@@ -13,5 +13,9 @@ describe Api::V1 do
     it 'returns a particular chapter' do
       subject.at_json_path("_id").should == chapter.id.to_s
     end
+
+    # it 'returns associated headings' do
+    #   pending
+    # end
   end
 end

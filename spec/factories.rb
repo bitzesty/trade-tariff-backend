@@ -8,6 +8,12 @@ FactoryGirl.define do
     nomenclature
     title    { Forgery(:basic).text }
     position { Forgery(:basic).number }
+
+    trait :with_chapters do
+      after(:create) do |section, evaluator|
+        # FactoryGirl.create_list(:chapter, section: section)
+      end
+    end
   end
 
   factory :chapter do

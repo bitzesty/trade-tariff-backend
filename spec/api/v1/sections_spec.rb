@@ -18,7 +18,7 @@ describe Api::V1 do
   end
 
   describe "GET /api/sections/:id" do
-    let!(:section)    { create(:section) }
+    let!(:section)    { create(:section, :with_chapters) }
 
     before {
       get "/api/sections/#{section.id}"
@@ -28,6 +28,10 @@ describe Api::V1 do
 
     it 'returns particular section' do
       subject.at_json_path("_id").should == section.id.to_s
+    end
+
+    it 'includes chapter info' do
+      subject.at_json_path("chapters").should_not be_blank
     end
   end
 end
