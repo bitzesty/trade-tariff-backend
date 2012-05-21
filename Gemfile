@@ -35,4 +35,5 @@ group :test do
   gem 'shoulda-matchers'
   gem 'fakeweb'
   gem 'mocha'
+  gem 'pathy'
 end
