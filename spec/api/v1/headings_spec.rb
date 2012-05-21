@@ -1,19 +1,17 @@
 require 'spec_helper'
 
 describe Api::V1 do
-  describe "GET /api/headings" do
-    let!(:heading1)    { create(:heading) }
-    let!(:heading2)    { create(:heading) }
+  describe "GET /api/headings/:id" do
+    let!(:heading)    { create(:heading) }
 
     before {
-      get "/api/headings"
+      get "/api/headings/#{heading.id}"
     }
 
     subject { JSON.parse(response.body) }
 
-    it 'returns a list of posts' do
-      subject.select { |s| s["_id"] == heading1.id.to_s }.should_not be_blank
-      subject.select { |s| s["_id"] == heading2.id.to_s }.should_not be_blank
+    it 'returns a particular heading' do
+      subject.at_json_path("_id").should == heading.id.to_s
     end
   end
 end

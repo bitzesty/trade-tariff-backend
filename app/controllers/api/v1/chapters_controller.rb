@@ -1,8 +1,8 @@
 module Api
   module V1
     class ChaptersController < ApplicationController
-      def index
-        respond_with Chapter.all
+      def show
+        respond_with Chapter.find(params[:id])
       end
     end
   end

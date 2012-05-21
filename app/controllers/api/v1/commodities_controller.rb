@@ -1,8 +1,8 @@
 module Api
   module V1
     class CommoditiesController < ApplicationController
-      def index
-        respond_with Commodity.all
+      def show
+        respond_with Commodity.find(params[:id])
       end
     end
   end

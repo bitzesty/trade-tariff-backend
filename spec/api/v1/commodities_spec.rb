@@ -1,19 +1,17 @@
 require 'spec_helper'
 
 describe Api::V1 do
-  describe "GET /api/commodities" do
-    let!(:commodity1)    { create(:commodity) }
-    let!(:commodity2)    { create(:commodity) }
+  describe "GET /api/commodities/:id" do
+    let!(:commodity)    { create(:commodity) }
 
     before {
-      get "/api/commodities"
+      get "/api/commodities/#{commodity.id}"
     }
 
     subject { JSON.parse(response.body) }
 
-    it 'returns a list of posts' do
-      subject.select { |s| s["_id"] == commodity1.id.to_s }.should_not be_blank
-      subject.select { |s| s["_id"] == commodity2.id.to_s }.should_not be_blank
+    it 'returns a particular commodity' do
+      subject.at_json_path("_id").should == commodity.id.to_s
     end
   end
 end

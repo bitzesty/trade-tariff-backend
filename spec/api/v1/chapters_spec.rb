@@ -1,19 +1,17 @@
 require 'spec_helper'
 
 describe Api::V1 do
-  describe "GET /api/chapters" do
-    let!(:chapter1)    { create(:chapter) }
-    let!(:chapter2)    { create(:chapter) }
+  describe "GET /api/chapters/:id" do
+    let!(:chapter)    { create(:chapter) }
 
     before {
-      get "/api/chapters"
+      get "/api/chapters/#{chapter.id}"
     }
 
     subject { JSON.parse(response.body) }
 
-    it 'returns a list of posts' do
-      subject.select { |s| s["_id"] == chapter1.id.to_s }.should_not be_blank
-      subject.select { |s| s["_id"] == chapter2.id.to_s }.should_not be_blank
+    it 'returns a particular chapter' do
+      subject.at_json_path("_id").should == chapter.id.to_s
     end
   end
 end
