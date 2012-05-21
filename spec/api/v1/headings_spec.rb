@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Api::V1 do
   describe "GET /api/headings/:id" do
-    let!(:heading)    { create(:heading) }
+    let!(:heading)    { create(:heading_with_commodities) }
 
     before {
       get "/api/headings/#{heading.id}"
@@ -11,7 +11,11 @@ describe Api::V1 do
     subject { JSON.parse(response.body) }
 
     it 'returns a particular heading' do
-      subject.at_json_path("_id").should == heading.id.to_s
+      subject.at_json_path("id").should == heading.id.to_s
+    end
+
+    it 'returns associated commodities' do
+      subject.at_json_path("commodities").should_not be_blank
     end
   end
 end

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Api::V1 do
   describe "GET /api/chapters/:id" do
-    let!(:chapter)    { create(:chapter) }
+    let!(:chapter)    { create(:chapter_with_headings) }
 
     before {
       get "/api/chapters/#{chapter.id}"
@@ -14,8 +14,8 @@ describe Api::V1 do
       subject.at_json_path("id").should == chapter.id.to_s
     end
 
-    # it 'returns associated headings' do
-    #   pending
-    # end
+    it 'returns associated headings' do
+      subject.at_json_path("headings").should_not be_blank
+    end
   end
 end

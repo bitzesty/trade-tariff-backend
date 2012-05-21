@@ -21,12 +21,24 @@ FactoryGirl.define do
     section
     description { Forgery(:basic).text }
     code        { Forgery(:basic).number }
+
+    factory :chapter_with_headings do
+      after(:create) do |chapter|
+        create_list(:heading, 3, chapter: chapter)
+      end
+    end
   end
 
   factory :heading do
     nomenclature
     chapter
     description { Forgery(:basic).text }
+
+    factory :heading_with_commodities do
+      after(:create) do |heading|
+        create_list(:commodity, 3, heading: heading)
+      end
+    end
   end
 
   factory :commodity do
