@@ -29,4 +29,5 @@ group :test do
   gem 'fakeweb'
   gem 'mocha'
   gem 'pathy'
+  gem 'mongoid-rspec'
 end

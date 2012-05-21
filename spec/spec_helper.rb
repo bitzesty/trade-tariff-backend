@@ -21,6 +21,7 @@ RSpec.configure do |config|
   config.mock_with :mocha
 
   config.include FactoryGirl::Syntax::Methods
+  config.include Mongoid::Matchers
 
   config.before(:suite) do
     Object.pathy!
