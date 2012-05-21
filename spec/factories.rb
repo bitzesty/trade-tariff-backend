@@ -9,9 +9,9 @@ FactoryGirl.define do
     title    { Forgery(:basic).text }
     position { Forgery(:basic).number }
 
-    trait :with_chapters do
-      after(:create) do |section, evaluator|
-        # FactoryGirl.create_list(:chapter, section: section)
+    factory :section_with_chapters do
+      after(:create) do |section|
+        create_list(:chapter, 3, section: section)
       end
     end
   end

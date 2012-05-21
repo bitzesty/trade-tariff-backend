@@ -6,7 +6,9 @@ module Api
       end
 
       def show
-        respond_with Section.find(params[:id])
+        @section = Section.find(params[:id])
+
+        respond_with @section
       end
     end
   end
