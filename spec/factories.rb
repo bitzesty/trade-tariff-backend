@@ -1,21 +1,30 @@
 FactoryGirl.define do
+
+  factory :nomenclature do
+    as_of_date { Date.today }
+  end
+
   factory :section do
+    nomenclature
     title    { Forgery(:basic).text }
     position { Forgery(:basic).number }
   end
 
   factory :chapter do
+    nomenclature
     section
     description { Forgery(:basic).text }
     code        { Forgery(:basic).number }
   end
 
   factory :heading do
+    nomenclature
     chapter
     description { Forgery(:basic).text }
   end
 
   factory :commodity do
+    nomenclature
     heading
     description { Forgery(:basic).text }
   end

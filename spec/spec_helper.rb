@@ -25,7 +25,7 @@ RSpec.configure do |config|
   config.before(:suite) do
     Object.pathy!
 
-    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.clean_with(:truncation)
 
     # TODO probably move these to run based on some tag
