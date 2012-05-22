@@ -18,8 +18,8 @@ class Search
   end
 
   def perform
-    Commodity.search(q.presence || "", page: page || 1,
-                                       per_page: PER_PAGE)
+    Commodity.tire.search(q.presence || "", page: page.presence || 1,
+                                            per_page: PER_PAGE)
   end
 
   def persisted?

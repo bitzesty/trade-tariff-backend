@@ -15,6 +15,9 @@ group :development do
   gem 'capistrano'
   gem 'debugger'
   gem 'pry-rails'
+  gem 'spreadsheet'
+  gem 'progressbar'
+  gem 'awesome_print'
 end
 
 group :test do
