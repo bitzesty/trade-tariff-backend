@@ -18,6 +18,7 @@ group :development do
   gem 'spreadsheet'
   gem 'progressbar'
   gem 'awesome_print'
+  gem 'mechanize'
 end
 
 group :test do
