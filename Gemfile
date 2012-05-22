@@ -7,6 +7,7 @@ gem 'bson_ext'
 gem 'mongoid'
 gem 'jbuilder'
 gem 'tire'
+gem 'kaminari'
 
 gem 'jquery-rails'
 
