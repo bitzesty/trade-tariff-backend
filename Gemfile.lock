@@ -43,6 +43,7 @@ GEM
       net-ssh-gateway (>= 1.1.0)
     ci_reporter (1.7.0)
       builder (>= 2.1.2)
+    coderay (1.0.6)
     columnize (0.3.6)
     database_cleaner (0.7.2)
     debugger (1.1.3)
@@ -81,6 +82,7 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     metaclass (0.0.1)
+    method_source (0.7.1)
     mime-types (1.18)
     mocha (0.11.4)
       metaclass (~> 0.0.1)
@@ -105,6 +107,17 @@ GEM
     pathy (0.0.4)
       json (~> 1.4)
     polyglot (0.3.3)
+    pry (0.9.9.6)
+      coderay (~> 1.0.5)
+      method_source (~> 0.7.1)
+      slop (>= 2.4.4, < 3)
+    pry (0.9.9.6-java)
+      coderay (~> 1.0.5)
+      method_source (~> 0.7.1)
+      slop (>= 2.4.4, < 3)
+      spoon (~> 0.0)
+    pry-rails (0.1.6)
+      pry
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -153,6 +166,8 @@ GEM
     simplecov-html (0.5.3)
     simplecov-rcov (0.2.3)
       simplecov (>= 0.4.1)
+    slop (2.4.4)
+    spoon (0.0.1)
     sprockets (2.1.3)
       hike (~> 1.2)
       rack (~> 1.0)
@@ -191,6 +206,7 @@ DEPENDENCIES
   mongoid
   mongoid-rspec
   pathy
+  pry-rails
   rails (= 3.2.3)
   rspec-rails
   shoulda-matchers

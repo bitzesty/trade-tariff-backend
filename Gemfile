@@ -18,6 +18,7 @@ gem 'test-unit'
 group :development do
   gem 'capistrano'
   gem 'debugger'
+  gem 'pry-rails'
 end
 
 group :test do
