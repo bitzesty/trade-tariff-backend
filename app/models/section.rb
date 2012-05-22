@@ -8,6 +8,6 @@ class Section
   field :position, type: Integer
 
   # associations
-  belongs_to :nomenclature
+  belongs_to :nomenclature, index: true
   has_many :chapters
 end

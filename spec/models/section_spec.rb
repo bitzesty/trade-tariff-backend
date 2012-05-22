@@ -7,4 +7,7 @@ describe Section do
   # associations
   it { should have_many :chapters }
   it { should belong_to :nomenclature }
+
+  # misc
+  it { should be_timestamped_document }
 end

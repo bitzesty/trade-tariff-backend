@@ -11,11 +11,6 @@ gem 'kaminari'
 
 gem 'jquery-rails'
 
-gem 'simplecov'
-gem 'simplecov-rcov'
-gem 'ci_reporter'
-gem 'test-unit'
-
 group :development do
   gem 'capistrano'
   gem 'debugger'
@@ -31,5 +26,10 @@ group :test do
   gem 'fakeweb'
   gem 'mocha'
   gem 'pathy'
-  gem 'mongoid-rspec'
+  # TODO upgrade to mongoid-rspec 1.4.5 when it's released
+  gem 'mongoid-rspec', git: 'https://github.com/evansagge/mongoid-rspec.git'
+
+  gem 'simplecov', require: false
+  gem 'simplecov-rcov', require: false
+  gem 'ci_reporter'
 end

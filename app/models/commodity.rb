@@ -11,9 +11,12 @@ class Commodity
   field :hier_pos,     type: Integer
   field :substring,    type: String
 
+  # indexes
+  index :code, unique: true
+
   # associations
-  belongs_to :nomenclature
-  belongs_to :heading
+  belongs_to :nomenclature, index: true
+  belongs_to :heading, index: true
 
   # tire configuration
   tire do

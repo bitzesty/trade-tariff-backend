@@ -9,4 +9,7 @@ describe Nomenclature do
   it { should have_many :chapters }
   it { should have_many :headings }
   it { should have_many :commodities }
+
+  # misc
+  it { should be_timestamped_document }
 end
