@@ -2,7 +2,9 @@ module Api
   module V1
     class SectionsController < ApplicationController
       def index
-        respond_with Section.all
+        @sections = Section.all
+
+        respond_with @sections
       end
 
       def show
