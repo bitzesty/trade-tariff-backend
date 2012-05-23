@@ -94,6 +94,31 @@ class Scrape
     results
   end
 
+  # Condition Document code Requirement Action  Duty expression
+  def process_conditions(table)
+    trs = table.css('tbody tr')
+    results = []
+    trs.each_with_index do |row, i|
+      hash = {}
+      row.css('td').each_with_index do |node, i|
+        case i
+        when 0
+          hash['Condition'] = node.content
+        when 1
+          hash["Document code"] = node.content
+        when 2
+          hash["Requirement"] = node.content
+        when 3
+          hash["Action"] = node.content
+        when 4
+          hash["Duty expression"] = node.content
+        end
+      end
+      results << hash
+    end
+    results
+  end
+
   def process_tables
     results = {}
     tables.each_with_index do |t, i|
@@ -105,6 +130,8 @@ class Scrape
         results["specific_countries"] = process_measures(t)
       elsif t.children.first.to_s == "<caption>Footnotes</caption>"
         results['footnotes'] = process_footnotes(t)
+      else #conditions
+        results['t.children.first.to_s'] = process_conditions(t)
       end
     end
     results
@@ -115,9 +142,6 @@ end
 #DUplicated data
 #fields: code, description, duty
 "Additional code"
-
-#fields: Code, Description
-"Footnotes"
 
 # Example:
 # require 'scrape'
