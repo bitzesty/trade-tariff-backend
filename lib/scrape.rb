@@ -46,7 +46,7 @@ class Scrape
     "#{image_base_url}#{url}"
   end
 
-  def process_third_country_measures(table)
+  def process_measures(table)
     trs = table.css('tbody tr')
     results = []
     trs.each_with_index do |row, i|
@@ -77,20 +77,20 @@ class Scrape
   end
 
   def process_tables
-    #fields: Measure Type, Duty rates / prohibitions, Additional codes, Conditions, Exclusions, Legal Act Footnote
+    results = {}
     tables.each_with_index do |t, i|
       if t.children.first.to_s == "<caption>Third country measures</caption>" #i == 2
         p 'Third country measures'
-        process_third_country_measures(t)
-      else
-        # puts "failed to process third country measures for: #{@obj_id}"
+        results['third_country'] = process_measures(t)
+      elsif t.children.first.to_s == "<caption>Measures for specific countries and country groups</caption>" #i == 3
+        p 'Measures for specific countries and country groups'
+        results["specific_countries"] = process_measures(t)
       end
     end
+    results
   end
 end
 
-#fields: Country, Measure Type,  Duty rates / prohibitions, Additional codes,  Conditions,  Exclusions,  Legal Act, Footnotes
-"Measures for specific countries and country groups"
 
 #DUplicated data
 #fields: code, description, duty
