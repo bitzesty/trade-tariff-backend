@@ -54,7 +54,7 @@ class Scrape
       row.css('td').each_with_index do |node, i|
         case i
         when 0
-          hash['flag'] = node.css('img').attribute('src').value if node.css('img')
+          hash['Flag'] = node.css('img').attribute('src').value if node.css('img')
         when 1
           hash["Measure Type"] = node.content
         when 2
@@ -76,6 +76,24 @@ class Scrape
     results
   end
 
+  def process_footnotes(table)
+    trs = table.css('tbody tr')
+    results = []
+    trs.each_with_index do |row, i|
+      hash = {}
+      row.css('td').each_with_index do |node, i|
+        case i
+        when 0
+          hash['Code'] = node.content
+        when 1
+          hash["Description"] = node.content
+        end
+      end
+      results << hash
+    end
+    results
+  end
+
   def process_tables
     results = {}
     tables.each_with_index do |t, i|
@@ -85,6 +103,8 @@ class Scrape
       elsif t.children.first.to_s == "<caption>Measures for specific countries and country groups</caption>" #i == 3
         p 'Measures for specific countries and country groups'
         results["specific_countries"] = process_measures(t)
+      elsif t.children.first.to_s == "<caption>Footnotes</caption>"
+        results['footnotes'] = process_footnotes(t)
       end
     end
     results
