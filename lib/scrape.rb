@@ -1,15 +1,23 @@
 class Scrape
 
-  attr_accessor :scrape_id, :simulation_date, :type_of_commodity
+  attr_accessor :scrape_id, :simulation_date
 
-  def initialize
+  def initialize(opts={})
     @agent = Mechanize.new
     @base_url = "http://tariff.businesslink.gov.uk/tariff-bl/print/commoditycode.html?"
-    @export="export=true&"
-    @import="export=false&"
-    @todays_date = Date.today.strftime("%d/%m/%y")
-    @date = "simulationDate=#{@todays_date}&"
-    @scrape_id='01022110'
+    if opts[:export]
+      @export="export=true&"
+    else
+      @export="export=false&"
+    end
+    if opts[:simulationDate]
+      use_date = opts[:simulationDate]
+    else
+      use_date = Date.today.strftime("%d/%m/%y")
+    end
+    @date = "simulationDate=#{use_date}&"
+
+    @scrape_id = opts[:scrape_id] || '01022110'
     @obj_id="id="
   end
 
@@ -91,5 +99,6 @@ end
 #fields: Code, Description
 "Footnotes"
 
+# Example:
 # require 'scrape'
-# s = Scrape.new
+# s = Scrape.new(scrape_id: '0101210000')
