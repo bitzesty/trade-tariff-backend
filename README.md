@@ -29,5 +29,5 @@ An API back end for UK Trade Tariff web app.
 3. Run UKTradeTariff:
 
     ```
-    bundle exec rails s
+    bundle exec rails s -p 3001
     ```
