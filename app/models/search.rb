@@ -22,7 +22,7 @@ class Search
                                                      per_page: PER_PAGE)
 
     {
-      results: search.results.as_json,
+      entries: search.results.as_json,
       current_page: search.current_page,
       total_entries: search.total_entries,
       per_page: search.per_page,
