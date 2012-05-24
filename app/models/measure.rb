@@ -12,7 +12,7 @@ class Measure
   has_and_belongs_to_many :footnotes
   has_and_belongs_to_many :conditions
   has_and_belongs_to_many :additional_codes
-  belongs_to :postable, polymorphic: true
+  belongs_to :measurable, polymorphic: true
   belongs_to :region, polymorphic: true
 end
 

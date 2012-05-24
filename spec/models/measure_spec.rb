@@ -9,7 +9,7 @@ describe Measure do
   it { should have_and_belong_to_many :conditions }
   it { should have_and_belong_to_many :additional_codes }
   it { should have_many :excluded_countries }
-  it { should belong_to :postable }
+  it { should belong_to :measurable }
   it { should belong_to :region }
 
   # misc
