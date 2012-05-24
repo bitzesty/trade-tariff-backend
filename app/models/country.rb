@@ -7,4 +7,6 @@ class Country
 
   has_and_belongs_to_many :country_groups
   has_many :measures, as: :region
+  has_and_belongs_to_many :measure_exclusions, inverse_of: :excluded_countries,
+                                               class_name: 'Measure'
 end

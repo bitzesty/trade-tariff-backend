@@ -1,5 +1,8 @@
-class Scrape
+require 'scrape/persistance'
+require 'scrape/geo_helper'
+require 'scrape/core_ext/string'
 
+class Scrape
   attr_accessor :scrape_id, :simulation_date
 
   def initialize(opts={})
@@ -58,29 +61,52 @@ class Scrape
     "#{image_base_url}#{url}"
   end
 
-  def process_measures(table)
+  def process_measures(table, country_specific = false)
     trs = table.css('tbody tr')
     results = []
     trs.each_with_index do |row, i|
       hash = {}
       row.css('td').each_with_index do |node, i|
-        case i
-        when 0
-          hash['Flag'] = node.css('img').attribute('src').value if node.css('img')
-        when 1
-          hash["Measure Type"] = node.content
-        when 2
-          hash["Duty rates"] = node.content
-        when 3
-          hash["Additional codes"] = node.content
-        when 4
-          hash["Conditions"] = node.content
-        when 5
-          hash["Exclusions"] = node.content
-        when 6
-          hash["Legal Act"] = node.content
-        when 7
-          hash["Footnote"] = node.content
+        if country_specific
+          case i
+          when 0
+            hash['Flag'] = node.css('img').attribute('src').value if node.css('img')
+          when 1
+              hash["Country"] = node.content
+          when 2
+              hash["Measure Type"] = node.content
+          when 3
+            hash["Duty rates"] = node.content
+          when 4
+            hash["Additional codes"] = node.content
+          when 5
+            hash["Conditions"] = node.content
+          when 6
+            hash["Exclusions"] = node.content
+          when 7
+            hash["Legal Act"] = node.content
+          when 8
+            hash["Footnote"] = node.content
+          end
+        else
+          case i
+          when 0
+            hash['Flag'] = node.css('img').attribute('src').value if node.css('img')
+          when 1
+              hash["Measure Type"] = node.content
+          when 2
+            hash["Duty rates"] = node.content
+          when 3
+            hash["Additional codes"] = node.content
+          when 4
+            hash["Conditions"] = node.content
+          when 5
+            hash["Exclusions"] = node.content
+          when 6
+            hash["Legal Act"] = node.content
+          when 7
+            hash["Footnote"] = node.content
+          end
         end
       end
       results << hash
@@ -139,7 +165,7 @@ class Scrape
         results['third_country'] = process_measures(t)
       elsif t.children.first.to_s == "<caption>Measures for specific countries and country groups</caption>" #i == 3
         p 'Measures for specific countries and country groups'
-        results["specific_countries"] = process_measures(t)
+        results["specific_countries"] = process_measures(t, true)
       elsif t.children.first.to_s == "<caption>Footnotes</caption>"
         results['footnotes'] = process_footnotes(t)
       else #

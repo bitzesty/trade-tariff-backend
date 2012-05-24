@@ -1,11 +1,10 @@
 require 'spec_helper'
 
-describe CountryGroup do
+describe LegalAct do
   # fields
-  it { should have_fields(:name, :description) }
+  it { should have_fields(:code, :url) }
 
   # associations
-  it { should have_and_belong_to_many :countries }
   it { should have_many :measures }
 
   # misc
