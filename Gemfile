@@ -12,6 +12,7 @@ gem 'kaminari'
 gem 'jquery-rails'
 
 group :development do
+  gem 'puma'
   gem 'capistrano'
   gem 'debugger'
   gem 'pry-rails'
