@@ -1,7 +1,7 @@
 require 'api_constraints'
 
 UKTradeTariff::Application.routes.draw do
-  namespace :api, defaults: {format: 'json'} do
+  namespace :api, defaults: {format: 'json'}, path: "/" do
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
       resources :sections, only: [:index, :show]
       resources :chapters, only: [:show]

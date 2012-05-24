@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 describe Api::V1 do
-  describe "GET /api/chapters/:id" do
+  describe "GET /chapters/:id" do
     let!(:chapter)    { create(:chapter_with_headings) }
 
     before {
-      get "/api/chapters/#{chapter.id}"
+      get "/chapters/#{chapter.id}"
     }
 
     subject { JSON.parse(response.body) }

@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe Api::V1 do
-  describe "GET /api/sections" do
+  describe "GET /sections" do
     let!(:section1)    { create(:section) }
     let!(:section2)    { create(:section) }
 
     before {
-      get "/api/sections"
+      get "/sections"
     }
 
     subject { JSON.parse(response.body) }
@@ -17,11 +17,11 @@ describe Api::V1 do
     end
   end
 
-  describe "GET /api/sections/:id" do
+  describe "GET /sections/:id" do
     let!(:section)    { create(:section_with_chapters) }
 
     before {
-      get "/api/sections/#{section.id}"
+      get "/sections/#{section.id}"
     }
 
     subject { JSON.parse(response.body) }
