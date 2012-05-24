@@ -1,16 +1,7 @@
 if Rails.env.production?
-  Tire.configure do
-    url "http://support.cluster:9200"
-    index "tariff"
-  end
+  Tire.configure {url "http://support.cluster:9200"}
 elsif Rails.env.development?
-  Tire.configure do
-    url "http://localhost:9200"
-    index "tariff-development"
-  end
+  Tire.configure {url "http://localhost:9200"}
 else
-  Tire.configure do
-    url "http://localhost:9200"
-    index "tariff-test"
-  end
+  Tire.configure {url "http://localhost:9200"}
 end
