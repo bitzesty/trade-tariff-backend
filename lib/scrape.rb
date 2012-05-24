@@ -4,7 +4,11 @@ class Scrape
 
   def initialize(opts={})
     @agent = Mechanize.new
-    @base_url = "http://tariff.businesslink.gov.uk/tariff-bl/print/commoditycode.html?"
+    @base_url = if opts[:heading]
+                  "http://tariff.businesslink.gov.uk/tariff-bl/print/headingDeclarative.html?"
+                else
+                  "http://tariff.businesslink.gov.uk/tariff-bl/print/commoditycode.html?"
+                end
     if opts[:export]
       @export="export=true&"
     else
@@ -17,8 +21,12 @@ class Scrape
     end
     @date = "simulationDate=#{use_date}&"
 
-    @scrape_id = opts[:scrape_id] || '01022110'
-    @obj_id="id="
+    if opts[:heading]
+      @obj_id="id=#{opts[:scrape_id].first(4)}"
+    else
+      @scrape_id = opts[:scrape_id] || '01022110'
+      @obj_id="id="
+    end
   end
 
   def page
@@ -35,7 +43,11 @@ class Scrape
   end
 
   def hit_url
-    @base_url + @export + @date + @obj_id + @scrape_id
+    if @scrape_id.present?
+      @base_url + @export + @date + @obj_id + @scrape_id
+    else
+      @base_url + @export + @date + @obj_id
+    end
   end
 
   def image_base_url
