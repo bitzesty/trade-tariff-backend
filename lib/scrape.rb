@@ -130,8 +130,8 @@ class Scrape
         results["specific_countries"] = process_measures(t)
       elsif t.children.first.to_s == "<caption>Footnotes</caption>"
         results['footnotes'] = process_footnotes(t)
-      else #conditions
-        results['t.children.first.to_s'] = process_conditions(t)
+      else #
+        results[t.children.first.content] = process_conditions(t)
       end
     end
     results
