@@ -15,4 +15,5 @@ class Heading
   belongs_to :nomenclature, index: true
   belongs_to :chapter, index: true
   has_many :commodities
+  has_many :measures, as: :measurable
 end
