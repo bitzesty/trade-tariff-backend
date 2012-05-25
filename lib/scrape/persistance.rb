@@ -39,24 +39,30 @@ class Scrape
             measure.save
 
             measure_data["Exclusions"].split(",").each do |country|
-              c = Country.find_or_create_by(name: country.normalize,
-                                            iso_code: Scrape::GeoHelper.country_by_name(country.normalize))
+              unless country.blank?
+                c = Country.find_or_create_by(name: country.normalize,
+                                              iso_code: Scrape::GeoHelper.country_by_name(country.normalize))
 
-              measure.excluded_countries << c
+                measure.excluded_countries << c
+              end
             end
 
             if measure_data.has_key?("Additional codes")
               measure_data["Additional codes"].normalize.split(",").each do |additional_code|
-                ac = AdditionalCode.find_or_create_by(code: additional_code)
+                unless additional_code.blank?
+                  ac = AdditionalCode.find_or_create_by(code: additional_code)
 
-                measure.additional_codes << ac
+                  measure.additional_codes << ac
+                end
               end
             end
 
             if measure_data.has_key?("Footnote")
               measure_data["Footnote"].normalize.split(",").each do |footnote|
-                if fn = Footnote.where(code: footnote).first
-                  measure.footnotes << fn
+                unless footnote.blank?
+                  if fn = Footnote.where(code: footnote).first
+                    measure.footnotes << fn
+                  end
                 end
               end
             end
