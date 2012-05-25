@@ -11,6 +11,14 @@ gem 'kaminari'
 
 gem 'jquery-rails'
 
+
+#### Scraper
+gem 'sidekiq', git: "git://github.com/mperham/sidekiq.git"
+gem 'sinatra'
+gem 'sprockets'
+gem 'slim'
+####
+
 group :development do
   gem 'puma'
   gem 'capistrano'

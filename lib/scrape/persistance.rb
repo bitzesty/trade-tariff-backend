@@ -1,7 +1,13 @@
 class Scrape
   class Persistance
     class << self
-      def process(record)
+      def process(id, type)
+        record =  if type == :heading
+                    Heading.find(id)
+                  else
+                    Commodity.find(id)
+                  end
+
         s = Scrape.new(scrape_id: record.code.first(10), heading: record.is_a?(Heading))
         tables = s.process_tables
 
