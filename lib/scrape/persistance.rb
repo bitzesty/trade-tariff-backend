@@ -8,14 +8,18 @@ class Scrape
                     Commodity.find(id)
                   end
 
-        s = Scrape.new(scrape_id: record.code.first(10), heading: record.is_a?(Heading))
-        tables = s.process_tables
+        [true, false].each do |record_type|
+          s = Scrape.new(scrape_id: record.code.first(10),
+                         heading: record.is_a?(Heading),
+                         export: record_type)
+          tables = s.process_tables
 
-        # process conditions
-        if tables['footnotes'].present?
-          process_footnotes(tables["footnotes"])
-          process_measures(record, tables, 'third_country')
-          process_measures(record, tables, 'specific_countries', true)
+          # process conditions
+          if tables['footnotes'].present?
+            process_footnotes(tables["footnotes"])
+            process_measures(record, tables, 'third_country', record_type)
+            process_measures(record, tables, 'specific_countries', record_type, true)
+          end
         end
       end
 
@@ -26,10 +30,11 @@ class Scrape
         end
       end
 
-      def process_measures(record, data, table, country_specific = false)
+      def process_measures(record, data, table, export, country_specific = false)
         data[table].each do |measure_data|
           if measure_data.keys.size > 2
             measure = Measure.new
+            measure.export = export
             measure.origin = measure_data["Flag"].match(/\/images\/(.*)\..*$/)[1]
             measure.measurable = record
             measure.measure_type = measure_data["Measure Type"].normalize
@@ -74,8 +79,10 @@ class Scrape
                   Country.find_or_create_by(name: region_name,
                                             iso_code: Scrape::GeoHelper.country_by_name(region_name))
                 else
-                  CountryGroup.find_or_create_by(name: region_name)
-              end
+                  CountryGroup.find_or_create_by(name: region_name) if region_name.present?
+                end
+
+              puts "#{measure} on #{measure.measurable} does not have associated country!" if region.blank?
 
               measure.region = region
               measure.save
@@ -84,7 +91,9 @@ class Scrape
             if measure_data.has_key?("Conditions") && measure_data['Conditions'].normalize.present?
               if country_specific
                 data.each do |key, value|
-                  if measure.region.present? && key =~ /#{measure.region}/
+                  if key.present? && measure.region.present? &&
+                                  (measure.region.present? && key =~ /#{measure.region}/) &&
+                                  (measure_data.has_key?("Measure Type") && key =~ /#{measure_data["Measure Type"]}/)
                     data[key].each do |condition|
                       measure.conditions.create({condition: condition['Condition'].normalize,
                                                 document_code: condition['Document code'].normalize,

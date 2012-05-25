@@ -16,4 +16,8 @@ class Heading
   belongs_to :chapter, index: true
   has_many :commodities
   has_many :measures, as: :measurable
+
+  def to_s
+    "<Heading: #{code}>"
+  end
 end

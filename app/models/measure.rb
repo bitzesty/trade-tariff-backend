@@ -2,6 +2,7 @@ class Measure
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  field :export,           type: Boolean
   field :origin,           type: String # EU/UK
   field :measure_type,     type: String
   field :duty_rates ,      type: String
@@ -19,6 +20,10 @@ class Measure
   # Applicable for all countries
   def ergo_omnes?
     region.blank?
+  end
+
+  def to_s
+    "<Measure: #{measure_type}>"
   end
 end
 
