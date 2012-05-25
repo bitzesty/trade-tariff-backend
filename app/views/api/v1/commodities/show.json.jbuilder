@@ -2,16 +2,11 @@ json.id           @commodity.id
 json.code         @commodity.code
 json.description  @commodity.description
 json.heading do |json|
-  json.id           @commodity.heading.id
-  json.code         @commodity.heading.code
-  json.description  @commodity.heading.description
+  json.partial! "api/v1/headings/heading", heading: @commodity.heading
 end
 json.chapter do |json|
-  json.id           @commodity.heading.chapter.id
-  json.description  @commodity.heading.chapter.description
-  json.code         @commodity.heading.chapter.code
+  json.partial! "api/v1/chapters/chapter", chapter: @commodity.heading.chapter
 end
 json.section do |json|
-  json.id          @commodity.heading.chapter.section.id
-  json.title       @commodity.heading.chapter.section.title
+  json.partial! "api/v1/sections/section", section: @commodity.heading.chapter.section
 end

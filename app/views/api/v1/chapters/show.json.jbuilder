@@ -1,12 +1,7 @@
 json.id           @chapter.id
 json.code         @chapter.code
 json.description  @chapter.description
-json.headings     @chapter.headings do |json, heading|
-  json.id          heading.id
-  json.description heading.description
-  json.code        heading.code
-end
+json.partial! "api/v1/headings/headings", headings: @chapter.headings
 json.section do |json|
-  json.id          @chapter.section.id
-  json.title       @chapter.section.title
+  json.partial! "api/v1/sections/section", section: @chapter.section
 end
