@@ -33,7 +33,6 @@ class Scrape
   end
 
   def page
-    puts 'fetching...'
     @page = @agent.get(hit_url)
   end
 
@@ -161,10 +160,8 @@ class Scrape
     results = {}
     tables.each_with_index do |t, i|
       if t.children.first.to_s == "<caption>Third country measures</caption>" #i == 2
-        p 'Third country measures'
         results['third_country'] = process_measures(t)
       elsif t.children.first.to_s == "<caption>Measures for specific countries and country groups</caption>" #i == 3
-        p 'Measures for specific countries and country groups'
         results["specific_countries"] = process_measures(t, true)
       elsif t.children.first.to_s == "<caption>Footnotes</caption>"
         results['footnotes'] = process_footnotes(t)
@@ -176,11 +173,16 @@ class Scrape
   end
 end
 
+# pbar = ProgressBar.new("Processing headings", 184) # this is hardcoded for now
+# Heading.all.each do |heading|
+#   if h.commodities.blank?
+#     Scrape::Persistance.process(heading)
+#     pbar.inc
+#   end
+# end
 
-#DUplicated data
-#fields: code, description, duty
-"Additional code"
-
-# Example:
-# require 'scrape'
-# s = Scrape.new(scrape_id: '0101210000')
+pbar = ProgressBar.new("Processing headings", Commodity.count)
+Commodity.limit(10).each do |commodity|
+  Scrape::Persistance.process(commodity)
+  pbar.inc
+end
