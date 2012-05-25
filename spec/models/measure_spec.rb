@@ -6,11 +6,11 @@ describe Measure do
 
   # associations
   it { should have_and_belong_to_many :footnotes }
-  it { should have_and_belong_to_many :conditions }
   it { should have_and_belong_to_many :additional_codes }
   it { should have_and_belong_to_many :excluded_countries }
   it { should belong_to :measurable }
   it { should belong_to :region }
+  it { should embed_many :conditions }
 
   # misc
   it { should be_timestamped_document }

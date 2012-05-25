@@ -9,7 +9,7 @@ class CountryGroup
   has_many :measures, as: :region
 
   def to_s
-    code
+    name
   end
 end
 

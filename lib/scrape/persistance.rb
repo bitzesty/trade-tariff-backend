@@ -7,8 +7,8 @@ class Scrape
 
         # process conditions
         process_footnotes(tables["footnotes"])
-        process_measures(record, tables['third_country'])
-        process_measures(record, tables['specific_countries'], true)
+        process_measures(record, tables, 'third_country')
+        process_measures(record, tables, 'specific_countries', true)
       end
 
       def process_headings
@@ -22,14 +22,16 @@ class Scrape
 
       def process_footnotes(data)
         data.each do |footnote|
-          Footnote.find_or_create_by(code: footnote["Code"].normalize, description: footnote["Description"].normalize)
+          Footnote.find_or_create_by(code: footnote["Code"].normalize,
+                                     description: footnote["Description"].normalize)
         end
       end
 
-      def process_measures(record, data, country_specific = false)
-        data.each do |measure_data|
+      def process_measures(record, data, table, country_specific = false)
+        data[table].each do |measure_data|
           measure = Measure.new
           measure.origin = measure_data["Flag"].match(/\/images\/(.*)\..*$/)[1]
+          measure.measurable = record
           measure.measure_type = measure_data["Measure Type"].normalize
           measure.duty_rates = measure_data["Duty rates"].normalize
           measure.legal_act = LegalAct.find_or_create_by(code: measure_data["Legal Act"].normalize)
@@ -61,12 +63,46 @@ class Scrape
           if country_specific
             region_name = measure_data["Country"].normalize
 
-            region = Country.where(name: region_name).first
-            if country.blank?
-              region = CountryGroup.where(name: region_name).first
+            if Scrape::GeoHelper.country_by_name(region_name).present?
+              region = Country.find_or_create_by(name: region_name,
+                                                iso_code: Scrape::GeoHelper.country_by_name(region_name))
+
+
+              if region.blank?
+                region = CountryGroup.find_or_create_by(name: region_name)
+              end
             end
 
             measure.region = region
+            measure.save
+          end
+
+          if measure_data.has_key?("Conditions") && measure_data['Conditions'].normalize.present?
+            if country_specific
+              data.each do |key, value|
+                if measure.region.present? && key =~ /#{measure.region}/
+                  data[key].each do |condition|
+                    measure.conditions.create({condition: condition['Condition'].normalize,
+                                              document_code: condition['Document code'].normalize,
+                                              action: condition['Action'].normalize,
+                                              requirement: condition['Requirement'].normalize,
+                                              duty_expression: condition['Duty expression'].normalize})
+                  end
+                end
+              end
+            else
+              data.each do |key, value|
+                if key =~ /ERGA OMNES/
+                  data[key].each do |condition|
+                    measure.conditions.create({condition: condition['Condition'].normalize,
+                                              document_code: condition['Document code'].normalize,
+                                              action: condition['Action'].normalize,
+                                              requirement: condition['Requirement'].normalize,
+                                              duty_expression: condition['Duty expression'].normalize})
+                  end
+                end
+              end
+            end
           end
 
           record.measures << measure

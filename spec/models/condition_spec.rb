@@ -2,11 +2,8 @@ require 'spec_helper'
 
 describe Condition do
   # fields
-  it { should have_fields(:name, :document_code, :action, :duty_expression) }
+  it { should have_fields(:condition, :document_code, :requirement, :action, :duty_expression) }
 
   # associations
-  it { should have_and_belong_to_many :measures }
-
-  # misc
-  it { should be_timestamped_document }
+  it { should be_embedded_in :measure }
 end
