@@ -69,7 +69,7 @@ class Scrape
         if country_specific
           case i
           when 0
-            hash['Flag'] = node.css('img').attribute('src').value if node.css('img')
+            hash['Flag'] = node.css('img').attribute('src').value if node.css('img').present?
           when 1
               hash["Country"] = node.content
           when 2
@@ -90,7 +90,7 @@ class Scrape
         else
           case i
           when 0
-            hash['Flag'] = node.css('img').attribute('src').value if node.css('img')
+            hash['Flag'] = node.css('img').attribute('src').value if node.css('img').present?
           when 1
               hash["Measure Type"] = node.content
           when 2

@@ -28,7 +28,8 @@ class Scrape
             measure.measurable = record
             measure.measure_type = measure_data["Measure Type"].normalize
             measure.duty_rates = measure_data["Duty rates"].normalize
-            measure.legal_act = LegalAct.find_or_create_by(code: measure_data["Legal Act"].normalize)
+            legal_act_code = measure_data["Legal Act"].normalize
+            measure.legal_act = LegalAct.find_or_create_by(code: legal_act_code) unless legal_act_code.blank?
             measure.save
 
             measure_data["Exclusions"].split(",").each do |country|
