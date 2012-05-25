@@ -1,19 +1,50 @@
 <div class="container-fluid">
   <div class="row-fluid">
     <div class="span3">
-      <h1>TradeTariff API</h1>
+      <div class="well" style="padding: 8px 0px; margin-top:100px;">
+        <ul class="nav nav-list">
+          <li class="nav-header">
+            QuickLinks
+          </li>
+          <li>
+            <a href="#Search">Search</a>
+          </li>
+          <li>
+            <a href="#Sections">Sections</a>
+          </li>
+          <li>
+            <a href="#Chapters">Chapters</a>
+          </li>
+          <li>
+            <a href="#Headings">Headings</a>
+          </li>
+          <li>
+            <a href="#Commodities">Commodities</a>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="span6">
-      <h2>Documentation</h2>
+      <div class='page-header'>
+        <h1>TradeTariff API</h1>
+        <h2>Documentation</h2>
+      </div>
 
-      <h3>Base URL</h3>
+      <p>This is the documentation for the public Trade Tariff API.</p>
 
+      <p>TODO:</p>
+      <ul>
+        <li>switch to pretty ids</li>
+        <li>load measure data into example response for commodity</li>
+      </ul>
+
+      <h3 class="page-header">Base URL</h3>
       <p>API URLs referenced in this documentation start with the following base part:</p>
 
-      <pre>https://www.preview.alphagov.co.uk/tariff-api [TODO UPDATE THIS]</pre>
+      <pre>[DEVELOPMENT] https://localhost:3016/</pre>
+      <pre>[PREVIEW] https://www.preview.alphagov.co.uk/tariff-api</pre>
 
-      <h3>Search</h3>
-
+      <h3 class="page-header">Search <a name="Search">¶</a></h3>
       <pre>GET /search</pre>
 
       <table class="table table-bordered table-condensed">
@@ -35,18 +66,215 @@
         </tbody>
       </table>
 
+      <h3 class="page-header">Sections <a name="Sections">¶</a></h3>
 
+      <h4>List all sections</h4>
 
+      <pre>GET /sections</pre>
 
-      <h3>Sections</h3>
+      <p>Responce</p>
+      <pre>
+        [
+           {
+              "id":"4fbf89747f93a11ec4000002",
+              "title":"Live animals; animal products (chapter 1 - 5)",
+              "numeral":"I",
+              "position":1
+           },
+           {
+              "id":"4fbf89747f93a11ec4000003",
+              "title":"Vegetable products (chapter 6 - 14)",
+              "numeral":"II",
+              "position":2
+           }
+           ...
+        ]
+      </pre>
 
-      <h3>Chapters</h3>
+      <h4>Show section</h4>
+      <p>To display a section and all it's chapters.</p>
 
-      <h3>Headings</h3>
+      <pre>GET /sections/4fbf89747f93a11ec4000002</pre>
 
-      <h3>Commodities</h3>
+      <p>Responce</p>
+      <pre>
+        {
+          "id": "4fbf89747f93a11ec4000002",
+          "numeral": "I",
+          "title": "Live animals; animal products (chapter 1 - 5)",
+          "chapters": [
+            {
+                "code": "010000000080",
+                "description": "LIVE ANIMALS",
+                "id": "4fbf897c7f93a11ec4000017"
+            },
+            {
+                "code": "020000000080",
+                "description": "MEAT AND EDIBLE MEAT OFFAL",
+                "id": "4fbf897f7f93a11ec40000af"
+            },
+            {
+                "code": "030000000080",
+                "description": "FISH AND CRUSTACEANS, MOLLUSCS AND OTHER AQUATIC INVERTEBRATES",
+                "id": "4fbf898a7f93a11ec40002c5"
+            },
+            {
+                "code": "040000000080",
+                "description": "DAIRY PRODUCE; BIRDS' EGGS; NATURAL HONEY; EDIBLE PRODUCTS OF ANIMAL ORIGIN, NOT ELSEWHERE SPECIFIED OR INCLUDED",
+                "id": "4fbf89a37f93a11ec40006f4"
+            },
+            {
+                "code": "050000000080",
+                "description": "PRODUCTS OF ANIMAL ORIGIN, NOT ELSEWHERE SPECIFIED OR INCLUDED",
+                "id": "4fbf89aa7f93a11ec4000843"
+            }
+          ]
+        }
+      </pre>
 
+      <h3 class="page-header">Chapters <a name="Chapters">¶</a></h3>
+      <h4>Display a chapter</h4>
+      <p>To get a chapter the section it is in and all the headings in that chapter.</p>
+      <pre>GET /chapters/4fbf897c7f93a11ec4000017</pre>
 
+      <p>Responce</p>
+      <pre>
+        {
+          "id": "4fbf897c7f93a11ec4000017",
+          "code": "010000000080",
+          "description": "LIVE ANIMALS",
+          "section": {
+              "id": "4fbf89747f93a11ec4000002",
+              "title": "Live animals; animal products (chapter 1 - 5)"
+          },
+          "headings": [
+              {
+                  "code": "010100000080",
+                  "description": "Live horses, asses, mules and hinnies",
+                  "id": "4fbf897c7f93a11ec4000018"
+              },
+              {
+                  "code": "010200000080",
+                  "description": "Live bovine animals",
+                  "id": "4fbf897d7f93a11ec4000020"
+              },
+              {
+                  "code": "010300000080",
+                  "description": "Live swine",
+                  "id": "4fbf897e7f93a11ec4000072"
+              },
+              {
+                  "code": "010400000080",
+                  "description": "Live sheep and goats",
+                  "id": "4fbf897f7f93a11ec400007d"
+              },
+              {
+                  "code": "010500000080",
+                  "description": "Live poultry, that is to say, fowls of the species Gallus domesticus, ducks, geese, turkeys and guinea fowls",
+                  "id": "4fbf897f7f93a11ec4000086"
+              },
+              {
+                  "code": "010600000080",
+                  "description": "Other live animals",
+                  "id": "4fbf897f7f93a11ec400009a"
+              }
+          ]
+        }
+      </pre>
+
+      <h3 class="page-header">Headings <a name="Headings">¶</a></h3>
+      <p>Get a heading, its chapter, the chapters section, and all the commodities for that heading.</p>
+      <pre>Get /headings/4fbf897c7f93a11ec4000018</pre>
+      <p>Response</p>
+      <pre>
+        {
+            "id": "4fbf897c7f93a11ec4000018",
+            "code": "010100000080",
+            "description": "Live horses, asses, mules and hinnies",
+            "section": {
+                "id": "4fbf89747f93a11ec4000002",
+                "title": "Live animals; animal products (chapter 1 - 5)"
+            },
+            "chapter": {
+                "code": "010000000080",
+                "description": "LIVE ANIMALS",
+                "id": "4fbf897c7f93a11ec4000017"
+            },
+            "commodities": [
+                {
+                    "code": "010121000010",
+                    "description": "Horses",
+                    "id": "4fbf897c7f93a11ec4000019",
+                    "substring": "1"
+                },
+                {
+                    "code": "010121000080",
+                    "description": "Pure-bred breeding animals",
+                    "id": "4fbf897d7f93a11ec400001a",
+                    "substring": "2"
+                },
+                {
+                    "code": "010129000080",
+                    "description": "Other",
+                    "id": "4fbf897d7f93a11ec400001b",
+                    "substring": "2"
+                },
+                {
+                    "code": "010129100080",
+                    "description": "For slaughter",
+                    "id": "4fbf897d7f93a11ec400001c",
+                    "substring": "3"
+                },
+                {
+                    "code": "010129900080",
+                    "description": "Other",
+                    "id": "4fbf897d7f93a11ec400001d",
+                    "substring": "3"
+                },
+                {
+                    "code": "010130000080",
+                    "description": "Asses",
+                    "id": "4fbf897d7f93a11ec400001e",
+                    "substring": "1"
+                },
+                {
+                    "code": "010190000080",
+                    "description": "Other",
+                    "id": "4fbf897d7f93a11ec400001f",
+                    "substring": "1"
+                }
+            ]
+        }
+      </pre>
+
+      <h3 class="page-header">Commodities <a name="Commodities">¶</a></h3>
+
+      <pre>Get /commodities/4fbf897c7f93a11ec4000019</pre>
+
+      <p>Response</p>
+
+      <pre>
+        {
+            "chapter": {
+                "code": "010000000080",
+                "description": "LIVE ANIMALS",
+                "id": "4fbf897c7f93a11ec4000017"
+            },
+            "code": "010121000010",
+            "description": "Horses",
+            "heading": {
+                "code": "010100000080",
+                "description": "Live horses, asses, mules and hinnies",
+                "id": "4fbf897c7f93a11ec4000018"
+            },
+            "id": "4fbf897c7f93a11ec4000019",
+            "measures": [],
+            "section": {
+                "id": "4fbf89747f93a11ec4000002",
+                "title": "Live animals; animal products (chapter 1 - 5)"
+            }
+        }
+      </pre>
     </div>
   </div>
 </div>
