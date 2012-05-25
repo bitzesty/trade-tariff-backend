@@ -51,6 +51,7 @@ GEM
     arel (3.0.2)
     awesome_print (1.0.2)
     blankslate (2.1.2.4)
+    bootstrap-sass (2.0.3.1)
     bson (1.6.2)
     bson_ext (1.6.2)
       bson (~> 1.6.2)
@@ -197,6 +198,11 @@ GEM
       railties (>= 3.0)
       rspec (~> 2.10.0)
     ruby-ole (1.2.11.3)
+    sass (3.1.18)
+    sass-rails (3.2.5)
+      railties (~> 3.2.0)
+      sass (>= 3.1.10)
+      tilt (~> 1.3)
     shoulda-matchers (1.1.0)
       activesupport (>= 3.0.0)
     simplecov (0.6.4)
@@ -242,6 +248,7 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
+  bootstrap-sass (~> 2.0.3)
   bson
   bson_ext
   capistrano
@@ -264,6 +271,7 @@ DEPENDENCIES
   puma
   rails (= 3.2.3)
   rspec-rails
+  sass-rails (~> 3.1)
   shoulda-matchers
   sidekiq!
   simplecov

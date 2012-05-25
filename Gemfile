@@ -19,6 +19,12 @@ gem 'sprockets'
 gem 'slim'
 ####
 
+
+### API Docs
+gem 'sass-rails', '~> 3.1'
+gem 'bootstrap-sass', '~> 2.0.3'
+##
+
 group :development do
   gem 'puma'
   gem 'capistrano'
