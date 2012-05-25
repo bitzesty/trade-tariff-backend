@@ -24,6 +24,7 @@ An API back end for UK Trade Tariff web app.
     cd UKTradeTariff
     bundle exec rake db:setup
     bundle exec rake db:import
+    bundle exec rake scrape:import
     ```
 3. Run UKTradeTariff:
 

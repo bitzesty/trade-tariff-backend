@@ -171,18 +171,23 @@ class Scrape
     end
     results
   end
+
+  def self.import
+    puts "Importing..."
+
+    pbar = ProgressBar.new("Headings", 184) # this is hardcoded for now
+    Heading.all.each do |heading|
+      if heading.commodities.blank?
+        Scrape::Persistance.process(heading)
+        pbar.inc
+      end
+    end
+
+    pbar = ProgressBar.new("Commodities", Commodity.count)
+    Commodity.all.each do |commodity|
+      Scrape::Persistance.process(commodity)
+      pbar.inc
+    end
+  end
 end
 
-# pbar = ProgressBar.new("Processing headings", 184) # this is hardcoded for now
-# Heading.all.each do |heading|
-#   if h.commodities.blank?
-#     Scrape::Persistance.process(heading)
-#     pbar.inc
-#   end
-# end
-
-pbar = ProgressBar.new("Processing headings", Commodity.count)
-Commodity.limit(10).each do |commodity|
-  Scrape::Persistance.process(commodity)
-  pbar.inc
-end
