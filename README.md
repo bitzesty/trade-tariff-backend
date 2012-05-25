@@ -25,9 +25,8 @@ An API back end for UK Trade Tariff web app.
     bundle exec rake db:setup
     bundle exec rake db:import
     ```
-
 3. Run UKTradeTariff:
 
     ```
-    bundle exec rails s -p 3001
+    ./startup.sh
     ```
