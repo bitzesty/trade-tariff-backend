@@ -15,5 +15,10 @@ class Measure
   belongs_to :region, polymorphic: true
 
   embeds_many :conditions
+
+  # Applicable for all countries
+  def ergo_omnes?
+    region.blank?
+  end
 end
 

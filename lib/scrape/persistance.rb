@@ -39,8 +39,8 @@ class Scrape
             measure.save
 
             measure_data["Exclusions"].split(",").each do |country|
-              c = Country.find_or_create_by(name: country,
-                                            iso_code: Scrape::GeoHelper.country_by_name(country))
+              c = Country.find_or_create_by(name: country.normalize,
+                                            iso_code: Scrape::GeoHelper.country_by_name(country.normalize))
 
               measure.excluded_countries << c
             end

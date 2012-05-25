@@ -10,3 +10,4 @@ end
 json.section do |json|
   json.partial! "api/v1/sections/section", section: @commodity.heading.chapter.section
 end
+json.partial! "api/v1/measures/measures", measures: @commodity.measures
