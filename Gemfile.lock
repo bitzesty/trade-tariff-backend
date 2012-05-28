@@ -56,6 +56,8 @@ GEM
     bson_ext (1.6.2)
       bson (~> 1.6.2)
     builder (3.0.0)
+    bullet (4.0.0)
+      uniform_notifier (~> 1.0.0)
     capistrano (2.12.0)
       highline
       net-scp (>= 1.0.0)
@@ -241,6 +243,7 @@ GEM
     unf (0.0.5)
       unf_ext
     unf_ext (0.0.4)
+    uniform_notifier (1.0.2)
     webrobots (0.0.13)
 
 PLATFORMS
@@ -251,6 +254,7 @@ DEPENDENCIES
   bootstrap-sass (~> 2.0.3)
   bson
   bson_ext
+  bullet
   capistrano
   ci_reporter
   database_cleaner

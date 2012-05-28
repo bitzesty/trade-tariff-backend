@@ -34,6 +34,7 @@ group :development do
   gem 'progressbar'
   gem 'awesome_print'
   gem 'mechanize'
+  gem "bullet"
 end
 
 group :test do
