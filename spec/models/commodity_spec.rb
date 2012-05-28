@@ -5,6 +5,7 @@ describe Commodity do
   it { should have_fields(:code, :description, :hier_pos, :substring) }
 
   # associations
+  it { should have_many :measures }
   it { should belong_to :nomenclature }
   it { should belong_to :heading }
 

@@ -48,7 +48,7 @@ group :test do
   # TODO upgrade to mongoid-rspec 1.4.5 when it's released
   gem 'mongoid-rspec', git: 'https://github.com/evansagge/mongoid-rspec.git'
 
-  gem 'simplecov', require: false
-  gem 'simplecov-rcov', require: false
+  gem 'simplecov'
+  gem 'simplecov-rcov'
   gem 'ci_reporter'
 end

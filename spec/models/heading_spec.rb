@@ -6,6 +6,7 @@ describe Heading do
 
   # associations
   it { should have_many :commodities }
+  it { should have_many :measures }
   it { should belong_to :nomenclature }
   it { should belong_to :chapter }
 

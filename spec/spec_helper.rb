@@ -1,11 +1,14 @@
-ENV["RAILS_ENV"] ||= 'test'
-require File.expand_path("../../config/environment", __FILE__)
-
 require 'simplecov'
 require 'simplecov-rcov'
 
-SimpleCov.start 'rails'
+SimpleCov.start 'rails' do
+  add_filter "lib/scrape"
+  add_filter "app/workers/scrape"
+end
 SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
+
+ENV["RAILS_ENV"] ||= 'test'
+require File.expand_path("../../config/environment", __FILE__)
 
 require 'rspec/rails'
 require 'rspec/autorun'
