@@ -46,4 +46,8 @@ FactoryGirl.define do
     heading
     description { Forgery(:basic).text }
   end
+
+  factory :legal_act do
+    code { "#{Forgery(:basic).text(exactly: 5)}/#{Forgery(:basic).text(exactly: 2)}" }
+  end
 end
