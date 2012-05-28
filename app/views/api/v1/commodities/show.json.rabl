@@ -33,10 +33,13 @@ child :measures do |measure|
     attributes :id, :code, :description
   end
 
-  # if measure.region.present? && !measure.ergo_omnes?
   child(region: :region) do
     attributes :id, :name, :description
     node(:type) { |r| r.class_name }
+    node(:countries, if: ->(region) { region.class_name == 'CountryGroup' }) do |region|
+      child(countries: :countries) do
+        attributes :id, :name
+      end
+    end
   end
-  # end
 end
