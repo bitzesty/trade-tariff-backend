@@ -1,5 +1,4 @@
 require 'scrape/persistance'
-require 'scrape/geo_helper'
 require 'scrape/core_ext/string'
 
 class Scrape

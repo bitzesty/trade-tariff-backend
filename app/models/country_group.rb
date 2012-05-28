@@ -9,6 +9,8 @@ class CountryGroup
   has_and_belongs_to_many :countries
   has_many :measures, as: :region
 
+  alias :name :description
+
   def class_name
     self.class.name
   end
