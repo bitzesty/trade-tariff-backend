@@ -6,7 +6,7 @@ namespace :db do
 
   desc "Clear data"
   task clear: 'environment' do
-    [Measure, Condition, AdditionalCode, Footnote, LegalAct, Country, CountryGroup].each do |r|
+    [Measure, AdditionalCode, Footnote, LegalAct].each do |r|
       r.delete_all
     end
   end

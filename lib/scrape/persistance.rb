@@ -83,10 +83,9 @@ class Scrape
               region_name = measure_data["Country"].normalize
 
               region = if Scrape::GeoHelper.country_by_name(region_name).present?
-                  Country.find_or_create_by(name: region_name,
-                                            iso_code: Scrape::GeoHelper.country_by_name(region_name))
+                  Country.find_by(name: region_name)
                 else
-                  CountryGroup.find_or_create_by(name: region_name) if region_name.present?
+                  CountryGroup.find_by(description: region_name) if region_name.present?
                 end
 
               logger.error "#{measure} on #{measure.measurable} does not have associated country!" if region.blank?

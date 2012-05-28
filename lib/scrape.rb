@@ -83,7 +83,6 @@ class Scrape
           when 6
             hash["Exclusions"] = node.content
           when 7
-            binding.pry
             hash["Legal Act"] = node.content
           when 8
             hash["Footnote"] = node.content
@@ -177,7 +176,7 @@ class Scrape
     puts "Importing..."
 
     pbar = ProgressBar.new("Headings", 184) # this is hardcoded for now
-    Heading.limit(10).all.each do |heading|
+    Heading.all.each do |heading|
       if heading.commodities.blank?
         # ScraperWorker.perform_async(heading.id, :heading)
         Scrape::Persistance.process(heading.id,:heading)
@@ -185,12 +184,12 @@ class Scrape
       end
     end
 
-    # pbar = ProgressBar.new("Commodities", Commodity.count)
-    # Commodity.all.each do |commodity|
-    #   #ScraperWorker.perform_async(commodity.id, :commodity)
-    #   Scrape::Persistance.process(commodity.id, :commodity)
-    #   pbar.inc
-    # end
+    pbar = ProgressBar.new("Commodities", Commodity.count)
+    Commodity.all.each do |commodity|
+      #ScraperWorker.perform_async(commodity.id, :commodity)
+      Scrape::Persistance.process(commodity.id, :commodity)
+      pbar.inc
+    end
   end
 end
 

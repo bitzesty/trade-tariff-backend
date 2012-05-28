@@ -1,3 +1,5 @@
+require 'csv'
+
 module XlsImporter
   def process_substr(x)
     x.nil? ? 0 : x.strip.split(' ').count
@@ -153,3 +155,18 @@ sheet1.each 1 do |row|
   create_objects(nomenclature, x)
   pbar.inc
 end
+
+puts 'Populating Countries and Country Groups'
+pbar = ProgressBar.new("Loading data", 4407)
+CSV.foreach("#{Rails.root}/db/geo_zones.csv", headers: :first_row) { |row|
+  country_group = CountryGroup.find_or_create_by(area_id: row["geogr_area_id"],
+                                                 sigl: row["sigl"],
+                                                 description: row["descr"])
+
+  country = Country.find_or_create_by(iso_code: row["iso_code"],
+                                      name: row["country"])
+
+  country_group.countries << country unless country_group.countries.include?(country)
+
+  pbar.inc
+}

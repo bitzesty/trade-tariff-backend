@@ -2,7 +2,8 @@ class CountryGroup
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field :name,        type: String
+  field :area_id,     type: String
+  field :sigl,        type: String
   field :description, type: String
 
   has_and_belongs_to_many :countries
@@ -13,7 +14,7 @@ class CountryGroup
   end
 
   def to_s
-    name
+    description
   end
 end
 
