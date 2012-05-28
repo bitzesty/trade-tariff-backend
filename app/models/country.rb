@@ -10,6 +10,12 @@ class Country
   has_and_belongs_to_many :measure_exclusions, inverse_of: :excluded_countries,
                                                class_name: 'Measure'
 
+  alias :description :iso_code
+
+  def class_name
+    self.class.name
+  end
+
   def to_s
     name
   end

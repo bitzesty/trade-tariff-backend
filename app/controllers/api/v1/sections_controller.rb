@@ -8,7 +8,7 @@ module Api
       end
 
       def show
-        @section = Section.find(params[:id])
+        @section = Section.includes(:chapters).find(params[:id])
 
         respond_with @section
       end

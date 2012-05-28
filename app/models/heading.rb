@@ -17,6 +17,10 @@ class Heading
   has_many :commodities
   has_many :measures, as: :measurable
 
+  def chapter_section
+    chapter.section
+  end
+
   def to_s
     "<Heading: #{code}>"
   end
