@@ -1,5 +1,8 @@
 class Scrape
   class Persistance
+    cattr_accessor :logger
+    self.logger = Logger.new("#{Rails.root}/log/scrape.log")
+
     class << self
       def process(id, type)
         record =  if type == :heading
@@ -22,7 +25,7 @@ class Scrape
               process_measures(record, tables, 'specific_countries', record_type, true)
             end
           rescue Exception => e
-            puts "Error: #{record.class.name} #{record.code} #{e}"
+            logger.error "Error: #{record.class.name} #{record.id} #{record.code} #{e}"
           end
         end
       end
@@ -86,7 +89,7 @@ class Scrape
                   CountryGroup.find_or_create_by(name: region_name) if region_name.present?
                 end
 
-              puts "#{measure} on #{measure.measurable} does not have associated country!" if region.blank?
+              logger.error "#{measure} on #{measure.measurable} does not have associated country!" if region.blank?
 
               measure.region = region
               measure.save
