@@ -16,7 +16,7 @@ class Chapter
   has_many :headings
 
   # callbacks
-  before_save :assign_short_code
+  before_validation :assign_short_code
 
   # validations
   validates :short_code, presence: true, length: { is: 2 }
