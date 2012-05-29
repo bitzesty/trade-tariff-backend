@@ -10,6 +10,7 @@ class Commodity
   field :description,  type: String
   field :hier_pos,     type: Integer
   field :substring,    type: String
+  field :synonyms,      type: String
 
   # indexes
   index({ code: 1 }, { unique: true, background: true })

@@ -9,7 +9,7 @@ UKTradeTariff::Application.routes.draw do
       resources :sections, only: [:index, :show]
       resources :chapters, only: [:show]
       resources :headings, only: [:show]
-      resources :commodities, only: [:show]
+      resources :commodities, only: [:show, :update]
 
       post "search" => "search#search", via: :post, as: :search
     end

@@ -1,5 +1,5 @@
 object @commodity
-attribute :id, :code, :description
+attribute :id, :code, :description, :synonyms
 child @commodity.heading.chapter do
   attributes :id, :code, :description
 end
