@@ -5,7 +5,7 @@ describe Api::V1 do
     let!(:heading)    { create(:heading_with_commodities) }
 
     before {
-      get "/headings/#{heading.id}"
+      get "/headings/#{heading.to_param}"
     }
 
     subject { JSON.parse(response.body) }

@@ -11,14 +11,18 @@ class Commodity
   field :hier_pos,     type: Integer
   field :substring,    type: String
   field :synonyms,      type: String
+  field :short_code,   type: String
 
   # indexes
-  index({ code: 1 }, { unique: true, background: true })
+  index({ short_code: 1 }, { background: true })
 
   # associations
   has_many :measures, as: :measurable
   belongs_to :nomenclature, index: true
   belongs_to :heading, index: true
+
+  # callbacks
+  before_save :assign_short_code
 
   # tire configuration
   tire do
@@ -74,5 +78,15 @@ class Commodity
         numeral: section.numeral
       }
     }.to_json
+  end
+
+  def to_param
+    short_code
+  end
+
+  private
+
+  def assign_short_code
+    self.short_code = code.first(10)
   end
 end

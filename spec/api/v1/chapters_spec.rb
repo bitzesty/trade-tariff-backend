@@ -5,7 +5,7 @@ describe Api::V1 do
     let!(:chapter)    { create(:chapter_with_headings) }
 
     before {
-      get "/chapters/#{chapter.id}"
+      get "/chapters/#{chapter.to_param}"
     }
 
     subject { JSON.parse(response.body) }

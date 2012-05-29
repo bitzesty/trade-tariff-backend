@@ -1,4 +1,5 @@
 FactoryGirl.define do
+  sequence(:code) {|n| Forgery(:basic).number(at_least: 1000000000, at_most: 9999999999) }
 
   factory :nomenclature do
     as_of_date { Date.today }
@@ -17,10 +18,15 @@ FactoryGirl.define do
   end
 
   factory :chapter do
+    ignore do
+      chapter_number { Forgery(:basic).number(at_least: 10, at_most: 100).to_s }
+    end
+
     nomenclature
     section
     description { Forgery(:basic).text }
-    code        { Forgery(:basic).number }
+    code        { generate :code }
+    short_code  { chapter_number.first(2) }
 
     factory :chapter_with_headings do
       after(:create) do |chapter|
@@ -33,6 +39,7 @@ FactoryGirl.define do
     nomenclature
     chapter
     description { Forgery(:basic).text }
+    code        { generate :code }
 
     factory :heading_with_commodities do
       after(:create) do |heading|
@@ -45,6 +52,7 @@ FactoryGirl.define do
     nomenclature
     heading
     description { Forgery(:basic).text }
+    code        { generate :code }
   end
 
   factory :legal_act do

@@ -1,13 +1,13 @@
 object @commodity
 attribute :id, :code, :description, :synonyms
 child @commodity.heading.chapter do
-  attributes :id, :code, :description
+  attributes :id, :code, :description, :short_code
 end
 child @commodity.heading.chapter.section do
-  attributes :id, :title
+  attributes :id, :title, :position
 end
 child :heading do
-  attributes :id, :code, :description
+  attributes :id, :code, :description, :short_code
 end
 
 child :measures do |measure|

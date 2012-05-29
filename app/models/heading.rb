@@ -7,9 +7,10 @@ class Heading
   field :description,  type: String
   field :hier_pos,     type: Integer
   field :substring,    type: String
+  field :short_code,   type: String
 
   # indexes
-  index({ code: 1 }, { unique: true, background: true })
+  index({ short_code: 1 }, { unique: true, background: true })
 
   # associations
   belongs_to :nomenclature, index: true
@@ -17,11 +18,25 @@ class Heading
   has_many :commodities
   has_many :measures, as: :measurable
 
+  # callbacks
+  before_save :assign_short_code
+
   def chapter_section
     chapter.section
   end
 
+
+  def to_param
+    short_code
+  end
+
   def to_s
     "<Heading: #{code}>"
+  end
+
+  private
+
+  def assign_short_code
+    self.short_code = code.first(4)
   end
 end

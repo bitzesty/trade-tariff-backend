@@ -5,7 +5,7 @@ describe Api::V1 do
     let!(:commodity)    { create(:commodity) }
 
     before {
-      get "/commodities/#{commodity.id}"
+      get "/commodities/#{commodity.to_param}"
     }
 
     subject { JSON.parse(response.body) }

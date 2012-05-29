@@ -1,10 +1,10 @@
 object @heading
 attributes :id, :code, :description
 child :chapter do
-  attributes :id, :code, :description
+  attributes :id, :code, :description, :short_code
 end
 child @heading.chapter.section do
-  attributes :id, :title
+  attributes :id, :title, :numeral, :position
 end
 child(commodities: :commodities) do
   attributes :id, :code, :description, :substring

@@ -21,7 +21,7 @@ describe Api::V1 do
     let!(:section)    { create(:section_with_chapters) }
 
     before {
-      get "/sections/#{section.id}"
+      get "/sections/#{section.to_param}"
     }
 
     subject { JSON.parse(response.body) }
