@@ -26,6 +26,7 @@ class Commodity
       indexes :id,                      index: :not_analyzed
       indexes :description,             analyzer: 'snowball'
       indexes :code,                    analyzer: 'snowball'
+      indexes :synonyms,                analyzer: 'snowball', boost: 10
 
       indexes :heading do
         indexes :id,                      index: :not_analyzed
