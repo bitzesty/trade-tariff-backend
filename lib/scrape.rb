@@ -177,16 +177,16 @@ class Scrape
     pbar = ProgressBar.new("Headings", 184) # this is hardcoded for now
     Heading.all.each do |heading|
       if heading.commodities.blank?
-        # ScraperWorker.perform_async(heading.id, :heading)
-        Scrape::Persistance.process(heading.id,:heading)
+        ScraperWorker.perform_async(heading.id, :heading)
+        # Scrape::Persistance.process(heading.id,:heading)
         pbar.inc
       end
     end
 
     pbar = ProgressBar.new("Commodities", Commodity.count)
     Commodity.all.each do |commodity|
-      #ScraperWorker.perform_async(commodity.id, :commodity)
-      Scrape::Persistance.process(commodity.id, :commodity)
+      ScraperWorker.perform_async(commodity.id, :commodity)
+      # Scrape::Persistance.process(commodity.id, :commodity)
       pbar.inc
     end
   end
