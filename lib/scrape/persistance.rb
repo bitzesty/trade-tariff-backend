@@ -11,18 +11,18 @@ class Scrape
                     Commodity.find(id)
                   end
 
-        [true, false].each do |record_type|
+        [true, false].each do |export|
           begin
             s = Scrape.new(scrape_id: record.code.first(10),
                            heading: record.is_a?(Heading),
-                           export: record_type)
+                           export: export)
             tables = s.process_tables
 
             # process conditions
             if tables['footnotes'].present?
               process_footnotes(tables["footnotes"])
-              process_measures(record, tables, 'third_country', record_type)
-              process_measures(record, tables, 'specific_countries', record_type, true)
+              process_measures(record, tables, 'third_country', export)
+              process_measures(record, tables, 'specific_countries', export, true)
             end
           rescue Exception => e
             logger.error "Error: #{record.class.name} #{record.id} #{record.code} #{e}"
