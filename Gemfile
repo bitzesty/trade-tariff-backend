@@ -41,13 +41,13 @@ group :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'forgery'
-  gem 'database_cleaner'
+  # gem 'database_cleaner' # use me when mongoid 3.0 patch gets merged in
   gem 'shoulda-matchers'
   gem 'fakeweb'
   gem 'mocha'
   gem 'pathy'
   # TODO upgrade to mongoid-rspec 1.4.5 when it's released
-  #gem 'mongoid-rspec', git: 'https://github.com/evansagge/mongoid-rspec.git'
+  gem 'mongoid-rspec', git: 'https://github.com/evansagge/mongoid-rspec.git'
 
   gem 'simplecov'
   gem 'simplecov-rcov'

@@ -10,7 +10,7 @@ describe Commodity do
   it { should belong_to :heading }
 
   # indexes
-  it { should have_index_for(:code) }
+  # it { should have_index_for(:code) }
 
   # misc
   it { should be_timestamped_document }
