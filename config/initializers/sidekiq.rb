@@ -1,7 +1,7 @@
 Sidekiq.configure_server do |config|
-  config.redis = { :namespace => 'uktt' }
+  config.redis = { :namespace => 'tradetariff' }
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = { :namespace => 'uktt', :size => 1 }
+  config.redis = { :namespace => 'tradetariff', :size => 1 }
 end

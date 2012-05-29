@@ -178,7 +178,7 @@ class Scrape
     Heading.all.each do |heading|
       if heading.commodities.blank?
         ScraperWorker.perform_async(heading.id, :heading)
-        # Scrape::Persistance.process(heading.id,:heading)
+        # Scrape::Persistance.process(heading.id, :heading)
         pbar.inc
       end
     end

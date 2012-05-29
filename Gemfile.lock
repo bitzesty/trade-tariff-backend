@@ -9,15 +9,6 @@ GIT
       redis
       redis-namespace
 
-GIT
-  remote: https://github.com/evansagge/mongoid-rspec.git
-  revision: f57c0475b89f0ce19fa5d3085bfe57d6eef6813e
-  specs:
-    mongoid-rspec (1.4.4)
-      mongoid (~> 2.4.6)
-      rake
-      rspec (~> 2.9)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -117,13 +108,13 @@ GEM
     mime-types (1.18)
     mocha (0.11.4)
       metaclass (~> 0.0.1)
-    mongo (1.6.2)
-      bson (~> 1.6.2)
-    mongoid (2.4.10)
+    mongoid (3.0.0.rc)
       activemodel (~> 3.1)
-      mongo (~> 1.3)
+      moped (~> 1.0.0.rc)
+      origin (~> 1.0.0.rc)
       tzinfo (~> 0.3.22)
-    multi_json (1.3.5)
+    moped (1.0.0.rc)
+    multi_json (1.3.6)
     net-http-digest_auth (1.2)
     net-http-persistent (2.6)
     net-scp (1.0.4)
@@ -136,6 +127,7 @@ GEM
       net-ssh (>= 1.99.1)
     nokogiri (1.5.2)
     ntlm-http (0.1.1)
+    origin (1.0.0.rc)
     pathy (0.0.4)
       json (~> 1.4)
     polyglot (0.3.3)
@@ -262,8 +254,7 @@ DEPENDENCIES
   kaminari
   mechanize
   mocha
-  mongoid
-  mongoid-rspec!
+  mongoid (= 3.0.0.rc)
   pathy
   progressbar
   pry-rails

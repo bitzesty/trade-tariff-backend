@@ -12,7 +12,7 @@ class Commodity
   field :substring,    type: String
 
   # indexes
-  index :code, unique: true
+  index({ code: 1 }, { unique: true, background: true })
 
   # associations
   has_many :measures, as: :measurable

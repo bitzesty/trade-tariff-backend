@@ -7,7 +7,7 @@ class Chapter
   field :description,  type: String
 
   # indexes
-  index :code, unique: true
+  index({ code: 1 }, { unique: true, background: true })
 
   # associations
   belongs_to :nomenclature, index: true

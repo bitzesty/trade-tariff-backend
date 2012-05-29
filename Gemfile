@@ -4,7 +4,7 @@ gem 'rails', '3.2.3'
 
 gem 'bson'
 gem 'bson_ext'
-gem 'mongoid'
+gem 'mongoid', "3.0.0.rc"
 gem 'rabl'
 gem 'yajl-ruby'
 gem 'tire'
@@ -47,7 +47,7 @@ group :test do
   gem 'mocha'
   gem 'pathy'
   # TODO upgrade to mongoid-rspec 1.4.5 when it's released
-  gem 'mongoid-rspec', git: 'https://github.com/evansagge/mongoid-rspec.git'
+  #gem 'mongoid-rspec', git: 'https://github.com/evansagge/mongoid-rspec.git'
 
   gem 'simplecov'
   gem 'simplecov-rcov'
