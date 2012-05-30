@@ -9,7 +9,7 @@ module Api
 
       # TODO: Remove this hack once the write api is done.
       def update
-        @commodity = Commodity.find(params[:id])
+        @commodity = Commodity.find_by(short_code: params[:id])
         @commodity.synonyms = params[:commodity][:synonyms]
         @commodity.save
 
