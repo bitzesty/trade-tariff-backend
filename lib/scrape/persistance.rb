@@ -5,6 +5,7 @@ class Scrape
 
     class << self
       def process(id, type)
+        logger.info "Scraping: type[#{type}] id [#{id}]" #DO NOT REMOVE!
         record =  if type == :heading
                     Heading.find(id)
                   else
@@ -87,7 +88,7 @@ class Scrape
                   CountryGroup.where(description: region_name).first if region_name.present?
                 end
 
-              logger.error "#{measure} on #{measure.measurable.code} does not have associated country!" if region.blank?
+              logger.error "#{measure} on #{measure.measurable.code} does not have associated country! #{region_name}" if region.blank?
 
               measure.region = region
               measure.save

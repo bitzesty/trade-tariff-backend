@@ -34,7 +34,7 @@ group :development do
   gem 'spreadsheet'
   gem 'progressbar'
   gem 'awesome_print'
-  gem 'mechanize'
+  gem 'nokogiri'
 end
 
 group :test do

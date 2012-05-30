@@ -4,7 +4,9 @@ class ScraperWorker
 
   sidekiq_options :retry => false
 
-  def perform(code, type)
+  def perform(arry)
+    code = arry[0]
+    type = arry[1]
     Scrape::Persistance.process(code, type)
   end
 end

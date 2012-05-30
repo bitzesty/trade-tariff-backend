@@ -18,6 +18,7 @@ class Commodity
 
   # associations
   has_many :measures, as: :measurable
+
   belongs_to :nomenclature, index: true
   belongs_to :heading, index: true
 
