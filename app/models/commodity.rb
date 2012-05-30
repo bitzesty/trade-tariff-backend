@@ -10,7 +10,7 @@ class Commodity
   field :description,  type: String
   field :hier_pos,     type: Integer
   field :substring,    type: String
-  field :synonyms,      type: String
+  field :synonyms,     type: String
   field :short_code,   type: String
 
   # indexes
