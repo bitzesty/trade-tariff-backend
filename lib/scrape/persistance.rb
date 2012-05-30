@@ -87,7 +87,7 @@ class Scrape
                   CountryGroup.where(description: region_name).first if region_name.present?
                 end
 
-              logger.error "#{measure} on #{measure.measurable} does not have associated country!" if region.blank?
+              logger.error "#{measure} on #{measure.measurable.code} does not have associated country!" if region.blank?
 
               measure.region = region
               measure.save

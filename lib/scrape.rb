@@ -6,6 +6,8 @@ class Scrape
 
   def initialize(opts={})
     @agent = Mechanize.new
+    # @agent.set_proxy 'localhost', 3128
+
     @base_url = if opts[:heading]
                   "http://tariff.businesslink.gov.uk/tariff-bl/print/headingDeclarative.html?"
                 else
