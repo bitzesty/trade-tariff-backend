@@ -1,8 +1,8 @@
 object @chapter
-attributes :id, :code, :description, :short_code
+attributes :short_code, :code, :description
 child :section do
-  attributes :id, :title, :position, :numeral
+  attributes :title, :position, :numeral
 end
 child(headings: :headings) do
-  attributes :id, :description, :code, :short_code
+  attributes :short_code, :code, :description
 end

@@ -1,13 +1,13 @@
 object @commodity
-attribute :id, :code, :description, :synonyms
+attribute :short_code, :code, :description, :synonyms
 child @commodity.heading.chapter do
-  attributes :id, :code, :description, :short_code
+  attributes :short_code, :code, :description
 end
 child @commodity.heading.chapter.section do
-  attributes :id, :title, :position
+  attributes :title, :position
 end
 child :heading do
-  attributes :id, :code, :description, :short_code
+  attributes :short_code, :code, :description
 end
 
 child Hash[@commodity.measures.import, :import_measures] do |measure|

@@ -1,5 +1,5 @@
 object @section
-attributes :id, :title, :numeral, :position
+attributes :position, :title, :numeral
 child(chapters: :chapters) do
-    attributes :id, :description, :code, :short_code
+    attributes :short_code, :description, :code
 end

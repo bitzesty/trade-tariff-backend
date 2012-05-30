@@ -1,2 +1,2 @@
 collection @sections
-attributes :id, :title, :numeral, :position
+attributes :position, :title, :numeral

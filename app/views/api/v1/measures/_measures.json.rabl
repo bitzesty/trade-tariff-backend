@@ -1,7 +1,7 @@
 attributes :id, :measure_type, :duty_rates
 
 child(:legal_act, if: ->(measure) { measure.legal_act.present? }) do
-  attributes :id, :code, :url
+  attributes :code, :url
 end
 
 child(conditions: :conditions) do
@@ -9,7 +9,7 @@ child(conditions: :conditions) do
 end
 
 child(excluded_countries: :excluded_countries) do
-  attributes :id, :name, :iso_code
+  attributes :name, :iso_code
 end
 
 child(footnotes: :footnotes) do
@@ -21,11 +21,11 @@ child(additional_codes: :additional_codes) do
 end
 
 child(region: :region) do
-  attributes :id, :name, :description
+  attributes :name, :description
   node(:type) { |r| r.class_name }
   node(:countries, if: ->(region) { region.class_name == 'CountryGroup' }) do |region|
     child(countries: :countries) do
-      attributes :id, :name
+      attributes :name
     end
   end
 end

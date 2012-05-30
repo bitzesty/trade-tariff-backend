@@ -1,10 +1,10 @@
 object @heading
-attributes :id, :code, :description, :short_code
+attributes :short_code, :code, :description
 child :chapter do
-  attributes :id, :code, :description, :short_code
+  attributes :short_code, :code, :description
 end
 child @heading.chapter.section do
-  attributes :id, :title, :numeral, :position
+  attributes :title, :numeral, :position
 end
 if @heading.has_measures?
   child Hash[@heading.measures.import, :import_measures] do |measure|
@@ -16,6 +16,6 @@ if @heading.has_measures?
   end
 else
   child(commodities: :commodities) do
-    attributes :id, :code, :description, :substring, :short_code
+    attributes :short_code, :code, :description, :substring
   end
 end

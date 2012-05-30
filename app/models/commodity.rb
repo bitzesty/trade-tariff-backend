@@ -30,19 +30,20 @@ class Commodity
     mapping do
       indexes :id,                      index: :not_analyzed
       indexes :description,             analyzer: 'snowball'
-      indexes :code,                    analyzer: 'snowball'
+      indexes :code,                    analyzer: 'simple'
+      indexes :short_code,              analyzer: 'simple'
       indexes :synonyms,                analyzer: 'snowball', boost: 10
 
       indexes :heading do
         indexes :id,                      index: :not_analyzed
         indexes :description,             analyzer: 'snowball'
-        indexes :code,                    analyzer: 'snowball'
+        indexes :code,                    analyzer: 'simple'
       end
 
       indexes :chapter do
         indexes :id,                      index: :not_analyzed
         indexes :description,             analyzer: 'snowball'
-        indexes :code,                    analyzer: 'snowball'
+        indexes :code,                    analyzer: 'simple'
       end
 
       indexes :section do
