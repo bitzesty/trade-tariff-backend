@@ -19,12 +19,12 @@ group :passenger_compatibility do
   gem 'rake', '0.9.2'
 end
 
-#### Scraper
-gem 'sidekiq', git: "git://github.com/mperham/sidekiq.git"
-gem 'sinatra', '1.3.1'
-gem 'sprockets'
-gem 'slim'
-####
+# #### Scraper
+# gem 'sidekiq', git: "git://github.com/mperham/sidekiq.git"
+# gem 'sinatra', '1.3.1'
+# gem 'sprockets'
+# gem 'slim'
+# ####
 
 
 ### API Docs
@@ -40,7 +40,7 @@ group :development do
   gem 'spreadsheet'
   gem 'progressbar'
   gem 'awesome_print'
-  gem 'nokogiri'
+  # gem 'nokogiri'
 end
 
 group :test do
