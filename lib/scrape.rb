@@ -7,9 +7,6 @@ class Scrape
   attr_accessor :scrape_id, :simulation_date
 
   def initialize(opts={})
-    # @agent = Mechanize.new
-    # @agent.set_proxy 'localhost', 3128
-
     @base_url = if opts[:heading]
                   "http://tariff.businesslink.gov.uk/tariff-bl/print/headingDeclarative.html?"
                 else
@@ -36,7 +33,7 @@ class Scrape
   end
 
   def page
-    sio = open(hit_url)
+    sio = open(hit_url, :proxy => "http://localhost:3128")
     @cur_encoding = sio.charset
     txt = sio.read             #read the whole file
     txt.gsub! "\u00a0", " "    #global replace
@@ -187,16 +184,16 @@ class Scrape
     pbar = ProgressBar.new("Headings", 184) # this is hardcoded for now
     Heading.all.each do |heading|
       if heading.commodities.blank?
-        ScraperWorker.perform_async([heading.id, :heading])
-        # Scrape::Persistance.process(heading.id, :heading)
+        # ScraperWorker.perform_async([heading.id, :heading])
+        Scrape::Persistance.process(heading.id, :heading)
         pbar.inc
       end
     end
 
     pbar = ProgressBar.new("Commodities", Commodity.count)
     Commodity.all.each do |commodity|
-      ScraperWorker.perform_async([commodity.id, :commodity])
-      # Scrape::Persistance.process(commodity.id, :commodity)
+      # ScraperWorker.perform_async([commodity.id, :commodity])
+      Scrape::Persistance.process(commodity.id, :commodity)
       pbar.inc
     end
   end
