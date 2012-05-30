@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.3'
+gem 'rails', '~> 3.1.1'
 
 gem 'bson'
 gem 'bson_ext'
@@ -10,19 +10,25 @@ gem 'yajl-ruby'
 gem 'tire'
 gem 'kaminari'
 
-gem 'jquery-rails'
+gem 'jquery-rails', "~> 1.0.19"
+gem 'builder'
+gem 'railties'
 
+group :passenger_compatibility do
+  gem 'rack', '1.3.5'
+  gem 'rake', '0.9.2'
+end
 
 #### Scraper
 gem 'sidekiq', git: "git://github.com/mperham/sidekiq.git"
-gem 'sinatra'
+gem 'sinatra', '1.3.1'
 gem 'sprockets'
 gem 'slim'
 ####
 
 
 ### API Docs
-gem 'sass-rails', '~> 3.1'
+gem 'sass-rails', '~> 3.1.4'
 gem 'bootstrap-sass', '~> 2.0.3'
 ##
 
