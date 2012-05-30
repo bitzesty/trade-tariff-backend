@@ -7,5 +7,5 @@ child @heading.chapter.section do
   attributes :id, :title, :numeral, :position
 end
 child(commodities: :commodities) do
-  attributes :id, :code, :description, :substring
+  attributes :id, :code, :description, :substring, :short_code
 end
