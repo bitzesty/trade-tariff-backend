@@ -25,6 +25,9 @@ class Heading
     chapter.section
   end
 
+  def has_measures?
+    measures.present?
+  end
 
   def to_param
     short_code
