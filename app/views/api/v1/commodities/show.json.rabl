@@ -11,9 +11,9 @@ child :heading do
 end
 
 child Hash[@commodity.measures.import, :import_measures] do |measure|
-  extends "api/v1/commodities/_measures"
+  extends "api/v1/measures/_measures"
 end
 
 child Hash[@commodity.measures.export, :export_measures] do |measure|
-  extends "api/v1/commodities/_measures"
+  extends "api/v1/measures/_measures"
 end
