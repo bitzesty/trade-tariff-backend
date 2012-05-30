@@ -12,8 +12,8 @@ describe Api::V1 do
     subject { JSON.parse(response.body) }
 
     it 'returns a list of sections' do
-      subject.select { |s| s["id"] == section1.id.to_s }.should_not be_blank
-      subject.select { |s| s["id"] == section2.id.to_s }.should_not be_blank
+      subject.select { |s| s["position"] == section1.position }.should_not be_blank
+      subject.select { |s| s["position"] == section2.position }.should_not be_blank
     end
   end
 
@@ -27,7 +27,7 @@ describe Api::V1 do
     subject { JSON.parse(response.body) }
 
     it 'returns particular section' do
-      subject.at_json_path("id").should == section.id.to_s
+      subject.at_json_path("position").should == section.position
     end
 
     it 'includes chapter info' do

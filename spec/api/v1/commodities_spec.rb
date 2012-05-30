@@ -11,7 +11,7 @@ describe Api::V1 do
     subject { JSON.parse(response.body) }
 
     it 'returns a particular commodity' do
-      subject.at_json_path("id").should == commodity.id.to_s
+      subject.at_json_path("short_code").should == commodity.short_code
     end
   end
 end
