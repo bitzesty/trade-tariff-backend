@@ -27,10 +27,14 @@ end
 # ####
 
 
-### API Docs
-gem 'sass-rails', '~> 3.1.4'
-gem 'bootstrap-sass', '~> 2.0.3'
-##
+group :assets do
+  gem 'therubyracer'
+  ### API Docs
+  gem 'sass-rails', '~> 3.1.4'
+  gem 'bootstrap-sass', '~> 2.0.3'
+  ##
+end
+
 
 group :development do
   gem 'puma'
