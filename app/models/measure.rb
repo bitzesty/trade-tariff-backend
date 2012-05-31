@@ -17,8 +17,8 @@ class Measure
 
   embeds_many :conditions
 
-  scope :import, where(export: false)
-  scope :export, where(export: true)
+  scope :for_import, where(export: false)
+  scope :for_export, where(export: true)
 
   # Applicable for all countries
   def ergo_omnes?

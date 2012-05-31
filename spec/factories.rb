@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  sequence(:code) {|n| Forgery(:basic).number(at_least: 1000000000, at_most: 9999999999) }
+  sequence(:code) {|n| Forgery(:basic).number(at_least: 100000000000, at_most: 999999999999) }
 
   factory :nomenclature do
     as_of_date { Date.today }

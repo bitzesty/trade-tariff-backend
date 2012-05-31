@@ -10,10 +10,10 @@ child :heading do
   attributes :short_code, :code, :description
 end
 
-child Hash[@commodity.measures.import, :import_measures] do |measure|
+child Hash[@commodity.measures.for_import, :import_measures] do |measure|
   extends "api/v1/measures/_measures"
 end
 
-child Hash[@commodity.measures.export, :export_measures] do |measure|
+child Hash[@commodity.measures.for_export, :export_measures] do |measure|
   extends "api/v1/measures/_measures"
 end

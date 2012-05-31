@@ -74,6 +74,21 @@
 
       <pre>GET /sections/1</pre>
 
+      <table class="table table-bordered table-condensed">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>:id</code></td>
+            <td>position</td>
+          </tr>
+        </tbody>
+      </table>
+
       <p>Response</p>
       <pre class="prettyprint">
         <%= render partial: "home/docs/sections_1" %>
@@ -82,7 +97,23 @@
       <h3 class="page-header">Chapters <a name="Chapters">¶</a></h3>
       <h4>Display a chapter</h4>
       <p>To get a chapter the section it is in and all the headings in that chapter.</p>
+
       <pre>GET /chapters/01</pre>
+
+      <table class="table table-bordered table-condensed">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>:id</code></td>
+            <td>short_code</td>
+          </tr>
+        </tbody>
+      </table>
 
       <p>Response</p>
       <pre class="prettyprint">
@@ -91,7 +122,24 @@
 
       <h3 class="page-header">Headings <a name="Headings">¶</a></h3>
       <p>Get a heading, its chapter, the chapters section, and all the commodities for that heading.</p>
+
       <pre>Get /headings/0101</pre>
+
+      <table class="table table-bordered table-condensed">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>:id</code></td>
+            <td>short_code</td>
+          </tr>
+        </tbody>
+      </table>
+
       <p>Response</p>
 
       <pre class="prettyprint">
@@ -100,7 +148,22 @@
 
       <h3 class="page-header">Commodities <a name="Commodities">¶</a></h3>
 
-      <pre>Get /commodities/0101300000</pre>
+      <pre>Get /commodities/010130000080</pre>
+
+            <table class="table table-bordered table-condensed">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>:id</code></td>
+            <td>code</td>
+          </tr>
+        </tbody>
+      </table>
 
       <p>Response</p>
       <pre class="prettyprint">

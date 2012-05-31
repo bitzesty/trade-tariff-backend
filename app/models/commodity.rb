@@ -14,7 +14,7 @@ class Commodity
   field :short_code,   type: String
 
   # indexes
-  index({ short_code: 1 }, { background: true })
+  index({ code: 1 }, { background: true })
 
   # associations
   has_many :measures, as: :measurable
@@ -83,7 +83,7 @@ class Commodity
   end
 
   def to_param
-    short_code
+    code
   end
 
   private
