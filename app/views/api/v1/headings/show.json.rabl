@@ -16,6 +16,7 @@ if @heading.has_measures?
   end
 else
   child(commodities: :commodities) do
-    attributes :short_code, :code, :description, :substring, :third_country_duty, :uk_vat_rate
+    attributes :short_code, :code, :description, :substring,
+    :third_country_duty_cache, :uk_vat_rate_cache
   end
 end

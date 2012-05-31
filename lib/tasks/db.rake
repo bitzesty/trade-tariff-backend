@@ -10,4 +10,16 @@ namespace :db do
       r.delete_all
     end
   end
+
+  desc "Update duties cache"
+  task update_duties_cache: 'environment' do
+    pbar = ProgressBar.new("Commodities", Commodity.count)
+    Mongoid.unit_of_work(disable: :all) do
+      Commodity.batch_size(1000).each_with_index do |c, i|
+        c.populate_rates
+        pbar.inc
+      end
+    end
+  end
+
 end

@@ -6,12 +6,14 @@ class Commodity
   include Tire::Model::Callbacks
 
   # fields
-  field :code,         type: String
-  field :description,  type: String
-  field :hier_pos,     type: Integer
-  field :substring,    type: Integer
-  field :synonyms,     type: String
-  field :short_code,   type: String
+  field :code,                      type: String
+  field :description,               type: String
+  field :hier_pos,                  type: Integer
+  field :substring,                 type: Integer
+  field :synonyms,                  type: String
+  field :short_code,                type: String
+  field :uk_vat_rate_cache,         type: String
+  field :third_country_duty_cache,  type: String
 
   # indexes
   index({ code: 1 }, { background: true })
@@ -63,6 +65,11 @@ class Commodity
 
   # kaminari
   paginates_per 25
+
+  def populate_rates
+    self.update_attribute(:uk_vat_rate_cache, uk_vat_rate)
+    self.update_attribute(:third_country_duty_cache, third_country_duty)
+  end
 
   def uk_vat_rate
     measures.uk_vat.first.duty_rates if measures.uk_vat.any?
