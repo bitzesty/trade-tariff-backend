@@ -1,5 +1,5 @@
 object @commodity
-attribute :short_code, :code, :description, :synonyms
+attribute :short_code, :code, :description, :synonyms, :third_country_duty, :uk_vat_rate
 child @commodity.heading.chapter do
   attributes :short_code, :code, :description
 end

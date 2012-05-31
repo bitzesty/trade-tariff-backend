@@ -2,10 +2,13 @@ class Measure
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  UK_VAT_STRINGS = ["VAT standard rate", "VAT zero rate"]
+  DUTY_STRINGS = ["Third country duty", "Non preferential duty under end use"]
+
   field :export,           type: Boolean
   field :origin,           type: String # EU/UK
   field :measure_type,     type: String
-  field :duty_rates ,      type: String
+  field :duty_rates,       type: String
 
   has_and_belongs_to_many :excluded_countries, inverse_of: :measure_exclusions,
                                                class_name: 'Country'
@@ -19,6 +22,9 @@ class Measure
 
   scope :for_import, where(export: false)
   scope :for_export, where(export: true)
+
+  scope :uk_vat, where(:measure_type.in => UK_VAT_STRINGS)
+  scope :third_country, where(:measure_type.in => DUTY_STRINGS)
 
   # Applicable for all countries
   def ergo_omnes?

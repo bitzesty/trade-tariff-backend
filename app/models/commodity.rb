@@ -64,6 +64,14 @@ class Commodity
   # kaminari
   paginates_per 25
 
+  def uk_vat_rate
+    measures.uk_vat.first.duty_rates
+  end
+
+  def third_country_duty
+    measures.third_country.first.duty_rates
+  end
+
   def to_indexed_json
     chapter = heading.chapter
     section = chapter.section
@@ -73,6 +81,8 @@ class Commodity
       short_code: short_code,
       description: description,
       short_code: short_code,
+      uk_vat_rate: uk_vat_rate,
+      third_country_duty: third_country_duty,
       heading: {
         id: heading.id,
         code: heading.code,
