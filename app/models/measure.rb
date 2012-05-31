@@ -25,6 +25,8 @@ class Measure
 
   scope :uk_vat, where(:measure_type.in => UK_VAT_STRINGS)
   scope :third_country, where(:measure_type.in => DUTY_STRINGS)
+  scope :ergo_omnes, where(:region_id => nil)
+  scope :specific, where(:region_id.ne => nil)
 
   # Applicable for all countries
   def ergo_omnes?
