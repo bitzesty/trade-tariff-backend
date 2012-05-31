@@ -65,11 +65,11 @@ class Commodity
   paginates_per 25
 
   def uk_vat_rate
-    measures.uk_vat.first.duty_rates
+    measures.uk_vat.first.duty_rates if measures.any?
   end
 
   def third_country_duty
-    measures.third_country.first.duty_rates
+    measures.third_country.first.duty_rates if measures.any?
   end
 
   def to_indexed_json
