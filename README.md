@@ -31,3 +31,9 @@ An API back end for UK Trade Tariff web app.
     ```
     ./startup.sh
     ```
+
+4. Reindex
+
+    ```
+    bundle exec rake environment tire:import CLASS='Commodity'
+    ```
