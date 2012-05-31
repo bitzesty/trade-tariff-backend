@@ -50,6 +50,7 @@ class Commodity
         indexes :id,                      index: :not_analyzed
         indexes :title,                   analyzer: 'snowball'
         indexes :numeral,                 index: :not_analyzed
+        indexes :position,                index: :not_analyzed
       end
     end
   end
