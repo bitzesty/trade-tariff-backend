@@ -64,16 +64,19 @@ class Commodity
 
     {
       code: code,
+      short_code: short_code, 
       description: description,
       heading: {
         id: heading.id,
         code: heading.code,
-        description: heading.description
+        description: heading.description,
+	short_code: heading.short_code
       },
       chapter: {
         id: chapter.id,
         code: chapter.code,
-        description: chapter.description
+        description: chapter.description,
+	short_code: chapter.short_code
       },
       section: {
         id: section.id,
