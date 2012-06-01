@@ -136,6 +136,11 @@ sections = [
   {position: 21, numeral: 'XXI',  title: "Works of art, collectors' pieces and antiques (chapter 97 - 99)"}
 ]
 
+prevent indexing for now, we will reindex everything after parent<->children
+commodity mapping gets done
+
+Commodity.skip_callback(:save, :after, :index_with_tire)
+
 puts "Creating Nomenclature..."
 nomenclature = Nomenclature.find_or_create_by(as_of_date: Date.today)
 
@@ -245,8 +250,6 @@ class CommodityMapper
   end
 end
 
-Commodity.skip_callback(:save, :after, :index_with_tire)
-
 pbar = ProgressBar.new("Mapping commodities", Heading.count)
 Heading.all.each do |heading|
   if heading.commodities.any? # Headings that aren't commodities themselves
@@ -264,3 +267,7 @@ Heading.all.each do |heading|
 end
 
 Commodity.set_callback(:save, :after, :index_with_tire)
+
+Commodity.leaves.each do |commodity|
+  commodity.tire.update_index
+end
