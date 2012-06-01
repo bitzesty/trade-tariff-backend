@@ -72,9 +72,6 @@ class Commodity
     end
   end
 
-  # kaminari
-  paginates_per 25
-
   # class methods
   def self.leaves
     where(:_id.nin => only(:parent_id).collect(&:parent_id))

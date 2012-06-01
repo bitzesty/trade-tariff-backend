@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'nokogiri'
+# require 'nokogiri'
 require 'open-uri'
 require 'scrape/persistance'
 require 'scrape/core_ext/string'
