@@ -35,10 +35,6 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
-    # database cleaner functionality for mongoid 3.0
-    Mongoid::Sessions.default['system.namespaces'].find(name: { '$not' => /system|\$/ }).to_a.map do |collection|
-      _, name = collection['name'].split('.', 2)
-      Mongoid::Sessions.default[name].drop
-    end
+    Mongoid.purge!
   end
 end

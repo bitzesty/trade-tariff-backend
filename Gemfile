@@ -52,7 +52,6 @@ group :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'forgery'
-  # gem 'database_cleaner' # use me when mongoid 3.0 patch gets merged in
   gem 'shoulda-matchers'
   gem 'fakeweb'
   gem 'mocha'

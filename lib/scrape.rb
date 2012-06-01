@@ -1,4 +1,5 @@
-# require 'nokogiri'
+require 'rubygems'
+require 'nokogiri'
 require 'open-uri'
 require 'scrape/persistance'
 require 'scrape/core_ext/string'
@@ -33,7 +34,7 @@ class Scrape
   end
 
   def page
-    sio = open(hit_url, :proxy => "http://localhost:3128")
+    sio = open(hit_url) #, :proxy => "http://localhost:3128")
     @cur_encoding = sio.charset
     txt = sio.read             #read the whole file
     txt.gsub! "\u00a0", " "    #global replace
