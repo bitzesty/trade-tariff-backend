@@ -9,6 +9,6 @@ end
 
 child(commodities: :commodities) do
   attributes :short_code, :code, :description, :substring,
-  :third_country_duty_cache, :uk_vat_rate_cache
+  :third_country_duty_cache, :uk_vat_rate_cache, :leaf
 end
 
