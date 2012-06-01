@@ -80,6 +80,7 @@ class Commodity
   def leaf?
     children.empty?
   end
+  alias :leaf :leaf?
 
   def ancestors
     Commodity.where(:_id.in => parent_ids)
