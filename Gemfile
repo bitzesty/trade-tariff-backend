@@ -14,6 +14,8 @@ gem 'jquery-rails', "~> 1.0.19"
 gem 'builder'
 gem 'railties'
 
+gem 'airbrake'
+
 group :passenger_compatibility do
   gem 'rack', '1.3.5'
   gem 'rake', '0.9.2'
