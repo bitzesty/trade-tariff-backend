@@ -95,6 +95,7 @@ module XlsImporter
         commodity = Commodity.new(attrs)
         commodity.heading = heading
         commodity.nomenclature = nomenclature
+        commodity.description = commodity.description.gsub("|", " ")
         commodity.save
       else
         #Errors in xls - no heading for a subheading treat as heading
@@ -170,3 +171,96 @@ CSV.foreach("#{Rails.root}/db/geo_zones.csv", headers: :first_row) { |row|
 
   pbar.inc
 }
+
+class CommodityMapper
+  # speed up the lookup without doing mongo queries
+  cattr_accessor :parent_map
+  self.parent_map = {}
+
+  class << self
+    def process(heading, commodities = [])
+      # first pair
+      traverse(heading, commodities, nil, commodities.first)
+      # all other pairs
+      traverse(heading, commodities, commodities.first, commodities.second)
+    end
+
+    def dump(commodities, level = 1)
+      commodities.each do |commodity|
+        puts "#{'*' * level} #{commodity.description}"
+        dump(commodity.children, level + 1)
+      end
+    end
+
+    private
+
+    def traverse(heading, commodities, primary, secondary)
+      # ignore case when first commodity is blank it's a direct child of the heading
+      unless commodities.index(secondary).blank?
+        next_commodity = commodities[commodities.index(secondary) + 1]
+        if next_commodity.present? # we are not at the end of the commodity array
+          map(secondary, next_commodity)
+          traverse(heading, commodities, secondary, next_commodity)
+        end
+      end
+    end
+
+    def map(primary, secondary)
+      if primary.substring < secondary.substring
+        primary.children << secondary unless primary.children.include?(secondary)
+
+        parent_map[secondary.id] = primary
+      elsif primary.substring == secondary.substring
+        if primary.parent.present? # if primary is not directly under heading
+          primary.parent.children << secondary unless primary.parent.children.include?(secondary)
+
+          parent_map[secondary.id] = primary.parent
+        end
+      else primary.substring > secondary.substring
+        parent = nth_parent(primary, secondary.substring)
+
+        if parent.present?
+          parent.children << secondary unless parent.children.include?(secondary)
+
+          parent_map[secondary.id] = parent
+        end
+      end
+    end
+
+    def nth_parent(commodity, nth)
+      if nth > 0
+        commodity = commodity.parent
+
+        while commodity.present? && commodity.substring >= nth
+          commodity = parent_of(commodity)
+        end
+
+        commodity
+      end
+    end
+
+    def parent_of(commodity)
+      parent_map[commodity.id]
+    end
+  end
+end
+
+Commodity.skip_callback(:save, :after, :index_with_tire)
+
+pbar = ProgressBar.new("Mapping commodities", Heading.count)
+Heading.all.each do |heading|
+  if heading.commodities.any? # Headings that aren't commodities themselves
+    if ENV['debug']
+      puts "Processing #{heading.description}"
+      puts "-" * heading.description.size
+    end
+    commodities = heading.commodities.order_by(created_at: 1).entries
+    CommodityMapper.process(heading, commodities)
+    # recursively print out the tree
+    CommodityMapper.dump(heading.commodities.where(substring: 1).entries) if ENV['debug']
+  end
+
+  pbar.inc
+end
+
+Commodity.set_callback(:save, :after, :index_with_tire)

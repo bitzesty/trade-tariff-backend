@@ -3,20 +3,21 @@ class Commodity
   include Mongoid::Timestamps
 
   include Tire::Model::Search
-  include Tire::Model::Callbacks
 
   # fields
-  field :code,                      type: String
-  field :description,               type: String
-  field :hier_pos,                  type: Integer
-  field :substring,                 type: Integer
-  field :synonyms,                  type: String
-  field :short_code,                type: String
+  field :code,         type: String
+  field :description,  type: String
+  field :hier_pos,     type: Integer
+  field :substring,    type: Integer
+  field :synonyms,     type: String
+  field :short_code,   type: String
+  field :parent_ids,   type: Array, default: []
   field :uk_vat_rate_cache,         type: String
   field :third_country_duty_cache,  type: String
 
   # indexes
   index({ code: 1 }, { background: true })
+  index({ parent_ids: 1 }, { background: true })
 
   # associations
   has_many :measures, as: :measurable
@@ -26,10 +27,18 @@ class Commodity
   belongs_to :nomenclature, index: true
   belongs_to :heading, index: true
   belongs_to :parent, class_name: 'Commodity',
-                      inverse_of: :children
+                      inverse_of: :children,
+                      index: true
 
   # callbacks
+  define_model_callbacks :rearrange, only: [:before, :after]
   before_save :assign_short_code
+  set_callback :save, :after, :rearrange_children, if: :rearrange_children?
+  set_callback :validation, :before do
+    run_callbacks(:rearrange) { rearrange }
+  end
+  after_save :index_with_tire
+  after_destroy :index_with_tire
 
   # tire configuration
   tire do
@@ -63,8 +72,22 @@ class Commodity
     end
   end
 
-  # kaminari
-  paginates_per 25
+  # class methods
+  def self.leaves
+    where(:_id.nin => only(:parent_id).collect(&:parent_id))
+  end
+
+  def leaf?
+    children.empty?
+  end
+
+  def ancestors
+    Commodity.where(:_id.in => parent_ids)
+  end
+
+  def descendants
+    Commodity.where(:parent_ids => self.id)
+  end
 
   def populate_rates
     self.update_attribute(:uk_vat_rate_cache, uk_vat_rate)
@@ -111,6 +134,14 @@ class Commodity
     }.to_json
   end
 
+  def rearrange_children!
+    @rearrange_children = true
+  end
+
+  def rearrange_children?
+    !!@rearrange_children
+  end
+
   def to_param
     code
   end
@@ -119,5 +150,24 @@ class Commodity
 
   def assign_short_code
     self.short_code = code.first(10)
+  end
+
+  def rearrange
+    if self.parent_id
+      self.parent_ids = parent.parent_ids + [self.parent_id]
+    else
+      self.parent_ids = []
+    end
+
+    rearrange_children! if self.parent_ids_changed?
+  end
+
+  def rearrange_children
+    @rearrange_children = false
+    self.children.each { |c| c.save }
+  end
+
+  def index_with_tire
+    self.tire.update_index
   end
 end

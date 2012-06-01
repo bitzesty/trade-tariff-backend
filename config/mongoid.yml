@@ -5,7 +5,7 @@ development:
       hosts:
         - localhost:27017
       options:
-        # safe: false
+        safe: false
         consistency: :strong
   # Configure Mongoid specific options. (optional)
   options:

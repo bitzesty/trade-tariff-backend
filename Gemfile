@@ -19,14 +19,6 @@ group :passenger_compatibility do
   gem 'rake', '0.9.2'
 end
 
-# #### Scraper
-# gem 'sidekiq', git: "git://github.com/mperham/sidekiq.git"
-# gem 'sinatra', '1.3.1'
-# gem 'sprockets'
-# gem 'slim'
-# ####
-
-
 group :assets do
   gem 'therubyracer'
   ### API Docs
@@ -36,7 +28,6 @@ group :assets do
   ##
 end
 
-
 group :development do
   gem 'puma'
   gem 'capistrano'
@@ -45,14 +36,12 @@ group :development do
   gem 'spreadsheet'
   gem 'progressbar'
   gem 'awesome_print'
-  # gem 'nokogiri'
 end
 
 group :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'forgery'
-  # gem 'database_cleaner' # use me when mongoid 3.0 patch gets merged in
   gem 'shoulda-matchers'
   gem 'fakeweb'
   gem 'mocha'
