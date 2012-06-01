@@ -1,5 +1,5 @@
 object @heading
-attributes :short_code, :code, :description
+attributes :short_code, :code, :description, :has_measures
 child :chapter do
   attributes :short_code, :code, :description
 end

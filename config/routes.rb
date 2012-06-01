@@ -8,7 +8,12 @@ UKTradeTariff::Application.routes.draw do
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
       resources :sections, only: [:index, :show], constraints: { id: /\d{1,2}/ }
       resources :chapters, only: [:show], constraints: { id: /\d{2}/ }
-      resources :headings, only: [:show], constraints: { id: /\d{4}/ }
+      resources :headings, only: [:show], constraints: { id: /\d{4}/ } do
+        member do
+          get :import_measures
+          get :export_measures
+        end
+      end
       resources :commodities, only: [:show, :update], constraints: { id: /\d{12}/ } do
         member do
           get :import_measures

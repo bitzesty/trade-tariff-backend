@@ -28,6 +28,7 @@ class Heading
   def has_measures?
     measures.present?
   end
+  alias :has_measures :has_measures?
 
   def to_param
     short_code

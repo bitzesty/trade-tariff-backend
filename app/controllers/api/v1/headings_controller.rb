@@ -6,6 +6,19 @@ module Api
 
         respond_with @heading
       end
+
+      def import_measures
+        heading = Heading.find_by(code: params[:id])
+        @measures = heading.measures.for_import
+        @measures = [heading.measures.for_import.ergo_omnes, heading.measures.for_import.specific]
+        respond_with @measures
+      end
+
+      def export_measures
+        heading = Heading.find_by(code: params[:id])
+        @measures = [heading.measures.for_export.ergo_omnes, heading.measures.for_export.specific]
+        respond_with @measures
+      end
     end
   end
 end
