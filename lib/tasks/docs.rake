@@ -19,5 +19,11 @@ namespace :doc do
     File.open("#{Rails.root}/app/views/home/docs/_commodity.html.erb", "w") do |f|
       f << JSON.pretty_generate(JSON.parse(open("http://localhost:3016/commodities/010130000080").read))
     end
+    File.open("#{Rails.root}/app/views/home/docs/_import_measures.html.erb", "w") do |f|
+      f << JSON.pretty_generate(JSON.parse(open("http://localhost:3016/commodities/010130000080/import_measures").read))
+    end
+    File.open("#{Rails.root}/app/views/home/docs/_export_measures.html.erb", "w") do |f|
+      f << JSON.pretty_generate(JSON.parse(open("http://localhost:3016/commodities/010130000080/export_measures").read))
+    end
   end
 end
