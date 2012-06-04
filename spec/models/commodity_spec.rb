@@ -14,4 +14,16 @@ describe Commodity do
 
   # misc
   it { should be_timestamped_document }
+
+  describe ".leaves" do
+    let!(:leaf_commodity) { create :commodity }
+    let!(:commodity_with_children) { create :commodity_with_children }
+
+    it "returns commodities that arent parents for anybody (i.e. are leaves)" do
+      commodities = Commodity.leaves.entries
+      commodities.should include leaf_commodity
+      commodities.should include commodity_with_children.children.first
+      commodities.should_not include commodity_with_children
+    end
+  end
 end

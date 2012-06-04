@@ -11,4 +11,16 @@ describe Country do
 
   # misc
   it { should be_timestamped_document }
+
+  describe "#class_name" do # for common interface with CountryGroup
+    it 'returns the class name' do
+      subject.class_name.should == 'Country'
+    end
+  end
+
+  describe "#to_s" do
+    it 'returns description' do
+      subject.to_s.should == subject.description
+    end
+  end
 end

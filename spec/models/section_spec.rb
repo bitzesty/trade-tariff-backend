@@ -10,4 +10,8 @@ describe Section do
 
   # misc
   it { should be_timestamped_document }
+
+  it 'uses position as key param' do
+    subject.to_param.should == subject.position
+  end
 end

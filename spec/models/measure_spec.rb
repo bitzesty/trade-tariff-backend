@@ -14,4 +14,14 @@ describe Measure do
 
   # misc
   it { should be_timestamped_document }
+
+  describe "#ergo_omnes?" do
+    let(:measure_with_region)    { create :measure, :with_region }
+    let(:measure_without_region) { create :measure }
+
+    it 'measure is applicable for all if it has no region associated' do
+      measure_with_region.ergo_omnes?.should == false
+      measure_without_region.ergo_omnes?.should == true
+    end
+  end
 end

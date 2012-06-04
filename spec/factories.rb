@@ -53,9 +53,31 @@ FactoryGirl.define do
     heading
     description { Forgery(:basic).text }
     code        { generate :code }
+
+    factory :commodity_with_children do
+      after(:create) do |commodity|
+        create_list(:commodity, 1, parent: commodity)
+      end
+    end
   end
 
   factory :legal_act do
     code { "#{Forgery(:basic).text(exactly: 5)}/#{Forgery(:basic).text(exactly: 2)}" }
+  end
+
+  factory :country do
+    name { Forgery(:address).country }
+    iso_code { Forgery(:address).country.first(2).upcase } # take a guess, not necessarily correct
+  end
+
+  factory :measure do
+    export { [true, false].sample }
+    origin { ["EU", "UK"].sample }
+    measure_type { Forgery(:basic).text }
+    duty_rates { Forgery(:basic).text }
+
+    trait :with_region do
+      association :region, factory: :country
+    end
   end
 end

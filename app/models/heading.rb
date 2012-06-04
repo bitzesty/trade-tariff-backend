@@ -21,10 +21,6 @@ class Heading
   # callbacks
   before_save :assign_short_code
 
-  def chapter_section
-    chapter.section
-  end
-
   def has_measures?
     measures.present?
   end
