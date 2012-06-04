@@ -79,5 +79,13 @@ FactoryGirl.define do
     trait :with_region do
       association :region, factory: :country
     end
+
+    trait :export do
+      export { true }
+    end
+
+    trait :import do
+      export { false }
+    end
   end
 end
