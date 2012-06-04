@@ -136,8 +136,8 @@ sections = [
   {position: 21, numeral: 'XXI',  title: "Works of art, collectors' pieces and antiques (chapter 97 - 99)"}
 ]
 
-prevent indexing for now, we will reindex everything after parent<->children
-commodity mapping gets done
+# prevent indexing for now, we will reindex everything after parent<->children
+# commodity mapping gets done
 
 Commodity.skip_callback(:save, :after, :index_with_tire)
 
