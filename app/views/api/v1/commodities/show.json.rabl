@@ -11,3 +11,6 @@ end
 child :heading do
   attributes :short_code, :code, :description
 end
+child(ancestors: :ancestors) do
+  attribute :short_code, :code, :description
+end
