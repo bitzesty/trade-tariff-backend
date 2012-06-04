@@ -30,6 +30,10 @@ class Heading
   end
   alias :has_measures :has_measures?
 
+  def has_commodities
+    commodities.any?
+  end
+
   def to_param
     short_code
   end
