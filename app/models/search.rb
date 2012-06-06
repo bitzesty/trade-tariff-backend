@@ -20,10 +20,8 @@ class Search
   def perform
     search = Commodity.tire.search do |search|
       search.query do |query|
-       query.string "description:#{q.presence || ""}"
+       query.string q.presence || ""
       end
-
-      search.highlight :parent, :description, { tag: "<span>" }
 
       {
         page: self.page.presence || 1,
