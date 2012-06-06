@@ -18,8 +18,18 @@ class Search
   end
 
   def perform
-    search = Commodity.tire.search(q.presence || "", page: page.presence || 1,
-                                                     per_page: PER_PAGE)
+    search = Commodity.tire.search do |search|
+      search.query do |query|
+       query.string "description:#{q.presence || ""}"
+      end
+
+      search.highlight :parent, :description, { tag: "<span>" }
+
+      {
+        page: self.page.presence || 1,
+        per_page: PER_PAGE
+      }
+    end
 
     {
       entries: search.results.as_json,

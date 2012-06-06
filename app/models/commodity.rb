@@ -44,10 +44,11 @@ class Commodity
   tire do
     mapping do
       indexes :id,                      index: :not_analyzed
-      indexes :description,             analyzer: 'snowball'
+      indexes :description,             analyzer: 'snowball', boost: 20
       indexes :code,                    analyzer: 'simple'
       indexes :short_code,              index: :not_analyzed
-      indexes :synonyms,                analyzer: 'snowball', boost: 10
+      indexes :synonyms,                analyzer: 'snowball', boost: 20
+      indexes :parents,                 type: 'string', analyzer: 'snowball', boost: 10
 
       indexes :heading do
         indexes :id,                      index: :not_analyzed
@@ -103,6 +104,10 @@ class Commodity
     measures.third_country.first.duty_rates if measures.third_country.any?
   end
 
+  def parent_descriptions
+    ancestors.map(&:description)
+  end
+
   def to_indexed_json
     chapter = heading.chapter
     section = chapter.section
@@ -114,6 +119,7 @@ class Commodity
       short_code: short_code,
       uk_vat_rate: uk_vat_rate,
       third_country_duty: third_country_duty,
+      parents: parent_descriptions,
       heading: {
         id: heading.id,
         code: heading.code,

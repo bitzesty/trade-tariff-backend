@@ -6,7 +6,7 @@ gem 'bson'
 gem 'bson_ext'
 gem 'mongoid', "3.0.0.rc"
 gem 'rabl'
-gem 'yajl-ruby', :require => "yajl"
+gem 'yajl-ruby', require: "yajl/json_gem"
 gem 'tire'
 gem 'kaminari'
 
