@@ -12,10 +12,19 @@ An API back end for UK Trade Tariff web app.
 
 ## Local install/run instructions
 
-1. Clone repo:
+1. Install repo (see http://source.android.com/source/downloading.html#installing-repo):
+    
+    ```
+    brew intall repo 
+    ```
+
+2. Run repo commands
 
     ```
-    git clone git@github.com:alphagov/UKTradeTariff.git
+    mkdir gds-tariff
+    cd gds-tariff
+    repo init -u git@github.com:alphagov/UKTradeTariff.git -b manifest
+    repo sync
     ```
 
 2. Setup the database and perform scraping: see instructions over here https://github.com/alphagov/TariffScraper.
