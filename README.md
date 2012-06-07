@@ -27,11 +27,11 @@ An API back end for UK Trade Tariff web app.
     repo sync
     ```
 
-2. Setup the database
+3. Setup the database
 
 Then perform scraping see instructions over here https://github.com/alphagov/TariffScraper or load a pre scraped mongodb dump.
 
-3. Run UKTradeTariff:
+4. Run UKTradeTariff:
 
     ```
     ./startup.sh
