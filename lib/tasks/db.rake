@@ -13,10 +13,15 @@ namespace :db do
 
   desc "Update duties cache"
   task update_duties_cache: 'environment' do
-    pbar = ProgressBar.new("Commodities", Commodity.count)
     Mongoid.unit_of_work(disable: :all) do
+      pbar = ProgressBar.new("Commodity", Commodity.count)
       Commodity.batch_size(1000).each_with_index do |c, i|
         c.populate_rates
+        pbar.inc
+      end
+      pbar = ProgressBar.new("Heading", Commodity.count)
+      Heading.batch_size(1000).each_with_index do |h, i|
+        h.populate_rates
         pbar.inc
       end
     end
