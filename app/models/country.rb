@@ -5,10 +5,10 @@ class Country
   field :name,     type: String
   field :iso_code, type: String
 
-  has_and_belongs_to_many :country_groups
+  has_and_belongs_to_many :country_groups, index: true
   has_many :measures, as: :region
   has_and_belongs_to_many :measure_exclusions, inverse_of: :excluded_countries,
-                                               class_name: 'Measure'
+                                               class_name: 'Measure', index: true
 
   alias :description :iso_code
 

@@ -11,12 +11,12 @@ class Measure
   field :duty_rates,       type: String
 
   has_and_belongs_to_many :excluded_countries, inverse_of: :measure_exclusions,
-                                               class_name: 'Country'
-  has_and_belongs_to_many :footnotes
-  has_and_belongs_to_many :additional_codes
-  belongs_to :legal_act
-  belongs_to :measurable, polymorphic: true
-  belongs_to :region, polymorphic: true
+                                               class_name: 'Country', index: true
+  has_and_belongs_to_many :footnotes, index: true
+  has_and_belongs_to_many :additional_codes, index: true
+  belongs_to :legal_act, index: true
+  belongs_to :measurable, polymorphic: true, index: true
+  belongs_to :region, polymorphic: true, index: true
 
   embeds_many :conditions
 
