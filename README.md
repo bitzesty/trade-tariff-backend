@@ -12,7 +12,7 @@ An API back end for UK Trade Tariff web app.
 
 ## Local install/run instructions
 
-1. Install repo (see http://source.android.com/source/downloading.html#installing-repo):
+1. Install repo see http://source.android.com/source/downloading.html#installing-repo :
     
     ```
     brew intall repo 
@@ -27,7 +27,9 @@ An API back end for UK Trade Tariff web app.
     repo sync
     ```
 
-2. Setup the database and perform scraping: see instructions over here https://github.com/alphagov/TariffScraper.
+2. Setup the database
+
+Then perform scraping see instructions over here https://github.com/alphagov/TariffScraper or load a pre scrapped mongodb dump.
 
 3. Run UKTradeTariff:
 
@@ -47,4 +49,10 @@ Useful commands:
 
     ```
     bundle exec rake environment tire:import CLASS='Commodity'
+    ```
+
+* Sync all repos
+
+    ```
+    repo sync
     ```
