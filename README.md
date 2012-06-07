@@ -29,7 +29,11 @@ An API back end for UK Trade Tariff web app.
 
 3. Setup the database
 
-Then perform scraping see instructions over here https://github.com/alphagov/TariffScraper or load a pre scraped mongodb dump.
+    Then perform scraping see instructions over here https://github.com/alphagov/TariffScraper or load a pre scraped mongodb dump.
+    
+    ```
+    rake db:mongoid:create_indexes
+    ````
 
 4. Run UKTradeTariff:
 
