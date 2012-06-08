@@ -29,6 +29,13 @@ class Search
       }
     end
 
+    sm = SearchMetric.where(q: q, q_on: Date.today).first
+    if sm
+      sm.inc(:count, 1)
+    else
+      SearchMetric.create(q: q, q_on: Date.today)
+    end
+
     {
       entries: search.results.as_json,
       current_page: search.current_page,

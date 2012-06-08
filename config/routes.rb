@@ -22,5 +22,6 @@ UKTradeTariff::Application.routes.draw do
     end
   end
 
+  match "/stats", to: "home#stats"
   root to: 'home#show'
 end
