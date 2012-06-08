@@ -33,7 +33,7 @@ class Search
     if sm
       sm.inc(:count, 1)
     else
-      SearchMetric.create(q: q, q_on: Date.today)
+      SearchMetric.create(q: q, q_on: Date.today, results: search.total_entries)
     end
 
     {
