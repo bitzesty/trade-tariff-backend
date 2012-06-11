@@ -22,11 +22,8 @@ class Search
       search.query do |query|
        query.string q.presence || ""
       end
-
-      {
-        page: self.page.presence || 1,
-        per_page: PER_PAGE
-      }
+      search.from self.page.presence || 1
+      search.size PER_PAGE
     end
 
     sm = SearchMetric.where(q: q, q_on: Date.today).first
