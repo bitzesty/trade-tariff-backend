@@ -64,7 +64,7 @@ describe Api::V1 do
 
       put "/commodities/#{commodity.to_param}", { commodity: { synonyms: synonyms } }
       result = JSON.parse(response.body)
-      response.status.should == 200
+      response.status.should == 204
 
       commodity.reload.synonyms.should == synonyms
     end
