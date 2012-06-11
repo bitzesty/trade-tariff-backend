@@ -1,30 +1,19 @@
-class Commodity
-  include Mongoid::Document
-  include Mongoid::Timestamps
-
-  include Tire::Model::Search
-
+class Commodity < BaseCommodity
   # fields
-  field :code,         type: String
-  field :description,  type: String
-  field :hier_pos,     type: Integer
-  field :substring,    type: Integer
-  field :synonyms,     type: String
-  field :short_code,   type: String
   field :parent_ids,   type: Array, default: []
-  field :uk_vat_rate_cache,         type: String
-  field :third_country_duty_cache,  type: String
 
   # indexes
-  index({ code: 1 }, { background: true })
   index({ parent_ids: 1 }, { background: true })
+
+  # tire
+  # same index as headings
+  index_name "#{Rails.env}-commodities"
 
   # associations
   has_many :measures, as: :measurable
   has_many :children, class_name: 'Commodity',
                       inverse_of: :parent
 
-  belongs_to :nomenclature, index: true
   belongs_to :heading, index: true
   belongs_to :parent, class_name: 'Commodity',
                       inverse_of: :children,
@@ -32,45 +21,9 @@ class Commodity
 
   # callbacks
   define_model_callbacks :rearrange, only: [:before, :after]
-  before_save :assign_short_code
   set_callback :save, :after, :rearrange_children, if: :rearrange_children?
   set_callback :validation, :before do
     run_callbacks(:rearrange) { rearrange }
-  end
-  after_save :index_with_tire
-  after_destroy :index_with_tire
-
-  # tire configuration
-  tire do
-    mapping do
-      indexes :id,                      index: :not_analyzed
-      indexes :description,             analyzer: 'snowball', boost: 20
-      indexes :code,                    analyzer: 'simple'
-      indexes :short_code,              index: :not_analyzed
-      indexes :synonyms,                analyzer: 'snowball', boost: 20
-      indexes :parents,                 type: 'string', analyzer: 'snowball', boost: 10
-
-      indexes :heading do
-        indexes :id,                      index: :not_analyzed
-        indexes :description,             analyzer: 'snowball'
-        indexes :code,                    analyzer: 'simple'
-        indexes :short_code,              index: :not_analyzed
-      end
-
-      indexes :chapter do
-        indexes :id,                      index: :not_analyzed
-        indexes :description,             analyzer: 'snowball'
-        indexes :code,                    analyzer: 'simple'
-        indexes :short_code,              index: :not_analyzed
-      end
-
-      indexes :section do
-        indexes :id,                      index: :not_analyzed
-        indexes :title,                   analyzer: 'snowball'
-        indexes :numeral,                 index: :not_analyzed
-        indexes :position,                index: :not_analyzed
-      end
-    end
   end
 
   # class methods
@@ -108,39 +61,6 @@ class Commodity
     ancestors.map(&:description)
   end
 
-  def to_indexed_json
-    chapter = heading.chapter
-    section = chapter.section
-
-    {
-      code: code,
-      short_code: short_code,
-      description: description,
-      short_code: short_code,
-      uk_vat_rate: uk_vat_rate,
-      third_country_duty: third_country_duty,
-      parents: parent_descriptions,
-      heading: {
-        id: heading.id,
-        code: heading.code,
-        description: heading.description,
-        short_code: heading.short_code
-      },
-      chapter: {
-        id: chapter.id,
-        code: chapter.code,
-        description: chapter.description,
-        short_code: chapter.short_code
-      },
-      section: {
-        id: section.id,
-        title: section.title,
-        numeral: section.numeral,
-        position: section.position
-      }
-    }.to_json
-  end
-
   def rearrange_children!
     @rearrange_children = true
   end
@@ -153,11 +73,27 @@ class Commodity
     code
   end
 
-  private
-
-  def assign_short_code
-    self.short_code = code.first(10)
+  def chapter
+    heading.chapter
   end
+
+  def section
+    chapter.section
+  end
+
+  def to_indexed_json
+    super.merge({
+      parents: parent_descriptions,
+      heading: {
+        id: heading.id,
+        code: heading.code,
+        description: heading.description,
+        short_code: heading.short_code
+      }
+    }).to_json
+  end
+
+  private
 
   def rearrange
     if self.parent_id
@@ -174,7 +110,7 @@ class Commodity
     self.children.each { |c| c.save }
   end
 
-  def index_with_tire
-    self.tire.update_index
+  def assign_short_code
+    self.short_code = code.first(10)
   end
 end

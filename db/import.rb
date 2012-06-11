@@ -139,7 +139,7 @@ sections = [
 # prevent indexing for now, we will reindex everything after parent<->children
 # commodity mapping gets done
 
-Commodity.skip_callback(:save, :after, :index_with_tire)
+BaseCommodity.skip_callback(:save, :after, :index_with_tire)
 
 puts "Creating Nomenclature..."
 nomenclature = Nomenclature.find_or_create_by(as_of_date: Date.today)
@@ -266,8 +266,14 @@ Heading.all.each do |heading|
   pbar.inc
 end
 
-Commodity.set_callback(:save, :after, :index_with_tire)
+BaseCommodity.set_callback(:save, :after, :index_with_tire)
 
 Commodity.leaves.each do |commodity|
   commodity.tire.update_index
+end
+
+Heading.all.each do |heading|
+  if heading.commodities.empty?
+    heading.tire.update_index
+  end
 end
