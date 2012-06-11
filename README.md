@@ -11,6 +11,10 @@ An API back end for UK Trade Tariff web app.
     ```
 2. MongoDB
 
+    ```
+    brew install mongodb
+    ```
+
 ## Local install/run instructions
 
 1. Install repo see http://source.android.com/source/downloading.html#installing-repo :
