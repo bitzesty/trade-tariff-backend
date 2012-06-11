@@ -9,6 +9,7 @@ An API back end for UK Trade Tariff web app.
     ```
     brew install elasticsearch
     ```
+2. MongoDB
 
 ## Local install/run instructions
 
