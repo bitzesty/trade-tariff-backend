@@ -1,8 +1,4 @@
 class Heading < BaseCommodity
-  # fields
-  field :uk_vat_rate_cache,         type: String
-  field :third_country_duty_cache,  type: String
-
   # indexes
   index({ short_code: 1 }, { unique: true, background: true })
 
@@ -23,8 +19,8 @@ class Heading < BaseCommodity
   end
   alias :has_measures :has_measures?
 
-  def has_commodities
-    commodities.any?
+  def declarative
+    commodities.none?
   end
 
   def to_param
@@ -43,22 +39,7 @@ class Heading < BaseCommodity
     "<Heading: #{code}>"
   end
 
-  def populate_rates
-    if has_measures?
-      self.update_attribute(:uk_vat_rate_cache, uk_vat_rate)
-      self.update_attribute(:third_country_duty_cache, third_country_duty)
-    end
-  end
-
-  def uk_vat_rate
-    measures.uk_vat.first.duty_rates if measures.uk_vat.any?
-  end
-
-  def third_country_duty
-    measures.third_country.first.duty_rates if measures.third_country.any?
-  end
-
-  def assign_short_code
+    def assign_short_code
     self.short_code = code.first(4)
   end
 end

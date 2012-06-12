@@ -42,8 +42,8 @@ describe Search do
     let(:tire_proxy) { stub() }
 
     before {
-      tire_proxy.expects(:search).returns(result_stub)
-      Commodity.expects(:tire).returns(tire_proxy)
+      tire_proxy.expects(:results).returns(result_stub)
+      Tire.expects(:search).returns(tire_proxy)
     }
 
     it 'returns search results' do

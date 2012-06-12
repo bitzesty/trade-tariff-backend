@@ -18,13 +18,11 @@ class Search
   end
 
   def perform
-    search = Commodity.tire.search do |search|
+    search = Tire.search('commodities', page: self.page.presence, per_page: PER_PAGE) do |search|
       search.query do |query|
        query.string q.presence || ""
       end
-      search.from self.page.presence || 1
-      search.size PER_PAGE
-    end
+    end.results
 
     sm = SearchMetric.where(q: q, q_on: Date.today).first
     if sm

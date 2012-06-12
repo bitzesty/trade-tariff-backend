@@ -85,6 +85,21 @@ class BaseCommodity
     }
   end
 
+  def populate_rates
+    if has_measures?
+      self.update_attribute(:uk_vat_rate_cache, uk_vat_rate)
+      self.update_attribute(:third_country_duty_cache, third_country_duty)
+    end
+  end
+
+  def uk_vat_rate
+    measures.uk_vat.first.duty_rates if measures.uk_vat.any?
+  end
+
+  def third_country_duty
+    measures.third_country.first.duty_rates if measures.third_country.any?
+  end
+
   private
 
   def index_with_tire

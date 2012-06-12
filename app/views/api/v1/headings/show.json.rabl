@@ -1,6 +1,7 @@
 object @heading
 attributes :short_code, :code, :description, :has_measures,
-    :third_country_duty_cache, :uk_vat_rate_cache
+    :third_country_duty_cache, :uk_vat_rate_cache, :declarative
+
 child :chapter do
   attributes :short_code, :code, :description
 end
