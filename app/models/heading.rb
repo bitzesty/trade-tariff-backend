@@ -8,7 +8,7 @@ class Heading < BaseCommodity
 
   # tire
   # same index as commodities
-  index_name "#{Rails.env}-commodities"
+  index_name "commodities"
 
   # associations
   belongs_to :chapter, index: true

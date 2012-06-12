@@ -7,7 +7,7 @@ class Commodity < BaseCommodity
 
   # tire
   # same index as headings
-  index_name "#{Rails.env}-commodities"
+  index_name "commodities"
 
   # associations
   has_many :measures, as: :measurable
