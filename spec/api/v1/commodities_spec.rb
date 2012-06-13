@@ -24,8 +24,8 @@ describe Api::V1 do
       commodity.synonyms.should be_blank
       api_key.access_token.should_not be_blank
 
-      put "/commodities/#{commodity.to_param}", { commodity: { synonyms: synonyms } }, authorization: ActionController::HttpAuthentication::Token.encode_credentials(api_key.access_token)
-      response.status.should == 200
+      put "/commodities/#{commodity.to_param}", { commodity: { synonyms: synonyms } },
+        authorization: ActionController::HttpAuthentication::Token.encode_credentials(api_key.access_token)
       result = JSON.parse(response.body)
 
       commodity.reload.synonyms.should == synonyms

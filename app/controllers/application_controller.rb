@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
 
   private
   def restrict_access
-    authenticate_or_request_with_http_token do |token, options|
+    authenticate_with_http_token do |token, options|
       ApiKey.where(access_token: token).exists?
     end
   end
