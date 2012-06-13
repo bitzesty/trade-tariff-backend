@@ -50,18 +50,6 @@ An API back end for UK Trade Tariff web app.
 
 Useful commands:
 
-* Drop index
-
-    ```
-    bundle exec rake tire:index:drop INDEX='commodities'
-    ```
-
-* Reindex
-
-    ```
-    bundle exec rake environment tire:import CLASS='Commodity'
-    ```
-
 * Sync all repos
 
     ```
