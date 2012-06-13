@@ -18,7 +18,7 @@ module XlsImporter
   end
 
   def build_attrs(row)
-    { code: process_id(row[0]), description: row[6].strip, hier_pos: row[4], substring: (process_substr(row[5])) }
+    { code: process_id(row[0]), description: normalize(row[6]), hier_pos: row[4], substring: (process_substr(row[5])) }
   end
 
   def is_chapter?(attrs)
@@ -27,6 +27,20 @@ module XlsImporter
 
   def is_heading?(attrs)
     attrs[:hier_pos] == 4 && attrs[:substring] == 0
+  end
+
+  def normalize(str)
+    str.gsub!("|", "\u00A0")
+    str.gsub!("!1!", "\n")
+    str.gsub!("!X!", "\u00D7")
+    str.gsub!("!x!", "\u00D7")
+    str.gsub!("!o!", "\u00B0")
+    str.gsub!("!O!", "\u00B0")
+    str.gsub!("!>=!", "\u2265")
+    str.gsub!("!<=!", "\u2264")
+    str.gsub!("@", "_")
+    str.gsub!("$", "^")
+    str.strip
   end
 
   def find_section_for_chapter(attrs)
@@ -95,7 +109,7 @@ module XlsImporter
         commodity = Commodity.new(attrs)
         commodity.heading = heading
         commodity.nomenclature = nomenclature
-        commodity.description = commodity.description.gsub("|", " ")
+        commodity.description = commodity.description
         commodity.save
       else
         #Errors in xls - no heading for a subheading treat as heading
