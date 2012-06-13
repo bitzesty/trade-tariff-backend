@@ -1,4 +1,6 @@
 class BaseCommodity
+  INDEX_NAME = "base_commodities"
+
   include Mongoid::Document
   include Mongoid::Timestamps
   include Tire::Model::Search
@@ -33,8 +35,8 @@ class BaseCommodity
   tire do
     mapping do
       indexes :id,                      index: :not_analyzed
-      indexes :description,             analyzer: 'snowball', boost: 20
-      indexes :code,                    analyzer: 'simple'
+      indexes :description,             analyzer: 'snowball'
+      indexes :code,                    index: :not_analyzed
       indexes :short_code,              index: :not_analyzed
       indexes :synonyms,                analyzer: 'snowball', boost: 20
       indexes :parents,                 type: 'string', analyzer: 'snowball', boost: 10
@@ -42,14 +44,14 @@ class BaseCommodity
       indexes :heading do
         indexes :id,                      index: :not_analyzed
         indexes :description,             analyzer: 'snowball'
-        indexes :code,                    analyzer: 'simple'
+        indexes :code,                    index: :not_analyzed
         indexes :short_code,              index: :not_analyzed
       end
 
       indexes :chapter do
         indexes :id,                      index: :not_analyzed
         indexes :description,             analyzer: 'snowball'
-        indexes :code,                    analyzer: 'simple'
+        indexes :code,                    index: :not_analyzed
         indexes :short_code,              index: :not_analyzed
       end
 

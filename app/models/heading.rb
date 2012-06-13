@@ -4,7 +4,7 @@ class Heading < BaseCommodity
 
   # tire
   # same index as commodities
-  index_name "commodities"
+  index_name BaseCommodity::INDEX_NAME
 
   # associations
   belongs_to :chapter, index: true

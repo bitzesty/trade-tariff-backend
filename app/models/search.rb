@@ -18,11 +18,31 @@ class Search
   end
 
   def perform
-    search = Tire.search('commodities', page: self.page.presence, per_page: PER_PAGE) do |search|
-      search.query do |query|
-       query.string q.presence || ""
-      end
-    end.results
+    search = Tire.search(BaseCommodity::INDEX_NAME,
+      {
+        query: {
+          dis_max: {
+            queries: [
+              {
+                query_string: {
+                  query: q
+                }
+              },
+              {
+                prefix: {
+                  code: {
+                    value: q,
+                    boost: 10
+                  }
+                }
+              }
+            ]
+          }
+        }
+        # page: page.presence,
+        # per_page: PER_PAGE
+      }
+    ).results
 
     sm = SearchMetric.where(q: q, q_on: Date.today).first
     if sm

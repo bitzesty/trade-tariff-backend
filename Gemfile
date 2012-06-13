@@ -9,7 +9,7 @@ gem 'mongoid', "3.0.0.rc"
 gem 'rabl'
 gem 'yajl-ruby', require: "yajl/json_gem"
 gem 'tire'
-gem 'tire-contrib'
+# gem 'tire-contrib'
 gem 'kaminari'
 
 gem 'jquery-rails', "~> 1.0.19"

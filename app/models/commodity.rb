@@ -7,7 +7,7 @@ class Commodity < BaseCommodity
 
   # tire
   # same index as headings
-  index_name "commodities"
+  index_name BaseCommodity::INDEX_NAME
 
   # associations
   has_many :measures, as: :measurable
