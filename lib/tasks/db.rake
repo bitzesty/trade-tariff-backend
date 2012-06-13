@@ -20,4 +20,16 @@ namespace :db do
     end
   end
 
+  desc "Index commodities&headings in ElasticSearch"
+  task index: 'environment' do
+    Commodity.leaves.each do |commodity|
+      commodity.tire.update_index
+    end
+
+    Heading.all.each do |heading|
+      if heading.commodities.empty?
+        heading.tire.update_index
+      end
+    end
+  end
 end
