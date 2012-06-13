@@ -72,6 +72,7 @@ class BaseCommodity
       short_code: short_code,
       uk_vat_rate: uk_vat_rate,
       third_country_duty: third_country_duty,
+      synonyms: synonyms,
       chapter: {
         id: chapter.id,
         code: chapter.code,
