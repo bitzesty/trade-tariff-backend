@@ -1,6 +1,10 @@
 FactoryGirl.define do
   sequence(:code) {|n| Forgery(:basic).number(at_least: 100000000000, at_most: 999999999999) }
 
+  factory :api_key do
+    app_id { Forgery(:internet).email_address }
+  end
+
   factory :nomenclature do
     as_of_date { Date.today }
   end

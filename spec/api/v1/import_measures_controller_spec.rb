@@ -41,21 +41,6 @@ describe Api::V1 do
     end
   end
 
-  describe "PUT /commodities/:id" do
-    let!(:commodity)    { create(:commodity) }
-    let(:synonyms) { Forgery(:basic).text }
-
-    it 'assigns synonyms to commodity' do
-      commodity.synonyms.should be_blank
-
-      put "/commodities/#{commodity.to_param}", { commodity: { synonyms: synonyms } }
-      result = JSON.parse(response.body)
-      response.status.should == 200
-
-      commodity.reload.synonyms.should == synonyms
-    end
-  end
-
   describe "GET /headings/:id/import_measures" do
     let!(:heading)    { create(:heading) }
     let!(:export_measure)    { create(:measure, :export, measurable: heading) }
