@@ -282,12 +282,5 @@ end
 
 BaseCommodity.set_callback(:save, :after, :index_with_tire)
 
-Commodity.leaves.each do |commodity|
-  commodity.tire.update_index
-end
-
-Heading.all.each do |heading|
-  if heading.commodities.empty?
-    heading.tire.update_index
-  end
-end
+# index records in elasticsearch after parent mapping is done
+Rake::Task['db:index'].invoke
