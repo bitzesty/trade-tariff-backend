@@ -38,9 +38,9 @@ class Search
               }
             ]
           }
-        }
-        # page: page.presence,
-        # per_page: PER_PAGE
+        },
+        size: PER_PAGE,
+        from: PER_PAGE * (current_page - 1)
       }
     ).results
 
@@ -59,6 +59,10 @@ class Search
       total_pages: search.total_pages,
       offset: search.offset
     }
+  end
+
+  def current_page
+    (page.present?) ? page.to_i : 1
   end
 
   def persisted?
