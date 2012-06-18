@@ -1,6 +1,9 @@
+require 'identifiable'
+
 class Measure
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Models::Identifiable
 
   UK_VAT_STRINGS = ["VAT standard rate", "VAT zero rate"]
   DUTY_STRINGS = ["Third country duty", "Non preferential duty under end use"]
@@ -9,7 +12,13 @@ class Measure
   field :origin,           type: String # EU/UK
   field :measure_type,     type: String
   field :duty_rates,       type: String
+  field :fedate,           type: DateTime
+  field :ledate,           type: DateTime
+  field :msrgpcode,        type: String
+  field :msrtype,          type: String
+  field :tarmsrno,         type: String
 
+  # associations
   has_and_belongs_to_many :excluded_countries, inverse_of: :measure_exclusions,
                                                class_name: 'Country', index: true
   has_and_belongs_to_many :footnotes, index: true
@@ -20,6 +29,7 @@ class Measure
 
   embeds_many :conditions
 
+  # scopes
   scope :for_import, where(export: false)
   scope :for_export, where(export: true)
 
@@ -27,6 +37,9 @@ class Measure
   scope :third_country, where(:measure_type.in => DUTY_STRINGS)
   scope :ergo_omnes, where(:region_id => nil)
   scope :specific, where(:region_id.ne => nil)
+
+  # configuration
+  identity_fields :fedate, :msrgpcode, :msrtype, :tarmsrno
 
   # Applicable for all countries
   def ergo_omnes?
