@@ -14,6 +14,8 @@ UKTradeTariff::Application.routes.draw do
         resources :export_measures, only: [:index]
       end
 
+      resources :measures, only: [:create, :update, :delete]
+
       post "search" => "search#search", via: :post, as: :search
     end
   end
