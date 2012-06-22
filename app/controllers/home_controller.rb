@@ -10,4 +10,8 @@ class HomeController < ApplicationController
     end
     @metrics = SearchMetric.where(q_on: @q_on).desc(:count)
   end
+
+  def not_found
+    render_not_found
+  end
 end

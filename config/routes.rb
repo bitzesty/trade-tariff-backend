@@ -20,6 +20,9 @@ UKTradeTariff::Application.routes.draw do
     end
   end
 
-  match "/stats", to: "home#stats"
+  match "/stats", to: 'home#stats'
+
   root to: 'home#show'
+
+  match '*path', to: 'home#not_found'
 end
