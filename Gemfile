@@ -3,9 +3,8 @@ source 'https://gems.gemfury.com/vo6ZrmjBQu5szyywDszE/'
 
 gem 'rails', '~> 3.1.1'
 
-gem 'bson'
-gem 'bson_ext'
-gem 'mongoid', "3.0.0.rc"
+gem 'mysql2'
+
 gem 'rabl'
 gem 'yajl-ruby', require: "yajl/json_gem"
 gem 'tire', git: 'https://github.com/sauliusg/tire', branch: 'custom_query_pagination'
