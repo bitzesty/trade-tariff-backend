@@ -8,7 +8,7 @@ class HomeController < ApplicationController
     else
       @q_on = Date.today
     end
-    @metrics = SearchMetric.where(q_on: @q_on).desc(:count)
+    # @metrics = SearchMetric.where(q_on: @q_on).desc(:count)
   end
 
   def not_found
