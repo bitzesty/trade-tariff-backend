@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  code_type_id: MyString
+  code_type: MyString
+  validity_start_date: 2012-06-26
+  validity_end_date: 2012-06-26
+  publiction_code: 1
+  publication_sigle: MyString
+
+two:
+  code_type_id: MyString
+  code_type: MyString
+  validity_start_date: 2012-06-26
+  validity_end_date: 2012-06-26
+  publiction_code: 1
+  publication_sigle: MyString

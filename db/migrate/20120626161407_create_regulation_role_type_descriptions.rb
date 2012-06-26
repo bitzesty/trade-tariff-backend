@@ -3,7 +3,7 @@ class CreateRegulationRoleTypeDescriptions < ActiveRecord::Migration
     create_table :regulation_role_type_descriptions, :id => false do |t|
       t.string :id
       t.string :regulation_role_type_id
-      t.string :language_id
+      t.string :langurakage_id
       t.text :short_description
 
       t.timestamps

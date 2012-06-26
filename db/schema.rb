@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120626161407) do
+ActiveRecord::Schema.define(:version => 20120626164513) do
 
   create_table "additional_code_type_descriptions", :id => false, :force => true do |t|
     t.string   "id"
@@ -49,6 +49,16 @@ ActiveRecord::Schema.define(:version => 20120626161407) do
     t.datetime "updated_at"
   end
 
+  create_table "footnote_descriptions", :id => false, :force => true do |t|
+    t.string   "sid"
+    t.string   "footnote_type_id"
+    t.string   "footnote_id"
+    t.string   "language_id"
+    t.text     "long_description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "footnote_type_descriptions", :id => false, :force => true do |t|
     t.string   "id"
     t.string   "footnote_type_id"
@@ -61,6 +71,15 @@ ActiveRecord::Schema.define(:version => 20120626161407) do
   create_table "footnote_types", :id => false, :force => true do |t|
     t.string   "id"
     t.integer  "code"
+    t.date     "validity_start_date"
+    t.date     "validity_end_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "footnotes", :id => false, :force => true do |t|
+    t.string   "footnote_id"
+    t.string   "footnote_type"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
     t.datetime "created_at"
@@ -97,6 +116,17 @@ ActiveRecord::Schema.define(:version => 20120626161407) do
     t.string   "measure_type_series_id"
     t.string   "language_id"
     t.text     "short_description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "publication_sigles", :id => false, :force => true do |t|
+    t.string   "code_type_id"
+    t.string   "code_type"
+    t.date     "validity_start_date"
+    t.date     "validity_end_date"
+    t.integer  "publiction_code"
+    t.string   "publication_sigle"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
