@@ -13,69 +13,78 @@
 
 ActiveRecord::Schema.define(:version => 20120626161407) do
 
-  create_table "additional_code_type_descriptions", :force => true do |t|
-    t.integer  "additional_code_type_id"
-    t.integer  "language_id"
+  create_table "additional_code_type_descriptions", :id => false, :force => true do |t|
+    t.string   "id"
+    t.string   "additional_code_type_id"
+    t.string   "language_id"
     t.text     "short_description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "additional_code_types", :force => true do |t|
+  create_table "additional_code_types", :id => false, :force => true do |t|
+    t.string   "id"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
+    t.string   "code"
+    t.string   "meursing_table_plan_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "certificate_type_descriptions", :id => false, :force => true do |t|
+    t.string   "id"
+    t.string   "certificate_type_id"
+    t.string   "language_id"
+    t.text     "short_description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "certificate_types", :id => false, :force => true do |t|
+    t.string   "id"
+    t.date     "validity_start_date"
+    t.date     "validity_end_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "footnote_type_descriptions", :id => false, :force => true do |t|
+    t.string   "id"
+    t.string   "footnote_type_id"
+    t.string   "language_id"
+    t.text     "short_description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "footnote_types", :id => false, :force => true do |t|
+    t.string   "id"
     t.integer  "code"
-    t.integer  "meursing_table_plan_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "certificate_type_descriptions", :force => true do |t|
-    t.integer  "certificate_type_id"
-    t.integer  "language_id"
-    t.text     "short_description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "certificate_types", :force => true do |t|
     t.date     "validity_start_date"
     t.date     "validity_end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "footnote_type_descriptions", :force => true do |t|
-    t.integer  "footnote_type_id"
-    t.integer  "language_id"
-    t.text     "short_description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "footnote_types", :force => true do |t|
-    t.integer  "code"
-    t.date     "validity_start_date"
-    t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "language_descriptions", :force => true do |t|
-    t.integer  "language_id"
+  create_table "language_descriptions", :id => false, :force => true do |t|
+    t.string   "id"
+    t.string   "language_id"
     t.text     "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "languages", :force => true do |t|
+  create_table "languages", :id => false, :force => true do |t|
+    t.string   "id"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "measure_type_series", :force => true do |t|
+  create_table "measure_type_series", :id => false, :force => true do |t|
+    t.string   "id"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
     t.integer  "combination"
@@ -83,38 +92,43 @@ ActiveRecord::Schema.define(:version => 20120626161407) do
     t.datetime "updated_at"
   end
 
-  create_table "measure_type_series_descriptions", :force => true do |t|
-    t.integer  "measure_type_series_id"
-    t.integer  "language_id"
+  create_table "measure_type_series_descriptions", :id => false, :force => true do |t|
+    t.string   "id"
+    t.string   "measure_type_series_id"
+    t.string   "language_id"
     t.text     "short_description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "regulation_group_descriptions", :force => true do |t|
-    t.integer  "regulation_group_id"
-    t.integer  "language_id"
+  create_table "regulation_group_descriptions", :id => false, :force => true do |t|
+    t.string   "id"
+    t.string   "regulation_group_id"
+    t.string   "language_id"
     t.text     "short_description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "regulation_groups", :force => true do |t|
+  create_table "regulation_groups", :id => false, :force => true do |t|
+    t.string   "id"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "regulation_role_type_descriptions", :force => true do |t|
-    t.integer  "regulation_role_type_id"
-    t.integer  "nguage_id"
+  create_table "regulation_role_type_descriptions", :id => false, :force => true do |t|
+    t.string   "id"
+    t.string   "regulation_role_type_id"
+    t.string   "language_id"
     t.text     "short_description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "regulation_role_types", :force => true do |t|
+  create_table "regulation_role_types", :id => false, :force => true do |t|
+    t.string   "id"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
     t.datetime "created_at"

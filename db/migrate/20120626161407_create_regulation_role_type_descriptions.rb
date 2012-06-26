@@ -1,8 +1,9 @@
 class CreateRegulationRoleTypeDescriptions < ActiveRecord::Migration
   def change
-    create_table :regulation_role_type_descriptions do |t|
-      t.integer :regulation_role_type_id
-      t.integer :nguage_id
+    create_table :regulation_role_type_descriptions, :id => false do |t|
+      t.string :id
+      t.string :regulation_role_type_id
+      t.string :language_id
       t.text :short_description
 
       t.timestamps
