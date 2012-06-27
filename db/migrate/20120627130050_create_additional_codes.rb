@@ -1,6 +1,6 @@
 class CreateAdditionalCodes < ActiveRecord::Migration
   def change
-    create_table :additional_codes do |t|
+    create_table :additional_codes, :id => false do |t|
       t.string :additional_code_sid
       t.string :additional_code_type_id
       t.string :additional_code
