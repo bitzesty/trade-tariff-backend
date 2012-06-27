@@ -8,4 +8,10 @@ class FootnoteType < ActiveRecord::Base
     7 => "Other Measures",
     8 => "Measuring Heading",
   }
+
+  self.primary_key = :footnote_type_id
+
+  has_many :footnotes
+  has_many :footnote_description
+  has_one :footnote_type_description
 end
