@@ -4,7 +4,7 @@ class CreateFootnoteDescriptionPeriods < ActiveRecord::Migration
       t.string :footnote_description_period_sid
       t.string :footnote_type_id
       t.string :footnote_id
-      t.sate :validity_start_date
+      t.date :validity_start_date
 
       t.timestamps
     end
