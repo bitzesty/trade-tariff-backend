@@ -5,7 +5,7 @@ class CreateCompleteAbrogationRegulations < ActiveRecord::Migration
       t.string :complete_abrogation_regulation_id
       t.date :published_date
       t.string :officialjournal_number
-      t.intger :officialjournal_page
+      t.integer :officialjournal_page
       t.integer :replacement_indicator
       t.text :information_text
       t.boolean :approved_flag
