@@ -1,7 +1,7 @@
 class CreateExportRefundNomenclatureIndents < ActiveRecord::Migration
   def change
     create_table :export_refund_nomenclature_indents, :id => false do |t|
-      t.strign :export_refund_nomenclature_indents_sid
+      t.string :export_refund_nomenclature_indents_sid
       t.string :export_refund_nomenclature_sid
       t.date :validity_start_date
       t.string :number_export_refund_nomenclature_indents
