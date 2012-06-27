@@ -10,7 +10,7 @@ class CreateBaseRegulations < ActiveRecord::Migration
       t.integer :replacement_indicator
       t.boolean :stopped_flag
       t.text :information_text
-      t.bolean :approved_flag
+      t.boolean :approved_flag
       t.date :published_date
       t.string :officialjournal_number
       t.date :effective_end_date
