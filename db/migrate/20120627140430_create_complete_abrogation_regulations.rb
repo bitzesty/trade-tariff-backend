@@ -1,6 +1,6 @@
 class CreateCompleteAbrogationRegulations < ActiveRecord::Migration
   def change
-    create_table :complete_abrogation_regulations do |t|
+    create_table :complete_abrogation_regulations, :id => false do |t|
       t.integer :complete_abrogation_regulation_role
       t.string :complete_abrogation_regulation_id
       t.date :published_date
