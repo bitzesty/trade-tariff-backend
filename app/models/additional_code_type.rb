@@ -5,4 +5,11 @@ class AdditionalCodeType < ActiveRecord::Base
     3 => "Meursing addition codes",
     4 => "Eport refund for processed agricultural goods"
   }
+
+  self.primary_key = :additional_code_type_id
+
+  has_many :additional_codes
+  has_many :additional_code_type_descriptions
+  has_many :additional_code_descriptions
+  has_many :additional_code_type_measure_types
 end
