@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120628162738) do
+ActiveRecord::Schema.define(:version => 20120628163107) do
 
   create_table "additional_code_description_periods", :id => false, :force => true do |t|
     t.string   "additional_code_description_period_sid"
@@ -983,6 +983,14 @@ ActiveRecord::Schema.define(:version => 20120628162738) do
     t.string   "regulation_role_type_id"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "transmission_comments", :id => false, :force => true do |t|
+    t.integer  "comment_sid"
+    t.string   "language_id"
+    t.text     "comment_text"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
