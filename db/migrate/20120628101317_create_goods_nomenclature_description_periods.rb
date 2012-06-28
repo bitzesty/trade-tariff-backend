@@ -1,6 +1,6 @@
 class CreateGoodsNomenclatureDescriptionPeriods < ActiveRecord::Migration
   def change
-    create_table :goods_nomenclature_description_periods do |t|
+    create_table :goods_nomenclature_description_periods, :id => false do |t|
       t.integer :goods_nomenclature_description_period_sid
       t.integer :goods_nomenclature_sid
       t.date :validity_start_date

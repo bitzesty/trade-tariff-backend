@@ -1,6 +1,6 @@
 class CreateGoodsNomenclatureDescriptions < ActiveRecord::Migration
   def change
-    create_table :goods_nomenclature_descriptions do |t|
+    create_table :goods_nomenclature_descriptions, :id => false do |t|
       t.integer :goods_nomenclature_description_period_sid
       t.string :language_id
       t.integer :goods_nomenclature_sid

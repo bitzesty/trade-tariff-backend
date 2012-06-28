@@ -1,6 +1,6 @@
 class CreateGoodsNomenclatureIndents < ActiveRecord::Migration
   def change
-    create_table :goods_nomenclature_indents do |t|
+    create_table :goods_nomenclature_indents, :id => false do |t|
       t.integer :goods_nomenclature_indent_sid
       t.integer :goods_nomenclature_sid
       t.date :validity_start_date

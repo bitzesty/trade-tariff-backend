@@ -1,6 +1,6 @@
 class CreateGeographicalAreas < ActiveRecord::Migration
   def change
-    create_table :geographical_areas do |t|
+    create_table :geographical_areas, :id => false do |t|
       t.integer :geographical_area_sid
       t.date :validity_start_date
       t.string :geographical_code

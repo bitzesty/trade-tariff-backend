@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120628102324) do
+ActiveRecord::Schema.define(:version => 20120628110326) do
 
   create_table "additional_code_description_periods", :id => false, :force => true do |t|
     t.string   "additional_code_description_period_sid"
@@ -153,7 +153,7 @@ ActiveRecord::Schema.define(:version => 20120628102324) do
   end
 
   create_table "duty_expression_descriptions", :id => false, :force => true do |t|
-    t.string   "duty_expression_description_id"
+    t.string   "duty_expression_id"
     t.string   "language_id"
     t.text     "description"
     t.datetime "created_at"
@@ -330,7 +330,7 @@ ActiveRecord::Schema.define(:version => 20120628102324) do
 
   create_table "footnotes", :id => false, :force => true do |t|
     t.string   "footnote_id"
-    t.string   "footnote_type_id"
+    t.string   "footnote_type"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
     t.datetime "created_at"
@@ -493,6 +493,97 @@ ActiveRecord::Schema.define(:version => 20120628102324) do
     t.datetime "updated_at"
   end
 
+  create_table "measure_action_descriptions", :id => false, :force => true do |t|
+    t.string   "action_code"
+    t.string   "language_id"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "measure_actions", :id => false, :force => true do |t|
+    t.string   "action_code"
+    t.date     "validity_start_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "measure_components", :id => false, :force => true do |t|
+    t.integer  "measure_sid"
+    t.string   "duty_expression_id"
+    t.integer  "duty_amount"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "measure_condition_code_descriptions", :id => false, :force => true do |t|
+    t.string   "condition_code"
+    t.string   "language_id"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "measure_condition_codes", :id => false, :force => true do |t|
+    t.string   "condition_code"
+    t.date     "validity_start_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "measure_condition_components", :id => false, :force => true do |t|
+    t.integer  "measure_condition_sid"
+    t.string   "duty_expression_id"
+    t.integer  "duty_amount"
+    t.string   "monetary_unit_code"
+    t.string   "measurement_unit_code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "measure_conditions", :id => false, :force => true do |t|
+    t.integer  "measure_condition_sid"
+    t.integer  "measure_sid"
+    t.string   "condition_code"
+    t.integer  "component_sequence_number"
+    t.integer  "condition_duty_amount"
+    t.string   "condition_monetary_unit_code"
+    t.string   "condition_measurement_unit_code"
+    t.string   "action_code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "measure_excluded_geographical_areas", :id => false, :force => true do |t|
+    t.integer  "measure_sid"
+    t.string   "excluded_geographical_area"
+    t.integer  "geographical_area_sid"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "measure_partial_temporary_stops", :id => false, :force => true do |t|
+    t.integer  "measure_sid"
+    t.date     "validity_start_date"
+    t.date     "validity_end_date"
+    t.string   "partial_temporary_stop_regulation_id"
+    t.string   "partial_temporary_stop_regulation_officialjournal_number"
+    t.integer  "partial_temporary_stop_regulation_officialjournal_page"
+    t.string   "abrogation_regulation_id"
+    t.string   "abrogation_regulation_officialjournal_number"
+    t.integer  "abrogation_regulation_officialjournal_page"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "measure_type_descriptions", :id => false, :force => true do |t|
+    t.integer  "measure_type_id"
+    t.string   "language_id"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "measure_type_series", :id => false, :force => true do |t|
     t.string   "measure_type_series_id"
     t.date     "validity_start_date"
@@ -506,6 +597,39 @@ ActiveRecord::Schema.define(:version => 20120628102324) do
     t.string   "measure_type_series_id"
     t.string   "language_id"
     t.text     "measure_type_series_descriptions"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "measure_types", :id => false, :force => true do |t|
+    t.integer  "measure_type_id"
+    t.date     "validity_start_date"
+    t.date     "validity_end_date"
+    t.integer  "trade_movement_code"
+    t.integer  "priority_code"
+    t.integer  "measure_component_applicable_code"
+    t.integer  "origin_dest_code"
+    t.integer  "order_number_capture_code"
+    t.integer  "measure_explosion_level"
+    t.string   "measure_type_series_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "measures", :id => false, :force => true do |t|
+    t.integer  "measure_sid"
+    t.integer  "measure_type"
+    t.string   "geographical_area"
+    t.string   "goods_nomenclature_item_id"
+    t.date     "validity_start_date"
+    t.date     "validity_end_date"
+    t.integer  "measure_generating_regulation_role"
+    t.string   "measure_generating_regulation_id"
+    t.integer  "justification_regulation_role"
+    t.string   "justification_regulation_id"
+    t.boolean  "stopped_flag"
+    t.integer  "geographical_area_sid"
+    t.integer  "goods_nomenclature_sid"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

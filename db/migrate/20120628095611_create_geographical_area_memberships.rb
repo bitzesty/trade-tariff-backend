@@ -1,6 +1,6 @@
 class CreateGeographicalAreaMemberships < ActiveRecord::Migration
   def change
-    create_table :geographical_area_memberships do |t|
+    create_table :geographical_area_memberships, :id => false do |t|
       t.integer :geographical_area_sid
       t.integer :geographical_area_group_sid
       t.date :validity_start_date
