@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120627162552) do
+ActiveRecord::Schema.define(:version => 20120628095611) do
 
   create_table "additional_code_description_periods", :id => false, :force => true do |t|
     t.string   "additional_code_description_period_sid"
@@ -153,7 +153,7 @@ ActiveRecord::Schema.define(:version => 20120627162552) do
   end
 
   create_table "duty_expression_descriptions", :id => false, :force => true do |t|
-    t.string   "duty_expression_id"
+    t.string   "duty_expression_description_id"
     t.string   "language_id"
     t.text     "description"
     t.datetime "created_at"
@@ -330,7 +330,7 @@ ActiveRecord::Schema.define(:version => 20120627162552) do
 
   create_table "footnotes", :id => false, :force => true do |t|
     t.string   "footnote_id"
-    t.string   "footnote_type"
+    t.string   "footnote_type_id"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
     t.datetime "created_at"
@@ -356,6 +356,42 @@ ActiveRecord::Schema.define(:version => 20120627162552) do
     t.integer  "replacement_indicator"
     t.text     "information_text"
     t.boolean  "approved_flag"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "geographical_area_description_periods", :force => true do |t|
+    t.integer  "geographical_area_description_period_sid"
+    t.integer  "geographical_area_sid"
+    t.date     "validity_start_date"
+    t.string   "geographical_area_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "geographical_area_descriptions", :force => true do |t|
+    t.integer  "geographical_area_description_period_sid"
+    t.string   "language_id"
+    t.integer  "geographical_area_sid"
+    t.string   "geographical_area_id"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "geographical_area_memberships", :force => true do |t|
+    t.integer  "geographical_area_sid"
+    t.integer  "geographical_area_group_sid"
+    t.date     "validity_start_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "geographical_areas", :force => true do |t|
+    t.integer  "geographical_area_sid"
+    t.date     "validity_start_date"
+    t.string   "geographical_code"
+    t.string   "geographical_area_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
