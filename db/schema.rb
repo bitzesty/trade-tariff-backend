@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120628110326) do
+ActiveRecord::Schema.define(:version => 20120628112949) do
 
   create_table "additional_code_description_periods", :id => false, :force => true do |t|
     t.string   "additional_code_description_period_sid"
@@ -612,6 +612,45 @@ ActiveRecord::Schema.define(:version => 20120628110326) do
     t.integer  "order_number_capture_code"
     t.integer  "measure_explosion_level"
     t.string   "measure_type_series_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "measurement_unit_descriptions", :force => true do |t|
+    t.string   "measurement_unit_code"
+    t.string   "language_id"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "measurement_unit_qualifier_descriptions", :force => true do |t|
+    t.string   "measurement_unit_qualifier_code"
+    t.string   "language_id"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "measurement_unit_qualifiers", :force => true do |t|
+    t.string   "measurement_unit_qualifier_code"
+    t.date     "validity_start_date"
+    t.date     "validity_end_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "measurement_units", :force => true do |t|
+    t.string   "measurement_unit_code"
+    t.date     "validity_start_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "measurements", :force => true do |t|
+    t.string   "measurement_unit_code"
+    t.string   "measurement_unit_qualifier_code"
+    t.date     "validity_start_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
