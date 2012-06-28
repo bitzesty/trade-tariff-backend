@@ -153,7 +153,7 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
   end
 
   create_table "duty_expression_descriptions", :id => false, :force => true do |t|
-    t.string   "duty_expression_id"
+    t.string   "duty_expression_description_id"
     t.string   "language_id"
     t.text     "description"
     t.datetime "created_at"
@@ -330,7 +330,7 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
 
   create_table "footnotes", :id => false, :force => true do |t|
     t.string   "footnote_id"
-    t.string   "footnote_type"
+    t.string   "footnote_type_id"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
     t.datetime "created_at"
