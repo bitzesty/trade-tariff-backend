@@ -1,6 +1,6 @@
 class CreateQuotaAssociations < ActiveRecord::Migration
   def change
-    create_table :quota_associations do |t|
+    create_table :quota_associations, :id => false do |t|
       t.integer :main_quota_definition_sid
       t.integer :sub_quota_definition_sid
       t.string :relation_type

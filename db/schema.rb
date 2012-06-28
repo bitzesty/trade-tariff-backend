@@ -822,7 +822,7 @@ ActiveRecord::Schema.define(:version => 20120628154105) do
     t.datetime "updated_at"
   end
 
-  create_table "quota_associations", :force => true do |t|
+  create_table "quota_associations", :id => false, :force => true do |t|
     t.integer  "main_quota_definition_sid"
     t.integer  "sub_quota_definition_sid"
     t.string   "relation_type"
