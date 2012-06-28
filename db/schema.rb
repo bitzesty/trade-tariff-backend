@@ -153,7 +153,7 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
   end
 
   create_table "duty_expression_descriptions", :id => false, :force => true do |t|
-    t.string   "duty_expression_description_id"
+    t.string   "duty_expression_id"
     t.string   "language_id"
     t.text     "description"
     t.datetime "created_at"
@@ -247,7 +247,7 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
     t.datetime "updated_at"
   end
 
-  create_table "footnote_association_erns", :force => true do |t|
+  create_table "footnote_association_erns", :id => false, :force => true do |t|
     t.string   "export_refund_nomenclature_sid"
     t.string   "footnote_type"
     t.string   "footnote_id"
@@ -360,7 +360,7 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
     t.datetime "updated_at"
   end
 
-  create_table "geographical_area_description_periods", :force => true do |t|
+  create_table "geographical_area_description_periods", :id => false, :force => true do |t|
     t.integer  "geographical_area_description_period_sid"
     t.integer  "geographical_area_sid"
     t.date     "validity_start_date"
@@ -369,7 +369,7 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
     t.datetime "updated_at"
   end
 
-  create_table "geographical_area_descriptions", :force => true do |t|
+  create_table "geographical_area_descriptions", :id => false, :force => true do |t|
     t.integer  "geographical_area_description_period_sid"
     t.string   "language_id"
     t.integer  "geographical_area_sid"
@@ -379,7 +379,7 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
     t.datetime "updated_at"
   end
 
-  create_table "geographical_area_memberships", :force => true do |t|
+  create_table "geographical_area_memberships", :id => false, :force => true do |t|
     t.integer  "geographical_area_sid"
     t.integer  "geographical_area_group_sid"
     t.date     "validity_start_date"
@@ -387,7 +387,7 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
     t.datetime "updated_at"
   end
 
-  create_table "geographical_areas", :force => true do |t|
+  create_table "geographical_areas", :id => false, :force => true do |t|
     t.integer  "geographical_area_sid"
     t.date     "validity_start_date"
     t.string   "geographical_code"
@@ -396,7 +396,7 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
     t.datetime "updated_at"
   end
 
-  create_table "goods_nomenclature_description_periods", :force => true do |t|
+  create_table "goods_nomenclature_description_periods", :id => false, :force => true do |t|
     t.integer  "goods_nomenclature_description_period_sid"
     t.integer  "goods_nomenclature_sid"
     t.date     "validity_start_date"
@@ -406,7 +406,7 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
     t.datetime "updated_at"
   end
 
-  create_table "goods_nomenclature_descriptions", :force => true do |t|
+  create_table "goods_nomenclature_descriptions", :id => false, :force => true do |t|
     t.integer  "goods_nomenclature_description_period_sid"
     t.string   "language_id"
     t.integer  "goods_nomenclature_sid"
@@ -417,7 +417,7 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
     t.datetime "updated_at"
   end
 
-  create_table "goods_nomenclature_group_descriptions", :force => true do |t|
+  create_table "goods_nomenclature_group_descriptions", :id => false, :force => true do |t|
     t.string   "goods_nomenclature_group_type"
     t.string   "goods_nomenclature_group_id"
     t.string   "language_id"
@@ -426,7 +426,7 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
     t.datetime "updated_at"
   end
 
-  create_table "goods_nomenclature_groups", :force => true do |t|
+  create_table "goods_nomenclature_groups", :id => false, :force => true do |t|
     t.string   "goods_nomenclature_group_type"
     t.string   "goods_nomenclature_group_id"
     t.date     "validity_start_date"
@@ -435,7 +435,7 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
     t.datetime "updated_at"
   end
 
-  create_table "goods_nomenclature_indents", :force => true do |t|
+  create_table "goods_nomenclature_indents", :id => false, :force => true do |t|
     t.integer  "goods_nomenclature_indent_sid"
     t.integer  "goods_nomenclature_sid"
     t.date     "validity_start_date"
@@ -446,7 +446,7 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
     t.datetime "updated_at"
   end
 
-  create_table "goods_nomenclature_origins", :force => true do |t|
+  create_table "goods_nomenclature_origins", :id => false, :force => true do |t|
     t.integer  "goods_nomenclature_sid"
     t.string   "derived_goods_nomenclature_item_id"
     t.string   "derived_productline_suffix"
@@ -456,7 +456,7 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
     t.datetime "updated_at"
   end
 
-  create_table "goods_nomenclature_successors", :force => true do |t|
+  create_table "goods_nomenclature_successors", :id => false, :force => true do |t|
     t.integer  "goods_nomenclature_sid"
     t.string   "absorbed_goods_nomenclature_item_id"
     t.string   "absorbed_productline_suffix"
@@ -466,7 +466,7 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
     t.datetime "updated_at"
   end
 
-  create_table "goods_nomenclatures", :force => true do |t|
+  create_table "goods_nomenclatures", :id => false, :force => true do |t|
     t.integer  "goods_nomenclature_sid"
     t.string   "goods_nomenclature_item_id"
     t.string   "producline_suffix"
@@ -616,7 +616,7 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
     t.datetime "updated_at"
   end
 
-  create_table "measurement_unit_descriptions", :force => true do |t|
+  create_table "measurement_unit_descriptions", :id => false, :force => true do |t|
     t.string   "measurement_unit_code"
     t.string   "language_id"
     t.string   "description"
@@ -624,7 +624,7 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
     t.datetime "updated_at"
   end
 
-  create_table "measurement_unit_qualifier_descriptions", :force => true do |t|
+  create_table "measurement_unit_qualifier_descriptions", :id => false, :force => true do |t|
     t.string   "measurement_unit_qualifier_code"
     t.string   "language_id"
     t.string   "description"
@@ -632,7 +632,7 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
     t.datetime "updated_at"
   end
 
-  create_table "measurement_unit_qualifiers", :force => true do |t|
+  create_table "measurement_unit_qualifiers", :id => false, :force => true do |t|
     t.string   "measurement_unit_qualifier_code"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
@@ -640,14 +640,14 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
     t.datetime "updated_at"
   end
 
-  create_table "measurement_units", :force => true do |t|
+  create_table "measurement_units", :id => false, :force => true do |t|
     t.string   "measurement_unit_code"
     t.date     "validity_start_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "measurements", :force => true do |t|
+  create_table "measurements", :id => false, :force => true do |t|
     t.string   "measurement_unit_code"
     t.string   "measurement_unit_qualifier_code"
     t.date     "validity_start_date"
