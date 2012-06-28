@@ -3,4 +3,5 @@ class Footnote < ActiveRecord::Base
 
   belongs_to :footnote_type, primary_key: :footnote_type
   has_one :footnote_description
+  has_one :footnote_description_period
 end

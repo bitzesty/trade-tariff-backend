@@ -13,5 +13,6 @@ class FootnoteType < ActiveRecord::Base
 
   has_many :footnotes
   has_many :footnote_description
+  has_many :footnote_description_periods
   has_one :footnote_type_description
 end

@@ -1,2 +1,3 @@
 class ExportRefundNomenclatureDescriptionPeriod < ActiveRecord::Base
+  has_many :export_refund_nomenclature_descriptions, foreign_key: :export_refund_nomenclature_description_period_sid
 end

@@ -4,6 +4,7 @@ source 'https://gems.gemfury.com/vo6ZrmjBQu5szyywDszE/'
 gem 'rails', '~> 3.1.1'
 
 gem 'mysql2'
+gem 'composite_primary_keys'
 
 gem 'rabl'
 gem 'yajl-ruby', require: "yajl/json_gem"
