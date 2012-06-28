@@ -5,7 +5,7 @@ class CreateGeographicalAreaDescriptions < ActiveRecord::Migration
       t.string :language_id
       t.integer :geographical_area_sid
       t.string :geographical_area_id
-      t.string :description
+      t.text :description
 
       t.timestamps
     end

@@ -3,7 +3,7 @@ class CreateMeasurementUnitDescriptions < ActiveRecord::Migration
     create_table :measurement_unit_descriptions, :id => false do |t|
       t.string :measurement_unit_code
       t.string :language_id
-      t.string :description
+      t.text :description
 
       t.timestamps
     end

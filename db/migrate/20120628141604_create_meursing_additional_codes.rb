@@ -1,6 +1,6 @@
 class CreateMeursingAdditionalCodes < ActiveRecord::Migration
   def change
-    create_table :meursing_additional_codes do |t|
+    create_table :meursing_additional_codes, :id => false do |t|
       t.integer :meursing_additional_code_sid
       t.integer :additional_code
       t.date :validity_start_date
