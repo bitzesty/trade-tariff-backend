@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120628112949) do
+ActiveRecord::Schema.define(:version => 20120628143643) do
 
   create_table "additional_code_description_periods", :id => false, :force => true do |t|
     t.string   "additional_code_description_period_sid"
@@ -669,6 +669,64 @@ ActiveRecord::Schema.define(:version => 20120628112949) do
     t.boolean  "stopped_flag"
     t.integer  "geographical_area_sid"
     t.integer  "goods_nomenclature_sid"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "meursing_additional_codes", :force => true do |t|
+    t.integer  "meursing_additional_code_sid"
+    t.integer  "additional_code"
+    t.date     "validity_start_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "meursing_heading_texts", :force => true do |t|
+    t.string   "meursing_table_plan_id"
+    t.integer  "meursing_heading_number"
+    t.integer  "row_column_code"
+    t.string   "language_id"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "meursing_headings", :force => true do |t|
+    t.string   "meursing_table_plan_id"
+    t.integer  "meursing_heading_number"
+    t.integer  "row_column_code"
+    t.date     "validity_start_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "meursing_subheadings", :force => true do |t|
+    t.string   "meursing_table_plan_id"
+    t.integer  "meursing_heading_number"
+    t.integer  "row_column_code"
+    t.integer  "subheading_sequence_number"
+    t.date     "validity_start_date"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "meursing_table_cell_components", :force => true do |t|
+    t.integer  "meursing_additional_code_sid"
+    t.string   "meursing_table_plan_id"
+    t.integer  "heading_number"
+    t.integer  "row_column_code"
+    t.integer  "subheading_sequence_number"
+    t.date     "validity_start_date"
+    t.date     "validity_end_date"
+    t.integer  "additional_code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "meursing_table_plans", :force => true do |t|
+    t.string   "meursing_table_plan_id"
+    t.date     "validity_start_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
