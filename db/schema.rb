@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120628152754) do
+ActiveRecord::Schema.define(:version => 20120628153729) do
 
   create_table "additional_code_description_periods", :id => false, :force => true do |t|
     t.string   "additional_code_description_period_sid"
@@ -783,6 +783,41 @@ ActiveRecord::Schema.define(:version => 20120628152754) do
     t.string   "monetary_unit_code"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "nomenclature_group_memberships", :id => false, :force => true do |t|
+    t.integer  "goods_nomenclature_sid"
+    t.string   "goods_nomenclature_group_type"
+    t.string   "goods_nomenclature_group_id"
+    t.date     "validity_start_date"
+    t.date     "validity_end_date"
+    t.string   "goods_nomenclature_item_id"
+    t.string   "productline_suffix"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "prorogation_regulation_actions", :id => false, :force => true do |t|
+    t.integer  "prorogation_regulation_role"
+    t.string   "prorogation_regulation_id"
+    t.integer  "prorogated_regulation_role"
+    t.string   "prorogated_regulation_id"
+    t.date     "prorogated_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "prorogation_regulations", :id => false, :force => true do |t|
+    t.integer  "prorogation_regulation_role"
+    t.string   "prorogation_regulation_id"
+    t.date     "published_date"
+    t.string   "officialjournal_number"
+    t.integer  "officialjournal_page"
+    t.integer  "replacement_indicator"
+    t.text     "information_text"
+    t.boolean  "approved_flag"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
