@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120628154105) do
+ActiveRecord::Schema.define(:version => 20120628162202) do
 
   create_table "additional_code_description_periods", :id => false, :force => true do |t|
     t.string   "additional_code_description_period_sid"
@@ -173,7 +173,6 @@ ActiveRecord::Schema.define(:version => 20120628154105) do
 
   create_table "explicit_abrogation_regulations", :id => false, :force => true do |t|
     t.integer  "explicit_abrogation_regulation_role"
-    t.string   "explicit_abrogation_regulation_id"
     t.date     "published_date"
     t.string   "officialjournal_number"
     t.integer  "officialjournal_page"
@@ -828,6 +827,121 @@ ActiveRecord::Schema.define(:version => 20120628154105) do
     t.integer  "sub_quota_definition_sid"
     t.string   "relation_type"
     t.decimal  "coefficient",               :precision => 16, :scale => 5
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "quota_balance_events", :id => false, :force => true do |t|
+    t.integer  "quota_definition_sid"
+    t.datetime "occurrence_timestamp"
+    t.integer  "old_balance"
+    t.integer  "new_balance"
+    t.integer  "imported_amount"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "quota_blocking_periods", :id => false, :force => true do |t|
+    t.integer  "quota_blocking_period_sid"
+    t.integer  "quota_definition_sid"
+    t.date     "blocking_start_date"
+    t.date     "blocking_end_date"
+    t.integer  "blocking_period_type"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "quota_critical_events", :id => false, :force => true do |t|
+    t.integer  "quota_definition_sid"
+    t.datetime "occurrence_timestamp"
+    t.string   "critical_state"
+    t.date     "critical_state_change_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "quota_definitions", :id => false, :force => true do |t|
+    t.integer  "quota_definition_sid"
+    t.string   "quota_order_number_id"
+    t.date     "validity_start_date"
+    t.date     "validity_end_date"
+    t.integer  "quota_order_number_sid"
+    t.integer  "volume"
+    t.integer  "initial_volume"
+    t.string   "measurement_unit_code"
+    t.integer  "maximum_precision"
+    t.string   "critical_state"
+    t.integer  "critical_threshold"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "quota_exhaustion_events", :id => false, :force => true do |t|
+    t.integer  "quota_definition_sid"
+    t.datetime "occurrence_timestamp"
+    t.date     "exhaustion_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "quota_order_number_origin_exclusions", :id => false, :force => true do |t|
+    t.integer  "quota_order_number_origin_sid"
+    t.integer  "excluded_geographical_area_sid"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "quota_order_number_origins", :id => false, :force => true do |t|
+    t.integer  "quota_order_number_origin_sid"
+    t.integer  "quota_order_number_sid"
+    t.string   "geographical_area_id"
+    t.date     "validity_start_date"
+    t.date     "validity_end_date"
+    t.integer  "geographical_area_sid"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "quota_order_numbers", :id => false, :force => true do |t|
+    t.integer  "quota_order_number_sid"
+    t.string   "quota_order_number_id"
+    t.date     "validity_start_date"
+    t.date     "validity_end_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "quota_reopening_events", :id => false, :force => true do |t|
+    t.integer  "quota_definition_sid"
+    t.datetime "occurrence_timestamp"
+    t.date     "reopening_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "quota_suspension_periods", :id => false, :force => true do |t|
+    t.integer  "quota_suspension_period_sid"
+    t.integer  "quota_definition_sid"
+    t.date     "suspension_start_date"
+    t.date     "suspension_end_date"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "quota_unblocking_events", :id => false, :force => true do |t|
+    t.integer  "quota_definition_sid"
+    t.datetime "occurrence_timestamp"
+    t.date     "unblocking_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "quota_unsuspension_events", :id => false, :force => true do |t|
+    t.integer  "quota_definition_sid"
+    t.datetime "occurrence_timestamp"
+    t.date     "unsuspension_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
