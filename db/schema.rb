@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120628153729) do
+ActiveRecord::Schema.define(:version => 20120628154105) do
 
   create_table "additional_code_description_periods", :id => false, :force => true do |t|
     t.string   "additional_code_description_period_sid"
@@ -766,7 +766,7 @@ ActiveRecord::Schema.define(:version => 20120628153729) do
   create_table "monetary_exchange_rates", :id => false, :force => true do |t|
     t.string   "monetary_exchange_period_sid"
     t.string   "child_monetary_unit_code"
-    t.decimal  "exchange_rate",                :precision => 6, :scale => 4
+    t.decimal  "exchange_rate",                :precision => 16, :scale => 8
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -818,6 +818,15 @@ ActiveRecord::Schema.define(:version => 20120628153729) do
     t.integer  "replacement_indicator"
     t.text     "information_text"
     t.boolean  "approved_flag"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "quota_associations", :force => true do |t|
+    t.integer  "main_quota_definition_sid"
+    t.integer  "sub_quota_definition_sid"
+    t.string   "relation_type"
+    t.decimal  "coefficient",               :precision => 16, :scale => 5
     t.datetime "created_at"
     t.datetime "updated_at"
   end
