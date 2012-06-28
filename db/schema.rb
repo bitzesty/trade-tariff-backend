@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120628095611) do
+ActiveRecord::Schema.define(:version => 20120628102324) do
 
   create_table "additional_code_description_periods", :id => false, :force => true do |t|
     t.string   "additional_code_description_period_sid"
@@ -392,6 +392,87 @@ ActiveRecord::Schema.define(:version => 20120628095611) do
     t.date     "validity_start_date"
     t.string   "geographical_code"
     t.string   "geographical_area_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "goods_nomenclature_description_periods", :force => true do |t|
+    t.integer  "goods_nomenclature_description_period_sid"
+    t.integer  "goods_nomenclature_sid"
+    t.date     "validity_start_date"
+    t.string   "goods_nomenclature_item_id"
+    t.string   "productline_suffix"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "goods_nomenclature_descriptions", :force => true do |t|
+    t.integer  "goods_nomenclature_description_period_sid"
+    t.string   "language_id"
+    t.integer  "goods_nomenclature_sid"
+    t.string   "goods_nomenclature_item_id"
+    t.string   "productline_suffix"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "goods_nomenclature_group_descriptions", :force => true do |t|
+    t.string   "goods_nomenclature_group_type"
+    t.string   "goods_nomenclature_group_id"
+    t.string   "language_id"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "goods_nomenclature_groups", :force => true do |t|
+    t.string   "goods_nomenclature_group_type"
+    t.string   "goods_nomenclature_group_id"
+    t.date     "validity_start_date"
+    t.integer  "nomenclature_group_facility_code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "goods_nomenclature_indents", :force => true do |t|
+    t.integer  "goods_nomenclature_indent_sid"
+    t.integer  "goods_nomenclature_sid"
+    t.date     "validity_start_date"
+    t.string   "number_indents"
+    t.string   "goods_nomenclature_item_id"
+    t.string   "productline_suffix"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "goods_nomenclature_origins", :force => true do |t|
+    t.integer  "goods_nomenclature_sid"
+    t.string   "derived_goods_nomenclature_item_id"
+    t.string   "derived_productline_suffix"
+    t.string   "goods_nomenclature_item_id"
+    t.string   "productline_suffix"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "goods_nomenclature_successors", :force => true do |t|
+    t.integer  "goods_nomenclature_sid"
+    t.string   "absorbed_goods_nomenclature_item_id"
+    t.string   "absorbed_productline_suffix"
+    t.string   "goods_nomenclature_item_id"
+    t.string   "productline_suffix"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "goods_nomenclatures", :force => true do |t|
+    t.integer  "goods_nomenclature_sid"
+    t.string   "goods_nomenclature_item_id"
+    t.string   "producline_suffix"
+    t.date     "validity_start_date"
+    t.date     "validity_end_date"
+    t.integer  "statistical_indicator"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
