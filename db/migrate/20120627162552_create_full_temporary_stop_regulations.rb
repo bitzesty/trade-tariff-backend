@@ -7,6 +7,10 @@ class CreateFullTemporaryStopRegulations < ActiveRecord::Migration
       t.string :officialjournal_number
       t.integer :officialjournal_page
       t.date :validity_start_date
+      t.date :validity_end_date
+      t.date :effective_enddate
+      t.integer :explicit_abrogation_regulation_role
+      t.string :explicit_abrogation_regulation_id
       t.integer :replacement_indicator
       t.text :information_text
       t.boolean :approved_flag
