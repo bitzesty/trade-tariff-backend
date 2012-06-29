@@ -384,6 +384,7 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
     t.integer  "geographical_area_sid"
     t.integer  "geographical_area_group_sid"
     t.date     "validity_start_date"
+    t.date     "validity_end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
