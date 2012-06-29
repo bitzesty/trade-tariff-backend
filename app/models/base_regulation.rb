@@ -19,4 +19,7 @@ class BaseRegulation < ActiveRecord::Base
   has_many :replaced_regulation_replacements, foreign_key: [:replaced_regulation_role,
                                                             :replaced_regulation_id],
                                                class_name: 'BaseRegulation'
+  has_many :prorogation_regulation_replacements, foreign_key: [:prorogation_regulation_role,
+                                                               :prorogation_regulation_id],
+                                                 class_name: 'BaseRegulation'
 end
