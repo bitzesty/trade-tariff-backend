@@ -522,6 +522,9 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
     t.integer  "measure_sid"
     t.string   "duty_expression_id"
     t.integer  "duty_amount"
+    t.string   "monetary_unit_code"
+    t.string   "measurement_unit_code"
+    t.string   "measurement_unit_qualifier_code"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -680,6 +683,8 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
     t.boolean  "stopped_flag"
     t.integer  "geographical_area_sid"
     t.integer  "goods_nomenclature_sid"
+    t.string   "ordernumber"
+    t.integer  "additional_code_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -885,6 +890,8 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
     t.integer  "maximum_precision"
     t.string   "critical_state"
     t.integer  "critical_threshold"
+    t.string   "monetary_unit_code"
+    t.string   "measurement_unit_qualifier_code"
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"

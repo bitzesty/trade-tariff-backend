@@ -14,6 +14,8 @@ class CreateMeasures < ActiveRecord::Migration
       t.boolean :stopped_flag
       t.integer :geographical_area_sid
       t.integer :goods_nomenclature_sid
+      t.string :ordernumber
+      t.integer :additional_code_type
 
       t.timestamps
     end

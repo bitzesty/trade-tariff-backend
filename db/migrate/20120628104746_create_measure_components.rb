@@ -4,6 +4,9 @@ class CreateMeasureComponents < ActiveRecord::Migration
       t.integer :measure_sid
       t.string :duty_expression_id
       t.integer :duty_amount
+      t.string :monetary_unit_code
+      t.string :measurement_unit_code
+      t.string :measurement_unit_qualifier_code
 
       t.timestamps
     end
