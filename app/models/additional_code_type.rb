@@ -16,5 +16,5 @@ class AdditionalCodeType < ActiveRecord::Base
   has_many :additional_code_description_periods
   has_many :additional_code_type
 
-  belongs_to :meursing_table_plan_id
+  belongs_to :meursing_table_plan
 end
