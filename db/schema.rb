@@ -173,6 +173,7 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
 
   create_table "explicit_abrogation_regulations", :id => false, :force => true do |t|
     t.integer  "explicit_abrogation_regulation_role"
+    t.string   "explicit_abrogation_regulation_id"
     t.date     "published_date"
     t.string   "officialjournal_number"
     t.integer  "officialjournal_page"
