@@ -652,6 +652,7 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
     t.string   "measurement_unit_code"
     t.string   "measurement_unit_qualifier_code"
     t.date     "validity_start_date"
+    t.date     "validity_end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

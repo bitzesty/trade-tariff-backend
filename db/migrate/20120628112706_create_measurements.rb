@@ -4,6 +4,7 @@ class CreateMeasurements < ActiveRecord::Migration
       t.string :measurement_unit_code
       t.string :measurement_unit_qualifier_code
       t.date :validity_start_date
+      t.date :validity_end_date
 
       t.timestamps
     end
