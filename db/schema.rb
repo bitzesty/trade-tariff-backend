@@ -290,6 +290,7 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
     t.string   "footnote_type"
     t.string   "footnote_id"
     t.date     "validity_start_date"
+    t.date     "validity_end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -514,6 +515,7 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
   create_table "measure_actions", :id => false, :force => true do |t|
     t.string   "action_code"
     t.date     "validity_start_date"
+    t.date     "validity_end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -540,6 +542,7 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
   create_table "measure_condition_codes", :id => false, :force => true do |t|
     t.string   "condition_code"
     t.date     "validity_start_date"
+    t.date     "validity_end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -563,6 +566,8 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
     t.string   "condition_monetary_unit_code"
     t.string   "condition_measurement_unit_code"
     t.string   "action_code"
+    t.string   "certificate_type_code"
+    t.string   "certificate_code"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -609,7 +614,7 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
   create_table "measure_type_series_descriptions", :id => false, :force => true do |t|
     t.string   "measure_type_series_id"
     t.string   "language_id"
-    t.text     "measure_type_series_descriptions"
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -656,6 +661,7 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
   create_table "measurement_units", :id => false, :force => true do |t|
     t.string   "measurement_unit_code"
     t.date     "validity_start_date"
+    t.date     "validity_end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -685,6 +691,7 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
     t.integer  "goods_nomenclature_sid"
     t.string   "ordernumber"
     t.integer  "additional_code_type"
+    t.integer  "additional_code"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -712,6 +719,7 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
     t.integer  "meursing_heading_number"
     t.integer  "row_column_code"
     t.date     "validity_start_date"
+    t.date     "validity_end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -722,6 +730,7 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
     t.integer  "row_column_code"
     t.integer  "subheading_sequence_number"
     t.date     "validity_start_date"
+    t.date     "validity_end_date"
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -743,6 +752,7 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
   create_table "meursing_table_plans", :id => false, :force => true do |t|
     t.string   "meursing_table_plan_id"
     t.date     "validity_start_date"
+    t.date     "validity_end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -3,6 +3,7 @@ class CreateMeasureConditionCodes < ActiveRecord::Migration
     create_table :measure_condition_codes, :id => false do |t|
       t.string :condition_code
       t.date :validity_start_date
+      t.date :validity_end_date
 
       t.timestamps
     end

@@ -7,6 +7,7 @@ class CreateFootnoteAssociationMeursingHeadings < ActiveRecord::Migration
       t.string :footnote_type
       t.string :footnote_id
       t.date :validity_start_date
+      t.date :validity_end_date
 
       t.timestamps
     end

@@ -6,6 +6,7 @@ class CreateMeursingSubheadings < ActiveRecord::Migration
       t.integer :row_column_code
       t.integer :subheading_sequence_number
       t.date :validity_start_date
+      t.date :validity_end_date
       t.text :description
 
       t.timestamps

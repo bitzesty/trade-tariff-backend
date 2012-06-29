@@ -11,4 +11,11 @@ class Measure < ActiveRecord::Base
   belongs_to :measure_generating_regulation, foreign_key: [:measure_generating_regulation_role,
                                                            :measure_generating_regulation_id],
                                              class_name: 'BaseRegulation'
+  # TODO come up with better naming scheme
+  belongs_to :ref_measure_type, foreign_key: :measure_type,
+                                class_name: 'MeasureType'
+  belongs_to :ref_additional_code, foreign_key: :additional_code,
+                                   class_name: 'AdditionalCode'
+  belongs_to :ref_additional_code_type, foreign_key: :additional_code_type,
+                                        class_name: 'AdditionalCodeType'
 end

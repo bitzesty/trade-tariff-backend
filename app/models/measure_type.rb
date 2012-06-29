@@ -3,4 +3,5 @@ class MeasureType < ActiveRecord::Base
 
   has_one :description, foreign_key: :measure_type_id,
                         class_name: 'MeasureTypeDescription'
+  has_many :measures, foreign_key: :measure_type
 end

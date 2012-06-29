@@ -5,6 +5,7 @@ class CreateMeursingHeadings < ActiveRecord::Migration
       t.integer :meursing_heading_number
       t.integer :row_column_code
       t.date :validity_start_date
+      t.date :validity_end_date
 
       t.timestamps
     end
