@@ -4,6 +4,7 @@ class CreateGoodsNomenclatureGroups < ActiveRecord::Migration
       t.string :goods_nomenclature_group_type
       t.string :goods_nomenclature_group_id
       t.date :validity_start_date
+      t.date :validity_end_date
       t.integer :nomenclature_group_facility_code
 
       t.timestamps

@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
     t.boolean  "approved_flag"
     t.date     "published_date"
     t.string   "officialjournal_number"
+    t.integer  "officialjournal_page"
     t.date     "effective_end_date"
     t.integer  "antidumping_regulation_role"
     t.string   "related_antidumping_regulation_id"
@@ -434,6 +435,7 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
     t.string   "goods_nomenclature_group_type"
     t.string   "goods_nomenclature_group_id"
     t.date     "validity_start_date"
+    t.date     "validity_end_date"
     t.integer  "nomenclature_group_facility_code"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -839,6 +841,7 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
   create_table "quota_balance_events", :id => false, :force => true do |t|
     t.integer  "quota_definition_sid"
     t.datetime "occurrence_timestamp"
+    t.date     "last_import_date_in_allocation"
     t.integer  "old_balance"
     t.integer  "new_balance"
     t.integer  "imported_amount"
@@ -878,6 +881,7 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
     t.integer  "maximum_precision"
     t.string   "critical_state"
     t.integer  "critical_threshold"
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -968,10 +972,13 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
   end
 
   create_table "regulation_replacements", :id => false, :force => true do |t|
+    t.string   "geographical_area_id"
+    t.string   "chapter_heading"
     t.integer  "replacing_regulation_role"
     t.string   "replacing_regulation_id"
     t.integer  "replaced_regulation_role"
     t.string   "replaced_regulation_id"
+    t.integer  "measure_type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

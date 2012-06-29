@@ -12,6 +12,7 @@ class CreateQuotaDefinitions < ActiveRecord::Migration
       t.integer :maximum_precision
       t.string :critical_state
       t.integer :critical_threshold
+      t.text :description
 
       t.timestamps
     end
