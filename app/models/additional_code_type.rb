@@ -13,4 +13,8 @@ class AdditionalCodeType < ActiveRecord::Base
   has_many :additional_code_descriptions
   has_many :additional_code_type_measure_types
   has_many :measures, foreign_key: :additional_code_type
+  has_many :additional_code_description_periods
+  has_many :additional_code_type
+
+  belongs_to :meursing_table_plan_id
 end
