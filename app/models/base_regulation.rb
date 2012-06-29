@@ -9,4 +9,9 @@ class BaseRegulation < ActiveRecord::Base
                                                             :complete_abrogation_regulation_id]
   belongs_to :antidumping_regulation, foreign_key: [:antidumping_regulation_role,
                                                     :related_antidumping_regulation_id]
+
+  has_many :replacing_regulation_replacements, foreign_key: [:replacing_regulation_role,
+                                                             :replacing_regulation_id]
+  has_many :replaced_regulation_replacements, foreign_key: [:replaced_regulation_role,
+                                                            :replaced_regulation_id]
 end

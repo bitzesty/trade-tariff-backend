@@ -9,6 +9,8 @@ class CreateMeasureConditions < ActiveRecord::Migration
       t.string :condition_monetary_unit_code
       t.string :condition_measurement_unit_code
       t.string :action_code
+      t.string :certificate_type_code
+      t.string :certificate_code
 
       t.timestamps
     end

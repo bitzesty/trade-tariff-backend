@@ -16,6 +16,7 @@ class CreateMeasures < ActiveRecord::Migration
       t.integer :goods_nomenclature_sid
       t.string :ordernumber
       t.integer :additional_code_type
+      t.integer :additional_code
 
       t.timestamps
     end

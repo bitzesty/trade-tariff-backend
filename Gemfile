@@ -40,6 +40,7 @@ group :development do
   gem 'spreadsheet'
   gem 'progressbar'
   gem 'awesome_print'
+  gem 'rails-erd'
 end
 
 group :test do
