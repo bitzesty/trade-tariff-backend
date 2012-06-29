@@ -5,6 +5,11 @@ class GeographicalArea < ActiveRecord::Base
   has_many :geographical_area_description_periods
   has_many :geographical_area_description
   has_many :measure_excluded_geographical_areas
-  has_many :excluded_measures, through: :measure_excluded_geographical_areas,
-                               class_name: 'Measure'
+
+  belongs_to :geographical_area, foreign_key: :parent_geographical_area_group_sid,
+                                 class_name: 'GeographicalArea'
+  has_many :geographical_areas, foreign_key: :parent_geographical_area_group_sid,
+                                class_name: 'GeographicalArea'
+  # has_many :excluded_measures, through: :measure_excluded_geographical_areas,
+  #                              class_name: 'Measure'
 end

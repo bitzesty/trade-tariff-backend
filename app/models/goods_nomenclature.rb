@@ -2,7 +2,7 @@ class GoodsNomenclature < ActiveRecord::Base
   self.primary_key = :goods_nomenclature_sid
 
   has_one :goods_nomenclature_description, foreign_key: :goods_nomenclature_sid
-  has_many :goodsnomenclature_description_periods, foreign_key: :goods_nomenclature_sid
+  has_many :goods_nomenclature_description_periods, foreign_key: :goods_nomenclature_sid
   has_one :goods_nomenclature_indent, foreign_key: :goods_nomenclature_sid
 
   has_one :goods_nomenclature_successor, foreign_key: :goods_nomenclature_sid
