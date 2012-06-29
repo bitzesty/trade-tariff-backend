@@ -391,7 +391,9 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
 
   create_table "geographical_areas", :id => false, :force => true do |t|
     t.integer  "geographical_area_sid"
+    t.integer  "parent_geographical_area_group_sid"
     t.date     "validity_start_date"
+    t.date     "validity_end_date"
     t.string   "geographical_code"
     t.string   "geographical_area_id"
     t.datetime "created_at"
