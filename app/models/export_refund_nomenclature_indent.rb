@@ -1,5 +1,5 @@
 class ExportRefundNomenclatureIndent < ActiveRecord::Base
-  self.primary_key = :export_refund_nomenclature_indents_sid
+  self.primary_key = [:record_code, :subrecord_code, :record_sequence_number]
 
   belongs_to :export_refund_nomenclature
   # belongs_to :additional_code_type

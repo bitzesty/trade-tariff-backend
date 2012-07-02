@@ -1,5 +1,5 @@
 class QuotaBlockingPeriod < ActiveRecord::Base
-  self.primary_key = :quota_blocking_period_sid
+  self.primary_key = [:record_code, :subrecord_code, :record_sequence_number]
 
   belongs_to :quota_definition, foreign_key: :quota_definition_sid
 end

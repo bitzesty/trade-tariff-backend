@@ -1,5 +1,5 @@
 class RegulationGroup < ActiveRecord::Base
-  self.primary_key = :regulation_group_id
+  self.primary_key = [:record_code, :subrecord_code, :record_sequence_number]
 
   has_many :base_regulations
   has_one  :description, class_name: 'RegulationGroupDescription',

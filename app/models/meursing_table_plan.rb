@@ -1,5 +1,5 @@
 class MeursingTablePlan < ActiveRecord::Base
-  self.primary_key = :meursing_table_plan_id
+  self.primary_key = [:record_code, :subrecord_code, :record_sequence_number]
 
   has_many :meursing_table_cell_components
   has_many :meursing_headings

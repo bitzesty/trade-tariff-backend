@@ -1,4 +1,6 @@
 class FootnoteAssociationAdditionalCode < ActiveRecord::Base
+  self.primary_key = [:record_code, :subrecord_code, :record_sequence_number]
+  
   belongs_to :footnote_type
   belongs_to :footnote
   belongs_to :additional_code_type

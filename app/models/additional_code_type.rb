@@ -1,12 +1,5 @@
 class AdditionalCodeType < ActiveRecord::Base
-  APPLICATION_CODES = {
-    0 => "Export refund nomencalture",
-    1 => "Additional Codes",
-    3 => "Meursing addition codes",
-    4 => "Eport refund for processed agricultural goods"
-  }
-
-  self.primary_key = :additional_code_type_id
+  self.primary_key = [:record_code, :subrecord_code, :record_sequence_number]
 
   has_many :additional_codes
   has_many :additional_code_type_descriptions
@@ -17,4 +10,11 @@ class AdditionalCodeType < ActiveRecord::Base
   has_many :additional_code_type
 
   belongs_to :meursing_table_plan
+
+  APPLICATION_CODES = {
+    0 => "Export refund nomencalture",
+    1 => "Additional Codes",
+    3 => "Meursing addition codes",
+    4 => "Eport refund for processed agricultural goods"
+  }
 end

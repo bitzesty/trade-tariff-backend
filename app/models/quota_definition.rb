@@ -1,5 +1,5 @@
 class QuotaDefinition < ActiveRecord::Base
-  self.primary_key = :quota_definition_sid
+  self.primary_key = [:record_code, :subrecord_code, :record_sequence_number]
 
   belongs_to :quota_order_number
   belongs_to :measurement_unit, foreign_key: :measurement_unit_code

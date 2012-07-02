@@ -1,3 +1,3 @@
 class GoodsNomenclatureGroup < ActiveRecord::Base
-  self.primary_key = [:goods_nomenclature_group_type, :goods_nomenclature_group_id]
+  self.primary_key = [:record_code, :subrecord_code, :record_sequence_number]
 end

@@ -1,5 +1,5 @@
 class ProrogationRegulation < ActiveRecord::Base
-  self.primary_key = [:prorogation_regulation_role, :prorogation_regulation_id]
+  self.primary_key = [:record_code, :subrecord_code, :record_sequence_number]
 
   has_many :prorogation_regulation_actions, foreign_key: [:prorogation_regulation_role,
                                                           :prorogation_regulation_id],

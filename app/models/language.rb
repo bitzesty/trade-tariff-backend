@@ -1,5 +1,5 @@
 class Language < ActiveRecord::Base
-  self.primary_key = :language_id
+  self.primary_key = [:record_code, :subrecord_code, :record_sequence_number]
 
   has_many :language_descriptions
   has_many :additional_code_descriptions
