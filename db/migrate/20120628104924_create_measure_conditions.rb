@@ -11,7 +11,6 @@ class CreateMeasureConditions < ActiveRecord::Migration
       t.string :action_code
       t.string :certificate_type_code
       t.string :certificate_code
-
       t.timestamps
     end
   end

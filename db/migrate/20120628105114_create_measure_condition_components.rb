@@ -6,6 +6,7 @@ class CreateMeasureConditionComponents < ActiveRecord::Migration
       t.integer :duty_amount
       t.string :monetary_unit_code
       t.string :measurement_unit_code
+      t.string :measurement_unit_qualifier_code
 
       t.timestamps
     end

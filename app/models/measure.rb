@@ -15,7 +15,7 @@ class Measure < ActiveRecord::Base
   # TODO come up with better naming scheme
   belongs_to :ref_measure_type, foreign_key: :measure_type,
                                 class_name: 'MeasureType'
-  belongs_to :ref_additional_code, foreign_key: :additional_code,
+  belongs_to :ref_additional_code, foreign_key: :additional_code_sid,
                                    class_name: 'AdditionalCode'
   belongs_to :ref_additional_code_type, foreign_key: :additional_code_type,
                                         class_name: 'AdditionalCodeType'

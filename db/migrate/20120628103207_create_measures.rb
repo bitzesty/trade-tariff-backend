@@ -16,7 +16,10 @@ class CreateMeasures < ActiveRecord::Migration
       t.integer :goods_nomenclature_sid
       t.string :ordernumber
       t.integer :additional_code_type
-      t.integer :additional_code
+      t.string :additional_code
+      t.string :additional_code_sid
+      t.integer :reduction_indicator
+      t.string :export_refund_nomenclature_sid
 
       t.timestamps
     end
