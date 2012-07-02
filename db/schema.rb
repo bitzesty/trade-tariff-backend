@@ -553,6 +553,7 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
     t.integer  "duty_amount"
     t.string   "monetary_unit_code"
     t.string   "measurement_unit_code"
+    t.string   "measurement_unit_qualifier_code"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -691,7 +692,10 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
     t.integer  "goods_nomenclature_sid"
     t.string   "ordernumber"
     t.integer  "additional_code_type"
-    t.integer  "additional_code"
+    t.string   "additional_code"
+    t.string   "additional_code_sid"
+    t.integer  "reduction_indicator"
+    t.string   "export_refund_nomenclature_sid"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
