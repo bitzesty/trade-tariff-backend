@@ -1,6 +1,10 @@
 class CreateExplicitAbrogationRegulations < ActiveRecord::Migration
   def change
     create_table :explicit_abrogation_regulations, :id => false do |t|
+      t.string :record_code
+      t.string :subrecord_code
+      t.string :record_sequence_number
+      
       t.integer :explicit_abrogation_regulation_role
       t.string  :explicit_abrogation_regulation_id
       t.date :published_date

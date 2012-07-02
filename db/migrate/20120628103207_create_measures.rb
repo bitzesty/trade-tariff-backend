@@ -1,6 +1,10 @@
 class CreateMeasures < ActiveRecord::Migration
   def change
     create_table :measures, :id => false do |t|
+      t.string :record_code
+      t.string :subrecord_code
+      t.string :record_sequence_number
+
       t.integer :measure_sid
       t.integer :measure_type
       t.string :geographical_area

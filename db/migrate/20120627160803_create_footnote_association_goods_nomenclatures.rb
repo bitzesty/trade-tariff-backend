@@ -1,6 +1,10 @@
 class CreateFootnoteAssociationGoodsNomenclatures < ActiveRecord::Migration
   def change
     create_table :footnote_association_goods_nomenclatures, :id => false do |t|
+      t.string :record_code
+      t.string :subrecord_code
+      t.string :record_sequence_number
+      
       t.string :goods_nomenclature_sid
       t.string :footnote_type
       t.string :footnote_id

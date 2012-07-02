@@ -1,6 +1,10 @@
 class CreateExportRefundNomenclatureDescriptions < ActiveRecord::Migration
   def change
     create_table :export_refund_nomenclature_descriptions, :id => false do |t|
+      t.string :record_code
+      t.string :subrecord_code
+      t.string :record_sequence_number
+      
       t.string :export_refund_nomenclature_description_period_sid
       t.string :language_id
       t.string :export_refund_nomenclature_sid

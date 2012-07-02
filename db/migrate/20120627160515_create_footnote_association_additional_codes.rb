@@ -1,6 +1,10 @@
 class CreateFootnoteAssociationAdditionalCodes < ActiveRecord::Migration
   def change
     create_table :footnote_association_additional_codes, :id => false do |t|
+      t.string :record_code
+      t.string :subrecord_code
+      t.string :record_sequence_number
+      
       t.string :additional_code_sid
       t.string :footnote_type_id
       t.string :footnote_id
