@@ -12,6 +12,7 @@ class CreateMeasureConditions < ActiveRecord::Migration
       t.integer :condition_duty_amount
       t.string :condition_monetary_unit_code
       t.string :condition_measurement_unit_code
+      t.string :condition_measurement_unit_qualifier_code
       t.string :action_code
       t.string :certificate_type_code
       t.string :certificate_code
