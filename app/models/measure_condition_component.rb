@@ -1,8 +1,10 @@
 class MeasureConditionComponent < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code
-  
+  set_primary_keys :measure_condition_sid
+
   belongs_to :measure_condition, foreign_key: :measure_condition_sid
   belongs_to :duty_expression
+  belongs_to :measurement_unit, foreign_key: :measurement_unit_code
+  belongs_to :measurement_unit_qualifier, foreign_key: :measurement_unit_qualifier_code
 end
 
 # == Schema Information

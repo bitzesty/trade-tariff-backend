@@ -1,10 +1,10 @@
 class FootnoteType < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code
+  set_primary_keys :footnote_type_id
 
-  has_many :footnotes
-  has_many :footnote_description
-  has_many :footnote_description_periods
-  has_one :footnote_type_description
+  has_many :footnotes, foreign_key: :footnote_type_id
+  has_many :footnote_description, foreign_key: :footnote_type_id
+  has_many :footnote_description_periods, foreign_key: :footnote_type_id
+  has_one  :footnote_type_description, foreign_key: :footnote_type_id
 
   APPLICATION_CODES = {
     1 => "CN nomencalture",

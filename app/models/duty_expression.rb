@@ -1,8 +1,8 @@
 class DutyExpression < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code
+  set_primary_keys :duty_expression_id
 
-  has_many :measures
   has_many :measure_components
+  has_many :measures, through: :measure_components
   has_many :measure_condition_components
 end
 

@@ -1,5 +1,7 @@
 class FootnoteDescription < ActiveRecord::Base
-  belongs_to :footnote
+  set_primary_keys :footnote_description_period_sid, :footnote_type_id, :footnote_id
+
+  belongs_to :footnote, foreign_key: [:footnote_id, :footnote_type_id]
   belongs_to :footnote_description_period, foreign_key: :footnote_description_period_sid
   belongs_to :footnote_type
 end

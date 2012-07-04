@@ -1,9 +1,8 @@
 class Measure < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code
+  set_primary_keys :measure_sid
 
   has_many :measure_components, foreign_key: :measure_sid
   has_many :excluded_geographical_areas, class_name: 'GeographicalArea'
-  belongs_to :duty_expression
   belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid
   belongs_to :justification_regulation, foreign_key: [:justification_regulation_role,
                                                       :justification_regulation_id],

@@ -1,9 +1,9 @@
 class Footnote < ActiveRecord::Base
-  set_primary_keys :footnote_id
+  set_primary_keys :footnote_id, :footnote_type_id
 
   belongs_to :footnote_type, primary_key: :footnote_type_id
-  has_one  :footnote_description
-  has_many :footnote_description_period
+  has_many :footnote_description_period, foreign_key: :footnote_id
+  has_many  :footnote_description, through: :footnote_description_periods
 end
 
 # == Schema Information

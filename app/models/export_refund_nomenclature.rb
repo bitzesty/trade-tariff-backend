@@ -1,8 +1,10 @@
 class ExportRefundNomenclature < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code
+  set_primary_keys :export_refund_nomenclature_sid
 
-  has_many :export_refund_nomenclature_indents, foreign_key: :export_refund_nomenclature_sid
   has_many :export_refund_nomenclature_description_periods, foreign_key: :export_refund_nomenclature_description_period_sid
+  has_many :export_refund_nomenclature_descriptions, through: :export_refund_nomenclature_description_periods
+  has_many :export_refund_nomenclature_indents, foreign_key: :export_refund_nomenclature_sid
+  belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid
 end
 
 # == Schema Information

@@ -5,6 +5,7 @@ class MeasurementUnit < ActiveRecord::Base
                         class_name: 'MeasurementUnitDescription'
   has_one :measurement, foreign_key: :measurement_unit_code
   has_many :quota_definitions, foreign_key: :measurement_unit_code
+  has_many :measure_condition_components, foreign_key: :measurement_unit_qualifier_code
 end
 
 # == Schema Information

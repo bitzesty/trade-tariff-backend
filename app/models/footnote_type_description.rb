@@ -1,6 +1,6 @@
 class FootnoteTypeDescription < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code
-  
+  set_primary_keys :footnote_type_id
+
   belongs_to :footnote_type
   belongs_to :language
 end
