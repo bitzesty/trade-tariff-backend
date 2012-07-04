@@ -17,12 +17,6 @@ gem 'builder'
 gem 'railties'
 
 gem 'airbrake'
-
-# group :passenger_compatibility do
-#   gem 'rack', '1.3.5'
-#   gem 'rake', '0.9.2'
-# end
-
 group :assets do
   gem 'therubyracer'
   ### API Docs
@@ -41,6 +35,7 @@ group :development do
   gem 'progressbar'
   gem 'awesome_print'
   gem 'rails-erd'
+  gem 'annotate'
 end
 
 group :test do
@@ -51,9 +46,6 @@ group :test do
   gem 'fakeweb'
   gem 'mocha'
   gem 'pathy'
-  # TODO upgrade to mongoid-rspec 1.4.5 when it's released
-  # gem 'mongoid-rspec', git: 'https://github.com/evansagge/mongoid-rspec.git'
-
   gem 'simplecov'
   gem 'simplecov-rcov'
   gem 'ci_reporter'
