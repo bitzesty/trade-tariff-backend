@@ -1,5 +1,5 @@
 class AdditionalCodeType < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code, :record_sequence_number
+  set_primary_keys :record_code, :subrecord_code
 
   has_many :additional_codes
   has_many :additional_code_type_descriptions

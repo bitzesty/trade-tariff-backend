@@ -1,5 +1,5 @@
 class Footnote < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code, :record_sequence_number
+  set_primary_keys :record_code, :subrecord_code
 
   belongs_to :footnote_type, primary_key: :footnote_type_id
   has_one  :footnote_description

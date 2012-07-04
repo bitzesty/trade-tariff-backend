@@ -1,5 +1,5 @@
 class AdditionalCode < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code, :record_sequence_number
+  set_primary_keys :record_code
 
   has_many :description_periods, foreign_key: :additional_code_sid,
                                  class_name: 'AdditionalCodeDescriptionPeriod'

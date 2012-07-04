@@ -1,5 +1,5 @@
 class MeasureCondition < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code, :record_sequence_number
+  set_primary_keys :record_code, :subrecord_code
 
   belongs_to :measure, foreign_key: :measure_sid
   belongs_to :action, foreign_key: :action_code, class_name: 'MeasureAction'

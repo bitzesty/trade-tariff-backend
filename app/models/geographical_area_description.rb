@@ -1,5 +1,5 @@
 class GeographicalAreaDescription < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code, :record_sequence_number
+  set_primary_keys :record_code, :subrecord_code
   
   belongs_to :geographical_area_description_period, foreign_key: :geographical_area_description_period_sid
   belongs_to :language

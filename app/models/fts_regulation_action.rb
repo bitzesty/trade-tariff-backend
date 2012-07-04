@@ -1,5 +1,5 @@
 class FtsRegulationAction < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code, :record_sequence_number
+  set_primary_keys :record_code, :subrecord_code
   
   belongs_to :fts_regulation, foreign_key: [:fts_regulation_role, :fts_regulation_id],
                               class_name: 'FullTemporaryStopRegulation'

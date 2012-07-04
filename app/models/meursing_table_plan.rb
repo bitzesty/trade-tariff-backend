@@ -1,5 +1,5 @@
 class MeursingTablePlan < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code, :record_sequence_number
+  set_primary_keys :record_code, :subrecord_code
 
   has_many :meursing_table_cell_components
   has_many :meursing_headings

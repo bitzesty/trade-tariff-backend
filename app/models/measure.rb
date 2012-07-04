@@ -1,5 +1,5 @@
 class Measure < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code, :record_sequence_number
+  set_primary_keys :record_code, :subrecord_code
 
   has_many :measure_components, foreign_key: :measure_sid
   has_many :excluded_geographical_areas, class_name: 'GeographicalArea'
