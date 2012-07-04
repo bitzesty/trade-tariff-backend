@@ -1,5 +1,5 @@
 class FootnoteAssociationErn < ActiveRecord::Base
-  self.primary_key = [:record_code, :subrecord_code, :record_sequence_number]
+  set_primary_keys :record_code, :subrecord_code, :record_sequence_number
 
   belongs_to :export_refund_nomenclature, foreign_key: :export_refund_nomenclature_sid
   #TODO FIX ME

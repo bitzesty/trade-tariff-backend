@@ -1,4 +1,4 @@
 class AdditionalCodeTypeMeasureType < ActiveRecord::Base
-  self.primary_key = [:record_code, :subrecord_code, :record_sequence_number]
+  set_primary_keys :record_code, :subrecord_code, :record_sequence_number
   
 end

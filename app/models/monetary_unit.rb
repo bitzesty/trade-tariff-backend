@@ -1,5 +1,5 @@
 class MonetaryUnit < ActiveRecord::Base
-  self.primary_key = [:record_code, :subrecord_code, :record_sequence_number]
+  set_primary_keys :record_code, :subrecord_code, :record_sequence_number
 
   has_many :measure_condition_components, foreign_key: :monetary_unit_code
   has_many :monetary_exchange_periods, foreign_key: :parent_monetary_unit_code
