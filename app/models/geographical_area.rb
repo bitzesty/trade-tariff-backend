@@ -14,3 +14,21 @@ class GeographicalArea < ActiveRecord::Base
   # has_many :excluded_measures, through: :measure_excluded_geographical_areas,
   #                              class_name: 'Measure'
 end
+
+# == Schema Information
+#
+# Table name: geographical_areas
+#
+#  record_code                        :string(255)
+#  subrecord_code                     :string(255)
+#  record_sequence_number             :string(255)
+#  geographical_area_sid              :integer(4)
+#  parent_geographical_area_group_sid :integer(4)
+#  validity_start_date                :date
+#  validity_end_date                  :date
+#  geographical_code                  :string(255)
+#  geographical_area_id               :string(255)
+#  created_at                         :datetime
+#  updated_at                         :datetime
+#
+

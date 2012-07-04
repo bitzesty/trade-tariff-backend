@@ -17,6 +17,35 @@ class Measure < ActiveRecord::Base
                                 class_name: 'MeasureType'
   belongs_to :ref_additional_code, foreign_key: :additional_code_sid,
                                    class_name: 'AdditionalCode'
-  belongs_to :ref_additional_code_type, foreign_key: :additional_code_type,
-                                        class_name: 'AdditionalCodeType'
 end
+
+# == Schema Information
+#
+# Table name: measures
+#
+#  record_code                        :string(255)
+#  subrecord_code                     :string(255)
+#  record_sequence_number             :string(255)
+#  measure_sid                        :integer(4)
+#  measure_type                       :integer(4)
+#  geographical_area                  :string(255)
+#  goods_nomenclature_item_id         :string(255)
+#  validity_start_date                :date
+#  validity_end_date                  :date
+#  measure_generating_regulation_role :integer(4)
+#  measure_generating_regulation_id   :string(255)
+#  justification_regulation_role      :integer(4)
+#  justification_regulation_id        :string(255)
+#  stopped_flag                       :boolean(1)
+#  geographical_area_sid              :integer(4)
+#  goods_nomenclature_sid             :integer(4)
+#  ordernumber                        :string(255)
+#  additional_code_type               :integer(4)
+#  additional_code                    :string(255)
+#  additional_code_sid                :string(255)
+#  reduction_indicator                :integer(4)
+#  export_refund_nomenclature_sid     :string(255)
+#  created_at                         :datetime
+#  updated_at                         :datetime
+#
+
