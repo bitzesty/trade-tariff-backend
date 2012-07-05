@@ -13,7 +13,8 @@ class GeographicalArea < ActiveRecord::Base
                                         class_name: 'GeographicalArea'
   has_many :measures, foreign_key: :geographical_area_sid
   has_many :measure_excluded_geographical_areas, foreign_key: :geographical_area_sid
-  has_many :excluded_measures, through: :measure_excluded_geographical_areas
+  has_many :excluded_measures, through: :measure_excluded_geographical_areas,
+                               source: :measure
   has_many :quota_order_number_origins, foreign_key: :geographical_area_sid
   has_many :quota_order_numbers, through: :quota_order_number_origins
   has_many :quota_order_number_origin_exclusions, foreign_key: :excluded_geographical_area_sid

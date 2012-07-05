@@ -8,10 +8,15 @@ class Footnote < ActiveRecord::Base
   has_many   :export_refund_nomenclatures, through: :footnote_association_erns
   has_many   :footnote_association_measures, foreign_key: :footnote_id
   has_many   :measures, through: :footnote_association_measures, foreign_key: :measure_sid
-  has_many   :footnote_association_meursing_heading, foreign_key: :footnote_id
+  has_many   :footnote_association_meursing_headings, foreign_key: :footnote_id
   has_many   :meursing_table_plans, through: :footnote_association_meursing_headings
   has_many   :footnote_association_goods_nomenclatures, foreign_key: :footnote_id
   has_many   :goods_nomenclatures, through: :footnote_association_goods_nomenclatures
+  has_many   :footnote_association_additional_codes, foreign_key: [:footnote_id, :footnote_type_id]
+  has_many   :additional_codes, through: :footnote_association_additional_codes,
+                                source: :ref_additional_code
+  has_many   :additional_code_types, through: :footnote_association_additional_codes,
+                                     source: :additional_code_type
 
   belongs_to :footnote_type, primary_key: :footnote_type_id
 end

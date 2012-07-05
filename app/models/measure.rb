@@ -5,7 +5,8 @@ class Measure < ActiveRecord::Base
   has_many :footnotes, through: :footnote_association_measures, foreign_key: :footnote_id
   has_many :measure_components, foreign_key: :measure_sid
   has_many :measure_conditions, foreign_key: :measure_sid
-  has_many :measure_excluded_geographical_areas, foreign_key: :measure_sid
+  has_many :measure_excluded_geographical_areas, foreign_key: :measure_sid,
+                                                 source: :excluded_geographical_area
   has_many :excluded_geographical_areas, through: :measure_excluded_geographical_areas
   belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid
   belongs_to :justification_regulation, foreign_key: [:justification_regulation_role,

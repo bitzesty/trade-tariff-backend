@@ -1,10 +1,10 @@
 class FootnoteAssociationAdditionalCode < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code
+  set_primary_keys :footnote_id, :footnote_type_id, :additional_code_sid
 
   belongs_to :footnote_type
-  belongs_to :footnote
+  belongs_to :footnote, foreign_key: [:footnote_id, :footnote_type_id]
   belongs_to :additional_code_type
-  # TODO find a better way to map
+  # # TODO find a better way to map
   belongs_to :ref_additional_code, foreign_key: :additional_code_sid,
                                    class_name: 'AdditionalCode'
 end

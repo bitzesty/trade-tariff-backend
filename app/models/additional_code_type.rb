@@ -7,6 +7,9 @@ class AdditionalCodeType < ActiveRecord::Base
   has_many :additional_code_type_measure_types
   has_many :measure_types, through: :additional_code_type_measure_types
   has_many :additional_code_description_periods, foreign_key: :additional_code_type_id
+  has_many :footnote_association_additional_codes, foreign_key: :additional_code_type_id
+  has_many :footnotes, through: :footnote_association_additional_codes,
+                       source: :footnote
 
   belongs_to :meursing_table_plan
 
