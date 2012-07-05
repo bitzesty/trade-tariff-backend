@@ -23,6 +23,14 @@ class BaseRegulation < ActiveRecord::Base
   has_many :prorogation_regulation_replacements, foreign_key: [:prorogation_regulation_role,
                                                                :prorogation_regulation_id],
                                                  class_name: 'BaseRegulation'
+  has_many :modification_regulations, foreign_key: [:base_regulation_id,
+                                                    :base_regulation_role]
+  has_many :modified_explicit_abrogation_regulations, through: :modification_regulations,
+                                                      source: :explicit_abrogation_regulation
+  has_many :modified_complete_abrogation_regulations, through: :modification_regulations,
+                                                      source: :complete_abrogation_regulation
+  has_many :prorogation_regulations, foreign_key: [:base_regulation_id,
+                                                   :base_regulation_role]
 end
 
 # == Schema Information
