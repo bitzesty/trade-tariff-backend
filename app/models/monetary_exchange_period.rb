@@ -1,7 +1,7 @@
 class MonetaryExchangePeriod < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code
+  set_primary_keys :monetary_exchange_period_sid
 
-  has_many :monetary_exchange_rates
+  has_many :monetary_exchange_rates, foreign_key: :monetary_exchange_period_sid
   belongs_to :parent_monetary_unit, foreign_key: :parent_monetary_unit_code,
                                     class_name: 'MonetaryUnit'
 end

@@ -1,8 +1,7 @@
 class MeursingAdditionalCode < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code
+  set_primary_keys :meursing_additional_code_sid
 
-  has_one :table_cell_component, foreign_key: :meursing_additional_code_sid,
-                                 class_name: 'MeursingTableCellComponent'
+  has_many :meursing_table_cell_components, foreign_key: :meursing_additional_code_sid
 end
 
 # == Schema Information

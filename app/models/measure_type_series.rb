@@ -1,7 +1,8 @@
 class MeasureTypeSeries < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code
+  set_primary_keys :measure_type_series_id
 
-  has_many :measure_type_series_descriptions
+  has_one :measure_type_series_description
+  has_many :measure_types
 end
 
 # == Schema Information

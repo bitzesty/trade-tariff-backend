@@ -1,8 +1,8 @@
 class MeasureAction < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code
+  set_primary_keys :action_code
 
-  has_one :description, foreign_key: :action_code,
-                        class_name: 'MeasureActionDescription'
+  has_one :measure_action_description, foreign_key: :action_code
+  has_many :measure_conditions, foreign_key: :action_code
 end
 
 # == Schema Information

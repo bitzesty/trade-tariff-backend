@@ -1,9 +1,9 @@
 class DutyExpression < ActiveRecord::Base
   set_primary_keys :duty_expression_id
 
-  has_many :measure_components
+  has_many :measure_components, foreign_key: :duty_expression_id
   has_many :measures, through: :measure_components
-  has_many :measure_condition_components
+  has_many :measure_condition_components, foreign_key: :duty_expression_id
 end
 
 # == Schema Information

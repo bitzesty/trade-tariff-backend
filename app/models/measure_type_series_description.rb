@@ -1,5 +1,5 @@
 class MeasureTypeSeriesDescription < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code
+  set_primary_keys :measure_type_series_id
 
   belongs_to :measure_type_series
   belongs_to :language

@@ -1,8 +1,7 @@
 class MeasureConditionCode < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code
+  set_primary_keys :condition_code
 
-  has_one :description, class_name: 'MeasureConditionCodeDescription',
-                        foreign_key: :condition_code
+  has_one :measure_condition_code_description, foreign_key: :condition_code
 end
 
 # == Schema Information

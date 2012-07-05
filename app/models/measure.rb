@@ -4,6 +4,7 @@ class Measure < ActiveRecord::Base
   has_many :footnote_association_measures, foreign_key: :measure_sid
   has_many :footnotes, through: :footnote_association_measures, foreign_key: :footnote_id
   has_many :measure_components, foreign_key: :measure_sid
+  has_many :measure_conditions, foreign_key: :measure_sid
   has_many :measure_excluded_geographical_areas, foreign_key: :measure_sid
   has_many :excluded_geographical_areas, through: :measure_excluded_geographical_areas
   belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid
@@ -14,6 +15,10 @@ class Measure < ActiveRecord::Base
                                                            :measure_generating_regulation_id],
                                              class_name: 'BaseRegulation'
   has_many :measure_partial_temporary_stops, foreign_key: :measure_sid
+  has_many :partial_temporary_stopped_regulations, through: :measure_partial_temporary_stops,
+                                                   source: :stopped_regulation
+  has_many :abrogated_regulations, through: :measure_partial_temporary_stops,
+                                   source: :abrogated_regulation
   # TODO come up with better naming scheme
   belongs_to :ref_measure_type, foreign_key: :measure_type,
                                 class_name: 'MeasureType'

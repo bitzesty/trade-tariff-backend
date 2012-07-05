@@ -2,11 +2,14 @@ class MeasureCondition < ActiveRecord::Base
   set_primary_keys :measure_condition_sid
 
   belongs_to :measure, foreign_key: :measure_sid
-  belongs_to :action, foreign_key: :action_code, class_name: 'MeasureAction'
-  belongs_to :code, foreign_key: :condition_code, class_name: 'MeasureConditionCode'
+  belongs_to :measure_action, foreign_key: :action_code
+  belongs_to :monetary_unit, foreign_key: :condition_monetary_unit_code
+  belongs_to :measurement_unit, foreign_key: :condition_measurement_unit_code
+  belongs_to :measurement_unit_qualifier, foreign_key: :condition_measurement_unit_qualifier_code
+  belongs_to :measure_action, foreign_key: :action_code
   belongs_to :certificate, foreign_key: [:certificate_code, :certificate_type_code]
-  belongs_to :certificate_type, foreign_key: :certificate_type_code,
-                                class_name: 'CertificateType'
+  belongs_to :certificate_type, foreign_key: :certificate_type_code
+  belongs_to :measure_condition_code, foreign_key: :condition_code
 end
 
 # == Schema Information

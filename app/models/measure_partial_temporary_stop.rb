@@ -1,10 +1,13 @@
 class MeasurePartialTemporaryStop < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code
+  set_primary_keys :measure_sid, :partial_temporary_stop_regulation_id
 
   belongs_to :measure, foreign_key: :measure_sid
-  # TODO FIXME
-  # belongs_to :base_regulation, foreign_key: [:abrogation_regulation_id]
-  # belongs_to :base_regulation, foreign_key: [:partial_temporary_stop_regulation_id]
+  belongs_to :abrogated_regulation, primary_key: :base_regulation_id,
+                                    foreign_key: :abrogation_regulation_id,
+                                    class_name: 'BaseRegulation'
+  belongs_to :stopped_regulation, primary_key: :base_regulation_id,
+                                  foreign_key: :partial_temporary_stop_regulation_id,
+                                  class_name: 'BaseRegulation'
 end
 
 # == Schema Information

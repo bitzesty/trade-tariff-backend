@@ -1,11 +1,12 @@
 class MeasureType < ActiveRecord::Base
   set_primary_keys :measure_type_id
 
-  has_one :description, foreign_key: :measure_type_id,
-                        class_name: 'MeasureTypeDescription'
+  has_one  :measure_type_description, foreign_key: :measure_type_id
   has_many :measures, foreign_key: :measure_type
-  has_many :additional_code_type_measure_types
+  has_many :additional_code_type_measure_types, foreign_key: :measure_type_id
   has_many :additional_code_types, through: :additional_code_type_measure_types
+
+  belongs_to :measure_type_series
 end
 
 # == Schema Information
