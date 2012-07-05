@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120628163107) do
+ActiveRecord::Schema.define(:version => 20120705143957) do
 
   create_table "additional_code_description_periods", :id => false, :force => true do |t|
     t.string   "record_code"
@@ -1309,7 +1309,7 @@ ActiveRecord::Schema.define(:version => 20120628163107) do
     t.string   "record_code"
     t.string   "subrecord_code"
     t.string   "record_sequence_number"
-    t.string   "regulation_role_type_id"
+    t.integer  "regulation_role_type_id"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
     t.datetime "created_at"

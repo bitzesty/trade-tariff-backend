@@ -11,6 +11,14 @@ class BaseRegulation < ActiveRecord::Base
   belongs_to :antidumping_regulation, foreign_key: [:antidumping_regulation_role,
                                                     :related_antidumping_regulation_id],
                                       class_name: 'BaseRegulation'
+  belongs_to :base_regulation_role_type, foreign_key: :base_regulation_role,
+                                    class_name: 'RegulationRoleType'
+  belongs_to :antidumping_regulation_role_type, foreign_key: :antidumping_regulation_role,
+                                           class_name: 'RegulationRoleType'
+  belongs_to :complete_abrogation_regulation_role_type, foreign_key: :complete_abrogation_regulation_role,
+                                                   class_name: 'RegulationRoleType'
+  belongs_to :explicit_abrogation_regulation_role_type, foreign_key: :explicit_abrogation_regulation_role,
+                                                   class_name: 'RegulationRoleType'
 
 
   has_many :replacing_regulation_replacements, foreign_key: [:replacing_regulation_role,

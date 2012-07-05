@@ -5,6 +5,7 @@ class MeasureType < ActiveRecord::Base
   has_many :measures, foreign_key: :measure_type
   has_many :additional_code_type_measure_types, foreign_key: :measure_type_id
   has_many :additional_code_types, through: :additional_code_type_measure_types
+  has_many :regulation_replacements, foreign_key: :measure_type_id
 
   belongs_to :measure_type_series
 end

@@ -9,6 +9,8 @@ class ModificationRegulation < ActiveRecord::Base
                                               class_name: 'BaseRegulation'
   belongs_to :base_regulation, foreign_key: [:base_regulation_id,
                                              :base_regulation_role]
+  belongs_to :modification_regulation_role_type, foreign_key: :modification_regulation_role,
+                                                 class_name: 'RegulationRoleType'
 end
 
 # == Schema Information

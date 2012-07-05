@@ -11,6 +11,8 @@ class FullTemporaryStopRegulation < ActiveRecord::Base
 
   belongs_to :explicit_abrogation_regulation, foreign_key: [:explicit_abrogation_regulation_role,
                                                             :explicit_abrogation_regulation_id]
+  belongs_to :full_temporary_stop_regulation_role_type, foreign_key: :full_temporary_stop_regulation_role,
+                                                        class_name: 'RegulationRoleType'
 end
 
 # == Schema Information

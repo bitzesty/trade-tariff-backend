@@ -10,6 +10,8 @@ class ProrogationRegulation < ActiveRecord::Base
 
   belongs_to :base_regulation, foreign_key: [:prorogation_regulation_role, :prorogation_regulation_id],
                                class_name: 'BaseRegulation'
+  belongs_to :prorogation_regulation_role_type, foreign_key: :prorogation_regulation_role,
+                                                class_name: 'RegulationRoleType'
 end
 
 # == Schema Information

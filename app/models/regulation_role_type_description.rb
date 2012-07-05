@@ -1,6 +1,6 @@
 class RegulationRoleTypeDescription < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code
-  
+  set_primary_keys :regulation_role_type_id
+
   belongs_to :regulation_role_type
   belongs_to :language
 end
