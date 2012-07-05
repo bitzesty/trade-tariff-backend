@@ -1,8 +1,11 @@
 class Measure < ActiveRecord::Base
   set_primary_keys :measure_sid
 
+  has_many :footnote_association_measures, foreign_key: :measure_sid
+  has_many :footnotes, through: :footnote_association_measures, foreign_key: :footnote_id
   has_many :measure_components, foreign_key: :measure_sid
-  has_many :excluded_geographical_areas, class_name: 'GeographicalArea'
+  has_many :measure_excluded_geographical_areas, foreign_key: :measure_sid
+  has_many :excluded_geographical_areas, through: :measure_excluded_geographical_areas
   belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid
   belongs_to :justification_regulation, foreign_key: [:justification_regulation_role,
                                                       :justification_regulation_id],
@@ -16,6 +19,7 @@ class Measure < ActiveRecord::Base
                                 class_name: 'MeasureType'
   belongs_to :ref_additional_code, foreign_key: :additional_code_sid,
                                    class_name: 'AdditionalCode'
+  belongs_to :geographical_area, foreign_key: :geographical_area_sid
 end
 
 # == Schema Information

@@ -2,7 +2,6 @@ class RegulationReplacement < ActiveRecord::Base
   set_primary_keys :replacing_regulation_id, :replacing_regulation_role,
                    :replaced_regulation_id, :replaced_regulation_role
 
-  belongs_to :geographical_area
   belongs_to :replacing_regulation, foreign_key: [:replacing_regulation_role,
                                                   :replacing_regulation_id],
                                     class_name: 'BaseRegulation'

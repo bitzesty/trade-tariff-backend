@@ -1,18 +1,24 @@
 class GeographicalArea < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code
+  set_primary_keys :geographical_area_sid
 
-  has_many :geographical_area_memberships
+  has_many :geographical_area_memberships, foreign_key: :geographical_area_sid
+  has_many :geographical_area_groups, through: :geographical_area_memberships,
+                                      class_name: 'GeographicalArea'
   has_many :geographical_area_description_periods, foreign_key: :geographical_area_sid
-  has_many :geographical_area_description, foreign_key: :geographical_area_sid
-  has_many :measure_excluded_geographical_areas, foreign_key: :geographical_area_sid
+  has_many :geographical_area_descriptions, through: :geographical_area_description_periods
 
-  belongs_to :geographical_area, foreign_key: :parent_geographical_area_group_sid,
-                                 class_name: 'GeographicalArea'
-  has_many :geographical_areas, foreign_key: :parent_geographical_area_group_sid,
-                                class_name: 'GeographicalArea'
-  has_many :regulation_replacements, foreign_key: :geographical_area_id
-  # has_many :excluded_measures, through: :measure_excluded_geographical_areas,
-  #                              class_name: 'Measure'
+  has_many   :children_geographical_areas, foreign_key: :parent_geographical_area_group_sid,
+                                           class_name: 'GeographicalArea'
+  belongs_to :parent_geographical_area, foreign_key: :parent_geographical_area_group_sid,
+                                        class_name: 'GeographicalArea'
+  has_many :measures, foreign_key: :geographical_area_sid
+  has_many :measure_excluded_geographical_areas, foreign_key: :geographical_area_sid
+  has_many :excluded_measures, through: :measure_excluded_geographical_areas
+  has_many :quota_order_number_origins, foreign_key: :geographical_area_sid
+  has_many :quota_order_numbers, through: :quota_order_number_origins
+  has_many :quota_order_number_origin_exclusions, foreign_key: :excluded_geographical_area_sid
+  has_many :excluded_quota_order_number_origins, through: :quota_order_number_origin_exclusions,
+                                                 source: :quota_order_number_origin
 end
 
 # == Schema Information

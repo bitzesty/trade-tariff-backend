@@ -1,11 +1,11 @@
 class FootnoteDescriptionPeriod < ActiveRecord::Base
-  self.primary_key = :footnote_description_period_sid
+  set_primary_keys :footnote_id, :footnote_type_id, :footnote_description_period_sid
 
   belongs_to :footnote_type
-  belongs_to :footnote
-  has_one :footnote_description, foreign_key: [:footnote_description_period_sid,
-                                               :footnote_type_id,
-                                               :footnote_id]
+  belongs_to :footnote, foreign_key: [:footnote_id, :footnote_type_id]
+  belongs_to :footnote_description, foreign_key: [:footnote_id,
+                                                  :footnote_type_id,
+                                                  :footnote_description_period_sid]
 end
 
 # == Schema Information

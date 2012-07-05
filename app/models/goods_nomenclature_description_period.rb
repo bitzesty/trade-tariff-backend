@@ -1,9 +1,9 @@
 class GoodsNomenclatureDescriptionPeriod < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code
+  set_primary_keys :goods_nomenclature_description_period_sid
 
   belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid
-
-  has_one :goods_nomenclature_description
+  belongs_to :goods_nomenclature_description, foreign_key: [:goods_nomenclature_sid,
+                                                            :goods_nomenclature_description_period_sid]
 end
 
 # == Schema Information

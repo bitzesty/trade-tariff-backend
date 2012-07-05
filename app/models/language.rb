@@ -26,6 +26,7 @@ class Language < ActiveRecord::Base
   has_many :regulation_role_type_descriptions
   has_many :transmission_comments
   has_many :goods_nomenclature_descriptions
+  has_many :goods_nomenclature_group_descriptions
 end
 
 # == Schema Information

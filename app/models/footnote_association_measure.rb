@@ -1,9 +1,8 @@
 class FootnoteAssociationMeasure < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code
-  
+  set_primary_keys :measure_sid, :footnote_id
+
   belongs_to :measure, foreign_key: :measure_sid
-  belongs_to :footnote
-  belongs_to :footnote_type
+  belongs_to :footnote, foreign_key: :footnote_id
 end
 
 # == Schema Information

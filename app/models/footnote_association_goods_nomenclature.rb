@@ -1,10 +1,8 @@
 class FootnoteAssociationGoodsNomenclature < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code
+  set_primary_keys :footnote_id, :goods_nomenclature_sid
 
-  belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid
-  # TODO FIXME
-  # belongs_to :footnote_type, foreign_key: :footnote_type
-  belongs_to :footnote
+  belongs_to :goods_nomenclature, primary_key: :goods_nomenclature_sid
+  belongs_to :footnote, primary_key: :footnote_id
 end
 
 # == Schema Information

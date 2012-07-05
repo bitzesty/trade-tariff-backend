@@ -1,8 +1,10 @@
 class GoodsNomenclatureDescription < ActiveRecord::Base
-  set_primary_keys :record_code, :subrecord_code
-  
-  belongs_to :goods_nomenclature_description_period, foreign_key: :goods_nomenclature_description_period_sid
-  belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid
+  set_primary_keys :goods_nomenclature_sid, :goods_nomenclature_description_period_sid
+
+  has_many :goods_nomenclature_description_periods, foreign_key: [:goods_nomenclature_sid,
+                                                                  :goods_nomenclature_description_period_sid]
+  has_many :goods_nomenclatures, through: :goods_nomenclature_description_periods
+
   belongs_to :language
 end
 
