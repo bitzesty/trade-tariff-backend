@@ -1,5 +1,5 @@
 class RegulationGroupDescription < ActiveRecord::Base
-  set_primary_keys :regulation_group_id
+  self.primary_keys =  :regulation_group_id
 
   belongs_to :regulation_group
   belongs_to :language

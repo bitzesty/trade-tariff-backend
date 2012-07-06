@@ -1,5 +1,5 @@
 class QuotaAssociation < ActiveRecord::Base
-  set_primary_keys :main_quota_definition_sid, :sub_quota_definition_sid
+  self.primary_keys =  :main_quota_definition_sid, :sub_quota_definition_sid
 
   belongs_to :main_quota_definition, foreign_key: :main_quota_definition_sid,
                                      class_name: 'QuotaDefinition'

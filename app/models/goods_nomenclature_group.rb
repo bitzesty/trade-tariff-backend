@@ -1,5 +1,5 @@
 class GoodsNomenclatureGroup < ActiveRecord::Base
-  set_primary_keys :goods_nomenclature_group_id, :goods_nomenclature_group_type
+  self.primary_keys =  :goods_nomenclature_group_id, :goods_nomenclature_group_type
 
   has_one :goods_nomenclature_group_description, foreign_key: [:goods_nomenclature_group_id,
                                                                :goods_nomenclature_group_type]

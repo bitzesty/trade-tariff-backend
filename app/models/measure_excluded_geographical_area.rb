@@ -1,5 +1,5 @@
 class MeasureExcludedGeographicalArea < ActiveRecord::Base
-  set_primary_keys :measure_sid, :geographical_area_sid
+  self.primary_keys =  :measure_sid, :geographical_area_sid
 
   belongs_to :measure, foreign_key: :measure_sid
   belongs_to :excluded_geographical_area, foreign_key: :geographical_area_sid,

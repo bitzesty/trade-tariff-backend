@@ -1,5 +1,5 @@
 class FootnoteAssociationAdditionalCode < ActiveRecord::Base
-  set_primary_keys :footnote_id, :footnote_type_id, :additional_code_sid
+  self.primary_keys =  :footnote_id, :footnote_type_id, :additional_code_sid
 
   belongs_to :footnote_type
   belongs_to :footnote, foreign_key: [:footnote_id, :footnote_type_id]

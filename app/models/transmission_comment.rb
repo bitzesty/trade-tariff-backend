@@ -1,5 +1,5 @@
 class TransmissionComment < ActiveRecord::Base
-  set_primary_keys :comment_sid
+  self.primary_keys =  :comment_sid
 
   belongs_to :language
 end

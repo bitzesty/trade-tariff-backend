@@ -1,5 +1,5 @@
 class FootnoteAssociationMeasure < ActiveRecord::Base
-  set_primary_keys :measure_sid, :footnote_id
+  self.primary_keys =  :measure_sid, :footnote_id
 
   belongs_to :measure, foreign_key: :measure_sid
   belongs_to :footnote, foreign_key: :footnote_id

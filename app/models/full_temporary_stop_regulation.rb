@@ -1,5 +1,5 @@
 class FullTemporaryStopRegulation < ActiveRecord::Base
-  set_primary_keys :full_temporary_stop_regulation_id, :full_temporary_stop_regulation_role
+  self.primary_keys =  :full_temporary_stop_regulation_id, :full_temporary_stop_regulation_role
 
   has_many :fts_regulation_actions, foreign_key: [:fts_regulation_id, :fts_regulation_role]
   has_many :fts_regulations, through: :fts_regulation_actions,

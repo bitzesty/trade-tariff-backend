@@ -1,5 +1,5 @@
 class ModificationRegulation < ActiveRecord::Base
-  set_primary_keys :modification_regulation_role, :modification_regulation_id
+  self.primary_keys =  :modification_regulation_role, :modification_regulation_id
 
   belongs_to :explicit_abrogation_regulation, foreign_key: [:explicit_abrogation_regulation_id,
                                                             :explicit_abrogation_regulation_role],

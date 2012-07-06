@@ -1,5 +1,5 @@
 class GoodsNomenclature < ActiveRecord::Base
-  set_primary_keys :goods_nomenclature_sid
+  self.primary_keys =  :goods_nomenclature_sid
 
   has_many :goods_nomenclature_description_periods, foreign_key: :goods_nomenclature_sid
   has_many :goods_nomenclature_descriptions, through: :goods_nomenclature_description_periods

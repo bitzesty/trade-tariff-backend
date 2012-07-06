@@ -1,5 +1,5 @@
 class QuotaOrderNumber < ActiveRecord::Base
-  set_primary_keys :quota_order_number_sid
+  self.primary_keys =  :quota_order_number_sid
 
   has_many :quota_order_number_origins, foreign_key: :quota_order_number_sid
   has_many :quota_order_number_origin_geographical_areas, through: :quota_order_number_origins,

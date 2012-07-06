@@ -1,5 +1,5 @@
 class NomenclatureGroupMembership < ActiveRecord::Base
-  set_primary_keys :goods_nomenclature_sid, :goods_nomenclature_group_id,
+  self.primary_keys =  :goods_nomenclature_sid, :goods_nomenclature_group_id,
                    :goods_nomenclature_group_type
 
   belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid

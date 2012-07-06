@@ -1,5 +1,5 @@
 class FtsRegulationAction < ActiveRecord::Base
-  set_primary_keys :fts_regulation_id, :fts_regulation_role,
+  self.primary_keys =  :fts_regulation_id, :fts_regulation_role,
                    :stopped_regulation_id, :stopped_regulation_role
 
   belongs_to :fts_regulation, foreign_key: [:fts_regulation_id, :fts_regulation_role],

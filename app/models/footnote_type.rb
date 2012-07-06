@@ -1,5 +1,5 @@
 class FootnoteType < ActiveRecord::Base
-  set_primary_keys :footnote_type_id
+  self.primary_keys =  :footnote_type_id
 
   has_many :footnotes, foreign_key: :footnote_type_id
   has_many :footnote_description, foreign_key: :footnote_type_id

@@ -1,5 +1,5 @@
 class AdditionalCodeTypeDescription < ActiveRecord::Base
-  set_primary_keys :additional_code_type_id
+  self.primary_keys =  :additional_code_type_id
 
   belongs_to :additional_code_type, foreign_key: :additional_code_type_id
   belongs_to :language

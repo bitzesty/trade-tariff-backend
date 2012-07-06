@@ -1,5 +1,5 @@
 class FootnoteAssociationMeursingHeading < ActiveRecord::Base
-  set_primary_keys :footnote_id, :meursing_table_plan_id
+  self.primary_keys =  :footnote_id, :meursing_table_plan_id
 
   belongs_to :meursing_table_plan
   belongs_to :footnote

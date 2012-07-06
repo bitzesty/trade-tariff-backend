@@ -1,5 +1,5 @@
 class BaseRegulation < ActiveRecord::Base
-  set_primary_keys :base_regulation_id, :base_regulation_role
+  self.primary_keys =  :base_regulation_id, :base_regulation_role
 
   belongs_to :regulation_group
   has_many :modification_regulations

@@ -1,5 +1,5 @@
 class MeasureCondition < ActiveRecord::Base
-  set_primary_keys :measure_condition_sid
+  self.primary_keys =  :measure_condition_sid
 
   belongs_to :measure, foreign_key: :measure_sid
   belongs_to :measure_action, foreign_key: :action_code

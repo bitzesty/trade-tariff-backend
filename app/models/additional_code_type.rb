@@ -1,5 +1,5 @@
 class AdditionalCodeType < ActiveRecord::Base
-  set_primary_keys :additional_code_type_id
+  self.primary_keys =  :additional_code_type_id
 
   has_many :additional_codes, foreign_key: :additional_code_type_id
   has_one  :additional_code_type_description, foreign_key: :additional_code_type_id

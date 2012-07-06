@@ -1,5 +1,5 @@
 class GeographicalArea < ActiveRecord::Base
-  set_primary_keys :geographical_area_sid
+  self.primary_keys =  :geographical_area_sid
 
   has_many :geographical_area_memberships, foreign_key: :geographical_area_sid
   has_many :geographical_area_groups, through: :geographical_area_memberships,

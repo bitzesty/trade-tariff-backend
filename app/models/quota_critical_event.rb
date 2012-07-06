@@ -1,5 +1,5 @@
 class QuotaCriticalEvent < ActiveRecord::Base
-  set_primary_keys :quota_definition_sid
+  self.primary_keys =  :quota_definition_sid
 
   belongs_to :quota_definition, foreign_key: :quota_definition_sid
 end

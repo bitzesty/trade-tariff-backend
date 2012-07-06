@@ -1,5 +1,5 @@
 class MeursingHeadingText < ActiveRecord::Base
-  set_primary_keys :meursing_table_plan_id, :meursing_heading_number
+  self.primary_keys =  :meursing_table_plan_id, :meursing_heading_number
 
   belongs_to :meursing_table_plan
   belongs_to :meursing_heading, foreign_key: [:meursing_table_plan_id,

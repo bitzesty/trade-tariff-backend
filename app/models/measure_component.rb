@@ -1,6 +1,6 @@
 class MeasureComponent < ActiveRecord::Base
   # NOTE there is no better qualifying primary key?
-  set_primary_keys :measure_sid, :duty_expression_id
+  self.primary_keys =  :measure_sid, :duty_expression_id
 
   belongs_to :measure, foreign_key: :measure_sid
   belongs_to :measurement_unit, foreign_key: :measurement_unit_code

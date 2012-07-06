@@ -1,5 +1,5 @@
 class Certificate < ActiveRecord::Base
-  set_primary_keys :certificate_code, :certificate_type_code
+  self.primary_keys =  :certificate_code, :certificate_type_code
 
   belongs_to :certificate_type, foreign_key: :certificate_type_code
   has_many :certificate_description_periods, foreign_key: [:certificate_code,

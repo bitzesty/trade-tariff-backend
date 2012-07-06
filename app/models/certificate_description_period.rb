@@ -1,5 +1,5 @@
 class CertificateDescriptionPeriod < ActiveRecord::Base
-  set_primary_keys :certificate_description_period_sid
+  self.primary_keys =  :certificate_description_period_sid
 
   belongs_to :certificate_type, foreign_key: :certificate_type_code
   belongs_to :certificate, foreign_key: [:certificate_code, :certificate_type_code]

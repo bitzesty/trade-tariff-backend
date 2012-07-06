@@ -1,5 +1,5 @@
 class MeursingAdditionalCode < ActiveRecord::Base
-  set_primary_keys :meursing_additional_code_sid
+  self.primary_keys =  :meursing_additional_code_sid
 
   has_many :meursing_table_cell_components, foreign_key: :meursing_additional_code_sid
 end

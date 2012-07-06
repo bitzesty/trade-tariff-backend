@@ -1,5 +1,5 @@
 class AdditionalCodeDescription < ActiveRecord::Base
-  set_primary_keys :additional_code_description_period_sid, :additional_code_sid
+  self.primary_keys =  :additional_code_description_period_sid, :additional_code_sid
 
   belongs_to :additional_code_description_period, foreign_key: :additional_code_description_period_sid
   belongs_to :language

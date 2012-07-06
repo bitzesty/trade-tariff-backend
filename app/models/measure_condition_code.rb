@@ -1,5 +1,5 @@
 class MeasureConditionCode < ActiveRecord::Base
-  set_primary_keys :condition_code
+  self.primary_keys =  :condition_code
 
   has_one :measure_condition_code_description, foreign_key: :condition_code
 end

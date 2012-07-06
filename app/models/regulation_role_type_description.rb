@@ -1,5 +1,5 @@
 class RegulationRoleTypeDescription < ActiveRecord::Base
-  set_primary_keys :regulation_role_type_id
+  self.primary_keys =  :regulation_role_type_id
 
   belongs_to :regulation_role_type
   belongs_to :language

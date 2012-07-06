@@ -1,5 +1,5 @@
 class MeasureTypeSeries < ActiveRecord::Base
-  set_primary_keys :measure_type_series_id
+  self.primary_keys =  :measure_type_series_id
 
   has_one :measure_type_series_description
   has_many :measure_types

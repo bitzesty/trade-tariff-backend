@@ -1,5 +1,5 @@
 class GoodsNomenclatureSuccessor < ActiveRecord::Base
-  set_primary_keys :goods_nomenclature_sid
+  self.primary_keys =  :goods_nomenclature_sid
 
   belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid
 end

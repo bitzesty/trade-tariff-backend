@@ -1,5 +1,5 @@
 class FootnoteAssociationErn < ActiveRecord::Base
-  set_primary_keys :export_refund_nomenclature_sid, :footnote_id
+  self.primary_keys =  :export_refund_nomenclature_sid, :footnote_id
 
   belongs_to :export_refund_nomenclature, foreign_key: :export_refund_nomenclature_sid
   belongs_to :footnote

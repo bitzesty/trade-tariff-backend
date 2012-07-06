@@ -1,5 +1,5 @@
 class MeasureAction < ActiveRecord::Base
-  set_primary_keys :action_code
+  self.primary_keys =  :action_code
 
   has_one :measure_action_description, foreign_key: :action_code
   has_many :measure_conditions, foreign_key: :action_code

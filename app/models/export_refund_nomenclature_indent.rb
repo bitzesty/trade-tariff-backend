@@ -1,5 +1,5 @@
 class ExportRefundNomenclatureIndent < ActiveRecord::Base
-  set_primary_keys :export_refund_nomenclature_indents_sid
+  self.primary_keys =  :export_refund_nomenclature_indents_sid
 
   belongs_to :export_refund_nomenclature, foreign_key: :export_refund_nomenclature_sid
 end

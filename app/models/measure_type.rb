@@ -1,5 +1,5 @@
 class MeasureType < ActiveRecord::Base
-  set_primary_keys :measure_type_id
+  self.primary_keys =  :measure_type_id
 
   has_one  :measure_type_description, foreign_key: :measure_type_id
   has_many :measures, foreign_key: :measure_type

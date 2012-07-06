@@ -1,5 +1,5 @@
 class AdditionalCodeTypeMeasureType < ActiveRecord::Base
-  set_primary_keys :measure_type_id, :additional_code_type_id
+  self.primary_keys =  :measure_type_id, :additional_code_type_id
 
   belongs_to :measure_type
   belongs_to :additional_code_type

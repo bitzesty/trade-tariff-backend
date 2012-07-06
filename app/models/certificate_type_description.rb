@@ -1,5 +1,5 @@
 class CertificateTypeDescription < ActiveRecord::Base
-  set_primary_keys :certificate_type_code
+  self.primary_keys =  :certificate_type_code
 
   belongs_to :certificate_type, foreign_key: :certificate_type_code
   belongs_to :language

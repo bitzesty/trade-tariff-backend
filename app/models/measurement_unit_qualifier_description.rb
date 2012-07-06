@@ -1,5 +1,5 @@
 class MeasurementUnitQualifierDescription < ActiveRecord::Base
-  set_primary_keys :measurement_unit_qualifier_code
+  self.primary_keys =  :measurement_unit_qualifier_code
 
   belongs_to :measurement_unit_qualifier, foreign_key: :measurement_unit_qualifier_code
   belongs_to :language

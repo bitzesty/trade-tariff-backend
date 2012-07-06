@@ -1,5 +1,5 @@
 class RegulationRoleType < ActiveRecord::Base
-  set_primary_keys :regulation_role_type_id
+  self.primary_keys =  :regulation_role_type_id
 
   has_one :regulation_role_type_description, foreign_key: :regulation_role_type_id
   has_many :base_regulations, foreign_key: :base_regulation_role

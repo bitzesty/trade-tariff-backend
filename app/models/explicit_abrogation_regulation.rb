@@ -1,5 +1,5 @@
 class ExplicitAbrogationRegulation < ActiveRecord::Base
-  set_primary_keys :explicit_abrogation_regulation_id, :explicit_abrogation_regulation_role
+  self.primary_keys =  :explicit_abrogation_regulation_id, :explicit_abrogation_regulation_role
 
   has_many :modification_regulations, foreign_key: [:explicit_abrogation_regulation_role,
                                                     :explicit_abrogation_regulation_id]
