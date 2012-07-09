@@ -1,13 +1,12 @@
-class CreateTames < ActiveRecord::Migration
+class CreateTame < ActiveRecord::Migration
   def change
-    create_table :tame do |t|
+    create_table :tame, :id => false do |t|
       t.datetime :fe_tsmp
       t.string :msgrp_code
       t.string :msr_type
       t.string :tty_code
       t.string :tar_msr_no
       t.datetime :le_tsmp
-      t.boolean :current_ind
       t.decimal :adval_rate, :precision => 3, :scale => 3
       t.decimal :alch_sgth, :precision => 3, :scale => 2
       t.datetime :audit_tsmp
@@ -35,8 +34,6 @@ class CreateTames < ActiveRecord::Migration
       t.string :rfs_code_5
       t.string :tdr_spr_sur
       t.boolean :exports_use_ind
-
-      t.timestamps
     end
   end
 end
