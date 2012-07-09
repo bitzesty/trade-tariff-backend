@@ -7,7 +7,8 @@ class Measure < ActiveRecord::Base
   has_many :measure_conditions, foreign_key: :measure_sid
   has_many :measure_excluded_geographical_areas, foreign_key: :measure_sid,
                                                  source: :excluded_geographical_area
-  has_many :excluded_geographical_areas, through: :measure_excluded_geographical_areas
+  has_many :excluded_geographical_areas, through: :measure_excluded_geographical_areas,
+                                         source: :ref_excluded_geographical_area
   belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid
   belongs_to :justification_regulation, foreign_key: [:justification_regulation_role,
                                                       :justification_regulation_id],
@@ -25,7 +26,7 @@ class Measure < ActiveRecord::Base
                                 class_name: 'MeasureType'
   belongs_to :ref_additional_code, foreign_key: :additional_code_sid,
                                    class_name: 'AdditionalCode'
-  belongs_to :geographical_area, foreign_key: :geographical_area_sid
+  belongs_to :ref_geographical_area, foreign_key: :geographical_area_sid
 end
 
 # == Schema Information
