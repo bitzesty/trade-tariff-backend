@@ -1,3 +1,3 @@
 class Comm < ActiveRecord::Base
-  # attr_accessible :title, :body
+  self.table_name = "comm"
 end
