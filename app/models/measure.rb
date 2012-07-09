@@ -26,7 +26,8 @@ class Measure < ActiveRecord::Base
                                 class_name: 'MeasureType'
   belongs_to :ref_additional_code, foreign_key: :additional_code_sid,
                                    class_name: 'AdditionalCode'
-  belongs_to :ref_geographical_area, foreign_key: :geographical_area_sid
+  belongs_to :ref_geographical_area, foreign_key: :geographical_area_sid,
+                                     class_name: 'GeographicalArea'
 end
 
 # == Schema Information
