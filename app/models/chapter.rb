@@ -1,3 +1,5 @@
+require_relative 'goods_nomenclature'
+
 class Chapter < GoodsNomenclature
   has_and_belongs_to_many :sections, foreign_key: :goods_nomenclature_sid
 
