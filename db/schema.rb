@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120706143001) do
+ActiveRecord::Schema.define(:version => 20120709123714) do
 
   create_table "additional_code_description_periods", :id => false, :force => true do |t|
     t.string   "record_code"
@@ -772,8 +772,6 @@ ActiveRecord::Schema.define(:version => 20120706143001) do
     t.datetime "updated_at"
   end
 
-  add_index "measure_type_descriptions", ["measure_type_id"], :name => "measure_type_id"
-
   create_table "measure_type_series", :id => false, :force => true do |t|
     t.string   "record_code"
     t.string   "subrecord_code"
@@ -797,10 +795,11 @@ ActiveRecord::Schema.define(:version => 20120706143001) do
     t.datetime "updated_at"
   end
 
-  create_table "measure_types", :primary_key => "measure_type_id", :force => true do |t|
+  create_table "measure_types", :id => false, :force => true do |t|
     t.string   "record_code"
     t.string   "subrecord_code"
     t.string   "record_sequence_number"
+    t.integer  "measure_type_id"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
     t.integer  "trade_movement_code"
@@ -896,9 +895,6 @@ ActiveRecord::Schema.define(:version => 20120706143001) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "measures", ["additional_code_sid"], :name => "additional_code_sid"
-  add_index "measures", ["goods_nomenclature_sid"], :name => "goods_nomenclature_sid"
 
   create_table "meursing_additional_codes", :id => false, :force => true do |t|
     t.string   "record_code"
@@ -1318,6 +1314,14 @@ ActiveRecord::Schema.define(:version => 20120706143001) do
     t.date     "validity_end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "sections", :force => true do |t|
+    t.integer  "position"
+    t.string   "numeral"
+    t.string   "title"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "tame", :force => true do |t|

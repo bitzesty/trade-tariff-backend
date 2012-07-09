@@ -1,126 +1,126 @@
-require 'csv'
+# require 'csv'
 
-module XlsImporter
-  def process_substr(x)
-    x.nil? ? 0 : x.strip.split(' ').count
-  end
+# module XlsImporter
+#   def process_substr(x)
+#     x.nil? ? 0 : x.strip.split(' ').count
+#   end
 
-  def process_id(x)
-    x.gsub(" ", '')
-  end
+#   def process_id(x)
+#     x.gsub(" ", '')
+#   end
 
-  def get_chapter(str)
-    str[0..1]
-  end
+#   def get_chapter(str)
+#     str[0..1]
+#   end
 
-  def get_heading(str)
-    str[0..3]
-  end
+#   def get_heading(str)
+#     str[0..3]
+#   end
 
-  def build_attrs(row)
-    { code: process_id(row[0]), description: normalize(row[6]), hier_pos: row[4], substring: (process_substr(row[5])) }
-  end
+#   def build_attrs(row)
+#     { code: process_id(row[0]), description: normalize(row[6]), hier_pos: row[4], substring: (process_substr(row[5])) }
+#   end
 
-  def is_chapter?(attrs)
-    attrs[:hier_pos] == 2 && attrs[:substring] == 0
-  end
+#   def is_chapter?(attrs)
+#     attrs[:hier_pos] == 2 && attrs[:substring] == 0
+#   end
 
-  def is_heading?(attrs)
-    attrs[:hier_pos] == 4 && attrs[:substring] == 0
-  end
+#   def is_heading?(attrs)
+#     attrs[:hier_pos] == 4 && attrs[:substring] == 0
+#   end
 
-  def normalize(str)
-    str.gsub!("|", "\u00A0")
-    str.gsub!("!1!", "\n")
-    str.gsub!("!X!", "\u00D7")
-    str.gsub!("!x!", "\u00D7")
-    str.gsub!("!o!", "\u00B0")
-    str.gsub!("!O!", "\u00B0")
-    str.gsub!("!>=!", "\u2265")
-    str.gsub!("!<=!", "\u2264")
-    str.gsub!("@", "_")
-    str.gsub!("$", "^")
-    str.strip
-  end
+#   def normalize(str)
+#     str.gsub!("|", "\u00A0")
+#     str.gsub!("!1!", "\n")
+#     str.gsub!("!X!", "\u00D7")
+#     str.gsub!("!x!", "\u00D7")
+#     str.gsub!("!o!", "\u00B0")
+#     str.gsub!("!O!", "\u00B0")
+#     str.gsub!("!>=!", "\u2265")
+#     str.gsub!("!<=!", "\u2264")
+#     str.gsub!("@", "_")
+#     str.gsub!("$", "^")
+#     str.strip
+#   end
 
-  def find_section_for_chapter(attrs)
-    chapter = get_chapter(attrs).to_i
-    section = case chapter
-              when 1..5
-                1
-              when 6..14
-                2
-              when 15
-                3
-              when 16..24
-                4
-              when 25..27
-                5
-              when 28..38
-                6
-              when 39..40
-                7
-              when 41..43
-                8
-              when 44..46
-                9
-              when 47..49
-                10
-              when 50..63
-                11
-              when 64..67
-                12
-              when 68..70
-                13
-              when 71
-                14
-              when 72..83
-                15
-              when 84..85
-                16
-              when 86..89
-                17
-              when 90..92
-                18
-              when 93
-                19
-              when 94..96
-                20
-              when 97..99
-                21
-              end
-  end
+#   def find_section_for_chapter(attrs)
+#     chapter = get_chapter(attrs).to_i
+#     section = case chapter
+#               when 1..5
+#                 1
+#               when 6..14
+#                 2
+#               when 15
+#                 3
+#               when 16..24
+#                 4
+#               when 25..27
+#                 5
+#               when 28..38
+#                 6
+#               when 39..40
+#                 7
+#               when 41..43
+#                 8
+#               when 44..46
+#                 9
+#               when 47..49
+#                 10
+#               when 50..63
+#                 11
+#               when 64..67
+#                 12
+#               when 68..70
+#                 13
+#               when 71
+#                 14
+#               when 72..83
+#                 15
+#               when 84..85
+#                 16
+#               when 86..89
+#                 17
+#               when 90..92
+#                 18
+#               when 93
+#                 19
+#               when 94..96
+#                 20
+#               when 97..99
+#                 21
+#               end
+#   end
 
-  def create_objects(nomenclature, attrs)
-    if is_chapter?(attrs)
-      section_pos = find_section_for_chapter(attrs[:code])
-      attrs.delete(:hier_pos)
-      attrs.delete(:substring)
-      chapter = Chapter.new(attrs)
-      chapter.section = Section.where(position: section_pos).first
-      chapter.nomenclature = nomenclature
-      chapter.save
-    elsif is_heading?(attrs)
-      chapter = Chapter.where({ code: /^#{get_chapter(attrs[:code])}/i }).first
-      Heading.create(attrs.merge({chapter: chapter, nomenclature: nomenclature}))
-    else
-      heading = Heading.where({ code: /^#{get_heading(attrs[:code])}/i }).first
-      if heading
-        commodity = Commodity.new(attrs)
-        commodity.heading = heading
-        commodity.nomenclature = nomenclature
-        commodity.description = commodity.description
-        commodity.save
-      else
-        #Errors in xls - no heading for a subheading treat as heading
-        chapter = Chapter.where({ code: /^#{get_chapter(attrs[:code])}/i }).first
-        Heading.create(attrs.merge({chapter: chapter, nomenclature: nomenclature}))
-      end
-    end
-  end
-end
+#   def create_objects(nomenclature, attrs)
+#     if is_chapter?(attrs)
+#       section_pos = find_section_for_chapter(attrs[:code])
+#       attrs.delete(:hier_pos)
+#       attrs.delete(:substring)
+#       chapter = Chapter.new(attrs)
+#       chapter.section = Section.where(position: section_pos).first
+#       chapter.nomenclature = nomenclature
+#       chapter.save
+#     elsif is_heading?(attrs)
+#       chapter = Chapter.where({ code: /^#{get_chapter(attrs[:code])}/i }).first
+#       Heading.create(attrs.merge({chapter: chapter, nomenclature: nomenclature}))
+#     else
+#       heading = Heading.where({ code: /^#{get_heading(attrs[:code])}/i }).first
+#       if heading
+#         commodity = Commodity.new(attrs)
+#         commodity.heading = heading
+#         commodity.nomenclature = nomenclature
+#         commodity.description = commodity.description
+#         commodity.save
+#       else
+#         #Errors in xls - no heading for a subheading treat as heading
+#         chapter = Chapter.where({ code: /^#{get_chapter(attrs[:code])}/i }).first
+#         Heading.create(attrs.merge({chapter: chapter, nomenclature: nomenclature}))
+#       end
+#     end
+#   end
+# end
 
-include XlsImporter
+# include XlsImporter
 
 #####################################
 # Loading Data
@@ -150,137 +150,138 @@ sections = [
   {position: 21, numeral: 'XXI',  title: "Works of art, collectors' pieces and antiques (chapter 97 - 99)"}
 ]
 
+sections.each do |sec|
+  Section.create(sec)
+end
+
 # prevent indexing for now, we will reindex everything after parent<->children
 # commodity mapping gets done
 
-BaseCommodity.skip_callback(:save, :after, :index_with_tire)
+# BaseCommodity.skip_callback(:save, :after, :index_with_tire)
 
-puts "Creating Nomenclature..."
-nomenclature = Nomenclature.find_or_create_by(as_of_date: Date.today)
+# puts "Creating Nomenclature..."
+# nomenclature = Nomenclature.find_or_create_by(as_of_date: Date.today)
 
-puts "Loading Sections..."
-sections.each do |sec|
-  Section.create(sec, nomenclature: nomenclature)
-end
+# puts "Loading Sections..."
 
-Spreadsheet.client_encoding = 'UTF-8'
-book = Spreadsheet.open Rails.root.join('db/goods-nomenclature.xls')
-sheet1 = book.worksheet 0
-n_rows = sheet1.count
-p "#{n_rows} Rows loaded"
-pbar = ProgressBar.new("Loading data", n_rows)
+# Spreadsheet.client_encoding = 'UTF-8'
+# book = Spreadsheet.open Rails.root.join('db/goods-nomenclature.xls')
+# sheet1 = book.worksheet 0
+# n_rows = sheet1.count
+# p "#{n_rows} Rows loaded"
+# pbar = ProgressBar.new("Loading data", n_rows)
 
-sheet1.each 1 do |row|
-  x = build_attrs(row)
-  create_objects(nomenclature, x)
-  pbar.inc
-end
+# sheet1.each 1 do |row|
+#   x = build_attrs(row)
+#   create_objects(nomenclature, x)
+#   pbar.inc
+# end
 
-puts 'Populating Countries and Country Groups'
-pbar = ProgressBar.new("Loading data", 4407)
-CSV.foreach("#{Rails.root}/db/geo_zones.csv", headers: :first_row) { |row|
-  country_group = CountryGroup.find_or_create_by(area_id: row["geogr_area_id"],
-                                                 sigl: row["sigl"],
-                                                 description: row["descr"])
+# puts 'Populating Countries and Country Groups'
+# pbar = ProgressBar.new("Loading data", 4407)
+# CSV.foreach("#{Rails.root}/db/geo_zones.csv", headers: :first_row) { |row|
+#   country_group = CountryGroup.find_or_create_by(area_id: row["geogr_area_id"],
+#                                                  sigl: row["sigl"],
+#                                                  description: row["descr"])
 
-  country = Country.find_or_create_by(iso_code: row["iso_code"],
-                                      name: row["country"])
+#   country = Country.find_or_create_by(iso_code: row["iso_code"],
+#                                       name: row["country"])
 
-  country_group.countries << country unless country_group.countries.include?(country)
+#   country_group.countries << country unless country_group.countries.include?(country)
 
-  pbar.inc
-}
+#   pbar.inc
+# }
 
-class CommodityMapper
-  # speed up the lookup without doing mongo queries
-  cattr_accessor :parent_map
-  self.parent_map = {}
+# class CommodityMapper
+#   # speed up the lookup without doing mongo queries
+#   cattr_accessor :parent_map
+#   self.parent_map = {}
 
-  class << self
-    def process(heading, commodities = [])
-      # first pair
-      traverse(heading, commodities, nil, commodities.first)
-      # all other pairs
-      traverse(heading, commodities, commodities.first, commodities.second)
-    end
+#   class << self
+#     def process(heading, commodities = [])
+#       # first pair
+#       traverse(heading, commodities, nil, commodities.first)
+#       # all other pairs
+#       traverse(heading, commodities, commodities.first, commodities.second)
+#     end
 
-    def dump(commodities, level = 1)
-      commodities.each do |commodity|
-        puts "#{'*' * level} #{commodity.description}"
-        dump(commodity.children, level + 1)
-      end
-    end
+#     def dump(commodities, level = 1)
+#       commodities.each do |commodity|
+#         puts "#{'*' * level} #{commodity.description}"
+#         dump(commodity.children, level + 1)
+#       end
+#     end
 
-    private
+#     private
 
-    def traverse(heading, commodities, primary, secondary)
-      # ignore case when first commodity is blank it's a direct child of the heading
-      unless commodities.index(secondary).blank?
-        next_commodity = commodities[commodities.index(secondary) + 1]
-        if next_commodity.present? # we are not at the end of the commodity array
-          map(secondary, next_commodity)
-          traverse(heading, commodities, secondary, next_commodity)
-        end
-      end
-    end
+#     def traverse(heading, commodities, primary, secondary)
+#       # ignore case when first commodity is blank it's a direct child of the heading
+#       unless commodities.index(secondary).blank?
+#         next_commodity = commodities[commodities.index(secondary) + 1]
+#         if next_commodity.present? # we are not at the end of the commodity array
+#           map(secondary, next_commodity)
+#           traverse(heading, commodities, secondary, next_commodity)
+#         end
+#       end
+#     end
 
-    def map(primary, secondary)
-      if primary.substring < secondary.substring
-        primary.children << secondary unless primary.children.include?(secondary)
+#     def map(primary, secondary)
+#       if primary.substring < secondary.substring
+#         primary.children << secondary unless primary.children.include?(secondary)
 
-        parent_map[secondary.id] = primary
-      elsif primary.substring == secondary.substring
-        if primary.parent.present? # if primary is not directly under heading
-          primary.parent.children << secondary unless primary.parent.children.include?(secondary)
+#         parent_map[secondary.id] = primary
+#       elsif primary.substring == secondary.substring
+#         if primary.parent.present? # if primary is not directly under heading
+#           primary.parent.children << secondary unless primary.parent.children.include?(secondary)
 
-          parent_map[secondary.id] = primary.parent
-        end
-      else primary.substring > secondary.substring
-        parent = nth_parent(primary, secondary.substring)
+#           parent_map[secondary.id] = primary.parent
+#         end
+#       else primary.substring > secondary.substring
+#         parent = nth_parent(primary, secondary.substring)
 
-        if parent.present?
-          parent.children << secondary unless parent.children.include?(secondary)
+#         if parent.present?
+#           parent.children << secondary unless parent.children.include?(secondary)
 
-          parent_map[secondary.id] = parent
-        end
-      end
-    end
+#           parent_map[secondary.id] = parent
+#         end
+#       end
+#     end
 
-    def nth_parent(commodity, nth)
-      if nth > 0
-        commodity = commodity.parent
+#     def nth_parent(commodity, nth)
+#       if nth > 0
+#         commodity = commodity.parent
 
-        while commodity.present? && commodity.substring >= nth
-          commodity = parent_of(commodity)
-        end
+#         while commodity.present? && commodity.substring >= nth
+#           commodity = parent_of(commodity)
+#         end
 
-        commodity
-      end
-    end
+#         commodity
+#       end
+#     end
 
-    def parent_of(commodity)
-      parent_map[commodity.id]
-    end
-  end
-end
+#     def parent_of(commodity)
+#       parent_map[commodity.id]
+#     end
+#   end
+# end
 
-pbar = ProgressBar.new("Mapping commodities", Heading.count)
-Heading.all.each do |heading|
-  if heading.commodities.any? # Headings that aren't commodities themselves
-    if ENV['debug']
-      puts "Processing #{heading.description}"
-      puts "-" * heading.description.size
-    end
-    commodities = heading.commodities.order_by(created_at: 1).entries
-    CommodityMapper.process(heading, commodities)
-    # recursively print out the tree
-    CommodityMapper.dump(heading.commodities.where(substring: 1).entries) if ENV['debug']
-  end
+# pbar = ProgressBar.new("Mapping commodities", Heading.count)
+# Heading.all.each do |heading|
+#   if heading.commodities.any? # Headings that aren't commodities themselves
+#     if ENV['debug']
+#       puts "Processing #{heading.description}"
+#       puts "-" * heading.description.size
+#     end
+#     commodities = heading.commodities.order_by(created_at: 1).entries
+#     CommodityMapper.process(heading, commodities)
+#     # recursively print out the tree
+#     CommodityMapper.dump(heading.commodities.where(substring: 1).entries) if ENV['debug']
+#   end
 
-  pbar.inc
-end
+#   pbar.inc
+# end
 
-BaseCommodity.set_callback(:save, :after, :index_with_tire)
+# BaseCommodity.set_callback(:save, :after, :index_with_tire)
 
-# index records in elasticsearch after parent mapping is done
-Rake::Task['db:index'].invoke
+# # index records in elasticsearch after parent mapping is done
+# Rake::Task['db:index'].invoke
