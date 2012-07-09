@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120709130157) do
+ActiveRecord::Schema.define(:version => 20120709135054) do
 
   create_table "additional_code_description_periods", :id => false, :force => true do |t|
     t.string   "record_code"
@@ -176,6 +176,7 @@ ActiveRecord::Schema.define(:version => 20120709130157) do
     t.datetime "updated_at",             :null => false
   end
 
+<<<<<<< HEAD
   create_table "chapters_sections", :force => true do |t|
     t.integer "goods_nomenclature_sid"
     t.integer "section_id"
@@ -183,6 +184,48 @@ ActiveRecord::Schema.define(:version => 20120709130157) do
 
   add_index "chapters_sections", ["goods_nomenclature_sid", "section_id"], :name => "index_chapters_sections_on_goods_nomenclature_sid_and_section_id", :unique => true
 
+=======
+  create_table "comm", :id => false, :force => true do |t|
+    t.datetime "fe_tsmp"
+    t.string   "cmdty_code"
+    t.datetime "le_tsmp"
+    t.string   "add_rlf_alwd_ind"
+    t.string   "alcohol_cmdty"
+    t.datetime "audit_tsmp"
+    t.string   "chi_doti_rqd"
+    t.string   "cmdty_bbeer"
+    t.string   "cmdty_beer"
+    t.string   "cmdty_euse_rfnd"
+    t.string   "cmdty_mdecln"
+    t.string   "exp_lcnc_rqd"
+    t.string   "ex_ec_scode_rqd"
+    t.decimal  "full_dty_adval1",  :precision => 3, :scale => 3
+    t.decimal  "full_dty_adval2",  :precision => 3, :scale => 3
+    t.string   "full_dty_exch"
+    t.decimal  "full_dty_spfc1",   :precision => 7, :scale => 4
+    t.decimal  "full_dty_spfc2",   :precision => 7, :scale => 4
+    t.string   "full_dty_ttype"
+    t.string   "full_dty_uoq_c2"
+    t.string   "full_dty_uoq1"
+    t.string   "full_dty_uoq2"
+    t.string   "full_duty_type"
+    t.string   "im_ec_scode_rqd"
+    t.string   "imp_exp_use"
+    t.string   "nba_id"
+    t.string   "perfume_cmdty"
+    t.text     "rfa"
+    t.integer  "season_end"
+    t.integer  "season_start"
+    t.string   "spv_code"
+    t.string   "spv_xhdg"
+    t.string   "uoq_code_cdu1"
+    t.string   "uoq_code_cdu2"
+    t.string   "uoq_code_cdu3"
+    t.string   "whse_cmdty"
+    t.string   "wines_cmdty"
+  end
+
+>>>>>>> comm table
   create_table "complete_abrogation_regulations", :id => false, :force => true do |t|
     t.string   "record_code"
     t.string   "subrecord_code"
