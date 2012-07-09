@@ -2,7 +2,7 @@ class CreateTame < ActiveRecord::Migration
   def change
     create_table :tame, :id => false do |t|
       t.datetime :fe_tsmp
-      t.string :msgrp_code
+      t.string :msrgp_code
       t.string :msr_type
       t.string :tty_code
       t.string :tar_msr_no

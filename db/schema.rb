@@ -11,8 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120709123714) do
-
+ActiveRecord::Schema.define(:version => 20120709132109) do
   create_table "additional_code_description_periods", :id => false, :force => true do |t|
     t.string   "record_code"
     t.string   "subrecord_code"
@@ -22,8 +21,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "additional_code_type_id"
     t.string   "additional_code"
     t.date     "validity_start_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
   end
 
   create_table "additional_code_descriptions", :id => false, :force => true do |t|
@@ -36,8 +35,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "additional_code_type_id"
     t.string   "additional_code"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
   end
 
   create_table "additional_code_type_descriptions", :id => false, :force => true do |t|
@@ -47,8 +46,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "additional_code_type_id"
     t.string   "language_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
   end
 
   create_table "additional_code_type_measure_types", :id => false, :force => true do |t|
@@ -59,8 +58,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "additional_code_type_id"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
   end
 
   create_table "additional_code_types", :id => false, :force => true do |t|
@@ -72,8 +71,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.date     "validity_end_date"
     t.string   "application_code"
     t.string   "meursing_table_plan_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
   end
 
   create_table "additional_codes", :id => false, :force => true do |t|
@@ -85,8 +84,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "additional_code"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
   end
 
   create_table "base_regulations", :id => false, :force => true do |t|
@@ -113,8 +112,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "complete_abrogation_regulation_id"
     t.integer  "explicit_abrogation_regulation_role"
     t.string   "explicit_abrogation_regulation_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
   end
 
   create_table "certificate_description_periods", :id => false, :force => true do |t|
@@ -125,8 +124,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "certificate_type_code"
     t.string   "certificate_code"
     t.date     "validity_start_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
   end
 
   create_table "certificate_descriptions", :id => false, :force => true do |t|
@@ -138,8 +137,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "certificate_type_code"
     t.string   "certificate_code"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
   end
 
   create_table "certificate_type_descriptions", :id => false, :force => true do |t|
@@ -149,8 +148,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "certificate_type_code"
     t.string   "language_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "certificate_types", :id => false, :force => true do |t|
@@ -160,8 +159,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "certificate_type_code"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "certificates", :id => false, :force => true do |t|
@@ -172,8 +171,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "certificate_code"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "complete_abrogation_regulations", :id => false, :force => true do |t|
@@ -188,8 +187,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "replacement_indicator"
     t.text     "information_text"
     t.boolean  "approved_flag"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
   end
 
   create_table "duty_expression_descriptions", :id => false, :force => true do |t|
@@ -199,8 +198,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "duty_expression_id"
     t.string   "language_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "duty_expressions", :id => false, :force => true do |t|
@@ -213,8 +212,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "duty_amount_applicability_code"
     t.integer  "measurement_unit_applicability_code"
     t.integer  "monetary_unit_applicability_code"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
   end
 
   create_table "explicit_abrogation_regulations", :id => false, :force => true do |t|
@@ -230,8 +229,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.date     "abrogation_date"
     t.text     "information_text"
     t.boolean  "approved_flag"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
   end
 
   create_table "export_refund_nomenclature_description_periods", :id => false, :force => true do |t|
@@ -245,8 +244,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "additional_code_type"
     t.string   "export_refund_code"
     t.string   "productline_suffix"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                        :null => false
+    t.datetime "updated_at",                                        :null => false
   end
 
   create_table "export_refund_nomenclature_descriptions", :id => false, :force => true do |t|
@@ -261,8 +260,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "export_refund_code"
     t.string   "productline_suffix"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                        :null => false
+    t.datetime "updated_at",                                        :null => false
   end
 
   create_table "export_refund_nomenclature_indents", :id => false, :force => true do |t|
@@ -277,8 +276,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "additional_code_type"
     t.string   "export_refund_code"
     t.string   "productline_suffix"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
   end
 
   create_table "export_refund_nomenclatures", :id => false, :force => true do |t|
@@ -293,8 +292,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.date     "validity_start_date"
     t.date     "validity_end_date"
     t.string   "goods_nomenclature_sid"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
   end
 
   create_table "footnote_association_additional_codes", :id => false, :force => true do |t|
@@ -308,8 +307,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.date     "validity_end_date"
     t.integer  "additional_code_type_id"
     t.string   "additional_code"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
   end
 
   create_table "footnote_association_erns", :id => false, :force => true do |t|
@@ -325,8 +324,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "additional_code_type"
     t.string   "export_refund_code"
     t.string   "productline_suffix"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
   end
 
   create_table "footnote_association_goods_nomenclatures", :id => false, :force => true do |t|
@@ -340,8 +339,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.date     "validity_end_date"
     t.string   "goods_nomenclature_item_id"
     t.string   "productline_suffix"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
   end
 
   create_table "footnote_association_measures", :id => false, :force => true do |t|
@@ -351,8 +350,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "measure_sid"
     t.string   "footnote_type_id"
     t.string   "footnote_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "footnote_association_meursing_headings", :id => false, :force => true do |t|
@@ -366,8 +365,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "footnote_id"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
   end
 
   create_table "footnote_description_periods", :id => false, :force => true do |t|
@@ -378,8 +377,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "footnote_type_id"
     t.string   "footnote_id"
     t.date     "validity_start_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
   end
 
   create_table "footnote_descriptions", :id => false, :force => true do |t|
@@ -391,8 +390,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "footnote_id"
     t.string   "language_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
   end
 
   create_table "footnote_type_descriptions", :id => false, :force => true do |t|
@@ -402,8 +401,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "footnote_type_id"
     t.string   "language_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "footnote_types", :id => false, :force => true do |t|
@@ -414,8 +413,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "application_code"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "footnotes", :id => false, :force => true do |t|
@@ -426,8 +425,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "footnote_type_id"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "fts_regulation_actions", :id => false, :force => true do |t|
@@ -438,8 +437,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "fts_regulation_id"
     t.integer  "stopped_regulation_role"
     t.string   "stopped_regulation_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
   end
 
   create_table "full_temporary_stop_regulations", :id => false, :force => true do |t|
@@ -459,8 +458,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "replacement_indicator"
     t.text     "information_text"
     t.boolean  "approved_flag"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
   end
 
   create_table "geographical_area_description_periods", :id => false, :force => true do |t|
@@ -471,8 +470,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "geographical_area_sid"
     t.date     "validity_start_date"
     t.string   "geographical_area_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
   end
 
   create_table "geographical_area_descriptions", :id => false, :force => true do |t|
@@ -484,8 +483,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "geographical_area_sid"
     t.string   "geographical_area_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
   end
 
   create_table "geographical_area_memberships", :id => false, :force => true do |t|
@@ -496,8 +495,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "geographical_area_group_sid"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
   end
 
   create_table "geographical_areas", :id => false, :force => true do |t|
@@ -510,8 +509,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.date     "validity_end_date"
     t.string   "geographical_code"
     t.string   "geographical_area_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
   end
 
   create_table "goods_nomenclature_description_periods", :id => false, :force => true do |t|
@@ -523,8 +522,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.date     "validity_start_date"
     t.string   "goods_nomenclature_item_id"
     t.string   "productline_suffix"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
   end
 
   create_table "goods_nomenclature_descriptions", :id => false, :force => true do |t|
@@ -537,8 +536,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "goods_nomenclature_item_id"
     t.string   "productline_suffix"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
   end
 
   create_table "goods_nomenclature_group_descriptions", :id => false, :force => true do |t|
@@ -549,8 +548,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "goods_nomenclature_group_id"
     t.string   "language_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
   end
 
   create_table "goods_nomenclature_groups", :id => false, :force => true do |t|
@@ -562,8 +561,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.date     "validity_start_date"
     t.date     "validity_end_date"
     t.integer  "nomenclature_group_facility_code"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
   end
 
   create_table "goods_nomenclature_indents", :id => false, :force => true do |t|
@@ -576,8 +575,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "number_indents"
     t.string   "goods_nomenclature_item_id"
     t.string   "productline_suffix"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
   end
 
   create_table "goods_nomenclature_origins", :id => false, :force => true do |t|
@@ -589,8 +588,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "derived_productline_suffix"
     t.string   "goods_nomenclature_item_id"
     t.string   "productline_suffix"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
   end
 
   create_table "goods_nomenclature_successors", :id => false, :force => true do |t|
@@ -602,8 +601,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "absorbed_productline_suffix"
     t.string   "goods_nomenclature_item_id"
     t.string   "productline_suffix"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
   end
 
   create_table "goods_nomenclatures", :id => false, :force => true do |t|
@@ -616,8 +615,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.date     "validity_start_date"
     t.date     "validity_end_date"
     t.integer  "statistical_indicator"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
   end
 
   create_table "language_descriptions", :id => false, :force => true do |t|
@@ -627,8 +626,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "language_code_id"
     t.string   "language_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "languages", :id => false, :force => true do |t|
@@ -638,8 +637,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "language_id"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "measure_action_descriptions", :id => false, :force => true do |t|
@@ -649,8 +648,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "action_code"
     t.string   "language_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "measure_actions", :id => false, :force => true do |t|
@@ -660,8 +659,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "action_code"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "measure_components", :id => false, :force => true do |t|
@@ -674,8 +673,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "monetary_unit_code"
     t.string   "measurement_unit_code"
     t.string   "measurement_unit_qualifier_code"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
   end
 
   create_table "measure_condition_code_descriptions", :id => false, :force => true do |t|
@@ -685,8 +684,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "condition_code"
     t.string   "language_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "measure_condition_codes", :id => false, :force => true do |t|
@@ -696,8 +695,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "condition_code"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "measure_condition_components", :id => false, :force => true do |t|
@@ -710,8 +709,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "monetary_unit_code"
     t.string   "measurement_unit_code"
     t.string   "measurement_unit_qualifier_code"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
   end
 
   create_table "measure_conditions", :id => false, :force => true do |t|
@@ -729,8 +728,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "action_code"
     t.string   "certificate_type_code"
     t.string   "certificate_code"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
   end
 
   create_table "measure_excluded_geographical_areas", :id => false, :force => true do |t|
@@ -740,8 +739,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "measure_sid"
     t.string   "excluded_geographical_area"
     t.integer  "geographical_area_sid"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
   end
 
   create_table "measure_partial_temporary_stops", :id => false, :force => true do |t|
@@ -757,8 +756,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "abrogation_regulation_id"
     t.string   "abrogation_regulation_officialjournal_number"
     t.integer  "abrogation_regulation_officialjournal_page"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
   end
 
   create_table "measure_type_descriptions", :id => false, :force => true do |t|
@@ -768,8 +767,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "measure_type_id"
     t.string   "language_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "measure_type_series", :id => false, :force => true do |t|
@@ -780,8 +779,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.date     "validity_start_date"
     t.date     "validity_end_date"
     t.integer  "measure_type_combination"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
   end
 
   create_table "measure_type_series_descriptions", :id => false, :force => true do |t|
@@ -791,8 +790,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "measure_type_series_id"
     t.string   "language_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "measure_types", :id => false, :force => true do |t|
@@ -809,8 +808,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "order_number_capture_code"
     t.integer  "measure_explosion_level"
     t.string   "measure_type_series_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
   end
 
   create_table "measurement_unit_descriptions", :id => false, :force => true do |t|
@@ -820,8 +819,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "measurement_unit_code"
     t.string   "language_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "measurement_unit_qualifier_descriptions", :id => false, :force => true do |t|
@@ -831,8 +830,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "measurement_unit_qualifier_code"
     t.string   "language_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
   end
 
   create_table "measurement_unit_qualifiers", :id => false, :force => true do |t|
@@ -842,8 +841,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "measurement_unit_qualifier_code"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
   end
 
   create_table "measurement_units", :id => false, :force => true do |t|
@@ -853,8 +852,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "measurement_unit_code"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "measurements", :id => false, :force => true do |t|
@@ -865,8 +864,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "measurement_unit_qualifier_code"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
   end
 
   create_table "measures", :id => false, :force => true do |t|
@@ -892,8 +891,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "additional_code_sid"
     t.integer  "reduction_indicator"
     t.string   "export_refund_nomenclature_sid"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
   end
 
   create_table "meursing_additional_codes", :id => false, :force => true do |t|
@@ -903,8 +902,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "meursing_additional_code_sid"
     t.integer  "additional_code"
     t.date     "validity_start_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
   end
 
   create_table "meursing_heading_texts", :id => false, :force => true do |t|
@@ -916,8 +915,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "row_column_code"
     t.string   "language_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
   end
 
   create_table "meursing_headings", :id => false, :force => true do |t|
@@ -929,8 +928,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "row_column_code"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
   end
 
   create_table "meursing_subheadings", :id => false, :force => true do |t|
@@ -944,8 +943,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.date     "validity_start_date"
     t.date     "validity_end_date"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
   end
 
   create_table "meursing_table_cell_components", :id => false, :force => true do |t|
@@ -960,8 +959,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.date     "validity_start_date"
     t.date     "validity_end_date"
     t.integer  "additional_code"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
   end
 
   create_table "meursing_table_plans", :id => false, :force => true do |t|
@@ -971,8 +970,21 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "meursing_table_plan_id"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
+  end
+
+  create_table "mfcm", :id => false, :force => true do |t|
+    t.datetime "fe_tsmp"
+    t.string   "msrgp_code"
+    t.string   "msr_type"
+    t.string   "tty_code"
+    t.datetime "le_tsmp"
+    t.datetime "audit_tsmp"
+    t.string   "cmdty_code"
+    t.string   "cmdty_msr_xhdg"
+    t.string   "null_tri_rqd"
+    t.boolean  "exports_use_ind"
   end
 
   create_table "modification_regulations", :id => false, :force => true do |t|
@@ -997,8 +1009,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.date     "effective_end_date"
     t.integer  "complete_abrogation_regulation_role"
     t.string   "complete_abrogation_regulation_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
   end
 
   create_table "monetary_exchange_periods", :force => true do |t|
@@ -1009,8 +1021,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "parent_monetary_unit_code"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
   end
 
   create_table "monetary_exchange_rates", :id => false, :force => true do |t|
@@ -1020,8 +1032,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "monetary_exchange_period_sid"
     t.string   "child_monetary_unit_code"
     t.decimal  "exchange_rate",                :precision => 16, :scale => 8
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                                  :null => false
+    t.datetime "updated_at",                                                  :null => false
   end
 
   create_table "monetary_unit_descriptions", :id => false, :force => true do |t|
@@ -1031,8 +1043,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "monetary_unit_code"
     t.string   "language_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "monetary_units", :id => false, :force => true do |t|
@@ -1042,8 +1054,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "monetary_unit_code"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "nomenclature_group_memberships", :id => false, :force => true do |t|
@@ -1057,8 +1069,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.date     "validity_end_date"
     t.string   "goods_nomenclature_item_id"
     t.string   "productline_suffix"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
   end
 
   create_table "prorogation_regulation_actions", :id => false, :force => true do |t|
@@ -1070,8 +1082,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "prorogated_regulation_role"
     t.string   "prorogated_regulation_id"
     t.date     "prorogated_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
   end
 
   create_table "prorogation_regulations", :id => false, :force => true do |t|
@@ -1086,8 +1098,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "replacement_indicator"
     t.text     "information_text"
     t.boolean  "approved_flag"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
   end
 
   create_table "quota_associations", :id => false, :force => true do |t|
@@ -1098,8 +1110,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "sub_quota_definition_sid"
     t.string   "relation_type"
     t.decimal  "coefficient",               :precision => 16, :scale => 5
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
   end
 
   create_table "quota_balance_events", :id => false, :force => true do |t|
@@ -1112,8 +1124,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "old_balance"
     t.integer  "new_balance"
     t.integer  "imported_amount"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
   end
 
   create_table "quota_blocking_periods", :id => false, :force => true do |t|
@@ -1126,8 +1138,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.date     "blocking_end_date"
     t.integer  "blocking_period_type"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
   end
 
   create_table "quota_critical_events", :id => false, :force => true do |t|
@@ -1138,8 +1150,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.datetime "occurrence_timestamp"
     t.string   "critical_state"
     t.date     "critical_state_change_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
   end
 
   create_table "quota_definitions", :id => false, :force => true do |t|
@@ -1160,8 +1172,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "monetary_unit_code"
     t.string   "measurement_unit_qualifier_code"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
   end
 
   create_table "quota_exhaustion_events", :id => false, :force => true do |t|
@@ -1171,8 +1183,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "quota_definition_sid"
     t.datetime "occurrence_timestamp"
     t.date     "exhaustion_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "quota_order_number_origin_exclusions", :id => false, :force => true do |t|
@@ -1181,8 +1193,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "record_sequence_number"
     t.integer  "quota_order_number_origin_sid"
     t.integer  "excluded_geographical_area_sid"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
   end
 
   create_table "quota_order_number_origins", :id => false, :force => true do |t|
@@ -1195,8 +1207,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.date     "validity_start_date"
     t.date     "validity_end_date"
     t.integer  "geographical_area_sid"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
   end
 
   create_table "quota_order_numbers", :id => false, :force => true do |t|
@@ -1207,8 +1219,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "quota_order_number_id"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "quota_reopening_events", :id => false, :force => true do |t|
@@ -1218,8 +1230,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "quota_definition_sid"
     t.datetime "occurrence_timestamp"
     t.date     "reopening_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "quota_suspension_periods", :id => false, :force => true do |t|
@@ -1231,8 +1243,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.date     "suspension_start_date"
     t.date     "suspension_end_date"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
   end
 
   create_table "quota_unblocking_events", :id => false, :force => true do |t|
@@ -1242,8 +1254,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "quota_definition_sid"
     t.datetime "occurrence_timestamp"
     t.date     "unblocking_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "quota_unsuspension_events", :id => false, :force => true do |t|
@@ -1253,8 +1265,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "quota_definition_sid"
     t.datetime "occurrence_timestamp"
     t.date     "unsuspension_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "regulation_group_descriptions", :id => false, :force => true do |t|
@@ -1264,8 +1276,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "regulation_group_id"
     t.string   "language_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "regulation_groups", :id => false, :force => true do |t|
@@ -1275,8 +1287,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "regulation_group_id"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "regulation_replacements", :id => false, :force => true do |t|
@@ -1290,8 +1302,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "replaced_regulation_role"
     t.string   "replaced_regulation_id"
     t.integer  "measure_type_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
   end
 
   create_table "regulation_role_type_descriptions", :id => false, :force => true do |t|
@@ -1301,8 +1313,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "regulation_role_type_id"
     t.string   "language_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
   end
 
   create_table "regulation_role_types", :id => false, :force => true do |t|
@@ -1312,10 +1324,11 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "regulation_role_type_id"
     t.date     "validity_start_date"
     t.date     "validity_end_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
   end
 
+<<<<<<< HEAD
   create_table "sections", :force => true do |t|
     t.integer  "position"
     t.string   "numeral"
@@ -1325,13 +1338,15 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
   end
 
   create_table "tame", :force => true do |t|
+=======
+  create_table "tame", :id => false, :force => true do |t|
+>>>>>>> mcfm table, remigrate and spec was wrong so renamed msgrm to msrgp
     t.datetime "fe_tsmp"
-    t.string   "msgrp_code"
+    t.string   "msrgp_code"
     t.string   "msr_type"
     t.string   "tty_code"
     t.string   "tar_msr_no"
     t.datetime "le_tsmp"
-    t.boolean  "current_ind"
     t.decimal  "adval_rate",          :precision => 3, :scale => 3
     t.decimal  "alch_sgth",           :precision => 3, :scale => 2
     t.datetime "audit_tsmp"
@@ -1359,8 +1374,37 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.string   "rfs_code_5"
     t.string   "tdr_spr_sur"
     t.boolean  "exports_use_ind"
-    t.datetime "created_at",                                        :null => false
-    t.datetime "updated_at",                                        :null => false
+  end
+
+  create_table "tamf", :id => false, :force => true do |t|
+    t.datetime "fe_tsmp"
+    t.string   "msrgp_code"
+    t.string   "msr_type"
+    t.string   "tty_code"
+    t.string   "tar_msr_no"
+    t.datetime "le_tsmp"
+    t.decimal  "adval1_rate",    :precision => 3, :scale => 3
+    t.decimal  "adval2_rate",    :precision => 3, :scale => 3
+    t.string   "ai_factor"
+    t.decimal  "cmdty_dmql",     :precision => 8, :scale => 3
+    t.string   "cmdty_dmql_uoq"
+    t.string   "cngp_code"
+    t.string   "cntry_disp"
+    t.string   "cntry_orig"
+    t.string   "duty_type"
+    t.string   "ec_supplement"
+    t.string   "ec_exch_rate"
+    t.string   "spcl_inst"
+    t.string   "spfc1_cmpd_uoq"
+    t.decimal  "spfc1_rate",     :precision => 7, :scale => 4
+    t.string   "spfc1_uoq"
+    t.decimal  "spfc2_rate",     :precision => 7, :scale => 4
+    t.string   "spfc2_uoq"
+    t.decimal  "spfc3_rate",     :precision => 7, :scale => 4
+    t.string   "spfc3_uoq"
+    t.string   "tamf_dt"
+    t.string   "tamf_sta"
+    t.string   "tamf_ty"
   end
 
   create_table "transmission_comments", :id => false, :force => true do |t|
@@ -1370,8 +1414,8 @@ ActiveRecord::Schema.define(:version => 20120709123714) do
     t.integer  "comment_sid"
     t.string   "language_id"
     t.text     "comment_text"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
 end
