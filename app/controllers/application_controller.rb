@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   respond_to :json, :html
 
+  helper_method :as_of
+
   unless Rails.application.config.consider_all_requests_local
     rescue_from Exception, with: :render_error
     # rescue_from Mongoid::Errors::DocumentNotFound,   with: :render_not_found
@@ -36,9 +38,14 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
   def restrict_access
     authenticate_with_http_token do |token, options|
      true # ApiKey.where(access_token: token).exists?
     end
+  end
+
+  def as_of
+    params[:as_of].presence || Date.today
   end
 end
