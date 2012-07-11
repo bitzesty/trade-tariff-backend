@@ -1,7 +1,7 @@
 class AdditionalCodeDescriptionPeriod < ActiveRecord::Base
   self.primary_keys =  :additional_code_description_period_sid, :additional_code_sid, :additional_code_type_id
 
-  has_one :additional_code_description, foreign_key: :additional_code_description_period_sid
+  has_one    :additional_code_description, foreign_key: :additional_code_description_period_sid
   belongs_to :additional_code, foreign_key: :additional_code_sid
   belongs_to :additional_code_type, foreign_key: :additional_code_type_id
 end

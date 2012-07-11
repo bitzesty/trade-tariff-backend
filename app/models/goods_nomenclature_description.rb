@@ -6,6 +6,10 @@ class GoodsNomenclatureDescription < ActiveRecord::Base
   has_many :goods_nomenclatures, through: :goods_nomenclature_description_periods
 
   belongs_to :language
+
+  def to_s
+    description
+  end
 end
 
 # == Schema Information

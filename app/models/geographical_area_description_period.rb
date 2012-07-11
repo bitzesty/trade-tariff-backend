@@ -1,5 +1,5 @@
 class GeographicalAreaDescriptionPeriod < ActiveRecord::Base
-  self.primary_keys =  :geographical_area_description_period_sid
+  self.primary_keys =  [:geographical_area_description_period_sid, :geographical_area_sid]
 
   belongs_to :geographical_area, foreign_key: :geographical_area_sid
   belongs_to :geographical_area_description, foreign_key: [:geographical_area_description_period_sid,

@@ -1,5 +1,5 @@
 class QuotaBalanceEvent < ActiveRecord::Base
-  self.primary_keys =  :quota_definition_sid
+  self.primary_keys =  [:quota_definition_sid, :occurance_timestamp]
 
   belongs_to :quota_definition, foreign_key: :quota_definition_sid
 end

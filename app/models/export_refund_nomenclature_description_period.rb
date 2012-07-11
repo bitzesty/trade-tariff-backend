@@ -1,8 +1,8 @@
 class ExportRefundNomenclatureDescriptionPeriod < ActiveRecord::Base
-  self.primary_keys =  :export_refund_nomenclature_description_period_sid
+  self.primary_keys =  [:export_refund_nomenclature_sid, :export_refund_nomenclature_description_period_sid]
 
   belongs_to :export_refund_nomenclature, foreign_key: :export_refund_nomenclature_sid
-  has_one :export_refund_nomenclature_description, foreign_key: :export_refund_nomenclature_description_period_sid
+  belongs_to :export_refund_nomenclature_description, foreign_key: :export_refund_nomenclature_description_period_sid
 end
 
 # == Schema Information

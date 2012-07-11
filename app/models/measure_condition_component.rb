@@ -1,5 +1,5 @@
 class MeasureConditionComponent < ActiveRecord::Base
-  self.primary_keys =  :measure_condition_sid
+  self.primary_keys =  [:measure_condition_sid, :duty_expression_id]
 
   belongs_to :duty_expression, foreign_key: :duty_expression_id
   belongs_to :measure_condition, foreign_key: :measure_condition_sid

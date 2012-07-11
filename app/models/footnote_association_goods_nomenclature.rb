@@ -1,5 +1,6 @@
 class FootnoteAssociationGoodsNomenclature < ActiveRecord::Base
-  self.primary_keys =  :footnote_id, :goods_nomenclature_sid
+  self.primary_keys =  :footnote_id, :footnote_type, :goods_nomenclature_sid,
+                       :validity_start_date
 
   belongs_to :goods_nomenclature, primary_key: :goods_nomenclature_sid
   belongs_to :footnote, primary_key: :footnote_id

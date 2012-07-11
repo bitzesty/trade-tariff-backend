@@ -1,5 +1,7 @@
 class GoodsNomenclatureSuccessor < ActiveRecord::Base
-  self.primary_keys =  :goods_nomenclature_sid
+  self.primary_keys =  [:goods_nomenclature_sid, :absorbed_goods_nomenclature_item_id,
+                        :absorbed_productline_suffix, :goods_nomenclature_item_id,
+                        :productline_suffix]
 
   belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid
 end

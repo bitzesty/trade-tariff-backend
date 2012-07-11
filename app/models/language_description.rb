@@ -1,5 +1,5 @@
 class LanguageDescription < ActiveRecord::Base
-  self.primary_keys =  :language_id
+  self.primary_keys =  [:language_id, :language_code_id]
 
   belongs_to :language
 end

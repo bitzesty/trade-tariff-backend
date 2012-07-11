@@ -1,5 +1,7 @@
 class GoodsNomenclatureOrigin < ActiveRecord::Base
-  self.primary_keys =  :goods_nomenclature_sid
+  self.primary_keys =  [:goods_nomenclature_sid, :derived_goods_nomenclature_item_id,
+                        :derived_productline_suffix,
+                        :goods_nomenclature_item_id, :productline_suffix]
 
   belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid
 end

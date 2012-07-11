@@ -11,6 +11,7 @@ class GoodsNomenclature < ActiveRecord::Base
   has_many :footnotes, through: :footnote_association_goods_nomenclatures
   has_many :nomenclature_group_memberships, foreign_key: :goods_nomenclature_sid
   has_many :goods_nomenclature_groups, through: :nomenclature_group_memberships
+  has_many :measures, foreign_key: :goods_nomenclature_sid
 end
 
 # == Schema Information

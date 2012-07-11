@@ -1,7 +1,7 @@
 class ExportRefundNomenclature < ActiveRecord::Base
   self.primary_keys =  :export_refund_nomenclature_sid
 
-  has_many :export_refund_nomenclature_description_periods, foreign_key: :export_refund_nomenclature_description_period_sid
+  has_many :export_refund_nomenclature_description_periods, foreign_key: :export_refund_nomenclature_sid
   has_many :export_refund_nomenclature_descriptions, through: :export_refund_nomenclature_description_periods
   has_many :export_refund_nomenclature_indents, foreign_key: :export_refund_nomenclature_sid
   has_many :footnote_association_erns, foreign_key: :export_refund_nomenclature_sid
