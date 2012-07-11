@@ -85,29 +85,4 @@ class CommodityMapper
   def parent_of(commodity)
     parent_map[commodity.id]
   end
-
-  # [
-  #   {
-  #     code: ...
-  #     commodities: [
-  #       {
-  #         code: ...
-  #       },
-  #       {
-  #         code: ...
-  #       }
-  #     ]
-  #   },
-  #   {
-  #     code: ...
-  #     commodities: [
-  #       {
-  #         code: ...
-  #       },
-  #       {
-  #         code: ...
-  #       }
-  #     ]
-  #   }
-  # ]
 end
