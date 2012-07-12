@@ -4,6 +4,9 @@ class BaseRegulation < ActiveRecord::Base
   belongs_to :regulation_group
   has_many :modification_regulations
 
+  has_many :measures, foreign_key: [:measure_generating_regulation_id,
+                                    :measure_generating_regulation_role]
+
   belongs_to :explicit_abrogation_regulation, foreign_key: [:explicit_abrogation_regulation_role,
                                                             :explicit_abrogation_regulation_id]
   belongs_to :complete_abrogation_regulation, foreign_key: [:complete_abrogation_regulation_role,

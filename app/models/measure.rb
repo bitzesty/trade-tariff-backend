@@ -13,8 +13,10 @@ class Measure < ActiveRecord::Base
   belongs_to :justification_regulation, foreign_key: [:justification_regulation_role,
                                                       :justification_regulation_id],
                                         class_name: 'BaseRegulation'
-  belongs_to :measure_generating_regulation, foreign_key: [:measure_generating_regulation_role,
-                                                           :measure_generating_regulation_id],
+  belongs_to :measure_generating_regulation, primary_key: [:base_regulation_id,
+                                                           :base_regulation_role],
+                                             foreign_key: [:measure_generating_regulation_id,
+                                                           :measure_generating_regulation_role],
                                              class_name: 'BaseRegulation'
   has_many :measure_partial_temporary_stops, foreign_key: :measure_sid
   has_many :partial_temporary_stopped_regulations, through: :measure_partial_temporary_stops,
