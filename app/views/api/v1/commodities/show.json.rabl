@@ -19,3 +19,9 @@ child @commodity.heading do
     heading.goods_nomenclature_descriptions.first.description
   }
 end
+
+node(:ancestors) { |commodity|
+  @commodity.ancestors.map do |commodity|
+    partial("api/v1/commodities/commodity_base", object: commodity)
+  end
+}

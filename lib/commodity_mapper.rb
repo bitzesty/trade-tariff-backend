@@ -1,6 +1,7 @@
 class CommodityMapper
   module MappedCommodity
     attr_accessor :parent
+    attr_writer :ancestors
 
     def children
       @children ||= []
@@ -8,6 +9,10 @@ class CommodityMapper
 
     def leaf?
       children.empty?
+    end
+
+    def ancestors
+      @ancestors ||= []
     end
   end
 
@@ -21,9 +26,15 @@ class CommodityMapper
     process
   end
 
-  def commodities
+  def all
     @commodities.reject { |commodity| commodity.parent.present? }
   end
+  alias :commodities :all
+
+  def find
+    @commodities.detect { |c| yield(c) } if block_given?
+  end
+  alias :detect :find
 
   def process
     # first pair
@@ -51,12 +62,16 @@ class CommodityMapper
 
       parent_map[secondary.id] = primary
       secondary.parent = primary
+      secondary.ancestors += primary.ancestors
+      secondary.ancestors << primary
     elsif primary.substring == secondary.substring
       if primary.parent.present? # if primary is not directly under heading
         primary.parent.children << secondary unless primary.parent.children.include?(secondary)
 
         parent_map[secondary.id] = primary.parent
         secondary.parent = primary
+        secondary.ancestors += primary.ancestors
+        secondary.ancestors << primary
       end
     else primary.substring > secondary.substring
       parent = nth_parent(primary, secondary.substring)
@@ -66,6 +81,8 @@ class CommodityMapper
 
         parent_map[secondary.id] = parent
         secondary.parent = parent
+        secondary.ancestors += parent.ancestors
+        secondary.ancestors << parent
       end
     end
   end
