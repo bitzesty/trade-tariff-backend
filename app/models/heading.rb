@@ -2,6 +2,8 @@ class Heading < GoodsNomenclature
   default_scope where("goods_nomenclatures.goods_nomenclature_item_id LIKE '____000000' AND
                        goods_nomenclatures.goods_nomenclature_item_id NOT LIKE '__00______'")
 
+  delegate :section, to: :chapter
+
   def chapter
     Chapter.where("goods_nomenclature_item_id LIKE ?", chapter_id).first
   end

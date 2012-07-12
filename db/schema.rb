@@ -731,7 +731,7 @@ ActiveRecord::Schema.define(:version => 20120710160550) do
     t.integer  "goods_nomenclature_indent_sid"
     t.integer  "goods_nomenclature_sid"
     t.date     "validity_start_date"
-    t.string   "number_indents"
+    t.integer  "number_indents"
     t.string   "goods_nomenclature_item_id"
     t.string   "productline_suffix"
     t.datetime "created_at"
@@ -785,6 +785,7 @@ ActiveRecord::Schema.define(:version => 20120710160550) do
     t.datetime "updated_at"
   end
 
+  add_index "goods_nomenclatures", ["goods_nomenclature_item_id", "producline_suffix"], :name => "item_id"
   add_index "goods_nomenclatures", ["goods_nomenclature_sid"], :name => "primary_key", :unique => true
 
   create_table "language_descriptions", :id => false, :force => true do |t|

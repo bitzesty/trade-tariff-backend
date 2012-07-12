@@ -1,26 +1,21 @@
 object @commodity
 
-attribute :short_code, :code, :description, :synonyms,
-    :third_country_duty_cache, :uk_vat_rate_cache
+extends "api/v1/commodities/commodity"
 
-if @commodity.is_a?(Commodity)
-  child @commodity.heading.chapter do
-    attributes :short_code, :code, :description
-  end
-  child @commodity.heading.chapter.section do
-    attributes :title, :position
-  end
-  child :heading do
-    attributes :short_code, :code, :description
-  end
-  child(ancestors: :ancestors) do
-    attribute :short_code, :code, :description
-  end
-elsif @commodity.is_a?(Heading)
-  child @commodity.chapter do
-    attributes :short_code, :code, :description
-  end
-  child @commodity.chapter.section do
-    attributes :title, :position
-  end
+child @commodity.section do
+  attributes :title, :position
+end
+
+child @commodity.chapter do
+  attributes :short_code, :code
+  node(:description) { |chapter|
+    chapter.goods_nomenclature_descriptions.first.description
+  }
+end
+
+child @commodity.heading do
+  attributes :short_code, :code, :description
+  node(:description) { |heading|
+    heading.goods_nomenclature_descriptions.first.description
+  }
 end

@@ -59,6 +59,7 @@ class AddIndexesFL < ActiveRecord::Migration
 
     # GoodsNomenclature
     add_index :goods_nomenclatures, :goods_nomenclature_sid, unique: true, name: :primary_key
+    add_index :goods_nomenclatures, [:goods_nomenclature_item_id, :producline_suffix], name: :item_id
 
     # GoodsNomenclatureDescription
     add_index :goods_nomenclature_descriptions, [:goods_nomenclature_sid, :goods_nomenclature_description_period_sid], unique: true, name: :primary_key
@@ -147,6 +148,7 @@ class AddIndexesFL < ActiveRecord::Migration
 
     # GoodsNomenclature
     remove_index :goods_nomenclatures, name: :primary_key
+    # remove_index :goods_nomenclatures, name: :item_id
 
     # GoodsNomenclatureDescription
     remove_index :goods_nomenclature_descriptions, name: :primary_key

@@ -22,7 +22,7 @@ class CommodityMapper
   end
 
   def commodities
-    @commodities
+    @commodities.reject { |commodity| commodity.parent.present? }
   end
 
   def process

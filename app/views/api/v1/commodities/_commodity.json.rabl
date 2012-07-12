@@ -1,3 +1,5 @@
+attributes :producline_suffix
+
 node(:code) { |commodity|
   commodity.goods_nomenclature_item_id
 }

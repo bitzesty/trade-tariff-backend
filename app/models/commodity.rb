@@ -1,8 +1,10 @@
 class Commodity < GoodsNomenclature
   default_scope where("goods_nomenclatures.goods_nomenclature_item_id NOT LIKE '____000000'")
 
-  def chapter
-    Chapter.where("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id).first
+  delegate :chapter, :section, to: :heading
+
+  def heading
+    Heading.where("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id).first
   end
 
   def code
@@ -15,7 +17,7 @@ class Commodity < GoodsNomenclature
 
   private
 
-  def chapter_id
-    goods_nomenclature_item_id.first(2) + "0" * 8
+  def heading_id
+    goods_nomenclature_item_id.first(4) + "0" * 6
   end
 end

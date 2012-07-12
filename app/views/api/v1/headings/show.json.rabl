@@ -16,16 +16,3 @@ node(:commodities) {
     partial("api/v1/commodities/commodity", object: commodity)
   end
 }
-# @commodities.map do |commodity|
-#   {
-#     commodities: commodity.children.map { |commodity|
-#       {
-#         code: commodity.goods_nomenclature_item_id,
-#         leaf: commodity.leaf?,
-#         description: commodity.goods_nomenclature_descriptions.first.description,
-#       }
-#     }
-#   }
-# end
-# }
-
