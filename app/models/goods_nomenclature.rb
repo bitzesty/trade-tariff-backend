@@ -5,7 +5,11 @@ class GoodsNomenclature < ActiveRecord::Base
   has_many :goods_nomenclature_descriptions, through: :goods_nomenclature_description_periods
   has_one  :goods_nomenclature_indent, foreign_key: :goods_nomenclature_sid
   has_many :goods_nomenclature_origins, foreign_key: :goods_nomenclature_sid
+  has_many :derived_goods_nomenclatures, through: :goods_nomenclature_origins,
+                                         source: :derived_goods_nomenclature
   has_many :goods_nomenclature_successors, foreign_key: :goods_nomenclature_sid
+  has_many :absorbed_goods_nomenclatures, through: :goods_nomenclature_successors,
+                                          source: :absorbed_goods_nomenclature
   has_many :export_refund_nomenclatures, foreign_key: :goods_nomenclature_sid
   has_many :footnote_association_goods_nomenclatures, foreign_key: :goods_nomenclature_sid
   has_many :footnotes, through: :footnote_association_goods_nomenclatures

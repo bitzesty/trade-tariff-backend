@@ -4,6 +4,11 @@ class GoodsNomenclatureSuccessor < ActiveRecord::Base
                         :productline_suffix]
 
   belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid
+  belongs_to :absorbed_goods_nomenclature, primary_key: [:goods_nomenclature_item_id,
+                                                         :producline_suffix],
+                                           foreign_key: [:absorbed_goods_nomenclature_item_id,
+                                                         :absorbed_productline_suffix],
+                                           class_name: 'GoodsNomenclature'
 end
 
 # == Schema Information
