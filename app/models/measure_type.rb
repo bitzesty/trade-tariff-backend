@@ -8,6 +8,8 @@ class MeasureType < ActiveRecord::Base
   has_many :regulation_replacements, foreign_key: :measure_type_id
 
   belongs_to :measure_type_series
+
+  delegate :description, to: :measure_type_description
 end
 
 # == Schema Information

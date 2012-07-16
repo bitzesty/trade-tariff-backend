@@ -5,6 +5,10 @@ class Commodity < GoodsNomenclature
 
   delegate :chapter, :section, to: :heading
 
+  def self.find_by_code(code)
+    where{(goods_nomenclature_item_id.eq code.first(10)) & (producline_suffix.eq code.last(2))}.first
+  end
+
   def heading
     Heading.valid_between(validity_start_date, validity_end_date)
            .with_item_id(heading_id)

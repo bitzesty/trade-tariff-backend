@@ -40,6 +40,8 @@ class Measure < ActiveRecord::Base
   belongs_to :ref_geographical_area, foreign_key: :geographical_area_sid,
                                      class_name: 'GeographicalArea'
 
+  delegate :description, to: :ref_measure_type, prefix: :measure_type
+
 end
 
 # == Schema Information
