@@ -1,3 +1,3 @@
-class Tamf < ActiveRecord::Base
-  self.table_name = "tamf"
+class Chief::Tamf < ActiveRecord::Base
+  self.table_name = "chief_tamf"
 end

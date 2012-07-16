@@ -1,6 +1,6 @@
 class CreateTamf < ActiveRecord::Migration
   def change
-    create_table :tamf, :id => false do |t|
+    create_table :chief_tamf, :id => false do |t|
       t.datetime :fe_tsmp
       t.string :msrgp_code
       t.string :msr_type

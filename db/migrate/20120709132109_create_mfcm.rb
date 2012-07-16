@@ -1,6 +1,6 @@
 class CreateMfcm < ActiveRecord::Migration
   def change
-    create_table :mfcm, :id => false do |t|
+    create_table :chief_mfcm, :id => false do |t|
       t.datetime :fe_tsmp
       t.string :msrgp_code
       t.string :msr_type

@@ -1,6 +1,6 @@
 class CreateTame < ActiveRecord::Migration
   def change
-    create_table :tame, :id => false do |t|
+    create_table :chief_tame, :id => false do |t|
       t.datetime :fe_tsmp
       t.string :msrgp_code
       t.string :msr_type
