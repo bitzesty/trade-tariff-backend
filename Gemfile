@@ -4,13 +4,13 @@ source 'https://gems.gemfury.com/vo6ZrmjBQu5szyywDszE/'
 gem 'rails', '3.2.6'
 
 gem 'mysql2'
-gem 'composite_primary_keys'
 
 gem 'rabl'
 gem 'yajl-ruby', require: "yajl/json_gem"
 gem 'tire', git: 'https://github.com/sauliusg/tire', branch: 'custom_query_pagination'
+gem 'sequel'
+gem 'talentbox-sequel-rails'
 # gem 'tire-contrib'
-gem 'squeel'
 gem 'kaminari'
 
 gem 'jquery-rails', "~> 1.0.19"
@@ -18,6 +18,7 @@ gem 'builder'
 gem 'railties'
 
 gem 'airbrake'
+
 group :assets do
   gem 'therubyracer'
   ### API Docs
@@ -34,9 +35,6 @@ group :development do
   gem 'pry-rails'
   gem 'spreadsheet'
   gem 'progressbar'
-  gem 'awesome_print'
-  gem 'rails-erd'
-  gem 'annotate'
 end
 
 group :test do

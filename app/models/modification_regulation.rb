@@ -1,22 +1,30 @@
-class ModificationRegulation < ActiveRecord::Base
-  self.primary_keys =  :modification_regulation_id, :modification_regulation_role
+require 'sequel/plugins/time_machine'
 
-  belongs_to :explicit_abrogation_regulation, foreign_key: [:explicit_abrogation_regulation_id,
-                                                            :explicit_abrogation_regulation_role],
-                                              class_name: 'BaseRegulation'
-  belongs_to :complete_abrogation_regulation, foreign_key: [:complete_abrogation_regulation_id,
-                                                            :complete_abrogation_regulation_role],
-                                              class_name: 'BaseRegulation'
-  belongs_to :base_regulation, foreign_key: [:base_regulation_id,
-                                             :base_regulation_role]
-  belongs_to :modification_regulation_role_type, foreign_key: :modification_regulation_role,
-                                                 class_name: 'RegulationRoleType'
+class ModificationRegulation < Sequel::Model
+  plugin :time_machine
 
-  scope :effective_on, ->(date) { where{(validity_start_date.lte date) &
-                                    ((effective_end_date.gte date) |
-                                     (effective_end_date.eq nil)
-                                    )}
-                                }
+  set_primary_key [:modification_regulation_id, :modification_regulation_role]
+
+  def_dataset_method(:valid_on) do |date|
+    where('validity_start_date <= ? AND (effective_end_date >= ? OR effective_end_date IS NULL)', date, date)
+  end
+
+#   belongs_to :explicit_abrogation_regulation, foreign_key: [:explicit_abrogation_regulation_id,
+#                                                             :explicit_abrogation_regulation_role],
+#                                               class_name: 'BaseRegulation'
+#   belongs_to :complete_abrogation_regulation, foreign_key: [:complete_abrogation_regulation_id,
+#                                                             :complete_abrogation_regulation_role],
+#                                               class_name: 'BaseRegulation'
+#   belongs_to :base_regulation, foreign_key: [:base_regulation_id,
+#                                              :base_regulation_role]
+#   belongs_to :modification_regulation_role_type, foreign_key: :modification_regulation_role,
+#                                                  class_name: 'RegulationRoleType'
+
+  # scope :effective_on, ->(date) { where{(validity_start_date.lte date) &
+  #                                   ((effective_end_date.gte date) |
+  #                                    (effective_end_date.eq nil)
+  #                                   )}
+  #                               }
 end
 
 # == Schema Information

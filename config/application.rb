@@ -1,6 +1,9 @@
 require File.expand_path('../boot', __FILE__)
 
-require "rails/all"
+require "action_controller/railtie"
+require "sequel-rails/railtie"
+require "action_mailer/railtie"
+# require "rails/all"
 require "sprockets/railtie"
 # require 'tire/rails/logger' if Rails.env.development?
 

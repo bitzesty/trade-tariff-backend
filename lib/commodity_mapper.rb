@@ -93,10 +93,10 @@ class CommodityMapper
 
   def nth_parent(commodity, nth)
     if nth > 0
-      commodity = commodity.parent
+      # commodity = commodity.parent
 
       while commodity.present? && commodity.substring >= nth
-        commodity = parent_of(commodity)
+        commodity = commodity.parent #parent_of(commodity)
       end
 
       commodity
