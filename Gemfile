@@ -10,6 +10,7 @@ gem 'rabl'
 gem 'yajl-ruby', require: "yajl/json_gem"
 gem 'tire', git: 'https://github.com/sauliusg/tire', branch: 'custom_query_pagination'
 # gem 'tire-contrib'
+gem 'squeel'
 gem 'kaminari'
 
 gem 'jquery-rails', "~> 1.0.19"

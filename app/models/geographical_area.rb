@@ -7,7 +7,8 @@ class GeographicalArea < ActiveRecord::Base
   has_many :geographical_area_description_periods, foreign_key: :geographical_area_sid
   has_many :geographical_area_descriptions, through: :geographical_area_description_periods
 
-  has_many   :children_geographical_areas, foreign_key: :parent_geographical_area_group_sid,
+  has_many   :children_geographical_areas, primary_key: :geographical_area_sid,
+                                           foreign_key: :parent_geographical_area_group_sid,
                                            class_name: 'GeographicalArea'
   belongs_to :parent_geographical_area, foreign_key: :parent_geographical_area_group_sid,
                                         class_name: 'GeographicalArea'
@@ -20,6 +21,7 @@ class GeographicalArea < ActiveRecord::Base
   has_many :quota_order_number_origin_exclusions, foreign_key: :excluded_geographical_area_sid
   has_many :excluded_quota_order_number_origins, through: :quota_order_number_origin_exclusions,
                                                  source: :quota_order_number_origin
+
 end
 
 # == Schema Information

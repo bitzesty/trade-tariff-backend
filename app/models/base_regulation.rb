@@ -1,4 +1,8 @@
+require 'dateable'
+
 class BaseRegulation < ActiveRecord::Base
+  include Model::Dateable
+
   self.primary_keys =  :base_regulation_id, :base_regulation_role
 
   belongs_to :regulation_group
@@ -42,6 +46,12 @@ class BaseRegulation < ActiveRecord::Base
                                                       source: :complete_abrogation_regulation
   has_many :prorogation_regulations, foreign_key: [:base_regulation_id,
                                                    :base_regulation_role]
+
+  scope :effective_on, ->(date) { where{(validity_start_date.lte date) &
+                                    ((effective_end_date.gte date) |
+                                     (effective_end_date.eq nil)
+                                    )}
+                                }
 end
 
 # == Schema Information

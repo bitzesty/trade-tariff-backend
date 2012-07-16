@@ -11,6 +11,12 @@ class ModificationRegulation < ActiveRecord::Base
                                              :base_regulation_role]
   belongs_to :modification_regulation_role_type, foreign_key: :modification_regulation_role,
                                                  class_name: 'RegulationRoleType'
+
+  scope :effective_on, ->(date) { where{(validity_start_date.lte date) &
+                                    ((effective_end_date.gte date) |
+                                     (effective_end_date.eq nil)
+                                    )}
+                                }
 end
 
 # == Schema Information

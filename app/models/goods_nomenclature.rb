@@ -1,4 +1,8 @@
+require 'dateable'
+
 class GoodsNomenclature < ActiveRecord::Base
+  include Model::Dateable
+
   self.primary_keys =  :goods_nomenclature_sid
 
   has_many :goods_nomenclature_description_periods, foreign_key: :goods_nomenclature_sid
@@ -6,16 +10,20 @@ class GoodsNomenclature < ActiveRecord::Base
   has_one  :goods_nomenclature_indent, foreign_key: :goods_nomenclature_sid
   has_many :goods_nomenclature_origins, foreign_key: :goods_nomenclature_sid
   has_many :derived_goods_nomenclatures, through: :goods_nomenclature_origins,
-                                         source: :derived_goods_nomenclature
+                                         source: :derived_goods_nomenclature,
+                                         foreign_key: :goods_nomenclature_sid
   has_many :goods_nomenclature_successors, foreign_key: :goods_nomenclature_sid
   has_many :absorbed_goods_nomenclatures, through: :goods_nomenclature_successors,
-                                          source: :absorbed_goods_nomenclature
+                                          source: :absorbed_goods_nomenclature,
+                                         foreign_key: :goods_nomenclature_sid
   has_many :export_refund_nomenclatures, foreign_key: :goods_nomenclature_sid
   has_many :footnote_association_goods_nomenclatures, foreign_key: :goods_nomenclature_sid
   has_many :footnotes, through: :footnote_association_goods_nomenclatures
   has_many :nomenclature_group_memberships, foreign_key: :goods_nomenclature_sid
   has_many :goods_nomenclature_groups, through: :nomenclature_group_memberships
-  has_many :measures, foreign_key: :goods_nomenclature_sid
+
+  scope :with_item_id, ->(item_id) { where{goods_nomenclature_item_id.eq item_id} }
+  scope :with_indent, includes(:goods_nomenclature_indent)
 end
 
 # == Schema Information

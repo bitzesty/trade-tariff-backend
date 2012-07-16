@@ -5,7 +5,17 @@ class Heading < GoodsNomenclature
   delegate :section, to: :chapter
 
   def chapter
-    Chapter.where("goods_nomenclature_item_id LIKE ?", chapter_id).first
+    Chapter.valid_between(validity_start_date, validity_end_date)
+           .with_item_id(chapter_id)
+           .first
+  end
+
+  def commodities
+    Commodity.where("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
+  end
+
+  def substring
+    goods_nomenclature_indent.number_indents
   end
 
   def code

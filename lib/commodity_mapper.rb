@@ -36,6 +36,10 @@ class CommodityMapper
   end
   alias :detect :find
 
+  def for_commodity(ref_commodity)
+    detect{|commodity| commodity.goods_nomenclature_sid == ref_commodity.goods_nomenclature_sid }
+  end
+
   def process
     # first pair
     traverse(commodities, nil, commodities.first)

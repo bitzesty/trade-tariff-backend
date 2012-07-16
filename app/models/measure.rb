@@ -1,4 +1,8 @@
+require 'dateable'
+
 class Measure < ActiveRecord::Base
+  include Model::Dateable
+
   self.primary_keys =  :measure_sid
 
   has_many :footnote_association_measures, foreign_key: :measure_sid
@@ -13,11 +17,16 @@ class Measure < ActiveRecord::Base
   belongs_to :justification_regulation, foreign_key: [:justification_regulation_role,
                                                       :justification_regulation_id],
                                         class_name: 'BaseRegulation'
-  belongs_to :measure_generating_regulation, primary_key: [:base_regulation_id,
-                                                           :base_regulation_role],
-                                             foreign_key: [:measure_generating_regulation_id,
-                                                           :measure_generating_regulation_role],
-                                             class_name: 'BaseRegulation'
+  belongs_to :base_regulation, primary_key: [:base_regulation_id,
+                                             :base_regulation_role],
+                                foreign_key: [:measure_generating_regulation_id,
+                                              :measure_generating_regulation_role],
+                                class_name: 'BaseRegulation'
+  belongs_to :modification_regulation, primary_key: [:modification_regulation_id,
+                                                     :modification_regulation_role],
+                                       foreign_key: [:measure_generating_regulation_id,
+                                                     :measure_generating_regulation_role],
+                                       class_name: 'ModificationRegulation'
   has_many :measure_partial_temporary_stops, foreign_key: :measure_sid
   has_many :partial_temporary_stopped_regulations, through: :measure_partial_temporary_stops,
                                                    source: :stopped_regulation
@@ -30,6 +39,7 @@ class Measure < ActiveRecord::Base
                                    class_name: 'AdditionalCode'
   belongs_to :ref_geographical_area, foreign_key: :geographical_area_sid,
                                      class_name: 'GeographicalArea'
+
 end
 
 # == Schema Information
