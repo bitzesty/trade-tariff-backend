@@ -1636,12 +1636,6 @@ Sequel.migration do
       index [:regulation_role_type_id], :name=>:primary_key, :unique=>true
     end
 
-    create_table(:schema_migrations) do
-      String :filename, :size=>255, :null=>false
-
-      primary_key [:filename]
-    end
-
     create_table(:sections) do
       primary_key :id
       Integer :position
