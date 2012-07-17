@@ -1,3 +1,2 @@
-class Chief::Tamf < ActiveRecord::Base
-  self.table_name = "chief_tamf"
+class Chief::Tamf < Sequel::Model(:chief_tamf)
 end

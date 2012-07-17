@@ -1,3 +1,3 @@
-class Chief::Mfcm < ActiveRecord::Base
-  self.table_name = "chief_mfcm"
+class Chief::Mfcm < Sequel::Model(:chief_mfcm)
+
 end
