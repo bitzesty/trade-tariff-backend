@@ -223,10 +223,9 @@ Sequel.migration do
     create_table(:chief_country_group) do  
       String :chief_country_grp, :size=>4
       String :country_grp_region, :size=>4
-      String :country_exclusions, :size=>2
+      String :country_exclusions, :size=>100
       index :chief_country_grp, :name=>:primary_key
     end
-
 
     create_table(:chief_duty_expression) do
       primary_key :id
@@ -243,6 +242,41 @@ Sequel.migration do
       String :duty_expression_id_adval2, :size => 2
       String :monetary_unit_code_adval2, :size => 3
     end    
+
+    create_table(:chief_measurement_unit) do
+      primary_key :id
+      String :spfc_cmpd_uoq, :size => 3
+      String :spfc_uoq, :size => 3
+      String :measurem_unit_cd, :size => 3
+      String :measurem_unit_qual_cd, :size => 1
+    end
+
+    create_table(:chief_measure_type_adco) do
+      String :measure_group_code, :size => 2
+      String :measure_type, :size => 3
+      String :tax_type_code, :size => 11
+      String :measure_type_id, :size => 3
+      String :adtnl_cd_type_id, :size => 1
+      String :adtnl_cd, :size => 3
+      Integer :zero_comp
+    end
+
+    create_table(:chief_measure_type_cond) do
+      String :measure_group_code, :size => 2
+      String :measure_type, :size => 3
+      String :cond_cd, :size => 1
+      String :comp_seq_no, :size => 3
+      String :cert_type_cd, :size => 1
+      String :cert_ref_no, :size => 3
+      String :act_cd, :size => 2
+    end
+
+    create_table(:chief_measure_type_footnote) do
+      primary_key :id
+      String :measure_type_id, :size => 3
+      String :footn_type_id, :size => 2
+      String :footn_id, :size => 3
+    end
 
     create_table(:chief_mfcm) do
       DateTime :fe_tsmp
