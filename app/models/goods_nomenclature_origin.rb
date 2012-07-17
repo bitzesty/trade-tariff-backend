@@ -1,14 +1,9 @@
-class GoodsNomenclatureOrigin < ActiveRecord::Base
-  self.primary_keys =  [:goods_nomenclature_sid, :derived_goods_nomenclature_item_id,
-                        :derived_productline_suffix,
-                        :goods_nomenclature_item_id, :productline_suffix]
+class GoodsNomenclatureOrigin < Sequel::Model
+  set_primary_key [:goods_nomenclature_sid, :derived_goods_nomenclature_item_id,
+                   :derived_productline_suffix,
+                   :goods_nomenclature_item_id, :productline_suffix]
 
-  belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid
-  belongs_to :derived_goods_nomenclature, primary_key: [:goods_nomenclature_item_id,
-                                                        :producline_suffix],
-                                          foreign_key: [:derived_goods_nomenclature_item_id,
-                                                        :derived_productline_suffix],
-                                          class_name: 'GoodsNomenclature'
+  many_to_one :goods_nomenclature, key: :goods_nomenclature_sid
 end
 
 # == Schema Information

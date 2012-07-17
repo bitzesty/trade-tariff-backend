@@ -16,19 +16,13 @@ class GoodsNomenclature < Sequel::Model
 
   delegate :number_indents, to: :goods_nomenclature_indent
 
-  # has_many :goods_nomenclature_origins, foreign_key: :goods_nomenclature_sid
-  # has_many :derived_goods_nomenclatures, through: :goods_nomenclature_origins,
-  #                                        source: :derived_goods_nomenclature,
-  #                                        foreign_key: :goods_nomenclature_sid
-  # has_many :goods_nomenclature_successors, foreign_key: :goods_nomenclature_sid
-  # has_many :absorbed_goods_nomenclatures, through: :goods_nomenclature_successors,
-  #                                         source: :absorbed_goods_nomenclature,
-  #                                        foreign_key: :goods_nomenclature_sid
-  # has_many :export_refund_nomenclatures, foreign_key: :goods_nomenclature_sid
-  # has_many :footnote_association_goods_nomenclatures, foreign_key: :goods_nomenclature_sid
-  # has_many :footnotes, through: :footnote_association_goods_nomenclatures
-  # has_many :nomenclature_group_memberships, foreign_key: :goods_nomenclature_sid
-  # has_many :goods_nomenclature_groups, through: :nomenclature_group_memberships
+  one_to_many :goods_nomenclature_origins, key: :goods_nomenclature_sid
+  one_to_many :goods_nomenclature_successors, key: :goods_nomenclature_sid
+  one_to_many :export_refund_nomenclatures, key: :goods_nomenclature_sid
+  # one_to_many :footnote_association_goods_nomenclatures, foreign_key: :goods_nomenclature_sid
+  # many_to_many :footnotes, through: :footnote_association_goods_nomenclatures
+  # one_to_many :nomenclature_group_memberships, foreign_key: :goods_nomenclature_sid
+  # many_to_many :goods_nomenclature_groups, through: :nomenclature_group_memberships
 
   def heading_id
     "#{goods_nomenclature_item_id.first(4)}______"

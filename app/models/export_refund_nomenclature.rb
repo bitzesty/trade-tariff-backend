@@ -1,13 +1,13 @@
-class ExportRefundNomenclature < ActiveRecord::Base
-  self.primary_keys =  :export_refund_nomenclature_sid
+class ExportRefundNomenclature < Sequel::Model 
+  set_primary_key :export_refund_nomenclature_sid
 
-  has_many :export_refund_nomenclature_description_periods, foreign_key: :export_refund_nomenclature_sid
-  has_many :export_refund_nomenclature_descriptions, through: :export_refund_nomenclature_description_periods
-  has_many :export_refund_nomenclature_indents, foreign_key: :export_refund_nomenclature_sid
-  has_many :footnote_association_erns, foreign_key: :export_refund_nomenclature_sid
-  has_many :footnotes, through: :footnote_association_erns
+  #one_to_many :export_refund_nomenclature_description_periods, foreign_key: :export_refund_nomenclature_sid
+  #has_many :export_refund_nomenclature_descriptions, through: :export_refund_nomenclature_description_periods
+  #has_many :export_refund_nomenclature_indents, foreign_key: :export_refund_nomenclature_sid
+  #has_many :footnote_association_erns, foreign_key: :export_refund_nomenclature_sid
+  #has_many :footnotes, through: :footnote_association_erns
 
-  belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid
+  many_to_one :goods_nomenclature, key: :goods_nomenclature_sid
 end
 
 # == Schema Information
