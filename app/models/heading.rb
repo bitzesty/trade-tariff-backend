@@ -6,12 +6,12 @@ class Heading < GoodsNomenclature
   set_primary_key :goods_nomenclature_sid
 
   one_to_many :commodities, dataset: -> {
-    Commodity.valid_inside(validity_start_date, validity_end_date)
+    Commodity.actual
              .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
   }
 
   one_to_one :chapter, dataset: -> {
-    Chapter.valid_between(validity_start_date, validity_end_date)
+    Chapter.actual
            .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
   }
 

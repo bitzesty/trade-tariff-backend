@@ -1,4 +1,5 @@
 require_relative 'goods_nomenclature'
+require 'time_machine'
 
 class Chapter < GoodsNomenclature
   set_dataset filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", '__00000000').
@@ -11,7 +12,7 @@ class Chapter < GoodsNomenclature
 
   one_to_many :headings, dataset: -> {
     Heading.actual
-           .filter("goods_nomenclature_item_id LIKE ? AND goods_nomenclature_item_id NOT LIKE '__00______'", chapter_id)
+           .filter("goods_nomenclature_item_id LIKE ? AND goods_nomenclature_item_id NOT LIKE '__00______'", relevant_headings)
   }
 
   def short_code
@@ -20,5 +21,9 @@ class Chapter < GoodsNomenclature
 
   def section
     sections.first
+  end
+
+  def relevant_headings
+    "#{short_code}__000000"
   end
 end

@@ -10,6 +10,7 @@ class CommodityMapper
     def leaf?
       children.empty?
     end
+    alias :leaf :leaf?
 
     def ancestors
       @ancestors ||= []
