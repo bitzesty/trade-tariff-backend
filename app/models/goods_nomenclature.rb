@@ -1,14 +1,35 @@
-require 'dateable'
+require 'sequel/plugins/time_machine'
 
 class GoodsNomenclature < Sequel::Model
-  # include Model::Dateable
-  #
+  plugin :time_machine
+
+  set_dataset order(:goods_nomenclature_item_id.asc)
 
   set_primary_key :goods_nomenclature_sid
-  # self.primary_keys =  :goods_nomenclature_sid
 
   one_to_one :goods_nomenclature_indent, key: :goods_nomenclature_sid
-  # has_one  :goods_nomenclature_indent, foreign_key: :goods_nomenclature_sid
+  one_to_many :goods_nomenclature_description_periods, key: :goods_nomenclature_sid
+  many_to_many :goods_nomenclature_descriptions, left_key: :goods_nomenclature_sid,
+                                                 right_key: :goods_nomenclature_description_period_sid,
+                                                 right_primary_key: :goods_nomenclature_description_period_sid,
+                                                 join_table: :goods_nomenclature_description_periods
+
+  dataset_module do
+    def valid_on(date)
+      where('goods_nomenclatures.validity_start_date <= ? AND (goods_nomenclatures.validity_end_date >= ? OR goods_nomenclatures.validity_end_date IS NULL)', date, date)
+    end
+
+    def valid_between(start_date, end_date)
+      filter('goods_nomenclatures.validity_start_date <= ? AND (goods_nomenclatures.validity_end_date >= ? OR goods_nomenclatures.validity_end_date IS NULL)', start_date, end_date)
+    end
+
+    def valid_inside(start_date, end_date)
+      filter('goods_nomenclatures.validity_start_date >= ? AND (goods_nomenclatures.validity_end_date <= ? OR goods_nomenclatures.validity_end_date IS NULL)', start_date, end_date)
+    end
+  end
+
+  delegate :number_indents, to: :goods_nomenclature_indent
+
   # has_many :goods_nomenclature_description_periods, foreign_key: :goods_nomenclature_sid
   # has_many :goods_nomenclature_descriptions, through: :goods_nomenclature_description_periods
   # has_many :goods_nomenclature_origins, foreign_key: :goods_nomenclature_sid
@@ -25,8 +46,13 @@ class GoodsNomenclature < Sequel::Model
   # has_many :nomenclature_group_memberships, foreign_key: :goods_nomenclature_sid
   # has_many :goods_nomenclature_groups, through: :nomenclature_group_memberships
 
-  # scope :with_item_id, ->(item_id) { where{goods_nomenclature_item_id.eq item_id} }
-  # scope :with_indent, includes(:goods_nomenclature_indent)
+  def heading_id
+    "#{goods_nomenclature_item_id.first(4)}______"
+  end
+
+  def chapter_id
+    goods_nomenclature_item_id.first(2) + "0" * 8
+  end
 end
 
 # == Schema Information

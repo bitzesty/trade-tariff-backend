@@ -1,4 +1,8 @@
+require 'time_machine'
+
 class ApplicationController < ActionController::Base
+  include TimeMachine
+
   respond_to :json, :html
 
   helper_method :as_of

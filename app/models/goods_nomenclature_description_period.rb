@@ -1,9 +1,9 @@
-class GoodsNomenclatureDescriptionPeriod < ActiveRecord::Base
-  self.primary_keys =  :goods_nomenclature_description_period_sid
+class GoodsNomenclatureDescriptionPeriod < Sequel::Model
+  set_primary_key :goods_nomenclature_description_period_sid
 
-  belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid
-  belongs_to :goods_nomenclature_description, foreign_key: [:goods_nomenclature_sid,
-                                                            :goods_nomenclature_description_period_sid]
+  many_to_one :goods_nomenclature, key: :goods_nomenclature_sid
+  many_to_one :goods_nomenclature_description, key: [:goods_nomenclature_sid,
+                                                     :goods_nomenclature_description_period_sid]
 end
 
 # == Schema Information

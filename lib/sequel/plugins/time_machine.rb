@@ -3,21 +3,25 @@ require "date"
 module Sequel
   module Plugins
     module TimeMachine
-      THREAD_NOW_KEY = :sequel_plugins_time_machine_now
-
       module ClassMethods
         def at(date = Date.today)
-          Thread.current[THREAD_NOW_KEY] = date
+          Thread.current[::TimeMachine::THREAD_DATE_KEY] = date
 
           self
         end
 
-        def now
-          Thread.current[THREAD_NOW_KEY] || Date.today
+        def point_in_time
+          Thread.current[::TimeMachine::THREAD_DATE_KEY] || Date.today
         end
 
-        def current
-          where('validity_start_date <= ? AND (effective_end_date >= ? OR effective_end_date IS NULL)', now, now)
+        def actual
+          where('validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)', point_in_time, point_in_time)
+        end
+      end
+
+      module InstanceMethods
+        def point_in_time
+          self.class.point_in_time
         end
       end
     end

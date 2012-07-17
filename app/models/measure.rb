@@ -1,16 +1,23 @@
-require 'dateable'
-
 class Measure < Sequel::Model
-  # include Model::Dateable
-
   set_primary_key :measure_sid
 
-  many_to_one :commodities
+  # rename to Declarable
+  many_to_one :goods_nomenclature, key: :goods_nomenclature_sid, foreign_key: :goods_nomenclature_sid
 
-  def_dataset_method(:valid_on) do |date|
-    where('validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)', date, date)
+  dataset_module do
+    # Measures are relevant if the the measure generating regulation is still effective
+    def relevant_on(date)
+      base_regulation_ids = BaseRegulation.valid_on(date)
+                                          .select(:base_regulation_id)
+
+      modification_regulation_ids = ModificationRegulation.valid_on(date)
+                                                          .select(:modification_regulation_id)
+
+      filter({measure_generating_regulation_id:  base_regulation_ids} |
+             {measure_generating_regulation_id: modification_regulation_ids}).
+      where('measures.validity_start_date <= ? AND (measures.validity_end_date >= ? OR measures.validity_end_date IS NULL)', date, date)
+    end
   end
-  # self.primary_keys =  :measure_sid
 
   # has_many :footnote_association_measures, foreign_key: :measure_sid
   # has_many :footnotes, through: :footnote_association_measures, foreign_key: :footnote_id

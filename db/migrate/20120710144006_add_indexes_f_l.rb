@@ -77,6 +77,7 @@ class AddIndexesFL < ActiveRecord::Migration
 
     # GoodsNomenclatureIndent
     add_index :goods_nomenclature_indents, :goods_nomenclature_indent_sid, unique: true, name: :primary_key
+    add_index :goods_nomenclature_indents, :goods_nomenclature_sid, name: :goods_nomenclature_sid
 
     GoodsNomenclatureOrigin
     add_index :goods_nomenclature_origins, [:goods_nomenclature_sid, :derived_goods_nomenclature_item_id, :derived_productline_suffix, :goods_nomenclature_item_id, :productline_suffix], unique: true, name: :primary_key
@@ -166,6 +167,7 @@ class AddIndexesFL < ActiveRecord::Migration
 
     # GoodsNomenclatureIndent
     remove_index :goods_nomenclature_indents, name: :primary_key
+    remove_index :goods_nomenclature_indents, name: :goods_nomenclature_sid
 
     # GoodsNomenclatureOrigin
     remove_index :goods_nomenclature_origins, name: :primary_key

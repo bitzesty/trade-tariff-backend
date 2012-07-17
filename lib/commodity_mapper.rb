@@ -61,29 +61,29 @@ class CommodityMapper
   end
 
   def map_commodities(primary, secondary)
-    if primary.substring < secondary.substring
+    if primary.number_indents < secondary.number_indents
       primary.children << secondary unless primary.children.include?(secondary)
 
-      parent_map[secondary.id] = primary
+      parent_map[secondary.to_param] = primary
       secondary.parent = primary
       secondary.ancestors += primary.ancestors
       secondary.ancestors << primary
-    elsif primary.substring == secondary.substring
+    elsif primary.number_indents == secondary.number_indents
       if primary.parent.present? # if primary is not directly under heading
         primary.parent.children << secondary unless primary.parent.children.include?(secondary)
 
-        parent_map[secondary.id] = primary.parent
+        parent_map[secondary.to_param] = primary.parent
         secondary.parent = primary
         secondary.ancestors += primary.ancestors
         secondary.ancestors << primary
       end
-    else primary.substring > secondary.substring
-      parent = nth_parent(primary, secondary.substring)
+    else primary.number_indents > secondary.number_indents
+      parent = nth_parent(primary, secondary.number_indents)
 
       if parent.present?
         parent.children << secondary unless parent.children.include?(secondary)
 
-        parent_map[secondary.id] = parent
+        parent_map[secondary.to_param] = parent
         secondary.parent = parent
         secondary.ancestors += parent.ancestors
         secondary.ancestors << parent
@@ -93,10 +93,10 @@ class CommodityMapper
 
   def nth_parent(commodity, nth)
     if nth > 0
-      # commodity = commodity.parent
+      commodity = commodity.parent
 
-      while commodity.present? && commodity.substring >= nth
-        commodity = commodity.parent #parent_of(commodity)
+      while commodity.present? && commodity.number_indents >= nth
+        commodity = parent_of(commodity)
       end
 
       commodity
@@ -104,6 +104,6 @@ class CommodityMapper
   end
 
   def parent_of(commodity)
-    parent_map[commodity.id]
+    parent_map[commodity.to_param]
   end
 end
