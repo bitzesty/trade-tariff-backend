@@ -1,13 +1,9 @@
 require 'sequel/plugins/time_machine'
 
 class ModificationRegulation < Sequel::Model
-  plugin :time_machine
+  plugin :time_machine, period_end_column: :effective_end_date
 
   set_primary_key [:modification_regulation_id, :modification_regulation_role]
-
-  def_dataset_method(:valid_on) do |date|
-    where('validity_start_date <= ? AND (effective_end_date >= ? OR effective_end_date IS NULL)', date, date)
-  end
 
 #   belongs_to :explicit_abrogation_regulation, foreign_key: [:explicit_abrogation_regulation_id,
 #                                                             :explicit_abrogation_regulation_role],
