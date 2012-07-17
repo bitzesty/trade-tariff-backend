@@ -214,6 +214,36 @@ Sequel.migration do
       index [:goods_nomenclature_sid, :section_id], :name=>:index_chapters_sections_on_goods_nomenclature_sid_and_section_id, :unique=>true
     end
 
+    create_table(:chief_country_code) do  
+      String :chief_country_cd, :size=>2
+      String :country_cd, :size=>2
+      index :chief_country_cd, :name=>:primary_key
+    end
+
+    create_table(:chief_country_group) do  
+      String :chief_country_grp, :size=>4
+      String :country_grp_region, :size=>4
+      String :country_exclusions, :size=>2
+      index :chief_country_grp, :name=>:primary_key
+    end
+
+
+    create_table(:chief_duty_expression) do
+      primary_key :id
+      Integer :adval1_rate
+      Integer :adval2_rate
+      Integer :spfc1_rate
+      Integer :spfc2_rate
+      String :duty_expression_id_spfc1, :size => 2
+      String :monetary_unit_code_spfc1, :size => 3
+      String :duty_expression_id_spfc2, :size => 2
+      String :monetary_unit_code_spfc2, :size => 3
+      String :duty_expression_id_adval1, :size => 2
+      String :monetary_unit_code_adval1, :size => 3
+      String :duty_expression_id_adval2, :size => 2
+      String :monetary_unit_code_adval2, :size => 3
+    end    
+
     create_table(:chief_mfcm) do
       DateTime :fe_tsmp
       String :msrgp_code, :size=>255
