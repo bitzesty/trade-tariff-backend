@@ -1,15 +1,19 @@
-class MeasureType < ActiveRecord::Base
-  self.primary_keys =  :measure_type_id
+class MeasureType < Sequel::Model
+  plugin :time_machine
 
-  has_one  :measure_type_description, foreign_key: :measure_type_id
-  has_many :measures, foreign_key: :measure_type
-  has_many :additional_code_type_measure_types, foreign_key: :measure_type_id
-  has_many :additional_code_types, through: :additional_code_type_measure_types
-  has_many :regulation_replacements, foreign_key: :measure_type_id
+  set_primary_key :measure_type_id
 
-  belongs_to :measure_type_series
+  one_to_one :measure_type_description, key: :measure_type_id,
+                                        foreign_key: :measure_type_id
+  # has_one  :measure_type_description, foreign_key: :measure_type_id
+  # has_many :measures, foreign_key: :measure_type
+  # has_many :additional_code_type_measure_types, foreign_key: :measure_type_id
+  # has_many :additional_code_types, through: :additional_code_type_measure_types
+  # has_many :regulation_replacements, foreign_key: :measure_type_id
 
-  delegate :description, to: :measure_type_description
+  # belongs_to :measure_type_series
+
+  # delegate :description, to: :measure_type_description
 end
 
 # == Schema Information

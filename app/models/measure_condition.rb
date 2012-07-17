@@ -1,15 +1,23 @@
-class MeasureCondition < ActiveRecord::Base
-  self.primary_keys =  :measure_condition_sid
+class MeasureCondition < Sequel::Model
+  set_primary_key :measure_condition_sid
 
-  belongs_to :measure, foreign_key: :measure_sid
-  belongs_to :measure_action, foreign_key: :action_code
-  belongs_to :monetary_unit, foreign_key: :condition_monetary_unit_code
-  belongs_to :measurement_unit, foreign_key: :condition_measurement_unit_code
-  belongs_to :measurement_unit_qualifier, foreign_key: :condition_measurement_unit_qualifier_code
-  belongs_to :measure_action, foreign_key: :action_code
-  belongs_to :certificate, foreign_key: [:certificate_code, :certificate_type_code]
-  belongs_to :certificate_type, foreign_key: :certificate_type_code
-  belongs_to :measure_condition_code, foreign_key: :condition_code
+  one_to_one :measure, key: :measure_sid,
+                       primary_key: :measure_sid
+
+  # TODO measure action has date
+  one_to_one :measure_action, key: :action_code,
+                              primary_key: :action_code
+  one_to_one :certificate, key: [:certificate_code, :certificate_type_code],
+                           primary_key: [:certificate_code, :certificate_type_code]
+  # belongs_to :measure, foreign_key: :measure_sid
+  # belongs_to :measure_action, foreign_key: :action_code
+  # belongs_to :monetary_unit, foreign_key: :condition_monetary_unit_code
+  # belongs_to :measurement_unit, foreign_key: :condition_measurement_unit_code
+  # belongs_to :measurement_unit_qualifier, foreign_key: :condition_measurement_unit_qualifier_code
+  # belongs_to :measure_action, foreign_key: :action_code
+  # belongs_to :certificate, foreign_key: [:certificate_code, :certificate_type_code]
+  # belongs_to :certificate_type, foreign_key: :certificate_type_code
+  # belongs_to :measure_condition_code, foreign_key: :condition_code
 end
 
 # == Schema Information

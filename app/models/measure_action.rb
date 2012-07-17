@@ -1,8 +1,8 @@
-class MeasureAction < ActiveRecord::Base
-  self.primary_keys =  :action_code
+class MeasureAction < Sequel::Model
+  set_primary_key :action_code
 
-  has_one :measure_action_description, foreign_key: :action_code
-  has_many :measure_conditions, foreign_key: :action_code
+  one_to_one :measure_action_description, key: :action_code,
+                                          primary_key: :action_code
 end
 
 # == Schema Information

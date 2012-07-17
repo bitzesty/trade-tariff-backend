@@ -1,13 +1,22 @@
-class Certificate < ActiveRecord::Base
-  self.primary_keys =  :certificate_code, :certificate_type_code
+class Certificate < Sequel::Model
+  set_primary_key [:certificate_code, :certificate_type_code]
 
-  belongs_to :certificate_type, foreign_key: :certificate_type_code
-  has_many :certificate_description_periods, foreign_key: [:certificate_code,
-                                                           :certificate_type_code]
-  has_many :certificate_descriptions, through: :certificate_description_periods,
-                                      source: :certificate
-  has_many :measure_conditions, foreign_key: [:certificate_code,
-                                              :certificate_type_code]
+  one_to_one :certificate_description, primary_key: {}, key: {}, dataset: -> {
+    CertificateDescriptionPeriod.actual
+                                .where(certificate_code: certificate_code,
+                                       certificate_type_code: certificate_type_code)
+                                .first
+                                .certificate_description_dataset
+  }
+  # self.primary_keys =  :certificate_code, :certificate_type_code
+
+  # belongs_to :certificate_type, foreign_key: :certificate_type_code
+  # has_many :certificate_description_periods, foreign_key: [:certificate_code,
+  #                                                          :certificate_type_code]
+  # has_many :certificate_descriptions, through: :certificate_description_periods,
+  #                                     source: :certificate
+  # has_many :measure_conditions, foreign_key: [:certificate_code,
+  #                                             :certificate_type_code]
 end
 
 # == Schema Information

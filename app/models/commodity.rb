@@ -24,6 +24,10 @@ class Commodity < GoodsNomenclature
 
   delegate :section, to: :chapter
 
+  def_dataset_method(:by_code) do |code|
+    filter(goods_nomenclature_item_id: code.first(10), producline_suffix: code.last(2))
+  end
+
   def ancestors
     @_ancestors ||= begin
                       commodities = heading.commodities_dataset.eager_graph(:goods_nomenclature_indent).all

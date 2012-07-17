@@ -1,13 +1,11 @@
-require 'dateable'
+class GeographicalAreaDescriptionPeriod < Sequel::Model
+  plugin :time_machine
 
-class GeographicalAreaDescriptionPeriod < ActiveRecord::Base
-  include Model::Dateable
+  set_primary_key [:geographical_area_description_period_sid, :geographical_area_sid]
 
-  self.primary_keys =  [:geographical_area_description_period_sid, :geographical_area_sid]
-
-  belongs_to :geographical_area, foreign_key: :geographical_area_sid
-  belongs_to :geographical_area_description, foreign_key: [:geographical_area_description_period_sid,
-                                                           :geographical_area_sid]
+  # belongs_to :geographical_area, foreign_key: :geographical_area_sid
+  # belongs_to :geographical_area_description, foreign_key: [:geographical_area_description_period_sid,
+  #                                                          :geographical_area_sid]
 end
 
 # == Schema Information

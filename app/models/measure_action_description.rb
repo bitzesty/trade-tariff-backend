@@ -1,9 +1,8 @@
+class MeasureActionDescription < Sequel::Model
+  set_primary_key :action_code
 
-class MeasureActionDescription < ActiveRecord::Base
-  self.primary_keys =  :action_code
-
-  belongs_to :measure_action, foreign_key: :action_code
-  belongs_to :language
+  # belongs_to :measure_action, foreign_key: :action_code
+  # belongs_to :language
 end
 
 # == Schema Information

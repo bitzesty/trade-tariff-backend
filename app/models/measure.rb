@@ -6,7 +6,16 @@ class Measure < Sequel::Model
   set_primary_key :measure_sid
 
   # rename to Declarable
-  many_to_one :goods_nomenclature, key: :goods_nomenclature_sid, foreign_key: :goods_nomenclature_sid
+  many_to_one :goods_nomenclature, key: :goods_nomenclature_sid,
+                                   foreign_key: :goods_nomenclature_sid
+  many_to_one :measure_type, key: {}, dataset: -> {
+    MeasureType.actual.where(measure_type_id: self[:measure_type])
+  }
+  one_to_many :measure_conditions, key: :measure_sid
+  one_to_one :geographical_area, key: :geographical_area_sid,
+                                 primary_key: :geographical_area_sid
+
+  delegate :measure_type_description, to: :measure_type
 
   dataset_module do
     # Measures are relevant if the the measure generating regulation
@@ -21,6 +30,23 @@ class Measure < Sequel::Model
       filter({measure_generating_regulation_id: base_regulation_ids} |
              {measure_generating_regulation_id: modification_regulation_ids})
     end
+  end
+
+  def generating_regulation_present?
+    measure_generating_regulation_id.present? && measure_generating_regulation_role.present?
+  end
+
+  def generating_regulation_code
+    "#{measure_generating_regulation_id.first}#{measure_generating_regulation_id[3..6]}/#{measure_generating_regulation_id[1..2]}"
+  end
+
+  def generating_regulation_url
+    code = "#{measure_generating_regulation_id[1..2]}#{measure_generating_regulation_id.first}#{measure_generating_regulation_id[3..6]}"
+    "http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=CELEX:320#{code}:en:HTML"
+  end
+
+  def origin
+    "eu"
   end
 
   # has_many :footnote_association_measures, foreign_key: :measure_sid
@@ -57,7 +83,6 @@ class Measure < Sequel::Model
   #                                  class_name: 'AdditionalCode'
   # belongs_to :ref_geographical_area, foreign_key: :geographical_area_sid,
   #                                    class_name: 'GeographicalArea'
-
   # delegate :description, to: :ref_measure_type, prefix: :measure_type
   # delegate :duty_rate, to: :
 

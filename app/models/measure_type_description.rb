@@ -1,8 +1,9 @@
-class MeasureTypeDescription < ActiveRecord::Base
-  self.primary_keys =  :measure_type_id
+class MeasureTypeDescription < Sequel::Model
+  set_primary_key :measure_type_id
 
-  belongs_to :measure_type
-  belongs_to :language
+  def to_s
+    description
+  end
 end
 
 # == Schema Information
