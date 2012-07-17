@@ -14,20 +14,8 @@ class GoodsNomenclature < Sequel::Model
                                                  right_primary_key: :goods_nomenclature_description_period_sid,
                                                  join_table: :goods_nomenclature_description_periods
 
-  dataset_module do
-    def valid_between(start_date, end_date)
-      filter('goods_nomenclatures.validity_start_date <= ? AND (goods_nomenclatures.validity_end_date >= ? OR goods_nomenclatures.validity_end_date IS NULL)', start_date, end_date)
-    end
-
-    def valid_inside(start_date, end_date)
-      filter('goods_nomenclatures.validity_start_date >= ? AND (goods_nomenclatures.validity_end_date <= ? OR goods_nomenclatures.validity_end_date IS NULL)', start_date, end_date)
-    end
-  end
-
   delegate :number_indents, to: :goods_nomenclature_indent
 
-  # has_many :goods_nomenclature_description_periods, foreign_key: :goods_nomenclature_sid
-  # has_many :goods_nomenclature_descriptions, through: :goods_nomenclature_description_periods
   # has_many :goods_nomenclature_origins, foreign_key: :goods_nomenclature_sid
   # has_many :derived_goods_nomenclatures, through: :goods_nomenclature_origins,
   #                                        source: :derived_goods_nomenclature,
