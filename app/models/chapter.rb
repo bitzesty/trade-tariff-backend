@@ -14,9 +14,9 @@ class Chapter < GoodsNomenclature
            .filter("goods_nomenclature_item_id LIKE ? AND goods_nomenclature_item_id NOT LIKE '__00______'", chapter_id)
   }
 
-  # def short_code
-  #   goods_nomenclature_item_id.first(2)
-  # end
+  def short_code
+    goods_nomenclature_item_id.first(2)
+  end
 
   def section
     sections.first

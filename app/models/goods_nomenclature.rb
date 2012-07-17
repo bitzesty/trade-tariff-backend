@@ -8,13 +8,27 @@ class GoodsNomenclature < Sequel::Model
   set_primary_key :goods_nomenclature_sid
 
   one_to_one :goods_nomenclature_indent, key: :goods_nomenclature_sid
-  one_to_many :goods_nomenclature_description_periods, key: :goods_nomenclature_sid
-  many_to_many :goods_nomenclature_descriptions, left_key: :goods_nomenclature_sid,
-                                                 right_key: :goods_nomenclature_description_period_sid,
-                                                 right_primary_key: :goods_nomenclature_description_period_sid,
-                                                 join_table: :goods_nomenclature_description_periods
+  one_to_one :goods_nomenclature_description, dataset: -> {
+    GoodsNomenclatureDescriptionPeriod.actual.first.goods_nomenclature_description_dataset
+  }, eager_loader: ->(eo) {
+    eo[:rows].each{|gono| gono.associations[:goods_nomenclature_description] = nil}
+    id_map = eo[:id_map]
+    GoodsNomenclatureDescriptionPeriod.actual
+                                      .eager(:goods_nomenclature_description)
+                                      .where(goods_nomenclature_sid: id_map.keys)
+                                      .all do |period|
+      if chapters = id_map[period.goods_nomenclature_sid]
+        chapters.each do |chapter|
+          chapter.associations[:goods_nomenclature_description] = period.goods_nomenclature_description
+        end
+      end
+    end
+  }
 
   delegate :number_indents, to: :goods_nomenclature_indent
+  delegate :description, to: :goods_nomenclature_description
+
+  alias :code :goods_nomenclature_item_id
 
   one_to_many :goods_nomenclature_origins, key: :goods_nomenclature_sid
   one_to_many :goods_nomenclature_successors, key: :goods_nomenclature_sid

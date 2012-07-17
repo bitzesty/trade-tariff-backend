@@ -15,8 +15,6 @@ class Heading < GoodsNomenclature
            .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
   }
 
-  alias :code :goods_nomenclature_item_id
-
   def short_code
     goods_nomenclature_item_id.first(4)
   end
