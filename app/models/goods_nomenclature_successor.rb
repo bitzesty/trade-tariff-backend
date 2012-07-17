@@ -1,14 +1,14 @@
-class GoodsNomenclatureSuccessor < ActiveRecord::Base
-  self.primary_keys =  [:goods_nomenclature_sid, :absorbed_goods_nomenclature_item_id,
+class GoodsNomenclatureSuccessor < Sequel::Model
+  set_primary_key  [:goods_nomenclature_sid, :absorbed_goods_nomenclature_item_id,
                         :absorbed_productline_suffix, :goods_nomenclature_item_id,
                         :productline_suffix]
 
-  belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid
-  belongs_to :absorbed_goods_nomenclature, primary_key: [:goods_nomenclature_item_id,
+  many_to_one :goods_nomenclature, key: :goods_nomenclature_sid
+  many_to_one :absorbed_goods_nomenclature, primary_key: [:goods_nomenclature_item_id,
                                                          :producline_suffix],
-                                           foreign_key: [:absorbed_goods_nomenclature_item_id,
+                                           key: [:absorbed_goods_nomenclature_item_id,
                                                          :absorbed_productline_suffix],
-                                           class_name: 'GoodsNomenclature'
+                                           class: 'GoodsNomenclature'
 end
 
 # == Schema Information
