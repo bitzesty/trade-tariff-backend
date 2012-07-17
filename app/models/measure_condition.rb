@@ -7,8 +7,12 @@ class MeasureCondition < Sequel::Model
   # TODO measure action has date
   one_to_one :measure_action, key: :action_code,
                               primary_key: :action_code
-  one_to_one :certificate, key: [:certificate_code, :certificate_type_code],
-                           primary_key: [:certificate_code, :certificate_type_code]
+  one_to_one :certificate, dataset: -> {
+    Certificate.actual
+               .where(certificate_code: certificate_code,
+                      certificate_type_code: certificate_type_code)
+  }
+
   one_to_one :measure_condition_code, key: [:condition_code],
                                       primary_key: [:condition_code]
 

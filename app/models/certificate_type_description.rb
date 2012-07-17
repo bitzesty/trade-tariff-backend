@@ -1,8 +1,8 @@
-class CertificateTypeDescription < ActiveRecord::Base
-  self.primary_keys =  :certificate_type_code
+class CertificateTypeDescription < Sequel::Model
+  set_primary_key  :certificate_type_code
 
-  belongs_to :certificate_type, foreign_key: :certificate_type_code
-  belongs_to :language
+  # belongs_to :certificate_type, foreign_key: :certificate_type_code
+  # belongs_to :language
 end
 
 # == Schema Information
