@@ -1,21 +1,25 @@
+require 'time_machine'
+
 class Measure < Sequel::Model
+  plugin :time_machine
+
   set_primary_key :measure_sid
 
   # rename to Declarable
   many_to_one :goods_nomenclature, key: :goods_nomenclature_sid, foreign_key: :goods_nomenclature_sid
 
   dataset_module do
-    # Measures are relevant if the the measure generating regulation is still effective
-    def relevant_on(date)
-      base_regulation_ids = BaseRegulation.valid_on(date)
+    # Measures are relevant if the the measure generating regulation
+    # is actual at given point in time
+    def relevant
+      base_regulation_ids = BaseRegulation.actual
                                           .select(:base_regulation_id)
 
-      modification_regulation_ids = ModificationRegulation.valid_on(date)
+      modification_regulation_ids = ModificationRegulation.actual
                                                           .select(:modification_regulation_id)
 
-      filter({measure_generating_regulation_id:  base_regulation_ids} |
-             {measure_generating_regulation_id: modification_regulation_ids}).
-      where('measures.validity_start_date <= ? AND (measures.validity_end_date >= ? OR measures.validity_end_date IS NULL)', date, date)
+      filter({measure_generating_regulation_id: base_regulation_ids} |
+             {measure_generating_regulation_id: modification_regulation_ids})
     end
   end
 

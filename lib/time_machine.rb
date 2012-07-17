@@ -20,4 +20,8 @@ module TimeMachine
   def self.at(date = Date.today, &block)
     ClassMethods.at(date, &block)
   end
+
+  def self.now(&block)
+    at(Date.today, &block)
+  end
 end

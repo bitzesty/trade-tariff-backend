@@ -33,7 +33,11 @@ module Sequel
         end
 
         def actual
-          where("#{send(:period_start_date_column)} <= ? AND (#{send(:period_end_date_column)} >= ? OR #{send(:period_end_date_column)} IS NULL)", point_in_time, point_in_time)
+          where("#{send(:table_name)}.#{send(:period_start_date_column)} <= ? AND (#{send(:table_name)}.#{send(:period_end_date_column)} >= ? OR #{send(:table_name)}.#{send(:period_end_date_column)} IS NULL)", point_in_time, point_in_time)
+        end
+
+        def actual_at(date = Date.today)
+          where("#{send(:table_name)}.#{send(:period_start_date_column)} <= ? AND (##{send(:table_name)}.{send(:period_end_date_column)} >= ? OR #{send(:table_name)}.#{send(:period_end_date_column)} IS NULL)", date, date)
         end
       end
 

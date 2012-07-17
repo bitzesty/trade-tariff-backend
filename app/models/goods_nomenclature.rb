@@ -15,10 +15,6 @@ class GoodsNomenclature < Sequel::Model
                                                  join_table: :goods_nomenclature_description_periods
 
   dataset_module do
-    def valid_on(date)
-      where('goods_nomenclatures.validity_start_date <= ? AND (goods_nomenclatures.validity_end_date >= ? OR goods_nomenclatures.validity_end_date IS NULL)', date, date)
-    end
-
     def valid_between(start_date, end_date)
       filter('goods_nomenclatures.validity_start_date <= ? AND (goods_nomenclatures.validity_end_date >= ? OR goods_nomenclatures.validity_end_date IS NULL)', start_date, end_date)
     end
