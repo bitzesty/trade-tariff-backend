@@ -652,6 +652,7 @@ Sequel.migration do
 
       index [:parent_geographical_area_group_sid], :name=>:index_geographical_areas_on_parent_geographical_area_group_sid
       index [:geographical_area_sid], :name=>:primary_key, :unique=>true
+      index [:geographical_area_id], :name=>:geographical_area_id, :unique=>true
     end
 
     create_table(:goods_nomenclature_description_periods, :ignore_index_errors=>true) do
@@ -1121,7 +1122,7 @@ Sequel.migration do
       index [:goods_nomenclature_sid], :name=>:index_measures_on_goods_nomenclature_sid
       index [:measure_type], :name=>:index_measures_on_measure_type
       index [:justification_regulation_role, :justification_regulation_id], :name=>:justification_regulation
-      index [:measure_generating_regulation_role, :measure_generating_regulation_id], :name=>:measure_generating_regulation
+      index :measure_generating_regulation_id, :name=>:measure_generating_regulation
       index [:measure_sid], :name=>:primary_key, :unique=>true
     end
 

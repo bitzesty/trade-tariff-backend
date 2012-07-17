@@ -214,13 +214,13 @@ Sequel.migration do
       index [:goods_nomenclature_sid, :section_id], :name=>:index_chapters_sections_on_goods_nomenclature_sid_and_section_id, :unique=>true
     end
 
-    create_table(:chief_country_code) do  
+    create_table(:chief_country_code) do
       String :chief_country_cd, :size=>2
       String :country_cd, :size=>2
       index :chief_country_cd, :name=>:primary_key
     end
 
-    create_table(:chief_country_group) do  
+    create_table(:chief_country_group) do
       String :chief_country_grp, :size=>4
       String :country_grp_region, :size=>4
       String :country_exclusions, :size=>100
@@ -241,7 +241,7 @@ Sequel.migration do
       String :monetary_unit_code_adval1, :size => 3
       String :duty_expression_id_adval2, :size => 2
       String :monetary_unit_code_adval2, :size => 3
-    end    
+    end
 
     create_table(:chief_measurement_unit) do
       primary_key :id
@@ -756,6 +756,7 @@ Sequel.migration do
 
       index [:parent_geographical_area_group_sid], :name=>:index_geographical_areas_on_parent_geographical_area_group_sid
       index [:geographical_area_sid], :name=>:primary_key, :unique=>true
+      index [:geographical_area_id], :name=>:geographical_area_id, :unique=>true
     end
 
     create_table(:goods_nomenclature_description_periods, :ignore_index_errors=>true) do
@@ -1041,7 +1042,8 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:measure_sid, :geographical_area_sid], :name=>:primary_key, :unique=>true
+      index [:measure_sid, :excluded_geographical_area, :geographical_area_sid], :name=>:primary_key, :unique=>true
+      index :geographical_area_sid, :name=>:geographical_area_sid
     end
 
     create_table(:measure_partial_temporary_stops, :ignore_index_errors=>true) do
@@ -1225,7 +1227,7 @@ Sequel.migration do
       index [:goods_nomenclature_sid], :name=>:index_measures_on_goods_nomenclature_sid
       index [:measure_type], :name=>:index_measures_on_measure_type
       index [:justification_regulation_role, :justification_regulation_id], :name=>:justification_regulation
-      index [:measure_generating_regulation_role, :measure_generating_regulation_id], :name=>:measure_generating_regulation
+      index :measure_generating_regulation_id, :name=>:measure_generating_regulation
       index [:measure_sid], :name=>:primary_key, :unique=>true
     end
 

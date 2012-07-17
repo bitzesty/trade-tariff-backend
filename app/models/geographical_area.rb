@@ -1,6 +1,21 @@
 class GeographicalArea < Sequel::Model
+  plugin :time_machine
+
   set_primary_key :geographical_area_sid
 
+  one_to_one :geographical_area_description, dataset: -> {
+    GeographicalAreaDescriptionPeriod.actual
+                                     .where(geographical_area_sid: geographical_area_sid)
+                                     .order(:validity_end_date.desc)
+                                     .first
+                                     .geographical_area_description_dataset
+  }
+  one_to_many :children_geographical_areas, key: :parent_geographical_area_group_sid,
+                                            primary_key: :geographical_area_sid,
+                                            class_name: 'GeographicalArea'
+  one_to_one :parent_geographical_area, key: :geographical_area_sid,
+                                        primary_key: :parent_geographical_area_group_sid,
+                                        class_name: 'GeographicalArea'
   # has_many :geographical_area_memberships, foreign_key: :geographical_area_sid
   # has_many :geographical_area_groups, through: :geographical_area_memberships,
   #                                     class_name: 'GeographicalArea'

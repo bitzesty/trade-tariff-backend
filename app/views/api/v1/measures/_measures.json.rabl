@@ -23,19 +23,35 @@ child(measure_conditions: :conditions) do
   }
 end
 
-child(region: :region) do
-  attributes :name, :description
-  node(:type) { |r| r.class_name }
-  node(:countries, if: ->(region) { region.class_name == 'CountryGroup' }) do |region|
-    child(countries: :countries) do
-      attributes :name
+child(geographical_area: :region) do
+  node(:iso_code) { |ga|
+    ga.geographical_area_id
+  }
+  node(:description) { |ga|
+    ga.geographical_area_description.description
+  }
+  node(:countries, if: ->(region) { region.children_geographical_areas.any? }) do |region|
+    child(children_geographical_areas: :countries) do
+      node(:iso_code) { |ga|
+        ga.geographical_area_id
+      }
+      node(:description) { |ga|
+        ga.geographical_area_description.description
+      }
     end
   end
+  # attributes :name, :description
+  # node(:type) { |r| r.class_name }
 end
 
-# child(excluded_countries: :excluded_countries) do
-#   attributes :name, :iso_code
-# end
+child(excluded_geographical_areas: :excluded_countries) do
+  node(:iso_code) { |ga|
+    ga.geographical_area_id
+  }
+  node(:description) { |ga|
+    ga.geographical_area_description.description
+  }
+end
 
 # child(footnotes: :footnotes) do
 #   attributes :id, :code, :description

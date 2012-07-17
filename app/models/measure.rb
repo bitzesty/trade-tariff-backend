@@ -12,8 +12,15 @@ class Measure < Sequel::Model
     MeasureType.actual.where(measure_type_id: self[:measure_type])
   }
   one_to_many :measure_conditions, key: :measure_sid
-  one_to_one :geographical_area, key: :geographical_area_sid,
-                                 primary_key: :geographical_area_sid
+  one_to_one :geographical_area, dataset: -> {
+    GeographicalArea.actual.where(geographical_area_sid: geographical_area_sid)
+  }
+  many_to_many :excluded_geographical_areas, join_table: :measure_excluded_geographical_areas,
+                                             left_key: :measure_sid,
+                                             left_primary_key: :measure_sid,
+                                             right_key: :excluded_geographical_area,
+                                             right_primary_key: :geographical_area_id,
+                                             class_name: 'GeographicalArea'
 
   delegate :measure_type_description, to: :measure_type
 
@@ -53,10 +60,6 @@ class Measure < Sequel::Model
   # has_many :footnotes, through: :footnote_association_measures, foreign_key: :footnote_id
   # has_many :measure_components, foreign_key: :measure_sid
   # has_many :measure_conditions, foreign_key: :measure_sid
-  # has_many :measure_excluded_geographical_areas, foreign_key: :measure_sid,
-  #                                                source: :excluded_geographical_area
-  # has_many :excluded_geographical_areas, through: :measure_excluded_geographical_areas,
-  #                                        source: :ref_excluded_geographical_area
   # belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid
   # belongs_to :justification_regulation, foreign_key: [:justification_regulation_role,
   #                                                     :justification_regulation_id],
