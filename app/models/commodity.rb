@@ -22,6 +22,8 @@ class Commodity < GoodsNomenclature
            .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
   }
 
+  delegate :section, to: :chapter
+
   def ancestors
     @_ancestors ||= begin
                       commodities = heading.commodities_dataset.eager_graph(:goods_nomenclature_indent).all
