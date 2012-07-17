@@ -1,3 +1,4 @@
-class Section < ActiveRecord::Base
-  has_and_belongs_to_many :chapters, association_foreign_key: :goods_nomenclature_sid
+class Section < Sequel::Model
+  many_to_many :chapters, right_key: :goods_nomenclature_sid,
+                          join_table: :chapters_sections
 end
