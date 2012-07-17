@@ -1,7 +1,8 @@
-class MeasureConditionCode < ActiveRecord::Base
-  self.primary_keys =  :condition_code
+class MeasureConditionCode < Sequel::Model
+  set_primary_key :condition_code
 
-  has_one :measure_condition_code_description, foreign_key: :condition_code
+  one_to_one :measure_condition_code_description, key: [:condition_code],
+                                                  primary_key: [:condition_code]
 end
 
 # == Schema Information

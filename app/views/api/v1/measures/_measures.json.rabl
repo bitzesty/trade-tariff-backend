@@ -12,14 +12,18 @@ node(:legal_act, if: ->(measure) { measure.generating_regulation_present? }) do 
 end
 
 child(measure_conditions: :conditions) do
-  attributes :condition_code, :action_code
-  node(:description) { |obj|
+  attributes :document_code
+
+  node(:action) { |obj|
     obj.measure_action.measure_action_description.description
   }
   node(:requirement) { |obj|
     if obj.certificate.present?
       obj.certificate.certificate_description.description
     end
+  }
+  node(:condition) { |obj|
+    obj.measure_condition_code.measure_condition_code_description.description
   }
 end
 

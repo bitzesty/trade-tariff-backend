@@ -1,8 +1,5 @@
-class MeasureConditionCodeDescription < ActiveRecord::Base
-  self.primary_keys =  :condition_code
-
-  belongs_to :language
-  belongs_to :measure_condition_code, foreign_key: :condition_code
+class MeasureConditionCodeDescription < Sequel::Model
+  set_primary_key :condition_code
 end
 
 # == Schema Information

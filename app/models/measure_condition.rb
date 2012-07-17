@@ -9,6 +9,12 @@ class MeasureCondition < Sequel::Model
                               primary_key: :action_code
   one_to_one :certificate, key: [:certificate_code, :certificate_type_code],
                            primary_key: [:certificate_code, :certificate_type_code]
+  one_to_one :measure_condition_code, key: [:condition_code],
+                                      primary_key: [:condition_code]
+
+  def document_code
+    "#{certificate_type_code}#{certificate_code}"
+  end
   # belongs_to :measure, foreign_key: :measure_sid
   # belongs_to :measure_action, foreign_key: :action_code
   # belongs_to :monetary_unit, foreign_key: :condition_monetary_unit_code
