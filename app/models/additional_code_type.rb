@@ -1,17 +1,17 @@
-class AdditionalCodeType < ActiveRecord::Base
-  self.primary_keys =  :additional_code_type_id
+class AdditionalCodeType < Sequel::Model
+  set_primary_key :additional_code_type_id
 
-  has_many :additional_codes, foreign_key: :additional_code_type_id
-  has_one  :additional_code_type_description, foreign_key: :additional_code_type_id
-  has_many :additional_code_descriptions, foreign_key: :additional_code_type_id
-  has_many :additional_code_type_measure_types
-  has_many :measure_types, through: :additional_code_type_measure_types
-  has_many :additional_code_description_periods, foreign_key: :additional_code_type_id
-  has_many :footnote_association_additional_codes, foreign_key: :additional_code_type_id
-  has_many :footnotes, through: :footnote_association_additional_codes,
-                       source: :footnote
+  one_to_many :additional_codes, key: :additional_code_type_id
+  one_to_one  :additional_code_type_description, key: :additional_code_type_id
+  one_to_many :additional_code_descriptions, key: :additional_code_type_id
+  one_to_many :additional_code_type_measure_types
+  many_to_many :measure_types, join_table: :additional_code_type_measure_types
+  one_to_many :additional_code_description_periods, key: :additional_code_type_id
+  one_to_many :footnote_association_additional_codes, key: :additional_code_type_id
+  many_to_many :footnotes, join_table: :footnote_association_additional_codes,
+                       'class': :footnote
 
-  belongs_to :meursing_table_plan
+  many_to_one :meursing_table_plan
 
   APPLICATION_CODES = {
     0 => "Export refund nomencalture",

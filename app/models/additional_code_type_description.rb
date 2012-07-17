@@ -1,8 +1,8 @@
-class AdditionalCodeTypeDescription < ActiveRecord::Base
-  self.primary_keys =  :additional_code_type_id
+class AdditionalCodeTypeDescription < Sequel::Model
+  set_primary_key :additional_code_type_id
 
-  belongs_to :additional_code_type, foreign_key: :additional_code_type_id
-  belongs_to :language
+  many_to_one :additional_code_type, key: :additional_code_type_id
+  many_to_one :language
 end
 
 # == Schema Information

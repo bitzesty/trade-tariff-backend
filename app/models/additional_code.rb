@@ -1,15 +1,24 @@
-class AdditionalCode < ActiveRecord::Base
-  self.primary_keys =  :additional_code_sid
+class AdditionalCode < Sequel::Model
+  set_primary_key :additional_code_sid
 
-  has_many :additional_code_description_periods, foreign_key: :additional_code_sid
-  has_many :additional_code_descriptions, through: :additional_code_description_periods,
-                                          foreign_key: :additional_code_sid
-  has_many :footnote_association_additional_codes, foreign_key: :additional_code_sid
-  has_many :footnotes, through: :footnote_association_additional_codes
+  one_to_one :additional_code_description, dataset: -> {
+    AdditionalCodeDescriptionPeriod.actual
+                                      .where(additional_code_sid: additional_code_sid)
+                                      .first
+                                      .additional_code_description_dataset
+  }
 
-  has_one :measure, foreign_key: :additional_code_sid
+  delegate :description, to: :additional_code_description
 
-  belongs_to :additional_code_type, foreign_key: :additional_code_type_id
+  # one_to_many :additional_code_description_periods, left_primary_key: :additional_code_sid,  key: [:additional_code_description_period_sid, :additional_code_sid, :additional_code_type_id]
+  # one_to_many :additional_code_descriptions, join_table: :additional_code_description_periods,
+  #                                         key: [:additional_code_description_period_sid, :additional_code_sid]
+  # one_to_many :footnote_association_additional_codes, key: :additional_code_sid
+  # one_to_many :footnotes, join_table: :footnote_association_additional_codes
+
+  # one_to_one :measure, key: :additional_code_sid
+
+  # many_to_one :additional_code_type, key: :additional_code_type_id
 end
 
 # == Schema Information

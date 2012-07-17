@@ -1,7 +1,7 @@
-class TransmissionComment < ActiveRecord::Base
-  self.primary_keys =  [:comment_sid, :language_id]
+class TransmissionComment < Sequel::Model
+  set_primary_key [:comment_sid, :language_id]
 
-  belongs_to :language
+  many_to_one :language
 end
 
 # == Schema Information

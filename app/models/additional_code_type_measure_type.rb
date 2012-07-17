@@ -1,8 +1,8 @@
-class AdditionalCodeTypeMeasureType < ActiveRecord::Base
-  self.primary_keys =  :measure_type_id, :additional_code_type_id
+class AdditionalCodeTypeMeasureType < Sequel::Model
+  set_primary_key [:measure_type_id, :additional_code_type_id]
 
-  belongs_to :measure_type
-  belongs_to :additional_code_type
+  many_to_one :measure_type
+  many_to_one :additional_code_type
 end
 
 # == Schema Information
