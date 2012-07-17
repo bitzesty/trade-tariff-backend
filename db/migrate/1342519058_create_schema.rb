@@ -214,44 +214,84 @@ Sequel.migration do
       index [:goods_nomenclature_sid, :section_id], :name=>:index_chapters_sections_on_goods_nomenclature_sid_and_section_id, :unique=>true
     end
 
-    create_table(:comm) do
+    create_table(:chief_mfcm) do
       DateTime :fe_tsmp
-      String :cmdty_code, :size=>255
+      String :msrgp_code, :size=>255
+      String :msr_type, :size=>255
+      String :tty_code, :size=>255
       DateTime :le_tsmp
-      String :add_rlf_alwd_ind, :size=>255
-      String :alcohol_cmdty, :size=>255
       DateTime :audit_tsmp
-      String :chi_doti_rqd, :size=>255
-      String :cmdty_bbeer, :size=>255
-      String :cmdty_beer, :size=>255
-      String :cmdty_euse_rfnd, :size=>255
-      String :cmdty_mdecln, :size=>255
-      String :exp_lcnc_rqd, :size=>255
-      String :ex_ec_scode_rqd, :size=>255
-      BigDecimal :full_dty_adval1, :size=>[3, 3]
-      BigDecimal :full_dty_adval2, :size=>[3, 3]
-      String :full_dty_exch, :size=>255
-      BigDecimal :full_dty_spfc1, :size=>[7, 4]
-      BigDecimal :full_dty_spfc2, :size=>[7, 4]
-      String :full_dty_ttype, :size=>255
-      String :full_dty_uoq_c2, :size=>255
-      String :full_dty_uoq1, :size=>255
-      String :full_dty_uoq2, :size=>255
-      String :full_duty_type, :size=>255
-      String :im_ec_scode_rqd, :size=>255
-      String :imp_exp_use, :size=>255
+      String :cmdty_code, :size=>255
+      String :cmdty_msr_xhdg, :size=>255
+      String :null_tri_rqd, :size=>255
+      TrueClass :exports_use_ind
+    end
+
+    create_table(:chief_tame) do
+      DateTime :fe_tsmp
+      String :msrgp_code, :size=>255
+      String :msr_type, :size=>255
+      String :tty_code, :size=>255
+      String :tar_msr_no, :size=>255
+      DateTime :le_tsmp
+      BigDecimal :adval_rate, :size=>[3, 3]
+      BigDecimal :alch_sgth, :size=>[3, 2]
+      DateTime :audit_tsmp
+      String :cap_ai_stmt, :size=>255
+      BigDecimal :cap_max_pct, :size=>[3, 3]
+      String :cmdty_msr_xhdg, :size=>255
+      String :comp_mthd, :size=>255
+      String :cpc_wvr_phb, :size=>255
+      String :ec_msr_set, :size=>255
+      String :mip_band_exch, :size=>255
+      String :mip_rate_exch, :size=>255
+      String :mip_uoq_code, :size=>255
       String :nba_id, :size=>255
-      String :perfume_cmdty, :size=>255
+      String :null_tri_rqd, :size=>255
+      String :qta_code_uk, :size=>255
+      String :qta_elig_useLstrubg, :size=>255
+      String :qta_exch_rate, :size=>255
+      String :qta_no, :size=>255
+      String :qta_uoq_code, :size=>255
       String :rfa, :text=>true
-      Integer :season_end
-      Integer :season_start
-      String :spv_code, :size=>255
-      String :spv_xhdg, :size=>255
-      String :uoq_code_cdu1, :size=>255
-      String :uoq_code_cdu2, :size=>255
-      String :uoq_code_cdu3, :size=>255
-      String :whse_cmdty, :size=>255
-      String :wines_cmdty, :size=>255
+      String :rfs_code_1, :size=>255
+      String :rfs_code_2, :size=>255
+      String :rfs_code_3, :size=>255
+      String :rfs_code_4, :size=>255
+      String :rfs_code_5, :size=>255
+      String :tdr_spr_sur, :size=>255
+      TrueClass :exports_use_ind
+    end
+
+    create_table(:chief_tamf) do
+      DateTime :fe_tsmp
+      String :msrgp_code, :size=>255
+      String :msr_type, :size=>255
+      String :tty_code, :size=>255
+      String :tar_msr_no, :size=>255
+      DateTime :le_tsmp
+      BigDecimal :adval1_rate, :size=>[3, 3]
+      BigDecimal :adval2_rate, :size=>[3, 3]
+      String :ai_factor, :size=>255
+      BigDecimal :cmdty_dmql, :size=>[8, 3]
+      String :cmdty_dmql_uoq, :size=>255
+      String :cngp_code, :size=>255
+      String :cntry_disp, :size=>255
+      String :cntry_orig, :size=>255
+      String :duty_type, :size=>255
+      String :ec_supplement, :size=>255
+      String :ec_exch_rate, :size=>255
+      String :spcl_inst, :size=>255
+      String :spfc1_cmpd_uoq, :size=>255
+      BigDecimal :spfc1_rate, :size=>[7, 4]
+      String :spfc1_uoq, :size=>255
+      BigDecimal :spfc2_rate, :size=>[7, 4]
+      String :spfc2_uoq, :size=>255
+      BigDecimal :spfc3_rate, :size=>[7, 4]
+      String :spfc3_uoq, :size=>255
+      String :tamf_dt, :size=>255
+      String :tamf_sta, :size=>255
+      String :tamf_ty, :size=>255
     end
 
     create_table(:complete_abrogation_regulations, :ignore_index_errors=>true) do
@@ -1217,19 +1257,6 @@ Sequel.migration do
       index [:meursing_table_plan_id], :name=>:primary_key, :unique=>true
     end
 
-    create_table(:mfcm) do
-      DateTime :fe_tsmp
-      String :msrgp_code, :size=>255
-      String :msr_type, :size=>255
-      String :tty_code, :size=>255
-      DateTime :le_tsmp
-      DateTime :audit_tsmp
-      String :cmdty_code, :size=>255
-      String :cmdty_msr_xhdg, :size=>255
-      String :null_tri_rqd, :size=>255
-      TrueClass :exports_use_ind
-    end
-
     create_table(:modification_regulations, :ignore_index_errors=>true) do
       String :record_code, :size=>255
       String :subrecord_code, :size=>255
@@ -1643,73 +1670,6 @@ Sequel.migration do
       String :title, :size=>255
       DateTime :created_at, :null=>false
       DateTime :updated_at, :null=>false
-    end
-
-    create_table(:tame) do
-      DateTime :fe_tsmp
-      String :msrgp_code, :size=>255
-      String :msr_type, :size=>255
-      String :tty_code, :size=>255
-      String :tar_msr_no, :size=>255
-      DateTime :le_tsmp
-      BigDecimal :adval_rate, :size=>[3, 3]
-      BigDecimal :alch_sgth, :size=>[3, 2]
-      DateTime :audit_tsmp
-      String :cap_ai_stmt, :size=>255
-      BigDecimal :cap_max_pct, :size=>[3, 3]
-      String :cmdty_msr_xhdg, :size=>255
-      String :comp_mthd, :size=>255
-      String :cpc_wvr_phb, :size=>255
-      String :ec_msr_set, :size=>255
-      String :mip_band_exch, :size=>255
-      String :mip_rate_exch, :size=>255
-      String :mip_uoq_code, :size=>255
-      String :nba_id, :size=>255
-      String :null_tri_rqd, :size=>255
-      String :qta_code_uk, :size=>255
-      String :qta_elig_useLstrubg, :size=>255
-      String :qta_exch_rate, :size=>255
-      String :qta_no, :size=>255
-      String :qta_uoq_code, :size=>255
-      String :rfa, :text=>true
-      String :rfs_code_1, :size=>255
-      String :rfs_code_2, :size=>255
-      String :rfs_code_3, :size=>255
-      String :rfs_code_4, :size=>255
-      String :rfs_code_5, :size=>255
-      String :tdr_spr_sur, :size=>255
-      TrueClass :exports_use_ind
-    end
-
-    create_table(:tamf) do
-      DateTime :fe_tsmp
-      String :msrgp_code, :size=>255
-      String :msr_type, :size=>255
-      String :tty_code, :size=>255
-      String :tar_msr_no, :size=>255
-      DateTime :le_tsmp
-      BigDecimal :adval1_rate, :size=>[3, 3]
-      BigDecimal :adval2_rate, :size=>[3, 3]
-      String :ai_factor, :size=>255
-      BigDecimal :cmdty_dmql, :size=>[8, 3]
-      String :cmdty_dmql_uoq, :size=>255
-      String :cngp_code, :size=>255
-      String :cntry_disp, :size=>255
-      String :cntry_orig, :size=>255
-      String :duty_type, :size=>255
-      String :ec_supplement, :size=>255
-      String :ec_exch_rate, :size=>255
-      String :spcl_inst, :size=>255
-      String :spfc1_cmpd_uoq, :size=>255
-      BigDecimal :spfc1_rate, :size=>[7, 4]
-      String :spfc1_uoq, :size=>255
-      BigDecimal :spfc2_rate, :size=>[7, 4]
-      String :spfc2_uoq, :size=>255
-      BigDecimal :spfc3_rate, :size=>[7, 4]
-      String :spfc3_uoq, :size=>255
-      String :tamf_dt, :size=>255
-      String :tamf_sta, :size=>255
-      String :tamf_ty, :size=>255
     end
 
     create_table(:transmission_comments, :ignore_index_errors=>true) do
