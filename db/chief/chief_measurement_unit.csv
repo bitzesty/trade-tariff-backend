@@ -1,4 +1,4 @@
-ID,SPFC_CMPD_UOQ,SPFC_UOQ,MEASUREM_UNIT_CD,MEASUREM_UNIT_QUAL_CD
+id,spfc_cmpd_uoq,spfc_uoq,measurem_unit_cd,measurem_unit_qual_cd
 1,098,078,ASX,X
 2,nil,078,HLT,nil
 3,nil,023,KGM,nil

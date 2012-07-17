@@ -1,4 +1,4 @@
-MEASURE_GROUP_CODE,MEASURE_TYPE,COND_CD,COMP_SEQ_NO,CERT_TYPE_CD,CERT_REF_NO,ACT_CD
+measure_group_code,measure_type,cond_cd,comp_seq_no,cert_type_cd,cert_ref_no,act_cd
 PR,ECM,B,001,9,111,nil
 PR,ECM,B,002,nil,nil,05
 PR,EHC,B,001,X,001,nil

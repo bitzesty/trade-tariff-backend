@@ -1,4 +1,4 @@
-ID,MEASURE_TYPE_ID,FOOTN_TYPE_ID,FOOTN_ID
+id,measure_type_id,footn_type_id,footn_id
 95,EDJ,01,540
 1,DAA,01,411
 2,DAB,01,412

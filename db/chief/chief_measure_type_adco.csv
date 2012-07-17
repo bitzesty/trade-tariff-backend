@@ -1,4 +1,4 @@
-MEASURE_GROUP_CODE,MEASURE_TYPE,TAX_TYPE_CODE,MEASURE_TYPE_ID,ADTNL_CD_TYPE_ID,ADTNL_CD,ZERO_COMP
+measure_group_code,measure_type,tax_type_code,measure_type_id,adtnl_cd_type_id,adtnl_cd,zero_comp
 EX,EXF,540,EDJ,nil,nil,1
 EX,EXA,990,EXA,nil,nil,1
 EX,EXB,990,EXB,nil,nil,1
