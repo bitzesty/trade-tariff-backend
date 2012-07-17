@@ -21,6 +21,8 @@ class Measure < Sequel::Model
                                              right_key: :excluded_geographical_area,
                                              right_primary_key: :geographical_area_id,
                                              class_name: 'GeographicalArea'
+  one_to_many :measure_components, key: :measure_sid,
+                                   primary_key: :measure_sid
 
   delegate :measure_type_description, to: :measure_type
 

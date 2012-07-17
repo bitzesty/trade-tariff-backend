@@ -11,6 +11,12 @@ node(:legal_act, if: ->(measure) { measure.generating_regulation_present? }) do 
   }
 end
 
+child(measure_components: :components) do
+  node(:duty_expression) { |obj|
+    "#{obj.duty_amount} #{obj.duty_expression.duty_expression_description.description}"
+  }
+end
+
 child(measure_conditions: :conditions) do
   attributes :document_code
 

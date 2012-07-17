@@ -21,8 +21,8 @@ module UKTradeTariff
     # -- all .rb files in that directory are automatically loaded.
 
     # Custom directories with classes and modules you want to be autoloadable.
+    # #{config.root}/app/models/chief
     config.autoload_paths += %W(
-      #{config.root}/app/models/chief
       #{config.root}/app/models/concerns
     )
 

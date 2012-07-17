@@ -1,5 +1,10 @@
 class MeasureComponent < Sequel::Model
-  set_primary_keys :measure_sid, :duty_expression_id
+  set_primary_key :measure_sid, :duty_expression_id
+
+  one_to_one :duty_expression, key: {}, primary_key: {}, dataset: -> {
+    DutyExpression.actual
+                  .where(duty_expression_id: duty_expression_id)
+  }
 
   # belongs_to :measure, foreign_key: :measure_sid
   # belongs_to :measurement_unit, foreign_key: :measurement_unit_code
