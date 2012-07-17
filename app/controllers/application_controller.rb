@@ -1,11 +1,9 @@
 require 'time_machine'
 
 class ApplicationController < ActionController::Base
-  include TimeMachine
-
   respond_to :json, :html
 
-  helper_method :as_of
+  around_filter :configure_time_machine
 
   unless Rails.application.config.consider_all_requests_local
     rescue_from Exception, with: :render_error
@@ -49,7 +47,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def as_of
-    params[:as_of].presence || Date.today
+  def configure_time_machine
+    TimeMachine.at(params[:as_of]) do
+      yield
+    end
   end
 end
