@@ -1,5 +1,5 @@
 class ProrogationRegulation < Sequel::Model
-  set_primary_keys  :prorogation_regulation_id, :prorogation_regulation_role
+  set_primary_key  :prorogation_regulation_id, :prorogation_regulation_role
 
   # has_many :prorogation_regulation_actions, foreign_key: [:prorogation_regulation_role,
   #                                                         :prorogation_regulation_id],

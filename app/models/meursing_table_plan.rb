@@ -1,5 +1,5 @@
 class MeursingTablePlan < Sequel::Model
-  set_primary_keys  :meursing_table_plan_id
+  set_primary_key  :meursing_table_plan_id
 
   # has_many :meursing_table_cell_components
   # has_many :meursing_headings

@@ -1,6 +1,6 @@
 class GoodsNomenclatureIndent < Sequel::Model
   set_primary_key :goods_nomenclature_indent_sid
-  # set_primary_keys  :goods_nomenclature_indent_sid
+  # set_primary_key  :goods_nomenclature_indent_sid
 
   # belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid
 end

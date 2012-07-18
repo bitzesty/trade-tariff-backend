@@ -1,5 +1,5 @@
 class QuotaDefinition < Sequel::Model
-  set_primary_keys  :quota_definition_sid
+  set_primary_key  :quota_definition_sid
 
   # belongs_to :quota_order_number
   # belongs_to :measurement_unit, foreign_key: :measurement_unit_code

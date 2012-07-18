@@ -1,5 +1,5 @@
 class Language < Sequel::Model
-  set_primary_keys  :language_id
+  set_primary_key  :language_id
 
   # has_many :language_descriptions
   # has_many :additional_code_descriptions

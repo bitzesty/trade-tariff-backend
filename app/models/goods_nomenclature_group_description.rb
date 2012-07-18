@@ -1,5 +1,5 @@
 class GoodsNomenclatureGroupDescription < Sequel::Model
-  set_primary_keys  :goods_nomenclature_group_id, :goods_nomenclature_group_type
+  set_primary_key  :goods_nomenclature_group_id, :goods_nomenclature_group_type
 
   # belongs_to :goods_nomenclature_group, foreign_key: [:goods_nomenclature_group_id,
   #                                                     :goods_nomenclature_group_type]

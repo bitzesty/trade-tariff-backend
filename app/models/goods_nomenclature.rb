@@ -20,8 +20,15 @@ class GoodsNomenclature < Sequel::Model
 
   alias :code :goods_nomenclature_item_id
 
-  one_to_many :goods_nomenclature_origins, key: :goods_nomenclature_sid
-  one_to_many :goods_nomenclature_successors, key: :goods_nomenclature_sid
+  one_to_one :goods_nomenclature_origin, key: [:goods_nomenclature_item_id,
+                                               :productline_suffix],
+                                         primary_key: [:goods_nomenclature_item_id,
+                                                       :producline_suffix]
+
+  one_to_many :goods_nomenclature_successors, key: [:absorbed_goods_nomenclature_item_id,
+                                                    :absorbed_productline_suffix],
+                                              primary_key: [:goods_nomenclature_item_id,
+                                                            :producline_suffix]
   one_to_many :export_refund_nomenclatures, key: :goods_nomenclature_sid
   # one_to_many :footnote_association_goods_nomenclatures, foreign_key: :goods_nomenclature_sid
   # many_to_many :footnotes, through: :footnote_association_goods_nomenclatures

@@ -1,5 +1,5 @@
 class QuotaOrderNumberOrigin < Sequel::Model
-  set_primary_keys  :quota_order_number_origin_sid
+  set_primary_key  :quota_order_number_origin_sid
 
   # belongs_to :geographical_area, foreign_key: :geographical_area_sid
   # belongs_to :quota_order_number, foreign_key: :quota_order_number_sid

@@ -1,5 +1,5 @@
 class MeasurementUnit < Sequel::Model
-  set_primary_keys  :measurement_unit_code
+  set_primary_key  :measurement_unit_code
 
   # has_many :measure_components, foreign_key: :measurement_unit_code
   # has_many :measurements, foreign_key: :measurement_unit_code
