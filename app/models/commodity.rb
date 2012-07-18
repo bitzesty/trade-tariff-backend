@@ -50,6 +50,11 @@ class Commodity < GoodsNomenclature
     @_children ||= tree_map.for_commodity(self).children
   end
 
+  # TODO calculate real rate
+  def third_country_duty_rate
+    "0.00 %"
+  end
+
   private
 
   def tree_map

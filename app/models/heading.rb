@@ -18,4 +18,8 @@ class Heading < GoodsNomenclature
   def short_code
     goods_nomenclature_item_id.first(4)
   end
+
+  def declarative
+    false
+  end
 end
