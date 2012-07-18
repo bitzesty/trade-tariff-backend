@@ -25,6 +25,10 @@ class GeographicalArea < Sequel::Model
 
   delegate :description, to: :geographical_area_description
 
+  def iso_code
+    (geographical_area_id.size == 2) ? geographical_area_id : nil
+  end
+
   # has_many :geographical_area_memberships, foreign_key: :geographical_area_sid
   # has_many :geographical_area_groups, through: :geographical_area_memberships,
   #                                     class_name: 'GeographicalArea'

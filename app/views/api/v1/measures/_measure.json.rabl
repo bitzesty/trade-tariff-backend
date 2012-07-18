@@ -33,18 +33,16 @@ child(measure_conditions: :conditions) do
   }
 end
 
-child(geographical_area: :region) do
-  node(:iso_code) { |ga|
-    ga.geographical_area_id
-  }
+child(geographical_area: :geographical_area) do
+  attributes :iso_code
+
   node(:description) { |ga|
     ga.geographical_area_description.description
   }
-  node(:countries, if: ->(region) { region.children_geographical_areas.any? }) do |region|
-    child(contained_geographical_areas: :countries) do
-      node(:iso_code) { |ga|
-        ga.geographical_area_id
-      }
+  node(:children_geographical_areas, if: ->(region) { region.contained_geographical_areas.any? }) do |region|
+    child(contained_geographical_areas: :children_geographical_areas) do
+      attributes :iso_code
+
       node(:description) { |ga|
         ga.geographical_area_description.description
       }
