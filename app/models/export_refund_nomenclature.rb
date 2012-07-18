@@ -1,4 +1,4 @@
-class ExportRefundNomenclature < Sequel::Model 
+class ExportRefundNomenclature < Sequel::Model
   set_primary_key :export_refund_nomenclature_sid
 
   one_to_many :export_refund_nomenclature_description_periods, key: :export_refund_nomenclature_sid

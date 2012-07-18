@@ -21,6 +21,11 @@ class Measure < Sequel::Model
                                              right_key: :excluded_geographical_area,
                                              right_primary_key: :geographical_area_id,
                                              class_name: 'GeographicalArea'
+  many_to_many :footnotes, dataset: -> {
+    Footnote.actual
+            .join(:footnote_association_measures, footnote_id: :footnote_id)
+            .where("footnote_association_measures.measure_sid = ?", measure_sid)
+  }
   one_to_many :measure_components, key: :measure_sid,
                                    primary_key: :measure_sid
 

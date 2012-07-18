@@ -461,7 +461,8 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:measure_sid, :footnote_id, :footnote_type_id], :name=>:primary_key, :unique=>true
+      index :measure_sid, :name=>:measure_sid
+      index :footnote_id, :name=>:footnote_id
     end
 
     create_table(:footnote_association_meursing_headings, :ignore_index_errors=>true) do
