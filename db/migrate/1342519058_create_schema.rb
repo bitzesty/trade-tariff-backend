@@ -1,9 +1,6 @@
 Sequel.migration do
   change do
     create_table(:additional_code_description_periods, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :additional_code_description_period_sid, :size=>255
       String :additional_code_sid, :size=>255
       String :additional_code_type_id, :size=>255
@@ -19,9 +16,6 @@ Sequel.migration do
     end
 
     create_table(:additional_code_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :additional_code_description_period_sid, :size=>255
       String :language_id, :size=>255
       String :additional_code_sid, :size=>255
@@ -39,9 +33,6 @@ Sequel.migration do
     end
 
     create_table(:additional_code_type_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :additional_code_type_id, :size=>255
       String :language_id, :size=>255
       String :description, :text=>true
@@ -53,9 +44,6 @@ Sequel.migration do
     end
 
     create_table(:additional_code_type_measure_types, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :measure_type_id, :size=>255
       String :additional_code_type_id, :size=>255
       Date :validity_start_date
@@ -67,9 +55,6 @@ Sequel.migration do
     end
 
     create_table(:additional_code_types, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :additional_code_type_id, :size=>255
       Date :validity_start_date
       Date :validity_end_date
@@ -83,9 +68,6 @@ Sequel.migration do
     end
 
     create_table(:additional_codes, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :additional_code_sid, :size=>255
       String :additional_code_type_id, :size=>255
       String :additional_code, :size=>255
@@ -99,9 +81,6 @@ Sequel.migration do
     end
 
     create_table(:base_regulations, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :base_regulation_role
       String :base_regulation_id, :size=>255
       Date :validity_start_date
@@ -133,9 +112,6 @@ Sequel.migration do
     end
 
     create_table(:certificate_description_periods, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :certificate_description_period_sid, :size=>255
       String :certificate_type_code, :size=>255
       String :certificate_code, :size=>255
@@ -149,9 +125,6 @@ Sequel.migration do
     end
 
     create_table(:certificate_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :certificate_description_period_sid, :size=>255
       String :language_id, :size=>255
       String :certificate_type_code, :size=>255
@@ -166,9 +139,7 @@ Sequel.migration do
     end
 
     create_table(:certificate_type_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
+ 
       String :certificate_type_code, :size=>255
       String :language_id, :size=>255
       String :description, :text=>true
@@ -180,9 +151,6 @@ Sequel.migration do
     end
 
     create_table(:certificate_types, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :certificate_type_code, :size=>255
       Date :validity_start_date
       Date :validity_end_date
@@ -193,9 +161,6 @@ Sequel.migration do
     end
 
     create_table(:certificates, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :certificate_type_code, :size=>255
       String :certificate_code, :size=>255
       Date :validity_start_date
@@ -207,7 +172,6 @@ Sequel.migration do
     end
 
     create_table(:chapters_sections, :ignore_index_errors=>true) do
-      primary_key :id
       Integer :goods_nomenclature_sid
       Integer :section_id
 
@@ -359,9 +323,6 @@ Sequel.migration do
     end
 
     create_table(:complete_abrogation_regulations, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :complete_abrogation_regulation_role
       String :complete_abrogation_regulation_id, :size=>255
       Date :published_date
@@ -377,9 +338,6 @@ Sequel.migration do
     end
 
     create_table(:duty_expression_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :duty_expression_id, :size=>255
       String :language_id, :size=>255
       String :description, :text=>true
@@ -391,9 +349,6 @@ Sequel.migration do
     end
 
     create_table(:duty_expressions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :duty_expression_id, :size=>255
       Date :validity_start_date
       Date :validity_end_date
@@ -407,9 +362,6 @@ Sequel.migration do
     end
 
     create_table(:explicit_abrogation_regulations, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :explicit_abrogation_regulation_role
       String :explicit_abrogation_regulation_id, :size=>255
       Date :published_date
@@ -426,9 +378,6 @@ Sequel.migration do
     end
 
     create_table(:export_refund_nomenclature_description_periods, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :export_refund_nomenclature_description_period_sid, :size=>255
       String :export_refund_nomenclature_sid, :size=>255
       Date :validity_start_date
@@ -444,9 +393,6 @@ Sequel.migration do
     end
 
     create_table(:export_refund_nomenclature_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :export_refund_nomenclature_description_period_sid, :size=>255
       String :language_id, :size=>255
       String :export_refund_nomenclature_sid, :size=>255
@@ -464,9 +410,6 @@ Sequel.migration do
     end
 
     create_table(:export_refund_nomenclature_indents, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :export_refund_nomenclature_indents_sid, :size=>255
       String :export_refund_nomenclature_sid, :size=>255
       Date :validity_start_date
@@ -483,9 +426,6 @@ Sequel.migration do
     end
 
     create_table(:export_refund_nomenclatures, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :export_refund_nomenclature_sid, :size=>255
       String :goods_nomenclature_item_id, :size=>255
       Integer :additional_code_type
@@ -502,9 +442,6 @@ Sequel.migration do
     end
 
     create_table(:footnote_association_additional_codes, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :additional_code_sid, :size=>255
       String :footnote_type_id, :size=>255
       String :footnote_id, :size=>255
@@ -520,9 +457,6 @@ Sequel.migration do
     end
 
     create_table(:footnote_association_erns, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :export_refund_nomenclature_sid, :size=>255
       String :footnote_type, :size=>255
       String :footnote_id, :size=>255
@@ -539,9 +473,6 @@ Sequel.migration do
     end
 
     create_table(:footnote_association_goods_nomenclatures, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :goods_nomenclature_sid, :size=>255
       String :footnote_type, :size=>255
       String :footnote_id, :size=>255
@@ -556,9 +487,6 @@ Sequel.migration do
     end
 
     create_table(:footnote_association_measures, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :measure_sid, :size=>255
       String :footnote_type_id, :size=>255
       String :footnote_id, :size=>255
@@ -570,9 +498,6 @@ Sequel.migration do
     end
 
     create_table(:footnote_association_meursing_headings, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :meursing_table_plan_id, :size=>255
       String :meursing_heading_number, :size=>255
       Integer :row_column_code
@@ -587,9 +512,6 @@ Sequel.migration do
     end
 
     create_table(:footnote_description_periods, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :footnote_description_period_sid, :size=>255
       String :footnote_type_id, :size=>255
       String :footnote_id, :size=>255
@@ -602,9 +524,6 @@ Sequel.migration do
     end
 
     create_table(:footnote_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :footnote_description_period_sid, :size=>255
       String :footnote_type_id, :size=>255
       String :footnote_id, :size=>255
@@ -618,9 +537,6 @@ Sequel.migration do
     end
 
     create_table(:footnote_type_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :footnote_type_id, :size=>255
       String :language_id, :size=>255
       String :description, :text=>true
@@ -632,9 +548,6 @@ Sequel.migration do
     end
 
     create_table(:footnote_types, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :footnote_type_id, :size=>255
       Integer :application_code
       Date :validity_start_date
@@ -646,9 +559,6 @@ Sequel.migration do
     end
 
     create_table(:footnotes, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :footnote_id, :size=>255
       String :footnote_type_id, :size=>255
       Date :validity_start_date
@@ -660,9 +570,6 @@ Sequel.migration do
     end
 
     create_table(:fts_regulation_actions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :fts_regulation_role
       String :fts_regulation_id, :size=>255
       Integer :stopped_regulation_role
@@ -674,9 +581,6 @@ Sequel.migration do
     end
 
     create_table(:full_temporary_stop_regulations, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :full_temporary_stop_regulation_role
       String :full_temporary_stop_regulation_id, :size=>255
       Date :published_date
@@ -698,9 +602,6 @@ Sequel.migration do
     end
 
     create_table(:geographical_area_description_periods, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :geographical_area_description_period_sid
       Integer :geographical_area_sid
       Date :validity_start_date
@@ -713,9 +614,6 @@ Sequel.migration do
     end
 
     create_table(:geographical_area_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :geographical_area_description_period_sid
       String :language_id, :size=>255
       Integer :geographical_area_sid
@@ -729,9 +627,6 @@ Sequel.migration do
     end
 
     create_table(:geographical_area_memberships, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :geographical_area_sid
       Integer :geographical_area_group_sid
       Date :validity_start_date
@@ -743,9 +638,6 @@ Sequel.migration do
     end
 
     create_table(:geographical_areas, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :geographical_area_sid
       Integer :parent_geographical_area_group_sid
       Date :validity_start_date
@@ -761,9 +653,6 @@ Sequel.migration do
     end
 
     create_table(:goods_nomenclature_description_periods, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :goods_nomenclature_description_period_sid
       Integer :goods_nomenclature_sid
       Date :validity_start_date
@@ -777,9 +666,6 @@ Sequel.migration do
     end
 
     create_table(:goods_nomenclature_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :goods_nomenclature_description_period_sid
       String :language_id, :size=>255
       Integer :goods_nomenclature_sid
@@ -794,9 +680,6 @@ Sequel.migration do
     end
 
     create_table(:goods_nomenclature_group_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :goods_nomenclature_group_type, :size=>255
       String :goods_nomenclature_group_id, :size=>255
       String :language_id, :size=>255
@@ -809,9 +692,6 @@ Sequel.migration do
     end
 
     create_table(:goods_nomenclature_groups, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :goods_nomenclature_group_type, :size=>255
       String :goods_nomenclature_group_id, :size=>255
       Date :validity_start_date
@@ -824,9 +704,6 @@ Sequel.migration do
     end
 
     create_table(:goods_nomenclature_indents, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :goods_nomenclature_indent_sid
       Integer :goods_nomenclature_sid
       Date :validity_start_date
@@ -843,9 +720,6 @@ Sequel.migration do
     end
 
     create_table(:goods_nomenclature_origins, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :goods_nomenclature_sid
       String :derived_goods_nomenclature_item_id, :size=>255
       String :derived_productline_suffix, :size=>255
@@ -858,9 +732,6 @@ Sequel.migration do
     end
 
     create_table(:goods_nomenclature_successors, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :goods_nomenclature_sid
       String :absorbed_goods_nomenclature_item_id, :size=>255
       String :absorbed_productline_suffix, :size=>255
@@ -873,9 +744,6 @@ Sequel.migration do
     end
 
     create_table(:goods_nomenclatures, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :goods_nomenclature_sid
       String :goods_nomenclature_item_id, :size=>255
       String :producline_suffix, :size=>255
@@ -890,9 +758,6 @@ Sequel.migration do
     end
 
     create_table(:language_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :language_code_id, :size=>255
       String :language_id, :size=>255
       String :description, :text=>true
@@ -903,9 +768,6 @@ Sequel.migration do
     end
 
     create_table(:languages, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :language_id, :size=>255
       Date :validity_start_date
       Date :validity_end_date
@@ -916,9 +778,6 @@ Sequel.migration do
     end
 
     create_table(:measure_action_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :action_code, :size=>255
       String :language_id, :size=>255
       String :description, :text=>true
@@ -929,9 +788,6 @@ Sequel.migration do
     end
 
     create_table(:measure_actions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :action_code, :size=>255
       Date :validity_start_date
       Date :validity_end_date
@@ -942,9 +798,6 @@ Sequel.migration do
     end
 
     create_table(:measure_components, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :measure_sid
       String :duty_expression_id, :size=>255
       Integer :duty_amount
@@ -961,9 +814,6 @@ Sequel.migration do
     end
 
     create_table(:measure_condition_code_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :condition_code, :size=>255
       String :language_id, :size=>255
       String :description, :text=>true
@@ -974,9 +824,6 @@ Sequel.migration do
     end
 
     create_table(:measure_condition_codes, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :condition_code, :size=>255
       Date :validity_start_date
       Date :validity_end_date
@@ -987,9 +834,6 @@ Sequel.migration do
     end
 
     create_table(:measure_condition_components, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :measure_condition_sid
       String :duty_expression_id, :size=>255
       Integer :duty_amount
@@ -1007,9 +851,6 @@ Sequel.migration do
     end
 
     create_table(:measure_conditions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :measure_condition_sid
       Integer :measure_sid
       String :condition_code, :size=>255
@@ -1034,9 +875,6 @@ Sequel.migration do
     end
 
     create_table(:measure_excluded_geographical_areas, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :measure_sid
       String :excluded_geographical_area, :size=>255
       Integer :geographical_area_sid
@@ -1048,9 +886,6 @@ Sequel.migration do
     end
 
     create_table(:measure_partial_temporary_stops, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :measure_sid
       Date :validity_start_date
       Date :validity_end_date
@@ -1068,9 +903,6 @@ Sequel.migration do
     end
 
     create_table(:measure_type_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :measure_type_id
       String :language_id, :size=>255
       String :description, :text=>true
@@ -1082,9 +914,6 @@ Sequel.migration do
     end
 
     create_table(:measure_type_series, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :measure_type_series_id, :size=>255
       Date :validity_start_date
       Date :validity_end_date
@@ -1096,9 +925,6 @@ Sequel.migration do
     end
 
     create_table(:measure_type_series_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :measure_type_series_id, :size=>255
       String :language_id, :size=>255
       String :description, :text=>true
@@ -1110,9 +936,6 @@ Sequel.migration do
     end
 
     create_table(:measure_types, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :measure_type_id
       Date :validity_start_date
       Date :validity_end_date
@@ -1131,9 +954,6 @@ Sequel.migration do
     end
 
     create_table(:measurement_unit_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :measurement_unit_code, :size=>255
       String :language_id, :size=>255
       String :description, :text=>true
@@ -1145,9 +965,6 @@ Sequel.migration do
     end
 
     create_table(:measurement_unit_qualifier_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :measurement_unit_qualifier_code, :size=>255
       String :language_id, :size=>255
       String :description, :text=>true
@@ -1158,9 +975,6 @@ Sequel.migration do
     end
 
     create_table(:measurement_unit_qualifiers, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :measurement_unit_qualifier_code, :size=>255
       Date :validity_start_date
       Date :validity_end_date
@@ -1171,9 +985,6 @@ Sequel.migration do
     end
 
     create_table(:measurement_units, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :measurement_unit_code, :size=>255
       Date :validity_start_date
       Date :validity_end_date
@@ -1184,9 +995,6 @@ Sequel.migration do
     end
 
     create_table(:measurements, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :measurement_unit_code, :size=>255
       String :measurement_unit_qualifier_code, :size=>255
       Date :validity_start_date
@@ -1198,9 +1006,6 @@ Sequel.migration do
     end
 
     create_table(:measures, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :measure_sid
       Integer :measure_type
       String :geographical_area, :size=>255
@@ -1233,9 +1038,6 @@ Sequel.migration do
     end
 
     create_table(:meursing_additional_codes, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :meursing_additional_code_sid
       Integer :additional_code
       Date :validity_start_date
@@ -1247,9 +1049,6 @@ Sequel.migration do
     end
 
     create_table(:meursing_heading_texts, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :meursing_table_plan_id, :size=>255
       Integer :meursing_heading_number
       Integer :row_column_code
@@ -1262,9 +1061,6 @@ Sequel.migration do
     end
 
     create_table(:meursing_headings, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :meursing_table_plan_id, :size=>255
       Integer :meursing_heading_number
       Integer :row_column_code
@@ -1277,9 +1073,6 @@ Sequel.migration do
     end
 
     create_table(:meursing_subheadings, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :meursing_table_plan_id, :size=>255
       Integer :meursing_heading_number
       Integer :row_column_code
@@ -1294,9 +1087,6 @@ Sequel.migration do
     end
 
     create_table(:meursing_table_cell_components, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :meursing_additional_code_sid
       String :meursing_table_plan_id, :size=>255
       Integer :heading_number
@@ -1312,9 +1102,6 @@ Sequel.migration do
     end
 
     create_table(:meursing_table_plans, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :meursing_table_plan_id, :size=>255
       Date :validity_start_date
       Date :validity_end_date
@@ -1325,9 +1112,6 @@ Sequel.migration do
     end
 
     create_table(:modification_regulations, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :modification_regulation_role
       String :modification_regulation_id, :size=>255
       Date :validity_start_date
@@ -1356,10 +1140,6 @@ Sequel.migration do
     end
 
     create_table(:monetary_exchange_periods, :ignore_index_errors=>true) do
-      primary_key :id
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :monetary_exchange_period_sid, :size=>255
       String :parent_monetary_unit_code, :size=>255
       Date :validity_start_date
@@ -1371,9 +1151,6 @@ Sequel.migration do
     end
 
     create_table(:monetary_exchange_rates, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :monetary_exchange_period_sid, :size=>255
       String :child_monetary_unit_code, :size=>255
       BigDecimal :exchange_rate, :size=>[16, 8]
@@ -1384,9 +1161,6 @@ Sequel.migration do
     end
 
     create_table(:monetary_unit_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :monetary_unit_code, :size=>255
       String :language_id, :size=>255
       String :description, :text=>true
@@ -1398,9 +1172,6 @@ Sequel.migration do
     end
 
     create_table(:monetary_units, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :monetary_unit_code, :size=>255
       Date :validity_start_date
       Date :validity_end_date
@@ -1411,9 +1182,6 @@ Sequel.migration do
     end
 
     create_table(:nomenclature_group_memberships, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :goods_nomenclature_sid
       String :goods_nomenclature_group_type, :size=>255
       String :goods_nomenclature_group_id, :size=>255
@@ -1428,9 +1196,6 @@ Sequel.migration do
     end
 
     create_table(:prorogation_regulation_actions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :prorogation_regulation_role
       String :prorogation_regulation_id, :size=>255
       Integer :prorogated_regulation_role
@@ -1443,9 +1208,6 @@ Sequel.migration do
     end
 
     create_table(:prorogation_regulations, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :prorogation_regulation_role
       String :prorogation_regulation_id, :size=>255
       Date :published_date
@@ -1461,9 +1223,6 @@ Sequel.migration do
     end
 
     create_table(:quota_associations, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :main_quota_definition_sid
       Integer :sub_quota_definition_sid
       String :relation_type, :size=>255
@@ -1475,9 +1234,6 @@ Sequel.migration do
     end
 
     create_table(:quota_balance_events, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :quota_definition_sid
       DateTime :occurrence_timestamp
       Date :last_import_date_in_allocation
@@ -1491,9 +1247,6 @@ Sequel.migration do
     end
 
     create_table(:quota_blocking_periods, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :quota_blocking_period_sid
       Integer :quota_definition_sid
       Date :blocking_start_date
@@ -1507,9 +1260,6 @@ Sequel.migration do
     end
 
     create_table(:quota_critical_events, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :quota_definition_sid
       DateTime :occurrence_timestamp
       String :critical_state, :size=>255
@@ -1521,9 +1271,6 @@ Sequel.migration do
     end
 
     create_table(:quota_definitions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :quota_definition_sid
       String :quota_order_number_id, :size=>255
       Date :validity_start_date
@@ -1549,9 +1296,6 @@ Sequel.migration do
     end
 
     create_table(:quota_exhaustion_events, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :quota_definition_sid
       DateTime :occurrence_timestamp
       Date :exhaustion_date
@@ -1562,9 +1306,6 @@ Sequel.migration do
     end
 
     create_table(:quota_order_number_origin_exclusions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :quota_order_number_origin_sid
       Integer :excluded_geographical_area_sid
       DateTime :created_at
@@ -1574,9 +1315,6 @@ Sequel.migration do
     end
 
     create_table(:quota_order_number_origins, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :quota_order_number_origin_sid
       Integer :quota_order_number_sid
       String :geographical_area_id, :size=>255
@@ -1591,9 +1329,6 @@ Sequel.migration do
     end
 
     create_table(:quota_order_numbers, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :quota_order_number_sid
       String :quota_order_number_id, :size=>255
       Date :validity_start_date
@@ -1605,9 +1340,6 @@ Sequel.migration do
     end
 
     create_table(:quota_reopening_events, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :quota_definition_sid
       DateTime :occurrence_timestamp
       Date :reopening_date
@@ -1618,9 +1350,6 @@ Sequel.migration do
     end
 
     create_table(:quota_suspension_periods, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :quota_suspension_period_sid
       Integer :quota_definition_sid
       Date :suspension_start_date
@@ -1634,9 +1363,6 @@ Sequel.migration do
     end
 
     create_table(:quota_unblocking_events, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :quota_definition_sid
       DateTime :occurrence_timestamp
       Date :unblocking_date
@@ -1647,9 +1373,6 @@ Sequel.migration do
     end
 
     create_table(:quota_unsuspension_events, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :quota_definition_sid
       DateTime :occurrence_timestamp
       Date :unsuspension_date
@@ -1660,9 +1383,6 @@ Sequel.migration do
     end
 
     create_table(:regulation_group_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :regulation_group_id, :size=>255
       String :language_id, :size=>255
       String :description, :text=>true
@@ -1674,9 +1394,6 @@ Sequel.migration do
     end
 
     create_table(:regulation_groups, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :regulation_group_id, :size=>255
       Date :validity_start_date
       Date :validity_end_date
@@ -1687,9 +1404,6 @@ Sequel.migration do
     end
 
     create_table(:regulation_replacements, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :geographical_area_id, :size=>255
       String :chapter_heading, :size=>255
       Integer :replacing_regulation_role
@@ -1704,9 +1418,6 @@ Sequel.migration do
     end
 
     create_table(:regulation_role_type_descriptions, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       String :regulation_role_type_id, :size=>255
       String :language_id, :size=>255
       String :description, :text=>true
@@ -1718,9 +1429,6 @@ Sequel.migration do
     end
 
     create_table(:regulation_role_types, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :regulation_role_type_id
       Date :validity_start_date
       Date :validity_end_date
@@ -1740,9 +1448,6 @@ Sequel.migration do
     end
 
     create_table(:transmission_comments, :ignore_index_errors=>true) do
-      String :record_code, :size=>255
-      String :subrecord_code, :size=>255
-      String :record_sequence_number, :size=>255
       Integer :comment_sid
       String :language_id, :size=>255
       String :comment_text, :text=>true
