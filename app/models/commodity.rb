@@ -55,6 +55,10 @@ class Commodity < GoodsNomenclature
     "0.00 %"
   end
 
+  def uk_vat_rate
+    "0.00 %"
+  end
+
   private
 
   def tree_map

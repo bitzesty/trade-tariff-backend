@@ -1,4 +1,4 @@
-attributes :measure_sid, :origin
+attributes :origin
 
 node(:measure_type_description) { |obj|
   obj.measure_type_description.description
@@ -11,13 +11,13 @@ node(:legal_act, if: ->(measure) { measure.generating_regulation_present? }) do 
   }
 end
 
-child(measure_components: :components) do
+child(measure_components: :measure_components) do
   node(:duty_expression) { |obj|
     "#{obj.duty_amount} #{obj.duty_expression.duty_expression_description.description}"
   }
 end
 
-child(measure_conditions: :conditions) do
+child(measure_conditions: :measure_conditions) do
   attributes :document_code
 
   node(:action) { |obj|
