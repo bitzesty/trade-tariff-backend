@@ -1,7 +1,7 @@
-class LanguageDescription < ActiveRecord::Base
-  self.primary_keys =  [:language_id, :language_code_id]
+class LanguageDescription < Sequel::Model
+  set_primary_keys  [:language_id, :language_code_id]
 
-  belongs_to :language
+  # belongs_to :language
 end
 
 # == Schema Information

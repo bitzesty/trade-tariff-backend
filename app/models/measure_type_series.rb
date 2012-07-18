@@ -1,8 +1,8 @@
-class MeasureTypeSeries < ActiveRecord::Base
-  self.primary_keys =  :measure_type_series_id
+class MeasureTypeSeries < Sequel::Model
+  set_primary_keys  :measure_type_series_id
 
-  has_one :measure_type_series_description
-  has_many :measure_types
+  # has_one :measure_type_series_description
+  # has_many :measure_types
 end
 
 # == Schema Information

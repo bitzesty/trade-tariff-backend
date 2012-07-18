@@ -1,7 +1,7 @@
-class QuotaCriticalEvent < ActiveRecord::Base
-  self.primary_keys =  :quota_definition_sid
+class QuotaCriticalEvent < Sequel::Model
+  set_primary_keys  :quota_definition_sid
 
-  belongs_to :quota_definition, foreign_key: :quota_definition_sid
+  # belongs_to :quota_definition, foreign_key: :quota_definition_sid
 end
 
 # == Schema Information

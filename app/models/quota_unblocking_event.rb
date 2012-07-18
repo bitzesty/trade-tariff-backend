@@ -1,7 +1,7 @@
-class QuotaUnblockingEvent < ActiveRecord::Base
-  self.primary_keys =  :quota_definition_sid
+class QuotaUnblockingEvent < Sequel::Model
+  set_primary_keys  :quota_definition_sid
 
-  belongs_to :quota_definition, foreign_key: :quota_definition_sid
+  # belongs_to :quota_definition, foreign_key: :quota_definition_sid
 end
 
 # == Schema Information

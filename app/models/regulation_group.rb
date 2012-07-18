@@ -1,8 +1,8 @@
-class RegulationGroup < ActiveRecord::Base
-  self.primary_keys =  :regulation_group_id
+class RegulationGroup < Sequel::Model
+  set_primary_keys  :regulation_group_id
 
-  has_many :base_regulations
-  has_one  :regulation_group_description, foreign_key: :regulation_group_id
+  # has_many :base_regulations
+  # has_one  :regulation_group_description, foreign_key: :regulation_group_id
 end
 
 # == Schema Information

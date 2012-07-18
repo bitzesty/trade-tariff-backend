@@ -1,7 +1,7 @@
-class QuotaBlockingPeriod < ActiveRecord::Base
-  self.primary_keys =  :quota_blocking_period_sid
+class QuotaBlockingPeriod < Sequel::Model
+  set_primary_keys  :quota_blocking_period_sid
 
-  belongs_to :quota_definition, foreign_key: :quota_definition_sid
+  # belongs_to :quota_definition, foreign_key: :quota_definition_sid
 end
 
 # == Schema Information

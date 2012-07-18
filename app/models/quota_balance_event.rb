@@ -1,7 +1,7 @@
-class QuotaBalanceEvent < ActiveRecord::Base
-  self.primary_keys =  [:quota_definition_sid, :occurance_timestamp]
+class QuotaBalanceEvent < Sequel::Model
+  set_primary_keys  [:quota_definition_sid, :occurance_timestamp]
 
-  belongs_to :quota_definition, foreign_key: :quota_definition_sid
+  # belongs_to :quota_definition, foreign_key: :quota_definition_sid
 end
 
 # == Schema Information

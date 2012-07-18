@@ -1,8 +1,8 @@
-class MonetaryUnitDescription < ActiveRecord::Base
-  self.primary_keys =  :monetary_unit_code
+class MonetaryUnitDescription < Sequel::Model
+  set_primary_keys  :monetary_unit_code
 
-  belongs_to :monetary_unit, foreign_key: :monetary_unit_code
-  belongs_to :language
+  # belongs_to :monetary_unit, foreign_key: :monetary_unit_code
+  # belongs_to :language
 end
 
 # == Schema Information

@@ -1,7 +1,7 @@
-class QuotaSuspensionPeriod < ActiveRecord::Base
-  self.primary_keys =  :quota_suspension_period_sid
+class QuotaSuspensionPeriod < Sequel::Model
+  set_primary_keys  :quota_suspension_period_sid
 
-  belongs_to :quota_definition, primary_key: :quota_definition_sid
+  # belongs_to :quota_definition, primary_key: :quota_definition_sid
 end
 
 # == Schema Information

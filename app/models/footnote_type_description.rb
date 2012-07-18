@@ -1,8 +1,8 @@
-class FootnoteTypeDescription < ActiveRecord::Base
-  self.primary_keys =  :footnote_type_id
+class FootnoteTypeDescription < Sequel::Model
+  set_primary_key :footnote_type_id
 
-  belongs_to :footnote_type
-  belongs_to :language
+  # belongs_to :footnote_type
+  # belongs_to :language
 end
 
 # == Schema Information

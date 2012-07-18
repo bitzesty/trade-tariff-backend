@@ -1,7 +1,7 @@
-class MeursingAdditionalCode < ActiveRecord::Base
-  self.primary_keys =  :meursing_additional_code_sid
+class MeursingAdditionalCode < Sequel::Model
+  set_primary_keys  :meursing_additional_code_sid
 
-  has_many :meursing_table_cell_components, foreign_key: :meursing_additional_code_sid
+  # has_many :meursing_table_cell_components, foreign_key: :meursing_additional_code_sid
 end
 
 # == Schema Information

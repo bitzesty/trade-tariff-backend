@@ -1,5 +1,5 @@
-class CompleteAbrogationRegulation < ActiveRecord::Base
-  set_primary_key  [:complete_abrogation_regulation_id, :complete_abrogation_regulation_role]
+class CompleteAbrogationRegulation < Sequel::Model
+  set_primary_key [:complete_abrogation_regulation_id, :complete_abrogation_regulation_role]
 
   # has_many :modification_regulations
   # has_many :base_regulations, foreign_key: [:complete_abrogation_regulation_role,

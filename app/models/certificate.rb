@@ -11,7 +11,6 @@ class Certificate < Sequel::Model
                                 .first
                                 .certificate_description_dataset
   }
-  # self.primary_keys =  :certificate_code, :certificate_type_code
 
   # belongs_to :certificate_type, foreign_key: :certificate_type_code
   # has_many :certificate_description_periods, foreign_key: [:certificate_code,

@@ -1,10 +1,10 @@
-class FootnoteType < ActiveRecord::Base
-  self.primary_keys =  :footnote_type_id
-
-  has_many :footnotes, foreign_key: :footnote_type_id
-  has_many :footnote_description, foreign_key: :footnote_type_id
-  has_many :footnote_description_periods, foreign_key: :footnote_type_id
-  has_one  :footnote_type_description, foreign_key: :footnote_type_id
+class FootnoteType < Sequel::Model
+  # set_primary_keys  :footnote_type_id
+ 
+  # has_many :footnotes, foreign_key: :footnote_type_id
+  # has_many :footnote_description, foreign_key: :footnote_type_id
+  # has_many :footnote_description_periods, foreign_key: :footnote_type_id
+  # has_one  :footnote_type_description, foreign_key: :footnote_type_id
 
   APPLICATION_CODES = {
     1 => "CN nomencalture",
@@ -31,4 +31,3 @@ end
 #  created_at             :datetime
 #  updated_at             :datetime
 #
-

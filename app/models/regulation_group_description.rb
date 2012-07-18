@@ -1,8 +1,8 @@
-class RegulationGroupDescription < ActiveRecord::Base
-  self.primary_keys =  :regulation_group_id
+class RegulationGroupDescription < Sequel::Model
+  set_primary_keys  :regulation_group_id
 
-  belongs_to :regulation_group
-  belongs_to :language
+  # belongs_to :regulation_group
+  # belongs_to :language
 end
 
 # == Schema Information

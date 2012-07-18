@@ -1,4 +1,4 @@
-class FootnoteAssociationAdditionalCode < ActiveRecord::Base
+class FootnoteAssociationAdditionalCode < Sequel::Model
   set_primary_key [:footnote_id, :footnote_type_id, :additional_code_sid]
 
   # belongs_to :footnote_type

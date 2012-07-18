@@ -1,9 +1,9 @@
-class MonetaryExchangePeriod < ActiveRecord::Base
-  self.primary_keys =  [:monetary_exchange_period_sid, :parent_monetary_unit_code]
+class MonetaryExchangePeriod < Sequel::Model
+  set_primary_keys  [:monetary_exchange_period_sid, :parent_monetary_unit_code]
 
-  has_many :monetary_exchange_rates, foreign_key: :monetary_exchange_period_sid
-  belongs_to :parent_monetary_unit, foreign_key: :parent_monetary_unit_code,
-                                    class_name: 'MonetaryUnit'
+  # has_many :monetary_exchange_rates, foreign_key: :monetary_exchange_period_sid
+  # belongs_to :parent_monetary_unit, foreign_key: :parent_monetary_unit_code,
+  #                                   class_name: 'MonetaryUnit'
 end
 
 # == Schema Information
