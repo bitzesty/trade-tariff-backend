@@ -28,6 +28,7 @@ class Measure < Sequel::Model
   }
   one_to_many :measure_components, key: :measure_sid,
                                    primary_key: :measure_sid
+  one_to_one :additional_code, key: :additional_code_sid
 
   delegate :measure_type_description, to: :measure_type
 

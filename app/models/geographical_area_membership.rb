@@ -1,10 +1,9 @@
 class GeographicalAreaMembership < Sequel::Model
-  set_primary_keys [:geographical_area_sid, :geographical_area_group_sid,
+  plugin :time_machine
+
+  set_primary_key [:geographical_area_sid, :geographical_area_group_sid,
                          :validity_start_date]
 
-  # belongs_to :geographical_area, foreign_key: :geographical_area_sid
-  # belongs_to :geographical_area_group, foreign_key: :geographical_area_group_sid,
-                                       # class_name: 'GeographicalArea'
 end
 
 # == Schema Information

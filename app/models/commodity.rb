@@ -12,6 +12,16 @@ class Commodity < GoodsNomenclature
            .filter('goods_nomenclature_sid IN ?', uptree.map(&:goods_nomenclature_sid))
   }
 
+  one_to_many :import_measures, dataset: -> {
+    measures_dataset.join(:measure_types, measure_type_id: :measure_type)
+                    .where(trade_movement_code: MeasureType::IMPORT_MOVEMENT_CODES)
+  }, class_name: 'Measure'
+
+  one_to_many :export_measures, dataset: -> {
+    measures_dataset.join(:measure_types, measure_type_id: :measure_type)
+                    .where(trade_movement_code: MeasureType::EXPORT_MOVEMENT_CODES)
+  }, class_name: 'Measure'
+
   one_to_one :heading, dataset: -> {
     Heading.actual
            .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)

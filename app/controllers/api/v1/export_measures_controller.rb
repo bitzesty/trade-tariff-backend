@@ -2,7 +2,9 @@ module Api
   module V1
     class ExportMeasuresController < ApplicationController
       def index
-        @measures = [item.measures.for_export.ergo_omnes, item.measures.for_export.specific]
+        @commodity = Commodity.by_code(params[:commodity_id]).first
+        @measures = @commodity.export_measures
+
         respond_with @measures
       end
     end

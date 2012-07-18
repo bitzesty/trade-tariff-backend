@@ -16,6 +16,12 @@ class GeographicalArea < Sequel::Model
   one_to_one :parent_geographical_area, key: :geographical_area_sid,
                                         primary_key: :parent_geographical_area_group_sid,
                                         class_name: 'GeographicalArea'
+  one_to_many :contained_geographical_areas, dataset: -> {
+    GeographicalArea.where(geographical_area_sid: GeographicalAreaMembership.actual
+                                                                            .where(geographical_area_group_sid: geographical_area_sid)
+                                                                            .select(:geographical_area_sid))
+
+  }, class_name: 'GeographicalArea'
   # has_many :geographical_area_memberships, foreign_key: :geographical_area_sid
   # has_many :geographical_area_groups, through: :geographical_area_memberships,
   #                                     class_name: 'GeographicalArea'

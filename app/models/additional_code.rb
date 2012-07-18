@@ -10,6 +10,10 @@ class AdditionalCode < Sequel::Model
 
   delegate :description, to: :additional_code_description
 
+  def code
+    "#{additional_code_type_id}#{additional_code_id}"
+  end
+
   # one_to_many :additional_code_description_periods, left_primary_key: :additional_code_sid,  key: [:additional_code_description_period_sid, :additional_code_sid, :additional_code_type_id]
   # one_to_many :additional_code_descriptions, join_table: :additional_code_description_periods,
   #                                         key: [:additional_code_description_period_sid, :additional_code_sid]

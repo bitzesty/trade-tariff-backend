@@ -19,3 +19,11 @@ node(:ancestors) { |commodity|
     partial("api/v1/commodities/commodity_base", object: commodity)
   end
 }
+
+node(:import_measures) { |commodity|
+  partial "api/v1/measures/_measures", object: commodity.import_measures
+}
+
+node(:export_measures) { |commodity|
+  partial "api/v1/measures/_measures", object: commodity.export_measures
+}

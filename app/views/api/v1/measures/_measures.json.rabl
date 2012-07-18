@@ -1,4 +1,4 @@
-attributes :measure_sid, :origin, :duty_rate
+attributes :measure_sid, :origin
 
 node(:measure_type_description) { |obj|
   obj.measure_type_description.description
@@ -41,7 +41,7 @@ child(geographical_area: :region) do
     ga.geographical_area_description.description
   }
   node(:countries, if: ->(region) { region.children_geographical_areas.any? }) do |region|
-    child(children_geographical_areas: :countries) do
+    child(contained_geographical_areas: :countries) do
       node(:iso_code) { |ga|
         ga.geographical_area_id
       }
@@ -50,8 +50,6 @@ child(geographical_area: :region) do
       }
     end
   end
-  # attributes :name, :description
-  # node(:type) { |r| r.class_name }
 end
 
 child(excluded_geographical_areas: :excluded_countries) do
@@ -70,15 +68,6 @@ child(footnotes: :footnotes) do
   }
 end
 
-
-# child(footnotes: :footnotes) do
-# end
-
-# child(footnotes: :footnotes) do
-#   attributes :id, :code, :description
-# end
-
-# child(additional_codes: :additional_codes) do
-#   attributes :id, :code, :description
-# end
-
+child(additional_code: :additional_code) do
+  attributes :code, :description
+end

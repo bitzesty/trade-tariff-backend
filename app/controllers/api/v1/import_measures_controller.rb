@@ -3,7 +3,7 @@ module Api
     class ImportMeasuresController < ApplicationController
       def index
         @commodity = Commodity.by_code(params[:commodity_id]).first
-        @measures = @commodity.measures
+        @measures = @commodity.import_measures
 
         respond_with @measures
       end

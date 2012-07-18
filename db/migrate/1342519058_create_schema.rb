@@ -379,7 +379,7 @@ Sequel.migration do
 
     create_table(:export_refund_nomenclature_description_periods, :ignore_index_errors=>true) do
       String :export_refund_nomenclature_description_period_sid, :size=>255
-      String :export_refund_nomenclature_sid, :size=>255
+      Integer :export_refund_nomenclature_sid
       Date :validity_start_date
       String :goods_nomenclature_item_id, :size=>255
       Integer :additional_code_type
@@ -395,7 +395,7 @@ Sequel.migration do
     create_table(:export_refund_nomenclature_descriptions, :ignore_index_errors=>true) do
       String :export_refund_nomenclature_description_period_sid, :size=>255
       String :language_id, :size=>255
-      String :export_refund_nomenclature_sid, :size=>255
+      Integer :export_refund_nomenclature_sid
       String :goods_nomenclature_item_id, :size=>255
       Integer :additional_code_type
       String :export_refund_code, :size=>255
@@ -411,7 +411,7 @@ Sequel.migration do
 
     create_table(:export_refund_nomenclature_indents, :ignore_index_errors=>true) do
       String :export_refund_nomenclature_indents_sid, :size=>255
-      String :export_refund_nomenclature_sid, :size=>255
+      Integer :export_refund_nomenclature_sid
       Date :validity_start_date
       String :number_export_refund_nomenclature_indents, :size=>255
       String :goods_nomenclature_item_id, :size=>255
@@ -426,14 +426,14 @@ Sequel.migration do
     end
 
     create_table(:export_refund_nomenclatures, :ignore_index_errors=>true) do
-      String :export_refund_nomenclature_sid, :size=>255
+      Integer :export_refund_nomenclature_sid
       String :goods_nomenclature_item_id, :size=>255
       Integer :additional_code_type
       String :export_refund_code, :size=>255
       String :productline_suffix, :size=>255
       Date :validity_start_date
       Date :validity_end_date
-      String :goods_nomenclature_sid, :size=>255
+      Integer :goods_nomenclature_sid
       DateTime :created_at
       DateTime :updated_at
 
@@ -457,7 +457,7 @@ Sequel.migration do
     end
 
     create_table(:footnote_association_erns, :ignore_index_errors=>true) do
-      String :export_refund_nomenclature_sid, :size=>255
+      Integer :export_refund_nomenclature_sid
       String :footnote_type, :size=>255
       String :footnote_id, :size=>255
       Date :validity_start_date
@@ -473,7 +473,7 @@ Sequel.migration do
     end
 
     create_table(:footnote_association_goods_nomenclatures, :ignore_index_errors=>true) do
-      String :goods_nomenclature_sid, :size=>255
+      Integer :goods_nomenclature_sid
       String :footnote_type, :size=>255
       String :footnote_id, :size=>255
       Date :validity_start_date
@@ -1024,7 +1024,7 @@ Sequel.migration do
       String :additional_code, :size=>255
       String :additional_code_sid, :size=>255
       Integer :reduction_indicator
-      String :export_refund_nomenclature_sid, :size=>255
+      Integer :export_refund_nomenclature_sid
       DateTime :created_at
       DateTime :updated_at
 

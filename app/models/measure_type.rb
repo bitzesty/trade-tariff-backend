@@ -1,4 +1,7 @@
 class MeasureType < Sequel::Model
+  IMPORT_MOVEMENT_CODES = [0, 2]
+  EXPORT_MOVEMENT_CODES = [1, 2]
+
   plugin :time_machine
 
   set_primary_key :measure_type_id
