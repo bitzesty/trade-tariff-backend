@@ -21,9 +21,13 @@ node(:ancestors) { |commodity|
 }
 
 node(:import_measures) { |commodity|
-  partial "api/v1/measures/_measures", object: commodity.import_measures
+  commodity.import_measures.map do |import_measure|
+    partial "api/v1/measures/measure", object: import_measure
+  end
 }
 
 node(:export_measures) { |commodity|
-  partial "api/v1/measures/_measures", object: commodity.export_measures
+  commodity.export_measures.map do |export_measure|
+    partial "api/v1/measures/_measure", object: export_measure
+  end
 }

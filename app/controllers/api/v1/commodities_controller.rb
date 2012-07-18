@@ -7,11 +7,7 @@ module Api
       before_filter :restrict_access, only: [:update]
 
       def show
-        @heading = Heading.where
-                          .where("goods_nomenclatures.goods_nomenclature_item_id = ?", "#{params[:id].first(4)}000000")
-                          .first
-
-        @commodity = CommodityMapper.new(@heading.commodities).detect{|commodity| commodity.goods_nomenclature_item_id == params[:id].first(10) && commodity.producline_suffix == params[:id].last(2) }
+        @commodity = Commodity.where(goods_nomenclature_item_id: params[:id].first(10), producline_suffix: params[:id].last(2)).first
 
         respond_with @commodity
       end

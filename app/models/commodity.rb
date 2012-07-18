@@ -39,17 +39,24 @@ class Commodity < GoodsNomenclature
   end
 
   def ancestors
-    @_ancestors ||= begin
-                      commodities = heading.commodities_dataset.eager_graph(:goods_nomenclature_indent).all
-                      heading = heading_dataset.eager_graph(:goods_nomenclature_indent).all
-                      commodity = CommodityMapper.new(heading + commodities)
-                                                 .for_commodity(self)
-
-                      commodity.ancestors
-                    end
+    @_ancestors ||= tree_map.for_commodity(self).ancestors
   end
 
   def uptree
     ancestors << self
+  end
+
+  def children
+    @_children ||= tree_map.for_commodity(self).children
+  end
+
+  private
+
+  def tree_map
+    @_tree_map ||= begin
+                      commodities = heading.commodities_dataset.eager_graph(:goods_nomenclature_indent).all
+                      heading = heading_dataset.eager_graph(:goods_nomenclature_indent).all
+                      commodity = CommodityMapper.new(heading + commodities)
+                   end
   end
 end

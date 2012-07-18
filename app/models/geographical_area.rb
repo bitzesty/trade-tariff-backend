@@ -22,6 +22,9 @@ class GeographicalArea < Sequel::Model
                                                                             .select(:geographical_area_sid))
 
   }, class_name: 'GeographicalArea'
+
+  delegate :description, to: :geographical_area_description
+
   # has_many :geographical_area_memberships, foreign_key: :geographical_area_sid
   # has_many :geographical_area_groups, through: :geographical_area_memberships,
   #                                     class_name: 'GeographicalArea'
