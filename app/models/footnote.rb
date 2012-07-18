@@ -3,6 +3,19 @@ class Footnote < Sequel::Model
 
   set_primary_key :footnote_id, :footnote_type_id
 
+  one_to_one :footnote_description, primary_key: {}, key: {}, dataset: -> {
+    FootnoteDescriptionPeriod.actual
+                             .where(footnote_id: footnote_id,
+                                    footnote_type_id: footnote_type_id)
+                             .order(:validity_start_date.desc)
+                             .first
+                             .footnote_description_dataset
+  }
+
+  def code
+    "#{footnote_type_id}#{footnote_id}"
+  end
+
   # has_many   :footnote_description_periods, foreign_key: [:footnote_id,
   #                                                         :footnote_type_id]
   # has_many   :footnote_descriptions, through: :footnote_description_periods

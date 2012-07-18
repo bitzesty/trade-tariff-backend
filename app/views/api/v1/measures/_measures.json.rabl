@@ -63,6 +63,17 @@ child(excluded_geographical_areas: :excluded_countries) do
   }
 end
 
+child(footnotes: :footnotes) do
+  attributes :code
+  node(:description) { |footnote|
+   footnote.footnote_description.description
+  }
+end
+
+
+# child(footnotes: :footnotes) do
+# end
+
 # child(footnotes: :footnotes) do
 #   attributes :id, :code, :description
 # end
