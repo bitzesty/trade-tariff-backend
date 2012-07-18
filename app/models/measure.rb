@@ -23,7 +23,7 @@ class Measure < Sequel::Model
                                              class_name: 'GeographicalArea'
   many_to_many :footnotes, dataset: -> {
     Footnote.actual
-            .join(:footnote_association_measures, footnote_id: :footnote_id)
+            .join(:footnote_association_measures, footnote_id: :footnote_id, footnote_type_id: :footnote_type_id)
             .where("footnote_association_measures.measure_sid = ?", measure_sid)
   }
   one_to_many :measure_components, key: :measure_sid,

@@ -139,7 +139,7 @@ Sequel.migration do
     end
 
     create_table(:certificate_type_descriptions, :ignore_index_errors=>true) do
- 
+
       String :certificate_type_code, :size=>255
       String :language_id, :size=>255
       String :description, :text=>true
@@ -487,7 +487,7 @@ Sequel.migration do
     end
 
     create_table(:footnote_association_measures, :ignore_index_errors=>true) do
-      String :measure_sid, :size=>255
+      Integer :measure_sid
       String :footnote_type_id, :size=>255
       String :footnote_id, :size=>255
       DateTime :created_at
