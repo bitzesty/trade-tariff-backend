@@ -1,11 +1,11 @@
 class CompleteAbrogationRegulation < ActiveRecord::Base
-  self.primary_keys =  :complete_abrogation_regulation_id, :complete_abrogation_regulation_role
+  set_primary_key  [:complete_abrogation_regulation_id, :complete_abrogation_regulation_role]
 
-  has_many :modification_regulations
-  has_many :base_regulations, foreign_key: [:complete_abrogation_regulation_role,
-                                            :complete_abrogation_regulation_id]
-  belongs_to :complete_abrogation_regulation_role_type, foreign_key: :complete_abrogation_regulation_role_type,
-                                                        class_name: 'RegulationRoleType'
+  # has_many :modification_regulations
+  # has_many :base_regulations, foreign_key: [:complete_abrogation_regulation_role,
+  #                                           :complete_abrogation_regulation_id]
+  # belongs_to :complete_abrogation_regulation_role_type, foreign_key: :complete_abrogation_regulation_role_type,
+  #                                                       class_name: 'RegulationRoleType'
 end
 
 # == Schema Information
