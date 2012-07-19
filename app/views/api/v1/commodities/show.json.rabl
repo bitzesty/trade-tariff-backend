@@ -3,7 +3,7 @@ object @commodity
 extends "api/v1/commodities/commodity"
 
 child @commodity.section do
-  attributes :title, :position
+  attributes :title, :position, :numeral
 end
 
 child @commodity.chapter do
