@@ -1,7 +1,7 @@
 Sequel.migration do
   change do
     create_table(:additional_code_description_periods, :ignore_index_errors=>true) do
-      String :additional_code_description_period_sid, :size=>255
+      Integer :additional_code_description_period_sid
       Integer :additional_code_sid
       String :additional_code_type_id, :size=>255
       String :additional_code, :size=>255
@@ -16,7 +16,7 @@ Sequel.migration do
     end
 
     create_table(:additional_code_descriptions, :ignore_index_errors=>true) do
-      String :additional_code_description_period_sid, :size=>255
+      Integer :additional_code_description_period_sid
       String :language_id, :size=>255
       Integer :additional_code_sid
       String :additional_code_type_id, :size=>255
@@ -112,7 +112,7 @@ Sequel.migration do
     end
 
     create_table(:certificate_description_periods, :ignore_index_errors=>true) do
-      String :certificate_description_period_sid, :size=>255
+      Integer :certificate_description_period_sid
       String :certificate_type_code, :size=>255
       String :certificate_code, :size=>255
       DateTime :validity_start_date
@@ -125,7 +125,7 @@ Sequel.migration do
     end
 
     create_table(:certificate_descriptions, :ignore_index_errors=>true) do
-      String :certificate_description_period_sid, :size=>255
+      Integer :certificate_description_period_sid
       String :language_id, :size=>255
       String :certificate_type_code, :size=>255
       String :certificate_code, :size=>255
@@ -378,7 +378,7 @@ Sequel.migration do
     end
 
     create_table(:export_refund_nomenclature_description_periods, :ignore_index_errors=>true) do
-      String :export_refund_nomenclature_description_period_sid, :size=>255
+      Integer :export_refund_nomenclature_description_period_sid
       Integer :export_refund_nomenclature_sid
       DateTime :validity_start_date
       String :goods_nomenclature_item_id, :size=>255
@@ -393,7 +393,7 @@ Sequel.migration do
     end
 
     create_table(:export_refund_nomenclature_descriptions, :ignore_index_errors=>true) do
-      String :export_refund_nomenclature_description_period_sid, :size=>255
+      Integer :export_refund_nomenclature_description_period_sid
       String :language_id, :size=>255
       Integer :export_refund_nomenclature_sid
       String :goods_nomenclature_item_id, :size=>255
@@ -410,7 +410,7 @@ Sequel.migration do
     end
 
     create_table(:export_refund_nomenclature_indents, :ignore_index_errors=>true) do
-      String :export_refund_nomenclature_indents_sid, :size=>255
+      Integer :export_refund_nomenclature_indents_sid
       Integer :export_refund_nomenclature_sid
       DateTime :validity_start_date
       String :number_export_refund_nomenclature_indents, :size=>255
@@ -512,7 +512,7 @@ Sequel.migration do
     end
 
     create_table(:footnote_description_periods, :ignore_index_errors=>true) do
-      String :footnote_description_period_sid, :size=>255
+      Integer :footnote_description_period_sid
       String :footnote_type_id, :size=>255
       String :footnote_id, :size=>255
       DateTime :validity_start_date
@@ -524,7 +524,7 @@ Sequel.migration do
     end
 
     create_table(:footnote_descriptions, :ignore_index_errors=>true) do
-      String :footnote_description_period_sid, :size=>255
+      Integer :footnote_description_period_sid
       String :footnote_type_id, :size=>255
       String :footnote_id, :size=>255
       String :language_id, :size=>255
@@ -1141,7 +1141,7 @@ Sequel.migration do
     end
 
     create_table(:monetary_exchange_periods, :ignore_index_errors=>true) do
-      String :monetary_exchange_period_sid, :size=>255
+      Integer :monetary_exchange_period_sid
       String :parent_monetary_unit_code, :size=>255
       DateTime :validity_start_date
       DateTime :validity_end_date
@@ -1152,7 +1152,7 @@ Sequel.migration do
     end
 
     create_table(:monetary_exchange_rates, :ignore_index_errors=>true) do
-      String :monetary_exchange_period_sid, :size=>255
+      Integer :monetary_exchange_period_sid
       String :child_monetary_unit_code, :size=>255
       BigDecimal :exchange_rate, :size=>[16, 8]
       DateTime :created_at
