@@ -9,7 +9,7 @@ class AdditionalCodeType < Sequel::Model
   one_to_many :additional_code_description_periods, key: :additional_code_type_id
   one_to_many :footnote_association_additional_codes, key: :additional_code_type_id
   many_to_many :footnotes, join_table: :footnote_association_additional_codes,
-                       'class': :footnote
+                       class_name: 'Footnote'
 
   many_to_one :meursing_table_plan
 

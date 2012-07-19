@@ -2,7 +2,7 @@ Sequel.migration do
   change do
     create_table(:additional_code_description_periods, :ignore_index_errors=>true) do
       String :additional_code_description_period_sid, :size=>255
-      String :additional_code_sid, :size=>255
+      Integer :additional_code_sid
       String :additional_code_type_id, :size=>255
       String :additional_code, :size=>255
       Date :validity_start_date
@@ -18,7 +18,7 @@ Sequel.migration do
     create_table(:additional_code_descriptions, :ignore_index_errors=>true) do
       String :additional_code_description_period_sid, :size=>255
       String :language_id, :size=>255
-      String :additional_code_sid, :size=>255
+      Integer :additional_code_sid
       String :additional_code_type_id, :size=>255
       String :additional_code, :size=>255
       String :description, :text=>true
@@ -68,7 +68,7 @@ Sequel.migration do
     end
 
     create_table(:additional_codes, :ignore_index_errors=>true) do
-      String :additional_code_sid, :size=>255
+      Integer :additional_code_sid
       String :additional_code_type_id, :size=>255
       String :additional_code, :size=>255
       Date :validity_start_date
@@ -442,7 +442,7 @@ Sequel.migration do
     end
 
     create_table(:footnote_association_additional_codes, :ignore_index_errors=>true) do
-      String :additional_code_sid, :size=>255
+      Integer :additional_code_sid
       String :footnote_type_id, :size=>255
       String :footnote_id, :size=>255
       Date :validity_start_date
@@ -663,6 +663,7 @@ Sequel.migration do
       Date :validity_end_date
 
       index [:goods_nomenclature_description_period_sid], :name=>:primary_key, :unique=>true
+      index [:goods_nomenclature_sid, :validity_start_date, :validity_end_date], :name=>:goods_nomenclature
     end
 
     create_table(:goods_nomenclature_descriptions, :ignore_index_errors=>true) do
@@ -1022,7 +1023,7 @@ Sequel.migration do
       String :ordernumber, :size=>255
       Integer :additional_code_type
       String :additional_code, :size=>255
-      String :additional_code_sid, :size=>255
+      Integer :additional_code_sid
       Integer :reduction_indicator
       Integer :export_refund_nomenclature_sid
       DateTime :created_at

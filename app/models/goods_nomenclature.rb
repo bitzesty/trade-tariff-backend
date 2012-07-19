@@ -1,4 +1,4 @@
-require 'sequel/plugins/time_machine'
+require 'time_machine'
 
 class GoodsNomenclature < Sequel::Model
   plugin :time_machine
@@ -18,7 +18,7 @@ class GoodsNomenclature < Sequel::Model
   delegate :number_indents, to: :goods_nomenclature_indent
   delegate :description, to: :goods_nomenclature_description
 
-  alias :code :goods_nomenclature_item_id
+  # alias :code :goods_nomenclature_item_id
 
   one_to_one :goods_nomenclature_origin, key: [:goods_nomenclature_item_id,
                                                :productline_suffix],
