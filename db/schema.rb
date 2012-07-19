@@ -17,7 +17,7 @@ Sequel.migration do
 
     create_table(:additional_code_descriptions, :ignore_index_errors=>true) do
       Integer :additional_code_description_period_sid
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       Integer :additional_code_sid
       String :additional_code_type_id, :size=>255
       String :additional_code, :size=>255
@@ -34,7 +34,7 @@ Sequel.migration do
 
     create_table(:additional_code_type_descriptions, :ignore_index_errors=>true) do
       String :additional_code_type_id, :size=>255
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       String :description, :text=>true
       DateTime :created_at
       DateTime :updated_at
@@ -126,7 +126,7 @@ Sequel.migration do
 
     create_table(:certificate_descriptions, :ignore_index_errors=>true) do
       Integer :certificate_description_period_sid
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       String :certificate_type_code, :size=>255
       String :certificate_code, :size=>255
       String :description, :text=>true
@@ -141,7 +141,7 @@ Sequel.migration do
     create_table(:certificate_type_descriptions, :ignore_index_errors=>true) do
 
       String :certificate_type_code, :size=>255
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       String :description, :text=>true
       DateTime :created_at
       DateTime :updated_at
@@ -339,7 +339,7 @@ Sequel.migration do
 
     create_table(:duty_expression_descriptions, :ignore_index_errors=>true) do
       String :duty_expression_id, :size=>255
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       String :description, :text=>true
       DateTime :created_at
       DateTime :updated_at
@@ -394,7 +394,7 @@ Sequel.migration do
 
     create_table(:export_refund_nomenclature_descriptions, :ignore_index_errors=>true) do
       Integer :export_refund_nomenclature_description_period_sid
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       Integer :export_refund_nomenclature_sid
       String :goods_nomenclature_item_id, :size=>255
       Integer :additional_code_type
@@ -527,7 +527,7 @@ Sequel.migration do
       Integer :footnote_description_period_sid
       String :footnote_type_id, :size=>255
       String :footnote_id, :size=>255
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       String :description, :text=>true
       DateTime :created_at
       DateTime :updated_at
@@ -538,7 +538,7 @@ Sequel.migration do
 
     create_table(:footnote_type_descriptions, :ignore_index_errors=>true) do
       String :footnote_type_id, :size=>255
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       String :description, :text=>true
       DateTime :created_at
       DateTime :updated_at
@@ -615,7 +615,7 @@ Sequel.migration do
 
     create_table(:geographical_area_descriptions, :ignore_index_errors=>true) do
       Integer :geographical_area_description_period_sid
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       Integer :geographical_area_sid
       String :geographical_area_id, :size=>255
       String :description, :text=>true
@@ -668,7 +668,7 @@ Sequel.migration do
 
     create_table(:goods_nomenclature_descriptions, :ignore_index_errors=>true) do
       Integer :goods_nomenclature_description_period_sid
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       Integer :goods_nomenclature_sid
       String :goods_nomenclature_item_id, :size=>255
       String :productline_suffix, :size=>255
@@ -683,7 +683,7 @@ Sequel.migration do
     create_table(:goods_nomenclature_group_descriptions, :ignore_index_errors=>true) do
       String :goods_nomenclature_group_type, :size=>255
       String :goods_nomenclature_group_id, :size=>255
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       String :description, :text=>true
       DateTime :created_at
       DateTime :updated_at
@@ -760,7 +760,7 @@ Sequel.migration do
 
     create_table(:language_descriptions, :ignore_index_errors=>true) do
       String :language_code_id, :size=>255
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       String :description, :text=>true
       DateTime :created_at
       DateTime :updated_at
@@ -769,7 +769,7 @@ Sequel.migration do
     end
 
     create_table(:languages, :ignore_index_errors=>true) do
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       DateTime :validity_start_date
       DateTime :validity_end_date
       DateTime :created_at
@@ -780,7 +780,7 @@ Sequel.migration do
 
     create_table(:measure_action_descriptions, :ignore_index_errors=>true) do
       String :action_code, :size=>255
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       String :description, :text=>true
       DateTime :created_at
       DateTime :updated_at
@@ -816,7 +816,7 @@ Sequel.migration do
 
     create_table(:measure_condition_code_descriptions, :ignore_index_errors=>true) do
       String :condition_code, :size=>255
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       String :description, :text=>true
       DateTime :created_at
       DateTime :updated_at
@@ -905,7 +905,7 @@ Sequel.migration do
 
     create_table(:measure_type_descriptions, :ignore_index_errors=>true) do
       Integer :measure_type_id
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       String :description, :text=>true
       DateTime :created_at
       DateTime :updated_at
@@ -927,7 +927,7 @@ Sequel.migration do
 
     create_table(:measure_type_series_descriptions, :ignore_index_errors=>true) do
       String :measure_type_series_id, :size=>255
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       String :description, :text=>true
       DateTime :created_at
       DateTime :updated_at
@@ -956,7 +956,7 @@ Sequel.migration do
 
     create_table(:measurement_unit_descriptions, :ignore_index_errors=>true) do
       String :measurement_unit_code, :size=>255
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       String :description, :text=>true
       DateTime :created_at
       DateTime :updated_at
@@ -967,7 +967,7 @@ Sequel.migration do
 
     create_table(:measurement_unit_qualifier_descriptions, :ignore_index_errors=>true) do
       String :measurement_unit_qualifier_code, :size=>255
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       String :description, :text=>true
       DateTime :created_at
       DateTime :updated_at
@@ -1053,7 +1053,7 @@ Sequel.migration do
       String :meursing_table_plan_id, :size=>255
       Integer :meursing_heading_number
       Integer :row_column_code
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       String :description, :text=>true
       DateTime :created_at
       DateTime :updated_at
@@ -1163,7 +1163,7 @@ Sequel.migration do
 
     create_table(:monetary_unit_descriptions, :ignore_index_errors=>true) do
       String :monetary_unit_code, :size=>255
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       String :description, :text=>true
       DateTime :created_at
       DateTime :updated_at
@@ -1385,7 +1385,7 @@ Sequel.migration do
 
     create_table(:regulation_group_descriptions, :ignore_index_errors=>true) do
       String :regulation_group_id, :size=>255
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       String :description, :text=>true
       DateTime :created_at
       DateTime :updated_at
@@ -1420,7 +1420,7 @@ Sequel.migration do
 
     create_table(:regulation_role_type_descriptions, :ignore_index_errors=>true) do
       String :regulation_role_type_id, :size=>255
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       String :description, :text=>true
       DateTime :created_at
       DateTime :updated_at
@@ -1450,7 +1450,7 @@ Sequel.migration do
 
     create_table(:transmission_comments, :ignore_index_errors=>true) do
       Integer :comment_sid
-      String :language_id, :size=>255
+      String :language_id, :size=>5
       String :comment_text, :text=>true
       DateTime :created_at
       DateTime :updated_at
