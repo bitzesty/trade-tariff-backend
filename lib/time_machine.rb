@@ -5,7 +5,7 @@ module TimeMachine
 
   # Temporary for easier console access
   def self.at(datetime, &block)
-      datetime = DateTime.now if date.blank?
+      datetime = DateTime.now if datetime.blank?
       datetime = DateTime.parse(datetime) if datetime.is_a?(String)
 
       previous = Thread.current[THREAD_DATETIME_KEY]
