@@ -5,10 +5,10 @@ Sequel.migration do
       Integer :additional_code_sid
       String :additional_code_type_id, :size=>255
       String :additional_code, :size=>255
-      Date :validity_start_date
+      DateTime :validity_start_date
       DateTime :created_at
       DateTime :updated_at
-      Date :validity_end_date
+      DateTime :validity_end_date
 
       index [:additional_code_type_id], :name=>:code_type_id
       index [:additional_code_description_period_sid], :name=>:description_period_sid
@@ -46,8 +46,8 @@ Sequel.migration do
     create_table(:additional_code_type_measure_types, :ignore_index_errors=>true) do
       String :measure_type_id, :size=>255
       String :additional_code_type_id, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
@@ -56,8 +56,8 @@ Sequel.migration do
 
     create_table(:additional_code_types, :ignore_index_errors=>true) do
       String :additional_code_type_id, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       String :application_code, :size=>255
       String :meursing_table_plan_id, :size=>255
       DateTime :created_at
@@ -71,8 +71,8 @@ Sequel.migration do
       Integer :additional_code_sid
       String :additional_code_type_id, :size=>255
       String :additional_code, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
@@ -83,8 +83,8 @@ Sequel.migration do
     create_table(:base_regulations, :ignore_index_errors=>true) do
       Integer :base_regulation_role
       String :base_regulation_id, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       Integer :community_code
       String :regulation_group_id, :size=>255
       Integer :replacement_indicator
@@ -115,10 +115,10 @@ Sequel.migration do
       String :certificate_description_period_sid, :size=>255
       String :certificate_type_code, :size=>255
       String :certificate_code, :size=>255
-      Date :validity_start_date
+      DateTime :validity_start_date
       DateTime :created_at
       DateTime :updated_at
-      Date :validity_end_date
+      DateTime :validity_end_date
 
       index [:certificate_code, :certificate_type_code], :name=>:certificate
       index [:certificate_description_period_sid], :name=>:primary_key, :unique=>true
@@ -152,8 +152,8 @@ Sequel.migration do
 
     create_table(:certificate_types, :ignore_index_errors=>true) do
       String :certificate_type_code, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
@@ -163,8 +163,8 @@ Sequel.migration do
     create_table(:certificates, :ignore_index_errors=>true) do
       String :certificate_type_code, :size=>255
       String :certificate_code, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
@@ -350,8 +350,8 @@ Sequel.migration do
 
     create_table(:duty_expressions, :ignore_index_errors=>true) do
       String :duty_expression_id, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       Integer :duty_amount_applicability_code
       Integer :measurement_unit_applicability_code
       Integer :monetary_unit_applicability_code
@@ -380,14 +380,14 @@ Sequel.migration do
     create_table(:export_refund_nomenclature_description_periods, :ignore_index_errors=>true) do
       String :export_refund_nomenclature_description_period_sid, :size=>255
       Integer :export_refund_nomenclature_sid
-      Date :validity_start_date
+      DateTime :validity_start_date
       String :goods_nomenclature_item_id, :size=>255
       Integer :additional_code_type
       String :export_refund_code, :size=>255
       String :productline_suffix, :size=>255
       DateTime :created_at
       DateTime :updated_at
-      Date :validity_end_date
+      DateTime :validity_end_date
 
       index [:export_refund_nomenclature_sid, :export_refund_nomenclature_description_period_sid], :name=>:primary_key, :unique=>true
     end
@@ -412,7 +412,7 @@ Sequel.migration do
     create_table(:export_refund_nomenclature_indents, :ignore_index_errors=>true) do
       String :export_refund_nomenclature_indents_sid, :size=>255
       Integer :export_refund_nomenclature_sid
-      Date :validity_start_date
+      DateTime :validity_start_date
       String :number_export_refund_nomenclature_indents, :size=>255
       String :goods_nomenclature_item_id, :size=>255
       Integer :additional_code_type
@@ -420,7 +420,7 @@ Sequel.migration do
       String :productline_suffix, :size=>255
       DateTime :created_at
       DateTime :updated_at
-      Date :validity_end_date
+      DateTime :validity_end_date
 
       index [:export_refund_nomenclature_indents_sid], :name=>:primary_key, :unique=>true
     end
@@ -431,8 +431,8 @@ Sequel.migration do
       Integer :additional_code_type
       String :export_refund_code, :size=>255
       String :productline_suffix, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       Integer :goods_nomenclature_sid
       DateTime :created_at
       DateTime :updated_at
@@ -445,8 +445,8 @@ Sequel.migration do
       Integer :additional_code_sid
       String :footnote_type_id, :size=>255
       String :footnote_id, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       Integer :additional_code_type_id
       String :additional_code, :size=>255
       DateTime :created_at
@@ -460,8 +460,8 @@ Sequel.migration do
       Integer :export_refund_nomenclature_sid
       String :footnote_type, :size=>255
       String :footnote_id, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       String :goods_nomenclature_item_id, :size=>255
       Integer :additional_code_type
       String :export_refund_code, :size=>255
@@ -476,8 +476,8 @@ Sequel.migration do
       Integer :goods_nomenclature_sid
       String :footnote_type, :size=>255
       String :footnote_id, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       String :goods_nomenclature_item_id, :size=>255
       String :productline_suffix, :size=>255
       DateTime :created_at
@@ -503,8 +503,8 @@ Sequel.migration do
       Integer :row_column_code
       String :footnote_type, :size=>255
       String :footnote_id, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
@@ -515,10 +515,10 @@ Sequel.migration do
       String :footnote_description_period_sid, :size=>255
       String :footnote_type_id, :size=>255
       String :footnote_id, :size=>255
-      Date :validity_start_date
+      DateTime :validity_start_date
       DateTime :created_at
       DateTime :updated_at
-      Date :validity_end_date
+      DateTime :validity_end_date
 
       index [:footnote_id, :footnote_type_id, :footnote_description_period_sid], :name=>:primary_key, :unique=>true
     end
@@ -550,8 +550,8 @@ Sequel.migration do
     create_table(:footnote_types, :ignore_index_errors=>true) do
       String :footnote_type_id, :size=>255
       Integer :application_code
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
@@ -561,8 +561,8 @@ Sequel.migration do
     create_table(:footnotes, :ignore_index_errors=>true) do
       String :footnote_id, :size=>255
       String :footnote_type_id, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
@@ -586,8 +586,8 @@ Sequel.migration do
       Date :published_date
       String :officialjournal_number, :size=>255
       Integer :officialjournal_page
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       Date :effective_enddate
       Integer :explicit_abrogation_regulation_role
       String :explicit_abrogation_regulation_id, :size=>255
@@ -604,11 +604,11 @@ Sequel.migration do
     create_table(:geographical_area_description_periods, :ignore_index_errors=>true) do
       Integer :geographical_area_description_period_sid
       Integer :geographical_area_sid
-      Date :validity_start_date
+      DateTime :validity_start_date
       String :geographical_area_id, :size=>255
       DateTime :created_at
       DateTime :updated_at
-      Date :validity_end_date
+      DateTime :validity_end_date
 
       index [:geographical_area_description_period_sid, :geographical_area_sid], :name=>:primary_key, :unique=>true
     end
@@ -629,8 +629,8 @@ Sequel.migration do
     create_table(:geographical_area_memberships, :ignore_index_errors=>true) do
       Integer :geographical_area_sid
       Integer :geographical_area_group_sid
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
@@ -640,8 +640,8 @@ Sequel.migration do
     create_table(:geographical_areas, :ignore_index_errors=>true) do
       Integer :geographical_area_sid
       Integer :parent_geographical_area_group_sid
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       String :geographical_code, :size=>255
       String :geographical_area_id, :size=>255
       DateTime :created_at
@@ -655,12 +655,12 @@ Sequel.migration do
     create_table(:goods_nomenclature_description_periods, :ignore_index_errors=>true) do
       Integer :goods_nomenclature_description_period_sid
       Integer :goods_nomenclature_sid
-      Date :validity_start_date
+      DateTime :validity_start_date
       String :goods_nomenclature_item_id, :size=>255
       String :productline_suffix, :size=>255
       DateTime :created_at
       DateTime :updated_at
-      Date :validity_end_date
+      DateTime :validity_end_date
 
       index [:goods_nomenclature_description_period_sid], :name=>:primary_key, :unique=>true
       index [:goods_nomenclature_sid, :validity_start_date, :validity_end_date], :name=>:goods_nomenclature
@@ -695,8 +695,8 @@ Sequel.migration do
     create_table(:goods_nomenclature_groups, :ignore_index_errors=>true) do
       String :goods_nomenclature_group_type, :size=>255
       String :goods_nomenclature_group_id, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       Integer :nomenclature_group_facility_code
       DateTime :created_at
       DateTime :updated_at
@@ -707,13 +707,13 @@ Sequel.migration do
     create_table(:goods_nomenclature_indents, :ignore_index_errors=>true) do
       Integer :goods_nomenclature_indent_sid
       Integer :goods_nomenclature_sid
-      Date :validity_start_date
+      DateTime :validity_start_date
       Integer :number_indents
       String :goods_nomenclature_item_id, :size=>255
       String :productline_suffix, :size=>255
       DateTime :created_at
       DateTime :updated_at
-      Date :validity_end_date
+      DateTime :validity_end_date
 
       index [:goods_nomenclature_sid], :name=>:goods_nomenclature_sid
       index [:validity_start_date, :validity_end_date], :name=>:goods_nomenclature_validity_dates
@@ -748,8 +748,8 @@ Sequel.migration do
       Integer :goods_nomenclature_sid
       String :goods_nomenclature_item_id, :size=>255
       String :producline_suffix, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       Integer :statistical_indicator
       DateTime :created_at
       DateTime :updated_at
@@ -770,8 +770,8 @@ Sequel.migration do
 
     create_table(:languages, :ignore_index_errors=>true) do
       String :language_id, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
@@ -790,8 +790,8 @@ Sequel.migration do
 
     create_table(:measure_actions, :ignore_index_errors=>true) do
       String :action_code, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
@@ -826,8 +826,8 @@ Sequel.migration do
 
     create_table(:measure_condition_codes, :ignore_index_errors=>true) do
       String :condition_code, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
@@ -888,8 +888,8 @@ Sequel.migration do
 
     create_table(:measure_partial_temporary_stops, :ignore_index_errors=>true) do
       Integer :measure_sid
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       String :partial_temporary_stop_regulation_id, :size=>255
       String :partial_temporary_stop_regulation_officialjournal_number, :size=>255
       Integer :partial_temporary_stop_regulation_officialjournal_page
@@ -916,8 +916,8 @@ Sequel.migration do
 
     create_table(:measure_type_series, :ignore_index_errors=>true) do
       String :measure_type_series_id, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       Integer :measure_type_combination
       DateTime :created_at
       DateTime :updated_at
@@ -938,8 +938,8 @@ Sequel.migration do
 
     create_table(:measure_types, :ignore_index_errors=>true) do
       Integer :measure_type_id
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       Integer :trade_movement_code
       Integer :priority_code
       Integer :measure_component_applicable_code
@@ -977,8 +977,8 @@ Sequel.migration do
 
     create_table(:measurement_unit_qualifiers, :ignore_index_errors=>true) do
       String :measurement_unit_qualifier_code, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
@@ -987,8 +987,8 @@ Sequel.migration do
 
     create_table(:measurement_units, :ignore_index_errors=>true) do
       String :measurement_unit_code, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
@@ -998,8 +998,8 @@ Sequel.migration do
     create_table(:measurements, :ignore_index_errors=>true) do
       String :measurement_unit_code, :size=>255
       String :measurement_unit_qualifier_code, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
@@ -1011,8 +1011,8 @@ Sequel.migration do
       Integer :measure_type
       String :geographical_area, :size=>255
       String :goods_nomenclature_item_id, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       Integer :measure_generating_regulation_role
       String :measure_generating_regulation_id, :size=>255
       Integer :justification_regulation_role
@@ -1041,10 +1041,10 @@ Sequel.migration do
     create_table(:meursing_additional_codes, :ignore_index_errors=>true) do
       Integer :meursing_additional_code_sid
       Integer :additional_code
-      Date :validity_start_date
+      DateTime :validity_start_date
       DateTime :created_at
       DateTime :updated_at
-      Date :validity_end_date
+      DateTime :validity_end_date
 
       index [:meursing_additional_code_sid], :name=>:primary_key, :unique=>true
     end
@@ -1065,8 +1065,8 @@ Sequel.migration do
       String :meursing_table_plan_id, :size=>255
       Integer :meursing_heading_number
       Integer :row_column_code
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
@@ -1078,8 +1078,8 @@ Sequel.migration do
       Integer :meursing_heading_number
       Integer :row_column_code
       Integer :subheading_sequence_number
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       String :description, :text=>true
       DateTime :created_at
       DateTime :updated_at
@@ -1093,8 +1093,8 @@ Sequel.migration do
       Integer :heading_number
       Integer :row_column_code
       Integer :subheading_sequence_number
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       Integer :additional_code
       DateTime :created_at
       DateTime :updated_at
@@ -1104,8 +1104,8 @@ Sequel.migration do
 
     create_table(:meursing_table_plans, :ignore_index_errors=>true) do
       String :meursing_table_plan_id, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
@@ -1115,8 +1115,8 @@ Sequel.migration do
     create_table(:modification_regulations, :ignore_index_errors=>true) do
       Integer :modification_regulation_role
       String :modification_regulation_id, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       Date :published_date
       String :officialjournal_number, :size=>255
       Integer :officialjournal_page
@@ -1143,8 +1143,8 @@ Sequel.migration do
     create_table(:monetary_exchange_periods, :ignore_index_errors=>true) do
       String :monetary_exchange_period_sid, :size=>255
       String :parent_monetary_unit_code, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
@@ -1174,8 +1174,8 @@ Sequel.migration do
 
     create_table(:monetary_units, :ignore_index_errors=>true) do
       String :monetary_unit_code, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
@@ -1186,8 +1186,8 @@ Sequel.migration do
       Integer :goods_nomenclature_sid
       String :goods_nomenclature_group_type, :size=>255
       String :goods_nomenclature_group_id, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       String :goods_nomenclature_item_id, :size=>255
       String :productline_suffix, :size=>255
       DateTime :created_at
@@ -1274,8 +1274,8 @@ Sequel.migration do
     create_table(:quota_definitions, :ignore_index_errors=>true) do
       Integer :quota_definition_sid
       String :quota_order_number_id, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       Integer :quota_order_number_sid
       Integer :volume
       Integer :initial_volume
@@ -1319,8 +1319,8 @@ Sequel.migration do
       Integer :quota_order_number_origin_sid
       Integer :quota_order_number_sid
       String :geographical_area_id, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       Integer :geographical_area_sid
       DateTime :created_at
       DateTime :updated_at
@@ -1332,8 +1332,8 @@ Sequel.migration do
     create_table(:quota_order_numbers, :ignore_index_errors=>true) do
       Integer :quota_order_number_sid
       String :quota_order_number_id, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
@@ -1396,8 +1396,8 @@ Sequel.migration do
 
     create_table(:regulation_groups, :ignore_index_errors=>true) do
       String :regulation_group_id, :size=>255
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
@@ -1431,8 +1431,8 @@ Sequel.migration do
 
     create_table(:regulation_role_types, :ignore_index_errors=>true) do
       Integer :regulation_role_type_id
-      Date :validity_start_date
-      Date :validity_end_date
+      DateTime :validity_start_date
+      DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
 
