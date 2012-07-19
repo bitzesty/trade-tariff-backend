@@ -1,22 +1,22 @@
 require "date"
 
 module TimeMachine
-  THREAD_DATE_KEY = :time_machine_now
+  THREAD_DATETIME_KEY = :time_machine_now
 
   # Temporary for easier console access
-  def self.at(date = Date.today, &block)
-      date = Date.today if date.blank?
-      date = Date.parse(date) if date.is_a?(String)
+  def self.at(datetime, &block)
+      datetime = DateTime.now if date.blank?
+      datetime = DateTime.parse(datetime) if datetime.is_a?(String)
 
-      previous = Thread.current[THREAD_DATE_KEY]
+      previous = Thread.current[THREAD_DATETIME_KEY]
       raise ArgumentError, "requires a block" unless block_given?
-      Thread.current[THREAD_DATE_KEY] = date
+      Thread.current[THREAD_DATETIME_KEY] = datetime
       yield
     ensure
-      Thread.current[THREAD_DATE_KEY] = previous
+      Thread.current[THREAD_DATETIME_KEY] = previous
   end
 
   def self.now(&block)
-    at(Date.today, &block)
+    at(DateTime.now, &block)
   end
 end
