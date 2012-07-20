@@ -10,8 +10,6 @@ gem 'yajl-ruby', require: "yajl/json_gem"
 gem 'tire'
 gem 'sequel'
 gem 'talentbox-sequel-rails'
-# gem 'tire-contrib'
-gem 'kaminari'
 
 gem 'jquery-rails', "~> 1.0.19"
 gem 'builder'
@@ -21,11 +19,9 @@ gem 'exception_notification'
 
 group :assets do
   gem 'therubyracer'
-  ### API Docs
   gem 'sass-rails'
   gem 'bootstrap-sass'
   gem 'uglifier'
-  ##
 end
 
 group :development do
@@ -33,8 +29,6 @@ group :development do
   gem 'capistrano'
   gem 'debugger'
   gem 'pry-rails'
-  gem 'spreadsheet'
-  gem 'progressbar'
 end
 
 group :test do

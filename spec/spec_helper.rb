@@ -29,8 +29,4 @@ RSpec.configure do |config|
     FakeWeb.allow_net_connect = false
     FakeWeb.register_uri(:any, %r|\Ahttp://localhost:9200|, :body => "{}")
   end
-
-  config.after(:each) do
-    Mongoid.purge!
-  end
 end
