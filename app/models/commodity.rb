@@ -1,6 +1,8 @@
 require 'commodity_mapper'
 
 class Commodity < GoodsNomenclature
+  plugin :json_serializer
+
   set_dataset filter("goods_nomenclatures.goods_nomenclature_item_id NOT LIKE ?", '____000000').
               order(:goods_nomenclatures__goods_nomenclature_item_id.asc)
 
@@ -95,6 +97,10 @@ class Commodity < GoodsNomenclature
            .where("goods_nomenclatures.goods_nomenclature_item_id >= ? AND goods_nomenclatures.goods_nomenclature_item_id < ?", goods_nomenclature_item_id, sibling.goods_nomenclature_item_id)
            .order(nil)
            .all
+  end
+
+  def identifier
+    goods_nomenclature_item_id + producline_suffix
   end
 
   # TODO calculate real rate

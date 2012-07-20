@@ -1,4 +1,6 @@
 class Heading < GoodsNomenclature
+  plugin :json_serializer
+
   set_dataset filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", '____000000').
               filter("goods_nomenclatures.goods_nomenclature_item_id NOT LIKE ?", '__00______').
               order(:goods_nomenclature_item_id.asc)
@@ -32,6 +34,10 @@ class Heading < GoodsNomenclature
 
   def short_code
     goods_nomenclature_item_id.first(4)
+  end
+
+  def identifier
+    short_code
   end
 
   def declarative

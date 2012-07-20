@@ -2,6 +2,8 @@ require_relative 'goods_nomenclature'
 require 'time_machine'
 
 class Chapter < GoodsNomenclature
+  plugin :json_serializer
+
   set_dataset filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", '__00000000').
               order(:goods_nomenclature_item_id.asc)
 
@@ -23,6 +25,10 @@ class Chapter < GoodsNomenclature
 
   def short_code
     goods_nomenclature_item_id.first(2)
+  end
+
+  def identifier
+    short_code
   end
 
   def section

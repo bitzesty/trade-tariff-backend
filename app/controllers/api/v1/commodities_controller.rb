@@ -7,7 +7,10 @@ module Api
       before_filter :restrict_access, only: [:update]
 
       def show
-        @commodity = Commodity.actual.by_full_code(params[:id]).first
+        @commodity = Commodity.actual
+                              .declarable
+                              .by_full_code(params[:id])
+                              .first
 
         respond_with @commodity
       end
