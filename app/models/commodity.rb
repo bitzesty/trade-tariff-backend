@@ -53,9 +53,6 @@ class Commodity < GoodsNomenclature
     end
   end
 
-  def commodity
-  end
-
   def ancestors
     Commodity.select(:goods_nomenclatures.*)
       .join_table(:inner, :goods_nomenclature_indents, goods_nomenclatures__goods_nomenclature_sid: :goods_nomenclature_indents__goods_nomenclature_sid)
@@ -76,7 +73,7 @@ class Commodity < GoodsNomenclature
   end
 
   def uptree
-    ancestors << self
+    ancestors.all << heading << self
   end
 
   def children
