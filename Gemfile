@@ -7,7 +7,7 @@ gem 'mysql2'
 
 gem 'rabl'
 gem 'yajl-ruby', require: "yajl/json_gem"
-gem 'tire', git: 'https://github.com/sauliusg/tire', branch: 'custom_query_pagination'
+gem 'tire'
 gem 'sequel'
 gem 'talentbox-sequel-rails'
 # gem 'tire-contrib'
