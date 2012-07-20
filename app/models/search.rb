@@ -3,7 +3,7 @@ class Search
   include ActiveModel::Conversion
 
   attr_accessor :q
-  attr_reader :results, :exact_match
+  attr_reader :results
 
   def initialize(attributes = {})
     attributes.each do |name, value|
@@ -13,6 +13,9 @@ class Search
     end if attributes.present?
   end
 
+  def exact_match
+    @results.present?
+  end
   alias :exact_match? :exact_match
 
   def perform
@@ -27,8 +30,6 @@ class Search
                when /^[0-9]{12}$/
                  Commodity.by_code(q).declarable.first
                end
-
-    @exact_match = true if results.present?
 
     # else do elasticsearch
 
