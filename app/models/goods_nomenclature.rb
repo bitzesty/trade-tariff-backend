@@ -3,7 +3,7 @@ require 'time_machine'
 class GoodsNomenclature < Sequel::Model
   plugin :time_machine
 
-  set_dataset order(:goods_nomenclature_item_id.asc)
+  set_dataset order(:goods_nomenclatures__goods_nomenclature_item_id.asc)
 
   set_primary_key :goods_nomenclature_sid
 

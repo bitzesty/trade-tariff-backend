@@ -37,12 +37,12 @@ sections = [
 ]
 
 sections.each do |sec|
-  Section.find_or_create_by_position_and_numeral(sec[:position], sec[:numeral], { title: sec[:title] })
+  Section.find_or_create(position: sec[:position], numeral: sec[:numeral], title: sec[:title])
 end
 
 # Map chapters to sections
 Chapter.all.each do |chapter|
   section = sections.detect { |s| chapter.short_code.in?(s[:chapters]) }
-  section = Section.find_by_position_and_numeral(section[:position], section[:numeral])
-  section.chapters << chapter
+  section = Section.where(position: section[:position], numeral: section[:numeral]).first
+  section.add_chapter chapter
 end

@@ -23,13 +23,13 @@ module Sequel
         end
 
         def at(date = Date.today)
-          Thread.current[::TimeMachine::THREAD_DATE_KEY] = date
+          Thread.current[::TimeMachine::THREAD_DATETIME_KEY] = date
 
           self
         end
 
         def point_in_time
-          Thread.current[::TimeMachine::THREAD_DATE_KEY] || Date.today
+          Thread.current[::TimeMachine::THREAD_DATETIME_KEY] || Date.today
         end
 
         def actual

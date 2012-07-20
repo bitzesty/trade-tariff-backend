@@ -7,7 +7,7 @@ module Api
       before_filter :restrict_access, only: [:update]
 
       def show
-        @commodity = Commodity.where(goods_nomenclature_item_id: params[:id].first(10), producline_suffix: params[:id].last(2)).first
+        @commodity = Commodity.by_full_code(params[:id]).first
 
         respond_with @commodity
       end
