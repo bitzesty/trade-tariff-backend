@@ -30,15 +30,22 @@ module Sequel
           Thread.current[::TimeMachine::THREAD_STRATEGY_KEY] || :relevant
         end
 
+        def actual
+          where("#{table_name}.#{period_start_date_column} <= ? AND (#{table_name}.#{period_end_date_column} >= ? OR #{table_name}.#{period_end_date_column} IS NULL)", point_in_time, point_in_time)
+        end
       end
 
       module InstanceMethods
+        def point_in_time
+          self.class.point_in_time
+        end
+
         def actual(assoc)
           klass = assoc.to_s.classify.constantize
 
           case self.class.strategy
           when :absolute
-            klass.where("#{self.class.table_name}.#{self.class.period_start_date_column} <= ? AND (#{self.class.table_name}.#{self.class.period_end_date_column} >= ? OR #{self.class.table_name}.#{self.class.period_end_date_column} IS NULL)", self.class.point_in_time, self.class.point_in_time)
+            klass.where("#{klass.table_name}.#{self.class.period_start_date_column} <= ? AND (#{klass.table_name}.#{self.class.period_end_date_column} >= ? OR #{klass.table_name}.#{self.class.period_end_date_column} IS NULL)", self.class.point_in_time, self.class.point_in_time)
           else # relevant
             klass.where("#{klass.table_name}.#{self.class.period_start_date_column} <= ? AND (#{klass.table_name}.#{self.class.period_end_date_column} >= ? OR #{klass.table_name}.#{self.class.period_end_date_column} IS NULL)", validity_start_date, validity_end_date)
           end

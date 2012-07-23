@@ -1,4 +1,6 @@
 class MeasureCondition < Sequel::Model
+  plugin :time_machine
+
   set_primary_key :measure_condition_sid
 
   one_to_one :measure, key: :measure_sid,

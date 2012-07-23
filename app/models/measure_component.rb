@@ -1,4 +1,6 @@
 class MeasureComponent < Sequel::Model
+  plugin :time_machine
+
   set_primary_key :measure_sid, :duty_expression_id
 
   one_to_one :duty_expression, key: {}, primary_key: {}, dataset: -> {
