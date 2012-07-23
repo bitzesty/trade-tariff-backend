@@ -9,10 +9,9 @@ class GoodsNomenclature < Sequel::Model
 
   one_to_one :goods_nomenclature_indent, key: :goods_nomenclature_sid
   one_to_one :goods_nomenclature_description, dataset: -> {
-    GoodsNomenclatureDescriptionPeriod.actual
-                                      .where(goods_nomenclature_sid: goods_nomenclature_sid)
-                                      .first
-                                      .goods_nomenclature_description_dataset
+    actual(GoodsNomenclatureDescriptionPeriod).where(goods_nomenclature_sid: goods_nomenclature_sid)
+                                              .first
+                                              .goods_nomenclature_description_dataset
   }
 
   delegate :number_indents, to: :goods_nomenclature_indent
@@ -28,10 +27,6 @@ class GoodsNomenclature < Sequel::Model
                                               primary_key: [:goods_nomenclature_item_id,
                                                             :producline_suffix]
   one_to_many :export_refund_nomenclatures, key: :goods_nomenclature_sid
-  # one_to_many :footnote_association_goods_nomenclatures, foreign_key: :goods_nomenclature_sid
-  # many_to_many :footnotes, through: :footnote_association_goods_nomenclatures
-  # one_to_many :nomenclature_group_memberships, foreign_key: :goods_nomenclature_sid
-  # many_to_many :goods_nomenclature_groups, through: :nomenclature_group_memberships
 
   def heading_id
     "#{goods_nomenclature_item_id.first(4)}______"

@@ -13,8 +13,7 @@ class Chapter < GoodsNomenclature
                           join_table: :chapters_sections
 
   one_to_many :headings, dataset: -> {
-    Heading.actual
-           .filter("goods_nomenclature_item_id LIKE ? AND goods_nomenclature_item_id NOT LIKE '__00______'", relevant_headings)
+    actual(Heading).filter("goods_nomenclature_item_id LIKE ? AND goods_nomenclature_item_id NOT LIKE '__00______'", relevant_headings)
   }
 
   dataset_module do

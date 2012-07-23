@@ -9,9 +9,8 @@ class Commodity < GoodsNomenclature
   set_primary_key :goods_nomenclature_sid
 
   one_to_many :measures, dataset: -> {
-    Measure.actual
-           .relevant
-           .filter('goods_nomenclature_sid IN ?', uptree.map(&:goods_nomenclature_sid))
+    actual(Measure).relevant
+                   .filter('goods_nomenclature_sid IN ?', uptree.map(&:goods_nomenclature_sid))
   }
 
   one_to_many :import_measures, dataset: -> {
@@ -25,20 +24,16 @@ class Commodity < GoodsNomenclature
   }, class_name: 'Measure'
 
   one_to_one :heading, dataset: -> {
-    Heading.actual
-           .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
+    actual(Heading).filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
   }
 
   one_to_one :chapter, dataset: -> {
-    Chapter.actual
-           .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
+    actual(Chapter).filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
   }
 
   one_to_one :goods_nomenclature_indent, dataset: -> {
-    GoodsNomenclatureIndent.actual
-                           .filter(goods_nomenclature_sid: goods_nomenclature_sid)
+    actual(GoodsNomenclatureIndent).filter(goods_nomenclature_sid: goods_nomenclature_sid)
   }
-
   delegate :section, to: :chapter
 
   dataset_module do
@@ -111,6 +106,10 @@ class Commodity < GoodsNomenclature
     goods_nomenclature_item_id
   end
 
+  def id
+    goods_nomenclature_sid
+  end
+
   # TODO calculate real rate
   def third_country_duty_rate
     "0.00 %"
@@ -119,4 +118,5 @@ class Commodity < GoodsNomenclature
   def uk_vat_rate
     "0.00 %"
   end
+
 end

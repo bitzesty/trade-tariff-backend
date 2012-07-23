@@ -9,11 +9,11 @@ class Measure < Sequel::Model
   many_to_one :goods_nomenclature, key: :goods_nomenclature_sid,
                                    foreign_key: :goods_nomenclature_sid
   many_to_one :measure_type, key: {}, dataset: -> {
-    MeasureType.actual.where(measure_type_id: self[:measure_type])
+    actual(MeasureType).where(measure_type_id: self[:measure_type])
   }
   one_to_many :measure_conditions, key: :measure_sid
   one_to_one :geographical_area, dataset: -> {
-    GeographicalArea.actual.where(geographical_area_sid: geographical_area_sid)
+    actual(GeographicalArea).where(geographical_area_sid: geographical_area_sid)
   }
   many_to_many :excluded_geographical_areas, join_table: :measure_excluded_geographical_areas,
                                              left_key: :measure_sid,
@@ -22,7 +22,7 @@ class Measure < Sequel::Model
                                              right_primary_key: :geographical_area_id,
                                              class_name: 'GeographicalArea'
   many_to_many :footnotes, dataset: -> {
-    Footnote.actual
+    actual(Footnote)
             .join(:footnote_association_measures, footnote_id: :footnote_id, footnote_type_id: :footnote_type_id)
             .where("footnote_association_measures.measure_sid = ?", measure_sid)
   }

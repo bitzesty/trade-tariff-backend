@@ -5,12 +5,11 @@ class MeasureCondition < Sequel::Model
                        primary_key: :measure_sid
 
   one_to_one :measure_action, dataset: -> {
-    MeasureAction.actual
+    actual(MeasureAction)
                  .where(action_code: action_code)
   }
   one_to_one :certificate, dataset: -> {
-    Certificate.actual
-               .where(certificate_code: certificate_code,
+    actual(Certificate).where(certificate_code: certificate_code,
                       certificate_type_code: certificate_type_code)
   }
 

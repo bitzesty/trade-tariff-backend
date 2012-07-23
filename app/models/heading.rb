@@ -8,13 +8,11 @@ class Heading < GoodsNomenclature
   set_primary_key :goods_nomenclature_sid
 
   one_to_many :commodities, dataset: -> {
-    Commodity.actual
-             .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
+    actual(Commodity).filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
   }
 
   one_to_one :chapter, dataset: -> {
-    Chapter.actual
-           .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
+    actual(Chapter).filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
   }
 
   dataset_module do

@@ -2,10 +2,9 @@ class AdditionalCode < Sequel::Model
   set_primary_key :additional_code_sid
 
   one_to_one :additional_code_description, dataset: -> {
-    AdditionalCodeDescriptionPeriod.actual
-                                      .where(additional_code_sid: additional_code_sid)
-                                      .first
-                                      .additional_code_description_dataset
+    actual(AdditionalCodeDescriptionPeriod).where(additional_code_sid: additional_code_sid)
+                                           .first
+                                           .additional_code_description_dataset
   }
 
   delegate :description, to: :additional_code_description

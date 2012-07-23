@@ -2,7 +2,7 @@ class MeasureComponent < Sequel::Model
   set_primary_key :measure_sid, :duty_expression_id
 
   one_to_one :duty_expression, key: {}, primary_key: {}, dataset: -> {
-    DutyExpression.actual
+    actual(DutyExpression)
                   .where(duty_expression_id: duty_expression_id)
   }
 

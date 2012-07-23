@@ -4,12 +4,12 @@ class Footnote < Sequel::Model
   set_primary_key :footnote_id, :footnote_type_id
 
   one_to_one :footnote_description, primary_key: {}, key: {}, dataset: -> {
-    FootnoteDescriptionPeriod.actual
-                             .where(footnote_id: footnote_id,
-                                    footnote_type_id: footnote_type_id)
-                             .order(:validity_start_date.desc)
-                             .first
-                             .footnote_description_dataset
+    actual(FootnoteDescriptionPeriod).actual
+                                     .where(footnote_id: footnote_id,
+                                            footnote_type_id: footnote_type_id)
+                                     .order(:validity_start_date.desc)
+                                     .first
+                                     .footnote_description_dataset
   }
 
   def code
