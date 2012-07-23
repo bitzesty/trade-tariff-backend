@@ -27,19 +27,4 @@ class AdditionalCode < Sequel::Model
   # many_to_one :additional_code_type, key: :additional_code_type_id
 end
 
-# == Schema Information
-#
-# Table name: additional_codes
-#
-#  record_code             :string(255)     primary key
-#  subrecord_code          :string(255)
-#  record_sequence_number  :string(255)
-#  additional_code_sid     :string(255)
-#  additional_code_type_id :string(255)
-#  additional_code         :string(255)
-#  validity_start_date     :date
-#  validity_end_date       :date
-#  created_at              :datetime
-#  updated_at              :datetime
-#
 

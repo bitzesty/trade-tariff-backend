@@ -54,34 +54,4 @@ class BaseRegulation < Sequel::Model
   #                               }
 end
 
-# == Schema Information
-#
-# Table name: base_regulations
-#
-#  record_code                         :string(255)
-#  subrecord_code                      :string(255)
-#  record_sequence_number              :string(255)
-#  base_regulation_role                :integer(4)
-#  base_regulation_id                  :string(255)
-#  validity_start_date                 :date
-#  validity_end_date                   :date
-#  community_code                      :integer(4)
-#  regulation_group_id                 :string(255)
-#  replacement_indicator               :integer(4)
-#  stopped_flag                        :boolean(1)
-#  information_text                    :text
-#  approved_flag                       :boolean(1)
-#  published_date                      :date
-#  officialjournal_number              :string(255)
-#  officialjournal_page                :integer(4)
-#  effective_end_date                  :date
-#  antidumping_regulation_role         :integer(4)
-#  related_antidumping_regulation_id   :string(255)
-#  complete_abrogation_regulation_role :integer(4)
-#  complete_abrogation_regulation_id   :string(255)
-#  explicit_abrogation_regulation_role :integer(4)
-#  explicit_abrogation_regulation_id   :string(255)
-#  created_at                          :datetime
-#  updated_at                          :datetime
-#
 

@@ -11,17 +11,4 @@ class MonetaryUnit < Sequel::Model
   # has_one  :monetary_unit_description, foreign_key: :monetary_unit_code
 end
 
-# == Schema Information
-#
-# Table name: monetary_units
-#
-#  record_code            :string(255)
-#  subrecord_code         :string(255)
-#  record_sequence_number :string(255)
-#  monetary_unit_code     :string(255)
-#  validity_start_date    :date
-#  validity_end_date      :date
-#  created_at             :datetime
-#  updated_at             :datetime
-#
 

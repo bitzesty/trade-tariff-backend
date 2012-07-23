@@ -29,17 +29,4 @@ class Language < Sequel::Model
   # has_many :goods_nomenclature_group_descriptions
 end
 
-# == Schema Information
-#
-# Table name: languages
-#
-#  record_code            :string(255)
-#  subrecord_code         :string(255)
-#  record_sequence_number :string(255)
-#  language_id            :string(255)
-#  validity_start_date    :date
-#  validity_end_date      :date
-#  created_at             :datetime
-#  updated_at             :datetime
-#
 

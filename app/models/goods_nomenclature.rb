@@ -41,20 +41,4 @@ class GoodsNomenclature < Sequel::Model
     goods_nomenclature_item_id
   end
 end
-# == Schema Information
-#
-# Table name: goods_nomenclatures
-#
-#  record_code                :string(255)
-#  subrecord_code             :string(255)
-#  record_sequence_number     :string(255)
-#  goods_nomenclature_sid     :integer(4)
-#  goods_nomenclature_item_id :string(255)
-#  producline_suffix          :string(255)
-#  validity_start_date        :date
-#  validity_end_date          :date
-#  statistical_indicator      :integer(4)
-#  created_at                 :datetime
-#  updated_at                 :datetime
-#
 

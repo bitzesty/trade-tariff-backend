@@ -32,25 +32,4 @@ class MeasureCondition < Sequel::Model
   # belongs_to :measure_condition_code, foreign_key: :condition_code
 end
 
-# == Schema Information
-#
-# Table name: measure_conditions
-#
-#  record_code                               :string(255)
-#  subrecord_code                            :string(255)
-#  record_sequence_number                    :string(255)
-#  measure_condition_sid                     :integer(4)
-#  measure_sid                               :integer(4)
-#  condition_code                            :string(255)
-#  component_sequence_number                 :integer(4)
-#  condition_duty_amount                     :integer(4)
-#  condition_monetary_unit_code              :string(255)
-#  condition_measurement_unit_code           :string(255)
-#  condition_measurement_unit_qualifier_code :string(255)
-#  action_code                               :string(255)
-#  certificate_type_code                     :string(255)
-#  certificate_code                          :string(255)
-#  created_at                                :datetime
-#  updated_at                                :datetime
-#
 

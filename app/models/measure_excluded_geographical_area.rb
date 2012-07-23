@@ -6,17 +6,4 @@ class MeasureExcludedGeographicalArea < Sequel::Model
   #                                             class_name: 'GeographicalArea'
 end
 
-# == Schema Information
-#
-# Table name: measure_excluded_geographical_areas
-#
-#  record_code                :string(255)
-#  subrecord_code             :string(255)
-#  record_sequence_number     :string(255)
-#  measure_sid                :integer(4)
-#  excluded_geographical_area :string(255)
-#  geographical_area_sid      :integer(4)
-#  created_at                 :datetime
-#  updated_at                 :datetime
-#
 
