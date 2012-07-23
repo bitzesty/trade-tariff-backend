@@ -11,7 +11,7 @@ namespace :db do
 
   desc "Clear chief data"
   task clear_chief: 'environment' do
-    [Chief::CountryCode, Chief::CountryGroup, Chief::MeasureTypeAdco, Chief::MeasureTypeCond, Chief::MeasureTypeFootnote, Chief::MeasurementUnit].each do |r|
+    [Chief::CountryCode, Chief::CountryGroup, Chief::DutyExpression, Chief::MeasureTypeAdco, Chief::MeasureTypeCond, Chief::MeasureTypeFootnote, Chief::MeasurementUnit].each do |r|
       r.delete
     end
   end
