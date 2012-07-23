@@ -15,7 +15,7 @@ gem 'jquery-rails', "~> 1.0.19"
 gem 'builder'
 gem 'railties'
 
-gem 'exception_notification'
+gem 'airbrake'
 
 group :assets do
   gem 'therubyracer'
