@@ -33,6 +33,12 @@ module Sequel
         def actual
           where("#{table_name}.#{period_start_date_column} <= ? AND (#{table_name}.#{period_end_date_column} >= ? OR #{table_name}.#{period_end_date_column} IS NULL)", point_in_time, point_in_time)
         end
+
+        def with_actual(assoc)
+          klass = assoc.to_s.classify.constantize
+
+          where("#{klass.table_name}.#{klass.period_start_date_column} <= ? AND (#{klass.table_name}.#{klass.period_end_date_column} >= ? OR #{klass.table_name}.#{klass.period_end_date_column} IS NULL)", point_in_time, point_in_time)
+        end
       end
 
       module InstanceMethods

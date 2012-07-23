@@ -4,11 +4,10 @@ class GeographicalArea < Sequel::Model
   set_primary_key :geographical_area_sid
 
   one_to_one :geographical_area_description, dataset: -> {
-    GeographicalAreaDescriptionPeriod.actual
-                                     .where(geographical_area_sid: geographical_area_sid)
-                                     .order(:validity_end_date.desc)
-                                     .first
-                                     .geographical_area_description_dataset
+    GeographicalAreaDescription.with_actual(GeographicalAreaDescriptionPeriod)
+                               .join(:geographical_area_description_periods, geographical_area_description_periods__geographical_area_description_period_sid: :geographical_area_descriptions__geographical_area_description_period_sid,
+                                                                             geographical_area_description_periods__geographical_area_sid: :geographical_area_descriptions__geographical_area_sid)
+                               .order(:geographical_area_description_periods__validity_end_date.desc)
   }
   one_to_many :children_geographical_areas, key: :parent_geographical_area_group_sid,
                                             primary_key: :geographical_area_sid,

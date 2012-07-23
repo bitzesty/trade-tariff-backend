@@ -1,12 +1,7 @@
 class FootnoteDescription < Sequel::Model
-  set_primary_key :footnote_id, :footnote_type_id, :footnote_description_period_sid
+  plugin :time_machine
 
-  # belongs_to :footnote, foreign_key: [:footnote_id, :footnote_type_id]
-  # belongs_to :footnote_description_period, foreign_key: [:footnote_id,
-  #                                                        :footnote_type_id,
-  #                                                        :footnote_description_period_sid]
-  # belongs_to :footnote_type
-  # belongs_to :language
+  set_primary_key :footnote_id, :footnote_type_id, :footnote_description_period_sid
 end
 
 # == Schema Information

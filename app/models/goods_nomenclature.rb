@@ -9,9 +9,10 @@ class GoodsNomenclature < Sequel::Model
 
   one_to_one :goods_nomenclature_indent, key: :goods_nomenclature_sid
   one_to_one :goods_nomenclature_description, dataset: -> {
-    actual(GoodsNomenclatureDescriptionPeriod).where(goods_nomenclature_sid: goods_nomenclature_sid)
-                                              .first
-                                              .goods_nomenclature_description_dataset
+    GoodsNomenclatureDescription.with_actual(GoodsNomenclatureDescriptionPeriod)
+                                .join(:goods_nomenclature_description_periods, goods_nomenclature_description_periods__goods_nomenclature_description_period_sid: :goods_nomenclature_descriptions__goods_nomenclature_description_period_sid,
+                                                                               goods_nomenclature_description_periods__goods_nomenclature_sid: :goods_nomenclature_descriptions__goods_nomenclature_sid)
+                                .where(goods_nomenclature_descriptions__goods_nomenclature_sid: goods_nomenclature_sid)
   }
 
   delegate :number_indents, to: :goods_nomenclature_indent

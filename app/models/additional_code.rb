@@ -1,10 +1,13 @@
 class AdditionalCode < Sequel::Model
+  plugin :time_machine
+
   set_primary_key :additional_code_sid
 
   one_to_one :additional_code_description, dataset: -> {
-    actual(AdditionalCodeDescriptionPeriod).where(additional_code_sid: additional_code_sid)
-                                           .first
-                                           .additional_code_description_dataset
+    AdditionalCodeDescription.with_actual(AdditionalCodeDescriptionPeriod)
+                             .join(:additional_code_description_periods, additional_code_description_periods__additional_code_description_period_sid: :additional_code_descriptions__additional_code_description_period_sid,
+                                                                         additional_code_description_periods__additional_code_sid: :additional_code_descriptions__additional_code_sid)
+                             .where(additional_code_descriptions__additional_code_sid: additional_code_sid)
   }
 
   delegate :description, to: :additional_code_description

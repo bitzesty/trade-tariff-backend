@@ -1,4 +1,6 @@
 class AdditionalCodeDescription < Sequel::Model
+  plugin :time_machine
+
   set_primary_key [:additional_code_description_period_sid, :additional_code_sid]
 
   # one_to_one :additional_code_description_period, key: [:additional_code_description_period_sid, :additional_code_sid, :additional_code_type_id]

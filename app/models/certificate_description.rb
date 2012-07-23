@@ -1,10 +1,7 @@
 class CertificateDescription < Sequel::Model
-  set_primary_key :certificate_description_period_sid
+  plugin :time_machine
 
-  # belongs_to :certificate_description_period, foreign_key: :certificate_description_period_sid
-  # belongs_to :certificate_type, foreign_key: :certificate_type_code
-  # belongs_to :certificate, foreign_key: [:certificate_code, :certificate_type_code]
-  # belongs_to :language
+  set_primary_key :certificate_description_period_sid
 end
 
 # == Schema Information

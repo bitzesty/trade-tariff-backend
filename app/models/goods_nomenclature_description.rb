@@ -1,11 +1,8 @@
 class GoodsNomenclatureDescription < Sequel::Model
+  plugin :time_machine
+
   set_primary_key [:goods_nomenclature_sid, :goods_nomenclature_description_period_sid]
 
-  # has_many :goods_nomenclature_description_periods, foreign_key: [:goods_nomenclature_sid,
-  #                                                                 :goods_nomenclature_description_period_sid]
-  # has_many :goods_nomenclatures, through: :goods_nomenclature_description_periods
-
-  # belongs_to :language
   one_to_one :goods_nomenclature, primary_key: :goods_nomenclature_sid, key: :goods_nomenclature_sid
 
   def to_s
