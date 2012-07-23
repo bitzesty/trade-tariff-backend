@@ -4,9 +4,8 @@ source 'https://gems.gemfury.com/vo6ZrmjBQu5szyywDszE/'
 gem 'rails', '3.2.6'
 
 gem 'mysql2'
-
+gem 'oj'
 gem 'rabl'
-gem 'yajl-ruby', require: "yajl/json_gem"
 gem 'tire'
 gem 'sequel'
 gem 'talentbox-sequel-rails'
