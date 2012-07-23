@@ -2,16 +2,16 @@ development:
   adapter: mysql2
   encoding: utf8
   reconnect: true
-  database: trade_tariff_development
+  database: tariff_development
   pool: 5
-  username: trade_tariff
-  password: trade_tariff
+  username: tariff
+  password: tariff
 
 test:
   adapter: mysql2
   encoding: utf8
   reconnect: true
-  database: trade_tariff_test
+  database: tariff_test
   pool: 5
-  username: trade_tariff
-  password: trade_tariff
+  username: tariff
+  password: tariff
