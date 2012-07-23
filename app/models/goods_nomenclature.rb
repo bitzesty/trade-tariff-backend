@@ -40,8 +40,11 @@ class GoodsNomenclature < Sequel::Model
   def chapter_id
     goods_nomenclature_item_id.first(2) + "0" * 8
   end
-end
 
+  def code
+    goods_nomenclature_item_id
+  end
+end
 # == Schema Information
 #
 # Table name: goods_nomenclatures
