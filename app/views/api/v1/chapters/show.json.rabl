@@ -4,5 +4,5 @@ child :section do
   attributes :title, :position, :numeral
 end
 child(headings: :headings) do
-  attributes :short_code, :code, :declarative, :description
+  attributes :short_code, :code, :declarable, :description
 end
