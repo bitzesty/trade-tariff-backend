@@ -7,6 +7,7 @@ class GeographicalArea < Sequel::Model
     GeographicalAreaDescription.with_actual(GeographicalAreaDescriptionPeriod)
                                .join(:geographical_area_description_periods, geographical_area_description_periods__geographical_area_description_period_sid: :geographical_area_descriptions__geographical_area_description_period_sid,
                                                                              geographical_area_description_periods__geographical_area_sid: :geographical_area_descriptions__geographical_area_sid)
+                               .where(geographical_area_descriptions__geographical_area_sid: geographical_area_sid)
                                .order(:geographical_area_description_periods__validity_end_date.desc)
   }
   one_to_many :children_geographical_areas, key: :parent_geographical_area_group_sid,
@@ -16,7 +17,7 @@ class GeographicalArea < Sequel::Model
                                         primary_key: :parent_geographical_area_group_sid,
                                         class_name: 'GeographicalArea'
   one_to_many :contained_geographical_areas, dataset: -> {
-    GeographicalArea.where(geographical_area_sid: GeographicalAreaMembership.actual
+    GeographicalArea.where(geographical_area_sid: actual(GeographicalAreaMembership)
                                                                             .where(geographical_area_group_sid: geographical_area_sid)
                                                                             .select(:geographical_area_sid))
 
