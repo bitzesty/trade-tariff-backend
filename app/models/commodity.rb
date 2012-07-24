@@ -1,5 +1,3 @@
-require 'commodity_mapper'
-
 class Commodity < GoodsNomenclature
   plugin :json_serializer
 

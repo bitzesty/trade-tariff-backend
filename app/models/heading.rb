@@ -25,7 +25,7 @@ class Heading < GoodsNomenclature
     end
 
     def declarable
-      filter(productline_suffix: 80)
+      filter(producline_suffix: 80)
       # join and see if it's declarable
     end
   end
@@ -39,11 +39,6 @@ class Heading < GoodsNomenclature
   end
 
   def declarative
-    false
-  end
-
-  def declarable?
     GoodsNomenclature.where("goods_nomenclature_item_id LIKE ?", "#{short_code}______").count > 1
   end
-
 end
