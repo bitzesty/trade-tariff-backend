@@ -15,6 +15,21 @@ class Heading < GoodsNomenclature
     actual(Chapter).filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
   }
 
+  one_to_many :measures, dataset: -> {
+    actual(Measure).relevant
+                   .filter('goods_nomenclature_sid IN ?', [self.goods_nomenclature_sid])
+  }
+
+  one_to_many :import_measures, dataset: -> {
+    measures_dataset.join(:measure_types, measure_type_id: :measure_type)
+                    .where(trade_movement_code: MeasureType::IMPORT_MOVEMENT_CODES)
+  }, class_name: 'Measure'
+
+  one_to_many :export_measures, dataset: -> {
+    measures_dataset.join(:measure_types, measure_type_id: :measure_type)
+                    .where(trade_movement_code: MeasureType::EXPORT_MOVEMENT_CODES)
+  }, class_name: 'Measure'
+
   dataset_module do
     def by_code(code = "")
       filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", "#{code.to_s.first(4)}000000")
@@ -30,6 +45,8 @@ class Heading < GoodsNomenclature
     end
   end
 
+  delegate :section, to: :chapter
+
   def short_code
     goods_nomenclature_item_id.first(4)
   end
@@ -38,7 +55,8 @@ class Heading < GoodsNomenclature
     short_code
   end
 
-  def declarative
+  def declarable
     GoodsNomenclature.where("goods_nomenclature_item_id LIKE ?", "#{short_code}______").count == 1
   end
+  alias :declarable? :declarable
 end

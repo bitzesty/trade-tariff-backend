@@ -5,7 +5,8 @@ UKTradeTariff::Application.routes.draw do
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
       resources :sections, only: [:index, :show], constraints: { id: /\d{1,2}/ }
       resources :chapters, only: [:show], constraints: { id: /\d{2}/ }
-      resources :measures, only: [:create, :update, :delete]
+      resources :headings, only: [:show], constraints: { id: /\d{4}/ }
+      resources :commodities, only: [:show, :update], constraints: { id: /\d{12}/ }
 
       post "search" => "search#search", via: :post, as: :search
     end
