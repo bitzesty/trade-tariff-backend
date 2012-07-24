@@ -8,7 +8,8 @@ class Commodity < GoodsNomenclature
 
   one_to_many :measures, dataset: -> {
     actual(Measure).relevant
-                   .filter('goods_nomenclature_sid IN ?', uptree.map(&:goods_nomenclature_sid))
+                  .filter('goods_nomenclature_sid IN ?', uptree.map(&:goods_nomenclature_sid))
+                  .order(:geographical_area.asc)
   }
 
   one_to_many :import_measures, dataset: -> {
