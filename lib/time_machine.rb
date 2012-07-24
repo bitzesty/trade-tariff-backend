@@ -9,7 +9,7 @@ module TimeMachine
       datetime = DateTime.now if datetime.blank?
       datetime = DateTime.parse(datetime) if datetime.is_a?(String)
 
-      previous = Thread.current[THREAD_DATETIME_KEY],
+      previous = Thread.current[THREAD_DATETIME_KEY]
       raise ArgumentError, "requires a block" unless block_given?
       Thread.current[THREAD_DATETIME_KEY] = datetime
       Thread.current[THREAD_STRATEGY_KEY] = :absolute
