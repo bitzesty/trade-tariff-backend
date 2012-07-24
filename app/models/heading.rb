@@ -59,4 +59,13 @@ class Heading < GoodsNomenclature
     GoodsNomenclature.where("goods_nomenclature_item_id LIKE ?", "#{short_code}______").count == 1
   end
   alias :declarable? :declarable
+
+  # TODO calculate real rate
+  def third_country_duty_rate
+    "0.00 %"
+  end
+
+  def uk_vat_rate
+    "0.00 %"
+  end
 end
