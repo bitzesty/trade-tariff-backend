@@ -39,6 +39,6 @@ class Heading < GoodsNomenclature
   end
 
   def declarative
-    GoodsNomenclature.where("goods_nomenclature_item_id LIKE ?", "#{short_code}______").count > 1
+    GoodsNomenclature.where("goods_nomenclature_item_id LIKE ?", "#{short_code}______").count == 1
   end
 end
