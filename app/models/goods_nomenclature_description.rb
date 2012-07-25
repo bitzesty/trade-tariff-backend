@@ -1,3 +1,4 @@
+require 'time_machine'
 class GoodsNomenclatureDescription < Sequel::Model
   plugin :time_machine
 
