@@ -1,5 +1,16 @@
 class MonetaryUnit < Sequel::Model
+  plugin :time_machine
+
   set_primary_key  :monetary_unit_code
+
+  one_to_one :monetary_unit_description, key: :monetary_unit_code,
+                                         primary_key: :monetary_unit_code
+
+  delegate :description, to: :monetary_unit_description
+
+  def to_s
+    monetary_unit_code
+  end
 
   # has_many :measure_condition_components, foreign_key: :monetary_unit_code
   # has_many :monetary_exchange_periods, foreign_key: :parent_monetary_unit_code

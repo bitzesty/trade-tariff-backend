@@ -69,7 +69,7 @@ class Commodity < GoodsNomenclature
   end
 
   def uptree
-    ancestors.all << heading << self
+    ancestors.all << heading << chapter << self
   end
 
   def children

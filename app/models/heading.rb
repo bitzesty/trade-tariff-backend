@@ -17,7 +17,7 @@ class Heading < GoodsNomenclature
 
   one_to_many :measures, dataset: -> {
     actual(Measure).relevant
-                   .filter('goods_nomenclature_sid IN ?', [self.goods_nomenclature_sid])
+                   .filter('goods_nomenclature_sid IN ?', uptree.map(&:goods_nomenclature_sid))
   }
 
   one_to_many :import_measures, dataset: -> {
@@ -53,6 +53,10 @@ class Heading < GoodsNomenclature
 
   def identifier
     short_code
+  end
+
+  def uptree
+    [self, self.chapter]
   end
 
   def declarable
