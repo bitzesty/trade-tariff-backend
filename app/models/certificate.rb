@@ -12,6 +12,8 @@ class Certificate < Sequel::Model
                                  certificate_description_periods__certificate_type_code: certificate_type_code)
                           .order(:certificate_description_periods__validity_start_date.desc)
   }
+
+  delegate :description, to: :certificate_description
 end
 
 

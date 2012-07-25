@@ -16,19 +16,21 @@ child(measure_components: :measure_components) do
 end
 
 child(measure_conditions: :measure_conditions) do
-  attributes :document_code
+  attributes :document_code, :requirement_type, :requirement, :action, :condition
 
-  node(:action) { |obj|
-    obj.measure_action.measure_action_description.description
-  }
-  node(:requirement) { |obj|
-    if obj.certificate.present?
-      obj.certificate.certificate_description.description
-    end
-  }
-  node(:condition) { |obj|
-    obj.measure_condition_code.measure_condition_code_description.description
-  }
+  child(measure_condition_components: :measure_condition_components) do
+    attributes :duty_amount, :duty_expression_id
+
+    node(:monetary_unit) { |component|
+      component.monetary_unit.try(:description)
+    }
+    node(:measurement_unit) { |component|
+      component.measurement_unit_code
+    }
+    node(:measurement_unit_qualifier) { |component|
+      component.measurement_unit_qualifier.try(:description)
+    }
+  end
 end
 
 child(geographical_area: :geographical_area) do
