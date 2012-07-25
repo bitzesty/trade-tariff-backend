@@ -1,7 +1,7 @@
 object @heading
 
 attributes :short_code, :code, :description, :has_measures,
-           :third_country_duty_rate, :uk_vat_rate, :declarative
+           :third_country_duty_rate, :uk_vat_rate
 
 if @heading.declarable?
   extends "api/v1/declarables/declarable", object: @heading

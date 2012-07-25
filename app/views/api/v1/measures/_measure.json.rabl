@@ -12,7 +12,17 @@ node(:legal_act, if: ->(measure) { measure.generating_regulation_present? }) do 
 end
 
 child(measure_components: :measure_components) do
-  node(:duty_expression) { |obj| obj.as_duty_expression }
+  attributes :duty_amount, :duty_expression_id
+
+  node(:monetary_unit) { |component|
+    component.monetary_unit.try(:description)
+  }
+  node(:measurement_unit) { |component|
+    component.measurement_unit.try(:description)
+  }
+  node(:measurement_unit_qualifier) { |component|
+    component.measurement_unit_qualifier.try(:description)
+  }
 end
 
 child(measure_conditions: :measure_conditions) do
@@ -25,7 +35,7 @@ child(measure_conditions: :measure_conditions) do
       component.monetary_unit.try(:description)
     }
     node(:measurement_unit) { |component|
-      component.measurement_unit_code
+      component.measurement_unit.try(:description)
     }
     node(:measurement_unit_qualifier) { |component|
       component.measurement_unit_qualifier.try(:description)
