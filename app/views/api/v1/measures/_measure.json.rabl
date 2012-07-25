@@ -15,7 +15,7 @@ child(measure_components: :measure_components) do
   attributes :duty_amount, :duty_expression_id
 
   node(:monetary_unit) { |component|
-    component.monetary_unit.try(:description)
+    component.monetary_unit_code
   }
   node(:measurement_unit) { |component|
     component.measurement_unit.try(:description)
@@ -32,7 +32,7 @@ child(measure_conditions: :measure_conditions) do
     attributes :duty_amount, :duty_expression_id
 
     node(:monetary_unit) { |component|
-      component.monetary_unit.try(:description)
+      component.monetary_unit_code
     }
     node(:measurement_unit) { |component|
       component.measurement_unit.try(:description)

@@ -22,6 +22,8 @@ class MeasureConditionComponent < Sequel::Model
     actual(MeasurementUnitQualifier)
                   .where(measurement_unit_qualifier_code: measurement_unit_qualifier_code)
   }
+
+  delegate :description, to: :duty_expression, prefix: true
 end
 
 

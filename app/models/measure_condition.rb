@@ -44,6 +44,7 @@ class MeasureCondition < Sequel::Model
   one_to_many :measure_condition_components, key: :measure_condition_sid,
                                              primary_key: :measure_condition_sid
 
+
   def document_code
     "#{certificate_type_code}#{certificate_code}"
   end

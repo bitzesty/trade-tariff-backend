@@ -25,6 +25,8 @@ class MeasureComponent < Sequel::Model
 
   one_to_one :measure, key: :measure_sid,
                        primary_key: :measure_sid
+
+  delegate :description, to: :duty_expression, prefix: true
 end
 
 
