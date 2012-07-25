@@ -25,11 +25,6 @@ class MeasureComponent < Sequel::Model
 
   one_to_one :measure, key: :measure_sid,
                        primary_key: :measure_sid
-
-  def as_duty_expression
-    DutyExpressionFormatter.format(duty_expression_id, duty_amount, monetary_unit,
-                                   measurement_unit, measurement_unit_qualifier)
-  end
 end
 
 
