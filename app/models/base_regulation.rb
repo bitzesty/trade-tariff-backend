@@ -1,5 +1,3 @@
-require 'time_machine'
-
 class BaseRegulation < Sequel::Model
   plugin :time_machine, period_end_column: :effective_end_date
 

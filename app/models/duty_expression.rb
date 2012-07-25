@@ -1,5 +1,3 @@
-require 'time_machine'
-
 class DutyExpression < Sequel::Model
   plugin :time_machine
 

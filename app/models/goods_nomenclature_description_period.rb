@@ -1,5 +1,3 @@
-require 'time_machine'
-
 class GoodsNomenclatureDescriptionPeriod < Sequel::Model
   plugin :time_machine
 

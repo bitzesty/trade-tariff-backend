@@ -1,5 +1,3 @@
-require 'time_machine'
-
 class Measure < Sequel::Model
   plugin :time_machine
 

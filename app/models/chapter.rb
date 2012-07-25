@@ -1,5 +1,4 @@
 require_relative 'goods_nomenclature'
-require 'time_machine'
 
 class Chapter < GoodsNomenclature
   plugin :json_serializer
