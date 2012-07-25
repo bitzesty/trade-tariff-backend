@@ -10,26 +10,81 @@ class MeasureCondition < Sequel::Model
     actual(MeasureAction)
                  .where(action_code: action_code)
   }
+
   one_to_one :certificate, dataset: -> {
     actual(Certificate).where(certificate_code: certificate_code,
                       certificate_type_code: certificate_type_code)
   }
 
-  one_to_one :measure_condition_code, key: [:condition_code],
-                                      primary_key: [:condition_code]
+  one_to_one :duty_expression, key: {}, primary_key: {}, dataset: -> {
+    actual(DutyExpression)
+                  .where(duty_expression_id: duty_expression_id)
+  }
+
+  one_to_one :measurement_unit, key: {}, primary_key: {}, dataset: -> {
+    actual(MeasurementUnit)
+                  .where(measurement_unit_code: condition_measurement_unit_code)
+  }
+
+  one_to_one :monetary_unit, key: {}, primary_key: {}, dataset: -> {
+    actual(MonetaryUnit)
+                  .where(monetary_unit_code: condition_monetary_unit_code)
+  }
+
+  one_to_one :measurement_unit_qualifier, key: {}, primary_key: {}, dataset: -> {
+    actual(MeasurementUnitQualifier)
+                  .where(measurement_unit_qualifier_code: condition_measurement_unit_qualifier_code)
+  }
+
+  one_to_one :measure_condition_code, key: {}, primary_key: {}, dataset: -> {
+    actual(MeasureConditionCode)
+                  .where(condition_code: condition_code)
+  }
+
+  one_to_many :measure_condition_components, key: :measure_condition_sid,
+                                             primary_key: :measure_condition_sid
 
   def document_code
     "#{certificate_type_code}#{certificate_code}"
   end
-  # belongs_to :measure, foreign_key: :measure_sid
-  # belongs_to :measure_action, foreign_key: :action_code
-  # belongs_to :monetary_unit, foreign_key: :condition_monetary_unit_code
-  # belongs_to :measurement_unit, foreign_key: :condition_measurement_unit_code
-  # belongs_to :measurement_unit_qualifier, foreign_key: :condition_measurement_unit_qualifier_code
-  # belongs_to :measure_action, foreign_key: :action_code
-  # belongs_to :certificate, foreign_key: [:certificate_code, :certificate_type_code]
-  # belongs_to :certificate_type, foreign_key: :certificate_type_code
-  # belongs_to :measure_condition_code, foreign_key: :condition_code
+
+  def requirement
+    case requirement_type
+    when :document
+      certificate.description
+    when :specific
+      {
+        sequence_number: component_sequence_number,
+        condition_amount: condition_duty_amount,
+        monetary_unit: condition_monetary_unit_code,
+        measurement_unit: measurement_unit.description
+      }
+    end
+  end
+
+  def action
+    measure_action.description
+  end
+
+  def condition
+    measure_condition_code.description
+  end
+
+  def components
+  end
+
+  def requirement_type
+    if certificate_code.present?
+      :document
+    elsif condition_duty_amount.present?
+      :specific
+    end
+  end
+
+  def as_duty_expression
+    DutyExpressionFormatter.format(duty_expression_id, duty_amount, monetary_unit,
+                                   measurement_unit, measurement_unit_qualifier)
+  end
 end
 
 
