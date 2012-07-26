@@ -9,7 +9,7 @@ module Api
       def show
         @commodity = Commodity.actual
                               .declarable
-                              .by_full_code(params[:id])
+                              .by_code(params[:id])
                               .first
 
         respond_with @commodity

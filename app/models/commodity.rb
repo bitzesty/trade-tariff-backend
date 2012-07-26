@@ -36,10 +36,6 @@ class Commodity < GoodsNomenclature
   delegate :section, to: :chapter
 
   dataset_module do
-    def by_full_code(code = "")
-      filter(goods_nomenclature_item_id: code.to_s.first(10), producline_suffix: code.to_s.last(2))
-    end
-
     def by_code(code = "")
       filter(goods_nomenclature_item_id: code.to_s.first(10))
     end
