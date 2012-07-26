@@ -2,7 +2,7 @@ development:
   adapter: mysql2
   encoding: utf8
   reconnect: true
-  database: tariff_development_v2
+  database: tariff_development
   pool: 5
   username: tariff
   password: tariff
