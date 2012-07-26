@@ -7,9 +7,17 @@ class Commodity < GoodsNomenclature
   set_primary_key :goods_nomenclature_sid
 
   one_to_many :measures, dataset: -> {
-    actual(Measure).relevant
-                  .filter('goods_nomenclature_sid IN ?', uptree.map(&:goods_nomenclature_sid))
-                  .order(:geographical_area.asc)
+    Measure.with_base_regulations
+           .with_actual(BaseRegulation)
+           .where(measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid))
+    .union(
+      Measure.with_modification_regulations
+             .with_actual(ModificationRegulation)
+             .where(measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid)),
+      alias: :measures
+    )
+    .with_actual(Measure)
+    .order(:measures__geographical_area.asc)
   }
 
   one_to_many :import_measures, dataset: -> {

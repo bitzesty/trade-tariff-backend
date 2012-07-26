@@ -23,6 +23,10 @@ class GeographicalArea < Sequel::Model
 
   }, class_name: 'GeographicalArea'
 
+  one_to_many :measures, dataset: -> {
+    actual(Measure).where(geographical_area_sid: geographical_area_sid)
+  }
+
   delegate :description, to: :geographical_area_description
 
   def iso_code

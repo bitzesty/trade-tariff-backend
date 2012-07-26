@@ -12,6 +12,13 @@ require 'rspec/autorun'
 
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
+# for FactoryGirl and Sequel compatibility
+class Sequel::Model
+  def save!
+    save(:validate=>false)
+  end
+end
+
 RSpec.configure do |config|
   config.infer_base_class_for_anonymous_controllers = false
   config.filter_run focus: true
@@ -23,10 +30,15 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 
   config.before(:suite) do
-    Object.pathy!
-
-    # TODO probably move these to run based on some tag
     FakeWeb.allow_net_connect = false
     FakeWeb.register_uri(:any, %r|\Ahttp://localhost:9200|, :body => "{}")
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
   end
 end

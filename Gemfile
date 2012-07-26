@@ -37,10 +37,10 @@ group :test do
   gem 'shoulda-matchers'
   gem 'fakeweb'
   gem 'mocha'
-  gem 'pathy'
   gem 'simplecov'
   gem 'simplecov-rcov'
   gem 'ci_reporter'
+  gem 'database_cleaner'
 end
 
 group :router do

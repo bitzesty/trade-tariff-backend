@@ -1,5 +1,6 @@
 class Measure < Sequel::Model
-  plugin :time_machine
+  plugin :time_machine, period_start_column: :measures__validity_start_date,
+                        period_end_column: :effective_end_date
 
   set_primary_key :measure_sid
 
@@ -31,17 +32,16 @@ class Measure < Sequel::Model
   delegate :measure_type_description, to: :measure_type
 
   dataset_module do
-    # Measures are relevant if the the measure generating regulation
-    # is actual at given point in time
-    def relevant
-      base_regulation_ids = BaseRegulation.actual
-                                          .select(:base_regulation_id)
+    def with_base_regulations
+      select(:measures.*).
+      select_append(Sequel.as(:if.sql_function('measures.validity_end_date >= base_regulations.validity_end_date'.lit, 'base_regulations.validity_end_date'.lit, 'measures.validity_end_date'.lit), :effective_end_date)).
+      join_table(:left, :base_regulations, base_regulations__base_regulation_id: :measures__measure_generating_regulation_id)
+    end
 
-      modification_regulation_ids = ModificationRegulation.actual
-                                                          .select(:modification_regulation_id)
-
-      filter({measure_generating_regulation_id: base_regulation_ids} |
-             {measure_generating_regulation_id: modification_regulation_ids})
+    def with_modification_regulations
+      select(:measures.*).
+      select_append(Sequel.as(:if.sql_function('measures.validity_end_date >= modification_regulations.validity_end_date'.lit, 'modification_regulations.validity_end_date'.lit, 'measures.validity_end_date'.lit), :effective_end_date)).
+      join_table(:left, :modification_regulations, modification_regulations__modification_regulation_id: :measures__measure_generating_regulation_id)
     end
   end
 

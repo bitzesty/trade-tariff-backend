@@ -5,12 +5,16 @@ module Api
     class HeadingsController < ApplicationController
       def show
         @heading = Heading.actual
-                          .where("goods_nomenclatures.goods_nomenclature_item_id = ?", "#{params[:id]}000000")
+                          .where(goods_nomenclatures__goods_nomenclature_item_id: heading_id)
                           .first
 
         @commodities = CommodityMapper.new(@heading.commodities).commodities
 
         respond_with @heading
+      end
+
+      def heading_id
+        "#{params[:id]}000000"
       end
     end
   end

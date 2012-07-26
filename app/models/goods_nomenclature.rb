@@ -1,7 +1,8 @@
 require 'time_machine'
 
 class GoodsNomenclature < Sequel::Model
-  plugin :time_machine
+  plugin :time_machine, period_start_column: :goods_nomenclatures__validity_start_date,
+                        period_end_column:   :goods_nomenclatures__validity_end_date
 
   set_dataset order(:goods_nomenclatures__goods_nomenclature_item_id.asc)
 

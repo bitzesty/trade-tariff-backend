@@ -1,14 +1,11 @@
-require "date"
+require 'date'
 
 module Sequel
   module Plugins
     module TimeMachine
-      START_DATE_COLUMN_DEFAULT = :validity_start_date
-      END_DATE_COLUMN_DEFAULT = :validity_end_date
-
       def self.configure(model, opts={})
-        model.period_start_date_column = opts[:period_start_column].presence || START_DATE_COLUMN_DEFAULT
-        model.period_end_date_column = opts[:period_end_column].presence || END_DATE_COLUMN_DEFAULT
+        model.period_start_date_column = opts[:period_start_column]
+        model.period_end_date_column = opts[:period_end_column]
       end
 
       module ClassMethods
@@ -18,8 +15,21 @@ module Sequel
         def inherited(subclass)
           super
 
+          ds = dataset
+
           subclass.period_start_date_column = period_start_date_column
           subclass.period_end_date_column = period_end_date_column
+          subclass.instance_eval do
+            set_dataset(ds)
+          end
+        end
+
+        def period_start_date_column
+          @period_start_date_column.presence || "#{table_name}__validity_start_date".to_sym
+        end
+
+        def period_end_date_column
+          @period_end_date_column.presence || "#{table_name}__validity_end_date".to_sym
         end
 
         def point_in_time
@@ -28,16 +38,6 @@ module Sequel
 
         def strategy
           Thread.current[::TimeMachine::THREAD_STRATEGY_KEY] || :relevant
-        end
-
-        def actual
-          where("#{table_name}.#{period_start_date_column} <= ? AND (#{table_name}.#{period_end_date_column} >= ? OR #{table_name}.#{period_end_date_column} IS NULL)", point_in_time, point_in_time)
-        end
-
-        def with_actual(assoc)
-          klass = assoc.to_s.classify.constantize
-
-          where("#{klass.table_name}.#{klass.period_start_date_column} <= ? AND (#{klass.table_name}.#{klass.period_end_date_column} >= ? OR #{klass.table_name}.#{klass.period_end_date_column} IS NULL)", point_in_time, point_in_time)
         end
       end
 
@@ -51,12 +51,24 @@ module Sequel
 
           case self.class.strategy
           when :absolute
-            klass.where("#{klass.table_name}.#{self.class.period_start_date_column} <= ? AND (#{klass.table_name}.#{self.class.period_end_date_column} >= ? OR #{klass.table_name}.#{self.class.period_end_date_column} IS NULL)", self.class.point_in_time, self.class.point_in_time)
+            klass.filter{|o| o.<=(klass.period_start_date_column, klass.point_in_time) & (o.>=(klass.period_end_date_column, klass.point_in_time) | ({klass.period_end_date_column => nil})) }
           else # relevant
-            klass.where("#{klass.table_name}.#{self.class.period_start_date_column} <= ? AND (#{klass.table_name}.#{self.class.period_end_date_column} >= ? OR #{klass.table_name}.#{self.class.period_end_date_column} IS NULL)", validity_start_date, validity_end_date)
+            klass.filter{|o| o.<=(klass.period_start_date_column, validity_start_date) & (o.>=(klass.period_end_date_column, validity_end_date) | ({klass.period_end_date_column => nil})) }
           end
         end
         private :actual
+      end
+
+      module DatasetMethods
+        def actual
+          filter{|o| o.<=(model.period_start_date_column, model.point_in_time) & (o.>=(model.period_end_date_column, model.point_in_time) | ({model.period_end_date_column => nil})) }
+        end
+
+        def with_actual(assoc)
+          klass = assoc.to_s.classify.constantize
+
+          filter{|o| o.<=(klass.period_start_date_column, klass.point_in_time) & (o.>=(klass.period_end_date_column, klass.point_in_time) | ({klass.period_end_date_column => nil})) }
+        end
       end
     end
   end
