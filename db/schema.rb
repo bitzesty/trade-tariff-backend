@@ -1,29 +1,29 @@
 Sequel.migration do
   change do
-    create_table(:additional_code_description_periods, :ignore_index_errors=>true) do
-      Integer :additional_code_description_period_sid
-      Integer :additional_code_sid
-      String :additional_code_type_id, :size=>255
-      String :additional_code, :size=>255
-      DateTime :validity_start_date
-      DateTime :created_at
-      DateTime :updated_at
-      DateTime :validity_end_date
+    create_table(:additional_code_description_periods) do
+      column :additional_code_description_period_sid, "int(11)"
+      column :additional_code_sid, "int(11)"
+      column :additional_code_type_id, "varchar(255)"
+      column :additional_code, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
+      column :validity_end_date, "datetime"
       
       index [:additional_code_type_id], :name=>:code_type_id
       index [:additional_code_description_period_sid], :name=>:description_period_sid
       index [:additional_code_description_period_sid, :additional_code_sid, :additional_code_type_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:additional_code_descriptions, :ignore_index_errors=>true) do
-      Integer :additional_code_description_period_sid
-      String :language_id, :size=>5
-      Integer :additional_code_sid
-      String :additional_code_type_id, :size=>255
-      String :additional_code, :size=>255
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:additional_code_descriptions) do
+      column :additional_code_description_period_sid, "int(11)"
+      column :language_id, "varchar(5)"
+      column :additional_code_sid, "int(11)"
+      column :additional_code_type_id, "varchar(255)"
+      column :additional_code, "varchar(255)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:language_id], :name=>:language_id
       index [:additional_code_description_period_sid], :name=>:period_sid
@@ -32,77 +32,77 @@ Sequel.migration do
       index [:additional_code_type_id], :name=>:type_id
     end
     
-    create_table(:additional_code_type_descriptions, :ignore_index_errors=>true) do
-      String :additional_code_type_id, :size=>255
-      String :language_id, :size=>5
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:additional_code_type_descriptions) do
+      column :additional_code_type_id, "varchar(255)"
+      column :language_id, "varchar(5)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:language_id], :name=>:index_additional_code_type_descriptions_on_language_id
       index [:additional_code_type_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:additional_code_type_measure_types, :ignore_index_errors=>true) do
-      String :measure_type_id, :size=>255
-      String :additional_code_type_id, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:additional_code_type_measure_types) do
+      column :measure_type_id, "varchar(255)"
+      column :additional_code_type_id, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:measure_type_id, :additional_code_type_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:additional_code_types, :ignore_index_errors=>true) do
-      String :additional_code_type_id, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      String :application_code, :size=>255
-      String :meursing_table_plan_id, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:additional_code_types) do
+      column :additional_code_type_id, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :application_code, "varchar(255)"
+      column :meursing_table_plan_id, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:meursing_table_plan_id], :name=>:index_additional_code_types_on_meursing_table_plan_id
       index [:additional_code_type_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:additional_codes, :ignore_index_errors=>true) do
-      Integer :additional_code_sid
-      String :additional_code_type_id, :size=>255
-      String :additional_code, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:additional_codes) do
+      column :additional_code_sid, "int(11)"
+      column :additional_code_type_id, "varchar(255)"
+      column :additional_code, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:additional_code_sid], :name=>:primary_key, :unique=>true
       index [:additional_code_type_id], :name=>:type_id
     end
     
-    create_table(:base_regulations, :ignore_index_errors=>true) do
-      Integer :base_regulation_role
-      String :base_regulation_id, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      Integer :community_code
-      String :regulation_group_id, :size=>255
-      Integer :replacement_indicator
-      TrueClass :stopped_flag
-      String :information_text, :text=>true
-      TrueClass :approved_flag
-      Date :published_date
-      String :officialjournal_number, :size=>255
-      Integer :officialjournal_page
-      Date :effective_end_date
-      Integer :antidumping_regulation_role
-      String :related_antidumping_regulation_id, :size=>255
-      Integer :complete_abrogation_regulation_role
-      String :complete_abrogation_regulation_id, :size=>255
-      Integer :explicit_abrogation_regulation_role
-      String :explicit_abrogation_regulation_id, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:base_regulations) do
+      column :base_regulation_role, "int(11)"
+      column :base_regulation_id, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :community_code, "int(11)"
+      column :regulation_group_id, "varchar(255)"
+      column :replacement_indicator, "int(11)"
+      column :stopped_flag, "tinyint(1)"
+      column :information_text, "text"
+      column :approved_flag, "tinyint(1)"
+      column :published_date, "date"
+      column :officialjournal_number, "varchar(255)"
+      column :officialjournal_page, "int(11)"
+      column :effective_end_date, "date"
+      column :antidumping_regulation_role, "int(11)"
+      column :related_antidumping_regulation_id, "varchar(255)"
+      column :complete_abrogation_regulation_role, "int(11)"
+      column :complete_abrogation_regulation_id, "varchar(255)"
+      column :explicit_abrogation_regulation_role, "int(11)"
+      column :explicit_abrogation_regulation_id, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:antidumping_regulation_role, :related_antidumping_regulation_id], :name=>:antidumping_regulation
       index [:complete_abrogation_regulation_role, :complete_abrogation_regulation_id], :name=>:complete_abrogation_regulation
@@ -111,703 +111,705 @@ Sequel.migration do
       index [:base_regulation_id, :base_regulation_role], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:certificate_description_periods, :ignore_index_errors=>true) do
-      Integer :certificate_description_period_sid
-      String :certificate_type_code, :size=>255
-      String :certificate_code, :size=>255
-      DateTime :validity_start_date
-      DateTime :created_at
-      DateTime :updated_at
-      DateTime :validity_end_date
+    create_table(:certificate_description_periods) do
+      column :certificate_description_period_sid, "int(11)"
+      column :certificate_type_code, "varchar(255)"
+      column :certificate_code, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
+      column :validity_end_date, "datetime"
       
       index [:certificate_code, :certificate_type_code], :name=>:certificate
       index [:certificate_description_period_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:certificate_descriptions, :ignore_index_errors=>true) do
-      Integer :certificate_description_period_sid
-      String :language_id, :size=>5
-      String :certificate_type_code, :size=>255
-      String :certificate_code, :size=>255
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:certificate_descriptions) do
+      column :certificate_description_period_sid, "int(11)"
+      column :language_id, "varchar(5)"
+      column :certificate_type_code, "varchar(255)"
+      column :certificate_code, "varchar(255)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:certificate_code, :certificate_type_code], :name=>:certificate
       index [:language_id], :name=>:index_certificate_descriptions_on_language_id
       index [:certificate_description_period_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:certificate_type_descriptions, :ignore_index_errors=>true) do
-      String :certificate_type_code, :size=>255
-      String :language_id, :size=>5
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:certificate_type_descriptions) do
+      column :certificate_type_code, "varchar(255)"
+      column :language_id, "varchar(5)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:language_id], :name=>:index_certificate_type_descriptions_on_language_id
       index [:certificate_type_code], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:certificate_types, :ignore_index_errors=>true) do
-      String :certificate_type_code, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:certificate_types) do
+      column :certificate_type_code, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:certificate_type_code], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:certificates, :ignore_index_errors=>true) do
-      String :certificate_type_code, :size=>255
-      String :certificate_code, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:certificates) do
+      column :certificate_type_code, "varchar(255)"
+      column :certificate_code, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:certificate_code, :certificate_type_code], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:chapters_sections, :ignore_index_errors=>true) do
-      Integer :goods_nomenclature_sid
-      Integer :section_id
+    create_table(:chapters_sections) do
+      column :goods_nomenclature_sid, "int(11)"
+      column :section_id, "int(11)"
       
       index [:goods_nomenclature_sid, :section_id], :name=>:index_chapters_sections_on_goods_nomenclature_sid_and_section_id, :unique=>true
     end
     
-    create_table(:chief_country_code, :ignore_index_errors=>true) do
-      String :chief_country_cd, :size=>2
-      String :country_cd, :size=>2
+    create_table(:chief_country_code) do
+      column :chief_country_cd, "varchar(2)"
+      column :country_cd, "varchar(2)"
       
       index [:chief_country_cd], :name=>:primary_key
     end
     
-    create_table(:chief_country_group, :ignore_index_errors=>true) do
-      String :chief_country_grp, :size=>4
-      String :country_grp_region, :size=>4
-      String :country_exclusions, :size=>100
+    create_table(:chief_country_group) do
+      column :chief_country_grp, "varchar(4)"
+      column :country_grp_region, "varchar(4)"
+      column :country_exclusions, "varchar(100)"
       
       index [:chief_country_grp], :name=>:primary_key
     end
     
     create_table(:chief_duty_expression) do
-      primary_key :id
-      Integer :adval1_rate
-      Integer :adval2_rate
-      Integer :spfc1_rate
-      Integer :spfc2_rate
-      String :duty_expression_id_spfc1, :size=>2
-      String :monetary_unit_code_spfc1, :size=>3
-      String :duty_expression_id_spfc2, :size=>2
-      String :monetary_unit_code_spfc2, :size=>3
-      String :duty_expression_id_adval1, :size=>2
-      String :monetary_unit_code_adval1, :size=>3
-      String :duty_expression_id_adval2, :size=>2
-      String :monetary_unit_code_adval2, :size=>3
+      primary_key :id, :type=>"int(11)"
+      column :adval1_rate, "int(11)"
+      column :adval2_rate, "int(11)"
+      column :spfc1_rate, "int(11)"
+      column :spfc2_rate, "int(11)"
+      column :duty_expression_id_spfc1, "varchar(2)"
+      column :monetary_unit_code_spfc1, "varchar(3)"
+      column :duty_expression_id_spfc2, "varchar(2)"
+      column :monetary_unit_code_spfc2, "varchar(3)"
+      column :duty_expression_id_adval1, "varchar(2)"
+      column :monetary_unit_code_adval1, "varchar(3)"
+      column :duty_expression_id_adval2, "varchar(2)"
+      column :monetary_unit_code_adval2, "varchar(3)"
     end
     
     create_table(:chief_measure_type_adco) do
-      String :measure_group_code, :size=>2
-      String :measure_type, :size=>3
-      String :tax_type_code, :size=>11
-      String :measure_type_id, :size=>3
-      String :adtnl_cd_type_id, :size=>1
-      String :adtnl_cd, :size=>3
-      Integer :zero_comp
+      column :measure_group_code, "varchar(2)"
+      column :measure_type, "varchar(3)"
+      column :tax_type_code, "varchar(11)"
+      column :measure_type_id, "varchar(3)"
+      column :adtnl_cd_type_id, "varchar(1)"
+      column :adtnl_cd, "varchar(3)"
+      column :zero_comp, "int(11)"
     end
     
     create_table(:chief_measure_type_cond) do
-      String :measure_group_code, :size=>2
-      String :measure_type, :size=>3
-      String :cond_cd, :size=>1
-      String :comp_seq_no, :size=>3
-      String :cert_type_cd, :size=>1
-      String :cert_ref_no, :size=>3
-      String :act_cd, :size=>2
+      column :measure_group_code, "varchar(2)"
+      column :measure_type, "varchar(3)"
+      column :cond_cd, "varchar(1)"
+      column :comp_seq_no, "varchar(3)"
+      column :cert_type_cd, "varchar(1)"
+      column :cert_ref_no, "varchar(3)"
+      column :act_cd, "varchar(2)"
     end
     
     create_table(:chief_measure_type_footnote) do
-      primary_key :id
-      String :measure_type_id, :size=>3
-      String :footn_type_id, :size=>2
-      String :footn_id, :size=>3
+      primary_key :id, :type=>"int(11)"
+      column :measure_type_id, "varchar(3)"
+      column :footn_type_id, "varchar(2)"
+      column :footn_id, "varchar(3)"
     end
     
     create_table(:chief_measurement_unit) do
-      primary_key :id
-      String :spfc_cmpd_uoq, :size=>3
-      String :spfc_uoq, :size=>3
-      String :measurem_unit_cd, :size=>3
-      String :measurem_unit_qual_cd, :size=>1
+      primary_key :id, :type=>"int(11)"
+      column :spfc_cmpd_uoq, "varchar(3)"
+      column :spfc_uoq, "varchar(3)"
+      column :measurem_unit_cd, "varchar(3)"
+      column :measurem_unit_qual_cd, "varchar(1)"
     end
     
     create_table(:chief_mfcm) do
-      DateTime :fe_tsmp
-      String :msrgp_code, :size=>255
-      String :msr_type, :size=>255
-      String :tty_code, :size=>255
-      DateTime :le_tsmp
-      DateTime :audit_tsmp
-      String :cmdty_code, :size=>255
-      String :cmdty_msr_xhdg, :size=>255
-      String :null_tri_rqd, :size=>255
-      TrueClass :exports_use_ind
+      column :fe_tsmp, "datetime"
+      column :msrgp_code, "varchar(255)"
+      column :msr_type, "varchar(255)"
+      column :tty_code, "varchar(255)"
+      column :le_tsmp, "datetime"
+      column :audit_tsmp, "datetime"
+      column :cmdty_code, "varchar(255)"
+      column :cmdty_msr_xhdg, "varchar(255)"
+      column :null_tri_rqd, "varchar(255)"
+      column :exports_use_ind, "tinyint(1)"
     end
     
     create_table(:chief_tame) do
-      DateTime :fe_tsmp
-      String :msrgp_code, :size=>255
-      String :msr_type, :size=>255
-      String :tty_code, :size=>255
-      String :tar_msr_no, :size=>255
-      DateTime :le_tsmp
-      BigDecimal :adval_rate, :size=>[3, 3]
-      BigDecimal :alch_sgth, :size=>[3, 2]
-      DateTime :audit_tsmp
-      String :cap_ai_stmt, :size=>255
-      BigDecimal :cap_max_pct, :size=>[3, 3]
-      String :cmdty_msr_xhdg, :size=>255
-      String :comp_mthd, :size=>255
-      String :cpc_wvr_phb, :size=>255
-      String :ec_msr_set, :size=>255
-      String :mip_band_exch, :size=>255
-      String :mip_rate_exch, :size=>255
-      String :mip_uoq_code, :size=>255
-      String :nba_id, :size=>255
-      String :null_tri_rqd, :size=>255
-      String :qta_code_uk, :size=>255
-      String :qta_elig_useLstrubg, :size=>255
-      String :qta_exch_rate, :size=>255
-      String :qta_no, :size=>255
-      String :qta_uoq_code, :size=>255
-      String :rfa, :text=>true
-      String :rfs_code_1, :size=>255
-      String :rfs_code_2, :size=>255
-      String :rfs_code_3, :size=>255
-      String :rfs_code_4, :size=>255
-      String :rfs_code_5, :size=>255
-      String :tdr_spr_sur, :size=>255
-      TrueClass :exports_use_ind
+      column :fe_tsmp, "datetime"
+      column :msrgp_code, "varchar(255)"
+      column :msr_type, "varchar(255)"
+      column :tty_code, "varchar(255)"
+      column :tar_msr_no, "varchar(255)"
+      column :le_tsmp, "datetime"
+      column :adval_rate, "decimal(3,3)"
+      column :alch_sgth, "decimal(3,2)"
+      column :audit_tsmp, "datetime"
+      column :cap_ai_stmt, "varchar(255)"
+      column :cap_max_pct, "decimal(3,3)"
+      column :cmdty_msr_xhdg, "varchar(255)"
+      column :comp_mthd, "varchar(255)"
+      column :cpc_wvr_phb, "varchar(255)"
+      column :ec_msr_set, "varchar(255)"
+      column :mip_band_exch, "varchar(255)"
+      column :mip_rate_exch, "varchar(255)"
+      column :mip_uoq_code, "varchar(255)"
+      column :nba_id, "varchar(255)"
+      column :null_tri_rqd, "varchar(255)"
+      column :qta_code_uk, "varchar(255)"
+      column :qta_elig_useLstrubg, "varchar(255)"
+      column :qta_exch_rate, "varchar(255)"
+      column :qta_no, "varchar(255)"
+      column :qta_uoq_code, "varchar(255)"
+      column :rfa, "text"
+      column :rfs_code_1, "varchar(255)"
+      column :rfs_code_2, "varchar(255)"
+      column :rfs_code_3, "varchar(255)"
+      column :rfs_code_4, "varchar(255)"
+      column :rfs_code_5, "varchar(255)"
+      column :tdr_spr_sur, "varchar(255)"
+      column :exports_use_ind, "tinyint(1)"
     end
     
     create_table(:chief_tamf) do
-      DateTime :fe_tsmp
-      String :msrgp_code, :size=>255
-      String :msr_type, :size=>255
-      String :tty_code, :size=>255
-      String :tar_msr_no, :size=>255
-      DateTime :le_tsmp
-      BigDecimal :adval1_rate, :size=>[3, 3]
-      BigDecimal :adval2_rate, :size=>[3, 3]
-      String :ai_factor, :size=>255
-      BigDecimal :cmdty_dmql, :size=>[8, 3]
-      String :cmdty_dmql_uoq, :size=>255
-      String :cngp_code, :size=>255
-      String :cntry_disp, :size=>255
-      String :cntry_orig, :size=>255
-      String :duty_type, :size=>255
-      String :ec_supplement, :size=>255
-      String :ec_exch_rate, :size=>255
-      String :spcl_inst, :size=>255
-      String :spfc1_cmpd_uoq, :size=>255
-      BigDecimal :spfc1_rate, :size=>[7, 4]
-      String :spfc1_uoq, :size=>255
-      BigDecimal :spfc2_rate, :size=>[7, 4]
-      String :spfc2_uoq, :size=>255
-      BigDecimal :spfc3_rate, :size=>[7, 4]
-      String :spfc3_uoq, :size=>255
-      String :tamf_dt, :size=>255
-      String :tamf_sta, :size=>255
-      String :tamf_ty, :size=>255
+      column :fe_tsmp, "datetime"
+      column :msrgp_code, "varchar(255)"
+      column :msr_type, "varchar(255)"
+      column :tty_code, "varchar(255)"
+      column :tar_msr_no, "varchar(255)"
+      column :le_tsmp, "datetime"
+      column :adval1_rate, "decimal(3,3)"
+      column :adval2_rate, "decimal(3,3)"
+      column :ai_factor, "varchar(255)"
+      column :cmdty_dmql, "decimal(8,3)"
+      column :cmdty_dmql_uoq, "varchar(255)"
+      column :cngp_code, "varchar(255)"
+      column :cntry_disp, "varchar(255)"
+      column :cntry_orig, "varchar(255)"
+      column :duty_type, "varchar(255)"
+      column :ec_supplement, "varchar(255)"
+      column :ec_exch_rate, "varchar(255)"
+      column :spcl_inst, "varchar(255)"
+      column :spfc1_cmpd_uoq, "varchar(255)"
+      column :spfc1_rate, "decimal(7,4)"
+      column :spfc1_uoq, "varchar(255)"
+      column :spfc2_rate, "decimal(7,4)"
+      column :spfc2_uoq, "varchar(255)"
+      column :spfc3_rate, "decimal(7,4)"
+      column :spfc3_uoq, "varchar(255)"
+      column :tamf_dt, "varchar(255)"
+      column :tamf_sta, "varchar(255)"
+      column :tamf_ty, "varchar(255)"
     end
     
-    create_table(:complete_abrogation_regulations, :ignore_index_errors=>true) do
-      Integer :complete_abrogation_regulation_role
-      String :complete_abrogation_regulation_id, :size=>255
-      Date :published_date
-      String :officialjournal_number, :size=>255
-      Integer :officialjournal_page
-      Integer :replacement_indicator
-      String :information_text, :text=>true
-      TrueClass :approved_flag
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:complete_abrogation_regulations) do
+      column :complete_abrogation_regulation_role, "int(11)"
+      column :complete_abrogation_regulation_id, "varchar(255)"
+      column :published_date, "date"
+      column :officialjournal_number, "varchar(255)"
+      column :officialjournal_page, "int(11)"
+      column :replacement_indicator, "int(11)"
+      column :information_text, "text"
+      column :approved_flag, "tinyint(1)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:complete_abrogation_regulation_id, :complete_abrogation_regulation_role], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:duty_expression_descriptions, :ignore_index_errors=>true) do
-      String :duty_expression_id, :size=>255
-      String :language_id, :size=>5
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:duty_expression_descriptions) do
+      column :duty_expression_id, "varchar(255)"
+      column :language_id, "varchar(5)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:language_id], :name=>:index_duty_expression_descriptions_on_language_id
       index [:duty_expression_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:duty_expressions, :ignore_index_errors=>true) do
-      String :duty_expression_id, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      Integer :duty_amount_applicability_code
-      Integer :measurement_unit_applicability_code
-      Integer :monetary_unit_applicability_code
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:duty_expressions) do
+      column :duty_expression_id, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :duty_amount_applicability_code, "int(11)"
+      column :measurement_unit_applicability_code, "int(11)"
+      column :monetary_unit_applicability_code, "int(11)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:duty_expression_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:explicit_abrogation_regulations, :ignore_index_errors=>true) do
-      Integer :explicit_abrogation_regulation_role
-      String :explicit_abrogation_regulation_id, :size=>255
-      Date :published_date
-      String :officialjournal_number, :size=>255
-      Integer :officialjournal_page
-      Integer :replacement_indicator
-      Date :abrogation_date
-      String :information_text, :text=>true
-      TrueClass :approved_flag
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:explicit_abrogation_regulations) do
+      column :explicit_abrogation_regulation_role, "int(11)"
+      column :explicit_abrogation_regulation_id, "varchar(255)"
+      column :published_date, "date"
+      column :officialjournal_number, "varchar(255)"
+      column :officialjournal_page, "int(11)"
+      column :replacement_indicator, "int(11)"
+      column :abrogation_date, "date"
+      column :information_text, "text"
+      column :approved_flag, "tinyint(1)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:explicit_abrogation_regulation_id, :explicit_abrogation_regulation_role], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:export_refund_nomenclature_description_periods, :ignore_index_errors=>true) do
-      Integer :export_refund_nomenclature_description_period_sid
-      Integer :export_refund_nomenclature_sid
-      DateTime :validity_start_date
-      String :goods_nomenclature_item_id, :size=>255
-      Integer :additional_code_type
-      String :export_refund_code, :size=>255
-      String :productline_suffix, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
-      DateTime :validity_end_date
+    create_table(:export_refund_nomenclature_description_periods) do
+      column :export_refund_nomenclature_description_period_sid, "int(11)"
+      column :export_refund_nomenclature_sid, "int(11)"
+      column :validity_start_date, "datetime"
+      column :goods_nomenclature_item_id, "varchar(255)"
+      column :additional_code_type, "int(11)"
+      column :export_refund_code, "varchar(255)"
+      column :productline_suffix, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
+      column :validity_end_date, "datetime"
       
       index [:export_refund_nomenclature_sid, :export_refund_nomenclature_description_period_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:export_refund_nomenclature_descriptions, :ignore_index_errors=>true) do
-      Integer :export_refund_nomenclature_description_period_sid
-      String :language_id, :size=>5
-      Integer :export_refund_nomenclature_sid
-      String :goods_nomenclature_item_id, :size=>255
-      Integer :additional_code_type
-      String :export_refund_code, :size=>255
-      String :productline_suffix, :size=>255
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:export_refund_nomenclature_descriptions) do
+      column :export_refund_nomenclature_description_period_sid, "int(11)"
+      column :language_id, "varchar(5)"
+      column :export_refund_nomenclature_sid, "int(11)"
+      column :goods_nomenclature_item_id, "varchar(255)"
+      column :additional_code_type, "int(11)"
+      column :export_refund_code, "varchar(255)"
+      column :productline_suffix, "varchar(255)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:export_refund_nomenclature_sid], :name=>:export_refund_nomenclature
       index [:language_id], :name=>:index_export_refund_nomenclature_descriptions_on_language_id
       index [:export_refund_nomenclature_description_period_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:export_refund_nomenclature_indents, :ignore_index_errors=>true) do
-      Integer :export_refund_nomenclature_indents_sid
-      Integer :export_refund_nomenclature_sid
-      DateTime :validity_start_date
-      String :number_export_refund_nomenclature_indents, :size=>255
-      String :goods_nomenclature_item_id, :size=>255
-      Integer :additional_code_type
-      String :export_refund_code, :size=>255
-      String :productline_suffix, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
-      DateTime :validity_end_date
+    create_table(:export_refund_nomenclature_indents) do
+      column :export_refund_nomenclature_indents_sid, "int(11)"
+      column :export_refund_nomenclature_sid, "int(11)"
+      column :validity_start_date, "datetime"
+      column :number_export_refund_nomenclature_indents, "varchar(255)"
+      column :goods_nomenclature_item_id, "varchar(255)"
+      column :additional_code_type, "int(11)"
+      column :export_refund_code, "varchar(255)"
+      column :productline_suffix, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
+      column :validity_end_date, "datetime"
       
       index [:export_refund_nomenclature_indents_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:export_refund_nomenclatures, :ignore_index_errors=>true) do
-      Integer :export_refund_nomenclature_sid
-      String :goods_nomenclature_item_id, :size=>255
-      Integer :additional_code_type
-      String :export_refund_code, :size=>255
-      String :productline_suffix, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      Integer :goods_nomenclature_sid
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:export_refund_nomenclatures) do
+      column :export_refund_nomenclature_sid, "int(11)"
+      column :goods_nomenclature_item_id, "varchar(255)"
+      column :additional_code_type, "int(11)"
+      column :export_refund_code, "varchar(255)"
+      column :productline_suffix, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :goods_nomenclature_sid, "int(11)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:goods_nomenclature_sid], :name=>:index_export_refund_nomenclatures_on_goods_nomenclature_sid
       index [:export_refund_nomenclature_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:footnote_association_additional_codes, :ignore_index_errors=>true) do
-      Integer :additional_code_sid
-      String :footnote_type_id, :size=>255
-      String :footnote_id, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      Integer :additional_code_type_id
-      String :additional_code, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:footnote_association_additional_codes) do
+      column :additional_code_sid, "int(11)"
+      column :footnote_type_id, "varchar(255)"
+      column :footnote_id, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :additional_code_type_id, "int(11)"
+      column :additional_code, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:additional_code_type_id], :name=>:additional_code_type
       index [:footnote_id, :footnote_type_id, :additional_code_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:footnote_association_erns, :ignore_index_errors=>true) do
-      Integer :export_refund_nomenclature_sid
-      String :footnote_type, :size=>255
-      String :footnote_id, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      String :goods_nomenclature_item_id, :size=>255
-      Integer :additional_code_type
-      String :export_refund_code, :size=>255
-      String :productline_suffix, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:footnote_association_erns) do
+      column :export_refund_nomenclature_sid, "int(11)"
+      column :footnote_type, "varchar(255)"
+      column :footnote_id, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :goods_nomenclature_item_id, "varchar(255)"
+      column :additional_code_type, "int(11)"
+      column :export_refund_code, "varchar(255)"
+      column :productline_suffix, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:export_refund_nomenclature_sid, :footnote_id, :footnote_type, :validity_start_date], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:footnote_association_goods_nomenclatures, :ignore_index_errors=>true) do
-      Integer :goods_nomenclature_sid
-      String :footnote_type, :size=>255
-      String :footnote_id, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      String :goods_nomenclature_item_id, :size=>255
-      String :productline_suffix, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:footnote_association_goods_nomenclatures) do
+      column :goods_nomenclature_sid, "int(11)"
+      column :footnote_type, "varchar(255)"
+      column :footnote_id, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :goods_nomenclature_item_id, "varchar(255)"
+      column :productline_suffix, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:footnote_id, :footnote_type, :goods_nomenclature_sid, :validity_start_date], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:footnote_association_measures, :ignore_index_errors=>true) do
-      Integer :measure_sid
-      String :footnote_type_id, :size=>255
-      String :footnote_id, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:footnote_association_measures) do
+      column :measure_sid, "int(11)"
+      column :footnote_type_id, "varchar(255)"
+      column :footnote_id, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
+      index [:footnote_id, :footnote_type_id], :name=>:footnote
       index [:footnote_id], :name=>:footnote_id
       index [:measure_sid], :name=>:measure_sid
     end
     
-    create_table(:footnote_association_meursing_headings, :ignore_index_errors=>true) do
-      String :meursing_table_plan_id, :size=>255
-      String :meursing_heading_number, :size=>255
-      Integer :row_column_code
-      String :footnote_type, :size=>255
-      String :footnote_id, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:footnote_association_meursing_headings) do
+      column :meursing_table_plan_id, "varchar(255)"
+      column :meursing_heading_number, "varchar(255)"
+      column :row_column_code, "int(11)"
+      column :footnote_type, "varchar(255)"
+      column :footnote_id, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:footnote_id, :meursing_table_plan_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:footnote_description_periods, :ignore_index_errors=>true) do
-      Integer :footnote_description_period_sid
-      String :footnote_type_id, :size=>255
-      String :footnote_id, :size=>255
-      DateTime :validity_start_date
-      DateTime :created_at
-      DateTime :updated_at
-      DateTime :validity_end_date
+    create_table(:footnote_description_periods) do
+      column :footnote_description_period_sid, "int(11)"
+      column :footnote_type_id, "varchar(255)"
+      column :footnote_id, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
+      column :validity_end_date, "datetime"
       
       index [:footnote_id, :footnote_type_id, :footnote_description_period_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:footnote_descriptions, :ignore_index_errors=>true) do
-      Integer :footnote_description_period_sid
-      String :footnote_type_id, :size=>255
-      String :footnote_id, :size=>255
-      String :language_id, :size=>5
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:footnote_descriptions) do
+      column :footnote_description_period_sid, "int(11)"
+      column :footnote_type_id, "varchar(255)"
+      column :footnote_id, "varchar(255)"
+      column :language_id, "varchar(5)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:language_id], :name=>:index_footnote_descriptions_on_language_id
       index [:footnote_id, :footnote_type_id, :footnote_description_period_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:footnote_type_descriptions, :ignore_index_errors=>true) do
-      String :footnote_type_id, :size=>255
-      String :language_id, :size=>5
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:footnote_type_descriptions) do
+      column :footnote_type_id, "varchar(255)"
+      column :language_id, "varchar(5)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:language_id], :name=>:index_footnote_type_descriptions_on_language_id
       index [:footnote_type_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:footnote_types, :ignore_index_errors=>true) do
-      String :footnote_type_id, :size=>255
-      Integer :application_code
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:footnote_types) do
+      column :footnote_type_id, "varchar(255)"
+      column :application_code, "int(11)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:footnote_type_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:footnotes, :ignore_index_errors=>true) do
-      String :footnote_id, :size=>255
-      String :footnote_type_id, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:footnotes) do
+      column :footnote_id, "varchar(255)"
+      column :footnote_type_id, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:footnote_id, :footnote_type_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:fts_regulation_actions, :ignore_index_errors=>true) do
-      Integer :fts_regulation_role
-      String :fts_regulation_id, :size=>255
-      Integer :stopped_regulation_role
-      String :stopped_regulation_id, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:fts_regulation_actions) do
+      column :fts_regulation_role, "int(11)"
+      column :fts_regulation_id, "varchar(255)"
+      column :stopped_regulation_role, "int(11)"
+      column :stopped_regulation_id, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:fts_regulation_id, :fts_regulation_role, :stopped_regulation_id, :stopped_regulation_role], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:full_temporary_stop_regulations, :ignore_index_errors=>true) do
-      Integer :full_temporary_stop_regulation_role
-      String :full_temporary_stop_regulation_id, :size=>255
-      Date :published_date
-      String :officialjournal_number, :size=>255
-      Integer :officialjournal_page
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      Date :effective_enddate
-      Integer :explicit_abrogation_regulation_role
-      String :explicit_abrogation_regulation_id, :size=>255
-      Integer :replacement_indicator
-      String :information_text, :text=>true
-      TrueClass :approved_flag
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:full_temporary_stop_regulations) do
+      column :full_temporary_stop_regulation_role, "int(11)"
+      column :full_temporary_stop_regulation_id, "varchar(255)"
+      column :published_date, "date"
+      column :officialjournal_number, "varchar(255)"
+      column :officialjournal_page, "int(11)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :effective_enddate, "date"
+      column :explicit_abrogation_regulation_role, "int(11)"
+      column :explicit_abrogation_regulation_id, "varchar(255)"
+      column :replacement_indicator, "int(11)"
+      column :information_text, "text"
+      column :approved_flag, "tinyint(1)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:explicit_abrogation_regulation_role, :explicit_abrogation_regulation_id], :name=>:explicit_abrogation_regulation
       index [:full_temporary_stop_regulation_id, :full_temporary_stop_regulation_role], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:geographical_area_description_periods, :ignore_index_errors=>true) do
-      Integer :geographical_area_description_period_sid
-      Integer :geographical_area_sid
-      DateTime :validity_start_date
-      String :geographical_area_id, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
-      DateTime :validity_end_date
+    create_table(:geographical_area_description_periods) do
+      column :geographical_area_description_period_sid, "int(11)"
+      column :geographical_area_sid, "int(11)"
+      column :validity_start_date, "datetime"
+      column :geographical_area_id, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
+      column :validity_end_date, "datetime"
       
       index [:geographical_area_description_period_sid, :geographical_area_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:geographical_area_descriptions, :ignore_index_errors=>true) do
-      Integer :geographical_area_description_period_sid
-      String :language_id, :size=>5
-      Integer :geographical_area_sid
-      String :geographical_area_id, :size=>255
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:geographical_area_descriptions) do
+      column :geographical_area_description_period_sid, "int(11)"
+      column :language_id, "varchar(5)"
+      column :geographical_area_sid, "int(11)"
+      column :geographical_area_id, "varchar(255)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:language_id], :name=>:index_geographical_area_descriptions_on_language_id
       index [:geographical_area_description_period_sid, :geographical_area_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:geographical_area_memberships, :ignore_index_errors=>true) do
-      Integer :geographical_area_sid
-      Integer :geographical_area_group_sid
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:geographical_area_memberships) do
+      column :geographical_area_sid, "int(11)"
+      column :geographical_area_group_sid, "int(11)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:geographical_area_sid, :geographical_area_group_sid, :validity_start_date], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:geographical_areas, :ignore_index_errors=>true) do
-      Integer :geographical_area_sid
-      Integer :parent_geographical_area_group_sid
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      String :geographical_code, :size=>255
-      String :geographical_area_id, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:geographical_areas) do
+      column :geographical_area_sid, "int(11)"
+      column :parent_geographical_area_group_sid, "int(11)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :geographical_code, "varchar(255)"
+      column :geographical_area_id, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:geographical_area_id], :name=>:geographical_area_id, :unique=>true
       index [:parent_geographical_area_group_sid], :name=>:index_geographical_areas_on_parent_geographical_area_group_sid
       index [:geographical_area_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:goods_nomenclature_description_periods, :ignore_index_errors=>true) do
-      Integer :goods_nomenclature_description_period_sid
-      Integer :goods_nomenclature_sid
-      DateTime :validity_start_date
-      String :goods_nomenclature_item_id, :size=>255
-      String :productline_suffix, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
-      DateTime :validity_end_date
+    create_table(:goods_nomenclature_description_periods) do
+      column :goods_nomenclature_description_period_sid, "int(11)"
+      column :goods_nomenclature_sid, "int(11)"
+      column :validity_start_date, "datetime"
+      column :goods_nomenclature_item_id, "varchar(255)"
+      column :productline_suffix, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
+      column :validity_end_date, "datetime"
       
       index [:goods_nomenclature_sid, :validity_start_date, :validity_end_date], :name=>:goods_nomenclature
       index [:goods_nomenclature_description_period_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:goods_nomenclature_descriptions, :ignore_index_errors=>true) do
-      Integer :goods_nomenclature_description_period_sid
-      String :language_id, :size=>5
-      Integer :goods_nomenclature_sid
-      String :goods_nomenclature_item_id, :size=>255
-      String :productline_suffix, :size=>255
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:goods_nomenclature_descriptions) do
+      column :goods_nomenclature_description_period_sid, "int(11)"
+      column :language_id, "varchar(5)"
+      column :goods_nomenclature_sid, "int(11)"
+      column :goods_nomenclature_item_id, "varchar(255)"
+      column :productline_suffix, "varchar(255)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:language_id], :name=>:index_goods_nomenclature_descriptions_on_language_id
       index [:goods_nomenclature_sid, :goods_nomenclature_description_period_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:goods_nomenclature_group_descriptions, :ignore_index_errors=>true) do
-      String :goods_nomenclature_group_type, :size=>255
-      String :goods_nomenclature_group_id, :size=>255
-      String :language_id, :size=>5
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:goods_nomenclature_group_descriptions) do
+      column :goods_nomenclature_group_type, "varchar(255)"
+      column :goods_nomenclature_group_id, "varchar(255)"
+      column :language_id, "varchar(5)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:language_id], :name=>:index_goods_nomenclature_group_descriptions_on_language_id
       index [:goods_nomenclature_group_id, :goods_nomenclature_group_type], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:goods_nomenclature_groups, :ignore_index_errors=>true) do
-      String :goods_nomenclature_group_type, :size=>255
-      String :goods_nomenclature_group_id, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      Integer :nomenclature_group_facility_code
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:goods_nomenclature_groups) do
+      column :goods_nomenclature_group_type, "varchar(255)"
+      column :goods_nomenclature_group_id, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :nomenclature_group_facility_code, "int(11)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:goods_nomenclature_group_id, :goods_nomenclature_group_type], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:goods_nomenclature_indents, :ignore_index_errors=>true) do
-      Integer :goods_nomenclature_indent_sid
-      Integer :goods_nomenclature_sid
-      DateTime :validity_start_date
-      Integer :number_indents
-      String :goods_nomenclature_item_id, :size=>255
-      String :productline_suffix, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
-      DateTime :validity_end_date
+    create_table(:goods_nomenclature_indents) do
+      column :goods_nomenclature_indent_sid, "int(11)"
+      column :goods_nomenclature_sid, "int(11)"
+      column :validity_start_date, "datetime"
+      column :number_indents, "int(11)"
+      column :goods_nomenclature_item_id, "varchar(255)"
+      column :productline_suffix, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
+      column :validity_end_date, "datetime"
       
       index [:goods_nomenclature_sid], :name=>:goods_nomenclature_sid
       index [:validity_start_date, :validity_end_date], :name=>:goods_nomenclature_validity_dates
       index [:goods_nomenclature_indent_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:goods_nomenclature_origins, :ignore_index_errors=>true) do
-      Integer :goods_nomenclature_sid
-      String :derived_goods_nomenclature_item_id, :size=>255
-      String :derived_productline_suffix, :size=>255
-      String :goods_nomenclature_item_id, :size=>255
-      String :productline_suffix, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:goods_nomenclature_origins) do
+      column :goods_nomenclature_sid, "int(11)"
+      column :derived_goods_nomenclature_item_id, "varchar(255)"
+      column :derived_productline_suffix, "varchar(255)"
+      column :goods_nomenclature_item_id, "varchar(255)"
+      column :productline_suffix, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:goods_nomenclature_sid, :derived_goods_nomenclature_item_id, :derived_productline_suffix, :goods_nomenclature_item_id, :productline_suffix], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:goods_nomenclature_successors, :ignore_index_errors=>true) do
-      Integer :goods_nomenclature_sid
-      String :absorbed_goods_nomenclature_item_id, :size=>255
-      String :absorbed_productline_suffix, :size=>255
-      String :goods_nomenclature_item_id, :size=>255
-      String :productline_suffix, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:goods_nomenclature_successors) do
+      column :goods_nomenclature_sid, "int(11)"
+      column :absorbed_goods_nomenclature_item_id, "varchar(255)"
+      column :absorbed_productline_suffix, "varchar(255)"
+      column :goods_nomenclature_item_id, "varchar(255)"
+      column :productline_suffix, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:goods_nomenclature_sid, :absorbed_goods_nomenclature_item_id, :absorbed_productline_suffix, :goods_nomenclature_item_id, :productline_suffix], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:goods_nomenclatures, :ignore_index_errors=>true) do
-      Integer :goods_nomenclature_sid
-      String :goods_nomenclature_item_id, :size=>255
-      String :producline_suffix, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      Integer :statistical_indicator
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:goods_nomenclatures) do
+      column :goods_nomenclature_sid, "int(11)"
+      column :goods_nomenclature_item_id, "varchar(255)"
+      column :producline_suffix, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :statistical_indicator, "int(11)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
+      index [:goods_nomenclature_item_id], :name=>:item
       index [:goods_nomenclature_item_id, :producline_suffix], :name=>:item_id
       index [:goods_nomenclature_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:language_descriptions, :ignore_index_errors=>true) do
-      String :language_code_id, :size=>255
-      String :language_id, :size=>5
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:language_descriptions) do
+      column :language_code_id, "varchar(255)"
+      column :language_id, "varchar(5)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:language_id, :language_code_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:languages, :ignore_index_errors=>true) do
-      String :language_id, :size=>5
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:languages) do
+      column :language_id, "varchar(5)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:language_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:measure_action_descriptions, :ignore_index_errors=>true) do
-      String :action_code, :size=>255
-      String :language_id, :size=>5
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:measure_action_descriptions) do
+      column :action_code, "varchar(255)"
+      column :language_id, "varchar(5)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:action_code], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:measure_actions, :ignore_index_errors=>true) do
-      String :action_code, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:measure_actions) do
+      column :action_code, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:action_code], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:measure_components, :ignore_index_errors=>true) do
-      Integer :measure_sid
-      String :duty_expression_id, :size=>255
-      Integer :duty_amount
-      String :monetary_unit_code, :size=>255
-      String :measurement_unit_code, :size=>255
-      String :measurement_unit_qualifier_code, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:measure_components) do
+      column :measure_sid, "int(11)"
+      column :duty_expression_id, "varchar(255)"
+      column :duty_amount, "double"
+      column :monetary_unit_code, "varchar(255)"
+      column :measurement_unit_code, "varchar(255)"
+      column :measurement_unit_qualifier_code, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:measurement_unit_code], :name=>:index_measure_components_on_measurement_unit_code
       index [:measurement_unit_qualifier_code], :name=>:index_measure_components_on_measurement_unit_qualifier_code
@@ -815,35 +817,35 @@ Sequel.migration do
       index [:measure_sid, :duty_expression_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:measure_condition_code_descriptions, :ignore_index_errors=>true) do
-      String :condition_code, :size=>255
-      String :language_id, :size=>5
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:measure_condition_code_descriptions) do
+      column :condition_code, "varchar(255)"
+      column :language_id, "varchar(5)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:condition_code], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:measure_condition_codes, :ignore_index_errors=>true) do
-      String :condition_code, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:measure_condition_codes) do
+      column :condition_code, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:condition_code], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:measure_condition_components, :ignore_index_errors=>true) do
-      Integer :measure_condition_sid
-      String :duty_expression_id, :size=>255
-      Integer :duty_amount
-      String :monetary_unit_code, :size=>255
-      String :measurement_unit_code, :size=>255
-      String :measurement_unit_qualifier_code, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:measure_condition_components) do
+      column :measure_condition_sid, "int(11)"
+      column :duty_expression_id, "varchar(255)"
+      column :duty_amount, "double"
+      column :monetary_unit_code, "varchar(255)"
+      column :measurement_unit_code, "varchar(255)"
+      column :measurement_unit_qualifier_code, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:duty_expression_id], :name=>:index_measure_condition_components_on_duty_expression_id
       index [:measurement_unit_code], :name=>:index_measure_condition_components_on_measurement_unit_code
@@ -852,20 +854,20 @@ Sequel.migration do
       index [:measure_condition_sid, :duty_expression_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:measure_conditions, :ignore_index_errors=>true) do
-      Integer :measure_condition_sid
-      Integer :measure_sid
-      String :condition_code, :size=>255
-      Integer :component_sequence_number
-      Integer :condition_duty_amount
-      String :condition_monetary_unit_code, :size=>255
-      String :condition_measurement_unit_code, :size=>255
-      String :condition_measurement_unit_qualifier_code, :size=>255
-      String :action_code, :size=>255
-      String :certificate_type_code, :size=>255
-      String :certificate_code, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:measure_conditions) do
+      column :measure_condition_sid, "int(11)"
+      column :measure_sid, "int(11)"
+      column :condition_code, "varchar(255)"
+      column :component_sequence_number, "int(11)"
+      column :condition_duty_amount, "double"
+      column :condition_monetary_unit_code, "varchar(255)"
+      column :condition_measurement_unit_code, "varchar(255)"
+      column :condition_measurement_unit_qualifier_code, "varchar(255)"
+      column :action_code, "varchar(255)"
+      column :certificate_type_code, "varchar(255)"
+      column :certificate_code, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:certificate_code, :certificate_type_code], :name=>:certificate
       index [:condition_measurement_unit_qualifier_code], :name=>:condition_measurement_unit_qualifier_code
@@ -876,159 +878,159 @@ Sequel.migration do
       index [:measure_condition_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:measure_excluded_geographical_areas, :ignore_index_errors=>true) do
-      Integer :measure_sid
-      String :excluded_geographical_area, :size=>255
-      Integer :geographical_area_sid
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:measure_excluded_geographical_areas) do
+      column :measure_sid, "int(11)"
+      column :excluded_geographical_area, "varchar(255)"
+      column :geographical_area_sid, "int(11)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:geographical_area_sid], :name=>:geographical_area_sid
       index [:measure_sid, :excluded_geographical_area, :geographical_area_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:measure_partial_temporary_stops, :ignore_index_errors=>true) do
-      Integer :measure_sid
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      String :partial_temporary_stop_regulation_id, :size=>255
-      String :partial_temporary_stop_regulation_officialjournal_number, :size=>255
-      Integer :partial_temporary_stop_regulation_officialjournal_page
-      String :abrogation_regulation_id, :size=>255
-      String :abrogation_regulation_officialjournal_number, :size=>255
-      Integer :abrogation_regulation_officialjournal_page
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:measure_partial_temporary_stops) do
+      column :measure_sid, "int(11)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :partial_temporary_stop_regulation_id, "varchar(255)"
+      column :partial_temporary_stop_regulation_officialjournal_number, "varchar(255)"
+      column :partial_temporary_stop_regulation_officialjournal_page, "int(11)"
+      column :abrogation_regulation_id, "varchar(255)"
+      column :abrogation_regulation_officialjournal_number, "varchar(255)"
+      column :abrogation_regulation_officialjournal_page, "int(11)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:abrogation_regulation_id], :name=>:abrogation_regulation_id
       index [:measure_sid, :partial_temporary_stop_regulation_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:measure_type_descriptions, :ignore_index_errors=>true) do
-      Integer :measure_type_id
-      String :language_id, :size=>5
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:measure_type_descriptions) do
+      column :measure_type_id, "int(11)"
+      column :language_id, "varchar(5)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:language_id], :name=>:index_measure_type_descriptions_on_language_id
       index [:measure_type_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:measure_type_series, :ignore_index_errors=>true) do
-      String :measure_type_series_id, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      Integer :measure_type_combination
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:measure_type_series) do
+      column :measure_type_series_id, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :measure_type_combination, "int(11)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:measure_type_series_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:measure_type_series_descriptions, :ignore_index_errors=>true) do
-      String :measure_type_series_id, :size=>255
-      String :language_id, :size=>5
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:measure_type_series_descriptions) do
+      column :measure_type_series_id, "varchar(255)"
+      column :language_id, "varchar(5)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:language_id], :name=>:index_measure_type_series_descriptions_on_language_id
       index [:measure_type_series_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:measure_types, :ignore_index_errors=>true) do
-      Integer :measure_type_id
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      Integer :trade_movement_code
-      Integer :priority_code
-      Integer :measure_component_applicable_code
-      Integer :origin_dest_code
-      Integer :order_number_capture_code
-      Integer :measure_explosion_level
-      String :measure_type_series_id, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:measure_types) do
+      column :measure_type_id, "int(11)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :trade_movement_code, "int(11)"
+      column :priority_code, "int(11)"
+      column :measure_component_applicable_code, "int(11)"
+      column :origin_dest_code, "int(11)"
+      column :order_number_capture_code, "int(11)"
+      column :measure_explosion_level, "int(11)"
+      column :measure_type_series_id, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:measure_type_series_id], :name=>:index_measure_types_on_measure_type_series_id
       index [:measure_type_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:measurement_unit_descriptions, :ignore_index_errors=>true) do
-      String :measurement_unit_code, :size=>255
-      String :language_id, :size=>5
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:measurement_unit_descriptions) do
+      column :measurement_unit_code, "varchar(255)"
+      column :language_id, "varchar(5)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:language_id], :name=>:index_measurement_unit_descriptions_on_language_id
       index [:measurement_unit_code], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:measurement_unit_qualifier_descriptions, :ignore_index_errors=>true) do
-      String :measurement_unit_qualifier_code, :size=>255
-      String :language_id, :size=>5
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:measurement_unit_qualifier_descriptions) do
+      column :measurement_unit_qualifier_code, "varchar(255)"
+      column :language_id, "varchar(5)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:measurement_unit_qualifier_code], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:measurement_unit_qualifiers, :ignore_index_errors=>true) do
-      String :measurement_unit_qualifier_code, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:measurement_unit_qualifiers) do
+      column :measurement_unit_qualifier_code, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:measurement_unit_qualifier_code], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:measurement_units, :ignore_index_errors=>true) do
-      String :measurement_unit_code, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:measurement_units) do
+      column :measurement_unit_code, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:measurement_unit_code], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:measurements, :ignore_index_errors=>true) do
-      String :measurement_unit_code, :size=>255
-      String :measurement_unit_qualifier_code, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:measurements) do
+      column :measurement_unit_code, "varchar(255)"
+      column :measurement_unit_qualifier_code, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:measurement_unit_code, :measurement_unit_qualifier_code], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:measures, :ignore_index_errors=>true) do
-      Integer :measure_sid
-      Integer :measure_type
-      String :geographical_area, :size=>255
-      String :goods_nomenclature_item_id, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      Integer :measure_generating_regulation_role
-      String :measure_generating_regulation_id, :size=>255
-      Integer :justification_regulation_role
-      String :justification_regulation_id, :size=>255
-      TrueClass :stopped_flag
-      Integer :geographical_area_sid
-      Integer :goods_nomenclature_sid
-      String :ordernumber, :size=>255
-      Integer :additional_code_type
-      String :additional_code, :size=>255
-      Integer :additional_code_sid
-      Integer :reduction_indicator
-      Integer :export_refund_nomenclature_sid
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:measures) do
+      column :measure_sid, "int(11)"
+      column :measure_type, "int(11)"
+      column :geographical_area, "varchar(255)"
+      column :goods_nomenclature_item_id, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :measure_generating_regulation_role, "int(11)"
+      column :measure_generating_regulation_id, "varchar(255)"
+      column :justification_regulation_role, "int(11)"
+      column :justification_regulation_id, "varchar(255)"
+      column :stopped_flag, "tinyint(1)"
+      column :geographical_area_sid, "int(11)"
+      column :goods_nomenclature_sid, "int(11)"
+      column :ordernumber, "varchar(255)"
+      column :additional_code_type, "int(11)"
+      column :additional_code, "varchar(255)"
+      column :additional_code_sid, "int(11)"
+      column :reduction_indicator, "int(11)"
+      column :export_refund_nomenclature_sid, "int(11)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:additional_code_sid], :name=>:index_measures_on_additional_code_sid
       index [:geographical_area_sid], :name=>:index_measures_on_geographical_area_sid
@@ -1039,101 +1041,101 @@ Sequel.migration do
       index [:measure_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:meursing_additional_codes, :ignore_index_errors=>true) do
-      Integer :meursing_additional_code_sid
-      Integer :additional_code
-      DateTime :validity_start_date
-      DateTime :created_at
-      DateTime :updated_at
-      DateTime :validity_end_date
+    create_table(:meursing_additional_codes) do
+      column :meursing_additional_code_sid, "int(11)"
+      column :additional_code, "int(11)"
+      column :validity_start_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
+      column :validity_end_date, "datetime"
       
       index [:meursing_additional_code_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:meursing_heading_texts, :ignore_index_errors=>true) do
-      String :meursing_table_plan_id, :size=>255
-      Integer :meursing_heading_number
-      Integer :row_column_code
-      String :language_id, :size=>5
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:meursing_heading_texts) do
+      column :meursing_table_plan_id, "varchar(255)"
+      column :meursing_heading_number, "int(11)"
+      column :row_column_code, "int(11)"
+      column :language_id, "varchar(5)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:meursing_table_plan_id, :meursing_heading_number, :row_column_code], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:meursing_headings, :ignore_index_errors=>true) do
-      String :meursing_table_plan_id, :size=>255
-      Integer :meursing_heading_number
-      Integer :row_column_code
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:meursing_headings) do
+      column :meursing_table_plan_id, "varchar(255)"
+      column :meursing_heading_number, "int(11)"
+      column :row_column_code, "int(11)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:meursing_table_plan_id, :meursing_heading_number, :row_column_code], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:meursing_subheadings, :ignore_index_errors=>true) do
-      String :meursing_table_plan_id, :size=>255
-      Integer :meursing_heading_number
-      Integer :row_column_code
-      Integer :subheading_sequence_number
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:meursing_subheadings) do
+      column :meursing_table_plan_id, "varchar(255)"
+      column :meursing_heading_number, "int(11)"
+      column :row_column_code, "int(11)"
+      column :subheading_sequence_number, "int(11)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:meursing_table_plan_id, :meursing_heading_number, :row_column_code, :subheading_sequence_number], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:meursing_table_cell_components, :ignore_index_errors=>true) do
-      Integer :meursing_additional_code_sid
-      String :meursing_table_plan_id, :size=>255
-      Integer :heading_number
-      Integer :row_column_code
-      Integer :subheading_sequence_number
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      Integer :additional_code
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:meursing_table_cell_components) do
+      column :meursing_additional_code_sid, "int(11)"
+      column :meursing_table_plan_id, "varchar(255)"
+      column :heading_number, "int(11)"
+      column :row_column_code, "int(11)"
+      column :subheading_sequence_number, "int(11)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :additional_code, "int(11)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:meursing_table_plan_id, :heading_number, :row_column_code, :meursing_additional_code_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:meursing_table_plans, :ignore_index_errors=>true) do
-      String :meursing_table_plan_id, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:meursing_table_plans) do
+      column :meursing_table_plan_id, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:meursing_table_plan_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:modification_regulations, :ignore_index_errors=>true) do
-      Integer :modification_regulation_role
-      String :modification_regulation_id, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      Date :published_date
-      String :officialjournal_number, :size=>255
-      Integer :officialjournal_page
-      Integer :base_regulation_role
-      String :base_regulation_id, :size=>255
-      Integer :replacement_indicator
-      TrueClass :stopped_flag
-      String :information_text, :text=>true
-      TrueClass :approved_flag
-      Integer :explicit_abrogation_regulation_role
-      String :explicit_abrogation_regulation_id, :size=>255
-      Date :effective_end_date
-      Integer :complete_abrogation_regulation_role
-      String :complete_abrogation_regulation_id, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:modification_regulations) do
+      column :modification_regulation_role, "int(11)"
+      column :modification_regulation_id, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :published_date, "date"
+      column :officialjournal_number, "varchar(255)"
+      column :officialjournal_page, "int(11)"
+      column :base_regulation_role, "int(11)"
+      column :base_regulation_id, "varchar(255)"
+      column :replacement_indicator, "int(11)"
+      column :stopped_flag, "tinyint(1)"
+      column :information_text, "text"
+      column :approved_flag, "tinyint(1)"
+      column :explicit_abrogation_regulation_role, "int(11)"
+      column :explicit_abrogation_regulation_id, "varchar(255)"
+      column :effective_end_date, "date"
+      column :complete_abrogation_regulation_role, "int(11)"
+      column :complete_abrogation_regulation_id, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:base_regulation_id, :base_regulation_role], :name=>:base_regulation
       index [:complete_abrogation_regulation_id, :complete_abrogation_regulation_role], :name=>:complete_abrogation_regulation
@@ -1141,154 +1143,154 @@ Sequel.migration do
       index [:modification_regulation_id, :modification_regulation_role], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:monetary_exchange_periods, :ignore_index_errors=>true) do
-      Integer :monetary_exchange_period_sid
-      String :parent_monetary_unit_code, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:monetary_exchange_periods) do
+      column :monetary_exchange_period_sid, "int(11)"
+      column :parent_monetary_unit_code, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:monetary_exchange_period_sid, :parent_monetary_unit_code], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:monetary_exchange_rates, :ignore_index_errors=>true) do
-      Integer :monetary_exchange_period_sid
-      String :child_monetary_unit_code, :size=>255
-      BigDecimal :exchange_rate, :size=>[16, 8]
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:monetary_exchange_rates) do
+      column :monetary_exchange_period_sid, "int(11)"
+      column :child_monetary_unit_code, "varchar(255)"
+      column :exchange_rate, "decimal(16,8)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:monetary_exchange_period_sid, :child_monetary_unit_code], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:monetary_unit_descriptions, :ignore_index_errors=>true) do
-      String :monetary_unit_code, :size=>255
-      String :language_id, :size=>5
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:monetary_unit_descriptions) do
+      column :monetary_unit_code, "varchar(255)"
+      column :language_id, "varchar(5)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:language_id], :name=>:index_monetary_unit_descriptions_on_language_id
       index [:monetary_unit_code], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:monetary_units, :ignore_index_errors=>true) do
-      String :monetary_unit_code, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:monetary_units) do
+      column :monetary_unit_code, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:monetary_unit_code], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:nomenclature_group_memberships, :ignore_index_errors=>true) do
-      Integer :goods_nomenclature_sid
-      String :goods_nomenclature_group_type, :size=>255
-      String :goods_nomenclature_group_id, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      String :goods_nomenclature_item_id, :size=>255
-      String :productline_suffix, :size=>255
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:nomenclature_group_memberships) do
+      column :goods_nomenclature_sid, "int(11)"
+      column :goods_nomenclature_group_type, "varchar(255)"
+      column :goods_nomenclature_group_id, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :goods_nomenclature_item_id, "varchar(255)"
+      column :productline_suffix, "varchar(255)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:goods_nomenclature_sid, :goods_nomenclature_group_id, :goods_nomenclature_group_type, :goods_nomenclature_item_id, :validity_start_date], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:prorogation_regulation_actions, :ignore_index_errors=>true) do
-      Integer :prorogation_regulation_role
-      String :prorogation_regulation_id, :size=>255
-      Integer :prorogated_regulation_role
-      String :prorogated_regulation_id, :size=>255
-      Date :prorogated_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:prorogation_regulation_actions) do
+      column :prorogation_regulation_role, "int(11)"
+      column :prorogation_regulation_id, "varchar(255)"
+      column :prorogated_regulation_role, "int(11)"
+      column :prorogated_regulation_id, "varchar(255)"
+      column :prorogated_date, "date"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:prorogation_regulation_id, :prorogation_regulation_role, :prorogated_regulation_id, :prorogated_regulation_role], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:prorogation_regulations, :ignore_index_errors=>true) do
-      Integer :prorogation_regulation_role
-      String :prorogation_regulation_id, :size=>255
-      Date :published_date
-      String :officialjournal_number, :size=>255
-      Integer :officialjournal_page
-      Integer :replacement_indicator
-      String :information_text, :text=>true
-      TrueClass :approved_flag
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:prorogation_regulations) do
+      column :prorogation_regulation_role, "int(11)"
+      column :prorogation_regulation_id, "varchar(255)"
+      column :published_date, "date"
+      column :officialjournal_number, "varchar(255)"
+      column :officialjournal_page, "int(11)"
+      column :replacement_indicator, "int(11)"
+      column :information_text, "text"
+      column :approved_flag, "tinyint(1)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:prorogation_regulation_id, :prorogation_regulation_role], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:quota_associations, :ignore_index_errors=>true) do
-      Integer :main_quota_definition_sid
-      Integer :sub_quota_definition_sid
-      String :relation_type, :size=>255
-      BigDecimal :coefficient, :size=>[16, 5]
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:quota_associations) do
+      column :main_quota_definition_sid, "int(11)"
+      column :sub_quota_definition_sid, "int(11)"
+      column :relation_type, "varchar(255)"
+      column :coefficient, "decimal(16,5)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:main_quota_definition_sid, :sub_quota_definition_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:quota_balance_events, :ignore_index_errors=>true) do
-      Integer :quota_definition_sid
-      DateTime :occurrence_timestamp
-      Date :last_import_date_in_allocation
-      Integer :old_balance
-      Integer :new_balance
-      Integer :imported_amount
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:quota_balance_events) do
+      column :quota_definition_sid, "int(11)"
+      column :occurrence_timestamp, "datetime"
+      column :last_import_date_in_allocation, "date"
+      column :old_balance, "int(11)"
+      column :new_balance, "int(11)"
+      column :imported_amount, "int(11)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:quota_definition_sid, :occurrence_timestamp], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:quota_blocking_periods, :ignore_index_errors=>true) do
-      Integer :quota_blocking_period_sid
-      Integer :quota_definition_sid
-      Date :blocking_start_date
-      Date :blocking_end_date
-      Integer :blocking_period_type
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:quota_blocking_periods) do
+      column :quota_blocking_period_sid, "int(11)"
+      column :quota_definition_sid, "int(11)"
+      column :blocking_start_date, "date"
+      column :blocking_end_date, "date"
+      column :blocking_period_type, "int(11)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:quota_blocking_period_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:quota_critical_events, :ignore_index_errors=>true) do
-      Integer :quota_definition_sid
-      DateTime :occurrence_timestamp
-      String :critical_state, :size=>255
-      Date :critical_state_change_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:quota_critical_events) do
+      column :quota_definition_sid, "int(11)"
+      column :occurrence_timestamp, "datetime"
+      column :critical_state, "varchar(255)"
+      column :critical_state_change_date, "date"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:quota_definition_sid, :occurrence_timestamp], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:quota_definitions, :ignore_index_errors=>true) do
-      Integer :quota_definition_sid
-      String :quota_order_number_id, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      Integer :quota_order_number_sid
-      Integer :volume
-      Integer :initial_volume
-      String :measurement_unit_code, :size=>255
-      Integer :maximum_precision
-      String :critical_state, :size=>255
-      Integer :critical_threshold
-      String :monetary_unit_code, :size=>255
-      String :measurement_unit_qualifier_code, :size=>255
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:quota_definitions) do
+      column :quota_definition_sid, "int(11)"
+      column :quota_order_number_id, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :quota_order_number_sid, "int(11)"
+      column :volume, "int(11)"
+      column :initial_volume, "int(11)"
+      column :measurement_unit_code, "varchar(255)"
+      column :maximum_precision, "int(11)"
+      column :critical_state, "varchar(255)"
+      column :critical_threshold, "int(11)"
+      column :monetary_unit_code, "varchar(255)"
+      column :measurement_unit_qualifier_code, "varchar(255)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:measurement_unit_code], :name=>:index_quota_definitions_on_measurement_unit_code
       index [:measurement_unit_qualifier_code], :name=>:index_quota_definitions_on_measurement_unit_qualifier_code
@@ -1297,170 +1299,170 @@ Sequel.migration do
       index [:quota_definition_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:quota_exhaustion_events, :ignore_index_errors=>true) do
-      Integer :quota_definition_sid
-      DateTime :occurrence_timestamp
-      Date :exhaustion_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:quota_exhaustion_events) do
+      column :quota_definition_sid, "int(11)"
+      column :occurrence_timestamp, "datetime"
+      column :exhaustion_date, "date"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:quota_definition_sid, :occurrence_timestamp], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:quota_order_number_origin_exclusions, :ignore_index_errors=>true) do
-      Integer :quota_order_number_origin_sid
-      Integer :excluded_geographical_area_sid
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:quota_order_number_origin_exclusions) do
+      column :quota_order_number_origin_sid, "int(11)"
+      column :excluded_geographical_area_sid, "int(11)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:quota_order_number_origin_sid, :excluded_geographical_area_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:quota_order_number_origins, :ignore_index_errors=>true) do
-      Integer :quota_order_number_origin_sid
-      Integer :quota_order_number_sid
-      String :geographical_area_id, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      Integer :geographical_area_sid
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:quota_order_number_origins) do
+      column :quota_order_number_origin_sid, "int(11)"
+      column :quota_order_number_sid, "int(11)"
+      column :geographical_area_id, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :geographical_area_sid, "int(11)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:geographical_area_sid], :name=>:index_quota_order_number_origins_on_geographical_area_sid
       index [:quota_order_number_origin_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:quota_order_numbers, :ignore_index_errors=>true) do
-      Integer :quota_order_number_sid
-      String :quota_order_number_id, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:quota_order_numbers) do
+      column :quota_order_number_sid, "int(11)"
+      column :quota_order_number_id, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:quota_order_number_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:quota_reopening_events, :ignore_index_errors=>true) do
-      Integer :quota_definition_sid
-      DateTime :occurrence_timestamp
-      Date :reopening_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:quota_reopening_events) do
+      column :quota_definition_sid, "int(11)"
+      column :occurrence_timestamp, "datetime"
+      column :reopening_date, "date"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:quota_definition_sid, :occurrence_timestamp], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:quota_suspension_periods, :ignore_index_errors=>true) do
-      Integer :quota_suspension_period_sid
-      Integer :quota_definition_sid
-      Date :suspension_start_date
-      Date :suspension_end_date
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:quota_suspension_periods) do
+      column :quota_suspension_period_sid, "int(11)"
+      column :quota_definition_sid, "int(11)"
+      column :suspension_start_date, "date"
+      column :suspension_end_date, "date"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:quota_definition_sid], :name=>:index_quota_suspension_periods_on_quota_definition_sid
       index [:quota_suspension_period_sid], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:quota_unblocking_events, :ignore_index_errors=>true) do
-      Integer :quota_definition_sid
-      DateTime :occurrence_timestamp
-      Date :unblocking_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:quota_unblocking_events) do
+      column :quota_definition_sid, "int(11)"
+      column :occurrence_timestamp, "datetime"
+      column :unblocking_date, "date"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:quota_definition_sid, :occurrence_timestamp], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:quota_unsuspension_events, :ignore_index_errors=>true) do
-      Integer :quota_definition_sid
-      DateTime :occurrence_timestamp
-      Date :unsuspension_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:quota_unsuspension_events) do
+      column :quota_definition_sid, "int(11)"
+      column :occurrence_timestamp, "datetime"
+      column :unsuspension_date, "date"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:quota_definition_sid, :occurrence_timestamp], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:regulation_group_descriptions, :ignore_index_errors=>true) do
-      String :regulation_group_id, :size=>255
-      String :language_id, :size=>5
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:regulation_group_descriptions) do
+      column :regulation_group_id, "varchar(255)"
+      column :language_id, "varchar(5)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:language_id], :name=>:index_regulation_group_descriptions_on_language_id
       index [:regulation_group_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:regulation_groups, :ignore_index_errors=>true) do
-      String :regulation_group_id, :size=>255
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:regulation_groups) do
+      column :regulation_group_id, "varchar(255)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:regulation_group_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:regulation_replacements, :ignore_index_errors=>true) do
-      String :geographical_area_id, :size=>255
-      String :chapter_heading, :size=>255
-      Integer :replacing_regulation_role
-      String :replacing_regulation_id, :size=>255
-      Integer :replaced_regulation_role
-      String :replaced_regulation_id, :size=>255
-      Integer :measure_type_id
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:regulation_replacements) do
+      column :geographical_area_id, "varchar(255)"
+      column :chapter_heading, "varchar(255)"
+      column :replacing_regulation_role, "int(11)"
+      column :replacing_regulation_id, "varchar(255)"
+      column :replaced_regulation_role, "int(11)"
+      column :replaced_regulation_id, "varchar(255)"
+      column :measure_type_id, "int(11)"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:replacing_regulation_id, :replacing_regulation_role, :replaced_regulation_id, :replaced_regulation_role, :measure_type_id, :geographical_area_id, :chapter_heading], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:regulation_role_type_descriptions, :ignore_index_errors=>true) do
-      String :regulation_role_type_id, :size=>255
-      String :language_id, :size=>5
-      String :description, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:regulation_role_type_descriptions) do
+      column :regulation_role_type_id, "varchar(255)"
+      column :language_id, "varchar(5)"
+      column :description, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:language_id], :name=>:index_regulation_role_type_descriptions_on_language_id
       index [:regulation_role_type_id], :name=>:primary_key, :unique=>true
     end
     
-    create_table(:regulation_role_types, :ignore_index_errors=>true) do
-      Integer :regulation_role_type_id
-      DateTime :validity_start_date
-      DateTime :validity_end_date
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:regulation_role_types) do
+      column :regulation_role_type_id, "int(11)"
+      column :validity_start_date, "datetime"
+      column :validity_end_date, "datetime"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:regulation_role_type_id], :name=>:primary_key, :unique=>true
     end
     
     create_table(:schema_migrations) do
-      String :filename, :size=>255, :null=>false
+      column :filename, "varchar(255)", :null=>false
       
       primary_key [:filename]
     end
     
     create_table(:sections) do
-      primary_key :id
-      Integer :position
-      String :numeral, :size=>255
-      String :title, :size=>255
-      DateTime :created_at, :null=>false
-      DateTime :updated_at, :null=>false
+      primary_key :id, :type=>"int(11)"
+      column :position, "int(11)"
+      column :numeral, "varchar(255)"
+      column :title, "varchar(255)"
+      column :created_at, "datetime", :null=>false
+      column :updated_at, "datetime", :null=>false
     end
     
-    create_table(:transmission_comments, :ignore_index_errors=>true) do
-      Integer :comment_sid
-      String :language_id, :size=>5
-      String :comment_text, :text=>true
-      DateTime :created_at
-      DateTime :updated_at
+    create_table(:transmission_comments) do
+      column :comment_sid, "int(11)"
+      column :language_id, "varchar(5)"
+      column :comment_text, "text"
+      column :created_at, "datetime"
+      column :updated_at, "datetime"
       
       index [:comment_sid, :language_id], :name=>:primary_key, :unique=>true
     end
