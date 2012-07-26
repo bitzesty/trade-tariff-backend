@@ -28,7 +28,7 @@ end
 child(measure_conditions: :measure_conditions) do
   attributes :document_code, :requirement_type, :requirement, :action, :condition
 
-  child(measure_condition_components: :measure_condition_components) do
+  child(measure_condition_components: :components) do
     attributes :duty_amount, :duty_expression_id
 
     node(:monetary_unit) { |component|

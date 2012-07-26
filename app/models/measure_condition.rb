@@ -52,8 +52,10 @@ class MeasureCondition < Sequel::Model
   def requirement
     case requirement_type
     when :document
-      certificate.description
-    when :specific
+      {
+        requirement: certificate.description
+      }
+    when :duty_expression
       {
         sequence_number: component_sequence_number,
         condition_amount: condition_duty_amount,
@@ -79,7 +81,7 @@ class MeasureCondition < Sequel::Model
     if certificate_code.present?
       :document
     elsif condition_duty_amount.present?
-      :specific
+      :duty_expression
     end
   end
 
