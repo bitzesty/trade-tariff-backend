@@ -1,3 +1,5 @@
-class Chief::CountryGroup < Sequel::Model(:chief_country_group)
-  
+module Chief
+  class CountryGroup < Sequel::Model(:chief_country_group)
+
+  end
 end

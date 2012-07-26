@@ -1,2 +1,4 @@
-class Chief::DutyExpression < Sequel::Model(:chief_duty_expression)
+module Chief
+  class DutyExpression < Sequel::Model(:chief_duty_expression)
+  end
 end

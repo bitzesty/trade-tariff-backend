@@ -1,3 +1,5 @@
-class Chief::Tamf < Sequel::Model(:chief_tamf)
-# set_primary_key TODO
+module Chief
+  class Tamf < Sequel::Model(:chief_tamf)
+  # set_primary_key TODO
+  end
 end
