@@ -494,7 +494,6 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
       
-      index [:footnote_id, :footnote_type_id], :name=>:footnote
       index [:footnote_id], :name=>:footnote_id
       index [:measure_sid], :name=>:measure_sid
     end
@@ -756,7 +755,6 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
       
-      index [:goods_nomenclature_item_id], :name=>:item
       index [:goods_nomenclature_item_id, :producline_suffix], :name=>:item_id
       index [:goods_nomenclature_sid], :name=>:primary_key, :unique=>true
     end
@@ -1038,6 +1036,7 @@ Sequel.migration do
       index [:measure_type], :name=>:index_measures_on_measure_type
       index [:justification_regulation_role, :justification_regulation_id], :name=>:justification_regulation
       index [:measure_generating_regulation_id], :name=>:measure_generating_regulation
+      index [:goods_nomenclature_item_id]
       index [:measure_sid], :name=>:primary_key, :unique=>true
     end
     
