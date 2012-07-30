@@ -6,7 +6,7 @@ describe Commodity do
   end
 
   describe '.actual' do
-    let!(:actual_commodity) { create :commodity, :actual }
+    let!(:actual_commodity)  { create :commodity, :actual }
     let!(:expired_commodity) { create :commodity, :expired }
 
     context 'when not in TimeMachine block' do
