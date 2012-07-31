@@ -25,7 +25,7 @@ class Chapter < GoodsNomenclature
     goods_nomenclature_item_id.first(2)
   end
 
-  def identifier
+  def to_param
     short_code
   end
 

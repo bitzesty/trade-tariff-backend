@@ -5,6 +5,14 @@ describe Commodity do
     subject.primary_key.should == :goods_nomenclature_sid
   end
 
+  describe '.to_param' do
+    let(:commodity) { create :commodity }
+
+    it 'uses goods_nomenclature_item_id as param' do
+      commodity.to_param.should == commodity.goods_nomenclature_item_id
+    end
+  end
+
   describe '.actual' do
     let!(:actual_commodity)  { create :commodity, :actual }
     let!(:expired_commodity) { create :commodity, :expired }

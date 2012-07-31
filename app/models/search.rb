@@ -57,7 +57,7 @@ class Search
         type: "exact_match",
         entries: [{
           endpoint: @results.class.name.parameterize("_").pluralize,
-          id: @results.identifier
+          id: @results.to_param
         }]
       }.to_json
     else

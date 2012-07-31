@@ -101,8 +101,8 @@ class Commodity < GoodsNomenclature
     end
   end
 
-  def identifier
-    goods_nomenclature_item_id + producline_suffix
+  def to_param
+    code
   end
 
   def code

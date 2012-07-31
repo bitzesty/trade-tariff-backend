@@ -1,7 +1,7 @@
 FactoryGirl.define do
   sequence(:sid) { |n| n}
 
-  factory :commodity do
+  factory :goods_nomenclature do
     goods_nomenclature_sid { generate(:sid) }
     goods_nomenclature_item_id { 10.times.map{ Random.rand(9) }.join }
     producline_suffix   { [10,20,80].sample }
@@ -17,6 +17,17 @@ FactoryGirl.define do
       validity_start_date { Date.today.ago(3.years) }
       validity_end_date   { Date.today.ago(1.year)  }
     end
+  end
+
+  factory :commodity, parent: :goods_nomenclature, class: Commodity do
+  end
+
+  factory :chapter, parent: :goods_nomenclature, class: Chapter do
+    goods_nomenclature_item_id { "#{2.times.map{ Random.rand(9) }.join}00000000" }
+  end
+
+  factory :heading, parent: :goods_nomenclature, class: Heading do
+    goods_nomenclature_item_id { "#{4.times.map{ Random.rand(9) }.join}000000" }
   end
 
   factory :quota_definition do
@@ -49,5 +60,11 @@ FactoryGirl.define do
     quota_definition
     critical_state_change_date { Date.today }
     occurrence_timestamp { Time.now }
+  end
+
+  factory :section do
+    position { Forgery(:basic).number }
+    numeral { ["I", "II", "III"].sample }
+    title { Forgery(:lorem_ipsum).sentence }
   end
 end

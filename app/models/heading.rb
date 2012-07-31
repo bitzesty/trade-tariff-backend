@@ -59,7 +59,7 @@ class Heading < GoodsNomenclature
     goods_nomenclature_item_id.first(4)
   end
 
-  def identifier
+  def to_param
     short_code
   end
 
