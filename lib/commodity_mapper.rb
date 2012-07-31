@@ -65,7 +65,7 @@ class CommodityMapper
     if primary.number_indents < secondary.number_indents
       primary.children << secondary unless primary.children.include?(secondary)
 
-      parent_map[secondary.to_param] = primary
+      parent_map[secondary.id] = primary
       secondary.parent = primary
       secondary.ancestors += primary.ancestors
       secondary.ancestors << primary
@@ -73,7 +73,7 @@ class CommodityMapper
       if primary.parent.present? # if primary is not directly under heading
         primary.parent.children << secondary unless primary.parent.children.include?(secondary)
 
-        parent_map[secondary.to_param] = primary.parent
+        parent_map[secondary.id] = primary.parent
         secondary.parent = primary
         secondary.ancestors += primary.ancestors
         secondary.ancestors << primary
@@ -84,7 +84,7 @@ class CommodityMapper
       if parent.present?
         parent.children << secondary unless parent.children.include?(secondary)
 
-        parent_map[secondary.to_param] = parent
+        parent_map[secondary.id] = parent
         secondary.parent = parent
         secondary.ancestors += parent.ancestors
         secondary.ancestors << parent
@@ -105,6 +105,6 @@ class CommodityMapper
   end
 
   def parent_of(commodity)
-    parent_map[commodity.to_param]
+    parent_map[commodity.id]
   end
 end
