@@ -40,7 +40,7 @@ group :test do
   gem 'simplecov'
   gem 'simplecov-rcov'
   gem 'ci_reporter'
-  gem 'database_cleaner'
+  gem 'database_cleaner', git: 'git://github.com/bmabey/database_cleaner.git'
 end
 
 group :router do
