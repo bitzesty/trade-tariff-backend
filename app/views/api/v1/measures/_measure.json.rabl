@@ -79,3 +79,22 @@ end
 child(additional_code: :additional_code) do
   attributes :code, :description
 end
+
+child(quota_order_number: :order_number) do
+  node(:number) { |qon| qon.quota_order_number_id }
+
+  child(quota_definition: :definition) do
+    attributes :initial_volume, :validity_start_date, :validity_end_date, :status
+
+    node(:measurement_unit) { |qd| qd.measurement_unit_code }
+    node(:monetary_unit) { |qd| qd.monetary_unit_code }
+    node(:measurement_unit_qualifier ) { |qd| qd.measurement_unit_qualifier_code }
+    node(:balance) { |qd| qd.last_balance_event.try(:new_balance)  }
+    node(:last_allocation_date) { |qd| qd.last_balance_event.try(:occurrence_timestamp) }
+    node(:suspension_period_start_date) { |qd| qd.last_suspension_period.try(:suspension_start_date) }
+    node(:suspension_period_end_date) { |qd| qd.last_suspension_period.try(:suspension_end_date) }
+    node(:blocking_period_start_date) { |qd| qd.last_blocking_period.try(:blocking_start_date) }
+    node(:blocking_period_end_date) { |qd| qd.last_blocking_period.try(:blocking_end_date) }
+  end
+end
+

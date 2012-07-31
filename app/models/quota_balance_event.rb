@@ -1,7 +1,18 @@
 class QuotaBalanceEvent < Sequel::Model
-  set_primary_key  [:quota_definition_sid, :occurance_timestamp]
+  set_primary_key  [:quota_definition_sid, :occurrence_timestamp]
 
-  # belongs_to :quota_definition, foreign_key: :quota_definition_sid
+  many_to_one :quota_definition, key: :quota_definition_sid,
+                                 primary_key: :quota_definition_sid
+
+  dataset_module do
+    def last
+      order(:occurrence_timestamp.desc).first
+    end
+  end
+
+  def self.status
+    'open'
+  end
 end
 
 

@@ -1,29 +1,33 @@
 class QuotaDefinition < Sequel::Model
+  plugin :time_machine
+
   set_primary_key  :quota_definition_sid
 
-  # belongs_to :quota_order_number
-  # belongs_to :measurement_unit, foreign_key: :measurement_unit_code
-  # belongs_to :measurement_unit_qualifier, foreign_key: :measurement_unit_qualifier_code
-  # belongs_to :monetary_unit, foreign_key: :monetary_unit_code
+  one_to_many :quota_exhaustion_events, key: :quota_definition_sid,
+                                        primary_key: :quota_definition_sid
 
-  # has_many :main_quota_associations, foreign_key: :main_quota_definition_sid,
-  #                                    class_name: 'QuotaAssociation'
-  # has_many :sub_quotas, through: :main_quota_associations,
-  #                       source: :sub_quota_definition
-  # has_many :sub_quota_associations, foreign_key: :sub_quota_definition_sid,
-  #                                   class_name: 'QuotaAssociation'
-  # has_many :main_quotas, through: :sub_quota_associations,
-  #                        source: :main_quota_definition
-  # has_many :quota_balance_events, foreign_key: :quota_definition_sid
-  # has_many :quota_blocking_periods, primary_key: :quota_definition_sid,
-  #                                   foreign_key: :quota_definition_sid
-  # has_many :quota_critical_events, foreign_key: :quota_definition_sid
-  # has_many :quota_exhaustion_events, foreign_key: :quota_definition_sid
-  # has_many :quota_reopening_events, foreign_key: :quota_definition_sid
-  # has_many :quota_suspension_periods, primary_key: :quota_definition_sid,
-  #                                     foreign_key: :quota_definition_sid
-  # has_many :quota_unblocking_events,  foreign_key: :quota_definition_sid
-  # has_many :quota_unsuspension_events, foreign_key: :quota_definition_sid
+  one_to_many :quota_balance_events, key: :quota_definition_sid,
+                                     primary_key: :quota_definition_sid
+  one_to_many :quota_suspension_periods, key: :quota_definition_sid,
+                                         primary_key: :quota_definition_sid
+  one_to_many :quota_blocking_periods, key: :quota_definition_sid,
+                                       primary_key: :quota_definition_sid
+
+  def status
+    QuotaEvent.last_for(quota_definition_sid).status
+  end
+
+  def last_balance_event
+    @_last_balance_event ||= quota_balance_events.last
+  end
+
+  def last_suspension_period
+    @_last_suspension_period ||= quota_suspension_periods.last
+  end
+
+  def last_blocking_period
+    @_last_blocking_period ||= quota_blocking_periods.last
+  end
 end
 
 

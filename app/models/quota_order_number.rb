@@ -1,10 +1,11 @@
 class QuotaOrderNumber < Sequel::Model
+  plugin :time_machine
+
   set_primary_key  :quota_order_number_sid
 
-  # has_many :quota_order_number_origins, foreign_key: :quota_order_number_sid
-  # has_many :quota_order_number_origin_geographical_areas, through: :quota_order_number_origins,
-  #                                                         source: :geographical_area,
-  #                                                         class_name: 'GeographicalArea'
+  one_to_one :quota_definition, dataset: -> {
+    actual(QuotaDefinition).where(quota_order_number_id: quota_order_number_id)
+  }
 end
 
 

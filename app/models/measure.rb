@@ -29,6 +29,10 @@ class Measure < Sequel::Model
                                    primary_key: :measure_sid
   one_to_one :additional_code, key: :additional_code_sid
 
+  one_to_one :quota_order_number, dataset: -> {
+    actual(QuotaOrderNumber).where(quota_order_number_id: ordernumber)
+  }
+
   delegate :measure_type_description, to: :measure_type
 
   dataset_module do
