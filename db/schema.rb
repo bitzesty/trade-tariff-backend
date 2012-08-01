@@ -1008,7 +1008,7 @@ Sequel.migration do
     end
     
     create_table(:measures) do
-      column :measure_sid, "int(11)"
+      column :measure_sid, "int(11) unsigned"
       column :measure_type, "int(11)"
       column :geographical_area, "varchar(255)"
       column :goods_nomenclature_item_id, "varchar(255)"
