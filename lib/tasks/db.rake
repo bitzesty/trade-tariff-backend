@@ -4,7 +4,7 @@ namespace :db do
     load(File.join(Rails.root, 'db', 'import.rb'))
   end
   
-  desc "Import Chief"
+  desc "Import Chief standing data"
   task chief: 'environment' do
     load(File.join(Rails.root, 'db', 'chief_standing_data.rb'))
   end
