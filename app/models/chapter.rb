@@ -25,6 +25,11 @@ class Chapter < GoodsNomenclature
     goods_nomenclature_item_id.first(2)
   end
 
+  # Override to avoid lookup, this is default behaviour for chapters.
+  def number_indents
+    0
+  end
+
   def to_param
     short_code
   end

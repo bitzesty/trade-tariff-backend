@@ -134,5 +134,54 @@ describe CommodityMapper do
         commodity5.parent.should == commodity1
       end
     end
+
+    # E.g.
+    # (1) 0101000010 10
+    # (2) 0101000010 80 -
+    # (3) 0101000030 10
+    # (4) 0101000030 80 -
+    # (1) should have children (2)
+    # (2) should have parent (1)
+    # (3) should have children (4)
+    # (4) should have parent (3)
+    context 'with heading indents on the same level' do
+      let(:heading1) { create :heading, :with_indent,
+                                        indents: 0,
+                                        goods_nomenclature_item_id: "0101000000",
+                                        producline_suffix: "10" }
+      let(:heading2) { create :heading, :with_indent,
+                                        indents: 1,
+                                        goods_nomenclature_item_id: "0101000000",
+                                        producline_suffix: "80" }
+      let(:heading3) { create :heading, :with_indent,
+                                        indents: 0,
+                                        goods_nomenclature_item_id: "0102000000",
+                                        producline_suffix: "10" }
+      let(:heading4) { create :heading, :with_indent,
+                                        indents: 0,
+                                        goods_nomenclature_item_id: "0102000000",
+                                        producline_suffix: "80" }
+
+      it 'assigns no parents or children to both commodities' do
+        headings = CommodityMapper.new([heading1, heading2, heading3, heading4])
+        heading1.children.should include heading2
+        heading1.children.should_not include heading3
+        heading1.ancestors.should be_blank
+        heading1.parent.should be_blank
+
+        heading2.children.should be_blank
+        heading2.ancestors.should include heading1
+        heading2.parent.should == heading1
+
+        heading3.children.should include heading4
+        heading3.ancestors.should be_blank
+        heading3.parent.should be_blank
+
+        heading4.children.should be_blank
+        heading4.ancestors.should include heading3
+        heading4.ancestors.should_not include heading1
+        heading4.parent.should == heading3
+      end
+    end
   end
 end

@@ -109,10 +109,6 @@ class Commodity < GoodsNomenclature
     goods_nomenclature_item_id
   end
 
-  def id
-    goods_nomenclature_sid
-  end
-
   # TODO calculate real rate
   def third_country_duty_rate
     "0.00 %"

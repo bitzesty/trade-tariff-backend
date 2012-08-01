@@ -3,6 +3,9 @@ attributes :short_code, :code, :description
 child :section do
   attributes :title, :position, :numeral
 end
-child(headings: :headings) do
-  attributes :short_code, :code, :declarable, :description
+
+node(:headings) do
+  @headings.map do |heading|
+    partial("api/v1/headings/heading", object: heading)
+  end
 end

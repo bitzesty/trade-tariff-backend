@@ -59,6 +59,11 @@ class Heading < GoodsNomenclature
     goods_nomenclature_item_id.first(4)
   end
 
+  # Override to avoid lookup, this is default behaviour for headings.
+  def number_indents
+    0
+  end
+
   def to_param
     short_code
   end

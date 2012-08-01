@@ -1,3 +1,5 @@
+require 'commodity_mapper'
+
 module Api
   module V1
     class ChaptersController < ApplicationController
@@ -5,6 +7,8 @@ module Api
         @chapter = Chapter.actual
                           .where(goods_nomenclature_item_id: chapter_id)
                           .first
+
+        @headings = CommodityMapper.new(@chapter.headings).commodities
 
         respond_with @chapter
       end

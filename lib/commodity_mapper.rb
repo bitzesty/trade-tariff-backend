@@ -62,14 +62,21 @@ class CommodityMapper
   end
 
   def map_commodities(primary, secondary)
-    if primary.number_indents < secondary.number_indents
+    if (heading_map?(primary, secondary) &&
+       (primary.producline_suffix < secondary.producline_suffix)) ||
+       (primary.number_indents < secondary.number_indents)
+
       primary.children << secondary unless primary.children.include?(secondary)
 
       parent_map[secondary.id] = primary
       secondary.parent = primary
       secondary.ancestors += primary.ancestors
       secondary.ancestors << primary
-    elsif primary.number_indents == secondary.number_indents
+    elsif (heading_map?(primary, secondary) &&
+          (primary.producline_suffix == secondary.producline_suffix)) ||
+          (!heading_map?(primary, secondary) &&
+           primary.number_indents == secondary.number_indents)
+
       if primary.parent.present? # if primary is not directly under heading
         primary.parent.children << secondary unless primary.parent.children.include?(secondary)
 
@@ -77,7 +84,10 @@ class CommodityMapper
         secondary.parent = primary.parent
         secondary.ancestors += primary.ancestors
       end
-    else primary.number_indents > secondary.number_indents
+    else (heading_map?(primary, secondary) &&
+          (primary.producline_suffix > secondary.producline_suffix)) ||
+         (primary.number_indents > secondary.number_indents)
+
       parent = nth_parent(primary, secondary.number_indents)
 
       if parent.present?
@@ -105,5 +115,9 @@ class CommodityMapper
 
   def parent_of(commodity)
     parent_map[commodity.id]
+  end
+
+  def heading_map?(primary, secondary)
+    primary.is_a?(Heading) && secondary.is_a?(Heading)
   end
 end
