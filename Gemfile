@@ -41,6 +41,7 @@ group :test do
   gem 'simplecov-rcov'
   gem 'ci_reporter'
   gem 'database_cleaner', git: 'git://github.com/bmabey/database_cleaner.git'
+  gem 'json_expressions'
 end
 
 group :router do

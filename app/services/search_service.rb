@@ -1,6 +1,8 @@
-class Search
+class SearchService
   include ActiveModel::Validations
   include ActiveModel::Conversion
+
+  class EmptyQuery < StandardError; end
 
   attr_accessor :q
   attr_reader :results
@@ -11,6 +13,8 @@ class Search
         send(:"#{name}=", value)
       end
     end if attributes.present?
+
+    raise EmptyQuery if q.blank?
   end
 
   def exact_match
@@ -27,7 +31,7 @@ class Search
                when /^[0-9]{10}$/
                  Commodity.by_code(q).declarable.first.presence ||
                  Heading.by_declarable_code(q).declarable.first.presence
-               when /^[0-9]{12}$/
+               when /^[0-9]{11,12}$/
                  Commodity.by_code(q).declarable.first
                end
 

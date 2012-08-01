@@ -31,6 +31,9 @@ FactoryGirl.define do
   end
 
   factory :commodity, parent: :goods_nomenclature, class: Commodity do
+    trait :declarable do
+      producline_suffix { 80 }
+    end
   end
 
   factory :chapter, parent: :goods_nomenclature, class: Chapter do
@@ -39,6 +42,10 @@ FactoryGirl.define do
 
   factory :heading, parent: :goods_nomenclature, class: Heading do
     goods_nomenclature_item_id { "#{4.times.map{ Random.rand(9) }.join}000000" }
+
+    trait :declarable do
+      producline_suffix { 80 }
+    end
   end
 
   factory :goods_nomenclature_indent do
