@@ -26,7 +26,7 @@ class Search
                  Heading.by_code(q).first
                when /^[0-9]{10}$/
                  Commodity.by_code(q).declarable.first.presence ||
-                 Heading.by_declarable_code(q).first.presence
+                 Heading.by_declarable_code(q).declarable.first.presence
                when /^[0-9]{12}$/
                  Commodity.by_code(q).declarable.first
                end

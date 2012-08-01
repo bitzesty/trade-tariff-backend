@@ -31,7 +31,8 @@ class Commodity < GoodsNomenclature
   }, class_name: 'Measure'
 
   one_to_one :heading, dataset: -> {
-    actual(Heading).filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
+    actual(Heading).declarable
+                   .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
   }
 
   one_to_one :chapter, dataset: -> {
