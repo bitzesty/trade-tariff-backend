@@ -41,14 +41,14 @@ class CommodityMapper
     detect{|commodity| commodity.goods_nomenclature_sid == ref_commodity.goods_nomenclature_sid }
   end
 
+  private
+
   def process
     # first pair
     traverse(commodities, nil, commodities.first)
     # all other pairs
     traverse(commodities, commodities.first, commodities.second)
   end
-
-  private
 
   def traverse(commodities, primary, secondary)
     # ignore case when first commodity is blank it's a direct child of the heading

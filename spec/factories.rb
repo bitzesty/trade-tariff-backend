@@ -2,6 +2,10 @@ FactoryGirl.define do
   sequence(:sid) { |n| n}
 
   factory :goods_nomenclature do
+    ignore do
+      indents { 1 }
+    end
+
     goods_nomenclature_sid { generate(:sid) }
     goods_nomenclature_item_id { 10.times.map{ Random.rand(9) }.join }
     producline_suffix   { [10,20,80].sample }
@@ -17,6 +21,13 @@ FactoryGirl.define do
       validity_start_date { Date.today.ago(3.years) }
       validity_end_date   { Date.today.ago(1.year)  }
     end
+
+    trait :with_indent do
+      after(:create) { |gono, evaluator|
+        FactoryGirl.create(:goods_nomenclature_indent, goods_nomenclature_sid: gono.goods_nomenclature_sid,
+                                                       number_indents: evaluator.indents)
+      }
+    end
   end
 
   factory :commodity, parent: :goods_nomenclature, class: Commodity do
@@ -28,6 +39,14 @@ FactoryGirl.define do
 
   factory :heading, parent: :goods_nomenclature, class: Heading do
     goods_nomenclature_item_id { "#{4.times.map{ Random.rand(9) }.join}000000" }
+  end
+
+  factory :goods_nomenclature_indent do
+    goods_nomenclature_sid { generate(:sid) }
+    goods_nomenclature_indent_sid { generate(:sid) }
+    number_indents { Forgery(:basic).number }
+    validity_start_date { Date.today.ago(3.years) }
+    validity_end_date   { nil }
   end
 
   factory :quota_definition do

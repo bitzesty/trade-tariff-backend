@@ -8,7 +8,9 @@ class GoodsNomenclature < Sequel::Model
 
   set_primary_key :goods_nomenclature_sid
 
-  one_to_one :goods_nomenclature_indent, key: :goods_nomenclature_sid
+  one_to_one :goods_nomenclature_indent, dataset: -> {
+    actual(GoodsNomenclatureIndent).where(goods_nomenclature_sid: goods_nomenclature_sid)
+  }
   one_to_one :goods_nomenclature_description, dataset: -> {
     GoodsNomenclatureDescription.with_actual(GoodsNomenclatureDescriptionPeriod)
                                 .join(:goods_nomenclature_description_periods, goods_nomenclature_description_periods__goods_nomenclature_description_period_sid: :goods_nomenclature_descriptions__goods_nomenclature_description_period_sid,
