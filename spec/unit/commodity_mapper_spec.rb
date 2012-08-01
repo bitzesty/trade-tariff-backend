@@ -4,24 +4,38 @@ describe CommodityMapper do
   describe 'mapping' do
 
     # E.g.
-    # (1) 0101000010 --
+    # (1) 0101000010 -
     # (2) 0101000030 --
-    # Both (1) and (2) should have no parents or children.
+    # (3) 0101000040 --
+    # (1) should have children (2) and (3)
+    # (2) should have parent (1)
+    # (3) should have parent (2)
     context 'with commodity indents on the same level' do
       let(:commodity1) { create :commodity, :with_indent,
-                                            indents: 2,
+                                            indents: 1,
                                             goods_nomenclature_item_id: "0101000010" }
       let(:commodity2) { create :commodity, :with_indent,
                                             indents: 2,
                                             goods_nomenclature_item_id: "0101000030" }
+      let(:commodity3) { create :commodity, :with_indent,
+                                            indents: 2,
+                                            goods_nomenclature_item_id: "0101000040" }
 
       it 'assigns no parents or children to both commodities' do
-        commodities = CommodityMapper.new([commodity1, commodity2])
-        commodity1.children.should be_blank
+        commodities = CommodityMapper.new([commodity1, commodity2, commodity3])
+        commodity1.children.should include commodity2
+        commodity1.children.should include commodity3
         commodity1.ancestors.should be_blank
+        commodity1.parent.should be_blank
 
         commodity2.children.should be_blank
-        commodity2.ancestors.should be_blank
+        commodity2.ancestors.should include commodity1
+        commodity2.parent.should == commodity1
+
+        commodity3.children.should be_blank
+        commodity3.ancestors.should include commodity1
+        commodity3.ancestors.should_not include commodity2
+        commodity3.parent.should == commodity1
       end
     end
 
@@ -50,15 +64,19 @@ describe CommodityMapper do
         commodities = CommodityMapper.new([commodity1, commodity2, commodity3, commodity4])
         commodity1.children.should include commodity2
         commodity1.ancestors.should be_blank
+        commodity1.parent.should be_blank
 
         commodity2.children.should be_blank
         commodity2.ancestors.should include commodity1
+        commodity2.parent.should == commodity1
 
         commodity3.children.should include commodity4
         commodity3.ancestors.should be_blank
+        commodity3.parent.should be_blank
 
         commodity4.children.should be_blank
         commodity4.ancestors.should include commodity3
+        commodity4.parent.should == commodity3
       end
     end
 
@@ -95,20 +113,25 @@ describe CommodityMapper do
         commodity1.children.should include commodity2
         commodity1.children.should include commodity5
         commodity1.ancestors.should be_blank
+        commodity1.parent.should be_blank
 
         commodity2.children.should include commodity3
         commodity2.ancestors.should include commodity1
+        commodity2.parent.should == commodity1
 
         commodity3.children.should be_blank
         commodity3.ancestors.should include commodity1
         commodity3.ancestors.should include commodity2
+        commodity3.parent.should == commodity2
 
         commodity4.children.should be_blank
         commodity4.ancestors.should include commodity1
         commodity4.ancestors.should include commodity2
+        commodity4.parent.should == commodity2
 
         commodity5.children.should be_blank
         commodity5.ancestors.should include commodity1
+        commodity5.parent.should == commodity1
       end
     end
   end

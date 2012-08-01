@@ -74,9 +74,8 @@ class CommodityMapper
         primary.parent.children << secondary unless primary.parent.children.include?(secondary)
 
         parent_map[secondary.id] = primary.parent
-        secondary.parent = primary
+        secondary.parent = primary.parent
         secondary.ancestors += primary.ancestors
-        secondary.ancestors << primary
       end
     else primary.number_indents > secondary.number_indents
       parent = nth_parent(primary, secondary.number_indents)
