@@ -1,5 +1,5 @@
-class CommodityMapper
-  module MappedCommodity
+class GoodsNomenclatureMapper
+  module MappedGoodsNomenclature
     attr_accessor :parent
     attr_writer :ancestors
 
@@ -20,48 +20,48 @@ class CommodityMapper
   # speed up the lookup without doing mongo queries
   attr_reader :parent_map
 
-  def initialize(commodities)
-    @commodities = commodities.map { |commodity| commodity.extend(MappedCommodity) }
+  def initialize(goods_nomenclatures)
+    @goods_nomenclatures = goods_nomenclatures.map { |goods_nomenclature| goods_nomenclature.extend(MappedGoodsNomenclature) }
     @parent_map = {}
 
     process
   end
 
-  def all
-    @commodities.reject { |commodity| commodity.parent.present? }
+  def goods_nomenclatures
+    @goods_nomenclatures.reject { |goods_nomenclature| goods_nomenclature.parent.present? }
   end
-  alias :commodities :all
+  alias :root_entries :goods_nomenclatures
 
   def find
-    @commodities.detect { |c| yield(c) } if block_given?
+    @goods_nomenclatures.detect { |c| yield(c) } if block_given?
   end
   alias :detect :find
 
-  def for_commodity(ref_commodity)
-    detect{|commodity| commodity.goods_nomenclature_sid == ref_commodity.goods_nomenclature_sid }
+  def for_goods_nomenclature(ref_goods_nomenclature)
+    detect{|goods_nomenclature| goods_nomenclature.goods_nomenclature_sid == ref_goods_nomenclature.goods_nomenclature_sid }
   end
 
   private
 
   def process
     # first pair
-    traverse(commodities, nil, commodities.first)
+    traverse(goods_nomenclatures, nil, goods_nomenclatures.first)
     # all other pairs
-    traverse(commodities, commodities.first, commodities.second)
+    traverse(goods_nomenclatures, goods_nomenclatures.first, goods_nomenclatures.second)
   end
 
-  def traverse(commodities, primary, secondary)
-    # ignore case when first commodity is blank it's a direct child of the heading
-    unless commodities.index(secondary).blank?
-      next_commodity = commodities[commodities.index(secondary) + 1]
-      if next_commodity.present? # we are not at the end of the commodity array
-        map_commodities(secondary, next_commodity)
-        traverse(commodities, secondary, next_commodity)
+  def traverse(goods_nomenclatures, primary, secondary)
+    # ignore case when first goods_nomenclature is blank it's a direct child of the heading
+    unless goods_nomenclatures.index(secondary).blank?
+      next_goods_nomenclature = goods_nomenclatures[goods_nomenclatures.index(secondary) + 1]
+      if next_goods_nomenclature.present? # we are not at the end of the goods_nomenclature array
+        map_goods_nomenclatures(secondary, next_goods_nomenclature)
+        traverse(goods_nomenclatures, secondary, next_goods_nomenclature)
       end
     end
   end
 
-  def map_commodities(primary, secondary)
+  def map_goods_nomenclatures(primary, secondary)
     if (heading_map?(primary, secondary) &&
        (primary.producline_suffix < secondary.producline_suffix)) ||
        (primary.number_indents < secondary.number_indents)
@@ -101,20 +101,20 @@ class CommodityMapper
     end
   end
 
-  def nth_parent(commodity, nth)
+  def nth_parent(goods_nomenclature, nth)
     if nth > 0
-      commodity = commodity.parent
+      goods_nomenclature = goods_nomenclature.parent
 
-      while commodity.present? && commodity.number_indents >= nth
-        commodity = parent_of(commodity)
+      while goods_nomenclature.present? && goods_nomenclature.number_indents >= nth
+        goods_nomenclature = parent_of(goods_nomenclature)
       end
 
-      commodity
+      goods_nomenclature
     end
   end
 
-  def parent_of(commodity)
-    parent_map[commodity.id]
+  def parent_of(goods_nomenclature)
+    parent_map[goods_nomenclature.id]
   end
 
   def heading_map?(primary, secondary)

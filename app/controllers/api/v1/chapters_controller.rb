@@ -1,4 +1,4 @@
-require 'commodity_mapper'
+require 'goods_nomenclature_mapper'
 
 module Api
   module V1
@@ -8,7 +8,7 @@ module Api
                           .where(goods_nomenclature_item_id: chapter_id)
                           .first
 
-        @headings = CommodityMapper.new(@chapter.headings).commodities
+        @headings = GoodsNomenclatureMapper.new(@chapter.headings).root_entries
 
         respond_with @chapter
       end

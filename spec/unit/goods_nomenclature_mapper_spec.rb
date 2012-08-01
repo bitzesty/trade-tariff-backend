@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe CommodityMapper do
+describe GoodsNomenclatureMapper do
   describe 'mapping' do
 
     # E.g.
@@ -22,7 +22,7 @@ describe CommodityMapper do
                                             goods_nomenclature_item_id: "0101000040" }
 
       it 'assigns no parents or children to both commodities' do
-        commodities = CommodityMapper.new([commodity1, commodity2, commodity3])
+        commodities = GoodsNomenclatureMapper.new([commodity1, commodity2, commodity3])
         commodity1.children.should include commodity2
         commodity1.children.should include commodity3
         commodity1.ancestors.should be_blank
@@ -61,7 +61,7 @@ describe CommodityMapper do
                                             goods_nomenclature_item_id: "0101000130" }
 
       it 'assigns no parents or children to both commodities' do
-        commodities = CommodityMapper.new([commodity1, commodity2, commodity3, commodity4])
+        commodities = GoodsNomenclatureMapper.new([commodity1, commodity2, commodity3, commodity4])
         commodity1.children.should include commodity2
         commodity1.ancestors.should be_blank
         commodity1.parent.should be_blank
@@ -109,7 +109,7 @@ describe CommodityMapper do
                                             goods_nomenclature_item_id: "0101000050" }
 
       it 'assigns no parents or children to both commodities' do
-        commodities = CommodityMapper.new([commodity1, commodity2, commodity3, commodity4, commodity5])
+        commodities = GoodsNomenclatureMapper.new([commodity1, commodity2, commodity3, commodity4, commodity5])
         commodity1.children.should include commodity2
         commodity1.children.should include commodity5
         commodity1.ancestors.should be_blank
@@ -163,7 +163,7 @@ describe CommodityMapper do
                                         producline_suffix: "80" }
 
       it 'assigns no parents or children to both commodities' do
-        headings = CommodityMapper.new([heading1, heading2, heading3, heading4])
+        headings = GoodsNomenclatureMapper.new([heading1, heading2, heading3, heading4])
         heading1.children.should include heading2
         heading1.children.should_not include heading3
         heading1.ancestors.should be_blank

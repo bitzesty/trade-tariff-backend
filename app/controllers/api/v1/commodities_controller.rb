@@ -1,5 +1,3 @@
-require 'commodity_mapper'
-
 module Api
   module V1
     class CommoditiesController < ApplicationController
