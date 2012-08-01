@@ -58,8 +58,16 @@ class Measure < Sequel::Model
   end
 
   def generating_regulation_url
-    code = "#{measure_generating_regulation_id[1..2]}#{measure_generating_regulation_id.first}#{measure_generating_regulation_id[3..6]}"
-    "http://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=CELEX:320#{code}:en:HTML"
+    year = measure_generating_regulation_id[1..2]
+    # When we get to 2071 assume that we don't care about the 1900's
+    # or the EU has a better way to search
+    if year.to_i > 70
+      full_year = "19#{year}"
+    else
+      full_year = "20#{year}"
+    end
+    code = "3#{full_year}#{measure_generating_regulation_id.first}#{measure_generating_regulation_id[3..6]}"
+    "http://eur-lex.europa.eu/Result.do?code=#{code}&RechType=RECH_celex"
   end
 
   def origin
