@@ -1,17 +1,17 @@
 GIT
-  remote: git://github.com/bmabey/database_cleaner.git
-  revision: 3ce1fc9f8da517fb4fd93795bd1820f360a6ad9e
-  specs:
-    database_cleaner (0.8.0)
-
-GIT
-  remote: git://github.com/iblue/sequel-rails.git
+  remote: git://github.com/alphagov/sequel-rails.git
   revision: 6497235418f19de0d4c7aad86d93a8fc364f3940
   branch: production
   specs:
     talentbox-sequel-rails (0.3.4)
       rails (~> 3.2.0)
       sequel (~> 3.28)
+
+GIT
+  remote: git://github.com/bmabey/database_cleaner.git
+  revision: 3ce1fc9f8da517fb4fd93795bd1820f360a6ad9e
+  specs:
+    database_cleaner (0.8.0)
 
 GEM
   remote: https://rubygems.org/
