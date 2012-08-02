@@ -12,6 +12,6 @@ test:
   encoding: utf8
   reconnect: true
   database: tariff_test
-  pool: 5
+  max_connections: 1
   username: tariff
   password: tariff
