@@ -1,5 +1,8 @@
 class SearchService
-  INDEX_SIZE_MAX = 100000
+  INDEX_SIZE_MAX = 1000000 # ElasticSearch does default pagination for 10 entries
+                           # per page. We do not do pagination when displaying
+                           # results so have a constant much bigger than possible
+                           # index size for size value.
 
   include ActiveModel::Validations
   include ActiveModel::Conversion
@@ -10,37 +13,53 @@ class SearchService
     def self.search(query_string)
       case query_string
       when /^[0-9]{1,3}$/
-        Chapter.by_code(query_string).first
+        Chapter.actual.by_code(query_string).first
       when /^[0-9]{4,9}$/
-        Heading.by_code(query_string).first
+        Heading.actual.by_code(query_string).first
       when /^[0-9]{10}$/
-        Commodity.by_code(query_string).declarable.first.presence ||
-        Heading.by_declarable_code(query_string).declarable.first.presence
+        Commodity.actual.by_code(query_string).declarable.first.presence ||
+        Heading.actual.by_declarable_code(query_string).declarable.first.presence
       when /^[0-9]{11,12}$/
-        Commodity.by_code(query_string).declarable.first
+        Commodity.actual.by_code(query_string).declarable.first
       end
     end
   end
 
   module FuzzySearch
-    def self.search(query_string)
+    def self.search(query_string, date)
       {
-        sections: results_for('sections', query_string),
-        chapters: results_for('chapters', query_string),
-        headings: results_for('headings', query_string),
-        commodities: results_for('commodities', query_string)
+        sections: results_for('sections', query_string, date),
+        chapters: results_for('chapters', query_string, date),
+        headings: results_for('headings', query_string, date),
+        commodities: results_for('commodities', query_string, date)
       }
     end
 
-    def self.results_for(index, query_string, opts = {})
+    def self.results_for(index, query_string, date)
       Tire.search(index, { query: {
                              query_string: {
                                query: query_string,
                                fields: ["description"]
                              }
                            },
+                           filter: {
+                             or: [
+                               {
+                                 range: {
+                                   validity_start_date: { lte: date },
+                                   validity_end_date:   { gte: date }
+                                 }
+                               },
+                               {
+                                 and: [
+                                  { range: { validity_start_date: { lte: date } } },
+                                  { missing: { field: "validity_end_date" } }
+                                ]
+                               }
+                             ]
+                           },
                            size: INDEX_SIZE_MAX
-                         }.deep_merge(opts)
+                         }
                  ).results
     end
   end
@@ -64,7 +83,7 @@ class SearchService
   alias :exact_match? :exact_match
 
   def perform!
-    @results = ExactSearch.search(q).presence || FuzzySearch.search(q)
+    @results = ExactSearch.search(q).presence || FuzzySearch.search(q, as_of)
 
     # sm = SearchMetric.where(q: q, q_on: Date.today).first
     # if sm
