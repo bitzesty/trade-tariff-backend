@@ -6,7 +6,8 @@ GIT
 
 GIT
   remote: git://github.com/iblue/sequel-rails.git
-  revision: 6897f8c7558ff942ec16136546f1ebce7f62792f
+  revision: 6497235418f19de0d4c7aad86d93a8fc364f3940
+  branch: production
   specs:
     talentbox-sequel-rails (0.3.4)
       rails (~> 3.2.0)
