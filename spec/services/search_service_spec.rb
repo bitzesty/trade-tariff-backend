@@ -20,23 +20,21 @@ describe SearchService do
       let(:pattern) {
         {
           type: 'exact_match',
-          entries: [
-            {
-              endpoint: 'chapters',
-              id: chapter.goods_nomenclature_item_id.first(2)
-            }
-          ]
+          entry: {
+            endpoint: 'chapters',
+            id: chapter.goods_nomenclature_item_id.first(2)
+          }
         }
       }
 
       it 'returns endpoint and identifier if provided with 2 symbol chapter code' do
-        result = SearchService.new(q: chapter.goods_nomenclature_item_id.first(2)).perform.to_json
+        result = SearchService.new(q: chapter.goods_nomenclature_item_id.first(2)).perform!.to_json
 
         result.should match_json_expression pattern
       end
 
       it 'returns endpoint and identifier if provided with matching 3 symbol chapter code' do
-        result = SearchService.new(q: chapter.goods_nomenclature_item_id.first(2)).perform.to_json
+        result = SearchService.new(q: chapter.goods_nomenclature_item_id.first(2)).perform!.to_json
 
         result.should match_json_expression pattern
       end
@@ -47,23 +45,21 @@ describe SearchService do
       let(:pattern) {
         {
           type: 'exact_match',
-          entries: [
-            {
-              endpoint: 'headings',
-              id: heading.goods_nomenclature_item_id.first(4)
-            }
-          ]
+          entry: {
+            endpoint: 'headings',
+            id: heading.goods_nomenclature_item_id.first(4)
+          }
         }
       }
 
       it 'returns endpoint and identifier if provided with 4 symbol heading code' do
-        result = SearchService.new(q: heading.goods_nomenclature_item_id.first(4)).perform.to_json
+        result = SearchService.new(q: heading.goods_nomenclature_item_id.first(4)).perform!.to_json
 
         result.should match_json_expression pattern
       end
 
       it 'returns endpoint and identifier if provided with matching 6 (or any between length of 4 to 9) symbol heading code' do
-        result = SearchService.new(q: heading.goods_nomenclature_item_id.first(6)).perform.to_json
+        result = SearchService.new(q: heading.goods_nomenclature_item_id.first(6)).perform!.to_json
 
         result.should match_json_expression pattern
       end
@@ -75,40 +71,36 @@ describe SearchService do
       let(:commodity_pattern) {
         {
           type: 'exact_match',
-          entries: [
-            {
-              endpoint: 'commodities',
-              id: commodity.goods_nomenclature_item_id.first(10)
-            }
-          ]
+          entry: {
+            endpoint: 'commodities',
+            id: commodity.goods_nomenclature_item_id.first(10)
+          }
         }
       }
       let(:heading_pattern) {
         {
           type: 'exact_match',
-          entries: [
-            {
-              endpoint: 'headings',
-              id: heading.goods_nomenclature_item_id.first(4)
-            }
-          ]
+          entry: {
+            endpoint: 'headings',
+            id: heading.goods_nomenclature_item_id.first(4)
+          }
         }
       }
 
       it 'returns endpoint and identifier if provided with 10 symbol commodity code' do
-        result = SearchService.new(q: commodity.goods_nomenclature_item_id.first(10)).perform.to_json
+        result = SearchService.new(q: commodity.goods_nomenclature_item_id.first(10)).perform!.to_json
 
         result.should match_json_expression commodity_pattern
       end
 
       it 'returns endpoint and identifier if provided with matching 12 symbol commodity code' do
-        result = SearchService.new(q: commodity.goods_nomenclature_item_id + commodity.producline_suffix).perform.to_json
+        result = SearchService.new(q: commodity.goods_nomenclature_item_id + commodity.producline_suffix).perform!.to_json
 
         result.should match_json_expression commodity_pattern
       end
 
       it 'returns endpoint and identifier if provided with matching 10 symbol declarable heading code' do
-        result = SearchService.new(q: heading.goods_nomenclature_item_id).perform.to_json
+        result = SearchService.new(q: heading.goods_nomenclature_item_id).perform!.to_json
 
         result.should match_json_expression heading_pattern
       end
