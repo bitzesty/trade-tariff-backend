@@ -15,6 +15,7 @@ gem 'builder'
 gem 'railties'
 
 gem 'airbrake'
+gem 'unicorn', '~> 4.3.1'
 
 group :assets do
   gem 'therubyracer'
@@ -24,7 +25,6 @@ group :assets do
 end
 
 group :development do
-  gem 'puma'
   gem 'capistrano'
   gem 'debugger'
   gem 'pry-rails'
