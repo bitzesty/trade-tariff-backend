@@ -12,6 +12,6 @@ test:
   encoding: utf8
   reconnect: true
   database: tariff_test
-  max_connections: 1
+  single_threaded: true
   username: tariff
   password: tariff
