@@ -23,7 +23,7 @@ describe Api::V1::SearchController, "POST #search" do
     end
   end
 
-  describe 'fuzzy matching', :focus do
+  describe 'fuzzy matching' do
     let(:chapter) { create :chapter, :with_description }
     let(:pattern) {
       {
