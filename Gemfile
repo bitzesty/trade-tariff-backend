@@ -8,7 +8,7 @@ gem 'oj'
 gem 'rabl'
 gem 'tire'
 gem 'sequel'
-gem 'talentbox-sequel-rails'
+gem 'talentbox-sequel-rails', git: "git://github.com/iblue/sequel-rails.git" 
 
 gem 'jquery-rails', "~> 1.0.19"
 gem 'builder'
