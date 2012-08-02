@@ -20,6 +20,12 @@ class Sequel::Model
   end
 end
 
+class TireStub
+  def self.results
+    []
+  end
+end
+
 RSpec.configure do |config|
   config.infer_base_class_for_anonymous_controllers = false
   config.filter_run focus: true

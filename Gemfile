@@ -26,7 +26,9 @@ end
 group :development do
   gem 'puma'
   gem 'capistrano'
-  gem 'debugger'
+end
+
+group :development, :test do
   gem 'pry-rails'
 end
 
