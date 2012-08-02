@@ -3,9 +3,7 @@ require File.expand_path('../boot', __FILE__)
 require "action_controller/railtie"
 require "sequel-rails/railtie"
 require "action_mailer/railtie"
-# require "rails/all"
 require "sprockets/railtie"
-# require 'tire/rails/logger' if Rails.env.development?
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line

@@ -1,4 +1,4 @@
-attributes :short_code, :code, :declarable, :description, :producline_suffix, :leaf
+attributes :goods_nomenclature_item_id, :declarable, :description, :producline_suffix, :leaf
 
 node(:children) { |heading|
   heading.children.map do |heading|

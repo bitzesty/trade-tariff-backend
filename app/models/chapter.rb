@@ -1,6 +1,8 @@
 require_relative 'goods_nomenclature'
 
 class Chapter < GoodsNomenclature
+  include Tire::Model::Search
+
   plugin :json_serializer
 
   set_dataset filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", '__00000000').
@@ -36,6 +38,22 @@ class Chapter < GoodsNomenclature
 
   def section
     sections.first
+  end
+
+  def to_indexed_json
+    {
+      id: goods_nomenclature_sid,
+      goods_nomenclature_item_id: goods_nomenclature_item_id,
+      producline_suffix: producline_suffix,
+      validity_start_date: validity_start_date,
+      validity_end_date: validity_end_date,
+      description: description.downcase,
+      section: {
+        numeral: section.numeral,
+        title: section.title,
+        position: section.position
+      },
+    }.to_json
   end
 
   def relevant_headings

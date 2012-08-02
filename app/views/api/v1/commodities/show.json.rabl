@@ -4,7 +4,7 @@ extends "api/v1/commodities/commodity"
 extends "api/v1/declarables/declarable", object: @commodity
 
 child @commodity.heading do
-  attributes :short_code, :code, :description, :description
+  attributes :goods_nomenclature_item_id, :description
 end
 
 node(:ancestors) { |commodity|
