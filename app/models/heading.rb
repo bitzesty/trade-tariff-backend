@@ -73,7 +73,7 @@ class Heading < GoodsNomenclature
   end
 
   def declarable
-    GoodsNomenclature.where("goods_nomenclature_item_id LIKE ?", "#{short_code}______").count == 1
+    actual(GoodsNomenclature).where("goods_nomenclature_item_id LIKE ?", "#{short_code}______").count == 1
   end
   alias :declarable? :declarable
 
