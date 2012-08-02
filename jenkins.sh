@@ -1,7 +1,10 @@
 #!/bin/bash -x
 bundle install --path "/home/jenkins/bundles/${JOB_NAME}" --deployment
 
-RAILS_ENV=test bundle exec rake db:create --trace
+RAILS_ENV=test bundle exec rake db:drop
+sleep 5
+
+RAILS_ENV=test bundle exec rake db:create
 sleep 5
 
 RAILS_ENV=test bundle exec rake db:schema:load --trace
