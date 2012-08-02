@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'goods_nomenclature_mapper'
 
 describe GoodsNomenclatureMapper do
   describe 'mapping' do
