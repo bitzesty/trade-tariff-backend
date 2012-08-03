@@ -1,5 +1,5 @@
 object @chapter
-attributes :short_code, :code, :description
+attributes :goods_nomenclature_item_id, :description
 child :section do
   attributes :title, :position, :numeral
 end

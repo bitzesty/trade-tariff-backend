@@ -1,4 +1,6 @@
 class Heading < GoodsNomenclature
+  include Tire::Model::Search
+
   plugin :json_serializer
 
   set_dataset filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", '____000000').
@@ -76,6 +78,31 @@ class Heading < GoodsNomenclature
     actual(GoodsNomenclature).where("goods_nomenclature_item_id LIKE ?", "#{short_code}______").count == 1
   end
   alias :declarable? :declarable
+
+  def to_indexed_json
+    {
+      id: goods_nomenclature_sid,
+      goods_nomenclature_item_id: goods_nomenclature_item_id,
+      producline_suffix: producline_suffix,
+      validity_start_date: validity_start_date,
+      validity_end_date: validity_end_date,
+      description: description,
+      number_indents: number_indents,
+      section: {
+        numeral: section.numeral,
+        title: section.title,
+        position: section.position
+      },
+      chapter: {
+        goods_nomenclature_sid: chapter.goods_nomenclature_sid,
+        goods_nomenclature_item_id: chapter.goods_nomenclature_item_id,
+        producline_suffix: chapter.producline_suffix,
+        validity_start_date: chapter.validity_start_date,
+        validity_end_date: chapter.validity_end_date,
+        description: chapter.description.downcase
+      },
+    }.to_json
+  end
 
   # TODO calculate real rate
   def third_country_duty_rate

@@ -1,4 +1,6 @@
 class Commodity < GoodsNomenclature
+  include Tire::Model::Search
+
   plugin :json_serializer
 
   set_dataset filter("goods_nomenclatures.goods_nomenclature_item_id NOT LIKE ?", '____000000').
@@ -42,6 +44,7 @@ class Commodity < GoodsNomenclature
   one_to_one :goods_nomenclature_indent, dataset: -> {
     actual(GoodsNomenclatureIndent).filter(goods_nomenclature_sid: goods_nomenclature_sid)
   }
+
   delegate :section, to: :chapter
 
   dataset_module do
@@ -108,6 +111,40 @@ class Commodity < GoodsNomenclature
 
   def code
     goods_nomenclature_item_id
+  end
+
+  def to_indexed_json
+    {
+      id: goods_nomenclature_sid,
+      goods_nomenclature_item_id: goods_nomenclature_item_id,
+      producline_suffix: producline_suffix,
+      validity_start_date: validity_start_date,
+      validity_end_date: validity_end_date,
+      description: description,
+      number_indents: number_indents,
+      section: {
+        numeral: section.numeral,
+        title: section.title,
+        position: section.position
+      },
+      chapter: {
+        goods_nomenclature_sid: chapter.goods_nomenclature_sid,
+        goods_nomenclature_item_id: chapter.goods_nomenclature_item_id,
+        producline_suffix: chapter.producline_suffix,
+        validity_start_date: chapter.validity_start_date,
+        validity_end_date: chapter.validity_end_date,
+        description: chapter.description.downcase
+      },
+      heading: {
+        goods_nomenclature_sid: heading.chapter.goods_nomenclature_sid,
+        goods_nomenclature_item_id: heading.chapter.goods_nomenclature_item_id,
+        producline_suffix: heading.chapter.producline_suffix,
+        validity_start_date: heading.chapter.validity_start_date,
+        validity_end_date: heading.chapter.validity_end_date,
+        description: heading.chapter.description,
+        number_indents: heading.number_indents
+      }
+    }.to_json
   end
 
   # TODO calculate real rate

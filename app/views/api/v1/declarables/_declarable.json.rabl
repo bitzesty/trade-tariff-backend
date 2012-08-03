@@ -5,7 +5,7 @@ child :section do
 end
 
 child :chapter do
-  attributes :short_code, :code, :description
+  attributes :goods_nomenclature_item_id, :description
 end
 
 node(:import_measures) { |commodity|

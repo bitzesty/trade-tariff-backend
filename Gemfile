@@ -26,7 +26,9 @@ end
 
 group :development do
   gem 'capistrano'
-  gem 'debugger'
+end
+
+group :development, :test do
   gem 'pry-rails'
 end
 
@@ -36,6 +38,7 @@ group :test do
   gem 'forgery'
   gem 'shoulda-matchers'
   gem 'fakeweb'
+  gem 'vcr'
   gem 'mocha'
   gem 'simplecov'
   gem 'simplecov-rcov'

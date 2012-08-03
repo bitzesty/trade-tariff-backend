@@ -1,17 +1,3 @@
-#   def normalize(str)
-#     str.gsub!("|", "\u00A0")
-#     str.gsub!("!1!", "\n")
-#     str.gsub!("!X!", "\u00D7")
-#     str.gsub!("!x!", "\u00D7")
-#     str.gsub!("!o!", "\u00B0")
-#     str.gsub!("!O!", "\u00B0")
-#     str.gsub!("!>=!", "\u2265")
-#     str.gsub!("!<=!", "\u2264")
-#     str.gsub!("@", "_")
-#     str.gsub!("$", "^")
-#     str.strip
-#   end
-
 sections = [
   {position: 1, numeral: 'I',     title: "Live animals; animal products (chapter 1 - 5)", chapters: ("01".."05")},
   {position: 2, numeral: 'II',    title: "Vegetable products (chapter 6 - 14)", chapters: ("06".."14")},

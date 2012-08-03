@@ -1,4 +1,6 @@
 class Section < Sequel::Model
+  include Tire::Model::Search
+
   plugin :json_serializer
 
   many_to_many :chapters, dataset: -> {
@@ -10,5 +12,14 @@ class Section < Sequel::Model
 
   def to_param
     position
+  end
+
+  def to_indexed_json
+    {
+      id: id,
+      numeral: numeral,
+      title: title,
+      position: position
+    }.to_json
   end
 end
