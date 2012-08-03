@@ -1,6 +1,6 @@
 object @heading
 
-attributes :goods_nomenclature_item_id, :description, :has_measures,
+attributes :goods_nomenclature_item_id, :description,
            :third_country_duty_rate, :uk_vat_rate
 
 if @heading.declarable?

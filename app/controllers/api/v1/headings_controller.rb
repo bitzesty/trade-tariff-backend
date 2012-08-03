@@ -6,8 +6,7 @@ module Api
       def show
         @heading = Heading.actual
                           .where(goods_nomenclatures__goods_nomenclature_item_id: heading_id)
-                          .declarable
-                          .first
+                          .take
 
         @commodities = GoodsNomenclatureMapper.new(@heading.commodities).root_entries
 

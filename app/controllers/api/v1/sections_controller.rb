@@ -9,7 +9,7 @@ module Api
 
       def show
         @section = Section.where(position: params[:id])
-                          .first
+                          .take
 
         respond_with @section
       end

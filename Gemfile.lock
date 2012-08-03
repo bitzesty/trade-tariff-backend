@@ -7,12 +7,6 @@ GIT
       rails (~> 3.2.0)
       sequel (~> 3.28)
 
-GIT
-  remote: git://github.com/bmabey/database_cleaner.git
-  revision: 8507ec04e161587962350d0d598163e568e8cadd
-  specs:
-    database_cleaner (0.8.0)
-
 GEM
   remote: https://rubygems.org/
   remote: https://gems.gemfury.com/vo6ZrmjBQu5szyywDszE/
@@ -208,7 +202,6 @@ DEPENDENCIES
   builder
   capistrano
   ci_reporter
-  database_cleaner!
   factory_girl_rails
   fakeweb
   forgery

@@ -6,7 +6,7 @@ module Api
       def show
         @chapter = Chapter.actual
                           .where(goods_nomenclature_item_id: chapter_id)
-                          .first
+                          .take
 
         @headings = GoodsNomenclatureMapper.new(@chapter.headings).root_entries
 

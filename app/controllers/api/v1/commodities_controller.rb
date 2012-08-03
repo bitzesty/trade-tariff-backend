@@ -8,7 +8,7 @@ module Api
         @commodity = Commodity.actual
                               .declarable
                               .by_code(params[:id])
-                              .first
+                              .take
 
         respond_with @commodity
       end

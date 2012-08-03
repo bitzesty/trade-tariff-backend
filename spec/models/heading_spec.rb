@@ -10,7 +10,7 @@ describe Heading do
   end
 
   describe '#declarable' do
-    let!(:declarable_heading)     { create :heading, goods_nomenclature_item_id: "0101000000" }
+    let!(:declarable_heading)     { create :heading, goods_nomenclature_item_id: "0101000000"}
     let!(:non_declarable_heading) { create :heading, goods_nomenclature_item_id: "0102000000" }
     let!(:commodity)              { create :commodity, goods_nomenclature_item_id: "0102000010",
                                                        validity_start_date: non_declarable_heading.validity_start_date,

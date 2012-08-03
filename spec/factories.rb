@@ -44,6 +44,10 @@ FactoryGirl.define do
     trait :declarable do
       producline_suffix { 80 }
     end
+
+    trait :non_declarable do
+      producline_suffix { 10 }
+    end
   end
 
   factory :chapter, parent: :goods_nomenclature, class: Chapter do
@@ -55,6 +59,22 @@ FactoryGirl.define do
 
     trait :declarable do
       producline_suffix { 80 }
+    end
+
+    trait :non_declarable do
+      before(:create) { |heading, evaluator|
+        FactoryGirl.create(:goods_nomenclature, :with_description,
+                                                :with_indent,
+                                                goods_nomenclature_item_id: "#{heading.short_code}#{6.times.map{ Random.rand(9) }.join}")
+      }
+    end
+
+    trait :with_chapter do
+      before(:create) { |heading, evaluator|
+        FactoryGirl.create(:goods_nomenclature, :with_description,
+                                                :with_indent,
+                                                goods_nomenclature_item_id: heading.chapter_id)
+      }
     end
   end
 
