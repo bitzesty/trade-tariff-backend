@@ -254,6 +254,7 @@ Sequel.migration do
       column :cmdty_msr_xhdg, "varchar(255)"
       column :null_tri_rqd, "varchar(255)"
       column :exports_use_ind, "tinyint(1)"
+      column :tar_msr_no, "varchar(255)"
     end
 
     create_table(:chief_tame) do
@@ -1451,6 +1452,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20120726092749_duty_amount_expressed_in_float.rb")
     self[:schema_migrations].insert(:filename => "20120726162358_measure_sid_to_be_unsigned.rb")
     self[:schema_migrations].insert(:filename => "20120730121153_add_gono_id_index_on_measures.rb")
+    self[:schema_migrations].insert(:filename => "20120803132451_fix_chief_columns.rb")
 
     create_table(:sections) do
       primary_key :id, :type=>"int(11)"
