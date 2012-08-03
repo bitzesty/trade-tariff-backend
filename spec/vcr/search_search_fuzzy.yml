@@ -1,0 +1,147 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:9200/sections/_search?payload%5Bfilter%5D%5Bor%5D%5B%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=2010-08-03&payload%5Bfilter%5D%5Bor%5D%5B%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=2010-08-03&payload%5Bfilter%5D%5Bor%5D%5B%5D%5Band%5D%5B%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=2010-08-03&payload%5Bfilter%5D%5Bor%5D%5B%5D%5Band%5D%5B%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B%5D=description&payload%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bquery%5D%5Bquery_string%5D%5Bquery_string%5D%5Bfields%5D%5B%5D=title&payload%5Bsize%5D=1000000
+    body:
+      encoding: US-ASCII
+      string: ! '{"query":{"query_string":{"query":"horse","fields":["description"],"query_string":{"fields":["title"]}}},"filter":{"or":[{"range":{"validity_start_date":{"lte":"2010-08-03"},"validity_end_date":{"gte":"2010-08-03"}}},{"and":[{"range":{"validity_start_date":{"lte":"2010-08-03"}}},{"missing":{"field":"validity_end_date"}}]}]},"size":1000000}'
+    headers:
+      accept:
+      - ! '*/*; q=0.5, application/xml'
+      accept-encoding:
+      - gzip, deflate
+      content-length:
+      - '341'
+      user-agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - application/json; charset=UTF-8
+      content-length:
+      - '122'
+    body:
+      encoding: US-ASCII
+      string: ! '{"took":1,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
+    http_version: '1.1'
+  recorded_at: Fri, 03 Aug 2012 08:11:09 GMT
+- request:
+    method: get
+    uri: http://localhost:9200/chapters/_search?payload%5Bfilter%5D%5Bor%5D%5B%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=2010-08-03&payload%5Bfilter%5D%5Bor%5D%5B%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=2010-08-03&payload%5Bfilter%5D%5Bor%5D%5B%5D%5Band%5D%5B%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=2010-08-03&payload%5Bfilter%5D%5Bor%5D%5B%5D%5Band%5D%5B%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B%5D=description&payload%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bsize%5D=1000000
+    body:
+      encoding: US-ASCII
+      string: ! '{"query":{"query_string":{"query":"horse","fields":["description"]}},"filter":{"or":[{"range":{"validity_start_date":{"lte":"2010-08-03"},"validity_end_date":{"gte":"2010-08-03"}}},{"and":[{"range":{"validity_start_date":{"lte":"2010-08-03"}}},{"missing":{"field":"validity_end_date"}}]}]},"size":1000000}'
+    headers:
+      accept:
+      - ! '*/*; q=0.5, application/xml'
+      accept-encoding:
+      - gzip, deflate
+      content-length:
+      - '305'
+      user-agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - application/json; charset=UTF-8
+      content-length:
+      - '122'
+    body:
+      encoding: US-ASCII
+      string: ! '{"took":1,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
+    http_version: '1.1'
+  recorded_at: Fri, 03 Aug 2012 08:11:09 GMT
+- request:
+    method: get
+    uri: http://localhost:9200/headings/_search?payload%5Bfilter%5D%5Bor%5D%5B%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=2010-08-03&payload%5Bfilter%5D%5Bor%5D%5B%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=2010-08-03&payload%5Bfilter%5D%5Bor%5D%5B%5D%5Band%5D%5B%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=2010-08-03&payload%5Bfilter%5D%5Bor%5D%5B%5D%5Band%5D%5B%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B%5D=description&payload%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bsize%5D=1000000
+    body:
+      encoding: US-ASCII
+      string: ! '{"query":{"query_string":{"query":"horse","fields":["description"]}},"filter":{"or":[{"range":{"validity_start_date":{"lte":"2010-08-03"},"validity_end_date":{"gte":"2010-08-03"}}},{"and":[{"range":{"validity_start_date":{"lte":"2010-08-03"}}},{"missing":{"field":"validity_end_date"}}]}]},"size":1000000}'
+    headers:
+      accept:
+      - ! '*/*; q=0.5, application/xml'
+      accept-encoding:
+      - gzip, deflate
+      content-length:
+      - '305'
+      user-agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - application/json; charset=UTF-8
+      content-length:
+      - '122'
+    body:
+      encoding: US-ASCII
+      string: ! '{"took":2,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
+    http_version: '1.1'
+  recorded_at: Fri, 03 Aug 2012 08:11:09 GMT
+- request:
+    method: get
+    uri: http://localhost:9200/commodities/_search?payload%5Bfilter%5D%5Bor%5D%5B%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=2010-08-03&payload%5Bfilter%5D%5Bor%5D%5B%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=2010-08-03&payload%5Bfilter%5D%5Bor%5D%5B%5D%5Band%5D%5B%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=2010-08-03&payload%5Bfilter%5D%5Bor%5D%5B%5D%5Band%5D%5B%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B%5D=description&payload%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bsize%5D=1000000
+    body:
+      encoding: US-ASCII
+      string: ! '{"query":{"query_string":{"query":"horse","fields":["description"]}},"filter":{"or":[{"range":{"validity_start_date":{"lte":"2010-08-03"},"validity_end_date":{"gte":"2010-08-03"}}},{"and":[{"range":{"validity_start_date":{"lte":"2010-08-03"}}},{"missing":{"field":"validity_end_date"}}]}]},"size":1000000}'
+    headers:
+      accept:
+      - ! '*/*; q=0.5, application/xml'
+      accept-encoding:
+      - gzip, deflate
+      content-length:
+      - '305'
+      user-agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - application/json; charset=UTF-8
+      content-length:
+      - '4374'
+    body:
+      encoding: US-ASCII
+      string: ! '{"took":46,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":4,"max_score":2.8671827,"hits":[{"_index":"commodities","_type":"commodity","_id":"74274","_score":2.8671827,
+        "_source" : {"id":74274,"goods_nomenclature_item_id":"2308004000","producline_suffix":"80","validity_start_date":"2002-01-01T00:00:00+02:00","validity_end_date":null,"description":"Acorns
+        and horse-chestnuts; pomace or marc of fruit, other than grapes","section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapter 16 - 24)","position":4},"chapter":{"goods_nomenclature_sid":35125,"goods_nomenclature_item_id":"2300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"RESIDUES
+        AND WASTE FROM THE FOOD INDUSTRIES; PREPARED ANIMAL FODDER"},"heading":{"goods_nomenclature_sid":35125,"goods_nomenclature_item_id":"2300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"RESIDUES
+        AND WASTE FROM THE FOOD INDUSTRIES; PREPARED ANIMAL FODDER"}}},{"_index":"commodities","_type":"commodity","_id":"30763","_score":2.1667428,
+        "_source" : {"id":30763,"goods_nomenclature_item_id":"0713500000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Broad
+        beans (Vicia faba var. major) and horse beans (Vicia faba var. equina, Vicia
+        faba var. minor)","section":{"numeral":"II","title":"Vegetable products (chapter
+        6 - 14)","position":2},"chapter":{"goods_nomenclature_sid":30240,"goods_nomenclature_item_id":"0700000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"EDIBLE
+        VEGETABLES AND CERTAIN ROOTS AND TUBERS"},"heading":{"goods_nomenclature_sid":30240,"goods_nomenclature_item_id":"0700000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"EDIBLE
+        VEGETABLES AND CERTAIN ROOTS AND TUBERS"}}},{"_index":"commodities","_type":"commodity","_id":"91682","_score":1.5614061,
+        "_source" : {"id":91682,"goods_nomenclature_item_id":"4412321000","producline_suffix":"80","validity_start_date":"2010-01-01T00:00:00+02:00","validity_end_date":null,"description":"Of
+        alder, ash, beech, birch, cherry, chestnut, elm, hickory, hornbeam, horse
+        chestnut, lime, maple, oak, plane tree, poplar, robinia, walnut or yellow
+        poplar","section":{"numeral":"IX","title":"Wood and articles of wood; wood
+        charcoal; cork and articles of cork; manufactures of straw, of esparto or
+        of other plaiting materials; basketware and wickerwork (chapter 44 - 46)","position":9},"chapter":{"goods_nomenclature_sid":39988,"goods_nomenclature_item_id":"4400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"WOOD
+        AND ARTICLES OF WOOD; WOOD CHARCOAL"},"heading":{"goods_nomenclature_sid":39988,"goods_nomenclature_item_id":"4400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"WOOD
+        AND ARTICLES OF WOOD; WOOD CHARCOAL"}}},{"_index":"commodities","_type":"commodity","_id":"91687","_score":1.5614061,
+        "_source" : {"id":91687,"goods_nomenclature_item_id":"4412994000","producline_suffix":"80","validity_start_date":"2010-01-01T00:00:00+02:00","validity_end_date":null,"description":"Of
+        alder, ash, beech, birch, cherry, chestnut, elm, hickory, hornbeam, horse
+        chestnut, lime, maple, oak, plane tree, poplar, robinia, walnut or yellow
+        poplar","section":{"numeral":"IX","title":"Wood and articles of wood; wood
+        charcoal; cork and articles of cork; manufactures of straw, of esparto or
+        of other plaiting materials; basketware and wickerwork (chapter 44 - 46)","position":9},"chapter":{"goods_nomenclature_sid":39988,"goods_nomenclature_item_id":"4400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"WOOD
+        AND ARTICLES OF WOOD; WOOD CHARCOAL"},"heading":{"goods_nomenclature_sid":39988,"goods_nomenclature_item_id":"4400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"WOOD
+        AND ARTICLES OF WOOD; WOOD CHARCOAL"}}}]}}'
+    http_version: '1.1'
+  recorded_at: Fri, 03 Aug 2012 08:11:09 GMT
+recorded_with: VCR 2.2.4

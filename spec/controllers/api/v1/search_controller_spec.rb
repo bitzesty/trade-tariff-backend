@@ -23,26 +23,27 @@ describe Api::V1::SearchController, "POST #search" do
     end
   end
 
-  describe 'fuzzy matching' do
-    let(:chapter) { create :chapter, :with_description }
+  describe 'fuzzy matching', vcr: { cassette_name: "search#search_fuzzy" } do
+    let(:chapter) { create :chapter, :with_description, description: "horse" }
     let(:pattern) {
       {
-        type: 'exact_match',
-        entry: {
-          endpoint: 'chapters',
-          id: chapter.to_param
+        type: 'fuzzy_match',
+        entries: {
+          commodities: Array,
+          headings: Array,
+          chapters: Array,
+          sections: Array
         }
       }
     }
 
     before {
-      Tire.stubs(:search).returns(TireStub)
-
       post :search, { q: chapter.description,  as_of: chapter.validity_start_date }
     }
 
     it { should respond_with(:success) }
     it 'returns exact match endpoint and indetifier if query for exact record' do
+        response.body.should match_json_expression pattern
     end
   end
 

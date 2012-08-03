@@ -187,6 +187,7 @@ GEM
     uglifier (1.2.6)
       execjs (>= 0.3.0)
       multi_json (~> 1.3)
+    vcr (2.2.4)
 
 PLATFORMS
   ruby
@@ -222,3 +223,4 @@ DEPENDENCIES
   therubyracer
   tire
   uglifier
+  vcr
