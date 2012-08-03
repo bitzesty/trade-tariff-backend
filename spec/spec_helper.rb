@@ -18,6 +18,10 @@ RSpec.configure do |config|
 
   config.include FactoryGirl::Syntax::Methods
 
+  config.before(:suite) do
+    Sequel::Model.db.tables.each{|table| Sequel::Model.db.from(table).truncate}
+  end
+
   config.around(:each) do |example|
     Sequel::Model.db.transaction(rollback: :always){example.run}
   end
