@@ -62,7 +62,7 @@ FactoryGirl.define do
     end
 
     trait :non_declarable do
-      before(:create) { |heading, evaluator|
+      after(:create) { |heading, evaluator|
         FactoryGirl.create(:goods_nomenclature, :with_description,
                                                 :with_indent,
                                                 goods_nomenclature_item_id: "#{heading.short_code}#{6.times.map{ Random.rand(9) }.join}")
@@ -70,7 +70,7 @@ FactoryGirl.define do
     end
 
     trait :with_chapter do
-      before(:create) { |heading, evaluator|
+      after(:create) { |heading, evaluator|
         FactoryGirl.create(:goods_nomenclature, :with_description,
                                                 :with_indent,
                                                 goods_nomenclature_item_id: heading.chapter_id)
@@ -103,7 +103,7 @@ FactoryGirl.define do
     description { Forgery(:basic).text }
     goods_nomenclature_description_period_sid { generate(:sid) }
 
-    before(:create) { |gono_desc, evaluator|
+    after(:create) { |gono_desc, evaluator|
       FactoryGirl.create(:goods_nomenclature_description_period, goods_nomenclature_sid: gono_desc.goods_nomenclature_sid,
                                                                  goods_nomenclature_description_period_sid: gono_desc.goods_nomenclature_description_period_sid,
                                                                  validity_start_date: evaluator.validity_start_date,
