@@ -22,6 +22,25 @@ The API backend for UK Trade Tariff Web application.
 Ensure that you have pulled the latest version of the development repo.
 Run the bootstrap command.
 
+## Setup UKTradeTariff
+
+1. Load sections
+
+    ```
+    bundle exec rake db:import
+    ```
+
+2. Load database snapshot (TariffImporter). TBD
+
+3. Index on ElasticSearch
+
+    ```
+    bundle exec rake environment tire:import CLASS='Section'
+    bundle exec rake environment tire:import CLASS='Chapter'
+    bundle exec rake environment tire:import CLASS='Heading'
+    bundle exec rake environment tire:import CLASS='Commodity'
+    ```
+
 ## Run UKTradeTariff
 
     ./startup.sh
