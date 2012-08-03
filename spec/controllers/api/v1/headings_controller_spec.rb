@@ -23,7 +23,7 @@ describe Api::V1::HeadingsController, "GET #show" do
 
   context 'when record is not present' do
     it 'returns not found if record was not found' do
-      expect { get :show, id: "0101", format: :json }.to raise_error Sequel::RecordNotFound
+      expect { get :show, id: "5555", format: :json }.to raise_error Sequel::RecordNotFound
     end
   end
 end
