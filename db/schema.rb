@@ -279,7 +279,7 @@ Sequel.migration do
       column :nba_id, "varchar(255)"
       column :null_tri_rqd, "varchar(255)"
       column :qta_code_uk, "varchar(255)"
-      column :qta_elig_useLstrubg, "varchar(255)"
+      column :qta_elig_use, "varchar(255)"
       column :qta_exch_rate, "varchar(255)"
       column :qta_no, "varchar(255)"
       column :qta_uoq_code, "varchar(255)"
@@ -1453,6 +1453,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20120726162358_measure_sid_to_be_unsigned.rb")
     self[:schema_migrations].insert(:filename => "20120730121153_add_gono_id_index_on_measures.rb")
     self[:schema_migrations].insert(:filename => "20120803132451_fix_chief_columns.rb")
+    self[:schema_migrations].insert(:filename => "20120805223427_rename_qta_elig_use_lstrubg_chief.rb")
 
     create_table(:sections) do
       primary_key :id, :type=>"int(11)"
