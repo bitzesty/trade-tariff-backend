@@ -61,6 +61,10 @@ FactoryGirl.define do
       producline_suffix { 80 }
     end
 
+    trait :non_grouping do
+      producline_suffix { 80 }
+    end
+
     trait :non_declarable do
       after(:create) { |heading, evaluator|
         FactoryGirl.create(:goods_nomenclature, :with_description,

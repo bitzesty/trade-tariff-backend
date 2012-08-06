@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Api::V1::HeadingsController, "GET #show" do
   render_views
 
-  let(:heading) { create :heading, :non_declarable, :with_description, :with_chapter }
+  let(:heading) { create :heading, :non_grouping, :non_declarable, :with_description, :with_chapter }
   let(:pattern) {
     {
       goods_nomenclature_item_id: heading.code,

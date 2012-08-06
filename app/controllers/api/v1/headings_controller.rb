@@ -5,6 +5,7 @@ module Api
     class HeadingsController < ApplicationController
       def show
         @heading = Heading.actual
+                          .non_grouping
                           .where(goods_nomenclatures__goods_nomenclature_item_id: heading_id)
                           .take
 

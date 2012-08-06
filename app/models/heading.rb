@@ -60,6 +60,10 @@ class Heading < GoodsNomenclature
     def declarable
       filter(producline_suffix: 80)
     end
+
+    def non_grouping
+      filter{~{producline_suffix: 10} }
+    end
   end
 
   delegate :section, to: :chapter
