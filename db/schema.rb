@@ -733,8 +733,6 @@ Sequel.migration do
       column :productline_suffix, "varchar(255)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
-
-      index [:goods_nomenclature_sid, :derived_goods_nomenclature_item_id, :derived_productline_suffix, :goods_nomenclature_item_id, :productline_suffix], :name=>:primary_key, :unique=>true
     end
 
     create_table(:goods_nomenclature_successors) do
@@ -745,8 +743,6 @@ Sequel.migration do
       column :productline_suffix, "varchar(255)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
-
-      index [:goods_nomenclature_sid, :absorbed_goods_nomenclature_item_id, :absorbed_productline_suffix, :goods_nomenclature_item_id, :productline_suffix], :name=>:primary_key, :unique=>true
     end
 
     create_table(:goods_nomenclatures) do
@@ -1420,8 +1416,6 @@ Sequel.migration do
       column :measure_type_id, "int(11)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
-
-      index [:replacing_regulation_id, :replacing_regulation_role, :replaced_regulation_id, :replaced_regulation_role, :measure_type_id, :geographical_area_id, :chapter_heading], :name=>:primary_key, :unique=>true
     end
 
     create_table(:regulation_role_type_descriptions) do
