@@ -31,6 +31,7 @@ class GoodsNomenclatureMapper
     @goods_nomenclatures.reject { |goods_nomenclature| goods_nomenclature.parent.present? }
   end
   alias :root_entries :goods_nomenclatures
+  alias :all :goods_nomenclatures
 
   def find
     @goods_nomenclatures.detect { |c| yield(c) } if block_given?

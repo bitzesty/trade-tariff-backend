@@ -47,6 +47,10 @@ class Commodity < GoodsNomenclature
     actual(GoodsNomenclatureIndent).filter(goods_nomenclature_sid: goods_nomenclature_sid)
   }
 
+  one_to_many :third_country_duty, dataset: -> {
+    MeasureComponent.where(measure: import_measures_dataset.where(measure_type: MeasureType::THIRD_COUNTRY).all)
+  }, class_name: 'MeasureComponent'
+
   delegate :section, to: :chapter
 
   dataset_module do
@@ -76,10 +80,11 @@ class Commodity < GoodsNomenclature
           t1__max_gono: :goods_nomenclatures__goods_nomenclature_item_id }
       )
       .group(:goods_nomenclature_indents__number_indents)
+      .all
   end
 
   def uptree
-    @_uptree ||= [ancestors.all, heading, chapter, self].flatten.compact
+    @_uptree ||= [ancestors, heading, chapter, self].flatten.compact
   end
 
   def children
@@ -148,14 +153,4 @@ class Commodity < GoodsNomenclature
       }
     }.to_json
   end
-
-  # TODO calculate real rate
-  def third_country_duty_rate
-    "0.00 %"
-  end
-
-  def uk_vat_rate
-    "0.00 %"
-  end
-
 end

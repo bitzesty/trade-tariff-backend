@@ -22,7 +22,7 @@ describe Commodity do
     end
   end
 
-  describe '.to_param' do
+  describe '#to_param' do
     let(:commodity) { create :commodity }
 
     it 'uses goods_nomenclature_item_id as param' do

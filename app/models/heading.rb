@@ -43,6 +43,11 @@ class Heading < GoodsNomenclature
                     .where(trade_movement_code: MeasureType::EXPORT_MOVEMENT_CODES)
   }, class_name: 'Measure'
 
+  one_to_many :third_country_duty, dataset: -> {
+    MeasureComponent.where(measure: import_measures_dataset.where(measure_type: MeasureType::THIRD_COUNTRY).all)
+  }, class_name: 'MeasureComponent'
+
+
   dataset_module do
     def by_code(code = "")
       filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", "#{code.to_s.first(4)}000000")
@@ -105,14 +110,5 @@ class Heading < GoodsNomenclature
         description: chapter.description.downcase
       },
     }.to_json
-  end
-
-  # TODO calculate real rate
-  def third_country_duty_rate
-    "0.00 %"
-  end
-
-  def uk_vat_rate
-    "0.00 %"
   end
 end

@@ -1,7 +1,6 @@
 object @heading
 
-attributes :goods_nomenclature_item_id, :description,
-           :third_country_duty_rate, :uk_vat_rate
+attributes :goods_nomenclature_item_id, :description
 
 if @heading.declarable?
   extends "api/v1/declarables/declarable", object: @heading
