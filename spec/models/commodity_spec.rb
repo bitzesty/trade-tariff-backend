@@ -5,6 +5,23 @@ describe Commodity do
     subject.primary_key.should == :goods_nomenclature_sid
   end
 
+  describe 'associations' do
+    describe 'measures' do
+      let(:measure_type) { create :measure_type, measure_type_id: MeasureType::EXCLUDED_TYPES.sample }
+      let(:commodity) { create :commodity, :with_indent }
+      let(:measure)   { create :measure, :with_base_regulation,
+                                         measure_type_id: measure_type.measure_type_id,
+                                         goods_nomenclature_sid: commodity.goods_nomenclature_sid  }
+
+      it 'does not include measures for excluded measure types' do
+        measure_type
+        measure
+
+        commodity.measures.map(&:measure_sid).should_not include measure.measure_sid
+      end
+    end
+  end
+
   describe '.to_param' do
     let(:commodity) { create :commodity }
 

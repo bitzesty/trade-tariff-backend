@@ -149,4 +149,35 @@ FactoryGirl.define do
     numeral { ["I", "II", "III"].sample }
     title { Forgery(:lorem_ipsum).sentence }
   end
+
+  factory :measure do
+    measure_sid  { generate(:sid) }
+    measure_type { generate(:sid) }
+    measure_generating_regulation_id { generate(:sid) }
+    validity_start_date { Date.today.ago(3.years) }
+    validity_end_date   { nil }
+
+    trait :with_measure_type do
+      after(:create) { |measure, evaluator|
+        FactoryGirl.create(:measure_type, measure_type_id: measure.measure_type_id)
+      }
+    end
+
+    trait :with_base_regulation do
+      after(:create) { |measure, evaluator|
+        FactoryGirl.create(:base_regulation, base_regulation_id: measure.measure_generating_regulation_id)
+      }
+    end
+  end
+
+  factory :measure_type do
+    validity_start_date { Date.today.ago(3.years) }
+    validity_end_date   { nil }
+  end
+
+  factory :base_regulation do
+    base_regulation_id { generate(:sid) }
+    validity_start_date { Date.today.ago(3.years) }
+    validity_end_date   { nil }
+  end
 end

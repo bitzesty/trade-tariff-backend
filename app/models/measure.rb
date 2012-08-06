@@ -35,6 +35,8 @@ class Measure < Sequel::Model
 
   delegate :measure_type_description, to: :measure_type
 
+  def_column_alias :measure_type_id, :measure_type
+
   dataset_module do
     def with_base_regulations
       select(:measures.*).
@@ -73,40 +75,6 @@ class Measure < Sequel::Model
   def origin
     "eu"
   end
-
-  # has_many :footnote_association_measures, foreign_key: :measure_sid
-  # has_many :footnotes, through: :footnote_association_measures, foreign_key: :footnote_id
-  # has_many :measure_components, foreign_key: :measure_sid
-  # has_many :measure_conditions, foreign_key: :measure_sid
-  # belongs_to :goods_nomenclature, foreign_key: :goods_nomenclature_sid
-  # belongs_to :justification_regulation, foreign_key: [:justification_regulation_role,
-  #                                                     :justification_regulation_id],
-  #                                       class_name: 'BaseRegulation'
-  # belongs_to :base_regulation, primary_key: [:base_regulation_id,
-  #                                            :base_regulation_role],
-  #                               foreign_key: [:measure_generating_regulation_id,
-  #                                             :measure_generating_regulation_role],
-  #                               class_name: 'BaseRegulation'
-  # belongs_to :modification_regulation, primary_key: [:modification_regulation_id,
-  #                                                    :modification_regulation_role],
-  #                                      foreign_key: [:measure_generating_regulation_id,
-  #                                                    :measure_generating_regulation_role],
-  #                                      class_name: 'ModificationRegulation'
-  # has_many :measure_partial_temporary_stops, foreign_key: :measure_sid
-  # has_many :partial_temporary_stopped_regulations, through: :measure_partial_temporary_stops,
-  #                                                  source: :stopped_regulation
-  # has_many :abrogated_regulations, through: :measure_partial_temporary_stops,
-  #                                  source: :abrogated_regulation
-  # # TODO come up with better naming scheme
-  # belongs_to :ref_measure_type, foreign_key: :measure_type,
-  #                               class_name: 'MeasureType'
-  # belongs_to :ref_additional_code, foreign_key: :additional_code_sid,
-  #                                  class_name: 'AdditionalCode'
-  # belongs_to :ref_geographical_area, foreign_key: :geographical_area_sid,
-  #                                    class_name: 'GeographicalArea'
-  # delegate :description, to: :ref_measure_type, prefix: :measure_type
-  # delegate :duty_rate, to: :
-
 end
 
 

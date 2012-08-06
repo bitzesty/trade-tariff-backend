@@ -9,6 +9,23 @@ describe Heading do
     end
   end
 
+  describe 'associations' do
+    describe 'measures' do
+      let(:measure_type) { create :measure_type, measure_type_id: MeasureType::EXCLUDED_TYPES.sample }
+      let(:heading)      { create :heading, :with_indent }
+      let(:measure)      { create :measure, :with_base_regulation,
+                                             measure_type_id: measure_type.measure_type_id,
+                                             goods_nomenclature_sid: heading.goods_nomenclature_sid  }
+
+      it 'does not include measures for excluded measure types' do
+        measure_type
+        measure
+
+        heading.measures.map(&:measure_sid).should_not include measure.measure_sid
+      end
+    end
+  end
+
   describe '#declarable' do
     let!(:declarable_heading)     { create :heading, goods_nomenclature_item_id: "0101000000"}
     let!(:non_declarable_heading) { create :heading, goods_nomenclature_item_id: "0102000000" }

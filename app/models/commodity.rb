@@ -12,10 +12,12 @@ class Commodity < GoodsNomenclature
     Measure.with_base_regulations
            .with_actual(BaseRegulation)
            .where(measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid))
+           .where{ ~{measures__measure_type: MeasureType::EXCLUDED_TYPES} }
     .union(
       Measure.with_modification_regulations
              .with_actual(ModificationRegulation)
-             .where(measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid)),
+             .where(measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid))
+             .where{ ~{measures__measure_type: MeasureType::EXCLUDED_TYPES} },
       alias: :measures
     )
     .with_actual(Measure)
@@ -77,7 +79,7 @@ class Commodity < GoodsNomenclature
   end
 
   def uptree
-    @_uptree ||= ancestors.all << heading << chapter << self
+    @_uptree ||= [ancestors.all, heading, chapter, self].flatten.compact
   end
 
   def children

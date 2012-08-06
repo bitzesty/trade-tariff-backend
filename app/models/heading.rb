@@ -21,10 +21,12 @@ class Heading < GoodsNomenclature
     Measure.with_base_regulations
            .with_actual(BaseRegulation)
            .where(measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid))
+           .where{ ~{measures__measure_type: MeasureType::EXCLUDED_TYPES} }
     .union(
       Measure.with_modification_regulations
              .with_actual(ModificationRegulation)
-             .where(measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid)),
+             .where(measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid))
+             .where{ ~{measures__measure_type: MeasureType::EXCLUDED_TYPES} },
       alias: :measures
     )
     .with_actual(Measure)
@@ -71,7 +73,7 @@ class Heading < GoodsNomenclature
   end
 
   def uptree
-    [self, self.chapter]
+    [self, self.chapter].compact
   end
 
   def declarable
