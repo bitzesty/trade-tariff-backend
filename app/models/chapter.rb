@@ -19,7 +19,8 @@ class Chapter < GoodsNomenclature
 
   # Tire configuration
   tire do
-    index_name 'chapters'
+    index_name    'chapters'
+    document_type 'chapter'
 
     mapping do
       indexes :description,        analyzer: 'snowball'

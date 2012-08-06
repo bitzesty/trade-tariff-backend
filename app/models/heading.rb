@@ -68,7 +68,8 @@ class Heading < GoodsNomenclature
 
   # Tire configuration
   tire do
-    index_name 'headings'
+    index_name    'headings'
+    document_type 'heading'
 
     mapping do
       indexes :description,        analyzer: 'snowball'

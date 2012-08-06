@@ -55,7 +55,8 @@ class Commodity < GoodsNomenclature
 
   # Tire configuration
   tire do
-    index_name 'commodities'
+    index_name    'commodities'
+    document_type 'commodity'
 
     mapping do
       indexes :description,        analyzer: 'snowball'

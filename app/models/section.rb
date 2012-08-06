@@ -12,7 +12,8 @@ class Section < Sequel::Model
 
   # Tire configuration
   tire do
-    index_name 'sections'
+    index_name    'sections'
+    document_type 'section'
 
     mapping do
       indexes :title,        analyzer: 'snowball'
