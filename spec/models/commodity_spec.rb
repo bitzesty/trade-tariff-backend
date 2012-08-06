@@ -8,10 +8,10 @@ describe Commodity do
   describe 'associations' do
     describe 'measures' do
       let(:measure_type) { create :measure_type, measure_type_id: MeasureType::EXCLUDED_TYPES.sample }
-      let(:commodity) { create :commodity, :with_indent }
-      let(:measure)   { create :measure, :with_base_regulation,
-                                         measure_type_id: measure_type.measure_type_id,
-                                         goods_nomenclature_sid: commodity.goods_nomenclature_sid  }
+      let(:commodity)    { create :commodity, :with_indent }
+      let(:measure)      { create :measure, :with_base_regulation,
+                                             measure_type_id: measure_type.measure_type_id,
+                                             goods_nomenclature_sid: commodity.goods_nomenclature_sid  }
 
       it 'does not include measures for excluded measure types' do
         measure_type

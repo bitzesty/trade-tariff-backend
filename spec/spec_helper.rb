@@ -18,7 +18,7 @@ RSpec.configure do |config|
 
   config.include FactoryGirl::Syntax::Methods
 
-  config.before(:suite) do
+  config.before(:all) do
     Sequel::Model.db.tables.each{|table| Sequel::Model.db.from(table).truncate}
   end
 
