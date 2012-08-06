@@ -81,6 +81,10 @@ class Heading < GoodsNomenclature
     [self, self.chapter].compact
   end
 
+  def uk_vat_rate
+    "0.00 %"
+  end
+
   def declarable
     actual(GoodsNomenclature).where("goods_nomenclature_item_id LIKE ?", "#{short_code}______")
                              .count == 1

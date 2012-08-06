@@ -120,6 +120,10 @@ class Commodity < GoodsNomenclature
     goods_nomenclature_item_id
   end
 
+  def uk_vat_rate
+    "0.00 %"
+  end
+
   def to_indexed_json
     {
       id: goods_nomenclature_sid,
