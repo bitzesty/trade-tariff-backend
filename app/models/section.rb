@@ -10,8 +10,13 @@ class Section < Sequel::Model
            .where(sections__id: id)
   }
 
-  mapping do
-    indexes :title,        analyzer: 'snowball'
+  # Tire configuration
+  tire do
+    index_name 'sections'
+
+    mapping do
+      indexes :title,        analyzer: 'snowball'
+    end
   end
 
   def to_param

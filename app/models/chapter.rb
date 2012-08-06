@@ -17,8 +17,13 @@ class Chapter < GoodsNomenclature
     actual(Heading).filter("goods_nomenclature_item_id LIKE ? AND goods_nomenclature_item_id NOT LIKE '__00______'", relevant_headings)
   }
 
-  mapping do
-    indexes :description,        analyzer: 'snowball'
+  # Tire configuration
+  tire do
+    index_name 'chapters'
+
+    mapping do
+      indexes :description,        analyzer: 'snowball'
+    end
   end
 
   dataset_module do

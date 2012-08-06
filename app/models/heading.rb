@@ -66,8 +66,13 @@ class Heading < GoodsNomenclature
     end
   end
 
-  mapping do
-    indexes :description,        analyzer: 'snowball'
+  # Tire configuration
+  tire do
+    index_name 'headings'
+
+    mapping do
+      indexes :description,        analyzer: 'snowball'
+    end
   end
 
   delegate :section, to: :chapter

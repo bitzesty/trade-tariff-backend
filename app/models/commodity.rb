@@ -53,8 +53,13 @@ class Commodity < GoodsNomenclature
 
   delegate :section, to: :chapter
 
-  mapping do
-    indexes :description,        analyzer: 'snowball'
+  # Tire configuration
+  tire do
+    index_name 'commodities'
+
+    mapping do
+      indexes :description,        analyzer: 'snowball'
+    end
   end
 
   dataset_module do
