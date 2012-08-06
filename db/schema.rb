@@ -255,6 +255,7 @@ Sequel.migration do
       column :null_tri_rqd, "varchar(255)"
       column :exports_use_ind, "tinyint(1)"
       column :tar_msr_no, "varchar(255)"
+      column :transformed, "tinyint(1)", :default=>false
     end
 
     create_table(:chief_tame) do
@@ -291,6 +292,7 @@ Sequel.migration do
       column :rfs_code_5, "varchar(255)"
       column :tdr_spr_sur, "varchar(255)"
       column :exports_use_ind, "tinyint(1)"
+      column :transformed, "tinyint(1)", :default=>false
     end
 
     create_table(:chief_tamf) do
@@ -322,6 +324,7 @@ Sequel.migration do
       column :tamf_dt, "varchar(255)"
       column :tamf_sta, "varchar(255)"
       column :tamf_ty, "varchar(255)"
+      column :transformed, "tinyint(1)", :default=>false
     end
 
     create_table(:complete_abrogation_regulations) do
@@ -1454,6 +1457,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20120730121153_add_gono_id_index_on_measures.rb")
     self[:schema_migrations].insert(:filename => "20120803132451_fix_chief_columns.rb")
     self[:schema_migrations].insert(:filename => "20120805223427_rename_qta_elig_use_lstrubg_chief.rb")
+    self[:schema_migrations].insert(:filename => "20120805224946_add_transformed_to_chief_tables.rb")
 
     create_table(:sections) do
       primary_key :id, :type=>"int(11)"
