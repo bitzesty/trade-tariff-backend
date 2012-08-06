@@ -23,7 +23,7 @@ describe Api::V1::SearchController, "POST #search" do
     end
   end
 
-  describe 'fuzzy matching', vcr: { cassette_name: "search#search_fuzzy" } do
+  describe 'fuzzy matching', vcr: { cassette_name: "search#search_fuzzy", match_requests_on: [:host] } do
     let(:chapter) { create :chapter, :with_description, description: "horse" }
     let(:pattern) {
       {
