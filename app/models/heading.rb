@@ -66,6 +66,10 @@ class Heading < GoodsNomenclature
     end
   end
 
+  mapping do
+    indexes :description,        analyzer: 'snowball'
+  end
+
   delegate :section, to: :chapter
 
   def short_code

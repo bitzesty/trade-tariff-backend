@@ -10,6 +10,10 @@ class Section < Sequel::Model
            .where(sections__id: id)
   }
 
+  mapping do
+    indexes :title,        analyzer: 'snowball'
+  end
+
   def to_param
     position
   end

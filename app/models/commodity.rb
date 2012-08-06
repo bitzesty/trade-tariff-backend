@@ -53,6 +53,10 @@ class Commodity < GoodsNomenclature
 
   delegate :section, to: :chapter
 
+  mapping do
+    indexes :description,        analyzer: 'snowball'
+  end
+
   dataset_module do
     def by_code(code = "")
       filter(goods_nomenclature_item_id: code.to_s.first(10))

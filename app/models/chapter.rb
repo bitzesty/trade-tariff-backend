@@ -17,6 +17,10 @@ class Chapter < GoodsNomenclature
     actual(Heading).filter("goods_nomenclature_item_id LIKE ? AND goods_nomenclature_item_id NOT LIKE '__00______'", relevant_headings)
   }
 
+  mapping do
+    indexes :description,        analyzer: 'snowball'
+  end
+
   dataset_module do
     def by_code(code = "")
       filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", "#{code.to_s.first(2)}00000000")
