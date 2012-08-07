@@ -3,7 +3,7 @@ Section.delete
 sections = [
   {position: 1, numeral: 'I',     title: "Live animals; animal products (chapters 1 to 5)", chapters: ("01".."05")},
   {position: 2, numeral: 'II',    title: "Vegetable products (chapters 6 to 14)", chapters: ("06".."14")},
-  {position: 3, numeral: 'III',   title: "Animal or vegetable fats and oils and their cleavage products; prepared edible fats; animal or vegetable waxes (chapters 15)", chapters: ("15".."15")},
+  {position: 3, numeral: 'III',   title: "Animal or vegetable fats and oils and their cleavage products; prepared edible fats; animal or vegetable waxes (chapter 15)", chapters: ("15".."15")},
   {position: 4, numeral: 'IV',    title: "Prepared foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco substitutes (chapters 16 to 24)", chapters: ("16".."24")},
   {position: 5, numeral: 'V',     title: "Mineral products (chapters 25 to 27)", chapters: ("25".."27")},
   {position: 6, numeral: 'VI',    title: "Products of the chemical or allied industries (chapters 28 to 38)", chapters: ("28".."38")},
