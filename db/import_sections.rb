@@ -29,10 +29,10 @@ sections.each do |sec|
 end
 
 # Map chapters to sections
-# TODO clear chapter_sections table
 Chapter.all.each do |chapter|
   sp = sections.select {|v| (v[:chapters]).include?(chapter.short_code) }
   section_position = sp.first[:position]
   section = Section.where(position: section_position).take
+  chapter.remove_all_sections
   chapter.add_section section
 end
