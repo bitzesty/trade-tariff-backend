@@ -16,10 +16,32 @@ namespace :db do
     end
   end
 
-  desc "Clear  data"
-  task clear: 'environment' do
-    [Measure, AdditionalCode, Footnote, LegalAct].each do |r|
-      r.delete
+  desc "Load Section notes"
+  task section_notes: 'environment' do
+    Dir[Rails.root.join('db','notes','sections','*')].each do |file|
+      begin
+        note = YAML.load(File.read(file))
+        SectionNote.find_or_create(section_id: note[:section]) { |sn|
+          sn.content = note[:content]
+        }
+      rescue
+        puts "Error loading: #{file}"
+      end
+    end
+  end
+
+  desc "Load Chapter notes"
+  task chapter_notes: 'environment' do
+    Dir[Rails.root.join('db','notes','chapters','*')].each do |file|
+      begin
+        note = YAML.load(File.read(file))
+        ChapterNote.find_or_create(section_id: note[:section],
+                                   chapter_id: note[:chapter]) { |cn|
+          cn.content = note[:content]
+        }
+      rescue
+        puts "Error loading: #{file}"
+      end
     end
   end
 end

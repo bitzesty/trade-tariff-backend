@@ -170,6 +170,16 @@ Sequel.migration do
       index [:certificate_code, :certificate_type_code], :name=>:primary_key, :unique=>true
     end
 
+    create_table(:chapter_notes) do
+      primary_key :id, :type=>"int(11)"
+      column :section_id, "int(11)"
+      column :chapter_id, "int(11)"
+      column :content, "text"
+
+      index [:chapter_id]
+      index [:section_id], :name=>:section_id
+    end
+
     create_table(:chapters_sections) do
       column :goods_nomenclature_sid, "int(11)"
       column :section_id, "int(11)"
@@ -733,6 +743,8 @@ Sequel.migration do
       column :productline_suffix, "varchar(255)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
+
+      index [:goods_nomenclature_sid, :derived_goods_nomenclature_item_id, :derived_productline_suffix, :goods_nomenclature_item_id, :productline_suffix], :name=>:primary_key, :unique=>true
     end
 
     create_table(:goods_nomenclature_successors) do
@@ -743,6 +755,8 @@ Sequel.migration do
       column :productline_suffix, "varchar(255)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
+
+      index [:goods_nomenclature_sid, :absorbed_goods_nomenclature_item_id, :absorbed_productline_suffix, :goods_nomenclature_item_id, :productline_suffix], :name=>:primary_key, :unique=>true
     end
 
     create_table(:goods_nomenclatures) do
@@ -1416,6 +1430,8 @@ Sequel.migration do
       column :measure_type_id, "int(11)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
+
+      index [:replacing_regulation_id, :replacing_regulation_role, :replaced_regulation_id, :replaced_regulation_role, :measure_type_id, :geographical_area_id, :chapter_heading], :name=>:primary_key, :unique=>true
     end
 
     create_table(:regulation_role_type_descriptions) do
@@ -1452,6 +1468,15 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20120803132451_fix_chief_columns.rb")
     self[:schema_migrations].insert(:filename => "20120805223427_rename_qta_elig_use_lstrubg_chief.rb")
     self[:schema_migrations].insert(:filename => "20120805224946_add_transformed_to_chief_tables.rb")
+    self[:schema_migrations].insert(:filename => "20120806141008_add_note_tables.rb")
+
+    create_table(:section_notes) do
+      primary_key :id, :type=>"int(11)"
+      column :section_id, "int(11)"
+      column :content, "text"
+
+      index [:section_id], :name=>:section_id
+    end
 
     create_table(:sections) do
       primary_key :id, :type=>"int(11)"

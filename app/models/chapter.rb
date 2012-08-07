@@ -17,6 +17,10 @@ class Chapter < GoodsNomenclature
     actual(Heading).filter("goods_nomenclature_item_id LIKE ? AND goods_nomenclature_item_id NOT LIKE '__00______'", relevant_headings)
   }
 
+  one_to_one :chapter_note, dataset: -> {
+    ChapterNote.where(chapter_id: to_param, section_id: section.id)
+  }
+
   # Tire configuration
   tire do
     index_name    'chapters'

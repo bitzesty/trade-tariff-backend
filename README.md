@@ -30,9 +30,21 @@ Run the bootstrap command.
     bundle exec rake db:import
     ```
 
-2. Load database snapshot (TariffImporter). TBD
+2. Load Secton notes
 
-3. Index on ElasticSearch
+    ```
+    bundle exec rake db:section_notes
+    ```
+
+3. Load Chapter notes
+
+    ```
+    bundle exec rake db:chapter_notes
+    ```
+
+4. Load database snapshot (TariffImporter). TBD
+
+5. Index on ElasticSearch
 
     ```
     bundle exec rake environment tire:import CLASS='Section'

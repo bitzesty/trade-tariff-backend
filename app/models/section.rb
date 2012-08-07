@@ -9,6 +9,7 @@ class Section < Sequel::Model
            .with_actual(Chapter)
            .where(sections__id: id)
   }
+  one_to_one :section_note
 
   # Tire configuration
   tire do
