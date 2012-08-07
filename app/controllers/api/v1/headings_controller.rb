@@ -9,7 +9,8 @@ module Api
                           .where(goods_nomenclatures__goods_nomenclature_item_id: heading_id)
                           .take
 
-        @commodities = GoodsNomenclatureMapper.new(@heading.commodities).root_entries
+        @commodities = GoodsNomenclatureMapper.new(@heading.commodities_dataset.eager(:goods_nomenclature_indent,
+                                                                                      :goods_nomenclature_description).all).root_entries
 
         respond_with @heading
       end

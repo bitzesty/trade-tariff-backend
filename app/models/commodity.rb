@@ -43,10 +43,6 @@ class Commodity < GoodsNomenclature
     actual(Chapter).filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
   }
 
-  one_to_one :goods_nomenclature_indent, dataset: -> {
-    actual(GoodsNomenclatureIndent).filter(goods_nomenclature_sid: goods_nomenclature_sid)
-  }
-
   one_to_many :third_country_duty, dataset: -> {
     MeasureComponent.where(measure: import_measures_dataset.where(measure_type: MeasureType::THIRD_COUNTRY).all)
   }, class_name: 'MeasureComponent'

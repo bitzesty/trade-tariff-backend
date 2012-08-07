@@ -9,14 +9,40 @@ class GoodsNomenclature < Sequel::Model
   set_primary_key :goods_nomenclature_sid
 
   one_to_one :goods_nomenclature_indent, dataset: -> {
-    (GoodsNomenclatureIndent).where(goods_nomenclature_sid: goods_nomenclature_sid)
-  }
+    actual(GoodsNomenclatureIndent).filter(goods_nomenclature_sid: goods_nomenclature_sid)
+  }, eager_loader: (proc do |eo|
+    eo[:rows].each{|gono| gono.associations[:goods_nomenclature_indent] = nil}
+
+    id_map = eo[:id_map]
+    GoodsNomenclatureIndent.actual.where(goods_nomenclature_sid: id_map.keys).all do |indent|
+      if gonos = id_map[indent.goods_nomenclature_sid]
+        gonos.each do |gono|
+          gono.associations[:goods_nomenclature_indent] = indent
+        end
+      end
+    end
+  end)
+
   one_to_one :goods_nomenclature_description, dataset: -> {
     GoodsNomenclatureDescription.with_actual(GoodsNomenclatureDescriptionPeriod)
                                 .join(:goods_nomenclature_description_periods, goods_nomenclature_description_periods__goods_nomenclature_description_period_sid: :goods_nomenclature_descriptions__goods_nomenclature_description_period_sid,
                                                                                goods_nomenclature_description_periods__goods_nomenclature_sid: :goods_nomenclature_descriptions__goods_nomenclature_sid)
                                 .where(goods_nomenclature_descriptions__goods_nomenclature_sid: goods_nomenclature_sid)
-  }
+  }, eager_loader: (proc do |eo|
+    eo[:rows].each{|gono| gono.associations[:goods_nomenclature_description] = nil}
+
+    id_map = eo[:id_map]
+    GoodsNomenclatureDescription.with_actual(GoodsNomenclatureDescriptionPeriod)
+                                .join(:goods_nomenclature_description_periods, goods_nomenclature_description_periods__goods_nomenclature_description_period_sid: :goods_nomenclature_descriptions__goods_nomenclature_description_period_sid,
+                                                                               goods_nomenclature_description_periods__goods_nomenclature_sid: :goods_nomenclature_descriptions__goods_nomenclature_sid)
+                                .where(goods_nomenclature_descriptions__goods_nomenclature_sid: id_map.keys).all do |description|
+      if gonos = id_map[description.goods_nomenclature_sid]
+        gonos.each do |gono|
+          gono.associations[:goods_nomenclature_description] = description
+        end
+      end
+    end
+  end)
 
   delegate :number_indents, to: :goods_nomenclature_indent
   delegate :description, to: :goods_nomenclature_description
