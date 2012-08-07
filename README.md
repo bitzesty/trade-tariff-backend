@@ -27,10 +27,10 @@ Run the bootstrap command.
 1. Load sections
 
     ```
-    bundle exec rake db:import
+    bundle exec rake db:import_sections
     ```
 
-2. Load Secton notes
+2. Load Section notes
 
     ```
     bundle exec rake db:section_notes

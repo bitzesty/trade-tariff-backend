@@ -1,7 +1,7 @@
 namespace :db do
-  desc 'Create Sections'
-  task import: 'environment' do
-    load(File.join(Rails.root, 'db', 'import.rb'))
+  desc 'Create Sections (destructive)'
+  task import_sections: 'environment' do
+    load(File.join(Rails.root, 'db', 'import_sections.rb'))
   end
 
   desc "Import Chief standing data"
