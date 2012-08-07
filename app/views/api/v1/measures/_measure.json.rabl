@@ -1,4 +1,4 @@
-attributes :origin
+attributes :origin, :ordernumber
 
 node(:measure_type_description) { |obj|
   obj.measure_type_description.description
