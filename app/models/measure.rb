@@ -7,33 +7,111 @@ class Measure < Sequel::Model
   # rename to Declarable
   many_to_one :goods_nomenclature, key: :goods_nomenclature_sid,
                                    foreign_key: :goods_nomenclature_sid
-  many_to_one :measure_type, key: {}, dataset: -> {
+
+  many_to_one :measure_type, key: :measure_type_id, dataset: -> {
     actual(MeasureType).where(measure_type_id: self[:measure_type])
-  }
+  }, eager_loader: (proc do |eo|
+    eo[:rows].each{|measure| measure.associations[:measure_type] = nil}
+
+    id_map = eo[:id_map]
+
+    MeasureType.actual
+               .eager(:measure_type_description)
+               .where(measure_type_id: id_map.keys)
+               .all do |measure_type|
+      if measures = id_map[measure_type.measure_type_id]
+        measures.each do |measure|
+          measure.associations[:measure_type] = measure_type
+        end
+      end
+    end
+  end)
+
   one_to_many :measure_conditions, key: :measure_sid
-  one_to_one :geographical_area, dataset: -> {
+
+  one_to_one :geographical_area, eager_loader_key: :geographical_area_sid, dataset: -> {
     actual(GeographicalArea).where(geographical_area_sid: geographical_area_sid)
-  }
+  }, eager_loader: (proc do |eo|
+    eo[:rows].each{|measure| measure.associations[:geographical_area] = nil}
+
+    id_map = eo[:id_map]
+
+    GeographicalArea.actual
+                    .eager(:geographical_area_description,
+                           :contained_geographical_areas)
+                    .where(geographical_area_sid: id_map.keys)
+                    .all do |geographical_area|
+      if measures = id_map[geographical_area.geographical_area_sid]
+        measures.each do |measure|
+          measure.associations[:geographical_area] = geographical_area
+        end
+      end
+    end
+  end)
+
+
   many_to_many :excluded_geographical_areas, join_table: :measure_excluded_geographical_areas,
                                              left_key: :measure_sid,
                                              left_primary_key: :measure_sid,
                                              right_key: :excluded_geographical_area,
                                              right_primary_key: :geographical_area_id,
                                              class_name: 'GeographicalArea'
+
   many_to_many :footnotes, dataset: -> {
     actual(Footnote)
             .join(:footnote_association_measures, footnote_id: :footnote_id, footnote_type_id: :footnote_type_id)
             .where("footnote_association_measures.measure_sid = ?", measure_sid)
-  }
+  }, eager_loader: (proc do |eo|
+    eo[:rows].each{|measure| measure.associations[:footnotes] = []}
+
+    id_map = eo[:id_map]
+
+    Footnote.actual
+            .eager(:footnote_description)
+            .join(:footnote_association_measures, footnote_id: :footnote_id, footnote_type_id: :footnote_type_id)
+            .where(footnote_association_measures__measure_sid: id_map.keys).all do |footnote|
+      if measures = id_map[footnote[:measure_sid]]
+        measures.each do |measure|
+          measure.associations[:footnotes] << footnote
+        end
+      end
+    end
+  end)
+
   one_to_many :measure_components, key: :measure_sid,
                                    primary_key: :measure_sid
-  one_to_one :additional_code, key: :additional_code_sid
 
-  one_to_one :quota_order_number, dataset: -> {
+  one_to_one :additional_code, key: :additional_code_sid, dataset: -> {
+    actual(AdditionalCode).where(additional_code_sid: additional_code_sid)
+  }, eager_loader: (proc do |eo|
+    eo[:rows].each{|measure| measure.associations[:additional_code] = nil}
+
+    id_map = eo[:id_map]
+
+    AdditionalCode.actual.where(additional_code_sid: id_map.keys).all do |additional_code|
+      if measures = id_map[additional_code.additional_code_sid]
+        measures.each do |measure|
+          measure.associations[:additional_code] = additional_code
+        end
+      end
+    end
+  end)
+
+  one_to_one :quota_order_number, eager_loader_key: :ordernumber, dataset: -> {
     actual(QuotaOrderNumber).where(quota_order_number_id: ordernumber)
-  }
+  }, eager_loader: (proc do |eo|
+    eo[:rows].each{|measure| measure.associations[:quota_order_number] = nil}
 
-  delegate :measure_type_description, to: :measure_type
+    id_map = eo[:id_map]
+
+    QuotaOrderNumber.actual.where(quota_order_number_id: id_map.keys).all do |order_number|
+      if measures = id_map[order_number.quota_order_number_id]
+        measures.each do |measure|
+          measure.associations[:quota_order_number] = order_number
+        end
+      end
+    end
+  end)
 
   def_column_alias :measure_type_id, :measure_type
 

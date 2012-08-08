@@ -12,6 +12,7 @@ class MeasureType < Sequel::Model
 
   one_to_one :measure_type_description, key: :measure_type_id,
                                         foreign_key: :measure_type_id
+
   one_to_many :measures, key: :measure_type,
                          foreign_key: :measure_type_id
 

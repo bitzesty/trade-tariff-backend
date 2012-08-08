@@ -1,7 +1,7 @@
 attributes :origin, :ordernumber
 
 node(:measure_type_description) { |obj|
-  obj.measure_type_description.description
+  obj.measure_type.description
 }
 
 node(:legal_act, if: ->(measure) { measure.generating_regulation_present? }) do |obj|
@@ -49,14 +49,13 @@ child(geographical_area: :geographical_area) do
   node(:description) { |ga|
     ga.geographical_area_description.description
   }
-  node(:children_geographical_areas, if: ->(region) { region.contained_geographical_areas.any? }) do |region|
-    child(contained_geographical_areas: :children_geographical_areas) do
-      attributes :iso_code
 
-      node(:description) { |ga|
-        ga.geographical_area_description.description
-      }
-    end
+  child(contained_geographical_areas: :children_geographical_areas) do
+    attributes :iso_code
+
+    node(:description) { |ga|
+      ga.geographical_area_description.description
+    }
   end
 end
 
