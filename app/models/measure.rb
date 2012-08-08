@@ -153,6 +153,14 @@ class Measure < Sequel::Model
   def origin
     "eu"
   end
+
+  def import
+    measure_type.trade_movement_code.in? MeasureType::IMPORT_MOVEMENT_CODES
+  end
+
+  def export
+    measure_type.trade_movement_code.in? MeasureType::EXPORT_MOVEMENT_CODES
+  end
 end
 
 
