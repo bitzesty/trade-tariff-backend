@@ -1,6 +1,6 @@
-# UK Trade Tariff
+# TradeTariffBackend
 
-The API backend for UK Trade Tariff Web application.
+The API backend for TradeTariffFrontend application.
 
 ## Dependencies (OS X using Homebrew)
 
@@ -22,7 +22,7 @@ The API backend for UK Trade Tariff Web application.
 Ensure that you have pulled the latest version of the development repo.
 Run the bootstrap command.
 
-## Setup UKTradeTariff
+## Setup TradeTariffBackend
 
 1. Load sections
 
@@ -53,14 +53,13 @@ Run the bootstrap command.
     RAILS_ENV=production bundle exec rake environment tire:import CLASS='Commodity'
     ```
 
-## Run UKTradeTariff
+## Run TradeTariffBackend
 
     ./startup.sh
 
 ## TODO
 
 * Instructions on how to run the TARIC and CHIEF importers
-* How to load pre imported db dumps.
-* Rewrite all the mongoid specs to sequel.
+* How to load pre-imported db dumps.
 * Timezone config
 * Background tasks for daily import
