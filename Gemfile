@@ -33,6 +33,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'brakeman', '~> 1.7.0'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'forgery'
