@@ -6,21 +6,21 @@ gem 'rails', '3.2.7'
 gem 'mysql2'
 gem 'oj'
 gem 'rabl'
-gem 'tire'
 gem 'sequel'
 gem 'talentbox-sequel-rails', git: "git://github.com/alphagov/sequel-rails.git", branch: 'production'
+gem 'tire'
 
-gem 'jquery-rails', "~> 1.0.19"
 gem 'builder'
+gem 'jquery-rails', "~> 1.0.19"
 gem 'railties'
 
 gem 'airbrake'
 gem 'unicorn', '~> 4.3.1'
 
 group :assets do
-  gem 'therubyracer'
-  gem 'sass-rails'
   gem 'bootstrap-sass'
+  gem 'sass-rails'
+  gem 'therubyracer'
   gem 'uglifier'
 end
 
@@ -34,17 +34,17 @@ end
 
 group :test do
   gem 'brakeman', '~> 1.7.0'
-  gem 'rspec-rails'
+  gem 'ci_reporter'
   gem 'factory_girl_rails'
-  gem 'forgery'
-  gem 'shoulda-matchers'
   gem 'fakeweb'
-  gem 'vcr'
+  gem 'forgery'
+  gem 'json_expressions'
   gem 'mocha'
+  gem 'rspec-rails'
+  gem 'shoulda-matchers'
   gem 'simplecov'
   gem 'simplecov-rcov'
-  gem 'ci_reporter'
-  gem 'json_expressions'
+  gem 'vcr'
 end
 
 group :router do
