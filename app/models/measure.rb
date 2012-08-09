@@ -119,21 +119,24 @@ class Measure < Sequel::Model
     end
   end)
 
-  one_to_one :additional_code, key: :additional_code_sid, dataset: -> {
-    actual(AdditionalCode).where(additional_code_sid: additional_code_sid)
-  }, eager_loader: (proc do |eo|
-    eo[:rows].each{|measure| measure.associations[:additional_code] = nil}
+  one_to_one :additional_code, key: :additional_code_sid, eager_loader_key: :additional_code_sid,
+    dataset: -> {
+      actual(AdditionalCode).where(additional_code_sid: additional_code_sid)
+    }, eager_loader: (proc do |eo|
+      eo[:rows].each{|measure| measure.associations[:additional_code] = nil}
 
-    id_map = eo[:id_map]
+      id_map = eo[:id_map]
 
-    AdditionalCode.actual.where(additional_code_sid: id_map.keys).all do |additional_code|
-      if measures = id_map[additional_code.additional_code_sid]
-        measures.each do |measure|
-          measure.associations[:additional_code] = additional_code
+      AdditionalCode.actual
+                    .eager(:additional_code_description)
+                    .where(additional_code_sid: id_map.keys).all do |additional_code|
+        if measures = id_map[additional_code.additional_code_sid]
+          measures.each do |measure|
+            measure.associations[:additional_code] = additional_code
+          end
         end
       end
-    end
-  end)
+    end)
 
   one_to_one :quota_order_number, eager_loader_key: :ordernumber, dataset: -> {
     actual(QuotaOrderNumber).where(quota_order_number_id: ordernumber)
@@ -154,6 +157,7 @@ class Measure < Sequel::Model
   end)
 
   def_column_alias :measure_type_id, :measure_type
+  def_column_alias :additional_code_id, :additional_code
 
   dataset_module do
     def with_base_regulations

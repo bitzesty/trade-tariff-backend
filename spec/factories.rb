@@ -52,7 +52,20 @@ FactoryGirl.define do
 
   factory :chapter, parent: :goods_nomenclature, class: Chapter do
     goods_nomenclature_item_id { "#{2.times.map{ Random.rand(9) }.join}00000000" }
+
+    trait :with_section do
+      after(:create) { |chapter, evaluator|
+        FactoryGirl.create(:section)
+      }
+    end
+
+    trait :with_note do
+      after(:create) { |chapter, evaluator|
+        FactoryGirl.create(:chapter_note, chapter_id: chapter.goods_nomenclature_sid)
+      }
+    end
   end
+
 
   factory :heading, parent: :goods_nomenclature, class: Heading do
     goods_nomenclature_item_id { "#{4.times.map{ Random.rand(9) }.join}000000" }
