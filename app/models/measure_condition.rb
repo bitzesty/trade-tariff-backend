@@ -56,7 +56,7 @@ class MeasureCondition < Sequel::Model
     MeasurementUnit.actual
                    .eager(:measurement_unit_description)
                    .where(measurement_unit_code: id_map.keys).all do |measurement_unit|
-      if measure_conditions = id_map[mesurement_unit.measurement_unit_code]
+      if measure_conditions = id_map[measurement_unit.measurement_unit_code]
         measure_conditions.each do |measure_condition|
           measure_condition.associations[:measurement_unit] = measurement_unit
         end
