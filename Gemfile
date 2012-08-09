@@ -39,7 +39,6 @@ group :test do
   gem 'fakeweb'
   gem 'forgery'
   gem 'json_expressions'
-  gem 'mocha'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'simplecov'
