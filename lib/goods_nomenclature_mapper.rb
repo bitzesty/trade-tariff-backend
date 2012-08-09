@@ -1,7 +1,7 @@
 class GoodsNomenclatureMapper
   module MappedGoodsNomenclature
-    attr_accessor :parent
     attr_writer :ancestors
+    attr_accessor :parent
 
     def children
       @children ||= []
@@ -31,7 +31,10 @@ class GoodsNomenclatureMapper
     @goods_nomenclatures.reject { |goods_nomenclature| goods_nomenclature.parent.present? }
   end
   alias :root_entries :goods_nomenclatures
-  alias :all :goods_nomenclatures
+
+  def all
+    @goods_nomenclatures
+  end
 
   def find
     @goods_nomenclatures.detect { |c| yield(c) } if block_given?

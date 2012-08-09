@@ -1,6 +1,8 @@
 object @commodity
 
-extends "api/v1/commodities/commodity"
+attributes :producline_suffix, :description, :number_indents, :goods_nomenclature_item_id,
+           :leaf, :uk_vat_rate
+
 extends "api/v1/declarables/declarable", object: @commodity
 
 child @commodity.heading do
@@ -21,8 +23,11 @@ child(third_country_duty: :basic_duty_rate_components) do
   }
 end
 
-node(:ancestors) { |commodity|
-  @commodity.ancestors.map do |commodity|
-    partial("api/v1/commodities/commodity_base", object: commodity)
-  end
+child(@commodity.ancestors => :ancestors) {
+    attributes :producline_suffix,
+               :description,
+               :number_indents,
+               :goods_nomenclature_item_id,
+               :leaf,
+               :uk_vat_rate
 }

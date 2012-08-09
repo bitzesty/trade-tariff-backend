@@ -27,9 +27,15 @@ else
     attributes :title, :numeral, :position
   end
 
-  node(:commodities) {
-    @commodities.map do |commodity|
-      partial("api/v1/commodities/commodity", object: commodity)
-    end
+  child(@commodities) {
+    attributes :producline_suffix,
+               :description,
+               :number_indents,
+               :goods_nomenclature_item_id,
+               :leaf,
+               :uk_vat_rate,
+               :goods_nomenclature_sid
+
+    node(:parent_sid) { |commodity| commodity.parent.try(:goods_nomenclature_sid) }
   }
 end

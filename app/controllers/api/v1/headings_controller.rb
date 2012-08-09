@@ -29,7 +29,7 @@ module Api
                                                         :additional_code).all
         else
           @commodities = GoodsNomenclatureMapper.new(@heading.commodities_dataset.eager(:goods_nomenclature_indent,
-                                                                                        :goods_nomenclature_description).all).root_entries
+                                                                                        :goods_nomenclature_description).all).all
         end
 
         respond_with @heading
