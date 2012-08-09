@@ -142,7 +142,9 @@ class Measure < Sequel::Model
 
     id_map = eo[:id_map]
 
-    QuotaOrderNumber.actual.where(quota_order_number_id: id_map.keys).all do |order_number|
+    QuotaOrderNumber.actual
+                    .eager(:quota_definition)
+                    .where(quota_order_number_id: id_map.keys).all do |order_number|
       if measures = id_map[order_number.quota_order_number_id]
         measures.each do |measure|
           measure.associations[:quota_order_number] = order_number

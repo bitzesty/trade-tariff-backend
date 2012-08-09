@@ -123,8 +123,25 @@ class MeasureCondition < Sequel::Model
     end
   end)
 
-  one_to_many :measure_condition_components, key: :measure_condition_sid,
-                                             primary_key: :measure_condition_sid
+  one_to_many :measure_condition_components, key: :measure_condition_sid, dataset: -> {
+    MeasureConditionComponent.where(measure_condition_sid: measure_condition_sid)
+  }, eager_loader: (proc do |eo|
+    eo[:rows].each{|measure_condition| measure_condition.associations[:measure_condition_components] = []}
+
+    id_map = eo[:id_map]
+
+    MeasureConditionComponent.eager(:duty_expression,
+                                    :monetary_unit,
+                                    {measurement_unit: :measurement_unit_description},
+                                    :measurement_unit_qualifier)
+                    .where(measure_condition_sid: id_map.keys).all do |measure_condition_component|
+      if measure_conditions = id_map[measure_condition_component.measure_condition_sid]
+        measure_conditions.each do |measure_condition|
+          measure_condition.associations[:measure_condition_components] << measure_condition_component
+        end
+      end
+    end
+  end)
 
 
   def document_code
