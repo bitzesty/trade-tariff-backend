@@ -6,7 +6,7 @@ class MeasureCondition < Sequel::Model
   one_to_one :measure, key: :measure_sid,
                        primary_key: :measure_sid
 
-  one_to_one :measure_action, eager_loader_key: :action_code, dataset: -> {
+  many_to_one :measure_action, eager_loader_key: :action_code, dataset: -> {
     actual(MeasureAction)
                  .where(action_code: action_code)
   }, eager_loader: (proc do |eo|
@@ -26,7 +26,7 @@ class MeasureCondition < Sequel::Model
     end
   end)
 
-  one_to_one :certificate, eager_loader_key: :certificate_type_code, dataset: -> {
+  many_to_one :certificate, eager_loader_key: :certificate_type_code, dataset: -> {
     actual(Certificate).where(certificate_code: certificate_code,
                       certificate_type_code: certificate_type_code)
   }, eager_loader: (proc do |eo|
@@ -45,7 +45,7 @@ class MeasureCondition < Sequel::Model
     end
   end)
 
-  one_to_one :measurement_unit, key: {}, primary_key: {}, eager_loader_key: :condition_measurement_unit_code, dataset: -> {
+  many_to_one :measurement_unit, key: {}, primary_key: {}, eager_loader_key: :condition_measurement_unit_code, dataset: -> {
     actual(MeasurementUnit)
                   .where(measurement_unit_code: condition_measurement_unit_code)
   }, eager_loader: (proc do |eo|
@@ -64,7 +64,7 @@ class MeasureCondition < Sequel::Model
     end
   end)
 
-  one_to_one :monetary_unit, key: {}, primary_key: {}, eager_loader_key: :condition_monetary_unit_code, dataset: -> {
+  many_to_one :monetary_unit, key: {}, primary_key: {}, eager_loader_key: :condition_monetary_unit_code, dataset: -> {
     actual(MonetaryUnit)
                   .where(monetary_unit_code: condition_monetary_unit_code)
   }, eager_loader: (proc do |eo|
@@ -83,7 +83,7 @@ class MeasureCondition < Sequel::Model
     end
   end)
 
-  one_to_one :measurement_unit_qualifier, key: {}, primary_key: {}, eager_loader_key: :condition_measurement_unit_qualifier_code, dataset: -> {
+  many_to_one :measurement_unit_qualifier, key: {}, primary_key: {}, eager_loader_key: :condition_measurement_unit_qualifier_code, dataset: -> {
     actual(MeasurementUnitQualifier)
                   .where(measurement_unit_qualifier_code: condition_measurement_unit_qualifier_code)
   }, eager_loader: (proc do |eo|
@@ -103,7 +103,7 @@ class MeasureCondition < Sequel::Model
     end
   end)
 
-  one_to_one :measure_condition_code, key: {}, primary_key: {}, eager_loader_key: :condition_code, dataset: -> {
+  many_to_one :measure_condition_code, key: {}, primary_key: {}, eager_loader_key: :condition_code, dataset: -> {
     actual(MeasureConditionCode)
                   .where(condition_code: condition_code)
   }, eager_loader: (proc do |eo|

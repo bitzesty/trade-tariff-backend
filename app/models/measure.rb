@@ -27,7 +27,28 @@ class Measure < Sequel::Model
     end
   end)
 
-  one_to_many :measure_conditions, key: :measure_sid
+  one_to_many :measure_conditions, key: :measure_sid, dataset: -> {
+    MeasureCondition.where(measure_sid: measure_sid)
+  }, eager_loader: (proc do |eo|
+    eo[:rows].each{|measure| measure.associations[:measure_conditions] = []}
+
+    id_map = eo[:id_map]
+
+    MeasureCondition.eager_graph(:certificate,
+                           {measurement_unit: :measurement_unit_description},
+                           :monetary_unit,
+                           :measure_condition_code,
+                           :measure_condition_components,
+                           :measure_action,
+                           :measurement_unit_qualifier)
+                    .where(measure_conditions__measure_sid: id_map.keys).all do |measure_condition|
+      if measures = id_map[measure_condition.measure_sid]
+        measures.each do |measure|
+          measure.associations[:measure_conditions] << measure_condition
+        end
+      end
+    end
+  end)
 
   one_to_one :geographical_area, eager_loader_key: :geographical_area_sid, dataset: -> {
     actual(GeographicalArea).where(geographical_area_sid: geographical_area_sid)
@@ -78,8 +99,25 @@ class Measure < Sequel::Model
     end
   end)
 
-  one_to_many :measure_components, key: :measure_sid,
-                                   primary_key: :measure_sid
+  one_to_many :measure_components, key: :measure_sid, dataset: -> {
+    MeasureComponent.where(measure_sid: measure_sid)
+  }, eager_loader: (proc do |eo|
+    eo[:rows].each{|measure| measure.associations[:measure_components] = []}
+
+    id_map = eo[:id_map]
+
+    MeasureComponent.eager(:duty_expression,
+                           :measurement_unit,
+                           :monetary_unit,
+                           :measurement_unit_qualifier)
+                    .where(measure_sid: id_map.keys).all do |measure_component|
+      if measures = id_map[measure_component.measure_sid]
+        measures.each do |measure|
+          measure.associations[:measure_components] << measure_component
+        end
+      end
+    end
+  end)
 
   one_to_one :additional_code, key: :additional_code_sid, dataset: -> {
     actual(AdditionalCode).where(additional_code_sid: additional_code_sid)

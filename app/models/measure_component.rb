@@ -3,7 +3,7 @@ class MeasureComponent < Sequel::Model
 
   set_primary_key :measure_sid, :duty_expression_id
 
-  one_to_one :duty_expression, key: {}, primary_key: {}, eager_loader_key: :duty_expression_id, dataset: -> {
+  many_to_one :duty_expression, key: {}, primary_key: {}, eager_loader_key: :duty_expression_id, dataset: -> {
     actual(DutyExpression)
                   .where(duty_expression_id: duty_expression_id)
   }, eager_loader: (proc do |eo|
@@ -22,7 +22,7 @@ class MeasureComponent < Sequel::Model
   end)
 
 
-  one_to_one :measurement_unit, key: {}, primary_key: {}, eager_loader_key: :measurement_unit_code, dataset: -> {
+  many_to_one :measurement_unit, key: {}, primary_key: {}, eager_loader_key: :measurement_unit_code, dataset: -> {
     actual(MeasurementUnit)
                   .where(measurement_unit_code: measurement_unit_code)
   }, eager_loader: (proc do |eo|
@@ -41,7 +41,7 @@ class MeasureComponent < Sequel::Model
     end
   end)
 
-  one_to_one :monetary_unit, key: {}, primary_key: {}, eager_loader_key: :monetary_unit_code, dataset: -> {
+  many_to_one :monetary_unit, key: {}, primary_key: {}, eager_loader_key: :monetary_unit_code, dataset: -> {
     actual(MonetaryUnit)
                   .where(monetary_unit_code: monetary_unit_code)
   }, eager_loader: (proc do |eo|
@@ -60,7 +60,7 @@ class MeasureComponent < Sequel::Model
     end
   end)
 
-  one_to_one :measurement_unit_qualifier, key: {}, primary_key: {}, eager_loader_key: :measurement_unit_qualifier_code, dataset: -> {
+  many_to_one :measurement_unit_qualifier, key: {}, primary_key: {}, eager_loader_key: :measurement_unit_qualifier_code, dataset: -> {
     actual(MeasurementUnitQualifier)
                   .where(measurement_unit_qualifier_code: measurement_unit_qualifier_code)
   }, eager_loader: (proc do |eo|
