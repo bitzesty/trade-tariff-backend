@@ -41,6 +41,18 @@ namespace :tariff do
         end
       end
     end
+
+    namespace :chief do
+      desc "Load Static National Data"
+      task static_national_data: :environment do
+        Sequel::Model.db.transaction do
+          File.readlines(Rails.root.join('db', 'chief', 'static_national_data_insert.sql')).each do |line|
+            puts line
+            Sequel::Model.db.run(line.strip)
+          end
+        end
+      end
+    end
   end
 
   desc 'Removes additional Trade Tariff entries'
@@ -60,7 +72,6 @@ namespace :tariff do
     namespace :chief do
       desc "Remove Static National data for CHIEF"
       task static_national_data: :environment do
-
         Sequel::Model.db.transaction do
           File.readlines(Rails.root.join('db', 'chief', 'static_national_data_delete.sql')).each do |line|
             Sequel::Model.db.run(line)

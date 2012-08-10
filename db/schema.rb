@@ -46,7 +46,7 @@ Sequel.migration do
     end
 
     create_table(:additional_code_type_measure_types) do
-      column :measure_type_id, "varchar(255)"
+      column :measure_type_id, "varchar(3)"
       column :additional_code_type_id, "varchar(255)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
@@ -125,6 +125,7 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
       column :validity_end_date, "datetime"
+      column :national, "tinyint(1)"
 
       index [:certificate_code, :certificate_type_code], :name=>:certificate
       index [:certificate_description_period_sid], :name=>:primary_key, :unique=>true
@@ -931,7 +932,7 @@ Sequel.migration do
     end
 
     create_table(:measure_type_descriptions) do
-      column :measure_type_id, "int(11)"
+      column :measure_type_id, "varchar(3)"
       column :language_id, "varchar(5)"
       column :description, "text"
       column :created_at, "datetime"
@@ -965,7 +966,7 @@ Sequel.migration do
     end
 
     create_table(:measure_types) do
-      column :measure_type_id, "int(11)"
+      column :measure_type_id, "varchar(3)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
       column :trade_movement_code, "int(11)"
@@ -978,6 +979,7 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
       column :national, "tinyint(1)"
+      column :measure_type_acronym, "varchar(3)"
 
       index [:measure_type_series_id], :name=>:index_measure_types_on_measure_type_series_id
       index [:measure_type_id], :name=>:primary_key, :unique=>true
@@ -1037,7 +1039,7 @@ Sequel.migration do
 
     create_table(:measures) do
       column :measure_sid, "int(11) unsigned"
-      column :measure_type, "int(11)"
+      column :measure_type, "varchar(3)"
       column :geographical_area, "varchar(255)"
       column :goods_nomenclature_item_id, "varchar(255)"
       column :validity_start_date, "datetime"
@@ -1443,11 +1445,14 @@ Sequel.migration do
       column :replacing_regulation_id, "varchar(255)"
       column :replaced_regulation_role, "int(11)"
       column :replaced_regulation_id, "varchar(255)"
-      column :measure_type_id, "int(11)"
+      column :measure_type_id, "varchar(3)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
-      index [:replacing_regulation_id, :replacing_regulation_role, :replaced_regulation_id, :replaced_regulation_role, :measure_type_id, :geographical_area_id, :chapter_heading], :name=>:primary_key, :unique=>true
+      index [:geographical_area_id], :name=>:geographical_area
+      index [:measure_type_id], :name=>:measure_type
+      index [:replaced_regulation_id, :replaced_regulation_role], :name=>:replaced_regulation
+      index [:replacing_regulation_id, :replacing_regulation_role], :name=>:replacing_regulation
     end
 
     create_table(:regulation_role_type_descriptions) do
@@ -1490,6 +1495,9 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20120807111730_add_national_attributes.rb")
     self[:schema_migrations].insert(:filename => "20120810083616_fix_datatypes.rb")
     self[:schema_migrations].insert(:filename => "20120810085137_add_national_abbreviation_to_certificates.rb")
+    self[:schema_migrations].insert(:filename => "20120810104725_create_add_acronym_to_measure_types.rb")
+    self[:schema_migrations].insert(:filename => "20120810105500_adjust_fields_for_chief.rb")
+    self[:schema_migrations].insert(:filename => "20120810114211_add_national_to_certificate_description_periods.rb")
 
     create_table(:sections) do
       primary_key :id, :type=>"int(11)"

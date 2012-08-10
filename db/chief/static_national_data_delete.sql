@@ -17,6 +17,7 @@ delete from footnotes where national = 1;
 delete from footnote_description_periods where footnote_description_period_sid <= -1 and footnote_description_period_sid >= -9999 and national = 1;
 delete from footnote_descriptions where footnote_description_period_sid <= -1 and footnote_description_period_sid >= -9999 and national = 1;
 delete from certificates where national = 1;
+delete from certificate_description_periods where national = 1;
 delete from certificate_descriptions where national = 1;
 delete from certificate_types where national = 1;
 delete from certificate_type_descriptions where national = 1;
