@@ -1,5 +1,3 @@
-Section.delete
-
 sections = [
   {position: 1, numeral: 'I',     title: "Live animals; animal products (chapters 1 to 5)", chapters: ("01".."05")},
   {position: 2, numeral: 'II',    title: "Vegetable products (chapters 6 to 14)", chapters: ("06".."14")},
