@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 source 'https://gems.gemfury.com/vo6ZrmjBQu5szyywDszE/'
 
-gem 'rails', '3.2.7'
+gem 'rails', '3.2.8'
 
 gem 'mysql2'
 gem 'oj'
