@@ -3,7 +3,16 @@ namespace :tariff do
   task install: %w[environment
                    install:taric:sections
                    install:taric:section_notes
-                   install:taric:chapter_notes]
+                   install:taric:chapter_notes
+                   reindex]
+
+  task reindex: :environment do
+    ENV['FORCE'] = 'true'
+    ['Section','Chapter','Heading','Commodity'].each do |klass|
+      ENV['CLASS'] = klass
+      Rake::Task['tire:import'].execute
+    end
+  end
 
   namespace :install do
     namespace :taric do

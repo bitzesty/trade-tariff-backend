@@ -47,10 +47,7 @@ Run the bootstrap command.
 5. Index on ElasticSearch
 
     ```
-    RAILS_ENV=production bundle exec rake environment tire:import CLASS='Section'
-    RAILS_ENV=production bundle exec rake environment tire:import CLASS='Chapter'
-    RAILS_ENV=production bundle exec rake environment tire:import CLASS='Heading'
-    RAILS_ENV=production bundle exec rake environment tire:import CLASS='Commodity'
+    RAILS_ENV=production bundle exec rake tariff:reindex
     ```
 
 ## Run TradeTariffBackend
