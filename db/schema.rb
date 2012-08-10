@@ -176,6 +176,7 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
       column :national, "tinyint(1)"
+      column :national_abbrev, "varchar(255)"
 
       index [:certificate_code, :certificate_type_code], :name=>:primary_key, :unique=>true
     end
@@ -397,7 +398,7 @@ Sequel.migration do
       column :export_refund_nomenclature_sid, "int(11)"
       column :validity_start_date, "datetime"
       column :goods_nomenclature_item_id, "varchar(255)"
-      column :additional_code_type, "int(11)"
+      column :additional_code_type, "varchar(255)"
       column :export_refund_code, "varchar(255)"
       column :productline_suffix, "varchar(255)"
       column :created_at, "datetime"
@@ -412,7 +413,7 @@ Sequel.migration do
       column :language_id, "varchar(5)"
       column :export_refund_nomenclature_sid, "int(11)"
       column :goods_nomenclature_item_id, "varchar(255)"
-      column :additional_code_type, "int(11)"
+      column :additional_code_type, "varchar(255)"
       column :export_refund_code, "varchar(255)"
       column :productline_suffix, "varchar(255)"
       column :description, "text"
@@ -430,7 +431,7 @@ Sequel.migration do
       column :validity_start_date, "datetime"
       column :number_export_refund_nomenclature_indents, "varchar(255)"
       column :goods_nomenclature_item_id, "varchar(255)"
-      column :additional_code_type, "int(11)"
+      column :additional_code_type, "varchar(255)"
       column :export_refund_code, "varchar(255)"
       column :productline_suffix, "varchar(255)"
       column :created_at, "datetime"
@@ -443,7 +444,7 @@ Sequel.migration do
     create_table(:export_refund_nomenclatures) do
       column :export_refund_nomenclature_sid, "int(11)"
       column :goods_nomenclature_item_id, "varchar(255)"
-      column :additional_code_type, "int(11)"
+      column :additional_code_type, "varchar(255)"
       column :export_refund_code, "varchar(255)"
       column :productline_suffix, "varchar(255)"
       column :validity_start_date, "datetime"
@@ -462,7 +463,7 @@ Sequel.migration do
       column :footnote_id, "varchar(255)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
-      column :additional_code_type_id, "int(11)"
+      column :additional_code_type_id, "varchar(255)"
       column :additional_code, "varchar(255)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
@@ -478,7 +479,7 @@ Sequel.migration do
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
       column :goods_nomenclature_item_id, "varchar(255)"
-      column :additional_code_type, "int(11)"
+      column :additional_code_type, "varchar(255)"
       column :export_refund_code, "varchar(255)"
       column :productline_suffix, "varchar(255)"
       column :created_at, "datetime"
@@ -1049,7 +1050,7 @@ Sequel.migration do
       column :geographical_area_sid, "int(11)"
       column :goods_nomenclature_sid, "int(11)"
       column :ordernumber, "varchar(255)"
-      column :additional_code_type, "int(11)"
+      column :additional_code_type, "varchar(255)"
       column :additional_code, "varchar(255)"
       column :additional_code_sid, "int(11)"
       column :reduction_indicator, "int(11)"
@@ -1487,6 +1488,8 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20120805224946_add_transformed_to_chief_tables.rb")
     self[:schema_migrations].insert(:filename => "20120806141008_add_note_tables.rb")
     self[:schema_migrations].insert(:filename => "20120807111730_add_national_attributes.rb")
+    self[:schema_migrations].insert(:filename => "20120810083616_fix_datatypes.rb")
+    self[:schema_migrations].insert(:filename => "20120810085137_add_national_abbreviation_to_certificates.rb")
 
     create_table(:sections) do
       primary_key :id, :type=>"int(11)"
