@@ -17,7 +17,7 @@ Sequel.migration do
     end
 
     alter_table :regulation_replacements do
-      drop_index [:replacing_regulation_id, :replacing_regulation_role, :replaced_regulation_id, :replaced_regulation_role, :measure_type_id, :geographical_area_id, :chapter_heading], :name=>:primary_key
+      # drop_index [:replacing_regulation_id, :replacing_regulation_role, :replaced_regulation_id, :replaced_regulation_role, :measure_type_id, :geographical_area_id, :chapter_heading], :name=>:primary_key
 
       set_column_type :measure_type_id, String, size: 3
 

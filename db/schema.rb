@@ -53,8 +53,6 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
       column :national, "tinyint(1)"
-
-      index [:measure_type_id, :additional_code_type_id], :name=>:primary_key, :unique=>true
     end
 
     create_table(:additional_code_types) do
@@ -127,7 +125,6 @@ Sequel.migration do
       column :validity_end_date, "datetime"
       column :national, "tinyint(1)"
 
-      index [:certificate_code, :certificate_type_code], :name=>:certificate
       index [:certificate_description_period_sid], :name=>:primary_key, :unique=>true
     end
 
@@ -141,7 +138,6 @@ Sequel.migration do
       column :updated_at, "datetime"
       column :national, "tinyint(1)"
 
-      index [:certificate_code, :certificate_type_code], :name=>:certificate
       index [:language_id], :name=>:index_certificate_descriptions_on_language_id
       index [:certificate_description_period_sid], :name=>:primary_key, :unique=>true
     end
@@ -178,8 +174,16 @@ Sequel.migration do
       column :updated_at, "datetime"
       column :national, "tinyint(1)"
       column :national_abbrev, "varchar(255)"
+    end
 
-      index [:certificate_code, :certificate_type_code], :name=>:primary_key, :unique=>true
+    create_table(:chapter_notes) do
+      primary_key :id, :type=>"int(11)"
+      column :section_id, "int(11)"
+      column :chapter_id, "int(11)"
+      column :content, "text"
+
+      index [:chapter_id]
+      index [:section_id], :name=>:section_id
     end
 
     create_table(:chapters_sections) do
@@ -470,7 +474,6 @@ Sequel.migration do
       column :updated_at, "datetime"
 
       index [:additional_code_type_id], :name=>:additional_code_type
-      index [:footnote_id, :footnote_type_id, :additional_code_sid], :name=>:primary_key, :unique=>true
     end
 
     create_table(:footnote_association_erns) do
@@ -485,8 +488,6 @@ Sequel.migration do
       column :productline_suffix, "varchar(255)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
-
-      index [:export_refund_nomenclature_sid, :footnote_id, :footnote_type, :validity_start_date], :name=>:primary_key, :unique=>true
     end
 
     create_table(:footnote_association_goods_nomenclatures) do
@@ -500,8 +501,6 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
       column :national, "tinyint(1)"
-
-      index [:footnote_id, :footnote_type, :goods_nomenclature_sid, :validity_start_date], :name=>:primary_key, :unique=>true
     end
 
     create_table(:footnote_association_measures) do
@@ -526,8 +525,6 @@ Sequel.migration do
       column :validity_end_date, "datetime"
       column :created_at, "datetime"
       column :updated_at, "datetime"
-
-      index [:footnote_id, :meursing_table_plan_id], :name=>:primary_key, :unique=>true
     end
 
     create_table(:footnote_description_periods) do
@@ -539,8 +536,6 @@ Sequel.migration do
       column :updated_at, "datetime"
       column :validity_end_date, "datetime"
       column :national, "tinyint(1)"
-
-      index [:footnote_id, :footnote_type_id, :footnote_description_period_sid], :name=>:primary_key, :unique=>true
     end
 
     create_table(:footnote_descriptions) do
@@ -554,7 +549,6 @@ Sequel.migration do
       column :national, "tinyint(1)"
 
       index [:language_id], :name=>:index_footnote_descriptions_on_language_id
-      index [:footnote_id, :footnote_type_id, :footnote_description_period_sid], :name=>:primary_key, :unique=>true
     end
 
     create_table(:footnote_type_descriptions) do
@@ -589,8 +583,6 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
       column :national, "tinyint(1)"
-
-      index [:footnote_id, :footnote_type_id], :name=>:primary_key, :unique=>true
     end
 
     create_table(:fts_regulation_actions) do
@@ -600,8 +592,6 @@ Sequel.migration do
       column :stopped_regulation_id, "varchar(255)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
-
-      index [:fts_regulation_id, :fts_regulation_role, :stopped_regulation_id, :stopped_regulation_role], :name=>:primary_key, :unique=>true
     end
 
     create_table(:full_temporary_stop_regulations) do
@@ -717,7 +707,6 @@ Sequel.migration do
       column :updated_at, "datetime"
 
       index [:language_id], :name=>:index_goods_nomenclature_group_descriptions_on_language_id
-      index [:goods_nomenclature_group_id, :goods_nomenclature_group_type], :name=>:primary_key, :unique=>true
     end
 
     create_table(:goods_nomenclature_groups) do
@@ -728,8 +717,6 @@ Sequel.migration do
       column :nomenclature_group_facility_code, "int(11)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
-
-      index [:goods_nomenclature_group_id, :goods_nomenclature_group_type], :name=>:primary_key, :unique=>true
     end
 
     create_table(:goods_nomenclature_indents) do
@@ -756,8 +743,6 @@ Sequel.migration do
       column :productline_suffix, "varchar(255)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
-
-      index [:goods_nomenclature_sid, :derived_goods_nomenclature_item_id, :derived_productline_suffix, :goods_nomenclature_item_id, :productline_suffix], :name=>:primary_key, :unique=>true
     end
 
     create_table(:goods_nomenclature_successors) do
@@ -768,8 +753,6 @@ Sequel.migration do
       column :productline_suffix, "varchar(255)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
-
-      index [:goods_nomenclature_sid, :absorbed_goods_nomenclature_item_id, :absorbed_productline_suffix, :goods_nomenclature_item_id, :productline_suffix], :name=>:primary_key, :unique=>true
     end
 
     create_table(:goods_nomenclatures) do
@@ -782,7 +765,6 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
-      index [:goods_nomenclature_item_id, :producline_suffix], :name=>:item_id
       index [:goods_nomenclature_sid], :name=>:primary_key, :unique=>true
     end
 
@@ -894,7 +876,6 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
-      index [:certificate_code, :certificate_type_code], :name=>:certificate
       index [:condition_measurement_unit_qualifier_code], :name=>:condition_measurement_unit_qualifier_code
       index [:action_code], :name=>:index_measure_conditions_on_action_code
       index [:condition_measurement_unit_code], :name=>:index_measure_conditions_on_condition_measurement_unit_code
@@ -1033,8 +1014,6 @@ Sequel.migration do
       column :validity_end_date, "datetime"
       column :created_at, "datetime"
       column :updated_at, "datetime"
-
-      index [:measurement_unit_code, :measurement_unit_qualifier_code], :name=>:primary_key, :unique=>true
     end
 
     create_table(:measures) do
@@ -1224,8 +1203,6 @@ Sequel.migration do
       column :productline_suffix, "varchar(255)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
-
-      index [:goods_nomenclature_sid, :goods_nomenclature_group_id, :goods_nomenclature_group_type, :goods_nomenclature_item_id, :validity_start_date], :name=>:primary_key, :unique=>true
     end
 
     create_table(:prorogation_regulation_actions) do
@@ -1236,8 +1213,6 @@ Sequel.migration do
       column :prorogated_date, "date"
       column :created_at, "datetime"
       column :updated_at, "datetime"
-
-      index [:prorogation_regulation_id, :prorogation_regulation_role, :prorogated_regulation_id, :prorogated_regulation_role], :name=>:primary_key, :unique=>true
     end
 
     create_table(:prorogation_regulations) do
@@ -1499,6 +1474,14 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20120810105500_adjust_fields_for_chief.rb")
     self[:schema_migrations].insert(:filename => "20120810114211_add_national_to_certificate_description_periods.rb")
 
+    create_table(:section_notes) do
+      primary_key :id, :type=>"int(11)"
+      column :section_id, "int(11)"
+      column :content, "text"
+
+      index [:section_id], :name=>:section_id
+    end
+
     create_table(:sections) do
       primary_key :id, :type=>"int(11)"
       column :position, "int(11)"
@@ -1516,24 +1499,6 @@ Sequel.migration do
       column :updated_at, "datetime"
 
       index [:comment_sid, :language_id], :name=>:primary_key, :unique=>true
-    end
-
-    create_table(:chapter_notes) do
-      primary_key :id, :type=>"int(11)"
-      foreign_key :section_id, :sections, :type=>"int(11)", :key=>[:id]
-      column :chapter_id, "int(11)"
-      column :content, "text"
-
-      index [:chapter_id]
-      index [:section_id], :name=>:section_id
-    end
-
-    create_table(:section_notes) do
-      primary_key :id, :type=>"int(11)"
-      foreign_key :section_id, :sections, :type=>"int(11)", :key=>[:id]
-      column :content, "text"
-
-      index [:section_id], :name=>:section_id
     end
   end
 end
