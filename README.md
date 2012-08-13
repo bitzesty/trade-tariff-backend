@@ -24,30 +24,24 @@ Run the bootstrap command.
 
 ## Setup TradeTariffBackend
 
-1. Load sections
+1. Create database.
 
     ```
-    bundle exec rake db:import_sections
+    bundle exec rake db:create
     ```
 
-2. Load Section notes
+2. Load database snapshot (TariffImporter). Or perform importing. TBD
+
+3. Load Sections, Section notes, Chapter notes and other tariff data.
 
     ```
-    bundle exec rake db:section_notes
+    bundle exec rake tariff:install
     ```
 
-3. Load Chapter notes
+4. Index on ElasticSearch
 
     ```
-    bundle exec rake db:chapter_notes
-    ```
-
-4. Load database snapshot (TariffImporter). TBD
-
-5. Index on ElasticSearch
-
-    ```
-    RAILS_ENV=production bundle exec rake tariff:reindex
+    bundle exec rake tariff:reindex
     ```
 
 ## Run TradeTariffBackend
