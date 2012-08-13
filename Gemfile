@@ -17,6 +17,8 @@ gem 'railties'
 gem 'airbrake'
 gem 'unicorn', '~> 4.3.1'
 
+gem 'tariff_importer'
+
 group :assets do
   gem 'bootstrap-sass'
   gem 'sass-rails'
