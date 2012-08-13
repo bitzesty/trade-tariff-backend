@@ -159,6 +159,14 @@ class Measure < Sequel::Model
   def_column_alias :measure_type_id, :measure_type
   def_column_alias :additional_code_id, :additional_code
 
+  ######### Conformance validations 430
+  # ME2 ME4 ME6 
+  validates_presence([:measure_type, :geographical_area, :goods_nomenclature_sid])
+  # ME1 
+  validates_unique([:measure_type, :geographical_area, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date])
+  # TODO:
+  # ME3 ME5 ME7 ME8 ME88 ME16 ME115 ME25 ME32 ...
+
   dataset_module do
     def with_base_regulations
       select(:measures.*).
