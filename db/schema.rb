@@ -28,7 +28,7 @@ Sequel.migration do
 
       index [:language_id], :name=>:language_id
       index [:additional_code_description_period_sid], :name=>:period_sid
-      index [:additional_code_description_period_sid, :additional_code_sid], :name=>:primary_key, :unique=>true
+      index [:additional_code_description_period_sid, :additional_code_type_id, :additional_code_sid], :name=>:primary_key, :unique=>true
       index [:additional_code_sid], :name=>:sid
       index [:additional_code_type_id], :name=>:type_id
     end
@@ -180,16 +180,6 @@ Sequel.migration do
       column :national_abbrev, "varchar(255)"
 
       index [:certificate_code, :certificate_type_code], :name=>:primary_key, :unique=>true
-    end
-
-    create_table(:chapter_notes) do
-      primary_key :id, :type=>"int(11)"
-      column :section_id, "int(11)"
-      column :chapter_id, "int(11)"
-      column :content, "text"
-
-      index [:chapter_id]
-      index [:section_id], :name=>:section_id
     end
 
     create_table(:chapters_sections) do
@@ -1504,14 +1494,6 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20120810105500_adjust_fields_for_chief.rb")
     self[:schema_migrations].insert(:filename => "20120810114211_add_national_to_certificate_description_periods.rb")
 
-    create_table(:section_notes) do
-      primary_key :id, :type=>"int(11)"
-      column :section_id, "int(11)"
-      column :content, "text"
-
-      index [:section_id], :name=>:section_id
-    end
-
     create_table(:sections) do
       primary_key :id, :type=>"int(11)"
       column :position, "int(11)"
@@ -1529,6 +1511,24 @@ Sequel.migration do
       column :updated_at, "datetime"
 
       index [:comment_sid, :language_id], :name=>:primary_key, :unique=>true
+    end
+
+    create_table(:chapter_notes) do
+      primary_key :id, :type=>"int(11)"
+      foreign_key :section_id, :sections, :type=>"int(11)", :key=>[:id]
+      column :chapter_id, "int(11)"
+      column :content, "text"
+
+      index [:chapter_id]
+      index [:section_id], :name=>:section_id
+    end
+
+    create_table(:section_notes) do
+      primary_key :id, :type=>"int(11)"
+      foreign_key :section_id, :sections, :type=>"int(11)", :key=>[:id]
+      column :content, "text"
+
+      index [:section_id], :name=>:section_id
     end
   end
 end

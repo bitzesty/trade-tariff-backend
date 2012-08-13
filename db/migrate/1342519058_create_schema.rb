@@ -27,7 +27,7 @@ Sequel.migration do
 
       index [:language_id], :name=>:language_id
       index [:additional_code_description_period_sid], :name=>:period_sid
-      index [:additional_code_description_period_sid, :additional_code_sid], :name=>:primary_key, :unique=>true
+      index [:additional_code_description_period_sid, :additional_code_type_id, :additional_code_sid], :name=>:primary_key, :unique=>true
       index [:additional_code_sid], :name=>:sid
       index [:additional_code_type_id], :name=>:type_id
     end
