@@ -3,8 +3,8 @@ Sequel.migration do
     create_table(:additional_code_description_periods) do
       column :additional_code_description_period_sid, "int(11)"
       column :additional_code_sid, "int(11)"
-      column :additional_code_type_id, "varchar(255)"
-      column :additional_code, "varchar(255)"
+      column :additional_code_type_id, "varchar(1)"
+      column :additional_code, "varchar(3)"
       column :validity_start_date, "datetime"
       column :created_at, "datetime"
       column :updated_at, "datetime"
@@ -19,8 +19,8 @@ Sequel.migration do
       column :additional_code_description_period_sid, "int(11)"
       column :language_id, "varchar(5)"
       column :additional_code_sid, "int(11)"
-      column :additional_code_type_id, "varchar(255)"
-      column :additional_code, "varchar(255)"
+      column :additional_code_type_id, "varchar(1)"
+      column :additional_code, "varchar(3)"
       column :description, "text"
       column :created_at, "datetime"
       column :updated_at, "datetime"
@@ -34,7 +34,7 @@ Sequel.migration do
     end
 
     create_table(:additional_code_type_descriptions) do
-      column :additional_code_type_id, "varchar(255)"
+      column :additional_code_type_id, "varchar(1)"
       column :language_id, "varchar(5)"
       column :description, "text"
       column :created_at, "datetime"
@@ -47,7 +47,7 @@ Sequel.migration do
 
     create_table(:additional_code_type_measure_types) do
       column :measure_type_id, "varchar(3)"
-      column :additional_code_type_id, "varchar(255)"
+      column :additional_code_type_id, "varchar(1)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
       column :created_at, "datetime"
@@ -58,11 +58,11 @@ Sequel.migration do
     end
 
     create_table(:additional_code_types) do
-      column :additional_code_type_id, "varchar(255)"
+      column :additional_code_type_id, "varchar(1)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
       column :application_code, "varchar(255)"
-      column :meursing_table_plan_id, "varchar(255)"
+      column :meursing_table_plan_id, "varchar(2)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
       column :national, "tinyint(1)"
@@ -73,8 +73,8 @@ Sequel.migration do
 
     create_table(:additional_codes) do
       column :additional_code_sid, "int(11)"
-      column :additional_code_type_id, "varchar(255)"
-      column :additional_code, "varchar(255)"
+      column :additional_code_type_id, "varchar(1)"
+      column :additional_code, "varchar(3)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
       column :created_at, "datetime"
@@ -119,8 +119,8 @@ Sequel.migration do
 
     create_table(:certificate_description_periods) do
       column :certificate_description_period_sid, "int(11)"
-      column :certificate_type_code, "varchar(255)"
-      column :certificate_code, "varchar(255)"
+      column :certificate_type_code, "varchar(1)"
+      column :certificate_code, "varchar(3)"
       column :validity_start_date, "datetime"
       column :created_at, "datetime"
       column :updated_at, "datetime"
@@ -134,8 +134,8 @@ Sequel.migration do
     create_table(:certificate_descriptions) do
       column :certificate_description_period_sid, "int(11)"
       column :language_id, "varchar(5)"
-      column :certificate_type_code, "varchar(255)"
-      column :certificate_code, "varchar(255)"
+      column :certificate_type_code, "varchar(1)"
+      column :certificate_code, "varchar(3)"
       column :description, "text"
       column :created_at, "datetime"
       column :updated_at, "datetime"
@@ -147,7 +147,7 @@ Sequel.migration do
     end
 
     create_table(:certificate_type_descriptions) do
-      column :certificate_type_code, "varchar(255)"
+      column :certificate_type_code, "varchar(1)"
       column :language_id, "varchar(5)"
       column :description, "text"
       column :created_at, "datetime"
@@ -159,7 +159,7 @@ Sequel.migration do
     end
 
     create_table(:certificate_types) do
-      column :certificate_type_code, "varchar(255)"
+      column :certificate_type_code, "varchar(1)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
       column :created_at, "datetime"
@@ -170,8 +170,8 @@ Sequel.migration do
     end
 
     create_table(:certificates) do
-      column :certificate_type_code, "varchar(255)"
-      column :certificate_code, "varchar(255)"
+      column :certificate_type_code, "varchar(1)"
+      column :certificate_code, "varchar(3)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
       column :created_at, "datetime"
@@ -180,6 +180,16 @@ Sequel.migration do
       column :national_abbrev, "varchar(255)"
 
       index [:certificate_code, :certificate_type_code], :name=>:primary_key, :unique=>true
+    end
+
+    create_table(:chapter_notes) do
+      primary_key :id, :type=>"int(11)"
+      column :section_id, "int(11)"
+      column :chapter_id, "int(11)"
+      column :content, "text"
+
+      index [:chapter_id]
+      index [:section_id], :name=>:section_id
     end
 
     create_table(:chapters_sections) do
@@ -380,7 +390,7 @@ Sequel.migration do
 
     create_table(:explicit_abrogation_regulations) do
       column :explicit_abrogation_regulation_role, "int(11)"
-      column :explicit_abrogation_regulation_id, "varchar(255)"
+      column :explicit_abrogation_regulation_id, "varchar(8)"
       column :published_date, "date"
       column :officialjournal_number, "varchar(255)"
       column :officialjournal_page, "int(11)"
@@ -398,10 +408,10 @@ Sequel.migration do
       column :export_refund_nomenclature_description_period_sid, "int(11)"
       column :export_refund_nomenclature_sid, "int(11)"
       column :validity_start_date, "datetime"
-      column :goods_nomenclature_item_id, "varchar(255)"
+      column :goods_nomenclature_item_id, "varchar(10)"
       column :additional_code_type, "varchar(255)"
       column :export_refund_code, "varchar(255)"
-      column :productline_suffix, "varchar(255)"
+      column :productline_suffix, "varchar(2)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
       column :validity_end_date, "datetime"
@@ -413,10 +423,10 @@ Sequel.migration do
       column :export_refund_nomenclature_description_period_sid, "int(11)"
       column :language_id, "varchar(5)"
       column :export_refund_nomenclature_sid, "int(11)"
-      column :goods_nomenclature_item_id, "varchar(255)"
+      column :goods_nomenclature_item_id, "varchar(10)"
       column :additional_code_type, "varchar(255)"
       column :export_refund_code, "varchar(255)"
-      column :productline_suffix, "varchar(255)"
+      column :productline_suffix, "varchar(2)"
       column :description, "text"
       column :created_at, "datetime"
       column :updated_at, "datetime"
@@ -431,10 +441,10 @@ Sequel.migration do
       column :export_refund_nomenclature_sid, "int(11)"
       column :validity_start_date, "datetime"
       column :number_export_refund_nomenclature_indents, "varchar(255)"
-      column :goods_nomenclature_item_id, "varchar(255)"
+      column :goods_nomenclature_item_id, "varchar(10)"
       column :additional_code_type, "varchar(255)"
       column :export_refund_code, "varchar(255)"
-      column :productline_suffix, "varchar(255)"
+      column :productline_suffix, "varchar(2)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
       column :validity_end_date, "datetime"
@@ -444,10 +454,10 @@ Sequel.migration do
 
     create_table(:export_refund_nomenclatures) do
       column :export_refund_nomenclature_sid, "int(11)"
-      column :goods_nomenclature_item_id, "varchar(255)"
+      column :goods_nomenclature_item_id, "varchar(10)"
       column :additional_code_type, "varchar(255)"
       column :export_refund_code, "varchar(255)"
-      column :productline_suffix, "varchar(255)"
+      column :productline_suffix, "varchar(2)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
       column :goods_nomenclature_sid, "int(11)"
@@ -460,12 +470,12 @@ Sequel.migration do
 
     create_table(:footnote_association_additional_codes) do
       column :additional_code_sid, "int(11)"
-      column :footnote_type_id, "varchar(255)"
-      column :footnote_id, "varchar(255)"
+      column :footnote_type_id, "varchar(2)"
+      column :footnote_id, "varchar(3)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
       column :additional_code_type_id, "varchar(255)"
-      column :additional_code, "varchar(255)"
+      column :additional_code, "varchar(3)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
@@ -475,14 +485,14 @@ Sequel.migration do
 
     create_table(:footnote_association_erns) do
       column :export_refund_nomenclature_sid, "int(11)"
-      column :footnote_type, "varchar(255)"
-      column :footnote_id, "varchar(255)"
+      column :footnote_type, "varchar(2)"
+      column :footnote_id, "varchar(3)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
-      column :goods_nomenclature_item_id, "varchar(255)"
+      column :goods_nomenclature_item_id, "varchar(10)"
       column :additional_code_type, "varchar(255)"
       column :export_refund_code, "varchar(255)"
-      column :productline_suffix, "varchar(255)"
+      column :productline_suffix, "varchar(2)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
@@ -491,12 +501,12 @@ Sequel.migration do
 
     create_table(:footnote_association_goods_nomenclatures) do
       column :goods_nomenclature_sid, "int(11)"
-      column :footnote_type, "varchar(255)"
-      column :footnote_id, "varchar(255)"
+      column :footnote_type, "varchar(2)"
+      column :footnote_id, "varchar(3)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
-      column :goods_nomenclature_item_id, "varchar(255)"
-      column :productline_suffix, "varchar(255)"
+      column :goods_nomenclature_item_id, "varchar(10)"
+      column :productline_suffix, "varchar(2)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
       column :national, "tinyint(1)"
@@ -506,8 +516,8 @@ Sequel.migration do
 
     create_table(:footnote_association_measures) do
       column :measure_sid, "int(11)"
-      column :footnote_type_id, "varchar(255)"
-      column :footnote_id, "varchar(255)"
+      column :footnote_type_id, "varchar(2)"
+      column :footnote_id, "varchar(3)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
       column :national, "tinyint(1)"
@@ -517,11 +527,11 @@ Sequel.migration do
     end
 
     create_table(:footnote_association_meursing_headings) do
-      column :meursing_table_plan_id, "varchar(255)"
+      column :meursing_table_plan_id, "varchar(2)"
       column :meursing_heading_number, "varchar(255)"
       column :row_column_code, "int(11)"
-      column :footnote_type, "varchar(255)"
-      column :footnote_id, "varchar(255)"
+      column :footnote_type, "varchar(2)"
+      column :footnote_id, "varchar(3)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
       column :created_at, "datetime"
@@ -532,8 +542,8 @@ Sequel.migration do
 
     create_table(:footnote_description_periods) do
       column :footnote_description_period_sid, "int(11)"
-      column :footnote_type_id, "varchar(255)"
-      column :footnote_id, "varchar(255)"
+      column :footnote_type_id, "varchar(2)"
+      column :footnote_id, "varchar(3)"
       column :validity_start_date, "datetime"
       column :created_at, "datetime"
       column :updated_at, "datetime"
@@ -545,8 +555,8 @@ Sequel.migration do
 
     create_table(:footnote_descriptions) do
       column :footnote_description_period_sid, "int(11)"
-      column :footnote_type_id, "varchar(255)"
-      column :footnote_id, "varchar(255)"
+      column :footnote_type_id, "varchar(2)"
+      column :footnote_id, "varchar(3)"
       column :language_id, "varchar(5)"
       column :description, "text"
       column :created_at, "datetime"
@@ -558,7 +568,7 @@ Sequel.migration do
     end
 
     create_table(:footnote_type_descriptions) do
-      column :footnote_type_id, "varchar(255)"
+      column :footnote_type_id, "varchar(2)"
       column :language_id, "varchar(5)"
       column :description, "text"
       column :created_at, "datetime"
@@ -570,7 +580,7 @@ Sequel.migration do
     end
 
     create_table(:footnote_types) do
-      column :footnote_type_id, "varchar(255)"
+      column :footnote_type_id, "varchar(2)"
       column :application_code, "int(11)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
@@ -582,8 +592,8 @@ Sequel.migration do
     end
 
     create_table(:footnotes) do
-      column :footnote_id, "varchar(255)"
-      column :footnote_type_id, "varchar(255)"
+      column :footnote_id, "varchar(3)"
+      column :footnote_type_id, "varchar(2)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
       column :created_at, "datetime"
@@ -595,9 +605,9 @@ Sequel.migration do
 
     create_table(:fts_regulation_actions) do
       column :fts_regulation_role, "int(11)"
-      column :fts_regulation_id, "varchar(255)"
+      column :fts_regulation_id, "varchar(8)"
       column :stopped_regulation_role, "int(11)"
-      column :stopped_regulation_id, "varchar(255)"
+      column :stopped_regulation_id, "varchar(8)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
@@ -606,7 +616,7 @@ Sequel.migration do
 
     create_table(:full_temporary_stop_regulations) do
       column :full_temporary_stop_regulation_role, "int(11)"
-      column :full_temporary_stop_regulation_id, "varchar(255)"
+      column :full_temporary_stop_regulation_id, "varchar(8)"
       column :published_date, "date"
       column :officialjournal_number, "varchar(255)"
       column :officialjournal_page, "int(11)"
@@ -614,7 +624,7 @@ Sequel.migration do
       column :validity_end_date, "datetime"
       column :effective_enddate, "date"
       column :explicit_abrogation_regulation_role, "int(11)"
-      column :explicit_abrogation_regulation_id, "varchar(255)"
+      column :explicit_abrogation_regulation_id, "varchar(8)"
       column :replacement_indicator, "int(11)"
       column :information_text, "text"
       column :approved_flag, "tinyint(1)"
@@ -684,8 +694,8 @@ Sequel.migration do
       column :goods_nomenclature_description_period_sid, "int(11)"
       column :goods_nomenclature_sid, "int(11)"
       column :validity_start_date, "datetime"
-      column :goods_nomenclature_item_id, "varchar(255)"
-      column :productline_suffix, "varchar(255)"
+      column :goods_nomenclature_item_id, "varchar(10)"
+      column :productline_suffix, "varchar(2)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
       column :validity_end_date, "datetime"
@@ -698,8 +708,8 @@ Sequel.migration do
       column :goods_nomenclature_description_period_sid, "int(11)"
       column :language_id, "varchar(5)"
       column :goods_nomenclature_sid, "int(11)"
-      column :goods_nomenclature_item_id, "varchar(255)"
-      column :productline_suffix, "varchar(255)"
+      column :goods_nomenclature_item_id, "varchar(10)"
+      column :productline_suffix, "varchar(2)"
       column :description, "text"
       column :created_at, "datetime"
       column :updated_at, "datetime"
@@ -709,8 +719,8 @@ Sequel.migration do
     end
 
     create_table(:goods_nomenclature_group_descriptions) do
-      column :goods_nomenclature_group_type, "varchar(255)"
-      column :goods_nomenclature_group_id, "varchar(255)"
+      column :goods_nomenclature_group_type, "varchar(1)"
+      column :goods_nomenclature_group_id, "varchar(6)"
       column :language_id, "varchar(5)"
       column :description, "text"
       column :created_at, "datetime"
@@ -721,8 +731,8 @@ Sequel.migration do
     end
 
     create_table(:goods_nomenclature_groups) do
-      column :goods_nomenclature_group_type, "varchar(255)"
-      column :goods_nomenclature_group_id, "varchar(255)"
+      column :goods_nomenclature_group_type, "varchar(1)"
+      column :goods_nomenclature_group_id, "varchar(6)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
       column :nomenclature_group_facility_code, "int(11)"
@@ -737,8 +747,8 @@ Sequel.migration do
       column :goods_nomenclature_sid, "int(11)"
       column :validity_start_date, "datetime"
       column :number_indents, "int(11)"
-      column :goods_nomenclature_item_id, "varchar(255)"
-      column :productline_suffix, "varchar(255)"
+      column :goods_nomenclature_item_id, "varchar(10)"
+      column :productline_suffix, "varchar(2)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
       column :validity_end_date, "datetime"
@@ -750,10 +760,10 @@ Sequel.migration do
 
     create_table(:goods_nomenclature_origins) do
       column :goods_nomenclature_sid, "int(11)"
-      column :derived_goods_nomenclature_item_id, "varchar(255)"
-      column :derived_productline_suffix, "varchar(255)"
-      column :goods_nomenclature_item_id, "varchar(255)"
-      column :productline_suffix, "varchar(255)"
+      column :derived_goods_nomenclature_item_id, "varchar(10)"
+      column :derived_productline_suffix, "varchar(2)"
+      column :goods_nomenclature_item_id, "varchar(10)"
+      column :productline_suffix, "varchar(2)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
@@ -762,10 +772,10 @@ Sequel.migration do
 
     create_table(:goods_nomenclature_successors) do
       column :goods_nomenclature_sid, "int(11)"
-      column :absorbed_goods_nomenclature_item_id, "varchar(255)"
-      column :absorbed_productline_suffix, "varchar(255)"
-      column :goods_nomenclature_item_id, "varchar(255)"
-      column :productline_suffix, "varchar(255)"
+      column :absorbed_goods_nomenclature_item_id, "varchar(10)"
+      column :absorbed_productline_suffix, "varchar(2)"
+      column :goods_nomenclature_item_id, "varchar(10)"
+      column :productline_suffix, "varchar(2)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
@@ -774,7 +784,7 @@ Sequel.migration do
 
     create_table(:goods_nomenclatures) do
       column :goods_nomenclature_sid, "int(11)"
-      column :goods_nomenclature_item_id, "varchar(255)"
+      column :goods_nomenclature_item_id, "varchar(10)"
       column :producline_suffix, "varchar(255)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
@@ -831,8 +841,8 @@ Sequel.migration do
       column :duty_expression_id, "varchar(255)"
       column :duty_amount, "double"
       column :monetary_unit_code, "varchar(255)"
-      column :measurement_unit_code, "varchar(255)"
-      column :measurement_unit_qualifier_code, "varchar(255)"
+      column :measurement_unit_code, "varchar(3)"
+      column :measurement_unit_qualifier_code, "varchar(1)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
@@ -867,8 +877,8 @@ Sequel.migration do
       column :duty_expression_id, "varchar(255)"
       column :duty_amount, "double"
       column :monetary_unit_code, "varchar(255)"
-      column :measurement_unit_code, "varchar(255)"
-      column :measurement_unit_qualifier_code, "varchar(255)"
+      column :measurement_unit_code, "varchar(3)"
+      column :measurement_unit_qualifier_code, "varchar(1)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
@@ -886,11 +896,11 @@ Sequel.migration do
       column :component_sequence_number, "int(11)"
       column :condition_duty_amount, "double"
       column :condition_monetary_unit_code, "varchar(255)"
-      column :condition_measurement_unit_code, "varchar(255)"
-      column :condition_measurement_unit_qualifier_code, "varchar(255)"
+      column :condition_measurement_unit_code, "varchar(3)"
+      column :condition_measurement_unit_qualifier_code, "varchar(1)"
       column :action_code, "varchar(255)"
-      column :certificate_type_code, "varchar(255)"
-      column :certificate_code, "varchar(255)"
+      column :certificate_type_code, "varchar(1)"
+      column :certificate_code, "varchar(3)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
@@ -986,7 +996,7 @@ Sequel.migration do
     end
 
     create_table(:measurement_unit_descriptions) do
-      column :measurement_unit_code, "varchar(255)"
+      column :measurement_unit_code, "varchar(3)"
       column :language_id, "varchar(5)"
       column :description, "text"
       column :created_at, "datetime"
@@ -997,7 +1007,7 @@ Sequel.migration do
     end
 
     create_table(:measurement_unit_qualifier_descriptions) do
-      column :measurement_unit_qualifier_code, "varchar(255)"
+      column :measurement_unit_qualifier_code, "varchar(1)"
       column :language_id, "varchar(5)"
       column :description, "text"
       column :created_at, "datetime"
@@ -1007,7 +1017,7 @@ Sequel.migration do
     end
 
     create_table(:measurement_unit_qualifiers) do
-      column :measurement_unit_qualifier_code, "varchar(255)"
+      column :measurement_unit_qualifier_code, "varchar(1)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
       column :created_at, "datetime"
@@ -1017,7 +1027,7 @@ Sequel.migration do
     end
 
     create_table(:measurement_units) do
-      column :measurement_unit_code, "varchar(255)"
+      column :measurement_unit_code, "varchar(3)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
       column :created_at, "datetime"
@@ -1027,8 +1037,8 @@ Sequel.migration do
     end
 
     create_table(:measurements) do
-      column :measurement_unit_code, "varchar(255)"
-      column :measurement_unit_qualifier_code, "varchar(255)"
+      column :measurement_unit_code, "varchar(3)"
+      column :measurement_unit_qualifier_code, "varchar(1)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
       column :created_at, "datetime"
@@ -1041,7 +1051,7 @@ Sequel.migration do
       column :measure_sid, "int(11) unsigned"
       column :measure_type, "varchar(3)"
       column :geographical_area, "varchar(255)"
-      column :goods_nomenclature_item_id, "varchar(255)"
+      column :goods_nomenclature_item_id, "varchar(10)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
       column :measure_generating_regulation_role, "int(11)"
@@ -1053,7 +1063,7 @@ Sequel.migration do
       column :goods_nomenclature_sid, "int(11)"
       column :ordernumber, "varchar(255)"
       column :additional_code_type, "varchar(255)"
-      column :additional_code, "varchar(255)"
+      column :additional_code, "varchar(3)"
       column :additional_code_sid, "int(11)"
       column :reduction_indicator, "int(11)"
       column :export_refund_nomenclature_sid, "int(11)"
@@ -1082,7 +1092,7 @@ Sequel.migration do
     end
 
     create_table(:meursing_heading_texts) do
-      column :meursing_table_plan_id, "varchar(255)"
+      column :meursing_table_plan_id, "varchar(2)"
       column :meursing_heading_number, "int(11)"
       column :row_column_code, "int(11)"
       column :language_id, "varchar(5)"
@@ -1094,7 +1104,7 @@ Sequel.migration do
     end
 
     create_table(:meursing_headings) do
-      column :meursing_table_plan_id, "varchar(255)"
+      column :meursing_table_plan_id, "varchar(2)"
       column :meursing_heading_number, "int(11)"
       column :row_column_code, "int(11)"
       column :validity_start_date, "datetime"
@@ -1106,7 +1116,7 @@ Sequel.migration do
     end
 
     create_table(:meursing_subheadings) do
-      column :meursing_table_plan_id, "varchar(255)"
+      column :meursing_table_plan_id, "varchar(2)"
       column :meursing_heading_number, "int(11)"
       column :row_column_code, "int(11)"
       column :subheading_sequence_number, "int(11)"
@@ -1121,7 +1131,7 @@ Sequel.migration do
 
     create_table(:meursing_table_cell_components) do
       column :meursing_additional_code_sid, "int(11)"
-      column :meursing_table_plan_id, "varchar(255)"
+      column :meursing_table_plan_id, "varchar(2)"
       column :heading_number, "int(11)"
       column :row_column_code, "int(11)"
       column :subheading_sequence_number, "int(11)"
@@ -1135,7 +1145,7 @@ Sequel.migration do
     end
 
     create_table(:meursing_table_plans) do
-      column :meursing_table_plan_id, "varchar(255)"
+      column :meursing_table_plan_id, "varchar(2)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
       column :created_at, "datetime"
@@ -1159,10 +1169,10 @@ Sequel.migration do
       column :information_text, "text"
       column :approved_flag, "tinyint(1)"
       column :explicit_abrogation_regulation_role, "int(11)"
-      column :explicit_abrogation_regulation_id, "varchar(255)"
+      column :explicit_abrogation_regulation_id, "varchar(8)"
       column :effective_end_date, "date"
       column :complete_abrogation_regulation_role, "int(11)"
-      column :complete_abrogation_regulation_id, "varchar(255)"
+      column :complete_abrogation_regulation_id, "varchar(8)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
@@ -1216,12 +1226,12 @@ Sequel.migration do
 
     create_table(:nomenclature_group_memberships) do
       column :goods_nomenclature_sid, "int(11)"
-      column :goods_nomenclature_group_type, "varchar(255)"
-      column :goods_nomenclature_group_id, "varchar(255)"
+      column :goods_nomenclature_group_type, "varchar(1)"
+      column :goods_nomenclature_group_id, "varchar(6)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
-      column :goods_nomenclature_item_id, "varchar(255)"
-      column :productline_suffix, "varchar(255)"
+      column :goods_nomenclature_item_id, "varchar(10)"
+      column :productline_suffix, "varchar(2)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
@@ -1230,9 +1240,9 @@ Sequel.migration do
 
     create_table(:prorogation_regulation_actions) do
       column :prorogation_regulation_role, "int(11)"
-      column :prorogation_regulation_id, "varchar(255)"
+      column :prorogation_regulation_id, "varchar(8)"
       column :prorogated_regulation_role, "int(11)"
-      column :prorogated_regulation_id, "varchar(255)"
+      column :prorogated_regulation_id, "varchar(8)"
       column :prorogated_date, "date"
       column :created_at, "datetime"
       column :updated_at, "datetime"
@@ -1311,12 +1321,12 @@ Sequel.migration do
       column :quota_order_number_sid, "int(11)"
       column :volume, "int(11)"
       column :initial_volume, "int(11)"
-      column :measurement_unit_code, "varchar(255)"
+      column :measurement_unit_code, "varchar(3)"
       column :maximum_precision, "int(11)"
       column :critical_state, "varchar(255)"
       column :critical_threshold, "int(11)"
       column :monetary_unit_code, "varchar(255)"
-      column :measurement_unit_qualifier_code, "varchar(255)"
+      column :measurement_unit_qualifier_code, "varchar(1)"
       column :description, "text"
       column :created_at, "datetime"
       column :updated_at, "datetime"
@@ -1448,11 +1458,6 @@ Sequel.migration do
       column :measure_type_id, "varchar(3)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
-
-      index [:geographical_area_id], :name=>:geographical_area
-      index [:measure_type_id], :name=>:measure_type
-      index [:replaced_regulation_id, :replaced_regulation_role], :name=>:replaced_regulation
-      index [:replacing_regulation_id, :replacing_regulation_role], :name=>:replacing_regulation
     end
 
     create_table(:regulation_role_type_descriptions) do
@@ -1499,6 +1504,14 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20120810105500_adjust_fields_for_chief.rb")
     self[:schema_migrations].insert(:filename => "20120810114211_add_national_to_certificate_description_periods.rb")
 
+    create_table(:section_notes) do
+      primary_key :id, :type=>"int(11)"
+      column :section_id, "int(11)"
+      column :content, "text"
+
+      index [:section_id], :name=>:section_id
+    end
+
     create_table(:sections) do
       primary_key :id, :type=>"int(11)"
       column :position, "int(11)"
@@ -1516,24 +1529,6 @@ Sequel.migration do
       column :updated_at, "datetime"
 
       index [:comment_sid, :language_id], :name=>:primary_key, :unique=>true
-    end
-
-    create_table(:chapter_notes) do
-      primary_key :id, :type=>"int(11)"
-      foreign_key :section_id, :sections, :type=>"int(11)", :key=>[:id]
-      column :chapter_id, "int(11)"
-      column :content, "text"
-
-      index [:chapter_id]
-      index [:section_id], :name=>:section_id
-    end
-
-    create_table(:section_notes) do
-      primary_key :id, :type=>"int(11)"
-      foreign_key :section_id, :sections, :type=>"int(11)", :key=>[:id]
-      column :content, "text"
-
-      index [:section_id], :name=>:section_id
     end
   end
 end
