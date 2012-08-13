@@ -19,6 +19,8 @@ gem 'unicorn', '~> 4.3.1'
 
 gem 'tariff_importer'
 
+gem 'pry-rails'
+
 group :assets do
   gem 'bootstrap-sass'
   gem 'sass-rails'
@@ -28,10 +30,6 @@ end
 
 group :development do
   gem 'capistrano'
-end
-
-group :development, :test do
-  gem 'pry-rails'
 end
 
 group :test do
