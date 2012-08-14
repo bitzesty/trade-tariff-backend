@@ -55,7 +55,5 @@ to the tmp folder then run the following commands:
 
 ## TODO
 
-* Instructions on how to run the TARIC and CHIEF importers
-* How to load pre-imported db dumps.
+* Instructions on how to run the CHIEF importers
 * Timezone config
-* Background tasks for daily import
