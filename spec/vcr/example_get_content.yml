@@ -1,0 +1,31 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://example.com/data
+    body:
+      encoding: US-ASCII
+      string: ! '?'
+    headers:
+      accept:
+      - ! '*/*; q=0.5, application/xml'
+      accept-encoding:
+      - gzip, deflate
+      content-length:
+      - '1'
+      user-agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type:
+      - plain/text; charset=UTF-8
+      content-length:
+      - '11'
+    body:
+      encoding: US-ASCII
+      string: ! 'Hello world'
+    http_version: '1.1'
+  recorded_at: Fri, 03 Aug 2012 08:11:09 GMT

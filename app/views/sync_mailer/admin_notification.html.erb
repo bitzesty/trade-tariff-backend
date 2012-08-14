@@ -1,0 +1,19 @@
+<p>Hello,</p>
+
+<p>
+  Trade Tariff failed to update on <%= Date.today %>.
+</p>
+
+<p>
+  <strong>Failed file path:</strong> <%= @failed_file_path %>
+</p>
+
+<p>
+  <strong>Backtrace:</strong>
+</p>
+
+<p>
+  <pre>
+  <%= @exception.backtrace.join("\n") %>
+  </pre>
+</p>
