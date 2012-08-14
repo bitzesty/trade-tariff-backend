@@ -775,7 +775,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:language_id], :name=>:primary_key, :unique=>true
+      index [:language_id, :validity_start_date], :name=>:primary_key
     end
 
     create_table(:measure_action_descriptions, :ignore_index_errors=>false) do

@@ -803,7 +803,7 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
-      index [:language_id], :name=>:primary_key, :unique=>true
+      index [:language_id, :validity_start_date], :name=>:primary_key
     end
 
     create_table(:measure_action_descriptions) do
