@@ -35,11 +35,9 @@ Download and extract the TARIC snapshot files from the 5th Jun 2012 from
 https://github.com/downloads/alphagov/trade-tariff-backend/taric-initial-load.tar.gz
 to the tmp folder then run the following commands:
 
-    ```
     bundle exec rake importer:taric:import TARGET=tmp/OBEXTACTEN.xml
     
     bundle exec rake importer:taric:import TARGET=tmp/OBEXTACT.xml
-    ```
     
 2.2. Download the db snapshot (TODO)
 
@@ -57,9 +55,7 @@ to the tmp folder then run the following commands:
 
 ## Run TradeTariffBackend
 
-    ```
     ./startup.sh
-    ```
 
 ## TODO
 
