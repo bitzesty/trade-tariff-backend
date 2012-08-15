@@ -1526,7 +1526,7 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
-      index [:comment_sid, :language_id], :name=>:primary_key, :unique=>true
+      index [:comment_sid, :language_id], :name=>:primary_key
     end
   end
 end
