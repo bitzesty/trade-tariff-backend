@@ -588,7 +588,7 @@ Sequel.migration do
       column :updated_at, "datetime"
       column :national, "tinyint(1)"
 
-      index [:footnote_type_id], :name=>:primary_key, :unique=>true
+      index [:footnote_type_id], :name=>:primary_key
     end
 
     create_table(:footnotes) do

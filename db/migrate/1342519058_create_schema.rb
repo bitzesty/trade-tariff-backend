@@ -555,7 +555,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:footnote_type_id], :name=>:primary_key, :unique=>true
+      index [:footnote_type_id], :name=>:primary_key
     end
 
     create_table(:footnotes, :ignore_index_errors=>false) do
