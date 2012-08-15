@@ -182,6 +182,16 @@ Sequel.migration do
       index [:certificate_code, :certificate_type_code], :name=>:primary_key, :unique=>true
     end
 
+    create_table(:chapter_notes) do
+      primary_key :id, :type=>"int(11)"
+      column :section_id, "int(11)"
+      column :chapter_id, "int(11)"
+      column :content, "text"
+
+      index [:chapter_id]
+      index [:section_id]
+    end
+
     create_table(:chapters_sections) do
       column :goods_nomenclature_sid, "int(11)"
       column :section_id, "int(11)"
@@ -802,8 +812,6 @@ Sequel.migration do
       column :validity_end_date, "datetime"
       column :created_at, "datetime"
       column :updated_at, "datetime"
-
-      index [:language_id, :validity_start_date], :name=>:primary_key
     end
 
     create_table(:measure_action_descriptions) do
@@ -1494,6 +1502,14 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20120810105500_adjust_fields_for_chief.rb")
     self[:schema_migrations].insert(:filename => "20120810114211_add_national_to_certificate_description_periods.rb")
 
+    create_table(:section_notes) do
+      primary_key :id, :type=>"int(11)"
+      column :section_id, "int(11)"
+      column :content, "text"
+
+      index [:section_id]
+    end
+
     create_table(:sections) do
       primary_key :id, :type=>"int(11)"
       column :position, "int(11)"
@@ -1511,24 +1527,6 @@ Sequel.migration do
       column :updated_at, "datetime"
 
       index [:comment_sid, :language_id], :name=>:primary_key, :unique=>true
-    end
-
-    create_table(:chapter_notes) do
-      primary_key :id, :type=>"int(11)"
-      foreign_key :section_id, :sections, :type=>"int(11)", :key=>[:id]
-      column :chapter_id, "int(11)"
-      column :content, "text"
-
-      index [:chapter_id]
-      index [:section_id], :name=>:section_id
-    end
-
-    create_table(:section_notes) do
-      primary_key :id, :type=>"int(11)"
-      foreign_key :section_id, :sections, :type=>"int(11)", :key=>[:id]
-      column :content, "text"
-
-      index [:section_id], :name=>:section_id
     end
   end
 end

@@ -774,8 +774,6 @@ Sequel.migration do
       DateTime :validity_end_date
       DateTime :created_at
       DateTime :updated_at
-
-      index [:language_id, :validity_start_date], :name=>:primary_key
     end
 
     create_table(:measure_action_descriptions, :ignore_index_errors=>false) do
