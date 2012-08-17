@@ -99,9 +99,9 @@ module TariffSynchronizer
       Sequel::Model.db.transaction do
         begin
           pending_update.apply
-        rescue TariffImporter::TaricImportException,
-               TariffImporter::ChiefImportException,
-               TariffImporter::ChiefTransformException => exception
+        rescue TaricImporter::ImportException,
+               ChiefImporter::ImportException,
+               ChiefTransformer::TransformException => exception
           logger.error "Update failed: #{pending_update}"
           pending_update.move_to(:failbox)
 

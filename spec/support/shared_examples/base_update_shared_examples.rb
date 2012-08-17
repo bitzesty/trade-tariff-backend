@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-shared_examples_for 'Base Synchronizer' do
+shared_examples_for 'Base Update' do
   before do
     TariffSynchronizer.logger = Logger.new('/dev/null')
   end

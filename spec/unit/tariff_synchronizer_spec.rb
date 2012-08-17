@@ -50,7 +50,7 @@ describe TariffSynchronizer do
     context 'failure scenarion' do
       before do
         update_1.expects(:apply).returns(true)
-        update_2.expects(:apply).raises(TariffImporter::TaricImportException)
+        update_2.expects(:apply).raises(TaricImporter::ImportException)
       end
 
       it 'error gets logged' do

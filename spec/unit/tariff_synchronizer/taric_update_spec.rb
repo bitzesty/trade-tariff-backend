@@ -3,7 +3,7 @@ require 'tariff_synchronizer'
 require 'mocha/standalone'
 
 describe TariffSynchronizer::TaricUpdate do
-  it_behaves_like 'Base Synchronizer'
+  it_behaves_like 'Base Update'
 
   let(:example_date)      { Date.new(2010,1,1) }
 
@@ -98,7 +98,7 @@ describe TariffSynchronizer::TaricUpdate do
 
     it 'does not move file to processed if import fails' do
       mock_importer = stub
-      mock_importer.expects(:import).raises(TariffImporter::ChiefImportException)
+      mock_importer.expects(:import).raises(TaricImporter::ImportException)
       TariffImporter.expects(:new).with(example_taric_path, TaricImporter).returns(mock_importer)
 
       File.exists?(example_taric_path).should be_true

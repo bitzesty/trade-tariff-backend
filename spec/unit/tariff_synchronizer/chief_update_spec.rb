@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'tariff_synchronizer'
 
 describe TariffSynchronizer::ChiefUpdate do
-  it_behaves_like 'Base Synchronizer'
+  it_behaves_like 'Base Update'
 
   let(:example_date)      { Date.new(2010,1,1) }
 
@@ -82,7 +82,7 @@ describe TariffSynchronizer::ChiefUpdate do
 
     it 'does not move file to processed if import fails' do
       mock_importer = stub
-      mock_importer.expects(:import).raises(TariffImporter::TaricImportException)
+      mock_importer.expects(:import).raises(ChiefImporter::ImportException)
       TariffImporter.expects(:new).with(example_chief_path, ChiefImporter).returns(mock_importer)
 
       File.exists?(example_chief_path).should be_true
