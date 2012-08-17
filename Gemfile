@@ -20,7 +20,7 @@ gem 'curb'
 
 gem 'whenever'
 
-gem 'tariff_importer', path: '../TariffImporter'
+gem 'tariff_importer'
 
 gem 'pry-rails'
 
