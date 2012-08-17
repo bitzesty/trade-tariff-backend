@@ -6,6 +6,15 @@ class GoodsNomenclatureGroup < Sequel::Model
   # has_many :nomenclature_group_memberships, foreign_key: [:goods_nomenclature_group_id,
   #                                                         :goods_nomenclature_group_type]
   # has_many :goods_nomenclatures, through: :nomenclature_group_memberships
+
+  # TODO
+  def validate
+    super
+    # NG1
+    validates_unique([:goods_nomenclature_group_id, :goods_nomenclature_group_type])
+    # NG2
+    validates_start_date
+  end
 end
 
 

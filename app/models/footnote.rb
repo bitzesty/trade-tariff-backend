@@ -29,9 +29,17 @@ class Footnote < Sequel::Model
     end
   end)
 
+  # TODO
+  def validate
+    super
+    # FO3
+    validates_start_date
+  end
+
   def code
     "#{footnote_type_id}#{footnote_id}"
   end
+
 end
 
 

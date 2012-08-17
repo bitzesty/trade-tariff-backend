@@ -8,6 +8,13 @@ class ExportRefundNomenclature < Sequel::Model
   #has_many :footnotes, through: :footnote_association_erns
 
   many_to_one :goods_nomenclature, key: :goods_nomenclature_sid
+
+  # TODO
+  def validate
+    super
+    # ERN5
+    validates_start_date
+  end
 end
 
 

@@ -5,6 +5,13 @@ class RegulationRoleType < Sequel::Model
                                                 primary_key: :regulation_role_type_id
 
   delegate :description, to: :regulation_role_type_description
+
+  # TODO
+  def validate
+    super
+    # RT5
+    validates_start_date
+  end
 end
 
 

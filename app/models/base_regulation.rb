@@ -51,6 +51,13 @@ class BaseRegulation < Sequel::Model
   #                                    (effective_end_date.eq nil)
   #                                   )}
   #                               }
+  
+  # TODO
+  def validate
+    super
+    # ROIMB3
+    validates_start_date
+  end
 end
 
 

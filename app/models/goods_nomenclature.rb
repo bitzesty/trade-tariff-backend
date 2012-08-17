@@ -58,6 +58,13 @@ class GoodsNomenclature < Sequel::Model
                                                             :producline_suffix]
   one_to_many :export_refund_nomenclatures, key: :goods_nomenclature_sid
 
+  # TODO
+  def validate
+    super
+    # NIG4
+    validates_start_date
+  end
+
   def id
     goods_nomenclature_sid
   end

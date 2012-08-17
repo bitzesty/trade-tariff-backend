@@ -160,16 +160,18 @@ class Measure < Sequel::Model
   def_column_alias :additional_code_id, :additional_code
 
   ######### Conformance validations 430
-  # def validate
-  #   super
-  #   # ME2 ME4 ME6 ME24
-  #   validates_presence([:measure_type, :geographical_area, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role])
-  #   # ME1 
-  #   validates_unique([:measure_type, :geographical_area, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date])
-  # end
-  # TODO:
-  # ME3 ME5 ME7 ME8 ME88 ME16 ME115 ME25 ME32 ...
-  # ME24 If no measure start date is specified it defaults to the regulation start date.
+  def validate
+    super
+    # ME2 ME4 ME6 ME24
+    validates_presence([:measure_type, :geographical_area, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role])
+    # ME1 
+    validates_unique([:measure_type, :geographical_area, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date])
+    # ME25
+    validates_start_date
+    # TODO:
+    # ME3 ME7 ME8 ME88 ME16 ME115 ME25 ME32 ...
+    # ME24 If no measure start date is specified it defaults to the regulation start date.
+  end
 
   dataset_module do
     def with_base_regulations

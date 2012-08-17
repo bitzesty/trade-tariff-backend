@@ -10,6 +10,14 @@ class ModificationRegulation < Sequel::Model
   #                                    (effective_end_date.eq nil)
   #                                   )}
   #                               }
+
+  # TODO
+  def validate
+    super
+    # ROIMM5
+    validates_start_date
+  end
+  
 end
 
 

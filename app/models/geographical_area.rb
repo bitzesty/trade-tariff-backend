@@ -64,6 +64,15 @@ class GeographicalArea < Sequel::Model
 
   delegate :description, to: :geographical_area_description
 
+  # TODO
+  def validate
+    super
+    # GA1
+    validates_unique([:geographical_area_id, :validates_start_date])
+    # GA2
+    validates_start_date
+  end
+
   def iso_code
     (geographical_area_id.size == 2) ? geographical_area_id : nil
   end
