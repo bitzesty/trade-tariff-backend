@@ -41,12 +41,6 @@ class ApplicationController < ActionController::Base
 
   private
 
-  # def restrict_access
-  #   authenticate_with_http_token do |token, options|
-  #    true # ApiKey.where(access_token: token).exists?
-  #   end
-  # end
-
   def configure_time_machine
     TimeMachine.at(params[:as_of]) do
       yield
