@@ -1,5 +1,5 @@
 class SyncMailer < ActionMailer::Base
-  default from: "DO NOT REPLY <inside-government@digital.cabinet-office.gov.uk>"
+  default from: "DO NOT REPLY <trade-tariff-alerts@digital.cabinet-office.gov.uk>"
 
   def admin_notification(admin_email, failed_file_path, exception)
     @exception = exception
