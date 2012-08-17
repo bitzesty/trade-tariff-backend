@@ -27,7 +27,7 @@ namespace :tariff do
     end
 
     desc 'Apply pending Taric and CHIEF'
-    task apply: :environment do
+    task apply: %w[environment reindex] do
       TariffSynchronizer.apply
     end
   end
