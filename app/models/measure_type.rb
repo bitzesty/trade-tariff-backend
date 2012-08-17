@@ -17,6 +17,15 @@ class MeasureType < Sequel::Model
                          foreign_key: :measure_type_id
 
   delegate :description, to: :measure_type_description
+
+  # MTS2 - TODO
+  def validate
+    super
+    # MTS1
+    validates_unique(:measure_type_id)
+    # MTS3
+    validates_start_date
+  end
 end
 
 
