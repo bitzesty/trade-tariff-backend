@@ -16,8 +16,11 @@ gem 'railties'
 
 gem 'airbrake'
 gem 'unicorn', '~> 4.3.1'
+gem 'curb'
 
-gem 'tariff_importer'
+gem 'whenever'
+
+gem 'tariff_importer', '~> 0.0.5'
 
 gem 'pry-rails'
 
@@ -37,14 +40,15 @@ group :test do
   gem 'brakeman', '~> 1.7.0'
   gem 'ci_reporter'
   gem 'factory_girl_rails'
-  gem 'fakeweb'
   gem 'forgery'
   gem 'json_expressions'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'simplecov'
   gem 'simplecov-rcov'
+  gem 'webmock'
   gem 'vcr'
+  gem 'mocha', require: false
 end
 
 group :router do

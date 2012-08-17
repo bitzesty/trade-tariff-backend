@@ -16,3 +16,5 @@ rerun.txt
 pickle-email-*.html
 .DS_Store
 ERD.pdf
+data/*/*.xml
+data/*/*.txt

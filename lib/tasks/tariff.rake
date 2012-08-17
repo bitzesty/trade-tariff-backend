@@ -1,3 +1,5 @@
+require 'tariff_synchronizer'
+
 namespace :tariff do
   desc 'Installs Trade Tariff, creates relevant records, imports national data'
   task install: %w[environment
@@ -6,11 +8,27 @@ namespace :tariff do
                    install:taric:chapter_notes
                    reindex]
 
+  desc 'Reindex relevant entities on ElasticSearch'
   task reindex: :environment do
     ENV['FORCE'] = 'true'
     ['Section','Chapter','Heading','Commodity'].each do |klass|
       ENV['CLASS'] = klass
       Rake::Task['tire:import'].execute
+    end
+  end
+
+  desc 'Download and apply Taric and CHIEF data'
+  task sync: %w[environment sync:download sync:apply]
+
+  namespace :sync do
+    desc 'Download pending Taric and CHIEF updates'
+    task download: :environment do
+      TariffSynchronizer.download
+    end
+
+    desc 'Apply pending Taric and CHIEF'
+    task apply: %w[environment reindex] do
+      TariffSynchronizer.apply
     end
   end
 
@@ -56,7 +74,6 @@ namespace :tariff do
       task static_national_data: :environment do
         Sequel::Model.db.transaction do
           File.readlines(Rails.root.join('db', 'chief', 'static_national_data_insert.sql')).each do |line|
-            puts line
             Sequel::Model.db.run(line.strip)
           end
         end
