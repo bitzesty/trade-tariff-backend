@@ -30,11 +30,6 @@ namespace :tariff do
     task apply: :environment do
       TariffSynchronizer.apply
     end
-
-    desc 'Retry applying updates in failbox'
-    task retry: :environment do
-      TariffSynchronizer.retry
-    end
   end
 
   namespace :install do
