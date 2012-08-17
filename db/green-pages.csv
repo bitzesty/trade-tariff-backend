@@ -229,7 +229,7 @@ Anaesthetic Instruments;90.18
 Anaesthetics;30.03
 Analogue to Digital Converters;85.43
 Anchors, Iron or Steel;73.16
-Anchovies;SEE FISH
+Anchovies;Chapter 3
 Andalusite;25.08
 Anemometers;90.15 OR 90.22 OR 90.26
 Anemone;06.01
@@ -296,11 +296,11 @@ Apparel - Rubber;40.15
 Apparel - Worn, in Bulk Packing's;63.09
 Apparel - Woven, Non Woven; 62
 Apple Pomade, Dried;23.08
-Apples;SEE FRUIT, EDIBLE
+Apples;Chapter 08
 Appliances Wire, Electrical Insulated;85.44
 Appliqué Work;58.10
 Apricot Kernels;12.12
-Apricots;SEE FRUIT, EDIBLE
+Apricots;Chapter 08
 Aprons;61.14 OR 62.11
 Aptitude Testing Apparatus;90.19
 Aqueous Solutions of Essential Oils;33.01
@@ -340,7 +340,7 @@ Asbestos - Cement Working machinery;84.64
 Asbestos - Cement, Articles of;68.11
 Ash Dischargers;84.16
 Ash;26.18 OR 26.21
-Asparagus;SEE VEGETABLES, EDIBLE
+Asparagus;Chapter 07
 Asphalt, Natural;27.14
 Aspirator Separators;84.37
 Aspirin (Acetylsalicylic Acid) - Tableted or Compounded;30.03 OR 30.04
@@ -378,7 +378,7 @@ Automatic Data Processing Machines and Units Thereof -  Servers;84.71
 Automatic Data Processing Machines and Units Thereof - Storage Units;8471
 Automatic Data Processing Machines and Units Thereof -Trackball;84.71
 Automatic Data Processing Machines and Units Thereof -  Workstations;84.71
-Automatics, Bars and Chucks (See Lathes)
+Automatics, Bars and Chucks; 84.58
 Automatic Teller Machines (ATMS);8472
 Auxiliary Boiler Plant;84.04
 Aviation Fuel (Kerosene Type);27.10
@@ -453,7 +453,7 @@ Bananas, including Plantains, Fresh or Dried;08.03
 Bandage Splints;90.21
 Bandages and Plasters;30.05
 Banding Machine;84.22
-Bands (for Machinery etc);SEE BELTS AND BELTING
+Bands (for Machinery etc);42.05
 Bands, of Plaited Iron or Steel Wire;73.12
 Bands, Rubber (e.g. Office Equipment);40.16
 Bandsaw, Blades;82.02
@@ -517,7 +517,7 @@ Beads, Base Metal, Unstrung;83.08
 Beads, Glass;70.18
 Beans - Cocoa;18.01
 Beans - Field, including Horse and Tic;07.13
-Beans - Leguminous, Edible;SEE VEGETABLES, EDIBLE
+Beans - Leguminous, Edible;Chapter 07
 Beans - Leguminous, for Sowing;07.13
 Beans - Locust, Whole, Kibbled or Ground;12.12
 Beans - Soya;12.01
@@ -643,9 +643,8 @@ Blood, Animal;05.11
 Block, Animal For Therapeutic Uses;30.02
 Blood-Grouping Reagents;30.06
 Blood, Human;30.02
-Blouses; Shirts And Shirt-Blouses -
-Blouses; Shirts And Shirt-Blouses - Knitted Or Crocheted Women's Or Girls;61.06
-Blouses; Shirts And Shirt-Blouses - Other Than Knitted Or Crocheted Women's Or Girls;62.06
+Blouses Shirts And Shirt-Blouses - Knitted Or Crocheted Women's Or Girls;61.06
+Blouses Shirts And Shirt-Blouses - Other Than Knitted Or Crocheted Women's Or Girls;62.06
 Blown Glass Sheets;70.04
 Blow Moulding Machines;84.77
 Blow Lamps;82.05
@@ -817,7 +816,7 @@ Bulbs, Flower;06.01
 Bulbs, Electric Lamp;85.39
 Bulk Carriers;89.01
 Bulkheads;73.08
-Bullace;See Fruit, Edible
+Bullace;Chapter 08
 Bulldozers;84.29
 Bullet-Proof Glass;70.07
 Bullets;93.06
@@ -937,14 +936,14 @@ Canvas, Cotton;52.09
 Canvas, Prepared Painting;59.01
 Capacitance Measuring Bridges;90.30
 Capacitors, Electrical;85.32
-Capers;See Vegetables Edible
+Capers;Chapter 07
 Capes - Knitted Or Crocheted Men's Or Boys;61.01
 Capes - Other Than Knitted Or Crocheted Men's Or Boys;62.01
 Capes - Knitted Or Crocheted Women's Or Girls;61.02
 Capes - Other Than Knitted Or Crocheted Women's Or Girls;62.02
 Capping Machines;84.22
 Caps, Bathing;56.06
-Capsicums, Sweet;See Vegetables, Edible
+Capsicums, Sweet;Chapter 07
 Capstans;84.25
 Capsules - Base Metal, For Bottles, Etc;83.019
 Capsules - For Pharmaceutical Products And Mechanical Light Fuel;96.02
@@ -1001,7 +1000,7 @@ Cargo Nets, Textile;56.08
 Cargo Ships;89.01
 Carnauba Wax;15.21
 Carnival Articles;95.02
-Carp;See Fish
+Carp;Chapter 3
 Carpet Underlay, Rubber;40.08
 Carpet Yarn, Of Man-Made Filaments;54.02 Or 54.03
 Carpets And Other Textile Floor Covering;Chapter 57
@@ -1136,7 +1135,7 @@ Cherries, Fresh;08.09
 Chestnut, Fresh And Dried;08.02
 Chewing Gum (Sugar);17.04
 Chewing Gum (Sugar Free);21.06
-Chickens (Gallus Domesticus);See Poultry
+Chickens (Gallus Domesticus);01.05
 Chicory, Roasted;21.01
 Chicory Root Unroasted;06.01
 Chicory Salad Fresh Or Chilled;07.05
@@ -1212,7 +1211,7 @@ Circular Saw Blades;82.02
 Circuses, Travelling;953.08
 Cisterns, Flushing, Plastic;39.22
 Citrus Fruit, Waste, Dried;23.08
-Citrus Fruit;See Fruit, Edible
+Citrus Fruit;Chapter 08
 Citrus Fruit Juice (No Added Water);20.09
 Civet;05.10
 Clamps;82.05
@@ -1230,7 +1229,7 @@ Cleansing Creams;33.04
 Cleansing Oils;27.10
 Cleansing Tissues;48.18
 Cleavers, Butchers (Base Metal);82.14
-Clementine's;See Fruit, Edible
+Clementine's;Chapter 08
 Clerical Garments And Vestlets;61.14 Or 62.11
 Climbing Sticks;66.02
 Clinical Waste;38.25
@@ -1260,7 +1259,7 @@ Cloth - Iron Or Steel;73.14
 Cloth - Photographic Sensitised, Unexposed;37.03
 Cloth - Wire, Aluminium;76.16
 Cloth - Wire, Copper;74.14
-Cloth -Clothing;See Apparel
+Cloth -Clothing;42.03
 Clothing Accessories - Knitted Or Crocheted, Not Elsewhere Specified Or Included;61.17
 Clothing Accessories - Other Knitted Or Crocheted Not Elsewhere Specified Or Clothing Accessories - Included;6217
 Cloths, Cleaning Textile;63.07
@@ -1314,7 +1313,7 @@ Coconuts Fresh Or Dried;08.01
 Cocoons, Silk Worm - Suitable For Reeling;50.01
 Cocoons, Silk Worm - Unsuitable For Reeling;50.03
 Cod Liver Oil, In Bulk;15.04 Or 15.16 Or 15.18
-Cod;See Fish
+Cod;Chapter 3
 Cod Liver Oil, Put Up As A Medicament;30.04
 Coffee Processing Machinery;84.38
 Coffee - Extracts, Essences And Concentrates;21.01
@@ -1443,7 +1442,6 @@ Copiers;84.43
 Copper Wire, Not Electrically Insulated;74.08
 Copper Ores And Concentrates;26.03
 Copper Waste And Scrap;74.04
-Copper, Refined, Unwrought
 Copper Including Alloys;Chapter 74
 Copra;12.03
 Cops - For Spinning And Weaving Of Iron Or Steel;73.26
@@ -1474,7 +1472,7 @@ Corned Beef;16.02
 Cornets -Ice Cream;19.05
 Cornets - Musical;92.05
 Cornflakes;19.04
-Corn;See Maize
+Corn;10.05
 Corozo Nuts;14.04
 Corozo Worked;96.02
 Correcting Fluids;38.24
@@ -1579,7 +1577,7 @@ Cuff-Links Of Base Metal;71.17
 Cuff Links Of Precious Metal;71.13
 Cuff Links Set With Precious Or Semi Precious Stones;71.16
 Cultivators;84.32
-Culture Media; Prepared;38.21
+Culture Media, Prepared;38.21
 Cultured Pearls (Not Strung Or Temporarily Strung For Transport;71.01
 Cumin Seeds;09.09
 Cupboards;94.03
@@ -1592,7 +1590,7 @@ Curb stones, Of Natural Stone (Excluding Slate);68.01
 Curd;04.06
 Curling Tong Heaters, Electric;85.16
 Curling Grips, Iron Or Steel;96.15
-Currants;See Fruit, Edible
+Currants;Chapter 08
 Currency Notes;49.07
 Curtains Textile;63.03
 Cushion Covers;63.04
@@ -1746,7 +1744,7 @@ Diving Chambers;84.79
 Dobbies, Textile;84.48
 Document Cases;42.02
 Documents For Title;49.07
-Dogfish;See Fish
+Dogfish;Chapter 3
 Dogs;01.06
 Dog Chews;23.09 Or 42.05
 Dog/Animal Shampoo;33.07
@@ -1764,7 +1762,7 @@ Doors And Door Frames, Wood;44.18
 Door And Dorr Frames, Iron Or Steel, For Buildings;73.08
 Double Bridges;90.30
 Doubling Machines, Textile;84.45
-Dover Sole;See Fish
+Dover Sole;Chapter 3
 Down;05.05
 Drafting Machines;90.17
 Drain Pipes, Ceramic;69.06
@@ -1814,7 +1812,7 @@ Dryers, Tumble;84.51
 Dryers, Spin;84.21
 Duchesse Lace;58.04
 Duck, Cotton Fabric;52.09
-Ducks;See Poultry
+Ducks;01.05
 Dummies, Tailor Etc;96.18
 Dumpers And Dump Trucks;87.04
 Duplicators, Hectograph And Stencil;84.72
@@ -1869,7 +1867,7 @@ Electric Lamp Making Machines;84.75
 Electric Sockets;85.36 Or 85.44 Or 85.47
 Electrical Apparatus, Appliances And Machinery - Accumulators;85.07
 Electrical Apparatus, Appliances And Machinery - Alarms, Burglar And Fire;85.31
-Amplifiers, Audio-Frequency;See Amplifiers
+Amplifiers, Audio-Frequency;Heading 85.42
 Batteries And Cells;85.06
 Capacitors;85.32
 Carbons;85.45
@@ -1976,7 +1974,7 @@ Electronic Integrated Circuits;85.42
 Electronic Microcircuits;85.42
 Electronic Valve Making Machinery;74.75
 Elements, Chemical, Radio Active;28.44
-Elevator Bands, Belting And Belts;See Belts And Belting
+Elevator Bands, Belting And Belts;42.05
 Elevators, For Goods;84.28
 Elevators, Liquid;84.13
 Emblems, Textile - Embroidered;58.10
@@ -2458,7 +2456,7 @@ Fuminates;28.38
 Funfair Games;95.04
 Fungicides;38.08
 Fur Hats;65.06
-Fur Clothing;See Apparel
+Fur Clothing;42.03
 Fur (Imitation), Woven Fabric;58.01
 Fur (Imitation), Knitted Fabric;60.01
 Fur, Artificial;43.04
@@ -2490,7 +2488,7 @@ Gangways - Aluminium;76.10
 Gangways - Concrete;68.10
 Gangways - Iron Or Steel;73.08
 Gantry Cranes;84.26
-Garlic;See Vegetable, Edible
+Garlic;Chapter 07
 Garments - Knitted Or Crocheted;Chapter 61
 Garments - Other Than Knitted Or Crocheted;Chapter 62
 Garments - Made Up Of Other Fabrics Of 56.02 Or 56.03 Or 59.03 Or 59.06 Or 59.07;62.10
@@ -2528,7 +2526,7 @@ Gauze - Wire, Copper;74.14
 Gear Making And Finishing Machines;64.61
 Gears And Gearing (Including Gearboxes) For Machinery;84.83
 Gearboxes For Motor Vehicles;87.08 Or 87.14
-Geese;See Poultry
+Geese;01.05
 Geiger Counter;90.30
 Gel Type Hand Warmer ;38.24
 Gelatine And Gelatine Derivatives;35.03
@@ -2634,7 +2632,7 @@ Granite, Worked And Articles Thereof;68.02
 Grape Must;20.09 Or 22.04
 Grape Juice;20.09
 Grape Marc;23.08
-Grapes;See Fruit, Edible
+Grapes;Chapter 08
 Graphic Cards, Computer;84.71
 Graphic Equalisers, Hi-Fi;85.43
 Graphite - Articles Of A Kind Used For Electrical Purposed;85.45
@@ -2672,7 +2670,7 @@ Guavas, Fresh Or Dried;08.04
 Guided Weapons Launchers;93.01
 Guided Weapons And Missiles;93.06
 Guillotines;84.41
-Guinea Fowls;See Poultry
+Guinea Fowls;01.05
 Guinea Maize;10.07
 Guipure Lace;58.10
 Guitars - Electric;92.07
@@ -2706,7 +2704,7 @@ Gyroscopes - Munitions;93.06
 Habits;61.14 Or 62.11
 Hacksaw Blades;82.02
 Hacksaw Frames;82.02
-Haddock;See Fish
+Haddock;Chapter 3
 Haemoglobin;30.02
 Hafnium;81.12
 Hair Care Preparations;33.05
@@ -2733,8 +2731,8 @@ Hair, Other - Nets;65.05
 Hair, Other - Slides, Pins And Curlers (Non Electric);96.15
 Hair, Other - Vegetable;14.02
 Haiti Hemp;53.05
-Hake;See Fish
-Halibut;See Fish
+Hake;Chapter 3
+Halibut;Chapter 3
 Halides;28.12
 Halogen Or Sulphur Compounds Of Non-Metal Sub-Chapter Iii;Chapter 28
 Ham And Hams, Prepared Or Reserved;16.02
@@ -2807,12 +2805,12 @@ Hemp True - Yarn;53.08
 Henequen;53.05
 Henna;14.04 Or 32.03
 Herbicides;38.08
-Herbs;See Vegetables, Edible
+Herbs;Chapter 07
 Herring - Prepared Or Preserved;16.04
 Herring - Liquidities;23.09
 Herring - Meal;23.01
 Herring - Oil;15.04 Or 15.16 Or 15.18
-Herring - Other ;See Fish
+Herring - Other ;Chapter 3
 Heterocyclic Compounds;29.32 Or 29.33 Or 29.34
 Hewing Tools;82.01
 Hibiscus Cannabinus, Not Spun;53.03
@@ -2870,7 +2868,7 @@ Horn, Worked;96.01
 Horn-Cores;05.06
 Horse Chestnuts;23.08
 Horse Beans;07.13
-Horse-Radish;See Vegetables, Edible
+Horse-Radish;Chapter 07
 Horsehair;05.03
 Horsehair, Woven Fabric;51.13
 Horsemeat - Fresh, Chilled, Frozen;02.05
@@ -2898,7 +2896,6 @@ Household Brooms And Brushes;96.03
 Housings, Bearing;84.83
 Hovercraft;86.03 Or 87.03 Or 89.01 Or 89.06
 Howitzers;93.01
-Human Remains Cpc Only;Cpc Only
 Human Cells, Non Prophylactic ;Chapter 5
 Human Cells, Prophylactic;Chapter 30
 Humane Killers (Guns);93.03
@@ -3020,7 +3017,7 @@ Insulating Fitting;85.47
 Insulating Electric;85.46
 Insulin;29.37 Or 30.03 Or 30.04
 Integrated Circuit Manufacturing Or Assembly Devices;84.86
-Integrated Circuits (Semi Conductor);See Electronic Integrated Circuits
+Integrated Circuits (Semi Conductor);Heading 85.42
 Integrated Receiver/Decoder, Cable TV;85.28
 Intensifiers, Photographic;37.07
 Intensifiers, Image;85.40
@@ -3291,7 +3288,7 @@ Laser Optical Reading System (Compact Disc Players);85.19
 Laser Pointers;90.13
 Lasers;90.13
 Last Boot And Shoe, Wood;44.17
-Latex;See Rubber
+Latex;Chapter 40
 Lathe Tools;82.07
 Lathes (Turning Machines);84.58 Or 84.65
 Laundering Machinery;84.50
@@ -3358,7 +3355,7 @@ Letter Clips, Base Metal;83.05
 Letter - Include Trays And Similar Articles, Of Base Metal;83.04
 Letter Racks And Trays Of Metal;83.04
 Letter Plates, Complete And Letters, Of Base Metal;83.10
-Lettuce;See Vegetables, Edible
+Lettuce;Chapter 07
 Leucite;25.29
 Lichens For Ornamental Purposes;06.04
 Life Jackets - Plastic Covered;39.26
@@ -3407,7 +3404,7 @@ Liquid Fuel Pressure Stove And Parts, Domestic Of Copper;74.18
 Liquorice - Root;12.11
 Liquorice Extract;13.02
 Lists, Trade (Printed Matter);49.11
-Litchis;See Fruit, Edible
+Litchis;Chapter 08
 Lithographic Printing Plates - Non Sensitised;84.42
 Lithographic Printing Plates - Sensitised;37.01
 Lithographs, Originals;97.02
@@ -3452,8 +3449,8 @@ Macaroni;19.02
 Mace;09.08
 Macerating Vessels, Incorporating Thermal Equipment;84.19
 Machetes;82.01
-Machine Tools;See Machines And Machinery
-Machinery Bands, Belts And Belting;See Belts And Belting
+Machine Tools;Section 16
+Machinery Bands, Belts And Belting;42.05
 Machinery Brushes;96.03
 Machinery For Preparing Or Working Printing Blocks, Plates Or Cylinders;84.42
 Machinery For Type Setting Or Type Founding;84.42
@@ -3609,7 +3606,7 @@ Machine Centres;84.57
 Machine Guns;93.01
 Machine Pistols;93.01
 Mach Meters;90.14
-Mackerel;See Fish
+Mackerel;Chapter 3
 Macramè Lace;58.04
 Madagascar Fibre;14.03
 Madagascar Jute;53.03
@@ -3652,7 +3649,7 @@ Manicure Preparations;33.04
 Manicure Sets;82.14
 Manifolds;84.09
 Manifold Valves;84.81
-Manila Hemp;See Abaca
+Manila Hemp;Heading 56.07
 Manioc Flour And Meal;11.06
 Manioc, Fresh Or Dried, Chilled Or Frozen;07.14
 Manioc, Prepared Foodstuff;19.03
@@ -3766,7 +3763,7 @@ Medium Density Fibreboard (Mdf);44.11
 Meerschaum, Crude;25.30
 Meerschaum, Worked;96.02
 Megaphones;85.18
-Melons;See Fruit, Edible
+Melons;Chapter 08
 Memory Modules;85.48
 Menageries, Travelling;95.08
 Men's Or Boys - Bib And Brace Overall Knitted Or Crocheted;61.03
@@ -3876,7 +3873,7 @@ Mines (Munitions);9306
 Mining Machinery;84.25 Or 84.28 Or 84.30
 Mink Furskin, Tanned Or Dressed;43.02
 Mink Skins Raw;43.01
-Mirabelles;See Fruit, Edible
+Mirabelles;Chapter 08
 Mirrors, Base Metal, Not Optically Worked;83.06
 Mirrors Glass;7009
 Mirrors, Optical Elements (Unmounted);90.01
@@ -4015,7 +4012,7 @@ Municipal Waste;38.25
 Munitions;93.06
 Muscle Exercise Kit;85.43
 Mushroom Spawn;06.02
-Mushrooms;See Vegetables, Edible
+Mushrooms;Chapter 07
 Music Cases;42.02
 Music, Printed;49.04
 Musical Boxes;92.08
@@ -4061,7 +4058,7 @@ Navigational Instruments (Non-Electric);90.14
 Neats Foot Oil;15.06 or 15.16 or 15.18
 Nebulisers;84.24 or 90.19
 Necties, Textiles;61.17 or 62.15
-Nectarines;See Fruit, Edible
+Nectarines;Chapter 08
 Needle - Bars;84.48
 Needles - Boards;84.48
 Needles - Cams;84.48
@@ -4154,7 +4151,7 @@ Nut Setters;84.67
 Nut Shelling Machine;84.38
 Nuts, Aluminium;76.16
 Nuts, Copper;74.15
-Nuts, Edible (Excluding Oil Nuts);See Fruit, Edible
+Nuts, Edible (Excluding Oil Nuts);Chapter 08
 Nuts, Iron or Steel;73.18
 Nuts, Oleaginous;Chapter 12
 Nuts, Roasted or Salted;20.08
@@ -4203,8 +4200,8 @@ Oleoresin;13.01
 Oleostearin;15.03
 Oleum;28.07
 Olive Oil;15.09
-Olives;See Vegetables, Edible
-Onions;See Vegetables, Edible
+Olives;Chapter 07
+Onions;Chapter 07
 Opacifying Preparations for X Ray Examinations;30.06
 Opacifiers, Prepared;32.07
 Opera Glasses;90.05
@@ -4221,7 +4218,7 @@ Optic Measures (Drinks);84.79
 Optoelectronic Receivers, Cable TV;85.17
 Optoelectronic Transmitters, Cable TV;85.17
 Orange Lead;28.24
-Oranges;See Fruit, Edible
+Oranges;Chapter 08
 Organic Chemicals ;Chapter 29
 Organic Surface Active Agent;34.02
 Organo Arsenic Compounds;29.31
@@ -4447,7 +4444,7 @@ Pearls - Temporarily Strung for Convenience of Transport;71.01
 Pearls - Whether or not Worked or Graded but not Strung, Mounted or Set;71.01
 Pearls, Natural or Cultured, Unworked or Worked;71.01
 Pears and Quinces;08.08
-Pears, Edible;See Fruit, Edible
+Pears, Edible;Chapter 08
 Pears, Avocado, Fresh or Dried;08.04
 Peas;07.08
 Peat;27.03
@@ -4458,7 +4455,7 @@ Pectin Substances, pectinates and Pectates;13.02
 Pedal Cars;95.01
 Pedicure, Instruments and Preparations;33.04 or 82.14
 Pedometers;90.29
-Peel or Fruit;See Fruit, Edible
+Peel or Fruit;Chapter 08
 Pelmets;63.03
 Pennants;63.07
 Pen Nibs;96.08
@@ -4470,7 +4467,7 @@ Pens and Parts;96.08
 Penicillin;29.41 or 30.03 or 30.04
 Pepper;09.04
 Peppercorns;09.04
-Peppers, Sweet;See Vegetables, Edible
+Peppers, Sweet;Chapter 07
 Peptones and their Derivatives;35.04
 Perambulators;87.15
 Percabonates;28.36
@@ -4497,7 +4494,7 @@ Petroleum - Coke;27.13
 Petroleum - Jelly;27.12
 Petroleum - Oils, Crude;27.09
 Petroleum - Sulphonates (not water soluble);38.24
-Petticoats;See Slips
+Petticoats;61.08
 Pewterware;80.07
 Pharmaceutical Glassware;70.17
 Pharmaceuticals;Chapter 30
@@ -4568,7 +4565,7 @@ Pig Iron;72.01
 Pig Products, Canned, Prepared or otherwise Prepared;16.02
 Pigments;32.04 to 32.07 or 32.12
 Pigs, Live;01.03
-Pilchards;See Fish
+Pilchards;Chapter 3
 Pile Driving Machinery;84.30
 Pile Extractors;84.30
 Pile Extractors, Single Purpose;84.28
@@ -4621,7 +4618,7 @@ Pitch and Pitch Coke;27.08
 Pitch Fibre Pipes, Couplings and Fittings;68.07
 Pitch, Vegetables;38.07
 Pitprops, Wood;44.03
-Plaice;See Fish
+Plaice;Chapter 3
 Plaiting material, Manufactures of;Chapter 46
 Plaiting (Vegetables) Materials;14.01
 Plaits and Similar Products of Plaiting Materials;46.01
@@ -4720,7 +4717,7 @@ Polyvinyl Acetate, in Primary Forms;39.05
 Polyvinyl Chloride (PVC), in Primary Forms;39.04
 Polyvinylidene Chloride, in Primary Forms;39.04
 Pompons, Textile;58.08
-Ponchos;See Overcoats
+Ponchos;61.01
 Pool, Paddling and Swimming;95.06
 Poplins, Cotton Fabric;52.08 to 52.12
 Popodoms;20.05
@@ -4744,7 +4741,7 @@ Potassium Sulphate;31.04
 Potato Crisps;20.05
 Potato Diggers and Harvesters;84.33
 Potato Flakes, Granules, Powder;11.05
-Potatoes;See Vegetables, Edible
+Potatoes;Chapter 07
 Potentiometers (Resistors);85.33
 Pots of Plastics;39.23 or 39.24 or 39.26
 Pottery;Chapter 69
@@ -4865,7 +4862,7 @@ Pulpwood, Other;44.03
 Pulverising Machinery, Mineral;84.74
 Punga;53.03
 Pumice Stone, Crude;25.13
-Pumpkins;See Vegetables, Edible
+Pumpkins;Chapter 07
 Pumps, Air or Vacuum;84.14
 Pumps, Liquid, including Petrol and Oil Measuring;84.13
 Punched Card (Accounting and Statistical) Machines;84.13
@@ -4902,7 +4899,7 @@ Quills, Raw;05.05
 Quilt Covers;63.02
 Quilted Textile products in the piece;58.11
 Quilts (Stuffed Furnishings);94.04
-Quinces;See Fruit, Edible
+Quinces;Chapter 08
 Quinine;29.39
 Rabbit Hutches;44.21
 Rabbits, Dead;02.08
@@ -5008,7 +5005,7 @@ Rectifiers - Selenium and Copper;85.04
 Rectifiers - Semi-Conductor;85.41
 Rectifiers - Valve and Tube;85.40
 Rectifying Apparatus;85.04 or 85.40 or 85.41
-Redfish;See Fish
+Redfish;Chapter 3
 Red Lead;28.24
 Reducers - Apparatus;90.08 or 90.10
 Reducers - Photographic Chemicals;37.07
@@ -5210,14 +5207,14 @@ Safety Pins - Copper;74.19
 Safety Pins - Iron or Steel;73.19
 Safety Razors;82.12
 Saffron;09.10
-Sago - Flour and Meal;;11.06
+Sago - Flour and Meal;11.06
 Sago - Prepared;19.03
 Sago - Starch;11.08
 Sago and Tapioca, Substitute Starches, Prepared;19.03
 Sailboards;95.06
 Sailboats;89.03
 Sails, Textile;63.09
-Saithe (Coalfish);See Fish
+Saithe (Coalfish);Chapter 3
 Salad Cream, mayonnaise and Dressing;21.03
 Salad Vegetables and Roots;Chapter 7
 Salep Flour and Meal;11.06
@@ -5242,7 +5239,7 @@ Sanitary Wares - Iron or Steel;73.24
 Sanitary Wares - Plastics;39.22
 Sanitary Ware (Ceramic) Making Machinery;84.74
 Sanseviera (Bowstring Hemp);53.05
-Sardines;See Fish
+Sardines;Chapter 3
 Sashes;61.17 or 62.17
 Sateen's, Cotton;52.08 or 52.12
 Satellites;88.02
@@ -5636,7 +5633,7 @@ Spices;07.09 or Chapter 9
 Spider Silk;Chapter 50
 Spiegeleisen;72.01
 Spikes, Iron or Steel, For Sports Footwear;64.06
-Spinach;See Vegetable, Edible
+Spinach;Chapter 07
 Spin Dryers;84.21
 Spindles and Spindle Flyers, Textile;84.48
 Spirit, Petroleum and White;27.10
@@ -5660,7 +5657,7 @@ Spoons;82.15
 Sporting Guns, Rifles and Carbines;93.03
 Sports Shoes;Chapter 64
 Spotlights, non focusing;94.05
-Sprats (bristling);See Fish
+Sprats (bristling);Chapter 3
 Spraying Equipment, Including Spray Guns;84.24
 Spraying Lorries;87.05
 Sprays, Scent and Toilet, Empty;96.16
@@ -5917,7 +5914,7 @@ Tall Oil;38.03
 Tall Oil, Fatty Acids;38.23
 Tallow;15.02
 Tallow Oil;15.03
-Tangarines, Fresh or Dried;See Fruit, Edible
+Tangarines, Fresh or Dried;Chapter 08
 Tanks, Aluminium;76.11 or 76.12
 Tanks, Armoured Fighting Vehicles and Parts;87.10
 Tanks, Copper;74.19
@@ -6090,7 +6087,7 @@ Toilet - Toilet Sprays, Empty;96.16
 Toilet - Water;33.03
 Toluene;27.07 or 29.02
 Tuluol;27.07
-Tomatoes;See Vegetables, Edible
+Tomatoes;Chapter 07
 Tomato Juice (Dry Weight Content under 7%);20.09
 Tomato Juice (Dry Weight Content 7% or More);20.02
 Tomato Ketchup;21.03
@@ -6150,7 +6147,7 @@ Transformers, Electric;85.04
 Transistors;85.41
 Translators, Language - With Calculator, Pocket Size;84.70
 Translators, Language - Without Calculators;85.43
-Transmission Bands, Belts and Belting;See Belts and Belting
+Transmission Bands, Belts and Belting;42.05
 Transmission Parts for Motor Vehicles;87.08
 Transmission Shafts, for Machinery;84.83
 Transparent Wrapping (Cellulose);39.20
@@ -6185,7 +6182,7 @@ Trophies - Ceramics;69.13
 Trophies - Plastic;39.26
 Trophies - Precious Metal;71.14
  Trousers, Textile;61.03 or 61.04 or 62.03 or 62.04
-Trout;See Fish
+Trout;Chapter 3
 Trucks - Dump;87.04
 Trucks - Fork Lift;84.27
 Trucks - Hand, not Mechanically Propelled;87.16
@@ -6235,7 +6232,7 @@ Tulle;58.04
 Tulle-making Machines;84.47
 Tumble Driers;84.21 or 84.51
 Tuna (Tunny), Canned;16.04
-Tuna (Tunny), Other than Canned;See Fish
+Tuna (Tunny), Other than Canned;Chapter 3
 Tuner Cards, Television;85.28
 Tung Nuts;12.07
 Tung Oil;15.15
@@ -6251,7 +6248,7 @@ Turbines, Wind;84.10
 Turbo Chargers (for Vehicles);84.14
 Turbo Jets;84.11
 Turbo Propellers;84.11
-Turkeys;See Poultry
+Turkeys;01.05
 Turning Machines (Lathes);84.58 or 84.65
 Turpentine;38.05
 Turtles Eggs (Edible);04.10
@@ -6406,7 +6403,7 @@ Wall Coverings - Of Plaiting Material, (Paper Backed);48.14 (See Chapter 48 Note
 Wall Coverings - Of Textile;59.03 (See Chapter 59, Note 3)
 Wallpaper, including Washable Wallpaper;48.14 (See Chapter 48 Note 8)
 Wallpaper - Faced with Cork;45.02 or 45.04
-Wallpaper - Faced with Foil;Section XV
+Wallpaper - Faced with Foil;Section 15
 Wallets of Leather, Plastics or Textile;42.02
 Wallpaper Base;48.02
 Walnuts, Fresh or Dried;08.02
@@ -6506,12 +6503,12 @@ Whelks;03.07 or 16.05
 Whetstones;68.04
 Whey - Whole, Liquid;04.04
 Whey - Powder;04.04
-Whey - Preserved; Partly or Wholly Concentrated;04.04
+Whey - Preserved, Partly or Wholly Concentrated;04.04
 Whips;66.02
 Whisky;22.08
 Whistles;92.08
 White Chocolate;17.04
-Whiting;See Fish
+Whiting;Chapter 3
 Whiting (Chalk);25.09
 Wicks, Sulphur-Treated;38.08
 Wicks, Textile;59.08
@@ -6685,3 +6682,14 @@ Zirconates;28.41
 Ziconium;81.09
 Zirconium Ores and Concentrates;26.15
 Zoo Animals;01.06
+PC;84.71
+Laptop;81.71
+LCD TV;85.17
+LED TV;81.17
+Skateboard;95.06
+Mobile phone;85.17
+Tablet PC;84.71
+Trainers;Chapter 64
+Classic car; 97.05
+Electronic cigarette;85.43
+e-book (Kindle);85.43
