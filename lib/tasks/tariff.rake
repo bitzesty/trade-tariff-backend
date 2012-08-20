@@ -1,4 +1,5 @@
 require 'tariff_synchronizer'
+require 'green_pages'
 
 namespace :tariff do
   desc 'Installs Trade Tariff, creates relevant records, imports national data'
@@ -9,9 +10,10 @@ namespace :tariff do
                    reindex]
 
   desc 'Reindex relevant entities on ElasticSearch'
-  task reindex: :environment do
+  task reindex: %w[environment
+                   install:green_pages] do
     ENV['FORCE'] = 'true'
-    ['Section','Chapter','Heading','Commodity'].each do |klass|
+    ['Section','Chapter','Heading','Commodity','SearchReference'].each do |klass|
       ENV['CLASS'] = klass
       Rake::Task['tire:import'].execute
     end
@@ -33,6 +35,11 @@ namespace :tariff do
   end
 
   namespace :install do
+    desc "Load Green Page (SearchReference) entities from reference file"
+    task green_pages: :environment do
+      GreenPages.reload
+    end
+
     namespace :taric do
       desc "Add Sections and associate to Chapters"
       task sections: :environment do

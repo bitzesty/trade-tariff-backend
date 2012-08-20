@@ -189,7 +189,7 @@ Sequel.migration do
       column :content, "text"
 
       index [:chapter_id]
-      index [:section_id]
+      index [:section_id], :name=>:section_id
     end
 
     create_table(:chapters_sections) do
@@ -588,7 +588,7 @@ Sequel.migration do
       column :updated_at, "datetime"
       column :national, "tinyint(1)"
 
-      index [:footnote_type_id], :name=>:primary_key
+      index [:footnote_type_id], :name=>:primary_key, :unique=>true
     end
 
     create_table(:footnotes) do
@@ -812,6 +812,8 @@ Sequel.migration do
       column :validity_end_date, "datetime"
       column :created_at, "datetime"
       column :updated_at, "datetime"
+
+      index [:language_id, :validity_start_date], :name=>:primary_key
     end
 
     create_table(:measure_action_descriptions) do
@@ -1501,13 +1503,20 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20120810104725_create_add_acronym_to_measure_types.rb")
     self[:schema_migrations].insert(:filename => "20120810105500_adjust_fields_for_chief.rb")
     self[:schema_migrations].insert(:filename => "20120810114211_add_national_to_certificate_description_periods.rb")
+    self[:schema_migrations].insert(:filename => "20120820074642_create_search_references.rb")
+
+    create_table(:search_references) do
+      primary_key :id, :type=>"int(11)"
+      column :title, "varchar(255)"
+      column :reference, "varchar(255)"
+    end
 
     create_table(:section_notes) do
       primary_key :id, :type=>"int(11)"
       column :section_id, "int(11)"
       column :content, "text"
 
-      index [:section_id]
+      index [:section_id], :name=>:section_id
     end
 
     create_table(:sections) do
@@ -1526,7 +1535,7 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
-      index [:comment_sid, :language_id], :name=>:primary_key
+      index [:comment_sid, :language_id], :name=>:primary_key, :unique=>true
     end
   end
 end

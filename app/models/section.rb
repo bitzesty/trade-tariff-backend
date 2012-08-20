@@ -43,12 +43,16 @@ class Section < Sequel::Model
     position
   end
 
-  def to_indexed_json
+  def serializable_hash
     {
       id: id,
       numeral: numeral,
       title: title,
       position: position
-    }.to_json
+    }
+  end
+
+  def to_indexed_json
+    serializable_hash.to_json
   end
 end

@@ -54,7 +54,7 @@ class Chapter < GoodsNomenclature
     sections.first
   end
 
-  def to_indexed_json
+  def serializable_hash
     {
       id: goods_nomenclature_sid,
       goods_nomenclature_item_id: goods_nomenclature_item_id,
@@ -67,7 +67,11 @@ class Chapter < GoodsNomenclature
         title: section.title,
         position: section.position
       },
-    }.to_json
+    }
+  end
+
+  def to_indexed_json
+    serializable_hash.to_json
   end
 
   def relevant_headings
