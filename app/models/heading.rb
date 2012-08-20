@@ -105,7 +105,7 @@ class Heading < GoodsNomenclature
   end
   alias :declarable? :declarable
 
-  def to_indexed_json
+  def serializable_hash
     {
       id: goods_nomenclature_sid,
       goods_nomenclature_item_id: goods_nomenclature_item_id,
@@ -127,6 +127,10 @@ class Heading < GoodsNomenclature
         validity_end_date: chapter.validity_end_date,
         description: chapter.description.downcase
       },
-    }.to_json
+    }
+  end
+
+  def to_indexed_json
+    serializable_hash.to_json
   end
 end

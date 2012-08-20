@@ -9,33 +9,94 @@ class SearchService
 
   class EmptyQuery < StandardError; end
 
-  module ExactSearch
-    def self.search(query_string)
-      case query_string
-      when /^[0-9]{1,3}$/
-        Chapter.actual.by_code(query_string).first
-      when /^[0-9]{4,9}$/
-        Heading.actual.by_code(query_string).first
-      when /^[0-9]{10}$/
-        Commodity.actual.by_code(query_string).declarable.first.presence ||
-        Heading.actual.by_declarable_code(query_string).declarable.first.presence
-      when /^[0-9]{11,12}$/
-        Commodity.actual.by_code(query_string).declarable.first
-      end
+  class BaseSearch
+    attr_reader :query_string, :results, :date
+
+    def initialize(query_string, date)
+      @query_string = query_string
+      @date = date
+    end
+
+    def present?
+      @results.present?
     end
   end
 
-  module FuzzySearch
-    def self.search(query_string, date)
+  class ExactSearch < BaseSearch
+    def search!
+      @results = case query_string
+                when /^[0-9]{1,3}$/
+                  Chapter.actual.by_code(query_string).first
+                when /^[0-9]{4,9}$/
+                  Heading.actual.by_code(query_string).first
+                when /^[0-9]{10}$/
+                  Commodity.actual.by_code(query_string).declarable.first.presence ||
+                  Heading.actual.by_declarable_code(query_string).declarable.first.presence
+                when /^[0-9]{11,12}$/
+                  Commodity.actual.by_code(query_string).declarable.first
+                end
+      self
+    end
+
+    def serializable_hash
       {
+        type: "exact_match",
+        entry: {
+          endpoint: results.class.name.parameterize("_").pluralize,
+          id: results.to_param
+        }
+      }
+    end
+  end
+
+  class ReferencedSearch < BaseSearch
+    def search!
+      @results = Tire.search('search_references', { query: {
+                                         term: {
+                                           title: query_string
+                                         }
+                                       },
+                                       size: INDEX_SIZE_MAX
+                                     }
+                             ).results
+      self
+    end
+
+    def serializable_hash
+      {
+        type: "referenced_match",
+        entries: {
+          sections: results.map{|r| r.reference['class'] == 'Section' },
+          chapters: results.map{|r| r.reference['class'] == 'Chapter' },
+          headings: results.map{|r| r.reference['class'] == 'Heading' },
+          commodities: []
+        }
+      }
+    end
+  end
+
+  class FuzzySearch < BaseSearch
+    def search!
+      @results = {
         sections: results_for('sections', query_string, date, query_string: { fields: ["title"] }),
         chapters: results_for('chapters', query_string, date),
         headings: results_for('headings', query_string, date),
         commodities: results_for('commodities', query_string, date)
       }
+
+      self
     end
 
-    def self.results_for(index, query_string, date, query_opts = {})
+    def serializable_hash
+      {
+        type: "fuzzy_match",
+        entries: results
+      }
+    end
+
+    private
+
+    def results_for(index, query_string, date, query_opts = {})
       Tire.search(index, { query: {
                              query_string: {
                                query: query_string,
@@ -65,10 +126,12 @@ class SearchService
   end
 
   attr_accessor :q
-  attr_reader :results, :as_of
+  attr_reader :result, :as_of
 
   validates :q, presence: true
   validates :as_of, presence: true
+
+  delegate :serializable_hash, to: :result
 
   def initialize(attributes = {})
     attributes.each do |name, value|
@@ -86,26 +149,8 @@ class SearchService
              end
   end
 
-  def exact_match
-    @results.present? && @results.is_a?(GoodsNomenclature)
-  end
-  alias :exact_match? :exact_match
-
-  def serializable_hash
-    if exact_match?
-      {
-        type: "exact_match",
-        entry: {
-          endpoint: @results.class.name.parameterize("_").pluralize,
-          id: @results.to_param
-        }
-      }
-    else
-      {
-        type: "fuzzy_match",
-        entries: @results
-      }
-    end
+  def exact_match?
+    result.is_a?(ExactSearch)
   end
 
   def to_json(config = {})
@@ -125,14 +170,8 @@ class SearchService
   private
 
   def perform
-    @results = ExactSearch.search(q).presence || FuzzySearch.search(q, as_of)
-
-    # sm = SearchMetric.where(q: q, q_on: Date.today).first
-    # if sm
-    #   sm.inc(:count, 1)
-    # else
-    #   SearchMetric.create(q: q, q_on: Date.today, results: search.total_entries)
-    # end
+    @result = ExactSearch.new(q, as_of).search!.presence ||
+              ReferencedSearch.new(q, as_of).search!.presence ||
+              FuzzySearch.new(q, as_of).search!.presence
   end
-
 end
