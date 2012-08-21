@@ -11,11 +11,11 @@ gem "talentbox-sequel-rails", git: "git://github.com/alphagov/sequel-rails.git",
 gem "tire"
 
 gem "builder"
-gem "jquery-rails", "~> 1.0.19"
+gem "jquery-rails", "1.0.19"
 gem "railties"
 
 gem "airbrake"
-gem "unicorn", "~> 4.3.1"
+gem "unicorn", "4.3.1"
 gem "curb"
 
 gem "whenever", "0.7.3"
@@ -37,7 +37,7 @@ group :development do
 end
 
 group :test do
-  gem "brakeman", "~> 1.7.0"
+  gem "brakeman", "1.7.0"
   gem "ci_reporter"
   gem "factory_girl_rails"
   gem "forgery"
@@ -52,5 +52,5 @@ group :test do
 end
 
 group :router do
-  gem "router-client", "~> 3.0.1", :require => "router"
+  gem "router-client", "3.0.1", :require => "router"
 end
