@@ -7,3 +7,7 @@ end
 every 1.day, at: '5am' do
   rake "tariff:sync:apply"
 end
+
+every 1.day, at: '6am' do
+  rake "tariff:reindex"
+end
