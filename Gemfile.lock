@@ -172,7 +172,7 @@ GEM
       json (~> 1.4)
     rest-client (1.6.7)
       mime-types (>= 1.16)
-    router-client (3.0.2)
+    router-client (3.0.1)
       activesupport
       builder
       null_logger
@@ -276,7 +276,7 @@ DEPENDENCIES
   rabl
   rails (= 3.2.8)
   railties
-  router-client (~> 3.0.1)
+  router-client (= 3.0.1)
   rspec-rails
   sass-rails
   sequel
