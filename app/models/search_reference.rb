@@ -14,6 +14,7 @@ class SearchReference < Sequel::Model
     end
   end
 
+
   def referenced_entity
     @referenced_entity ||= case reference
                            when HEADING_IDENTITY_REGEX
@@ -28,9 +29,17 @@ class SearchReference < Sequel::Model
   end
 
   def to_indexed_json
-    {
-      title: title,
-      reference: referenced_entity.serializable_hash.merge({class: referenced_entity.class.name})
-    }.to_json unless referenced_entity.blank?
+    # Cannot return nil from #to_indexed_json because ElasticSearch does not like that.
+    # It will eat all memory and timeout indexing requests.
+    result = if referenced_entity.blank?
+               {}
+             else
+               {
+                 title: title,
+                 reference: referenced_entity.serializable_hash.merge({class: referenced_entity.class.name})
+               }
+             end
+
+    result.to_json
   end
 end

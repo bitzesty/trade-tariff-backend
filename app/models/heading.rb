@@ -126,7 +126,7 @@ class Heading < GoodsNomenclature
         validity_start_date: chapter.validity_start_date,
         validity_end_date: chapter.validity_end_date,
         description: chapter.description.downcase
-      },
+      }
     }
   end
 

@@ -66,7 +66,7 @@ class Chapter < GoodsNomenclature
         numeral: section.numeral,
         title: section.title,
         position: section.position
-      },
+      }
     }
   end
 

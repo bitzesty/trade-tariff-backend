@@ -66,9 +66,9 @@ class SearchService
       {
         type: "referenced_match",
         entries: {
-          sections: results.map{|r| r.reference['class'] == 'Section' },
-          chapters: results.map{|r| r.reference['class'] == 'Chapter' },
-          headings: results.map{|r| r.reference['class'] == 'Heading' },
+          sections: results.select{|r| r.reference['class'] == 'Section' },
+          chapters: results.select{|r| r.reference['class'] == 'Chapter' },
+          headings: results.select{|r| r.reference['class'] == 'Heading' },
           commodities: []
         }
       }
