@@ -44,7 +44,7 @@ GEM
       builder
     arel (3.0.2)
     bootstrap-sass (2.0.4.0)
-    brakeman (1.7.1)
+    brakeman (1.7.0)
       activesupport
       erubis (~> 2.6)
       fastercsv (~> 1.5)
@@ -259,7 +259,7 @@ PLATFORMS
 DEPENDENCIES
   airbrake
   bootstrap-sass
-  brakeman (~> 1.7.0)
+  brakeman (= 1.7.0)
   builder
   capistrano
   ci_reporter
@@ -267,7 +267,7 @@ DEPENDENCIES
   factory_girl_rails
   forgery
   guard-rspec
-  jquery-rails (~> 1.0.19)
+  jquery-rails (= 1.0.19)
   json_expressions
   mocha
   mysql2
@@ -288,7 +288,7 @@ DEPENDENCIES
   therubyracer
   tire
   uglifier
-  unicorn (~> 4.3.1)
+  unicorn (= 4.3.1)
   vcr
   webmock
-  whenever
+  whenever (= 0.7.3)
