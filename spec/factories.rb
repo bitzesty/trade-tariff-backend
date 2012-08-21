@@ -197,4 +197,9 @@ FactoryGirl.define do
     validity_start_date { Date.today.ago(3.years) }
     validity_end_date   { nil }
   end
+
+  factory :search_reference do
+    title { Forgery(:basic).text }
+    reference { Forgery(:basic).text }
+  end
 end
