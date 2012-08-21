@@ -1,5 +1,8 @@
 ENV["RAILS_ENV"] ||= 'test'
 
+require 'webmock/rspec'
+WebMock.allow_net_connect!
+
 require 'simplecov'
 require 'simplecov-rcov'
 
