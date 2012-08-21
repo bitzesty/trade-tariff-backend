@@ -18,7 +18,7 @@ gem 'airbrake'
 gem 'unicorn', '~> 4.3.1'
 gem 'curb'
 
-gem 'whenever'
+gem 'whenever', '0.7.3'
 
 gem 'tariff_importer', '~> 0.0.5'
 
