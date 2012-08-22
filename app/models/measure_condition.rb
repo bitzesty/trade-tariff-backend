@@ -95,7 +95,7 @@ class MeasureCondition < Sequel::Model
                             .eager(:measurement_unit_qualifier_description)
                             .where(measurement_unit_qualifier_code: id_map.keys)
                             .all do |measurement_unit_qualifier|
-      if measure_conditions = id_map[monetary_unit.monetary_unit_code]
+      if measure_conditions = id_map[measurement_unit_qualifier.measurement_unit_qualifier_code]
         measure_conditions.each do |measure_condition|
           measure_condition.associations[:measurement_unit_qualifier] = measurement_unit_qualifier
         end
