@@ -10,7 +10,7 @@ class SearchReference < Sequel::Model
     document_type 'search_reference'
 
     mapping do
-      indexes :title,        analyzer: :stop
+      indexes :title,        analyzer: :simple
     end
   end
 
