@@ -7,7 +7,7 @@ gem "mysql2"
 gem "oj"
 gem "rabl"
 gem "sequel"
-gem "talentbox-sequel-rails", git: "git://github.com/alphagov/sequel-rails.git", branch: "production"
+gem "talentbox-sequel-rails", git: "https://github.com/alphagov/sequel-rails.git", branch: "production"
 gem "tire"
 
 gem "builder"
