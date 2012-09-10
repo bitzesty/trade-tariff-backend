@@ -1,3 +1,5 @@
+# TODO: This file probably doesn't have a reason to exist
+
 require 'router'
 require 'logger'
 
