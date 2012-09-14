@@ -2,10 +2,10 @@
 http_interactions:
 - request:
     method: get
-    uri: http://localhost:9200/search_references/_search?payload%5Bquery%5D%5Bterm%5D%5Btitle%5D=Horse-Radish&payload%5Bsize%5D=1000000
+    uri: http://localhost:9200/search_references/_search?payload%5Bquery%5D%5Bterm%5D%5Btitle%5D=horse-radish&payload%5Bsize%5D=1000000
     body:
       encoding: US-ASCII
-      string: ! '{"query":{"term":{"title":"Horse-Radish"}},"size":1000000}'
+      string: ! '{"query":{"term":{"title":"horse-radish"}},"size":1000000}'
     headers:
       accept:
       - ! '*/*; q=0.5, application/xml'

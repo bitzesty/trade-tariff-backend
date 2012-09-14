@@ -25,7 +25,7 @@ class GreenPages
   private
 
   def self.create_record(title, reference)
-    SearchReference.create(title: title, reference: reference)
+    SearchReference.create(title: title.downcase, reference: reference)
   end
 
   def self.references_multiple_records?(reference)
