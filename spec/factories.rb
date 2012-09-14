@@ -188,6 +188,7 @@ FactoryGirl.define do
   end
 
   factory :measure_type do
+    measure_type_id     { generate(:sid) }
     validity_start_date { Date.today.ago(3.years) }
     validity_end_date   { nil }
   end

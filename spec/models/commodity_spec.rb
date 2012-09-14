@@ -20,6 +20,30 @@ describe Commodity do
         commodity.measures.map(&:measure_sid).should_not include measure.measure_sid
       end
     end
+
+    describe 'measure duplication' do
+      # sometimes measures have the same base regulation id and
+      # validity_start date
+      # need to group and choose the latest one
+      let(:measure_type) { create :measure_type }
+      let(:commodity)    { create :commodity, :with_indent }
+      let(:measure1)     { create :measure, :with_base_regulation,
+                                             measure_sid: 1,
+                                             measure_type_id: measure_type.measure_type_id,
+                                             goods_nomenclature_sid: commodity.goods_nomenclature_sid  }
+      let(:measure2)     { create :measure,  measure_sid: 2,
+                                             measure_generating_regulation_id: measure1.measure_generating_regulation_id,
+                                             measure_type_id: measure_type.measure_type_id,
+                                             goods_nomenclature_sid: commodity.goods_nomenclature_sid  }
+
+      it 'groups measures by measure_generating_regulation_id and picks latest one' do
+        measure1
+        measure2
+
+        commodity.measures.map(&:measure_sid).should     include measure2.measure_sid
+        commodity.measures.map(&:measure_sid).should_not include measure1.measure_sid
+      end
+    end
   end
 
   describe '#to_param' do
