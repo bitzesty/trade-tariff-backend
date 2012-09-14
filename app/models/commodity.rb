@@ -26,6 +26,7 @@ class Commodity < GoodsNomenclature
     .group(:measures__measure_generating_regulation_id,
            :measures__geographical_area_sid,
            :measures__additional_code_sid)
+    .order(:geographical_area.asc)
   }
 
   one_to_many :import_measures, dataset: -> {
