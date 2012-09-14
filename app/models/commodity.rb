@@ -23,7 +23,9 @@ class Commodity < GoodsNomenclature
       alias: :measures
     )
     .with_actual(Measure)
-    .group(:measures__measure_generating_regulation_id, :measures__geographical_area_sid)
+    .group(:measures__measure_generating_regulation_id,
+           :measures__geographical_area_sid,
+           :measures__additional_code_sid)
   }
 
   one_to_many :import_measures, dataset: -> {
@@ -92,7 +94,8 @@ class Commodity < GoodsNomenclature
   end
 
   def uptree
-    @_uptree ||= [ancestors, heading, chapter, self].flatten.compact
+    # @_uptree ||= [ancestors, heading, chapter, self].flatten.compact
+    @_uptree ||= [heading, chapter, self].flatten.compact
   end
 
   def children
