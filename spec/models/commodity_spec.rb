@@ -40,8 +40,8 @@ describe Commodity do
         measure1
         measure2
 
-        commodity.measures.map(&:measure_sid).should     include measure2.measure_sid
-        commodity.measures.map(&:measure_sid).should_not include measure1.measure_sid
+        commodity.measures.map(&:measure_sid).should     include measure1.measure_sid
+        commodity.measures.map(&:measure_sid).should_not include measure2.measure_sid
       end
     end
   end

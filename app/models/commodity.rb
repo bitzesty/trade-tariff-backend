@@ -13,27 +13,27 @@ class Commodity < GoodsNomenclature
            .with_actual(BaseRegulation)
            .where(measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid))
            .where{ ~{measures__measure_type: MeasureType::EXCLUDED_TYPES} }
-           .order(:measures__measure_sid.desc)
+           .order(:measures__measure_sid.asc)
     .union(
       Measure.with_modification_regulations
              .with_actual(ModificationRegulation)
              .where(measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid))
              .where{ ~{measures__measure_type: MeasureType::EXCLUDED_TYPES} }
-             .order(:measures__measure_sid.desc),
+             .order(:measures__measure_sid.asc),
       alias: :measures
     )
     .with_actual(Measure)
-    .group(:measures__measure_generating_regulation_id)
+    .group(:measures__measure_generating_regulation_id, :measures__geographical_area_sid)
   }
 
   one_to_many :import_measures, dataset: -> {
     measures_dataset.join(:measure_types, measure_type_id: :measure_type)
-                    .filter{ { measure_types__trade_movement_code: MeasureType::IMPORT_MOVEMENT_CODES } | { measures__export: nil, measures__national: nil } }
+                    .filter{ { measure_types__trade_movement_code: MeasureType::IMPORT_MOVEMENT_CODES } }
   }, class_name: 'Measure'
 
   one_to_many :export_measures, dataset: -> {
     measures_dataset.join(:measure_types, measure_type_id: :measure_type)
-                    .filter{ { measure_types__trade_movement_code: MeasureType::EXPORT_MOVEMENT_CODES } | { measures__export: true, measures__national: true } }
+                    .filter{ { measure_types__trade_movement_code: MeasureType::EXPORT_MOVEMENT_CODES } }
   }, class_name: 'Measure'
 
   one_to_one :heading, dataset: -> {
