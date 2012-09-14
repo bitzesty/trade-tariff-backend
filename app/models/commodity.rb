@@ -76,18 +76,20 @@ class Commodity < GoodsNomenclature
 
   def ancestors
     Commodity.actual
+             .with_actual(GoodsNomenclatureIndent)
              .select(:goods_nomenclatures.*)
       .join_table(:inner, :goods_nomenclature_indents, goods_nomenclatures__goods_nomenclature_sid: :goods_nomenclature_indents__goods_nomenclature_sid)
       .join_table(:inner,
         Commodity.actual
                  .select(:goods_nomenclature_indents__number_indents___indents,
-                         Sequel.as(:max.sql_function(:goods_nomenclatures__goods_nomenclature_item_id), :max_gono))
-                 .join(:goods_nomenclature_indents, goods_nomenclature_sid: :goods_nomenclature_sid)
+                         Sequel.as(:goods_nomenclatures__goods_nomenclature_item_id, :max_gono))
+                 .join(:goods_nomenclature_indents, goods_nomenclature_indents__goods_nomenclature_sid: :goods_nomenclatures__goods_nomenclature_sid)
                  .where("goods_nomenclature_indents.validity_start_date <= ? AND (goods_nomenclature_indents.validity_end_date >= ? OR goods_nomenclature_indents.validity_end_date IS NULL)", point_in_time, point_in_time, point_in_time)
                  .where("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
                  .where("goods_nomenclatures.goods_nomenclature_item_id <= ?", goods_nomenclature_item_id)
                  .where("goods_nomenclature_indents.number_indents < ?", goods_nomenclature_indent.number_indents)
-                 .group(:goods_nomenclature_indents__number_indents),
+                 .group(:goods_nomenclatures__goods_nomenclature_item_id)
+                 .order(:goods_nomenclatures__validity_start_date.desc),
         { t1__indents: :goods_nomenclature_indents__number_indents,
           t1__max_gono: :goods_nomenclatures__goods_nomenclature_item_id }
       )

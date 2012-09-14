@@ -10,11 +10,14 @@ class GoodsNomenclature < Sequel::Model
 
   one_to_one :goods_nomenclature_indent, dataset: -> {
     actual(GoodsNomenclatureIndent).filter(goods_nomenclature_sid: goods_nomenclature_sid)
+                                   .order(:validity_start_date.desc)
   }, eager_loader: (proc do |eo|
     eo[:rows].each{|gono| gono.associations[:goods_nomenclature_indent] = nil}
 
     id_map = eo[:id_map]
-    GoodsNomenclatureIndent.actual.where(goods_nomenclature_sid: id_map.keys).all do |indent|
+    GoodsNomenclatureIndent.actual
+                           .order(:validity_start_date.desc)
+                           .where(goods_nomenclature_sid: id_map.keys).all do |indent|
       if gonos = id_map[indent.goods_nomenclature_sid]
         gonos.each do |gono|
           gono.associations[:goods_nomenclature_indent] = indent
