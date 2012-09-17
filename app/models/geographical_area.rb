@@ -62,13 +62,24 @@ class GeographicalArea < Sequel::Model
     actual(Measure).where(geographical_area_sid: geographical_area_sid)
   }
 
+
+  dataset_module do
+    def by_id(id)
+      where(geographical_area_id: id)
+    end
+
+    def latest
+      order(:created_at.desc)
+    end
+  end
+
   delegate :description, to: :geographical_area_description
 
   # TODO
   def validate
     super
     # GA1
-    validates_unique([:geographical_area_id, :validates_start_date])
+    validates_unique([:geographical_area_id, :validity_start_date])
     # GA2
     validates_start_date
   end

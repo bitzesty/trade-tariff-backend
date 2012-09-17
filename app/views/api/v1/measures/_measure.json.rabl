@@ -1,10 +1,10 @@
 attributes :origin, :ordernumber
 
 node(:measure_type_description) { |obj|
-  obj.measure_type.description
+  obj.measure_type.try(:description)
 }
 
-node(:legal_act, if: ->(measure) { measure.generating_regulation_present? }) do |obj|
+node(:legal_act, if: ->(measure) { !measure.national && measure.generating_regulation_present? }) do |obj|
   {
     generating_regulation_code: obj.generating_regulation_code,
     url: obj.generating_regulation_url

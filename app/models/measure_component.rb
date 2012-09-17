@@ -1,5 +1,6 @@
 class MeasureComponent < Sequel::Model
   plugin :time_machine
+  plugin :timestamps
 
   set_primary_key :measure_sid, :duty_expression_id
 

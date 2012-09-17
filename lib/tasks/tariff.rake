@@ -7,6 +7,8 @@ namespace :tariff do
                    install:taric:sections
                    install:taric:section_notes
                    install:taric:chapter_notes
+                   install:chief:static_national_data
+                   install:chief:standing_data
                    reindex]
 
   desc 'Reindex relevant entities on ElasticSearch'
@@ -85,12 +87,18 @@ namespace :tariff do
           end
         end
       end
+
+      desc "Load Chief Standing data used for Transformation"
+      task standing_data: :environment do
+        load(File.join(Rails.root, 'db', 'chief_standing_data.rb'))
+      end
     end
   end
 
   desc 'Removes additional Trade Tariff entries'
   task remove: %w[environment
                   remove:taric:sections
+                  remove:chief:standing_data
                   remove:chief:static_national_data]
 
   namespace :remove do
@@ -109,6 +117,14 @@ namespace :tariff do
           File.readlines(Rails.root.join('db', 'chief', 'static_national_data_delete.sql')).each do |line|
             Sequel::Model.db.run(line)
           end
+        end
+      end
+
+      desc "Remove CHIEF standing data"
+      task standing_data: :environment do
+        [Chief::CountryCode, Chief::CountryGroup, Chief::MeasureTypeAdco, Chief::DutyExpression,
+         Chief::MeasureTypeCond, Chief::MeasureTypeFootnote, Chief::MeasurementUnit].each do |chief_model|
+          chief_model.truncate
         end
       end
     end

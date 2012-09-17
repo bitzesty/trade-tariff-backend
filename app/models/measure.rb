@@ -1,9 +1,8 @@
 class Measure < Sequel::Model
+  set_primary_key :measure_sid
   plugin :time_machine, period_start_column: :measures__validity_start_date,
                         period_end_column: :effective_end_date
-
-  set_primary_key :measure_sid
-
+  plugin :national
   # rename to Declarable
   many_to_one :goods_nomenclature, key: :goods_nomenclature_sid,
                                    foreign_key: :goods_nomenclature_sid
@@ -50,7 +49,7 @@ class Measure < Sequel::Model
     end
   end)
 
-  one_to_one :geographical_area, eager_loader_key: :geographical_area_sid, dataset: -> {
+  one_to_one :geographical_area, key: :geographical_area_sid, eager_loader_key: :geographical_area_sid, dataset: -> {
     actual(GeographicalArea).where(geographical_area_sid: geographical_area_sid)
   }, eager_loader: (proc do |eo|
     eo[:rows].each{|measure| measure.associations[:geographical_area] = nil}
@@ -99,6 +98,8 @@ class Measure < Sequel::Model
     end
   end)
 
+  one_to_many :footnote_association_measures, key: :measure_sid, primary_key: :measure_sid
+
   one_to_many :measure_components, key: :measure_sid, dataset: -> {
     MeasureComponent.where(measure_sid: measure_sid)
   }, eager_loader: (proc do |eo|
@@ -119,7 +120,7 @@ class Measure < Sequel::Model
     end
   end)
 
-  one_to_one :additional_code, key: :additional_code_sid, eager_loader_key: :additional_code_sid,
+  many_to_one :additional_code, key: :additional_code_sid, eager_loader_key: :additional_code_sid,
     dataset: -> {
       actual(AdditionalCode).where(additional_code_sid: additional_code_sid)
     }, eager_loader: (proc do |eo|
@@ -158,14 +159,15 @@ class Measure < Sequel::Model
 
   def_column_alias :measure_type_id, :measure_type
   def_column_alias :additional_code_id, :additional_code
+  def_column_alias :geographical_area_id, :geographical_area
 
   ######### Conformance validations 430
   def validate
     super
     # ME2 ME4 ME6 ME24
-    validates_presence([:measure_type, :geographical_area, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role])
-    # ME1 
-    validates_unique([:measure_type, :geographical_area, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date])
+    # validates_presence([:measure_type, :geographical_area, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role])
+    # ME1
+    # validates_unique([:measure_type, :geographical_area, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date])
     # ME25
     validates_start_date
     # TODO:
@@ -209,15 +211,19 @@ class Measure < Sequel::Model
   end
 
   def origin
-    "eu"
+    if measure_sid >= 0
+      "eu"
+    else
+      "uk"
+    end
   end
 
   def import
-    measure_type.trade_movement_code.in? MeasureType::IMPORT_MOVEMENT_CODES
+    measure_type.present? && measure_type.trade_movement_code.in?(MeasureType::IMPORT_MOVEMENT_CODES) || self[:export].blank?
   end
 
   def export
-    measure_type.trade_movement_code.in? MeasureType::EXPORT_MOVEMENT_CODES
+    (measure_type.present? && measure_type.trade_movement_code.in?(MeasureType::EXPORT_MOVEMENT_CODES)) || self[:export]
   end
 end
 

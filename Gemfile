@@ -4,10 +4,10 @@ source "https://gems.gemfury.com/vo6ZrmjBQu5szyywDszE/"
 gem "rails", "3.2.8"
 
 gem "mysql2"
-gem "oj"
+gem "yajl-ruby"
 gem "rabl"
 gem "sequel"
-gem "talentbox-sequel-rails", git: "https://github.com/alphagov/sequel-rails.git", branch: "production"
+gem "bitzesty-sequel-rails", git: "https://github.com/bitzesty/sequel-rails.git", branch: "bitzesty"
 gem "tire"
 
 gem "builder"
@@ -18,9 +18,9 @@ gem "airbrake"
 gem "unicorn", "4.3.1"
 gem "curb"
 
-gem "whenever", "0.7.3"
+gem "nokogiri", "1.5.4"
 
-gem "tariff_importer", "~> 0.0.5"
+gem "whenever", "0.7.3"
 
 gem "pry-rails"
 

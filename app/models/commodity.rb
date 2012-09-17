@@ -23,20 +23,22 @@ class Commodity < GoodsNomenclature
       alias: :measures
     )
     .with_actual(Measure)
-    .group(:measures__measure_generating_regulation_id,
+    .order(:measures__geographical_area.asc,
+           :measures__validity_start_date.desc,
+           :measures__validity_end_date.desc)
+    .group(:measures__measure_type,
            :measures__geographical_area_sid,
-           :measures__additional_code_sid)
-    .order(:geographical_area.asc)
+           :measure_generating_regulation_id)
   }
 
   one_to_many :import_measures, dataset: -> {
     measures_dataset.join(:measure_types, measure_type_id: :measure_type)
-                    .filter{ { measure_types__trade_movement_code: MeasureType::IMPORT_MOVEMENT_CODES } }
+                    .filter{ { measure_types__trade_movement_code: MeasureType::IMPORT_MOVEMENT_CODES } | { measures__export: nil, measures__national: nil } }
   }, class_name: 'Measure'
 
   one_to_many :export_measures, dataset: -> {
     measures_dataset.join(:measure_types, measure_type_id: :measure_type)
-                    .filter{ { measure_types__trade_movement_code: MeasureType::EXPORT_MOVEMENT_CODES } }
+                    .filter{ { measure_types__trade_movement_code: MeasureType::EXPORT_MOVEMENT_CODES } | { measures__export: true, measures__national: true } }
   }, class_name: 'Measure'
 
   one_to_one :heading, dataset: -> {
@@ -75,26 +77,28 @@ class Commodity < GoodsNomenclature
   end
 
   def ancestors
-    Commodity.actual
-             .with_actual(GoodsNomenclatureIndent)
-             .select(:goods_nomenclatures.*)
-      .join_table(:inner, :goods_nomenclature_indents, goods_nomenclatures__goods_nomenclature_sid: :goods_nomenclature_indents__goods_nomenclature_sid)
+    Commodity.select(:goods_nomenclatures.*)
       .join_table(:inner,
-        Commodity.actual
-                 .select(:goods_nomenclature_indents__number_indents___indents,
-                         Sequel.as(:goods_nomenclatures__goods_nomenclature_item_id, :max_gono))
-                 .join(:goods_nomenclature_indents, goods_nomenclature_indents__goods_nomenclature_sid: :goods_nomenclatures__goods_nomenclature_sid)
-                 .where("goods_nomenclature_indents.validity_start_date <= ? AND (goods_nomenclature_indents.validity_end_date >= ? OR goods_nomenclature_indents.validity_end_date IS NULL)", point_in_time, point_in_time, point_in_time)
-                 .where("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
-                 .where("goods_nomenclatures.goods_nomenclature_item_id <= ?", goods_nomenclature_item_id)
+        GoodsNomenclatureIndent
+                 .select(Sequel.as(:goods_nomenclatures__goods_nomenclature_sid, :gono_sid),
+                         Sequel.as(:max.sql_function(:goods_nomenclatures__goods_nomenclature_item_id), :max_gono),
+                         :goods_nomenclature_indents__number_indents)
+                 .with_actual(GoodsNomenclature)
+                 .join(:goods_nomenclatures, goods_nomenclature_indents__goods_nomenclature_sid: :goods_nomenclatures__goods_nomenclature_sid)
+                 .where("goods_nomenclature_indents.goods_nomenclature_item_id LIKE ?", heading_id)
+                 .where("goods_nomenclature_indents.goods_nomenclature_item_id <= ?", goods_nomenclature_item_id)
                  .where("goods_nomenclature_indents.number_indents < ?", goods_nomenclature_indent.number_indents)
-                 .group(:goods_nomenclatures__goods_nomenclature_item_id)
-                 .order(:goods_nomenclatures__validity_start_date.desc),
-        { t1__indents: :goods_nomenclature_indents__number_indents,
-          t1__max_gono: :goods_nomenclatures__goods_nomenclature_item_id }
-      )
-      .group(:goods_nomenclature_indents__number_indents)
+                 .order(:goods_nomenclature_indents__validity_start_date.desc,
+                        :goods_nomenclature_indents__goods_nomenclature_item_id.desc)
+                 .group(:goods_nomenclature_indents__goods_nomenclature_sid),
+        { t1__gono_sid: :goods_nomenclatures__goods_nomenclature_sid,
+          t1__max_gono: :goods_nomenclatures__goods_nomenclature_item_id })
+      .order(:goods_nomenclatures__goods_nomenclature_item_id.desc)
       .all
+      .group_by(&:number_indents)
+      .map(&:last)
+      .map(&:first)
+      .reverse
   end
 
   def uptree

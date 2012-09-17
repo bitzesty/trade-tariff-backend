@@ -1,4 +1,4 @@
-require 'csv'    
+require 'csv'
 
 CSV.foreach("#{Rails.root}/db/chief/chief_country_code.csv", :headers => true) do |row|
   Chief::CountryCode.insert(row.to_hash.delete_if{|k,v| v == 'nil'})

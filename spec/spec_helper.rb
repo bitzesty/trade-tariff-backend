@@ -27,6 +27,7 @@ RSpec.configure do |config|
                                                     example_group: { file_path: /spec\/api/ }
   config.include SynchronizerHelper
   config.include RescueHelper
+  config.include ChiefStandingDataHelper
 
   config.include FactoryGirl::Syntax::Methods
 

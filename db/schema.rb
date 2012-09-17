@@ -189,7 +189,7 @@ Sequel.migration do
       column :content, "text"
 
       index [:chapter_id]
-      index [:section_id], :name=>:section_id
+      index [:section_id]
     end
 
     create_table(:chapters_sections) do
@@ -216,10 +216,10 @@ Sequel.migration do
 
     create_table(:chief_duty_expression) do
       primary_key :id, :type=>"int(11)"
-      column :adval1_rate, "int(11)"
-      column :adval2_rate, "int(11)"
-      column :spfc1_rate, "int(11)"
-      column :spfc2_rate, "int(11)"
+      column :adval1_rate, "tinyint(1)"
+      column :adval2_rate, "tinyint(1)"
+      column :spfc1_rate, "tinyint(1)"
+      column :spfc2_rate, "tinyint(1)"
       column :duty_expression_id_spfc1, "varchar(2)"
       column :monetary_unit_code_spfc1, "varchar(3)"
       column :duty_expression_id_spfc2, "varchar(2)"
@@ -267,9 +267,9 @@ Sequel.migration do
 
     create_table(:chief_mfcm) do
       column :fe_tsmp, "datetime"
-      column :msrgp_code, "varchar(255)"
-      column :msr_type, "varchar(255)"
-      column :tty_code, "varchar(255)"
+      column :msrgp_code, "varchar(5)"
+      column :msr_type, "varchar(5)"
+      column :tty_code, "varchar(5)"
       column :le_tsmp, "datetime"
       column :audit_tsmp, "datetime"
       column :cmdty_code, "varchar(255)"
@@ -278,20 +278,23 @@ Sequel.migration do
       column :exports_use_ind, "tinyint(1)"
       column :tar_msr_no, "varchar(255)"
       column :transformed, "tinyint(1)", :default=>false
+      column :amend_indicator, "varchar(1)"
+
+      index [:msrgp_code]
     end
 
     create_table(:chief_tame) do
       column :fe_tsmp, "datetime"
-      column :msrgp_code, "varchar(255)"
-      column :msr_type, "varchar(255)"
-      column :tty_code, "varchar(255)"
+      column :msrgp_code, "varchar(5)"
+      column :msr_type, "varchar(5)"
+      column :tty_code, "varchar(5)"
       column :tar_msr_no, "varchar(255)"
       column :le_tsmp, "datetime"
-      column :adval_rate, "decimal(3,3)"
-      column :alch_sgth, "decimal(3,2)"
+      column :adval_rate, "decimal(8,3)"
+      column :alch_sgth, "decimal(8,3)"
       column :audit_tsmp, "datetime"
       column :cap_ai_stmt, "varchar(255)"
-      column :cap_max_pct, "decimal(3,3)"
+      column :cap_max_pct, "decimal(8,3)"
       column :cmdty_msr_xhdg, "varchar(255)"
       column :comp_mthd, "varchar(255)"
       column :cpc_wvr_phb, "varchar(255)"
@@ -315,17 +318,20 @@ Sequel.migration do
       column :tdr_spr_sur, "varchar(255)"
       column :exports_use_ind, "tinyint(1)"
       column :transformed, "tinyint(1)", :default=>false
+      column :amend_indicator, "varchar(1)"
+
+      index [:msrgp_code, :msr_type, :tty_code]
     end
 
     create_table(:chief_tamf) do
       column :fe_tsmp, "datetime"
-      column :msrgp_code, "varchar(255)"
-      column :msr_type, "varchar(255)"
-      column :tty_code, "varchar(255)"
+      column :msrgp_code, "varchar(5)"
+      column :msr_type, "varchar(5)"
+      column :tty_code, "varchar(5)"
       column :tar_msr_no, "varchar(255)"
       column :le_tsmp, "datetime"
-      column :adval1_rate, "decimal(3,3)"
-      column :adval2_rate, "decimal(3,3)"
+      column :adval1_rate, "decimal(8,3)"
+      column :adval2_rate, "decimal(8,3)"
       column :ai_factor, "varchar(255)"
       column :cmdty_dmql, "decimal(8,3)"
       column :cmdty_dmql_uoq, "varchar(255)"
@@ -347,6 +353,9 @@ Sequel.migration do
       column :tamf_sta, "varchar(255)"
       column :tamf_ty, "varchar(255)"
       column :transformed, "tinyint(1)", :default=>false
+      column :amend_indicator, "varchar(1)"
+
+      index [:msrgp_code, :msr_type, :tty_code]
     end
 
     create_table(:complete_abrogation_regulations) do
@@ -588,7 +597,7 @@ Sequel.migration do
       column :updated_at, "datetime"
       column :national, "tinyint(1)"
 
-      index [:footnote_type_id], :name=>:primary_key, :unique=>true
+      index [:footnote_type_id], :name=>:primary_key
     end
 
     create_table(:footnotes) do
@@ -812,8 +821,6 @@ Sequel.migration do
       column :validity_end_date, "datetime"
       column :created_at, "datetime"
       column :updated_at, "datetime"
-
-      index [:language_id, :validity_start_date], :name=>:primary_key
     end
 
     create_table(:measure_action_descriptions) do
@@ -1048,7 +1055,7 @@ Sequel.migration do
     end
 
     create_table(:measures) do
-      column :measure_sid, "int(11) unsigned"
+      column :measure_sid, "int(11)"
       column :measure_type, "varchar(3)"
       column :geographical_area, "varchar(255)"
       column :goods_nomenclature_item_id, "varchar(10)"
@@ -1069,6 +1076,8 @@ Sequel.migration do
       column :export_refund_nomenclature_sid, "int(11)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
+      column :national, "tinyint(1)"
+      column :export, "tinyint(1)"
 
       index [:additional_code_sid], :name=>:index_measures_on_additional_code_sid
       index [:geographical_area_sid], :name=>:index_measures_on_geographical_area_sid
@@ -1504,6 +1513,12 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20120810105500_adjust_fields_for_chief.rb")
     self[:schema_migrations].insert(:filename => "20120810114211_add_national_to_certificate_description_periods.rb")
     self[:schema_migrations].insert(:filename => "20120820074642_create_search_references.rb")
+    self[:schema_migrations].insert(:filename => "20120820181332_measure_sid_should_be_signed.rb")
+    self[:schema_migrations].insert(:filename => "20120821151733_add_amend_indicator_to_chief.rb")
+    self[:schema_migrations].insert(:filename => "20120823142700_change_decimals_in_chief.rb")
+    self[:schema_migrations].insert(:filename => "20120911111821_change_chief_duty_expressions_to_boolean.rb")
+    self[:schema_migrations].insert(:filename => "20120912143520_add_indexes_to_chief_records.rb")
+    self[:schema_migrations].insert(:filename => "20120913170136_add_national_to_measures.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"
@@ -1516,7 +1531,7 @@ Sequel.migration do
       column :section_id, "int(11)"
       column :content, "text"
 
-      index [:section_id], :name=>:section_id
+      index [:section_id]
     end
 
     create_table(:sections) do
@@ -1535,7 +1550,7 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
-      index [:comment_sid, :language_id], :name=>:primary_key, :unique=>true
+      index [:comment_sid, :language_id], :name=>:primary_key
     end
   end
 end

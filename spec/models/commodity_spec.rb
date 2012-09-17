@@ -44,6 +44,44 @@ describe Commodity do
         commodity.measures.map(&:measure_sid).should_not include measure2.measure_sid
       end
     end
+
+    describe 'measures for export' do
+      let(:export_measure_type) { create :measure_type, :export }
+      let(:commodity)           { create :commodity, :with_indent }
+      let(:export_measure)      { create :measure, :with_base_regulation,
+                                                   measure_type_id: export_measure_type.measure_type_id,
+                                                   goods_nomenclature_sid: commodity.goods_nomenclature_sid  }
+
+      let(:import_measure_type) { create :measure_type, :import }
+      let(:commodity)           { create :commodity, :with_indent }
+      let(:import_measure)      { create :measure, :with_base_regulation,
+                                                   measure_type_id: import_measure_type.measure_type_id,
+                                                   goods_nomenclature_sid: commodity.goods_nomenclature_sid  }
+
+      let(:regular_measure_type)         { create :measure_type }
+      let(:export_national_measure)      { create :measure, :with_base_regulation,
+                                                            export: true,
+                                                            national: true,
+                                                            measure_type_id: regular_measure_type.measure_type_id,
+                                                            goods_nomenclature_sid: commodity.goods_nomenclature_sid  }
+
+      it 'fetches measures that have measure type with proper trade movement code' do
+        export_measure_type
+        export_measure
+
+        import_measure_type
+        import_measure
+
+        commodity.export_measures.map(&:measure_sid).should     include export_measure.measure_sid
+        commodity.export_measures.map(&:measure_sid).should_not include import_measure.measure_sid
+      end
+
+      it 'fetches measures that have export set to true' do
+        export_national_measure
+
+        commodity.export_measures.map(&:measure_sid).should include export_national_measure.measure_sid
+      end
+    end
   end
 
   describe '#to_param' do

@@ -1,5 +1,6 @@
 class MeasureCondition < Sequel::Model
   plugin :time_machine
+  plugin :national
 
   set_primary_key :measure_condition_sid
 
@@ -143,6 +144,11 @@ class MeasureCondition < Sequel::Model
     end
   end)
 
+  def before_create
+    self.measure_condition_sid ||= self.class.next_national_sid
+
+    super
+  end
 
   def document_code
     "#{certificate_type_code}#{certificate_code}"
@@ -166,11 +172,11 @@ class MeasureCondition < Sequel::Model
   end
 
   def action
-    measure_action.description
+    measure_action.try(:description)
   end
 
   def condition
-    measure_condition_code.description
+    measure_condition_code.try(:description)
   end
 
   def components
