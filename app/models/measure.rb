@@ -193,6 +193,17 @@ class Measure < Sequel::Model
     measure_generating_regulation_id.present? && measure_generating_regulation_role.present?
   end
 
+  def measure_generating_regulation_id
+    result = self[:measure_generating_regulation_id]
+
+    case result
+    when "D9500019"
+      "D9601421"
+    else
+      result
+    end
+  end
+
   def generating_regulation_code
     "#{measure_generating_regulation_id.first}#{measure_generating_regulation_id[3..6]}/#{measure_generating_regulation_id[1..2]}"
   end
