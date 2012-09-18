@@ -15,7 +15,7 @@ describe Api::V1::HeadingsController, "GET #show" do
 
   context 'when record is present' do
     it 'returns rendered record' do
-      get :show, id: heading.to_param, format: :json
+      get :show, id: heading, format: :json
 
       response.body.should match_json_expression pattern
     end
