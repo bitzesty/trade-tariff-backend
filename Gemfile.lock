@@ -251,6 +251,7 @@ DEPENDENCIES
   jquery-rails (= 1.0.19)
   json_expressions
   mocha
+  multi_json
   mysql2
   nokogiri (= 1.5.4)
   nulogy-sequel-rails!
