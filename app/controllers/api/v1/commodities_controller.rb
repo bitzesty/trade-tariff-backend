@@ -17,6 +17,7 @@ module Api
                                                                             :measurement_unit_qualifier]},
                                                       {measure_conditions: [{measure_action: :measure_action_description},
                                                                             {certificate: :certificate_description},
+                                                                            {certificate_type: :certificate_type_description},
                                                                             {measurement_unit: :measurement_unit_description},
                                                                             :monetary_unit,
                                                                             :measurement_unit_qualifier,

@@ -27,9 +27,9 @@ class MeasureCondition < Sequel::Model
     end
   end)
 
-  many_to_one :certificate, eager_loader_key: :certificate_type_code, dataset: -> {
+  many_to_one :certificate, eager_loader_key: [:certificate_code, :certificate_type_code], dataset: -> {
     actual(Certificate).where(certificate_code: certificate_code,
-                      certificate_type_code: certificate_type_code)
+                              certificate_type_code: certificate_type_code)
   }, eager_loader: (proc do |eo|
     eo[:rows].each{|measure_condition| measure_condition.associations[:certificate] = nil}
 
@@ -37,14 +37,18 @@ class MeasureCondition < Sequel::Model
 
     Certificate.actual
                .eager(:certificate_description)
-               .where(certificate_type_code: id_map.keys).all do |certificate|
-      if measure_conditions = id_map[certificate.certificate_type_code]
+               .where(certificate_code: id_map.keys.map(&:first),
+                      certificate_type_code: id_map.keys.map(&:last)).all do |certificate|
+      if measure_conditions = id_map[[certificate.certificate_code, certificate.certificate_type_code]]
         measure_conditions.each do |measure_condition|
           measure_condition.associations[:certificate] = certificate
         end
       end
     end
   end)
+
+  many_to_one :certificate_type, key: :certificate_type_code,
+                                 primary_key: :certificate_type_code
 
   many_to_one :measurement_unit, key: {}, primary_key: {}, eager_loader_key: :condition_measurement_unit_code, dataset: -> {
     actual(MeasurementUnit)
@@ -158,7 +162,8 @@ class MeasureCondition < Sequel::Model
     case requirement_type
     when :document
       {
-        requirement: certificate.description
+        certificate: certificate.try(:description),
+        certificate_type: certificate_type.try(:description)
       }
     when :duty_expression
       {
