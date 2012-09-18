@@ -239,7 +239,7 @@ FactoryGirl.define do
     fe_tsmp { DateTime.now.ago(10.years) }
     msrgp_code { ChiefTransformer::CandidateMeasure::RESTRICTION_GROUP_CODES.sample }
     msr_type { (ChiefTransformer::CandidateMeasure::NATIONAL_MEASURE_TYPES - ['VTA','VTE', 'VTS', 'VTZ', 'EXA', 'EXB', 'EXC', 'EXD']).sample}
-    tty_code { Forgery(:basic).text }
+    tty_code { Forgery(:basic).text(exactly: 3) }
     le_tsmp  { nil }
     audit_tsmp { nil }
     cmdty_code { 10.times.map{ Random.rand(9) }.join }
@@ -421,7 +421,7 @@ FactoryGirl.define do
     fe_tsmp { DateTime.now.ago(10.years)  }
     msrgp_code { Forgery(:basic).text(exactly: 2) }
     msr_type { Forgery(:basic).text(exactly: 3) }
-    tty_code { Forgery(:basic).text }
+    tty_code { Forgery(:basic).text(exactly: 3) }
     adval_rate { nil }
     le_tsmp  { nil }
     audit_tsmp { nil }
@@ -436,7 +436,7 @@ FactoryGirl.define do
     fe_tsmp { DateTime.now.ago(10.years)  }
     msrgp_code { Forgery(:basic).text(exactly: 2) }
     msr_type { Forgery(:basic).text(exactly: 3) }
-    tty_code { Forgery(:basic).text }
+    tty_code { Forgery(:basic).text(exactly: 3) }
     adval1_rate { nil }
     spfc1_rate { nil }
     le_tsmp  { nil }
