@@ -1,9 +1,9 @@
 GIT
-  remote: https://github.com/bitzesty/sequel-rails.git
-  revision: 5ccfdfd8b19453ecf6f62231952a0248fa4864f0
-  branch: bitzesty
+  remote: https://github.com/nulogy/sequel-rails.git
+  revision: 5357612ede620f9c2f1e48f1e4a0f43b20f2f2c3
+  branch: deploy
   specs:
-    bitzesty-sequel-rails (0.3.5.rc1)
+    nulogy-sequel-rails (0.3.7)
       sequel (~> 3.28)
 
 GEM
@@ -239,7 +239,6 @@ PLATFORMS
 
 DEPENDENCIES
   airbrake
-  bitzesty-sequel-rails!
   bootstrap-sass
   brakeman (= 1.7.0)
   builder
@@ -254,6 +253,7 @@ DEPENDENCIES
   mocha
   mysql2
   nokogiri (= 1.5.4)
+  nulogy-sequel-rails!
   pry-rails
   rabl
   rails (= 3.2.8)

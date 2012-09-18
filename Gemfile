@@ -7,7 +7,7 @@ gem "mysql2"
 gem "yajl-ruby"
 gem "rabl"
 gem "sequel"
-gem "bitzesty-sequel-rails", git: "https://github.com/bitzesty/sequel-rails.git", branch: "bitzesty"
+gem "nulogy-sequel-rails", git: "https://github.com/nulogy/sequel-rails.git", branch: "deploy"
 gem "tire"
 
 gem "builder"
