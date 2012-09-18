@@ -4,7 +4,7 @@ source "https://gems.gemfury.com/vo6ZrmjBQu5szyywDszE/"
 gem "rails", "3.2.8"
 
 gem "mysql2"
-gem "rabl"
+gem "rabl-rails"
 gem "yajl-ruby", require: "yajl"
 gem "sequel"
 gem "nulogy-sequel-rails", git: "https://github.com/nulogy/sequel-rails.git", branch: "deploy"
