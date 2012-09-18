@@ -60,16 +60,6 @@ class ChiefTransformer
       errors.add(:tame_tamf, 'tame or tamf must be set') if tame.blank? && tamf.blank?
       errors.add(:measure_type, 'measure_type must be present') if measure_type.blank?
       errors.add(:measure_type, 'must have national measure type') if measure_type.present? && !measure_type.in?(NATIONAL_MEASURE_TYPES)
-      errors.add(:measure_sid, 'duplicate measure') if Measure.where(measure_type: measure_type,
-                                                                     goods_nomenclature_item_id: goods_nomenclature_item_id,
-                                                                     goods_nomenclature_sid: goods_nomenclature_sid,
-                                                                     geographical_area: geographical_area,
-                                                                     geographical_area_sid: geographical_area_sid,
-                                                                     measure_generating_regulation_id: measure_generating_regulation_id,
-                                                                     validity_start_date: validity_start_date,
-                                                                     validity_end_date: validity_end_date,
-                                                                     national: true
-                                                                    ).any?
       errors.add(:goods_nomenclature_sid, 'must be present') if goods_nomenclature_sid.blank?
       errors.add(:geographical_area_sid, 'must be present') if geographical_area_sid.blank?
     end
