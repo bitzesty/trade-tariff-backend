@@ -6,7 +6,7 @@ class RegulationRoleType < Sequel::Model
 
   delegate :description, to: :regulation_role_type_description
 
-  # TODO
+  ######### Conformance validations 160
   def validate
     super
     # RT5
