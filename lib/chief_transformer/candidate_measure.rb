@@ -17,16 +17,15 @@ class ChiefTransformer
     VAT_GROUP_CODES = %w[VT]
     RESTRICTION_GROUP_CODES = %w[DL PR DP DO HO]
     NATIONAL_MEASURE_TYPES = %w[AIL DPO EXA EXB EXC EXD DAA DAB DAC DAE DAI
-                                DBA DBB DBC DBE DBI DCA DCC DCE DCH DDJ DDA
-                                DDB DDC DDD DDE DDF DDG DEA DFA DFB DFC DGC
-                                DHA DHC DHE EAA EAE EBJ EBA EBB EBE EDJ EDA
-                                EDB EDE EEA EEF EFJ EFA EGJ EGA EGB EHI EIJ
-                                EIA EIB EIC EID EIE FAA FAE FAI FBC FBG LAA
-                                LAE LBJ LBA LBB LBE LDA LEA LEF LFA LGJ COE
-                                PRE AHC ATT CEX CHM COI CVD ECM EHC EQC EWP
-                                HOP HSE IWP PHC PRT QRC SFS VTA VTA VTE VTE
-                                VTS VTS VTZ VTZ SPL]
-
+                                    DBA DBB DBC DBE DBI DCA DCC DCE DCH DDJ DDA
+                                    DDB DDC DDD DDE DDF DDG DEA DFA DFB DFC DGC
+                                    DHA DHC DHE EAA EAE EBJ EBA EBB EBE EDJ EDA
+                                    EDB EDE EEA EEF EFJ EFA EGJ EGA EGB EHI EIJ
+                                    EIA EIB EIC EID EIE FAA FAE FAI FBC FBG LAA
+                                    LAE LBJ LBA LBB LBE LDA LEA LEF LFA LGJ COE
+                                    PRE AHC ATT CEX CHM COI CVD ECM EHC EQC EWP
+                                    HOP HSE IWP PHC PRT QRC SFS VTA VTA VTE VTE
+                                    VTS VTS VTZ VTZ SPL]
     attr_accessor :mfcm, :tame, :tamf, :amend_indicator, :candidate_associations
     attr_reader :chief_geographical_area
 
@@ -66,8 +65,8 @@ class ChiefTransformer
     end
 
     def assign_mfcm_attributes
-      self.goods_nomenclature_item_id = mfcm.cmdty_code
       self.amend_indicator = mfcm.amend_indicator
+      self.goods_nomenclature_item_id = (mfcm.cmdty_code.size == 8) ? "#{mfcm.cmdty_code}00" : mfcm.cmdty_code
       self.measure_type = mfcm.measure_type_adco.measure_type_id.presence || mfcm.msr_type
       self.additional_code = mfcm.measure_type_adco.adtnl_cd
       self.additional_code_type = mfcm.measure_type_adco.adtnl_cd_type_id

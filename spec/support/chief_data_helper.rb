@@ -1,4 +1,4 @@
-module ChiefStandingDataHelper
+module ChiefDataHelper
   def preload_standing_data
     load(File.join(Rails.root, 'db', 'chief_standing_data.rb'))
   end

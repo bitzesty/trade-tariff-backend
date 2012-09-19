@@ -33,12 +33,12 @@ class Commodity < GoodsNomenclature
 
   one_to_many :import_measures, dataset: -> {
     measures_dataset.join(:measure_types, measure_type_id: :measure_type)
-                    .filter{ { measure_types__trade_movement_code: MeasureType::IMPORT_MOVEMENT_CODES } | { measures__export: nil, measures__national: nil } }
+                    .filter(measure_types__trade_movement_code: MeasureType::IMPORT_MOVEMENT_CODES)
   }, class_name: 'Measure'
 
   one_to_many :export_measures, dataset: -> {
     measures_dataset.join(:measure_types, measure_type_id: :measure_type)
-                    .filter{ { measure_types__trade_movement_code: MeasureType::EXPORT_MOVEMENT_CODES } | { measures__export: true, measures__national: true } }
+                    .filter(measure_types__trade_movement_code: MeasureType::EXPORT_MOVEMENT_CODES)
   }, class_name: 'Measure'
 
   one_to_one :heading, dataset: -> {

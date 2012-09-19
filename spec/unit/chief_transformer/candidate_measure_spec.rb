@@ -81,20 +81,15 @@ describe ChiefTransformer::CandidateMeasure do
       end
     end
 
-    # TODO figure out if exporting is needed
-    # context 'mfcm cmdty code length of 8' do
-    #   let(:mfcm) { create :mfcm, cmdty_code: "12345678" }
+    context 'mfcm cmdty code length of 8' do
+      let(:mfcm) { create :mfcm, cmdty_code: "12345678" }
 
-    #   subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm) }
+      subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm) }
 
-    #   it 'sets measure export indication to true' do
-    #     subject.export.should be_true
-    #   end
-
-    #   it 'pads commodity code with leading zeros' do
-    #     subject.goods_nomenclature_item_id.should == "1234567800"
-    #   end
-    # end
+      it 'pads commodity code with leading zeros' do
+        subject.goods_nomenclature_item_id.should == "1234567800"
+      end
+    end
   end
 
   describe "geographical_area=" do

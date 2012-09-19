@@ -1077,7 +1077,6 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
       column :national, "tinyint(1)"
-      column :export, "tinyint(1)"
 
       index [:additional_code_sid], :name=>:index_measures_on_additional_code_sid
       index [:geographical_area_sid], :name=>:index_measures_on_geographical_area_sid
@@ -1519,6 +1518,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20120911111821_change_chief_duty_expressions_to_boolean.rb")
     self[:schema_migrations].insert(:filename => "20120912143520_add_indexes_to_chief_records.rb")
     self[:schema_migrations].insert(:filename => "20120913170136_add_national_to_measures.rb")
+    self[:schema_migrations].insert(:filename => "20120919073610_remove_export_indication_from_measures.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"
