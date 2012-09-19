@@ -60,9 +60,12 @@ class TariffUrlMapper
   end
 
   def self.generate_random
-    gn_ids = Measure.national.order(:validity_start_date.desc).group_by(:goods_nomenclature_item_id).limit(1000).to_a.map(&:goods_nomenclature_item_id)
-    gn_ids.each do |gn|
-      logger.info TariffUrlMapper.new({scrape_id: gn}).to_csv
+    (1..99).each do |section|
+      no = "%02d" % section
+      gn_ids = Measure.national.filter("goods_nomenclature_item_id LIKE ?", "#{no}________").order(:validity_start_date.desc).group_by(:goods_nomenclature_item_id).limit(10).to_a.map(&:goods_nomenclature_item_id)
+      gn_ids.each do |gn|
+        logger.info TariffUrlMapper.new({scrape_id: gn}).to_csv
+      end
     end
   end
 end
