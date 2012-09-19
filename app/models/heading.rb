@@ -30,7 +30,13 @@ class Heading < GoodsNomenclature
       alias: :measures
     )
     .with_actual(Measure)
-    .order(:measures__geographical_area.asc)
+    .order(:measures__geographical_area.asc,
+           :measures__validity_start_date.desc,
+           :measures__validity_end_date.desc)
+    .group(:measures__measure_type,
+           :measures__geographical_area_sid,
+           :measure_generating_regulation_id,
+           :additional_code_sid)
   }
 
   one_to_many :import_measures, dataset: -> {
