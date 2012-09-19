@@ -72,8 +72,8 @@ describe ChiefTransformer::CandidateMeasure do
         candidate_measure.amend_indicator.should == mfcm.amend_indicator
       end
 
-      it 'assigns measure type using mfcm component' do
-        candidate_measure.measure_type.should == mfcm.msr_type
+      it 'assigns measure type using chief measure type adco table' do
+        candidate_measure.measure_type.should == mfcm.measure_type_adco.measure_type_id
       end
 
       it 'does not set measure export indication' do
@@ -81,19 +81,20 @@ describe ChiefTransformer::CandidateMeasure do
       end
     end
 
-    context 'mfcm cmdty code length of 8' do
-      let(:mfcm) { create :mfcm, cmdty_code: "12345678" }
+    # TODO figure out if exporting is needed
+    # context 'mfcm cmdty code length of 8' do
+    #   let(:mfcm) { create :mfcm, cmdty_code: "12345678" }
 
-      subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm) }
+    #   subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm) }
 
-      it 'sets measure export indication to true' do
-        subject.export.should be_true
-      end
+    #   it 'sets measure export indication to true' do
+    #     subject.export.should be_true
+    #   end
 
-      it 'pads commodity code with leading zeros' do
-        subject.goods_nomenclature_item_id.should == "1234567800"
-      end
-    end
+    #   it 'pads commodity code with leading zeros' do
+    #     subject.goods_nomenclature_item_id.should == "1234567800"
+    #   end
+    # end
   end
 
   describe "geographical_area=" do
@@ -224,6 +225,20 @@ describe ChiefTransformer::CandidateMeasure do
         it "should be nil" do
           candidate_measure.validity_end_date.should == nil
         end
+      end
+    end
+  end
+
+  describe "#assign_mfcm_attributes" do
+    describe "assigning measure_type" do
+      let(:mfcm) { create :mfcm, :with_tame, measure_type_id: 'AB' }
+
+      it 'should assign measure type by referencing Chief::MeasureTypeAdco' do
+        mfcm
+
+        candidate_measure = ChiefTransformer::CandidateMeasure.new(mfcm: mfcm,
+                                                                   tame: mfcm.tame)
+        candidate_measure.measure_type.should == "AB"
       end
     end
   end

@@ -244,13 +244,25 @@ FactoryGirl.define do
     audit_tsmp { nil }
     cmdty_code { 10.times.map{ Random.rand(9) }.join }
 
+    ignore do
+      measure_type_id { ChiefTransformer::CandidateMeasure::NATIONAL_MEASURE_TYPES.sample }
+    end
+
+    before(:create) { |mfcm, evaluator|
+      FactoryGirl.create(:measure_type_adco, measure_group_code: mfcm.msrgp_code,
+                                             measure_type: mfcm.msr_type,
+                                             tax_type_code: mfcm.tty_code,
+                                             measure_type_id: evaluator.measure_type_id)
+    }
+
     trait :prohibition do
       tty_code { nil }
     end
 
     trait :excise do
       msrgp_code { 'EX' }
-      msr_type { ['EXA','EXB','EXC','EXD'].sample }
+      msr_type   { 'EXA' }
+      tty_code   { 990 }
     end
 
     trait :with_vat_group do
@@ -315,6 +327,7 @@ FactoryGirl.define do
         FactoryGirl.create(:measure_type_adco, measure_group_code: "EX",
                                                measure_type: "EXF",
                                                tax_type_code: "591",
+                                               measure_type_id: "",
                                                adtnl_cd_type_id: 'EIA')
       }
     end
@@ -411,7 +424,7 @@ FactoryGirl.define do
 
     trait :with_chief_measure_type_mapping do
       after(:create) { |mfcm, evaluator|
-        FactoryGirl.create(:chief_measure_type_footnote, measure_type_id: evaluator.msr_type)
+        FactoryGirl.create(:chief_measure_type_footnote, measure_type_id: evaluator.measure_type_id)
       }
     end
   end
@@ -457,10 +470,10 @@ FactoryGirl.define do
   end
 
   factory :measure_type_adco, class: Chief::MeasureTypeAdco do
-    measure_group_code { Forgery(:basic).text(exactly: 2) }
-    measure_type       { Forgery(:basic).text(exactly: 3) }
-    tax_type_code      { Forgery(:basic).text(exactly: 3) }
-    measure_type_id    { Forgery(:basic).text(exactly: 3) }
+    # measure_group_code { Forgery(:basic).text(exactly: 2) }
+    # measure_type       { Forgery(:basic).text(exactly: 3) }
+    # tax_type_code      { Forgery(:basic).text(exactly: 3) }
+    # measure_type_id    { Forgery(:basic).text(exactly: 3) }
     adtnl_cd_type_id   { nil }
     adtnl_cd           { nil }
     zero_comp          { 1 }

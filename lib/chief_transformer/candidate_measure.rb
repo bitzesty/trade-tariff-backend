@@ -16,16 +16,16 @@ class ChiefTransformer
     EXCISE_GROUP_CODES = %w[EX]
     VAT_GROUP_CODES = %w[VT]
     RESTRICTION_GROUP_CODES = %w[DL PR DP DO HO]
-    NATIONAL_MEASURE_TYPES = %w[VTA VTE VTS VTZ EXA EXB EXC EXD DAA DAB DAC
-                                DAE DAI DBA DBB DBC DBE DBI DCA DCC DCE DCH
-                                DDJ DDA DDB DDC DDD DDE DDF DDG DEA DFA DFB
-                                DFC DGC DHA DHC DHE EAA EAE EBJ EBA EBB EBE
-                                EDA EDB EDE EDJ EEA EEF EFJ EFA EGA EGB EGJ
-                                EHI EIJ EIA EIB EIC EID EIE FAA FAE FAI FBC
-                                FBG LAA LAE LBA LBB LBE LBJ LDA LEA LEF LFA
-                                LGJ AHC AIL ATT CEX CHM COE COI CVD DPO ECM
-                                EHC EQC EWP HOP HSE IWP PHC PRE PRT QRC SFS
-                                CON EXF EXL]
+    NATIONAL_MEASURE_TYPES = %w[AIL DPO EXA EXB EXC EXD DAA DAB DAC DAE DAI
+                                DBA DBB DBC DBE DBI DCA DCC DCE DCH DDJ DDA
+                                DDB DDC DDD DDE DDF DDG DEA DFA DFB DFC DGC
+                                DHA DHC DHE EAA EAE EBJ EBA EBB EBE EDJ EDA
+                                EDB EDE EEA EEF EFJ EFA EGJ EGA EGB EHI EIJ
+                                EIA EIB EIC EID EIE FAA FAE FAI FBC FBG LAA
+                                LAE LBJ LBA LBB LBE LDA LEA LEF LFA LGJ COE
+                                PRE AHC ATT CEX CHM COI CVD ECM EHC EQC EWP
+                                HOP HSE IWP PHC PRT QRC SFS VTA VTA VTE VTE
+                                VTS VTS VTZ VTZ SPL]
 
     attr_accessor :mfcm, :tame, :tamf, :amend_indicator, :candidate_associations
     attr_reader :chief_geographical_area
@@ -58,26 +58,17 @@ class ChiefTransformer
 
       errors.add(:mfcm, 'must be set') if mfcm.blank?
       errors.add(:tame_tamf, 'tame or tamf must be set') if tame.blank? && tamf.blank?
+      errors.add(:goods_nomenclature_item_id, 'commodity code should have 10 symbol length') if goods_nomenclature_item_id.present? && goods_nomenclature_item_id.size != 10
       errors.add(:measure_type, 'measure_type must be present') if measure_type.blank?
       errors.add(:measure_type, 'must have national measure type') if measure_type.present? && !measure_type.in?(NATIONAL_MEASURE_TYPES)
       errors.add(:goods_nomenclature_sid, 'must be present') if goods_nomenclature_sid.blank?
       errors.add(:geographical_area_sid, 'must be present') if geographical_area_sid.blank?
     end
 
-    # TODO TEST THIS
     def assign_mfcm_attributes
-      if mfcm.cmdty_code.size == 8
-        self.goods_nomenclature_item_id = "#{mfcm.cmdty_code}00"
-        self.export = true
-      else
-        self.goods_nomenclature_item_id = mfcm.cmdty_code
-      end
+      self.goods_nomenclature_item_id = mfcm.cmdty_code
       self.amend_indicator = mfcm.amend_indicator
-      self.measure_type = if is_vat?
-                            "#{mfcm.msrgp_code}#{mfcm.msr_type}"
-                          else
-                            mfcm.msr_type
-                          end
+      self.measure_type = mfcm.measure_type_adco.measure_type_id.presence || mfcm.msr_type
       self.additional_code = mfcm.measure_type_adco.adtnl_cd
       self.additional_code_type = mfcm.measure_type_adco.adtnl_cd_type_id
     end

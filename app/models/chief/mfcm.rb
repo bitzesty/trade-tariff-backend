@@ -18,8 +18,10 @@ module Chief
                               }.untransformed
     }, class_name: 'Chief::Tame'
 
-    one_to_one :measure_type_adco, key: [:measure_group_code, :measure_type, :tax_type_code],
-                                   primary_key: [:msrgp_code, :msr_type, :tty_code]
+    one_to_one :measure_type_adco, key: {}, primary_key: {},
+      dataset: -> { Chief::MeasureTypeAdco.where(chief_measure_type_adco__measure_group_code: msrgp_code,
+                                                 chief_measure_type_adco__measure_type: msr_type,
+                                                 chief_measure_type_adco__tax_type_code: tty_code) }
 
     dataset_module do
       def untransformed
@@ -35,7 +37,7 @@ module Chief
     end
 
     def measure_type_adco
-      self[:measure_type_adco].presence || ::NullObject.new
+      _measure_type_adco_dataset.first.presence || ::NullObject.new
     end
   end
 end

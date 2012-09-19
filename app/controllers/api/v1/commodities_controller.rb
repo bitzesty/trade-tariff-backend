@@ -23,7 +23,7 @@ module Api
                                                                             :measurement_unit_qualifier,
                                                                             :measure_condition_code,
                                                                             :measure_condition_components]},
-                                                      :quota_order_number,
+                                                      {quota_order_number: :quota_definition},
                                                       {excluded_geographical_areas: :geographical_area_description},
                                                       :additional_code).all
 

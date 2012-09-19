@@ -2,8 +2,8 @@ class Measure < Sequel::Model
   set_primary_key :measure_sid
   plugin :time_machine, period_start_column: :measures__validity_start_date,
                         period_end_column: :effective_end_date
+
   plugin :national
-  # rename to Declarable
   many_to_one :goods_nomenclature, key: :goods_nomenclature_sid,
                                    foreign_key: :goods_nomenclature_sid
 
@@ -178,13 +178,13 @@ class Measure < Sequel::Model
   dataset_module do
     def with_base_regulations
       select(:measures.*).
-      select_append(Sequel.as(:if.sql_function('measures.validity_end_date >= base_regulations.validity_end_date'.lit, 'base_regulations.validity_end_date'.lit, 'measures.validity_end_date'.lit), :effective_end_date)).
+      select_append(Sequel.as(:if.sql_function('measures.validity_end_date IS NOT NULL'.lit, 'measures.validity_end_date'.lit, 'base_regulations.effective_end_date'.lit), :effective_end_date)).
       join_table(:left, :base_regulations, base_regulations__base_regulation_id: :measures__measure_generating_regulation_id)
     end
 
     def with_modification_regulations
       select(:measures.*).
-      select_append(Sequel.as(:if.sql_function('measures.validity_end_date >= modification_regulations.validity_end_date'.lit, 'modification_regulations.validity_end_date'.lit, 'measures.validity_end_date'.lit), :effective_end_date)).
+      select_append(Sequel.as(:if.sql_function('measures.validity_end_date IS NOT NULL'.lit, 'measures.validity_end_date'.lit, 'modification_regulations.effective_end_date'.lit), :effective_end_date)).
       join_table(:left, :modification_regulations, modification_regulations__modification_regulation_id: :measures__measure_generating_regulation_id)
     end
   end

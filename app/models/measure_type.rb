@@ -1,7 +1,7 @@
 class MeasureType < Sequel::Model
   IMPORT_MOVEMENT_CODES = [0, 2]
   EXPORT_MOVEMENT_CODES = [1, 2]
-  EXCLUDED_TYPES = [442]
+  EXCLUDED_TYPES = ['442', 'SPL']
   THIRD_COUNTRY = 103
 
   plugin :time_machine, period_start_column: :measure_types__validity_start_date,
