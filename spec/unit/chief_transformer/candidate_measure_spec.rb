@@ -75,10 +75,6 @@ describe ChiefTransformer::CandidateMeasure do
       it 'assigns measure type using chief measure type adco table' do
         candidate_measure.measure_type.should == mfcm.measure_type_adco.measure_type_id
       end
-
-      it 'does not set measure export indication' do
-        candidate_measure.export.should be_blank
-      end
     end
 
     context 'mfcm cmdty code length of 8' do

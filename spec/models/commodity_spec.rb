@@ -59,11 +59,6 @@ describe Commodity do
                                                    goods_nomenclature_sid: commodity.goods_nomenclature_sid  }
 
       let(:regular_measure_type)         { create :measure_type }
-      let(:export_national_measure)      { create :measure, :with_base_regulation,
-                                                            export: true,
-                                                            national: true,
-                                                            measure_type_id: regular_measure_type.measure_type_id,
-                                                            goods_nomenclature_sid: commodity.goods_nomenclature_sid  }
 
       it 'fetches measures that have measure type with proper trade movement code' do
         export_measure_type
@@ -74,12 +69,6 @@ describe Commodity do
 
         commodity.export_measures.map(&:measure_sid).should     include export_measure.measure_sid
         commodity.export_measures.map(&:measure_sid).should_not include import_measure.measure_sid
-      end
-
-      it 'fetches measures that have export set to true' do
-        export_national_measure
-
-        commodity.export_measures.map(&:measure_sid).should include export_national_measure.measure_sid
       end
     end
 
