@@ -15,9 +15,11 @@ class GoodsNomenclature < Sequel::Model
     eo[:rows].each{|gono| gono.associations[:goods_nomenclature_indent] = nil}
 
     id_map = eo[:id_map]
+
     GoodsNomenclatureIndent.actual
-                           .order(:validity_start_date.desc)
-                           .where(goods_nomenclature_sid: id_map.keys).all do |indent|
+                           .where(goods_nomenclature_sid: id_map.keys)
+                           .group(:goods_nomenclature_sid)
+                           .all do |indent|
       if gonos = id_map[indent.goods_nomenclature_sid]
         gonos.each do |gono|
           gono.associations[:goods_nomenclature_indent] = indent
