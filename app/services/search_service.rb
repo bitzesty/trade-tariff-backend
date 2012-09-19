@@ -80,12 +80,17 @@ class SearchService
 
   class FuzzySearch < BaseSearch
     def search!
-      @results = {
-        sections: results_for('sections', query_string, date, query_string: { fields: ["title"] }),
-        chapters: results_for('chapters', query_string, date),
-        headings: results_for('headings', query_string, date),
-        commodities: results_for('commodities', query_string, date)
-      }
+      @results = begin
+                  {
+                    sections: results_for('sections', query_string, date, query_string: { fields: ["title"] }),
+                    chapters: results_for('chapters', query_string, date),
+                    headings: results_for('headings', query_string, date),
+                    commodities: results_for('commodities', query_string, date)
+                  }
+                # rescue from malformed queries, return empty resultset in that case
+                rescue Tire::Search::SearchRequestFailed
+                  { sections: [], chapters: [], headings: [], commodities: [] }
+                end
 
       self
     end
