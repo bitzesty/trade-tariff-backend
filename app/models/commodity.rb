@@ -28,7 +28,8 @@ class Commodity < GoodsNomenclature
            :measures__validity_end_date.desc)
     .group(:measures__measure_type,
            :measures__geographical_area_sid,
-           :measure_generating_regulation_id)
+           :measure_generating_regulation_id,
+           :additional_code_sid)
   }
 
   one_to_many :import_measures, dataset: -> {
