@@ -11,7 +11,7 @@ module TariffSynchronizer
 
     def write_file(path, body)
       data_file = File.new(path, "w")
-      data_file.write(body)
+      data_file.write(body.encode('UTF-8', invalid: :replace, undef: :replace))
       data_file.close
     end
 
