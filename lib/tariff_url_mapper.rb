@@ -60,10 +60,9 @@ class TariffUrlMapper
   end
 
   def self.generate_random
-    TimeMachine.at("2012-06-05") do
-      Commodity.actual.order(:validity_start_date.desc).limit(200).to_a.each do |c|
-        logger.info TariffUrlMapper.new({scrape_id: c.code}).to_csv
-      end
+    gn_ids = Measure.national.order(:validity_start_date.desc).group_by(:goods_nomenclature_item_id).limit(1000).to_a.map(&:goods_nomenclature_item_id)
+    gn_ids.each do |gn|
+      logger.info TariffUrlMapper.new({scrape_id: c.code}).to_csv
     end
   end
 end
