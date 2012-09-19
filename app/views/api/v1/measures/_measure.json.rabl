@@ -50,12 +50,14 @@ child(geographical_area: :geographical_area) do
     ga.geographical_area_description.description
   }
 
-  child(contained_geographical_areas: :children_geographical_areas) do
-    attributes :iso_code
+  node(if: ->(measure) { !measure.national? }) do
+    child(contained_geographical_areas: :children_geographical_areas) do
+      attributes :iso_code
 
-    node(:description) { |ga|
-      ga.geographical_area_description.description
-    }
+      node(:description) { |ga|
+        ga.geographical_area_description.description
+      }
+    end
   end
 end
 
