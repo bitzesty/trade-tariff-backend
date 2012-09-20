@@ -102,6 +102,7 @@ class Commodity < GoodsNomenclature
       .map(&:last)
       .map(&:first)
       .reverse
+      .sort_by(&:number_indents)
   end
 
   def uptree
