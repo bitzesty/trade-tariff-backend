@@ -13,7 +13,7 @@ class SearchService
     attr_reader :query_string, :results, :date
 
     def initialize(query_string, date)
-      @query_string = query_string.downcase
+      @query_string = query_string.squish.downcase
       @date = date
     end
 
