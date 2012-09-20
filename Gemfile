@@ -5,7 +5,7 @@ gem "rails", "3.2.8"
 
 gem "mysql2"
 gem "multi_json"
-gem "yajl-ruby", :require => "yajl"
+gem "yajl-ruby", require: "yajl"
 gem "rabl", "0.6.14"
 gem "sequel"
 gem "nulogy-sequel-rails", git: "https://github.com/nulogy/sequel-rails.git", branch: "deploy"

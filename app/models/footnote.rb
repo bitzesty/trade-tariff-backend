@@ -29,6 +29,8 @@ class Footnote < Sequel::Model
     end
   end)
 
+  delegate :description, to: :footnote_description
+
   # TODO
   def validate
     super

@@ -184,9 +184,6 @@ class MeasureCondition < Sequel::Model
     measure_condition_code.try(:description)
   end
 
-  def components
-  end
-
   def requirement_type
     if certificate_code.present?
       :document
