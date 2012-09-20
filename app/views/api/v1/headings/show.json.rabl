@@ -1,6 +1,6 @@
 object @heading
 
-attributes :goods_nomenclature_item_id, :description
+attributes :goods_nomenclature_item_id, :description, :bti_url
 
 if @heading.declarable?
   extends "api/v1/declarables/declarable", object: @heading
