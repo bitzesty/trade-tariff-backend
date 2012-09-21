@@ -1,7 +1,6 @@
 object @commodity
 
-attributes :producline_suffix, :description, :number_indents, :goods_nomenclature_item_id,
-           :leaf, :uk_vat_rate, :bti_url
+attributes :producline_suffix, :description, :number_indents, :goods_nomenclature_item_id, :bti_url
 
 extends "api/v1/declarables/declarable", object: @commodity
 

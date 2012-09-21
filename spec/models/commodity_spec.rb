@@ -46,29 +46,47 @@ describe Commodity do
     end
 
     describe 'measures for export' do
-      let(:export_measure_type) { create :measure_type, :export }
-      let(:commodity)           { create :commodity, :with_indent }
-      let(:export_measure)      { create :measure, :with_base_regulation,
-                                                   measure_type_id: export_measure_type.measure_type_id,
-                                                   goods_nomenclature_sid: commodity.goods_nomenclature_sid  }
+      context 'trade movement code' do
+        let(:export_measure_type) { create :measure_type, :export }
+        let(:commodity1)          { create :commodity, :with_indent }
+        let(:export_measure)      { create :measure, :with_base_regulation,
+                                                     measure_type_id: export_measure_type.measure_type_id,
+                                                     goods_nomenclature_sid: commodity1.goods_nomenclature_sid  }
 
-      let(:import_measure_type) { create :measure_type, :import }
-      let(:commodity)           { create :commodity, :with_indent }
-      let(:import_measure)      { create :measure, :with_base_regulation,
-                                                   measure_type_id: import_measure_type.measure_type_id,
-                                                   goods_nomenclature_sid: commodity.goods_nomenclature_sid  }
+        let(:import_measure_type) { create :measure_type, :import }
+        let(:commodity2)          { create :commodity, :with_indent }
+        let(:import_measure)      { create :measure, :with_base_regulation,
+                                                     measure_type_id: import_measure_type.measure_type_id,
+                                                     goods_nomenclature_sid: commodity2.goods_nomenclature_sid  }
 
-      let(:regular_measure_type)         { create :measure_type }
 
-      it 'fetches measures that have measure type with proper trade movement code' do
-        export_measure_type
-        export_measure
+        it 'fetches measures that have measure type with proper trade movement code' do
+          export_measure_type
+          export_measure
 
-        import_measure_type
-        import_measure
+          import_measure_type
+          import_measure
 
-        commodity.export_measures.map(&:measure_sid).should     include export_measure.measure_sid
-        commodity.export_measures.map(&:measure_sid).should_not include import_measure.measure_sid
+          commodity1.export_measures.map(&:measure_sid).should     include export_measure.measure_sid
+          commodity1.export_measures.map(&:measure_sid).should_not include import_measure.measure_sid
+
+          commodity2.import_measures.map(&:measure_sid).should     include import_measure.measure_sid
+          commodity2.import_measures.map(&:measure_sid).should_not include export_measure.measure_sid
+        end
+      end
+
+      context 'export refund nomenclature' do
+        let!(:commodity) { create :commodity, :with_indent }
+        let!(:export_refund_nomenclature) { create :export_refund_nomenclature, :with_indent,
+                                                                                goods_nomenclature_sid: commodity.goods_nomenclature_sid }
+        let!(:export_measure)             { create :measure, :with_base_regulation,
+                                                             export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid,
+                                                             goods_nomenclature_item_id: commodity.goods_nomenclature_item_id  }
+
+        it 'includes measures that belongs to related export refund nomenclature' do
+          commodity.measures.should_not be_blank
+          commodity.measures.map(&:measure_sid).should include export_measure.measure_sid
+        end
       end
     end
 

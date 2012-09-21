@@ -1,5 +1,8 @@
+require 'declarable'
+
 class Commodity < GoodsNomenclature
   include Tire::Model::Search
+  include Model::Declarable
 
   plugin :json_serializer
 
@@ -7,40 +10,6 @@ class Commodity < GoodsNomenclature
               order(:goods_nomenclatures__goods_nomenclature_item_id.asc)
 
   set_primary_key :goods_nomenclature_sid
-
-  one_to_many :measures, dataset: -> {
-    Measure.with_base_regulations
-           .with_actual(BaseRegulation)
-           .where(measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid))
-           .where{ ~{measures__measure_type: MeasureType::EXCLUDED_TYPES} }
-           .order(:measures__measure_sid.asc)
-    .union(
-      Measure.with_modification_regulations
-             .with_actual(ModificationRegulation)
-             .where(measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid))
-             .where{ ~{measures__measure_type: MeasureType::EXCLUDED_TYPES} }
-             .order(:measures__measure_sid.asc),
-      alias: :measures
-    )
-    .with_actual(Measure)
-    .order(:measures__geographical_area.asc,
-           :measures__validity_start_date.desc,
-           :measures__validity_end_date.desc)
-    .group(:measures__measure_type,
-           :measures__geographical_area_sid,
-           :measure_generating_regulation_id,
-           :additional_code_sid)
-  }
-
-  one_to_many :import_measures, dataset: -> {
-    measures_dataset.join(:measure_types, measure_type_id: :measure_type)
-                    .filter(measure_types__trade_movement_code: MeasureType::IMPORT_MOVEMENT_CODES)
-  }, class_name: 'Measure'
-
-  one_to_many :export_measures, dataset: -> {
-    measures_dataset.join(:measure_types, measure_type_id: :measure_type)
-                    .filter(measure_types__trade_movement_code: MeasureType::EXPORT_MOVEMENT_CODES)
-  }, class_name: 'Measure'
 
   one_to_one :heading, dataset: -> {
     actual(Heading).declarable
@@ -72,7 +41,7 @@ class Commodity < GoodsNomenclature
       filter(goods_nomenclature_item_id: code.to_s.first(10))
     end
 
-    def declarable
+   def declarable
       filter(producline_suffix: 80)
     end
   end
@@ -140,10 +109,6 @@ class Commodity < GoodsNomenclature
 
   def code
     goods_nomenclature_item_id
-  end
-
-  def uk_vat_rate
-    "0.00 %"
   end
 
   def to_indexed_json

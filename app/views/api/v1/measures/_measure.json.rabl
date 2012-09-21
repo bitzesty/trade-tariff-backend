@@ -75,8 +75,18 @@ child(footnotes: :footnotes) do
   }
 end
 
-child(additional_code: :additional_code) do
-  attributes :code, :description
+node(:additional_code, if: ->(measure) { measure.additional_code.present? }) do |obj|
+  {
+    code: obj.additional_code.code,
+    description: obj.additional_code.description
+  }
+end
+
+node(:additional_code, if: ->(measure) { measure.export_refund_nomenclature_sid.present? }) do |measure|
+  {
+    code: measure.export_refund_nomenclature.additional_code,
+    description: measure.export_refund_nomenclature.description
+  }
 end
 
 child(quota_order_number: :order_number) do

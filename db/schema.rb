@@ -464,8 +464,8 @@ Sequel.migration do
     create_table(:export_refund_nomenclatures) do
       column :export_refund_nomenclature_sid, "int(11)"
       column :goods_nomenclature_item_id, "varchar(10)"
-      column :additional_code_type, "varchar(255)"
-      column :export_refund_code, "varchar(255)"
+      column :additional_code_type, "varchar(1)"
+      column :export_refund_code, "varchar(3)"
       column :productline_suffix, "varchar(2)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
@@ -1078,14 +1078,19 @@ Sequel.migration do
       column :updated_at, "datetime"
       column :national, "tinyint(1)"
 
+      index [:export_refund_nomenclature_sid, :measure_type], :name=>:export_refund_nomenclature_query
+      index [:goods_nomenclature_sid, :measure_type], :name=>:goods_nomenclature_index
       index [:additional_code_sid], :name=>:index_measures_on_additional_code_sid
       index [:geographical_area_sid], :name=>:index_measures_on_geographical_area_sid
       index [:goods_nomenclature_sid], :name=>:index_measures_on_goods_nomenclature_sid
       index [:measure_type], :name=>:index_measures_on_measure_type
       index [:justification_regulation_role, :justification_regulation_id], :name=>:justification_regulation
       index [:measure_generating_regulation_id], :name=>:measure_generating_regulation
+      index [:export_refund_nomenclature_sid]
       index [:goods_nomenclature_item_id]
+      index [:goods_nomenclature_sid, :export_refund_nomenclature_sid], :name=>:msss
       index [:measure_sid], :name=>:primary_key, :unique=>true
+      index [:goods_nomenclature_sid, :export_refund_nomenclature_sid, :measure_type], :name=>:sids
     end
 
     create_table(:meursing_additional_codes) do
@@ -1519,6 +1524,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20120912143520_add_indexes_to_chief_records.rb")
     self[:schema_migrations].insert(:filename => "20120913170136_add_national_to_measures.rb")
     self[:schema_migrations].insert(:filename => "20120919073610_remove_export_indication_from_measures.rb")
+    self[:schema_migrations].insert(:filename => "20120921072412_export_refund_changes.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"

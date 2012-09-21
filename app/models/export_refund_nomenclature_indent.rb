@@ -1,7 +1,12 @@
 class ExportRefundNomenclatureIndent < Sequel::Model
+  plugin :time_machine, period_start_column: :export_refund_nomenclature_indents__validity_start_date,
+                        period_end_column:   :export_refund_nomenclature_indents__validity_end_date
+
   set_primary_key :export_refund_nomenclature_indents_sid
 
-  # belongs_to :export_refund_nomenclature, foreign_key: :export_refund_nomenclature_sid
+  def number_indents
+    number_export_refund_nomenclature_indents
+  end
 end
 
 

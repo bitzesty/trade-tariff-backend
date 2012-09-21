@@ -1,5 +1,8 @@
+require 'declarable'
+
 class Heading < GoodsNomenclature
   include Tire::Model::Search
+  include Model::Declarable
 
   plugin :json_serializer
 
@@ -16,38 +19,6 @@ class Heading < GoodsNomenclature
   one_to_one :chapter, dataset: -> {
     actual(Chapter).filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
   }
-
-  one_to_many :measures, dataset: -> {
-    Measure.with_base_regulations
-           .with_actual(BaseRegulation)
-           .where(measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid))
-           .where{ ~{measures__measure_type: MeasureType::EXCLUDED_TYPES} }
-    .union(
-      Measure.with_modification_regulations
-             .with_actual(ModificationRegulation)
-             .where(measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid))
-             .where{ ~{measures__measure_type: MeasureType::EXCLUDED_TYPES} },
-      alias: :measures
-    )
-    .with_actual(Measure)
-    .order(:measures__geographical_area.asc,
-           :measures__validity_start_date.desc,
-           :measures__validity_end_date.desc)
-    .group(:measures__measure_type,
-           :measures__geographical_area_sid,
-           :measure_generating_regulation_id,
-           :additional_code_sid)
-  }
-
-  one_to_many :import_measures, dataset: -> {
-    measures_dataset.join(:measure_types, measure_type_id: :measure_type)
-                    .where(trade_movement_code: MeasureType::IMPORT_MOVEMENT_CODES)
-  }, class_name: 'Measure'
-
-  one_to_many :export_measures, dataset: -> {
-    measures_dataset.join(:measure_types, measure_type_id: :measure_type)
-                    .where(trade_movement_code: MeasureType::EXPORT_MOVEMENT_CODES)
-  }, class_name: 'Measure'
 
   one_to_many :third_country_duty, dataset: -> {
     MeasureComponent.where(measure: import_measures_dataset.where(measure_type: MeasureType::THIRD_COUNTRY).all)
@@ -99,10 +70,6 @@ class Heading < GoodsNomenclature
 
   def uptree
     [self, self.chapter].compact
-  end
-
-  def uk_vat_rate
-    "0.00 %"
   end
 
   def declarable

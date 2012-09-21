@@ -1,11 +1,14 @@
 class Measure < Sequel::Model
   set_primary_key :measure_sid
-  plugin :time_machine, period_start_column: :measures__validity_start_date,
+  plugin :time_machine, period_start_column: :effective_start_date,
                         period_end_column: :effective_end_date
 
   plugin :national
+
   many_to_one :goods_nomenclature, key: :goods_nomenclature_sid,
                                    foreign_key: :goods_nomenclature_sid
+  many_to_one :export_refund_nomenclature, key: :export_refund_nomenclature_sid,
+                                   foreign_key: :export_refund_nomenclature_sid
 
   many_to_one :measure_type, key: :measure_type_id, dataset: -> {
     actual(MeasureType).where(measure_type_id: self[:measure_type])
@@ -178,14 +181,16 @@ class Measure < Sequel::Model
   dataset_module do
     def with_base_regulations
       select(:measures.*).
+      select_append(Sequel.as(:if.sql_function('measures.validity_start_date IS NOT NULL'.lit, 'measures.validity_start_date'.lit, 'base_regulations.validity_start_date'.lit), :effective_start_date)).
       select_append(Sequel.as(:if.sql_function('measures.validity_end_date IS NOT NULL'.lit, 'measures.validity_end_date'.lit, 'base_regulations.effective_end_date'.lit), :effective_end_date)).
-      join_table(:left, :base_regulations, base_regulations__base_regulation_id: :measures__measure_generating_regulation_id)
+      join_table(:right, :base_regulations, base_regulations__base_regulation_id: :measures__measure_generating_regulation_id)
     end
 
     def with_modification_regulations
       select(:measures.*).
+      select_append(Sequel.as(:if.sql_function('measures.validity_start_date IS NOT NULL'.lit, 'measures.validity_start_date'.lit, 'modification_regulations.validity_start_date'.lit), :effective_start_date)).
       select_append(Sequel.as(:if.sql_function('measures.validity_end_date IS NOT NULL'.lit, 'measures.validity_end_date'.lit, 'modification_regulations.effective_end_date'.lit), :effective_end_date)).
-      join_table(:left, :modification_regulations, modification_regulations__modification_regulation_id: :measures__measure_generating_regulation_id)
+      join_table(:right, :modification_regulations, modification_regulations__modification_regulation_id: :measures__measure_generating_regulation_id)
     end
   end
 

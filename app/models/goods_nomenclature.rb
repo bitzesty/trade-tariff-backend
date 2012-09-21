@@ -61,7 +61,10 @@ class GoodsNomenclature < Sequel::Model
                                                     :absorbed_productline_suffix],
                                               primary_key: [:goods_nomenclature_item_id,
                                                             :producline_suffix]
-  one_to_many :export_refund_nomenclatures, key: :goods_nomenclature_sid
+
+  one_to_many :export_refund_nomenclatures, dataset: -> {
+    actual(ExportRefundNomenclature).where(goods_nomenclature_sid: goods_nomenclature_sid)
+  }
 
   # TODO
   def validate
