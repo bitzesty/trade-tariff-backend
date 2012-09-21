@@ -90,7 +90,7 @@ class GoodsNomenclature < Sequel::Model
   end
 
   def bti_url
-    "http://ec.europa.eu/taxation_customs/dds2/ebti/ebti_consultation.jsp?Lang=en&Lang=en&refcountry=GB&&nomenc=#{code}&Expand=true"
+    "http://ec.europa.eu/taxation_customs/dds2/ebti/ebti_consultation.jsp?Lang=en&nomenc=#{code}&Expand=true"
   end
 end
 
