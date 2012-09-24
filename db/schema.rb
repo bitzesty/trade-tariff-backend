@@ -1078,8 +1078,6 @@ Sequel.migration do
       column :updated_at, "datetime"
       column :national, "tinyint(1)"
 
-      index [:export_refund_nomenclature_sid, :measure_type], :name=>:export_refund_nomenclature_query
-      index [:goods_nomenclature_sid, :measure_type], :name=>:goods_nomenclature_index
       index [:additional_code_sid], :name=>:index_measures_on_additional_code_sid
       index [:geographical_area_sid], :name=>:index_measures_on_geographical_area_sid
       index [:goods_nomenclature_sid], :name=>:index_measures_on_goods_nomenclature_sid
@@ -1088,9 +1086,7 @@ Sequel.migration do
       index [:measure_generating_regulation_id], :name=>:measure_generating_regulation
       index [:export_refund_nomenclature_sid]
       index [:goods_nomenclature_item_id]
-      index [:goods_nomenclature_sid, :export_refund_nomenclature_sid], :name=>:msss
       index [:measure_sid], :name=>:primary_key, :unique=>true
-      index [:goods_nomenclature_sid, :export_refund_nomenclature_sid, :measure_type], :name=>:sids
     end
 
     create_table(:meursing_additional_codes) do

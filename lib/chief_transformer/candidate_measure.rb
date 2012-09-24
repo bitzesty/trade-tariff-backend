@@ -126,25 +126,25 @@ class ChiefTransformer
       # must happen after validity dates are set, depends on start date
       self.additional_code_sid = AdditionalCode.where(additional_code_type_id: additional_code_type,
                                                       additional_code: additional_code)
-                                               .where("validity_start_date <= ?", validity_start_date)
+                                               .where("validity_start_date >= ? AND (validity_end_date <= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
                                                .first
                                                .try(:additional_code_sid)
       # needs to throw errors about invalid geographical area
       self.geographical_area_sid = GeographicalArea.where(geographical_area_id: geographical_area)
-                                                   .where("validity_start_date <= ?", validity_start_date)
+                                                   .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
                                                    .first
                                                    .try(:geographical_area_sid)
       if self.geographical_area_sid.blank?
         self[:geographical_area] = DEFAULT_GEOGRAPHICAL_AREA_ID
         self.geographical_area_sid = GeographicalArea.where(geographical_area_id: geographical_area)
-                                                     .where("validity_start_date <= ?", validity_start_date)
+                                                     .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
                                                      .first
                                                      .try(:geographical_area_sid)
       end
 
       # needs to throw errors about invalid goods nomenclature item found
       self.goods_nomenclature_sid = GoodsNomenclature.where(goods_nomenclature_item_id: goods_nomenclature_item_id)
-                                                     .where("validity_start_date <= ?", validity_start_date)
+                                                     .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
                                                      .first
                                                      .try(:goods_nomenclature_sid)
 
@@ -226,6 +226,7 @@ class ChiefTransformer
         if tame.adval_rate.blank? || tame.adval_rate < 0
           tame.adval_rate = 0
         end
+
         measure_component = MeasureComponent.new do |mc|
           mc.duty_amount = tame.adval_rate
           if tame.duty_expression.present?

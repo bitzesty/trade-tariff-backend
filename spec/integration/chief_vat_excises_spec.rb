@@ -180,7 +180,6 @@ describe "CHIEF: VAT and Excises" do
   end
 
   context "Daily Update TAME" do
-
     let!(:mfcm1){ create(:mfcm, :with_goods_nomenclature, amend_indicator: "I", fe_tsmp: DateTime.parse("2007-11-15 11:00:00"), msrgp_code: "VT", msr_type: "S", tty_code: "813", cmdty_code: "0101010100") }
     let!(:mfcm2){ create(:mfcm, :with_goods_nomenclature, amend_indicator: "I", fe_tsmp: DateTime.parse("2008-01-01 00:00:00"), msrgp_code: "VT", msr_type: "S", tty_code: "813", cmdty_code: "0202020200") }
     let!(:mfcm3){ create(:mfcm, :with_goods_nomenclature, amend_indicator: "I", fe_tsmp: DateTime.parse("2008-04-30 14:00:00"), msrgp_code: "VT", msr_type: "S", tty_code: "813", cmdty_code: "0303030300") }

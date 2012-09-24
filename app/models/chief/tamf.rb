@@ -1,6 +1,5 @@
 module Chief
   class Tamf < Sequel::Model
-    # TODO missing order on audited tsmp
     set_dataset db[:chief_tamf].
                 order(:msrgp_code.asc).
                 order_more(:msr_type.asc).
@@ -36,9 +35,9 @@ module Chief
     def measurement_unit(cmpd_uoq, uoq)
       if cmpd_uoq.present?
         Chief::MeasurementUnit.where(spfc_cmpd_uoq: cmpd_uoq,
-                                     spfc_uoq: uoq)
+                                     spfc_uoq: uoq).first
       elsif uoq.present?
-        Chief::MeasurementUnit.where(spfc_uoq: uoq)
+        Chief::MeasurementUnit.where(spfc_uoq: uoq).first
       end
     end
 
@@ -54,9 +53,10 @@ module Chief
           mc.monetary_unit_code = duty_expression.monetary_unit_code_spfc1
         end
         if measure_component.monetary_unit_code.present?
-          m_unit = measurement_unit(spfc1_cmpd_uoq, spfc1_uoq)
-          measure_component.measurement_unit_code = m_unit.measurem_unit_cd if m_unit
-          measure_component.measurement_unit_qualifier_code = m_unit.measurem_unit_qual_cd if m_unit
+          if m_unit = measurement_unit(spfc1_cmpd_uoq, spfc1_uoq)
+            measure_component.measurement_unit_code = m_unit.measurem_unit_cd
+            measure_component.measurement_unit_qualifier_code = m_unit.measurem_unit_qual_cd
+          end
         end
 
         components << measure_component

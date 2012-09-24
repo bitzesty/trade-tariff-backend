@@ -16,7 +16,8 @@ module Chief
                                  primary_key: [:adval1_rate, :adval2_rate, :spfc1_rate, :spfc2_rate]
 
     one_to_many :tamfs, key:{}, primary_key: {}, dataset: -> {
-      Chief::Tamf.filter{ |o| {:msrgp_code => msrgp_code} &
+      Chief::Tamf.filter{ |o| {:fe_tsmp => fe_tsmp} &
+                              {:msrgp_code => msrgp_code} &
                               {:msr_type => msr_type} &
                               {:tty_code => tty_code} &
                               {:tar_msr_no => tar_msr_no}
