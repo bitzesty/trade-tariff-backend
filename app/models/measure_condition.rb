@@ -47,8 +47,23 @@ class MeasureCondition < Sequel::Model
     end
   end)
 
-  many_to_one :certificate_type, key: :certificate_type_code,
-                                 primary_key: :certificate_type_code
+  one_to_one :certificate_type, eager_loader_key: :certificate_type_code, dataset: -> {
+    CertificateType.actual.where(certificate_type_code: certificate_type_code)
+  }, eager_loader: (proc do |eo|
+    eo[:rows].each{|certificate| certificate.associations[:certificate_type] = nil}
+
+    id_map = eo[:id_map]
+
+    CertificateType.actual
+                   .eager(:certificate_type_description)
+                   .where(certificate_type_code: id_map.keys).all do |certificate_type|
+      if certificates = id_map[certificate_type.certificate_type_code]
+        certificates.each do |certificate|
+          certificate.associations[:certificate_type] = certificate_type
+        end
+      end
+    end
+  end)
 
   many_to_one :measurement_unit, key: {}, primary_key: {}, eager_loader_key: :condition_measurement_unit_code, dataset: -> {
     actual(MeasurementUnit)

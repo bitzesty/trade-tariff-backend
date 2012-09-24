@@ -36,7 +36,8 @@ class Measure < Sequel::Model
 
     id_map = eo[:id_map]
 
-    MeasureCondition.eager(:certificate,
+    MeasureCondition.eager({certificate: :certificate_description},
+                           {certificate_type: :certificate_type_description},
                            {measurement_unit: :measurement_unit_description},
                            :monetary_unit,
                            :measure_condition_code,
