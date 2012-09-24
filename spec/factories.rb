@@ -24,6 +24,10 @@ FactoryGirl.define do
       validity_start_date { Date.today.ago(15.years) }
     end
 
+    trait :declarable do
+      producline_suffix 80
+    end
+
     trait :expired do
       validity_start_date { Date.today.ago(3.years) }
       validity_end_date   { Date.today.ago(1.year)  }
@@ -312,7 +316,7 @@ FactoryGirl.define do
 
     trait :with_goods_nomenclature do
       before(:create) { |mfcm|
-        FactoryGirl.create :goods_nomenclature, :fifteen_years,
+        FactoryGirl.create :goods_nomenclature, :fifteen_years, :declarable,
                            goods_nomenclature_item_id: mfcm.cmdty_code
       }
     end

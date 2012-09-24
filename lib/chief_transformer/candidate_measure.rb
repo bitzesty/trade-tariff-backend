@@ -145,6 +145,7 @@ class ChiefTransformer
       # needs to throw errors about invalid goods nomenclature item found
       self.goods_nomenclature_sid = GoodsNomenclature.where(goods_nomenclature_item_id: goods_nomenclature_item_id)
                                                      .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
+                                                     .declarable
                                                      .first
                                                      .try(:goods_nomenclature_sid)
 

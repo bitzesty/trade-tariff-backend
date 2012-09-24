@@ -116,7 +116,7 @@ describe ChiefTransformer::CandidateMeasure do
       let!(:tame) { create :tame }
 
       let!(:geographical_area) { create :geographical_area, :fifteen_years, geographical_area_id: "1011" }
-      let!(:goods_nomenclature) { create :commodity, :fifteen_years, goods_nomenclature_item_id: mfcm.cmdty_code }
+      let!(:goods_nomenclature) { create :commodity, :declarable, :fifteen_years, goods_nomenclature_item_id: mfcm.cmdty_code }
 
       it 'maps Geographical Area Chief code to Taric code' do
         candidate_measure = subject.new(chief_geographical_area: country_code.chief_country_cd)

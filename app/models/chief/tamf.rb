@@ -76,9 +76,10 @@ module Chief
         #                 + tamfVO.getSpecific2UnitOfQuantity());
         #     }
         if measure_component.monetary_unit_code.present?
-          m_unit = measurement_unit(spfc1_cmpd_uoq, spfc2_uoq)
-          measure_component.measurement_unit_code = m_unit.measurem_unit_cd if m_unit
-          measure_component.measurement_unit_qualifier_code = m_unit.measurem_unit_qual_cd if m_unit
+          if m_unit = measurement_unit(spfc1_cmpd_uoq, spfc2_uoq)
+            measure_component.measurement_unit_code = m_unit.measurem_unit_cd
+            measure_component.measurement_unit_qualifier_code = m_unit.measurem_unit_qual_cd
+          end
         end
 
         components << measure_component
