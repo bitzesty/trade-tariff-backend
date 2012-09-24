@@ -161,6 +161,26 @@ class Measure < Sequel::Model
     end
   end)
 
+  one_to_one :full_temporary_stop_regulation, key: {}, primary_key: {}, eager_loader_key: :measure_generating_regulation_id, dataset: -> {
+    FullTemporaryStopRegulation.actual
+                               .join(FtsRegulationAction, full_temporary_stop_regulations__full_temporary_stop_regulation_id: :fts_regulation_actions__fts_regulation_id)
+                               .where(fts_regulation_actions__stopped_regulation_id: measure_generating_regulation_id)
+  }, eager_loader: (proc do |eo|
+    eo[:rows].each{|measure| measure.associations[:full_temporary_stop_regulation] = nil}
+
+    id_map = eo[:id_map]
+
+    FullTemporaryStopRegulation.actual
+                               .join(FtsRegulationAction, full_temporary_stop_regulations__full_temporary_stop_regulation_id: :fts_regulation_actions__fts_regulation_id)
+                               .where(fts_regulation_actions__stopped_regulation_id: id_map.keys).all do |fts_regulation|
+      if measures = id_map[fts_regulation[:stopped_regulation_id]]
+        measures.each do |measure|
+          measure.associations[:full_temporary_stop_regulation] = fts_regulation
+        end
+      end
+    end
+  end)
+
   def_column_alias :measure_type_id, :measure_type
   def_column_alias :additional_code_id, :additional_code
   def_column_alias :geographical_area_id, :geographical_area
@@ -210,12 +230,12 @@ class Measure < Sequel::Model
     end
   end
 
-  def generating_regulation_code
-    "#{measure_generating_regulation_id.first}#{measure_generating_regulation_id[3..6]}/#{measure_generating_regulation_id[1..2]}"
+  def generating_regulation_code(regulation_code = measure_generating_regulation_id)
+    "#{regulation_code.first}#{regulation_code[3..6]}/#{regulation_code[1..2]}"
   end
 
-  def generating_regulation_url
-    year = measure_generating_regulation_id[1..2]
+  def generating_regulation_url(regulation_code = measure_generating_regulation_id)
+    year = regulation_code[1..2]
     # When we get to 2071 assume that we don't care about the 1900's
     # or the EU has a better way to search
     if year.to_i > 70
@@ -223,7 +243,7 @@ class Measure < Sequel::Model
     else
       full_year = "20#{year}"
     end
-    code = "3#{full_year}#{measure_generating_regulation_id.first}#{measure_generating_regulation_id[3..6]}"
+    code = "3#{full_year}#{regulation_code.first}#{regulation_code[3..6]}"
     "http://eur-lex.europa.eu/Result.do?code=#{code}&RechType=RECH_celex"
   end
 
@@ -241,6 +261,10 @@ class Measure < Sequel::Model
 
   def export
     measure_type.present? && measure_type.trade_movement_code.in?(MeasureType::EXPORT_MOVEMENT_CODES)
+  end
+
+  def suspended?
+    full_temporary_stop_regulation.present?
   end
 end
 

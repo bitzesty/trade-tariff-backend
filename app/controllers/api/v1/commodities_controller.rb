@@ -25,7 +25,8 @@ module Api
                                                                             :measure_condition_components]},
                                                       {quota_order_number: :quota_definition},
                                                       {excluded_geographical_areas: :geographical_area_description},
-                                                      :additional_code).all
+                                                      :additional_code,
+                                                      :full_temporary_stop_regulation).all
 
         respond_with @commodity
       end

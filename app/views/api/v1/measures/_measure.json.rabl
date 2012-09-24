@@ -4,10 +4,20 @@ node(:measure_type_description) { |obj|
   obj.measure_type.try(:description)
 }
 
-node(:legal_act, if: ->(measure) { !measure.national && measure.generating_regulation_present? }) do |obj|
+node(:legal_act, if: ->(measure) { !measure.national && measure.generating_regulation_present? }) do |measure|
   {
-    generating_regulation_code: obj.generating_regulation_code,
-    url: obj.generating_regulation_url
+    generating_regulation_code: measure.generating_regulation_code,
+    url: measure.generating_regulation_url,
+    suspended: measure.suspended?
+  }
+end
+
+node(:suspension_legal_act, if: ->(measure) { !measure.national && measure.suspended? }) do |measure|
+  {
+    generating_regulation_code: measure.generating_regulation_code(measure.full_temporary_stop_regulation.full_temporary_stop_regulation_id),
+    url: measure.generating_regulation_url(measure.full_temporary_stop_regulation.full_temporary_stop_regulation_id),
+    validity_end_date: measure.full_temporary_stop_regulation.effective_enddate,
+    validity_start_date: measure.full_temporary_stop_regulation.validity_start_date.to_date.to_s(:db)
   }
 end
 
