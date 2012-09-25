@@ -1,4 +1,4 @@
-attributes :origin, :ordernumber, :validity_start_date, :validity_end_date
+attributes :origin, :ordernumber, :effective_start_date, :effective_end_date
 
 node(:measure_type_description) { |obj|
   obj.measure_type.try(:description)
