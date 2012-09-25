@@ -34,8 +34,6 @@ class ChiefTransformer
                             end
                            }.flatten.compact)
       candidate_measures.persist
-      # candidate_measures.clean
     }
-    # clean Mfcm, Tamf and Tame tables
   end
 end

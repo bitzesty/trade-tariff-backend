@@ -58,8 +58,4 @@ describe ChiefTransformer::CandidateMeasure::Collection do
       end
     end
   end
-
-  describe "#clean" do
-    pending("Cleaning means marking entries as processed.")
-  end
 end
