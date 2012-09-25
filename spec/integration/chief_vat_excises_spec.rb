@@ -212,7 +212,8 @@ describe "CHIEF: VAT and Excises" do
         let!(:tame1) { create(:tame, amend_indicator: "U", fe_tsmp: DateTime.parse("2007-11-15 11:00:00"), msrgp_code: "VT", msr_type: "S", tty_code: "813", adval_rate: 15.000, le_tsmp: DateTime.parse("2008-04-01 00:00:00")) }
         let!(:tame2) { create(:tame, amend_indicator: "I", fe_tsmp: DateTime.parse("2008-04-01 00:00:00"), msrgp_code: "VT", msr_type: "S", tty_code: "813", adval_rate: 17.000) }
 
-        it "should be increase to 17% starting from 2008-04-01 from 15%"
+        it "should be increase to 17% starting from 2008-04-01 from 15%" do
+        end
       end
 
       # In alternative 2 and alternative 3 the Taric measure -3 just updates the existing measure component (43005) with the new rate since its Taric measure start date is after the received FEDATE.

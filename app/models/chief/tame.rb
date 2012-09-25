@@ -24,6 +24,14 @@ module Chief
                               }.untransformed
     }, class_name: 'Chief::Tamf'
 
+    one_to_many :mfcms, key: {}, primary_key: {}, dataset: -> {
+      Chief::Mfcm.filter{ |o| o.>=(:fe_tsmp, fe_tsmp) &
+                              {:msrgp_code => msrgp_code} &
+                              {:msr_type => msr_type} &
+                              {:tty_code => tty_code}
+                        }
+    }
+
     dataset_module do
       def untransformed
         filter(transformed: false)

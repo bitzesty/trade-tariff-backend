@@ -23,5 +23,18 @@ describe Chief::Tame do
         end
       end
     end
+
+    describe 'mfcms' do
+      let(:common_mfcm_attributes) { attributes_for(:mfcm).slice(:fe_tsmp, :msrgp_code, :msr_type, :tty_code) }
+
+      let!(:tame)  { create :tame, common_mfcm_attributes }
+      let!(:mfcm1) { create :mfcm, common_mfcm_attributes }
+      let!(:mfcm2) { create :mfcm, common_mfcm_attributes.merge(fe_tsmp: tame.fe_tsmp + 1.day) }
+
+      it 'matches MFCMs that have fe_tsmp equal or later to own fe_tsmp' do
+        tame.mfcms.should include mfcm1
+        tame.mfcms.should include mfcm2
+      end
+    end
   end
 end
