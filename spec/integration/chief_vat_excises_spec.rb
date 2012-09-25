@@ -19,7 +19,7 @@ describe "CHIEF: VAT and Excises" do
     let!(:geographical_area) { create :geographical_area, :fifteen_years, :erga_omnes }
 
     before do
-      ChiefTransformer.instance.invoke
+      ChiefTransformer.instance.invoke(:initial_load)
     end
 
     it "should create measure for 0101010100" do
@@ -58,7 +58,7 @@ describe "CHIEF: VAT and Excises" do
     end
 
     it "should create the following measures" do
-      ChiefTransformer.instance.invoke
+      ChiefTransformer.instance.invoke(:initial_load)
       m = Measure.where(goods_nomenclature_item_id: "0101010100", validity_start_date: DateTime.parse("2006-06-01 00:00:00")).take
       m.measure_components.first.duty_amount.should == 17.5
     end
@@ -87,7 +87,7 @@ describe "CHIEF: VAT and Excises" do
     let!(:geographical_area) { create :geographical_area, :fifteen_years, :erga_omnes }
 
     before do
-      ChiefTransformer.instance.invoke
+      ChiefTransformer.instance.invoke(:initial_load)
     end
 
     it "should create measures for 0101010100" do
@@ -147,7 +147,7 @@ describe "CHIEF: VAT and Excises" do
 
     let!(:geographical_area) { create :geographical_area, :fifteen_years, :erga_omnes }
 
-    before { ChiefTransformer.instance.invoke }
+    before { ChiefTransformer.instance.invoke(:initial_load) }
 
     # If there are several TAMF records with values in CNTRYORIG or CNGPCODE this will result in that a Taric measure is created for each country/country group.
     it "should create measures for US" do
@@ -189,7 +189,7 @@ describe "CHIEF: VAT and Excises" do
     let!(:geographical_area) { create :geographical_area, :fifteen_years, :erga_omnes }
 
     before do
-      ChiefTransformer.instance.invoke
+      ChiefTransformer.instance.invoke(:initial_load)
     end
 
     it "should create the 0101010100 measure" do
@@ -206,7 +206,7 @@ describe "CHIEF: VAT and Excises" do
     end
 
     context "TAME Daily Scenario 1: Changed VAT rate" do
-      before(:each) { ChiefTransformer.instance.invoke }
+      before(:each) { ChiefTransformer.instance.invoke(:initial_load) }
 
       context "Alt 1. Update and Insert" do
         let!(:tame1) { create(:tame, amend_indicator: "U", fe_tsmp: DateTime.parse("2007-11-15 11:00:00"), msrgp_code: "VT", msr_type: "S", tty_code: "813", adval_rate: 15.000, le_tsmp: DateTime.parse("2008-04-01 00:00:00")) }

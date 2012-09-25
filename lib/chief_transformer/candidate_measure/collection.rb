@@ -7,8 +7,18 @@ class ChiefTransformer
 
       delegate :size, to: :measures
 
+      def self.build
+        new(MeasureBuilder.build_all)
+      end
+
       def initialize(measures)
         @measures = measures
+      end
+
+      def merge
+      end
+
+      def validate
       end
 
       def persist

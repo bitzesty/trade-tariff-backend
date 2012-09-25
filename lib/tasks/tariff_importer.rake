@@ -1,7 +1,7 @@
 namespace :importer do
   namespace :chief do
     desc "Import CHIEF file"
-    task :import => :environment do
+    task import: :environment do
       require 'tariff_importer'
 
       if ENV["TARGET"] && File.exists?(ENV["TARGET"])
@@ -12,15 +12,18 @@ namespace :importer do
     end
 
     desc "Transform Chief data into taric and save"
-    task :transform => :environment do
+    task transform: :environment do
       require 'chief_transformer'
-      ChiefTransformer.instance.invoke
+
+      mode = ENV["MODE"].try(:to_sym).presence || :update
+
+      ChiefTransformer.instance.invoke(mode)
     end
   end
 
   namespace :taric do
     desc "Import Tariff file"
-    task :import => :environment do
+    task import: :environment do
       require 'tariff_importer'
 
       if ENV["TARGET"] && File.exists?(ENV["TARGET"])

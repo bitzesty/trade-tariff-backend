@@ -42,7 +42,7 @@ describe "CHIEF: Prohibitions and Restrictions" do
     let!(:geographical_area) { create :geographical_area, :fifteen_years, :erga_omnes, geographical_area_sid: 400 }
 
     before do
-      ChiefTransformer.instance.invoke
+      ChiefTransformer.instance.invoke(:initial_load)
     end
 
     it "should create measure for 1211300000" do

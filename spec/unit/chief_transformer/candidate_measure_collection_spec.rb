@@ -3,17 +3,16 @@ require 'chief_transformer'
 
 describe ChiefTransformer::CandidateMeasure::Collection do
   describe '#persist' do
-
     context 'just MFCM present' do
       let!(:mfcm) { create :mfcm }
 
       it 'creates no measures' do
-        ChiefTransformer.instance.invoke
+        ChiefTransformer.instance.invoke(:initial_load)
         Measure.count.should == 0
       end
 
       it 'creates no measure associations' do
-        ChiefTransformer.instance.invoke
+        ChiefTransformer.instance.invoke(:initial_load)
         MeasureComponent.count.should == 0
       end
     end
@@ -25,7 +24,7 @@ describe ChiefTransformer::CandidateMeasure::Collection do
                                   :with_goods_nomenclature }
 
       it 'create Measure with Measure Components from TAME' do
-        ChiefTransformer.instance.invoke
+        ChiefTransformer.instance.invoke(:initial_load)
         Measure.count.should == 1
         MeasureComponent.count.should == 1
       end
@@ -42,7 +41,7 @@ describe ChiefTransformer::CandidateMeasure::Collection do
                                   :with_goods_nomenclature }
 
       it 'creates Measure and Measure Components from TAMF' do
-        ChiefTransformer.instance.invoke
+        ChiefTransformer.instance.invoke(:initial_load)
         Measure.count.should == 1
         MeasureComponent.count.should == 1
       end
@@ -52,10 +51,22 @@ describe ChiefTransformer::CandidateMeasure::Collection do
                              :with_goods_nomenclature,
                              msrgp_code: 'PR'
 
-        ChiefTransformer.instance.invoke
+        ChiefTransformer.instance.invoke(:initial_load)
         Measure.count.should == 2
         MeasureCondition.count.should == 1
       end
+    end
+  end
+
+  describe '#build' do
+    it 'builds measures from Mfcm' do
+      measures = ChiefTransformer::CandidateMeasure::Collection.build
+    end
+
+    it 'builds measures from Tame' do
+    end
+
+    it 'builds measures from Tamf' do
     end
   end
 end
