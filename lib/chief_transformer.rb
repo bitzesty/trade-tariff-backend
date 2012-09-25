@@ -21,7 +21,7 @@ class ChiefTransformer
   def invoke
     logger.info "CHIEF Transformer started"
 
-    Chief::Mfcm.untransformed.each_page(per_page) { |items|
+    Chief::Mfcm.each_page(per_page) { |items|
       candidate_measures = CandidateMeasure::Collection.new(items.map { |mfcm|
                             if mfcm.tame.present?
                               cm = mfcm.tame.tamfs.map { |tamf|

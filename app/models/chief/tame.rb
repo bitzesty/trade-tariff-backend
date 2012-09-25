@@ -1,6 +1,5 @@
 module Chief
   class Tame < Sequel::Model
-    # TODO missing order on audited tsmp
     set_dataset db[:chief_tame].
                 order(:msrgp_code.asc).
                 order_more(:msr_type.asc).
@@ -21,7 +20,7 @@ module Chief
                               {:msr_type => msr_type} &
                               {:tty_code => tty_code} &
                               {:tar_msr_no => tar_msr_no}
-                              }.untransformed
+                              }
     }, class_name: 'Chief::Tamf'
 
     one_to_many :mfcms, key: {}, primary_key: {}, dataset: -> {
@@ -31,12 +30,6 @@ module Chief
                               {:tty_code => tty_code}
                         }
     }
-
-    dataset_module do
-      def untransformed
-        filter(transformed: false)
-      end
-    end
 
     def adval1_rate; 1; end
     def adval2_rate; 0; end

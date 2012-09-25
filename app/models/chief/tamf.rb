@@ -26,12 +26,6 @@ module Chief
     def spfc1_rate_key; spfc1_rate.present?; end
     def spfc2_rate_key; spfc2_rate.present?; end
 
-    dataset_module do
-      def untransformed
-        filter(transformed: false)
-      end
-    end
-
     def measurement_unit(cmpd_uoq, uoq)
       if cmpd_uoq.present?
         Chief::MeasurementUnit.where(spfc_cmpd_uoq: cmpd_uoq,
