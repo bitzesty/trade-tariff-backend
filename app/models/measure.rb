@@ -224,6 +224,17 @@ class Measure < Sequel::Model
             geographical_area: candidate_measure.geographical_area,
             national: true)
     end
+
+    def expired_before(candidate_measure)
+      where(measure_type: candidate_measure.measure_type,
+            additional_code_type: candidate_measure.additional_code_type,
+            additional_code: candidate_measure.additional_code,
+            goods_nomenclature_item_id: candidate_measure.goods_nomenclature_item_id,
+            geographical_area: candidate_measure.geographical_area,
+            national: true).
+      where("validity_start_date < ?", candidate_measure.validity_start_date).
+      where(validity_end_date: nil)
+    end
   end
 
   def generating_regulation_present?

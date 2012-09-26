@@ -264,16 +264,108 @@ describe "CHIEF: VAT and Excises" do
 
       # In alternative 2 and alternative 3 the Taric measure -3 just updates the existing measure component (43005) with the new rate since its Taric measure start date is after the received FEDATE.
       context "Alt 2. Update" do
-        let!(:tame3) { create(:tame, amend_indicator: "U", fe_tsmp: DateTime.parse("2008-04-01 00:00:00"), msrgp_code: "VT", msr_type: "S", tty_code: "813", adval_rate: 17.000) }
+        let!(:tame1) { create(:tame, amend_indicator: "U",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     adval_rate: 17.000) }
 
-        it "should be increase to 17% starting from 2008-04-01 from 15%"
+        before {
+          ChiefTransformer.instance.invoke
+        }
+
+        it 'creates two new measures' do
+          Measure.count.should == 5
+        end
+
+        it 'should add end date to measure 0101010100' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
+                            validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+
+        it 'should add end date to measure 0202020200' do
+          m = Measure.where(goods_nomenclature_item_id: "0202020200",
+                            validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
+                            validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+
+        it 'should increase Duty Amount to 17% for measure 0303030300' do
+          m = Measure.where(goods_nomenclature_item_id: "0303030300",
+                            validity_start_date: DateTime.parse("2008-04-30 14:00:00")).take
+          m.measure_components.first.duty_amount.should == 17
+        end
+
+        it 'should create new Measure for 0101010100 with duty amount of 17%' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 17
+        end
+
+        it 'should create new Measure for 0202020200 with duty amount of 17%' do
+          m = Measure.where(goods_nomenclature_item_id: "0202020200",
+                            validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 17
+        end
       end
 
       context "Alt 3. Delete and Insert" do
-        let!(:tame4) { create(:tame, amend_indicator: "X", fe_tsmp: DateTime.parse("2008-04-01 00:00:00"), msrgp_code: "VT", msr_type: "S", tty_code: "813", adval_rate: 15.000) }
-        let!(:tame5) { create(:tame, amend_indicator: "I", fe_tsmp: DateTime.parse("2008-04-01 00:00:00"), msrgp_code: "VT", msr_type: "S", tty_code: "813", adval_rate: 17.000) }
+        let!(:tame4) { create(:tame, amend_indicator: "X",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     adval_rate: 15.000) }
+        let!(:tame5) { create(:tame, amend_indicator: "I",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     adval_rate: 17.000) }
 
-        it "should be increase to 17% starting from 2008-04-01 from 15%"
+        before {
+          ChiefTransformer.instance.invoke
+        }
+
+        it 'creates two new measures' do
+          Measure.count.should == 5
+        end
+
+        it 'should add end date to measure 0101010100' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
+                            validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+
+        it 'should add end date to measure 0202020200' do
+          m = Measure.where(goods_nomenclature_item_id: "0202020200",
+                            validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
+                            validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+
+        it 'should increase Duty Amount to 17% for measure 0303030300' do
+          m = Measure.where(goods_nomenclature_item_id: "0303030300",
+                            validity_start_date: DateTime.parse("2008-04-30 14:00:00")).take
+          m.measure_components.first.duty_amount.should == 17
+        end
+
+        it 'should create new Measure for 0101010100 with duty amount of 17%' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 17
+        end
+
+        it 'should create new Measure for 0202020200 with duty amount of 17%' do
+          m = Measure.where(goods_nomenclature_item_id: "0202020200",
+                            validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 17
+        end
+
       end
 
       # New, changed and deleted national measures in Taric
@@ -286,7 +378,75 @@ describe "CHIEF: VAT and Excises" do
       #   -3  2008-05-01    0303030300  17%
       # * -4  2008-04-01    0101010100  17%
       # * -5  2008-04-01    0202020200  17%
+    end
 
+    context "TAME Daily Scenario 2: VAT applied to another commodity code" do
+      context "Alt 1. Update and Insert" do
+        let!(:mfcm4) { create(:mfcm, amend_indicator: "U",
+                                     fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
+                                     le_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     cmdty_code: "0101010100") }
+        let!(:mfcm5) { create(:mfcm, :with_goods_nomenclature,
+                                     amend_indicator: "I",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     cmdty_code: "0404040400") }
+
+        before {
+          ChiefTransformer.instance.invoke
+        }
+
+        it 'adds validity end date to commodity 0101010100' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
+                            validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+
+        it 'creates commodity 0404040400' do
+          m = Measure.where(goods_nomenclature_item_id: "0404040400",
+                            validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+      end
+
+      context "Alt 2. Delete and Insert" do
+        let!(:mfcm4) { create(:mfcm, amend_indicator: "X",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     cmdty_code: "0101010100") }
+        let!(:mfcm5) { create(:mfcm, :with_goods_nomenclature,
+                                     amend_indicator: "I",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     cmdty_code: "0404040400") }
+
+        before {
+          ChiefTransformer.instance.invoke
+        }
+
+        it 'adds validity end date to commodity 0101010100' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
+                            validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+
+        it 'creates commodity 0404040400' do
+          m = Measure.where(goods_nomenclature_item_id: "0404040400",
+                            validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+      end
     end
   end
 
@@ -396,8 +556,8 @@ describe "CHIEF: VAT and Excises" do
 
         it 'adds end date to existing measure' do
           m1 = Measure.where(goods_nomenclature_item_id: "0101010100",
-                            validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
-                            validity_end_date: DateTime.parse("2007-11-30 00:00:00")).take
+                             validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
+                             validity_end_date: DateTime.parse("2007-11-30 00:00:00")).take
           m1.measure_components.first.duty_amount.should == 15
         end
 

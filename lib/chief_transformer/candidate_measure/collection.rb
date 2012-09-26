@@ -45,18 +45,41 @@ class ChiefTransformer
                 candidate_measure.save if candidate_measure.valid?
               end
             when "U"
-              measures_for_update = Measure.for_candidate_measure(candidate_measure)
+              measures_for_update = Measure.eager(:measure_components,
+                                                  :footnote_association_measures).for_candidate_measure(candidate_measure).all
+
               if measures_for_update.any?
                 measures_for_update.each do |existing_measure|
-                  existing_measure.update candidate_measure.values.diff(existing_measure.values.except(Measure.primary_key))
+                  candidate_measure.measure_sid = existing_measure.measure_sid
+                  candidate_measure.candidate_associations.each do |association, records|
+                    existing_measure.associations[association].each do |record|
+                      record.delete
+                    end
+                  end
+
+                  candidate_measure.candidate_associations.persist
+
+                  existing_measure.update candidate_measure.values.diff(existing_measure.values).except(Measure.primary_key)
                 end
               else
                 # MFCM Scenario 3
+                Measure.expired_before(candidate_measure).each do |expired_measure|
+                  expired_measure.update validity_end_date: candidate_measure.validity_start_date
+                end
+
                 candidate_measure.save if candidate_measure.valid?
               end
             when "X"
-              Measure.for_candidate_measure(candidate_measure).each do |existing_measure|
-                existing_measure.destroy
+              existing_measures = Measure.expired_before(candidate_measure)
+
+              if existing_measures.any?
+                existing_measures.each do |existing_measure|
+                  existing_measure.update validity_end_date: candidate_measure.validity_start_date
+                end
+              else
+                Measure.for_candidate_measure(candidate_measure).each do |existing_measure|
+                  existing_measure.delete
+                end
               end
             end
           end
