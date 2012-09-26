@@ -57,16 +57,4 @@ describe ChiefTransformer::CandidateMeasure::Collection do
       end
     end
   end
-
-  describe '#build' do
-    it 'builds measures from Mfcm' do
-      measures = ChiefTransformer::CandidateMeasure::Collection.build
-    end
-
-    it 'builds measures from Tame' do
-    end
-
-    it 'builds measures from Tamf' do
-    end
-  end
 end

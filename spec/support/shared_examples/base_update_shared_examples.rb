@@ -67,7 +67,7 @@ shared_examples_for 'Base Update' do
       let!(:example_taric_file) { create_taric_file :inbox, Date.yesterday }
 
       it 'expects download to be invoed' do
-        described_class.expects(:download).at_least(:once)
+        described_class.expects(:download).at_least(1)
 
         described_class.sync
       end
