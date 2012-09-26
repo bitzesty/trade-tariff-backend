@@ -214,6 +214,16 @@ class Measure < Sequel::Model
       select_append(Sequel.as(:if.sql_function('measures.validity_end_date IS NOT NULL'.lit, 'measures.validity_end_date'.lit, 'modification_regulations.effective_end_date'.lit), :effective_end_date)).
       join_table(:right, :modification_regulations, modification_regulations__modification_regulation_id: :measures__measure_generating_regulation_id)
     end
+
+    def for_candidate_measure(candidate_measure)
+      where(measure_type: candidate_measure.measure_type,
+            validity_start_date: candidate_measure.validity_start_date,
+            additional_code_type: candidate_measure.additional_code_type,
+            additional_code: candidate_measure.additional_code,
+            goods_nomenclature_item_id: candidate_measure.goods_nomenclature_item_id,
+            geographical_area: candidate_measure.geographical_area,
+            national: true)
+    end
   end
 
   def generating_regulation_present?

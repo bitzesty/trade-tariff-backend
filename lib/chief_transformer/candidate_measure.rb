@@ -26,6 +26,7 @@ class ChiefTransformer
                                     PRE AHC ATT CEX CHM COI CVD ECM EHC EQC EWP
                                     HOP HSE IWP PHC PRT QRC SFS VTA VTA VTE VTE
                                     VTS VTS VTZ VTZ SPL]
+
     attr_accessor :mfcm, :tame, :tamf, :amend_indicator, :candidate_associations
     attr_reader :chief_geographical_area
 

@@ -25,6 +25,7 @@ module Chief
 
     one_to_many :mfcms, key: {}, primary_key: {}, dataset: -> {
       Chief::Mfcm.filter{ |o| o.>=(:fe_tsmp, fe_tsmp) &
+                              ((o.<=(:le_tsmp, le_tsmp)) | ({le_tsmp: nil})) &
                               {:msrgp_code => msrgp_code} &
                               {:msr_type => msr_type} &
                               {:tty_code => tty_code}

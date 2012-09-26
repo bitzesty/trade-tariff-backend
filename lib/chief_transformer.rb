@@ -43,8 +43,6 @@ class ChiefTransformer
       query_arguments = { transformed: false }
       candidate_measures = MeasureBuilder.build_all(query_arguments: query_arguments)
 
-      binding.pry
-
       CandidateMeasure::Collection.new(candidate_measures).tap {|cms|
         cms.merge
         cms.validate

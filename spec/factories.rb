@@ -288,6 +288,10 @@ FactoryGirl.define do
                                              measure_type_id: evaluator.measure_type_id)
     }
 
+    trait :for_insert do
+      amend_indicator "I"
+    end
+
     trait :prohibition do
       tty_code { nil }
     end

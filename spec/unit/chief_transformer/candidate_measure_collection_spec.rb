@@ -4,7 +4,7 @@ require 'chief_transformer'
 describe ChiefTransformer::CandidateMeasure::Collection do
   describe '#persist' do
     context 'just MFCM present' do
-      let!(:mfcm) { create :mfcm }
+      let!(:mfcm) { create :mfcm, :for_insert }
 
       it 'creates no measures' do
         ChiefTransformer.instance.invoke(:initial_load)
@@ -18,7 +18,8 @@ describe ChiefTransformer::CandidateMeasure::Collection do
     end
 
     context 'MFCM & TAME present' do
-      let!(:mfcm) { create :mfcm, :with_tame_components,
+      let!(:mfcm) { create :mfcm, :for_insert,
+                                  :with_tame_components,
                                   :with_vat_group,
                                   :with_geographical_area,
                                   :with_goods_nomenclature }
@@ -35,7 +36,8 @@ describe ChiefTransformer::CandidateMeasure::Collection do
                                                                     adval2_rate: 0,
                                                                     spfc1_rate: 1,
                                                                     spfc2_rate: 0 }
-      let!(:mfcm) { create :mfcm, :with_tamf_components,
+      let!(:mfcm) { create :mfcm, :for_insert,
+                                  :with_tamf_components,
                                   :with_vat_group,
                                   :with_geographical_area,
                                   :with_goods_nomenclature }
@@ -47,7 +49,8 @@ describe ChiefTransformer::CandidateMeasure::Collection do
       end
 
       it 'create Measure Conditions from TAMF' do
-        mfcm = create :mfcm, :with_tamf_conditions,
+        mfcm = create :mfcm, :for_insert,
+                             :with_tamf_conditions,
                              :with_goods_nomenclature,
                              msrgp_code: 'PR'
 
