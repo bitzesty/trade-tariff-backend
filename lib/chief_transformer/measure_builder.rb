@@ -8,6 +8,8 @@ class ChiefTransformer
     self.builders = [MfcmBuilder, TameBuilder, TamfBuilder]
 
     def self.build(builder)
+      raise TransformException.new("Incorrect measure builder provided") unless builder.in? builders
+
       builder.build
     end
 

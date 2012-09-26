@@ -40,7 +40,7 @@ class ChiefTransformer
         }
       }
     when :update
-      CandidateMeasure::Collection.build.tap { |candidate_measures|
+      CandidateMeasure::Collection.new(MeasureBuilder.build_all).tap {|candidate_measures|
         candidate_measures.merge
         candidate_measures.validate
         candidate_measures.persist

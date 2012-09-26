@@ -39,11 +39,6 @@ RSpec.configure do |config|
     Sequel::Model.db.transaction(rollback: :always){example.run}
   end
 
-  config.after(:each) do
-    Mocha::Mockery.instance.teardown
-    Mocha::Mockery.reset_instance
-  end
-
   config.before(:each, :webmock) do
     WebMock.disable_net_connect!
   end
