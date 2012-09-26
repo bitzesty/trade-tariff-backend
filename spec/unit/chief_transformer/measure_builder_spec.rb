@@ -17,6 +17,12 @@ describe ChiefTransformer::MeasureBuilder do
     it 'raises TransformException if invalid builder specified' do
       expect { subject.build(nil) }.to raise_exception ChiefTransformer::TransformException
     end
+
+    it 'passes arguments down to builder' do
+      mfcm_builder.expects(:build).with(:abc, :def).returns(true)
+
+      subject.build(mfcm_builder, :abc, :def)
+    end
   end
 
   describe '.build_all' do

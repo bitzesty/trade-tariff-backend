@@ -34,7 +34,7 @@ class ChiefTransformer
 
     case work_mode
     when :initial_load
-      MeasureBuilder::MfcmBuilder.batch_build(per_page) { |measure_batch|
+      MeasureBuilder::PaginatedMfcmBuilder.build({per_page: per_page}) { |measure_batch|
         CandidateMeasure::Collection.new(measure_batch).tap { |candidate_measures|
           candidate_measures.persist
         }
