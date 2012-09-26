@@ -68,10 +68,6 @@ describe ChiefTransformer::CandidateMeasure do
         candidate_measure.goods_nomenclature_item_id.should == mfcm.cmdty_code
       end
 
-      it 'assigns amend indicator using mfcm component' do
-        candidate_measure.amend_indicator.should == mfcm.amend_indicator
-      end
-
       it 'assigns measure type using chief measure type adco table' do
         candidate_measure.measure_type.should == mfcm.measure_type_adco.measure_type_id
       end

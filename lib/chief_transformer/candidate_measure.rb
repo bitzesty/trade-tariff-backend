@@ -66,7 +66,6 @@ class ChiefTransformer
     end
 
     def assign_mfcm_attributes
-      self.amend_indicator = mfcm.amend_indicator
       self.goods_nomenclature_item_id = (mfcm.cmdty_code.size == 8) ? "#{mfcm.cmdty_code}00" : mfcm.cmdty_code
       self.measure_type = mfcm.measure_type_adco.measure_type_id.presence || mfcm.msr_type
       self.additional_code = mfcm.measure_type_adco.adtnl_cd
