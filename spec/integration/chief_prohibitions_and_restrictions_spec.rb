@@ -5,7 +5,7 @@ describe "CHIEF: Prohibitions and Restrictions" do
   before(:all) { preload_standing_data }
   after(:all)  { clear_standing_data }
 
-  context "Initial Load Scenario P&R" do
+  describe "Initial Load Scenario P&R" do
     # In this scenario a number of P&R measures are created. The created measures represent Export and Import restrictions for:
     # * specific countries or regions (IQ, XC)
     # * a country group that is translated to an EU country group (D066)
@@ -160,6 +160,27 @@ describe "CHIEF: Prohibitions and Restrictions" do
       f = FootnoteAssociationMeasure.where(measure_sid: -6, footnote_type_id: "04", footnote_id: "011").first
       f.should_not be_nil
       f.national.should be_true
+    end
+  end
+
+  describe "Daily Update TAME and TAMF" do
+    describe "Daily Scenario 1: Changed country group for measure" do
+      context "Alternative 1: Update & Insert"
+      context "Alternative 2: Update"
+      context "Alternative 3: Delete & Insert"
+    end
+
+    describe "Daily Scenario 2: Restriction removed" do
+      context "Alternative 1: Update TAME & TAMF"
+      context "Alternative 2: Delete TAME & TAMF"
+      context "Alternative 3: Delete TAME"
+    end
+
+    describe "Daily Scenario 3: Country group changed countries" do
+      context "Alternative 1: Update TAME & TAMF"
+    end
+    describe "Daily Scenario 4: Country removed from restriction" do
+      context "Alternative 1: Update TAME & TAMF"
     end
   end
 end
