@@ -448,6 +448,49 @@ describe "CHIEF: VAT and Excises" do
         end
       end
     end
+
+    context "TAME Daily Scenario 3: VAT no longer applied to commodity" do
+      context "Alt 1. Update" do
+        let!(:mfcm4) { create(:mfcm, amend_indicator: "U",
+                                     fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
+                                     le_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     cmdty_code: "0101010100") }
+
+        before {
+          ChiefTransformer.instance.invoke
+        }
+
+        it 'adds validity end date to commodity 0101010100' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
+                            validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+      end
+
+      context "Alt 2. Delete" do
+        let!(:mfcm4) { create(:mfcm, amend_indicator: "X",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     cmdty_code: "0101010100") }
+
+        before {
+          ChiefTransformer.instance.invoke
+        }
+
+        it 'adds validity end date to commodity 0101010100' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
+                            validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+      end
+    end
   end
 
   context "Daily Update MFCM" do
