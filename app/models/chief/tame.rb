@@ -31,6 +31,12 @@ module Chief
                         }
     }
 
+    dataset_module do
+      def untransformed
+        filter(transformed: false)
+      end
+    end
+
     def adval1_rate; 1; end
     def adval2_rate; 0; end
     def spfc1_rate; 0; end

@@ -23,6 +23,12 @@ module Chief
                                                  chief_measure_type_adco__measure_type: msr_type,
                                                  chief_measure_type_adco__tax_type_code: tty_code) }
 
+    dataset_module do
+      def untransformed
+        filter(transformed: false)
+      end
+    end
+
     def validate
       super
 
