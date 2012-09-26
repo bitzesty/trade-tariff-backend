@@ -41,7 +41,6 @@ class ChiefTransformer
                   existing_measure.update candidate_measure.values.diff(existing_measure.values).except(Measure.primary_key)
                 end
               else
-                # MFCM Scenario 3
                 candidate_measure.save if candidate_measure.valid?
               end
             when "U"
@@ -62,7 +61,6 @@ class ChiefTransformer
                   existing_measure.update candidate_measure.values.diff(existing_measure.values).except(Measure.primary_key)
                 end
               else
-                # MFCM Scenario 3
                 Measure.expired_before(candidate_measure).each do |expired_measure|
                   expired_measure.update validity_end_date: candidate_measure.validity_start_date
                 end

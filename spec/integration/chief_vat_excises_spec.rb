@@ -491,6 +491,28 @@ describe "CHIEF: VAT and Excises" do
         end
       end
     end
+
+    context "TAME Daily Scenario 4: VAT applied to additional commodity" do
+      context "Alt 1. Insert" do
+        let!(:mfcm4) { create(:mfcm, :with_goods_nomenclature,
+                                     amend_indicator: "I",
+                                     fe_tsmp: DateTime.parse("2008-01-01 00:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     cmdty_code: "0404040400") }
+
+        before {
+          ChiefTransformer.instance.invoke
+        }
+
+        it 'creates new measure for commodity 0404040400' do
+          m = Measure.where(goods_nomenclature_item_id: "0404040400",
+                            validity_start_date: DateTime.parse("2008-01-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+      end
+    end
   end
 
   context "Daily Update MFCM" do
