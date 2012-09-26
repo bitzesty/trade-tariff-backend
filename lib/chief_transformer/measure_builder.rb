@@ -6,7 +6,7 @@ require 'chief_transformer/measure_builders/tamf_builder'
 class ChiefTransformer
   class MeasureBuilder
     cattr_accessor :builders
-    self.builders = [PaginatedMfcmBuilder, MfcmBuilder, TameBuilder, TamfBuilder]
+    self.builders = [MfcmBuilder, TameBuilder, TamfBuilder]
 
     def self.build(builder, *args)
       raise TransformException.new("Incorrect measure builder provided") unless builder.in? builders
@@ -14,9 +14,9 @@ class ChiefTransformer
       builder.build(*args)
     end
 
-    def self.build_all
+    def self.build_all(*args)
       builders.inject([]) {|memo, builder|
-        memo << build(builder)
+        memo << build(builder, *args)
         memo
       }.flatten
     end

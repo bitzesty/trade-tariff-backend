@@ -1,7 +1,7 @@
 class ChiefTransformer
   class MeasureBuilder
     module TameBuilder
-      def self.build
+      def self.build(*args)
         []
       end
     end

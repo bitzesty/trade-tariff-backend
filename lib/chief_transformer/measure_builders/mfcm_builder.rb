@@ -3,7 +3,21 @@ class ChiefTransformer
     module MfcmBuilder
       extend self
 
-      def build
+      def build(*args)
+        options = args.extract_options!
+        query_arguments = options.fetch(:query_arguments, '')
+
+        Chief::Mfcm.where(query_arguments).map do |mfcm|
+          if mfcm.tame.present?
+            mfcm.tame.tamfs.map { |tamf|
+              CandidateMeasure.new(mfcm: mfcm, tame: mfcm.tame, tamf: tamf)
+            }.tap! { |candidate_measures|
+              # When TAME has no subsidiary TAMFs and no candidate measures are built
+              # from the combo. Create Measure just from TAME record.
+              candidate_measures << CandidateMeasure.new(mfcm: mfcm, tame: mfcm.tame) if candidate_measures.empty?
+            }
+          end
+        end.flatten.compact
       end
     end
   end

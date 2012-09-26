@@ -321,6 +321,14 @@ FactoryGirl.define do
       }
     end
 
+    trait :untransformed do
+      transformed { false }
+    end
+
+    trait :transformed do
+      transformed { true }
+    end
+
     trait :with_tame do
       after(:create) { |mfcm|
         FactoryGirl.create(:tame, msrgp_code: mfcm.msrgp_code,
@@ -475,6 +483,14 @@ FactoryGirl.define do
     trait :prohibition do
       tty_code { nil }
     end
+
+    trait :untransformed do
+      transformed { false }
+    end
+
+    trait :transformed do
+      transformed { true }
+    end
   end
 
   factory :tamf, class: Chief::Tamf do
@@ -489,6 +505,14 @@ FactoryGirl.define do
 
     trait :prohibition do
       tty_code { nil }
+    end
+
+    trait :untransformed do
+      transformed { false }
+    end
+
+    trait :transformed do
+      transformed { true }
     end
   end
 

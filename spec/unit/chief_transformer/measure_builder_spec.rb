@@ -30,13 +30,18 @@ describe ChiefTransformer::MeasureBuilder do
     let(:builder2) { stub }
     let(:builders) { [builder1, builder2] }
 
-    before {
+    it 'builds measures from all available builders' do
       builders.each{ |b| b.expects(:build).returns(true) }
       ChiefTransformer::MeasureBuilder.expects(:builders).at_least(1).returns(builders)
-    }
 
-    it 'builds measures from all available builders' do
       subject.build_all
+    end
+
+    it 'passes down arguments to builders' do
+      builders.each{ |b| b.expects(:build).with(:abc, :def).returns(true) }
+      ChiefTransformer::MeasureBuilder.expects(:builders).at_least(1).returns(builders)
+
+      subject.build_all(:abc, :def)
     end
   end
 end

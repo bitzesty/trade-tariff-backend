@@ -206,7 +206,7 @@ describe "CHIEF: VAT and Excises" do
     end
 
     context "TAME Daily Scenario 1: Changed VAT rate" do
-      before(:each) { ChiefTransformer.instance.invoke(:initial_load) }
+      before(:all) { ChiefTransformer.instance.invoke(:initial_load) }
 
       context "Alt 1. Update and Insert" do
         let!(:tame1) { create(:tame, amend_indicator: "U", fe_tsmp: DateTime.parse("2007-11-15 11:00:00"), msrgp_code: "VT", msr_type: "S", tty_code: "813", adval_rate: 15.000, le_tsmp: DateTime.parse("2008-04-01 00:00:00")) }
@@ -241,6 +241,87 @@ describe "CHIEF: VAT and Excises" do
       # * -4  2008-04-01    0101010100  17%
       # * -5  2008-04-01    0202020200  17%
 
+    end
+  end
+
+  context "Daily Update MFCM" do
+    let!(:mfcm1){ create(:mfcm, :with_goods_nomenclature,
+                                amend_indicator: "I",
+                                fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
+                                msrgp_code: "VT",
+                                msr_type: "S",
+                                tty_code: "813",
+                                cmdty_code: "0101010100") }
+
+    let!(:tame) { create(:tame, amend_indicator: "I",
+                                fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
+                                msrgp_code: "VT",
+                                msr_type: "S",
+                                tty_code: "813",
+                                adval_rate: 15.000) }
+
+    let!(:geographical_area) { create :geographical_area, :fifteen_years, :erga_omnes }
+
+    before do
+      ChiefTransformer.instance.invoke(:initial_load)
+    end
+
+    it "should create the 0101010100 measure" do
+      m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                        validity_start_date: DateTime.parse("2007-11-15 11:00:00")).take
+      m.measure_components.first.duty_amount.should == 15
+    end
+
+    describe "MFCM Daily Scenario 1: Updated measure with later start date" do
+      before(:all) { ChiefTransformer.instance.invoke }
+
+      describe "Alt 1. Update" do
+        let!(:mfcm2){ create(:mfcm, amend_indicator: "U",
+                                    fe_tsmp: DateTime.parse("2008-01-01 00:00:00"),
+                                    msrgp_code: "VT",
+                                    msr_type: "S",
+                                    tty_code: "813",
+                                    cmdty_code: "0101010100") }
+
+        it 'no changes should be done to Measure because just fe_tsmp was moved forward' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2007-11-15 11:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+      end
+    end
+
+    describe "MFCM Daily Scenario 2: Updated measure with later start date" do
+      before(:all) { ChiefTransformer.instance.invoke }
+
+      describe 'Alt 1: Update and Insert' do
+        let!(:mfcm2){ create(:mfcm, amend_indicator: "U",
+                                    fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
+                                    le_tsmp: DateTime.parse("2007-12-31 11:00:00"),
+                                    msrgp_code: "VT",
+                                    msr_type: "S",
+                                    tty_code: "813",
+                                    cmdty_code: "0101010100") }
+        let!(:mfcm3){ create(:mfcm, amend_indicator: "I",
+                                    fe_tsmp: DateTime.parse("2008-01-01 00:00:00"),
+                                    msrgp_code: "VT",
+                                    msr_type: "S",
+                                    tty_code: "813",
+                                    cmdty_code: "0101010100") }
+
+        it 'adds end date to existing measure' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
+                            validity_end_date: DateTime.parse("2007-12-31 11:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+
+        it 'creates new measure with new start date' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2008-01-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+      end
     end
   end
 end

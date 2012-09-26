@@ -40,10 +40,13 @@ class ChiefTransformer
         }
       }
     when :update
-      CandidateMeasure::Collection.new(MeasureBuilder.build_all).tap {|candidate_measures|
-        candidate_measures.merge
-        candidate_measures.validate
-        candidate_measures.persist
+      query_arguments = { transformed: false }
+      candidate_measures = MeasureBuilder.build_all(query_arguments: query_arguments)
+
+      CandidateMeasure::Collection.new(candidate_measures).tap {|cms|
+        cms.merge
+        cms.validate
+        cms.persist
       }
     end
 
