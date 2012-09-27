@@ -1500,4 +1500,90 @@ describe "CHIEF: VAT and Excises" do
       end
     end
   end
+
+  context "Unsupported scenario 1" do
+    let!(:mfcm1) { create(:mfcm, :with_goods_nomenclature,
+                                 amend_indicator: "I",
+                                 fe_tsmp: DateTime.parse("2008-01-01 00:00:00"),
+                                 msrgp_code: "EX",
+                                 msr_type: "EXF",
+                                 tty_code: "411",
+                                 cmdty_code: "0101010100") }
+    let!(:tame1) { create(:tame, amend_indicator: "I",
+                                 fe_tsmp: DateTime.parse("2008-01-01 00:00:00"),
+                                 msrgp_code: "EX",
+                                 msr_type: "EXF",
+                                 tty_code: "411") }
+    let!(:tamf1) { create(:tamf, amend_indicator: "I",
+                                 fe_tsmp: DateTime.parse("2008-01-01 00:00:00"),
+                                 msrgp_code: "EX",
+                                 msr_type: "EXF",
+                                 tty_code: "411",
+                                 adval1_rate: 20.0) }
+
+    let!(:geographical_area) { create :geographical_area, :fifteen_years, :erga_omnes }
+
+    before { ChiefTransformer.instance.invoke(:initial_load) }
+
+    it 'creates one measure' do
+      Measure.count.should == 1
+    end
+
+    it 'measure for 0101010100 with duty rate of 20.0' do
+      m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                        validity_start_date: DateTime.parse("2008-01-01 00:00:00")).take
+      m.measure_components.first.duty_amount.should == 20
+    end
+
+    describe "Alt 1. Multiple updates" do
+      let!(:tame2) { create(:tame, amend_indicator: "U",
+                                   fe_tsmp: DateTime.parse("2008-02-01 00:00:00"),
+                                   msrgp_code: "EX",
+                                   msr_type: "EXF",
+                                   tty_code: "411") }
+      let!(:tame3) { create(:tame, amend_indicator: "U",
+                                   fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                   msrgp_code: "EX",
+                                   msr_type: "EXF",
+                                   tty_code: "411") }
+      let!(:tamf2) { create(:tamf, amend_indicator: "U",
+                                   fe_tsmp: DateTime.parse("2008-02-01 00:00:00"),
+                                   msrgp_code: "EX",
+                                   msr_type: "EXF",
+                                   tty_code: "411",
+                                   adval1_rate: 19.0) }
+      let!(:tamf3) { create(:tamf, amend_indicator: "U",
+                                   fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                   msrgp_code: "EX",
+                                   msr_type: "EXF",
+                                   tty_code: "411",
+                                   adval1_rate: 18.0) }
+
+      before { ChiefTransformer.instance.invoke }
+
+      it 'creates two new measures' do
+        Measure.count.should == 3
+      end
+
+      it 'adds end date to 0101010100 with duty amount of 20%' do
+        m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                          validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
+                          validity_end_date: DateTime.parse("2008-02-01 00:00:00")).take
+        m.measure_components.first.duty_amount.should == 20
+      end
+
+      it 'creates new temporary measure for 0101010100 with duty amount of 20%' do
+        m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                          validity_start_date: DateTime.parse("2008-02-01 00:00:00"),
+                          validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
+        m.measure_components.first.duty_amount.should == 19
+      end
+
+      it 'creates new measure for 0101010100 with duty amount of 18' do
+        m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                          validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
+        m.measure_components.first.duty_amount.should == 18
+      end
+    end
+  end
 end

@@ -61,6 +61,9 @@ class ChiefTransformer
 
                   candidate_measure.candidate_associations.persist
 
+                  # TODO remove this hack, unsupported scenario 1
+                  candidate_measure.validity_end_date = existing_measure.validity_end_date if existing_measure.validity_end_date.present? && existing_measure.validity_start_date != existing_measure.validity_end_date
+
                   existing_measure.update candidate_measure.values.diff(existing_measure.values).except(Measure.primary_key)
                 end
               else

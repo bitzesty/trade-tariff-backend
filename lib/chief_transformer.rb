@@ -49,6 +49,15 @@ class ChiefTransformer
         cms.validate
         cms.persist
       }
+
+
+      # MeasureBuilder.build_all(query_arguments: query_arguments) do |measure|
+      #   CandidateMeasure::Collection.new([measure]).tap {|cms|
+      #     # cms.merge
+      #     cms.validate
+      #     cms.persist
+      #   }
+      # end
     end
 
     clean
