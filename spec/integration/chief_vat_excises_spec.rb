@@ -708,6 +708,39 @@ describe "CHIEF: VAT and Excises" do
         end
       end
     end
+
+    context 'TAME Daily Scenario 7: Incorrect VAT rate' do
+      context "Alt 1. Update" do
+        let!(:tame2) { create(:tame, amend_indicator: "U",
+                                     fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     adval_rate: 17.00) }
+
+        before {
+          ChiefTransformer.instance.invoke
+        }
+
+        it 'updates duty amount for commodity 0101010100 measure' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2007-11-15 11:00:00")).take
+          m.measure_components.first.duty_amount.should == 17.0
+        end
+
+        it 'updates duty amount for commodity 0202020200 measure' do
+          m = Measure.where(goods_nomenclature_item_id: "0202020200",
+                            validity_start_date: DateTime.parse("2008-01-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 17.0
+        end
+
+        it 'updates duty amount for commodity 0303030300 measure' do
+          m = Measure.where(goods_nomenclature_item_id: "0303030300",
+                            validity_start_date: DateTime.parse("2008-04-30 14:00:00")).take
+          m.measure_components.first.duty_amount.should == 17.0
+        end
+      end
+    end
   end
 
   context "Daily Update TAMF" do
