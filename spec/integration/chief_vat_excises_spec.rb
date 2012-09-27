@@ -1103,6 +1103,219 @@ describe "CHIEF: VAT and Excises" do
         end
       end
     end
+
+    describe "TAMF Daily Scenario 3: Removed max amount" do
+      describe "Alt 1. Update and Insert" do
+        let!(:tamf3) { create(:tamf, amend_indicator: "U",
+                                     fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
+                                     msrgp_code: "EX",
+                                     msr_type: "EXF",
+                                     tty_code: "411",
+                                     spfc1_rate: 20.0,
+                                     spfc2_rate: 1.0)}
+        let!(:tamf4) { create(:tamf, amend_indicator: "I",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "EX",
+                                     msr_type: "EXF",
+                                     tty_code: "411",
+                                     spfc1_rate: 20.0)}
+        let!(:tame1) { create(:tame, amend_indicator: "X",
+                                     fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
+                                     le_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "EX",
+                                     msr_type: "EXF",
+                                     tty_code: "411") }
+        let!(:tame2) { create(:tame, amend_indicator: "I",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "EX",
+                                     msr_type: "EXF",
+                                     tty_code: "411") }
+
+        before {
+          ChiefTransformer.instance.invoke
+        }
+
+        it 'creates two new measures' do
+          Measure.count.should == 8
+        end
+
+        it 'adds validity end date to 0101010100 measure' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
+                            validity_end_date: DateTime.parse("2008-04-01 00:00:00"),
+                            measure_type: 'DAA').take
+          m.measure_components.first.duty_amount.should == 20
+          m.measure_components.last.duty_amount.should == 1
+        end
+
+        it 'adds validity end date to 0202020200 measure' do
+          m = Measure.where(goods_nomenclature_item_id: "0202020200",
+                            validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
+                            validity_end_date: DateTime.parse("2008-04-01 00:00:00"),
+                            measure_type: 'DAA').take
+          m.measure_components.first.duty_amount.should == 20
+          m.measure_components.last.duty_amount.should == 1
+        end
+
+        it 'removes measure component (1kg) from 0303030300' do
+          m = Measure.where(goods_nomenclature_item_id: "0303030300",
+                            validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
+                            measure_type: 'DAA').take
+          m.measure_components.first.duty_amount.should == 20
+          m.measure_components.size.should == 1
+        end
+
+        it 'creates new measure for 0101010100 with duty amount of 20%' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
+                            measure_type: 'DAA').take
+          m.measure_components.first.duty_amount.should == 20
+        end
+
+        it 'creates new measure for 0202020200 with duty amount of 20%' do
+          m = Measure.where(goods_nomenclature_item_id: "0202020200",
+                            validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
+                            measure_type: 'DAA').take
+          m.measure_components.first.duty_amount.should == 20
+        end
+      end
+
+      describe "Alt 2. Update" do
+        let!(:tamf3) { create(:tamf, amend_indicator: "U",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "EX",
+                                     msr_type: "EXF",
+                                     tty_code: "411",
+                                     spfc1_rate: 20.0) }
+        let!(:tame1) { create(:tame, amend_indicator: "U",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "EX",
+                                     msr_type: "EXF",
+                                     tty_code: "411") }
+
+        before {
+          ChiefTransformer.instance.invoke
+        }
+
+        it 'creates two new measures' do
+          Measure.count.should == 8
+        end
+
+        it 'adds validity end date to 0101010100 measure' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
+                            validity_end_date: DateTime.parse("2008-04-01 00:00:00"),
+                            measure_type: 'DAA').take
+          m.measure_components.first.duty_amount.should == 20
+          m.measure_components.last.duty_amount.should == 1
+        end
+
+        it 'adds validity end date to 0202020200 measure' do
+          m = Measure.where(goods_nomenclature_item_id: "0202020200",
+                            validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
+                            validity_end_date: DateTime.parse("2008-04-01 00:00:00"),
+                            measure_type: 'DAA').take
+          m.measure_components.first.duty_amount.should == 20
+          m.measure_components.last.duty_amount.should == 1
+        end
+
+        it 'removes measure component (1kg) from 0303030300' do
+          m = Measure.where(goods_nomenclature_item_id: "0303030300",
+                            validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
+                            measure_type: 'DAA').take
+          m.measure_components.first.duty_amount.should == 20
+          m.measure_components.size.should == 1
+        end
+
+        it 'creates new measure for 0101010100 with duty amount of 20%' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
+                            measure_type: 'DAA').take
+          m.measure_components.first.duty_amount.should == 20
+        end
+
+        it 'creates new measure for 0202020200 with duty amount of 20%' do
+          m = Measure.where(goods_nomenclature_item_id: "0202020200",
+                            validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
+                            measure_type: 'DAA').take
+          m.measure_components.first.duty_amount.should == 20
+        end
+      end
+
+      describe "Alt 3. Delete and Insert" do
+        let!(:tamf3) { create(:tamf, amend_indicator: "X",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "EX",
+                                     msr_type: "EXF",
+                                     tty_code: "411",
+                                     spfc1_rate: 20.0,
+                                     spfc2_rate: 1) }
+        let!(:tamf4) { create(:tamf, amend_indicator: "I",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "EX",
+                                     msr_type: "EXF",
+                                     tty_code: "411",
+                                     spfc1_rate: 20.0) }
+        let!(:tame1) { create(:tame, amend_indicator: "X",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "EX",
+                                     msr_type: "EXF",
+                                     tty_code: "411") }
+        let!(:tame2) { create(:tame, amend_indicator: "I",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "EX",
+                                     msr_type: "EXF",
+                                     tty_code: "411") }
+
+        before {
+          ChiefTransformer.instance.invoke
+        }
+
+        it 'creates two new measures' do
+          Measure.count.should == 8
+        end
+
+        it 'adds validity end date to 0101010100 measure' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
+                            validity_end_date: DateTime.parse("2008-04-01 00:00:00"),
+                            measure_type: 'DAA').take
+          m.measure_components.first.duty_amount.should == 20
+          m.measure_components.last.duty_amount.should == 1
+        end
+
+        it 'adds validity end date to 0202020200 measure' do
+          m = Measure.where(goods_nomenclature_item_id: "0202020200",
+                            validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
+                            validity_end_date: DateTime.parse("2008-04-01 00:00:00"),
+                            measure_type: 'DAA').take
+          m.measure_components.first.duty_amount.should == 20
+          m.measure_components.last.duty_amount.should == 1
+        end
+
+        it 'removes measure component (1kg) from 0303030300' do
+          m = Measure.where(goods_nomenclature_item_id: "0303030300",
+                            validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
+                            measure_type: 'DAA').take
+          m.measure_components.first.duty_amount.should == 20
+          m.measure_components.size.should == 1
+        end
+
+        it 'creates new measure for 0101010100 with duty amount of 20%' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
+                            measure_type: 'DAA').take
+          m.measure_components.first.duty_amount.should == 20
+        end
+
+        it 'creates new measure for 0202020200 with duty amount of 20%' do
+          m = Measure.where(goods_nomenclature_item_id: "0202020200",
+                            validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
+                            measure_type: 'DAA').take
+          m.measure_components.first.duty_amount.should == 20
+        end
+      end
+    end
   end
 
   context "Daily Update MFCM" do

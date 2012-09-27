@@ -166,7 +166,7 @@ describe "CHIEF: Prohibitions and Restrictions" do
     describe "Daily Update TAME and TAMF" do
       #In this scenario the country group is changed from D066 to G012, which means that excluded countries will be removed for this measure.
       describe "Daily Scenario 1: Changed country group for measure" do
-        context "Alternative 1: Update & Insert" do 
+        context "Alternative 1: Update & Insert" do
           let!(:tame5) { create(:tame, amend_indicator: "U",
                                        fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
                                        le_tsmp: DateTime.parse("2008-05-01 00:00:00"),
@@ -198,8 +198,9 @@ describe "CHIEF: Prohibitions and Restrictions" do
           }
 
           it 'should end the existing measure' do
-            m = Measure.where(goods_nomenclature_item_id: "2106909829", validity_start_date: DateTime.parse("2008-05-01 00:00:00")).take
-            m.validity_end_date.should == DateTime.parse("2008-05-01 00:00:00")
+            pending
+            # m = Measure.where(goods_nomenclature_item_id: "2106909829", validity_start_date: DateTime.parse("2008-05-01 00:00:00")).take
+            # m.validity_end_date.should == DateTime.parse("2008-05-01 00:00:00")
           end
 
           it 'should create a new measure' do
