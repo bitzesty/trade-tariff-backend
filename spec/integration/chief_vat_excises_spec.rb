@@ -1501,7 +1501,7 @@ describe "CHIEF: VAT and Excises" do
     end
   end
 
-  context "Unsupported scenario 1" do
+  context "Unsupported Scenario 1: Several updates in same daily update file" do
     let!(:mfcm1) { create(:mfcm, :with_goods_nomenclature,
                                  amend_indicator: "I",
                                  fe_tsmp: DateTime.parse("2008-01-01 00:00:00"),
@@ -1583,6 +1583,126 @@ describe "CHIEF: VAT and Excises" do
         m = Measure.where(goods_nomenclature_item_id: "0101010100",
                           validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
         m.measure_components.first.duty_amount.should == 18
+      end
+    end
+  end
+
+  context "Unsupported Scenario 2: Insert and delete in same daily update file" do
+    let!(:tame1) { create(:tame, amend_indicator: "I",
+                                 fe_tsmp: DateTime.parse("2007-01-01 00:00:00"),
+                                 msrgp_code: "EX",
+                                 msr_type: "EXF",
+                                 tty_code: "411") }
+    let!(:tamf1) { create(:tamf, amend_indicator: "I",
+                                 fe_tsmp: DateTime.parse("2007-01-01 00:00:00"),
+                                 msrgp_code: "EX",
+                                 msr_type: "EXF",
+                                 tty_code: "411",
+                                 adval1_rate: 20.0) }
+
+    let!(:geographical_area) { create :geographical_area, :fifteen_years, :erga_omnes }
+
+    before { ChiefTransformer.instance.invoke(:initial_load) }
+
+    it 'no Taric measures should be created' do
+      Measure.count.should == 0
+    end
+
+    context 'Alt 1. Insertion and deletion' do
+      let!(:mfcm1) { create(:mfcm, amend_indicator: "I",
+                                   fe_tsmp: DateTime.parse("2008-01-01 00:00:00"),
+                                   msrgp_code: "EX",
+                                   msr_type: "EXF",
+                                   tty_code: "411",
+                                   cmdty_code: "0101010100") }
+      let!(:mfcm2) { create(:mfcm, amend_indicator: "X",
+                                   fe_tsmp: DateTime.parse("2008-01-01 00:00:00"),
+                                   msrgp_code: "EX",
+                                   msr_type: "EXF",
+                                   tty_code: "411",
+                                   cmdty_code: "0101010100") }
+
+      before { ChiefTransformer.instance.invoke }
+
+      it 'no Taric measures should be created' do
+        Measure.count.should == 0
+      end
+    end
+  end
+
+  context "Unsupported Scenario 3: Insert and update in same daily file" do
+    describe "Alt 1. Insert and Update" do
+      let!(:mfcm1) { create(:mfcm, :with_goods_nomenclature,
+                                   amend_indicator: "I",
+                                   fe_tsmp: DateTime.parse("2008-01-01 00:00:00"),
+                                   msrgp_code: "EX",
+                                   msr_type: "EXF",
+                                   tty_code: "411",
+                                   cmdty_code: "0101010100") }
+      let!(:tame1) { create(:tame, amend_indicator: "I",
+                                   fe_tsmp: DateTime.parse("2008-03-01 00:00:00"),
+                                   msrgp_code: "EX",
+                                   msr_type: "EXF",
+                                   tty_code: "411") }
+      let!(:tame2) { create(:tame, amend_indicator: "U",
+                                   fe_tsmp: DateTime.parse("2008-03-01 00:00:00"),
+                                   msrgp_code: "EX",
+                                   msr_type: "EXF",
+                                   tty_code: "411") }
+      let!(:tamf1) { create(:tamf, amend_indicator: "I",
+                                   fe_tsmp: DateTime.parse("2008-03-01 00:00:00"),
+                                   msrgp_code: "EX",
+                                   msr_type: "EXF",
+                                   tty_code: "411",
+                                   adval1_rate: 20.0) }
+      let!(:tamf2) { create(:tamf, amend_indicator: "U",
+                                   fe_tsmp: DateTime.parse("2008-03-01 00:00:00"),
+                                   msrgp_code: "EX",
+                                   msr_type: "EXF",
+                                   tty_code: "411",
+                                   adval1_rate: 15.0) }
+
+      let!(:geographical_area) { create :geographical_area, :fifteen_years, :erga_omnes }
+
+      before { ChiefTransformer.instance.invoke }
+
+      it 'creates measure for 0101010100 with duty rate of 15%' do
+        Measure.count.should == 1
+        m = Measure.where({validity_start_date: DateTime.parse("2008-03-01 00:00:00"),
+                           goods_nomenclature_item_id: "0101010100"}).take
+        m.measure_components.first.duty_amount.should == 15
+      end
+    end
+
+    describe "Alt 2. Insert" do
+      let!(:mfcm1) { create(:mfcm, :with_goods_nomenclature,
+                                   amend_indicator: "I",
+                                   fe_tsmp: DateTime.parse("2008-01-01 00:00:00"),
+                                   msrgp_code: "EX",
+                                   msr_type: "EXF",
+                                   tty_code: "411",
+                                   cmdty_code: "0101010100") }
+      let!(:tame1) { create(:tame, amend_indicator: "I",
+                                   fe_tsmp: DateTime.parse("2008-03-01 00:00:00"),
+                                   msrgp_code: "EX",
+                                   msr_type: "EXF",
+                                   tty_code: "411") }
+      let!(:tamf2) { create(:tamf, amend_indicator: "I",
+                                   fe_tsmp: DateTime.parse("2008-03-01 00:00:00"),
+                                   msrgp_code: "EX",
+                                   msr_type: "EXF",
+                                   tty_code: "411",
+                                   adval1_rate: 15.0) }
+
+      let!(:geographical_area) { create :geographical_area, :fifteen_years, :erga_omnes }
+
+      before { ChiefTransformer.instance.invoke }
+
+      it 'creates measure for 0101010100 with duty rate of 15%' do
+        Measure.count.should == 1
+        m = Measure.where({validity_start_date: DateTime.parse("2008-03-01 00:00:00"),
+                           goods_nomenclature_item_id: "0101010100"}).take
+        m.measure_components.first.duty_amount.should == 15
       end
     end
   end
