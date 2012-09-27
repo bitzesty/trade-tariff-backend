@@ -163,31 +163,36 @@ describe "CHIEF: Prohibitions and Restrictions" do
       f.should_not be_nil
       f.national.should be_true
     end
+
     describe "Daily Update TAME and TAMF" do
       #In this scenario the country group is changed from D066 to G012, which means that excluded countries will be removed for this measure.
       describe "Daily Scenario 1: Changed country group for measure" do
         context "Alternative 1: Update & Insert" do
-          let!(:tame5) { create(:tame, amend_indicator: "U",
+          let!(:tame5) { create(:tame, :prohibition,
+                                       amend_indicator: "U",
                                        fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
                                        le_tsmp: DateTime.parse("2008-05-01 00:00:00"),
                                        msrgp_code: "PR",
                                        msr_type: "CVD",
                                        tar_msr_no: "2106909829") }
 
-          let!(:tame6) { create(:tame, amend_indicator: "I",
+          let!(:tame6) { create(:tame, :prohibition,
+                                       amend_indicator: "I",
                                        fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
                                        msrgp_code: "PR",
                                        msr_type: "CVD",
                                        tar_msr_no: "2106909829") }
 
-          let!(:tamf5) { create(:tamf, amend_indicator: "U",
+          let!(:tamf5) { create(:tamf, :prohibition,
+                                       amend_indicator: "U",
                                        fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
                                        msrgp_code: "PR",
                                        msr_type: "CVD",
                                        cngp_code: "D066",
                                        tar_msr_no: "2106909829") }
 
-          let!(:tamf6) { create(:tamf, amend_indicator: "I",
+          let!(:tamf6) { create(:tamf, :prohibition,
+                                       amend_indicator: "I",
                                        fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
                                        msrgp_code: "PR",
                                        msr_type: "CVD",
@@ -198,18 +203,160 @@ describe "CHIEF: Prohibitions and Restrictions" do
           }
 
           it 'should end the existing measure' do
-            pending
-            # m = Measure.where(goods_nomenclature_item_id: "2106909829", validity_start_date: DateTime.parse("2008-05-01 00:00:00")).take
-            # m.validity_end_date.should == DateTime.parse("2008-05-01 00:00:00")
+            m = Measure.where(goods_nomenclature_item_id: "2106909829",
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
+                              validity_end_date: DateTime.parse("2008-05-01 00:00:00")).take
           end
 
-          it 'should create a new measure' do
-            m = Measure.where(goods_nomenclature_item_id: "2106909829", validity_start_date: DateTime.parse("2008-04-01 00:00:00")).first
-            m.should_not be_nil
+          it 'should create a new measure for 2106909829' do
+            m = Measure.where(goods_nomenclature_item_id: "2106909829",
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
+            m[:geographical_area].should == "1011"
+            m.measure_conditions.count.should == 2
+          end
+
+          it 'should create measure conditions for new measure for  2106909829' do
+            m = Measure.where(goods_nomenclature_item_id: "2106909829",
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
+            m.measure_conditions_dataset.where(condition_code: "B",
+                                               component_sequence_number: 1,
+                                               certificate_type_code: "N",
+                                               certificate_code: "853").any?.should be_true
+            m.measure_conditions_dataset.where(condition_code: "B",
+                                               component_sequence_number: 2,
+                                               action_code: "04").any?.should be_true
+          end
+
+          it 'should create footnote associationf or new measure for 2106909829' do
+            m = Measure.where(goods_nomenclature_item_id: "2106909829",
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
+            m.footnote_association_measures_dataset.where(footnote_type_id: "04",
+                                                          footnote_id: "006").any?.should be_true
           end
         end
-        context "Alternative 2: Update"
-        context "Alternative 3: Delete & Insert"
+
+        context "Alternative 2: Update" do
+          let!(:tame5) { create(:tame, :prohibition,
+                                       amend_indicator: "U",
+                                       fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
+                                       msrgp_code: "PR",
+                                       msr_type: "CVD",
+                                       tar_msr_no: "2106909829") }
+
+
+          let!(:tamf5) { create(:tamf, :prohibition,
+                                       amend_indicator: "U",
+                                       fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
+                                       msrgp_code: "PR",
+                                       msr_type: "CVD",
+                                       cngp_code: "G012",
+                                       tar_msr_no: "2106909829") }
+
+          before {
+            ChiefTransformer.instance.invoke
+          }
+
+          it 'should end the existing measure' do
+            m = Measure.where(goods_nomenclature_item_id: "2106909829",
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
+                              validity_end_date: DateTime.parse("2008-05-01 00:00:00")).take
+          end
+
+          it 'should create a new measure for 2106909829' do
+            m = Measure.where(goods_nomenclature_item_id: "2106909829",
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
+            m[:geographical_area].should == "1011"
+            m.measure_conditions.count.should == 2
+          end
+
+          it 'should create measure conditions for new measure for  2106909829' do
+            m = Measure.where(goods_nomenclature_item_id: "2106909829",
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
+            m.measure_conditions_dataset.where(condition_code: "B",
+                                               component_sequence_number: 1,
+                                               certificate_type_code: "N",
+                                               certificate_code: "853").any?.should be_true
+            m.measure_conditions_dataset.where(condition_code: "B",
+                                               component_sequence_number: 2,
+                                               action_code: "04").any?.should be_true
+          end
+
+          it 'should create footnote associationf or new measure for 2106909829' do
+            m = Measure.where(goods_nomenclature_item_id: "2106909829",
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
+            m.footnote_association_measures_dataset.where(footnote_type_id: "04",
+                                                          footnote_id: "006").any?.should be_true
+          end
+        end
+
+        context "Alternative 3: Delete & Insert" do
+          let!(:tame5) { create(:tame, :prohibition,
+                                       amend_indicator: "X",
+                                       fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                       msrgp_code: "PR",
+                                       msr_type: "CVD",
+                                       tar_msr_no: "2106909829") }
+
+          let!(:tame6) { create(:tame, :prohibition,
+                                       amend_indicator: "I",
+                                       fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
+                                       msrgp_code: "PR",
+                                       msr_type: "CVD",
+                                       tar_msr_no: "2106909829") }
+
+          let!(:tamf5) { create(:tamf, :prohibition,
+                                       amend_indicator: "X",
+                                       fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                       msrgp_code: "PR",
+                                       msr_type: "CVD",
+                                       cngp_code: "D066",
+                                       tar_msr_no: "2106909829") }
+
+          let!(:tamf6) { create(:tamf, :prohibition,
+                                       amend_indicator: "I",
+                                       fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
+                                       msrgp_code: "PR",
+                                       msr_type: "CVD",
+                                       cngp_code: "G012",
+                                       tar_msr_no: "2106909829") }
+
+          before {
+            ChiefTransformer.instance.invoke
+          }
+
+          it 'should end the existing measure' do
+            pending("Suspect spec")
+            # m = Measure.where(goods_nomenclature_item_id: "2106909829",
+            #                   validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
+            #                   validity_end_date: DateTime.parse("2008-05-01 00:00:00")).take
+          end
+
+          it 'should create a new measure for 2106909829' do
+            m = Measure.where(goods_nomenclature_item_id: "2106909829",
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
+            m[:geographical_area].should == "1011"
+            m.measure_conditions.count.should == 2
+          end
+
+          it 'should create measure conditions for new measure for  2106909829' do
+            m = Measure.where(goods_nomenclature_item_id: "2106909829",
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
+            m.measure_conditions_dataset.where(condition_code: "B",
+                                               component_sequence_number: 1,
+                                               certificate_type_code: "N",
+                                               certificate_code: "853").any?.should be_true
+            m.measure_conditions_dataset.where(condition_code: "B",
+                                               component_sequence_number: 2,
+                                               action_code: "04").any?.should be_true
+          end
+
+          it 'should create footnote associationf or new measure for 2106909829' do
+            m = Measure.where(goods_nomenclature_item_id: "2106909829",
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
+            m.footnote_association_measures_dataset.where(footnote_type_id: "04",
+                                                          footnote_id: "006").any?.should be_true
+          end
+        end
       end
 
       describe "Daily Scenario 2: Restriction removed" do
