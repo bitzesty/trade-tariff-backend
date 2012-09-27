@@ -12,6 +12,7 @@ class ChiefTransformer
       end
 
       def merge
+        @measures.uniq! { |m| [m.measure_type, m.geographical_area, m.goods_nomenclature_item_id, m.validity_start_date, m.validity_end_date, m.additional_code, m.additional_code_type] }
       end
 
       def validate
@@ -25,7 +26,8 @@ class ChiefTransformer
             case candidate_measure.amend_indicator
             when "I"
               measures_for_update = Measure.eager(:measure_components,
-                                                  :footnote_association_measures).for_candidate_measure(candidate_measure).all
+                                                  :footnote_association_measures,
+                                                  :measure_conditions).for_candidate_measure(candidate_measure).all
 
               if measures_for_update.any?
                 measures_for_update.each do |existing_measure|
@@ -45,7 +47,8 @@ class ChiefTransformer
               end
             when "U"
               measures_for_update = Measure.eager(:measure_components,
-                                                  :footnote_association_measures).for_candidate_measure(candidate_measure).all
+                                                  :footnote_association_measures,
+                                                  :measure_conditions).for_candidate_measure(candidate_measure).all
 
               if measures_for_update.any?
                 measures_for_update.each do |existing_measure|

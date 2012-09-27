@@ -21,6 +21,14 @@ module Chief
                                  primary_key: [:adval1_rate_key, :adval2_rate_key, :spfc1_rate_key, :spfc2_rate_key],
                                  class_name: 'Chief::DutyExpression'
 
+    many_to_one :tame, key: {}, primary_key: {}, dataset: -> {
+      Chief::Tame.filter{ |o| {:fe_tsmp => fe_tsmp} &
+                              {:msrgp_code => msrgp_code} &
+                              {:msr_type => msr_type} &
+                              {:tty_code => tty_code} &
+                              {:tar_msr_no => tar_msr_no} }
+    }
+
     def adval1_rate_key; adval1_rate.present?; end
     def adval2_rate_key; adval2_rate.present?; end
     def spfc1_rate_key; spfc1_rate.present?; end

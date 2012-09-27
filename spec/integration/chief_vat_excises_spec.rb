@@ -95,7 +95,6 @@ describe "CHIEF: VAT and Excises" do
       m.goods_nomenclature_item_id.should == "0101010100"
       m.measure_components.first.duty_amount.should == 1.7799
       m.measure_components.first.monetary_unit_code.should == 'GBP'
-      # TODO 1.7799GBP/Litre
     end
 
     it "should create measures for 0202020200" do
@@ -113,7 +112,6 @@ describe "CHIEF: VAT and Excises" do
       m.validity_end_date.should == Time.parse("2007-12-01 00:00:00")
       m.measure_components.first.duty_amount.should == 0.6007
       m.measure_components.first.monetary_unit_code.should == 'GBP'
-      # TODO 0.6007GBP/Litre
     end
 
     it "should create measures for 0404040400" do
@@ -122,7 +120,6 @@ describe "CHIEF: VAT and Excises" do
       m.validity_end_date.should == Time.parse("2007-12-31 23:50:00")
       m.measure_components.first.duty_amount.should == 0.6007
       m.measure_components.first.monetary_unit_code.should == 'GBP'
-      # TODO 0.6007GBP/Litre
     end
 
     it "should create measures for 0505050500" do
@@ -710,6 +707,115 @@ describe "CHIEF: VAT and Excises" do
           # m.measure_components.first.duty_amount.should == 15
         end
       end
+    end
+  end
+
+  context "Daily Update TAMF" do
+    let!(:mfcm1){ create(:mfcm, :with_goods_nomenclature,
+                                amend_indicator: "I",
+                                fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
+                                msrgp_code: "EX",
+                                msr_type: "EXF",
+                                tty_code: "411",
+                                cmdty_code: "0101010100") }
+    let!(:mfcm2){ create(:mfcm, :with_goods_nomenclature,
+                                amend_indicator: "I",
+                                fe_tsmp: DateTime.parse("2008-01-01 00:00:00"),
+                                msrgp_code: "EX",
+                                msr_type: "EXF",
+                                tty_code: "411",
+                                cmdty_code: "0202020200") }
+    let!(:mfcm3){ create(:mfcm, :with_goods_nomenclature,
+                                amend_indicator: "I",
+                                fe_tsmp: DateTime.parse("2008-04-30 14:00:00"),
+                                msrgp_code: "EX",
+                                msr_type: "EXF",
+                                tty_code: "411",
+                                cmdty_code: "0303030300") }
+    let!(:mfcm4){ create(:mfcm, :with_goods_nomenclature,
+                                amend_indicator: "I",
+                                fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
+                                msrgp_code: "EX",
+                                msr_type: "EXF",
+                                tty_code: "570",
+                                cmdty_code: "0101010100") }
+    let!(:mfcm5){ create(:mfcm, :with_goods_nomenclature,
+                                amend_indicator: "I",
+                                fe_tsmp: DateTime.parse("2008-01-01 00:00:00"),
+                                msrgp_code: "EX",
+                                msr_type: "EXF",
+                                tty_code: "570",
+                                cmdty_code: "0202020200") }
+    let!(:mfcm6){ create(:mfcm, :with_goods_nomenclature,
+                                amend_indicator: "I",
+                                fe_tsmp: DateTime.parse("2008-04-30 14:00:00"),
+                                msrgp_code: "EX",
+                                msr_type: "EXF",
+                                tty_code: "570",
+                                cmdty_code: "0303030300") }
+    let!(:tamf1) { create(:tamf, amend_indicator: "I",
+                                 fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
+                                 msrgp_code: "EX",
+                                 msr_type: "EXF",
+                                 tty_code: "411",
+                                 spfc1_rate: 20.0,
+                                 spfc2_rate: 1)}
+    let!(:tamf2) { create(:tamf, amend_indicator: "I",
+                                 fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
+                                 msrgp_code: "EX",
+                                 msr_type: "EXF",
+                                 tty_code: "570",
+                                 spfc1_rate: 10.0)}
+
+    let!(:geographical_area) { create :geographical_area, :fifteen_years, :erga_omnes }
+
+    before do
+      ChiefTransformer.instance.invoke(:initial_load)
+    end
+
+    it 'creates measure for 0101010100 with two measure components for duty amount of 20% and max 1kg' do
+      m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                        validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
+                        measure_type: 'DAA').take
+      m.measure_components.first.duty_amount.should == 20
+      m.measure_components.last.duty_amount.should == 1
+    end
+
+    it 'creates measure for 0202020200 with two measure components for duty amount of 20% and max 1kg' do
+      m = Measure.where(goods_nomenclature_item_id: "0202020200",
+                        validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
+                        measure_type: 'DAA').take
+      m.measure_components.first.duty_amount.should == 20
+      m.measure_components.last.duty_amount.should == 1
+    end
+
+    it 'creates measure for 0303030300 with two measure components for duty amount of 20% and max 1kg' do
+      m = Measure.where(goods_nomenclature_item_id: "0303030300",
+                        validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
+                        measure_type: 'DAA').take
+      m.measure_components.first.duty_amount.should == 20
+      m.measure_components.last.duty_amount.should == 1
+    end
+
+    it 'create measure for 0101010100 with one measure component, duty amount of 10%' do
+      m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                        validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
+                        measure_type: 'EGJ').take
+      m.measure_components.first.duty_amount.should == 10
+    end
+
+    it 'create measure for 0202020200 with one measure component, duty amount of 10%' do
+      m = Measure.where(goods_nomenclature_item_id: "0202020200",
+                        validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
+                        measure_type: 'EGJ').take
+      m.measure_components.first.duty_amount.should == 10
+    end
+
+    it 'create measure for 0303030300 with one measure component, duty amount of 10%' do
+      m = Measure.where(goods_nomenclature_item_id: "0303030300",
+                        validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
+                        measure_type: 'EGJ').take
+      m.measure_components.first.duty_amount.should == 10
     end
   end
 

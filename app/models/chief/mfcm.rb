@@ -18,6 +18,13 @@ module Chief
                               }.order(:fe_tsmp.desc)
     }, class_name: 'Chief::Tame'
 
+    one_to_many :tamfs, key: {}, primary_key: {}, dataset: -> {
+      Chief::Tamf.filter{ |o| {:msrgp_code => msrgp_code} &
+                              {:msr_type => msr_type} &
+                              {:tty_code => tty_code}
+                              }.order(:fe_tsmp.desc)
+    }
+
     one_to_one :measure_type_adco, key: {}, primary_key: {},
       dataset: -> { Chief::MeasureTypeAdco.where(chief_measure_type_adco__measure_group_code: msrgp_code,
                                                  chief_measure_type_adco__measure_type: msr_type,

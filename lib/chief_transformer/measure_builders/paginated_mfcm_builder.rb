@@ -18,20 +18,22 @@ class ChiefTransformer
       private
 
       def build_from(mfcm)
-        if mfcm.tame.present?
+        cms = []
+        cms << if mfcm.tame.present?
           mfcm.tame.tamfs.map { |tamf|
-            CandidateMeasure.new(mfcm: mfcm,
-                                 tame: mfcm.tame,
-                                 tamf: tamf,
-                                 amend_indicator: mfcm.amend_indicator)
+            CandidateMeasure.new(mfcm: mfcm, tame: mfcm.tame, tamf: tamf, amend_indicator: mfcm.amend_indicator)
           }.tap! { |candidate_measures|
             # When TAME has no subsidiary TAMFs and no candidate measures are built
             # from the combo. Create Measure just from TAME record.
-            candidate_measures << CandidateMeasure.new(mfcm: mfcm,
-                                                       tame: mfcm.tame,
-                                                       amend_indicator: mfcm.amend_indicator) if candidate_measures.empty?
+            candidate_measures << CandidateMeasure.new(mfcm: mfcm, tame: mfcm.tame, amend_indicator: mfcm.amend_indicator) if candidate_measures.empty?
           }
         end
+        if mfcm.tamfs.any?
+          cms << mfcm.tamfs.map { |tamf|
+            CandidateMeasure.new(mfcm: mfcm, tamf: tamf, tame: tamf.tame, amend_indicator: mfcm.amend_indicator)
+          }
+        end
+        cms
       end
     end
   end

@@ -108,12 +108,14 @@ describe "CHIEF: Prohibitions and Restrictions" do
       m.condition_code.should == "B"
       m.certificate_code.should == "115"
     end
+
     it "should create measure conditions for 9706000010" do
       MeasureCondition.where(measure_sid: -5).count.should == 2
       m = MeasureCondition.where(measure_sid: -5).first
       m.condition_code.should == "B"
       m.certificate_code.should == "115"
     end
+
     it "should create measure conditions for 9706000090" do
       MeasureCondition.where(measure_sid: -6).count.should == 2
       m = MeasureCondition.where(measure_sid: -6).first
