@@ -163,45 +163,85 @@ describe "CHIEF: Prohibitions and Restrictions" do
       f.should_not be_nil
       f.national.should be_true
     end
-  end
+    describe "Daily Update TAME and TAMF" do
+      #In this scenario the country group is changed from D066 to G012, which means that excluded countries will be removed for this measure.
+      describe "Daily Scenario 1: Changed country group for measure" do
+        context "Alternative 1: Update & Insert" do 
+          let!(:tame5) { create(:tame, amend_indicator: "U",
+                                       fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                       le_tsmp: DateTime.parse("2008-05-01 00:00:00"),
+                                       msrgp_code: "PR",
+                                       msr_type: "CVD",
+                                       tar_msr_no: "2106909829") }
 
-  describe "Daily Update TAME and TAMF" do
-    describe "Daily Scenario 1: Changed country group for measure" do
-      context "Alternative 1: Update & Insert"
-      context "Alternative 2: Update"
-      context "Alternative 3: Delete & Insert"
+          let!(:tame6) { create(:tame, amend_indicator: "I",
+                                       fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
+                                       msrgp_code: "PR",
+                                       msr_type: "CVD",
+                                       tar_msr_no: "2106909829") }
+
+          let!(:tamf5) { create(:tamf, amend_indicator: "U",
+                                       fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                       msrgp_code: "PR",
+                                       msr_type: "CVD",
+                                       cngp_code: "D066",
+                                       tar_msr_no: "2106909829") }
+
+          let!(:tamf6) { create(:tamf, amend_indicator: "I",
+                                       fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
+                                       msrgp_code: "PR",
+                                       msr_type: "CVD",
+                                       cngp_code: "G012",
+                                       tar_msr_no: "2106909829") }
+          before {
+            ChiefTransformer.instance.invoke
+          }
+
+          it 'should end the existing measure' do
+            m = Measure.where(goods_nomenclature_item_id: "2106909829", validity_start_date: DateTime.parse("2008-05-01 00:00:00")).take
+            m.validity_end_date.should == DateTime.parse("2008-05-01 00:00:00")
+          end
+
+          it 'should create a new measure' do
+            m = Measure.where(goods_nomenclature_item_id: "2106909829", validity_start_date: DateTime.parse("2008-04-01 00:00:00")).first
+            m.should_not be_nil
+          end
+        end
+        context "Alternative 2: Update"
+        context "Alternative 3: Delete & Insert"
+      end
+
+      describe "Daily Scenario 2: Restriction removed" do
+        context "Alternative 1: Update TAME & TAMF"
+        context "Alternative 2: Delete TAME & TAMF"
+        context "Alternative 3: Delete TAME"
+      end
+
+      describe "Daily Scenario 3: Country group changed countries" do
+        context "Alternative 1: Update TAME & TAMF"
+      end
+
+      describe "Daily Scenario 4: Country removed from restriction" do
+        context "Alternative 1: Update TAME & TAMF"
+      end
     end
 
-    describe "Daily Scenario 2: Restriction removed" do
-      context "Alternative 1: Update TAME & TAMF"
-      context "Alternative 2: Delete TAME & TAMF"
-      context "Alternative 3: Delete TAME"
-    end
+    describe "Daily Update MFCM" do
+      describe "Daily Scenario 1: Changed country group for measure" do
+        context "Alternative 1: Update"
+        context "Alternative 2: Delete"
+        context "Alternative 3: Delete & Update TAME/TAMF"
+        context "Alternative 4: Delete & Delete TAME"
+      end
 
-    describe "Daily Scenario 3: Country group changed countries" do
-      context "Alternative 1: Update TAME & TAMF"
-    end
+      describe "Daily Scenario 2: Updated measure with later start date" do
+        context "Alternative 1: Update"
+      end
 
-    describe "Daily Scenario 4: Country removed from restriction" do
-      context "Alternative 1: Update TAME & TAMF"
-    end
-  end
-
-  describe "Daily Update MFCM" do
-    describe "Daily Scenario 1: Changed country group for measure" do
-      context "Alternative 1: Update"
-      context "Alternative 2: Delete"
-      context "Alternative 3: Delete & Update TAME/TAMF"
-      context "Alternative 4: Delete & Delete TAME"
-    end
-
-    describe "Daily Scenario 2: Updated measure with later start date" do
-      context "Alternative 1: Update"
-    end
-
-    describe "Daily Scenario 3: Restriction applied to wrong commodity removed" do
-      context "Alternative 1: Delete MFCM & TAME"
-      context "Alternative 2: Delete MFCM"
+      describe "Daily Scenario 3: Restriction applied to wrong commodity removed" do
+        context "Alternative 1: Delete MFCM & TAME"
+        context "Alternative 2: Delete MFCM"
+      end
     end
   end
 end
