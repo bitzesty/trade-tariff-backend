@@ -818,7 +818,7 @@ describe "CHIEF: VAT and Excises" do
       m.measure_components.first.duty_amount.should == 10
     end
 
-    describe "TAMF Daily Scenario 1: Added max amount", :this do
+    describe "TAMF Daily Scenario 1: Added max amount" do
       describe "Alt 1. Update and Insert" do
         let!(:tamf3) { create(:tamf, amend_indicator: "U",
                                      fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
@@ -1020,6 +1020,50 @@ describe "CHIEF: VAT and Excises" do
         it 'creates new measure  for 0202020200 with measure components for duty amount 10% and 2kg' do
           m = Measure.where(goods_nomenclature_item_id: "0202020200",
                             validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
+                            measure_type: 'EGJ').take
+          m.measure_components.first.duty_amount.should == 10
+          m.measure_components.last.duty_amount.should == 2
+        end
+      end
+    end
+
+    describe "TAMF Daily Scenario 2: Added max amount" do
+      describe "Alt 1. Update" do
+        let!(:tamf3) { create(:tamf, amend_indicator: "U",
+                                     fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
+                                     msrgp_code: "EX",
+                                     msr_type: "EXF",
+                                     tty_code: "570",
+                                     spfc1_rate: 10.0,
+                                     spfc2_rate: 2.0)}
+
+        before {
+          ChiefTransformer.instance.invoke
+        }
+
+        it 'does not add new measures' do
+          Measure.count.should == 6
+        end
+
+        it 'adds additional duty amount of 2kg to 0101010100' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
+                            measure_type: 'EGJ').take
+          m.measure_components.first.duty_amount.should == 10
+          m.measure_components.last.duty_amount.should == 2
+        end
+
+        it 'adds additional duty amount of 2kg to 0202020200' do
+          m = Measure.where(goods_nomenclature_item_id: "0202020200",
+                            validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
+                            measure_type: 'EGJ').take
+          m.measure_components.first.duty_amount.should == 10
+          m.measure_components.last.duty_amount.should == 2
+        end
+
+        it 'adds additional duty amount of 2kg to 0303030300' do
+          m = Measure.where(goods_nomenclature_item_id: "0303030300",
+                            validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
                             measure_type: 'EGJ').take
           m.measure_components.first.duty_amount.should == 10
           m.measure_components.last.duty_amount.should == 2

@@ -12,7 +12,7 @@ class ChiefTransformer
       end
 
       def merge
-        @measures.uniq! { |m| [m.measure_type, m.validity_start_date, m.additional_code_type, m.additional_code, m.goods_nomenclature_item_id, m.geographical_area] }
+        @measures.uniq! { |m| [m.measure_type, m.validity_start_date, m.additional_code_type, m.additional_code, m.goods_nomenclature_item_id, m.geographical_area, m.mfcm, m.tame] }
       end
 
       def validate
