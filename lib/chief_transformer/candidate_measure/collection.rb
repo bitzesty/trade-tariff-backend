@@ -76,7 +76,7 @@ class ChiefTransformer
                 end
               else
                 Measure.for_candidate_measure(candidate_measure).each do |existing_measure|
-                  existing_measure.delete
+                  existing_measure.update validity_end_date: candidate_measure.validity_start_date
                 end
               end
             end

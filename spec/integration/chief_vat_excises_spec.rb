@@ -513,6 +513,29 @@ describe "CHIEF: VAT and Excises" do
         end
       end
     end
+
+    context "TAME Daily Scenario 5: VAT applied to incorrect commodity" do
+      context "Alt 1. Deletion" do
+        let!(:mfcm4) { create(:mfcm, :with_goods_nomenclature,
+                                     amend_indicator: "X",
+                                     fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     cmdty_code: "0101010100") }
+
+        before {
+          ChiefTransformer.instance.invoke
+        }
+
+        it 'adds end date to commodity 0101010100' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
+                            validity_end_date: DateTime.parse("2007-11-15 11:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+      end
+    end
   end
 
   context "Daily Update MFCM" do
@@ -685,7 +708,8 @@ describe "CHIEF: VAT and Excises" do
 
         it 'deletes existing Matching measures' do
           Measure.where(goods_nomenclature_item_id: "0101010100",
-                        validity_start_date: DateTime.parse("2007-11-15 11:00:00")).any?.should be_false
+                        validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
+                        validity_end_date: DateTime.parse("2007-11-15 11:00:00")).take
         end
 
         it 'inserts new measures' do
