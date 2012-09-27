@@ -29,6 +29,13 @@ module Chief
                               {:tar_msr_no => tar_msr_no} }
     }
 
+    one_to_many :mfcms, key: {}, primary_key: {}, dataset: -> {
+      Chief::Mfcm.filter{ |o| {:msrgp_code => msrgp_code} &
+                              {:msr_type => msr_type} &
+                              {:tty_code => tty_code}
+                              }.order(:fe_tsmp.desc)
+    }
+
     def adval1_rate_key; adval1_rate.present?; end
     def adval2_rate_key; adval2_rate.present?; end
     def spfc1_rate_key; spfc1_rate.present?; end
