@@ -526,7 +526,7 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
     end
 
     describe "Daily Update MFCM \n" do
-      describe "Daily Scenario 1: Changed country group for measure \n" do
+      describe "Daily Scenario 1: Restriction removed for measure \n" do
         context "Alternative 1: Update" 
         context "Alternative 2: Delete"
         context "Alternative 3: Delete & Update TAME/TAMF"
