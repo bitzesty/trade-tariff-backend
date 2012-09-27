@@ -523,10 +523,6 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
           end
         end
       end
-
-      describe "Daily Scenario 4: Country removed from restriction \n" do
-        context "Alternative 1: Update TAME & TAMF"
-      end
     end
 
     describe "Daily Update MFCM \n" do
@@ -537,14 +533,18 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
         context "Alternative 4: Delete & Delete TAME"
       end
 
-      describe "#Daily Scenario 2: Updated measure with later start date \n" do
+      describe "Daily Scenario 2: Updated measure with later start date \n" do
         context "Alternative 1: Update"
       end
 
-      describe "#Daily Scenario 3: Restriction applied to wrong commodity removed \n" do
+      describe "Daily Scenario 3: Restriction applied to wrong commodity removed \n" do
         context "Alternative 1: Delete MFCM & TAME"
         context "Alternative 2: Delete MFCM"
       end
     end
+  end
+  describe "Daily Scenario 4: Country removed from restriction \n" do
+  # This scenario describes an update of a restriction where the list of countries is changed to fewer countries. The precondition is the following:
+    context "Alternative 1: Update TAME & TAMF"
   end
 end
