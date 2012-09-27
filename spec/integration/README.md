@@ -13,6 +13,11 @@ This means that CHIEF specs which deal with dates, specifically the rounding up/
 
 This should not cause many issues, there could be a caching issue, we should ensure we're not caching too much to avoid stale data as end dates could be mid-day for example.
 
+Deletion
+--------
+
+Any alternatives or examples in the scenarios which delete records have been amended, as no data should ever be deleted and we should just set an end date.
+
 
 Commodity Code formatting
 --------------------------
