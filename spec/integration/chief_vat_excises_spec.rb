@@ -536,6 +536,181 @@ describe "CHIEF: VAT and Excises" do
         end
       end
     end
+
+    context 'TAME Daily Scenario 6: VAT removed' do
+      context "Alt 1. Update, Update and delete" do
+        let!(:mfcm4) { create(:mfcm, amend_indicator: "U",
+                                     fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
+                                     le_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     cmdty_code: "0101010100") }
+        let!(:mfcm5) { create(:mfcm, :with_goods_nomenclature,
+                                     amend_indicator: "U",
+                                     fe_tsmp: DateTime.parse("2008-01-01 00:00:00"),
+                                     le_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     cmdty_code: "0202020200") }
+        let!(:mfcm6) { create(:mfcm, :with_goods_nomenclature,
+                                     amend_indicator: "X",
+                                     fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     cmdty_code: "0303030300") }
+
+        before {
+          ChiefTransformer.instance.invoke
+        }
+
+        it 'keeps three measures in the database' do
+          Measure.count.should == 3
+        end
+
+        it 'adds validity end date to commodity 0101010100' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
+                            validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+
+        it 'adds validity end date to commodity 0202020100' do
+          m = Measure.where(goods_nomenclature_item_id: "0202020200",
+                            validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
+                            validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+
+        it 'adds validity end date to commodity 0303030300' do
+          m = Measure.where(goods_nomenclature_item_id: "0303030300",
+                            validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
+                            validity_end_date: DateTime.parse("2008-05-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+      end
+
+      context "Alt 2. Single Update" do
+        # Won't happen according to the documentation
+      end
+
+      context "Alt 3. Single Deletetion" do
+        # Won't happen according to the documentation
+      end
+
+      context "Alt 4. Three Deletions" do
+        let!(:mfcm4) { create(:mfcm, amend_indicator: "X",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     cmdty_code: "0101010100") }
+        let!(:mfcm5) { create(:mfcm, :with_goods_nomenclature,
+                                     amend_indicator: "X",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     cmdty_code: "0202020200") }
+        let!(:mfcm6) { create(:mfcm, :with_goods_nomenclature,
+                                     amend_indicator: "X",
+                                     fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     cmdty_code: "0303030300") }
+
+        before {
+          ChiefTransformer.instance.invoke
+        }
+
+        it 'keeps three measures in the database' do
+          Measure.count.should == 3
+        end
+
+        it 'adds validity end date to commodity 0101010100' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
+                            validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+
+        it 'adds validity end date to commodity 0202020100' do
+          m = Measure.where(goods_nomenclature_item_id: "0202020200",
+                            validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
+                            validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+
+        it 'adds validity end date to commodity 0303030300' do
+          m = Measure.where(goods_nomenclature_item_id: "0303030300",
+                            validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
+                            validity_end_date: DateTime.parse("2008-05-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+      end
+
+      context "Alt 5. One TAME deletion and Three MFCM Deletions" do
+        let!(:tame2) { create(:tame, amend_indicator: "X",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     adval_rate: 15.000) }
+        let!(:mfcm4) { create(:mfcm, amend_indicator: "X",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     cmdty_code: "0101010100") }
+        let!(:mfcm5) { create(:mfcm, :with_goods_nomenclature,
+                                     amend_indicator: "X",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     cmdty_code: "0202020200") }
+        let!(:mfcm6) { create(:mfcm, :with_goods_nomenclature,
+                                     amend_indicator: "X",
+                                     fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
+                                     msrgp_code: "VT",
+                                     msr_type: "S",
+                                     tty_code: "813",
+                                     cmdty_code: "0303030300") }
+
+        before {
+          ChiefTransformer.instance.invoke
+        }
+
+        it 'keeps three measures in the database' do
+          Measure.count.should == 3
+        end
+
+        it 'adds validity end date to commodity 0101010100' do
+          m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                            validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
+                            validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+
+        it 'adds validity end date to commodity 0202020100' do
+          m = Measure.where(goods_nomenclature_item_id: "0202020200",
+                            validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
+                            validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
+        end
+
+        it 'adds validity end date to commodity 0303030300' do
+          pending("Check if example is valid.")
+          # m = Measure.where(goods_nomenclature_item_id: "0303030300",
+          #                   validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
+          #                   validity_end_date: DateTime.parse("2008-05-01 00:00:00")).take
+          # m.measure_components.first.duty_amount.should == 15
+        end
+      end
+    end
   end
 
   context "Daily Update MFCM" do

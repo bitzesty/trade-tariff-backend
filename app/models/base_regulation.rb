@@ -4,6 +4,7 @@ class BaseRegulation < Sequel::Model
 
   set_primary_key [:base_regulation_id, :base_regulation_role]
 
+
   # TODO
   def validate
     super
