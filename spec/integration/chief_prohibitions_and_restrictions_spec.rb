@@ -45,6 +45,10 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
       ChiefTransformer.instance.invoke(:initial_load)
     end
 
+    it 'creates 6 measures' do
+      Measure.count.should == 6
+    end
+
     it "should create measure for 1211300000" do
       m = Measure.where(goods_nomenclature_item_id: "1211300000", validity_start_date: DateTime.parse("2006-07-24 08:45:00")).first
       m.should_not be_nil
@@ -202,6 +206,10 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
             ChiefTransformer.instance.invoke
           }
 
+          it 'creates one extra measure' do
+            Measure.count.should == 7
+          end
+
           it 'should end the existing measure' do
             m = Measure.where(goods_nomenclature_item_id: "2106909829",
                               validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
@@ -255,6 +263,10 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
           before {
             ChiefTransformer.instance.invoke
           }
+
+          it 'creates one extra measure' do
+            Measure.count.should == 7
+          end
 
           it 'should end the existing measure' do
             m = Measure.where(goods_nomenclature_item_id: "2106909829",
@@ -324,6 +336,10 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
             ChiefTransformer.instance.invoke
           }
 
+          it 'creates one extra measure' do
+            Measure.count.should == 7
+          end
+
           it 'should end the existing measure' do
             m = Measure.where(goods_nomenclature_item_id: "2106909829",
                               validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
@@ -381,6 +397,10 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
             ChiefTransformer.instance.invoke
           }
 
+          it 'creates no new measures' do
+            Measure.count.should == 6
+          end
+
           it "should end all the measures that are applicable" do
             pending
             m1 = Measure.where(goods_nomenclature_item_id: "9706000000",
@@ -416,6 +436,10 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
             ChiefTransformer.instance.invoke
           }
 
+          it 'creates no new measures' do
+            Measure.count.should == 6
+          end
+
           it "should end all the measures that are applicable" do
             pending
             m1 = Measure.where(goods_nomenclature_item_id: "9706000000",
@@ -440,6 +464,10 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
           before {
             ChiefTransformer.instance.invoke
           }
+
+          it 'creates no new measures' do
+            Measure.count.should == 6
+          end
 
           it "should end all the measures that are applicable" do
             pending
@@ -496,24 +524,31 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
             ChiefTransformer.instance.invoke
           }
 
+          it 'creates three new measures' do
+            Measure.count.should == 9
+          end
+
           it "should end the old measures" do
             m1 = Measure.where(goods_nomenclature_item_id: "2106909829",
                                geographical_area_sid: 400,
                                validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
             m1.validity_end_date.should_not be_nil #should be new start date - 1 sec
           end
+
           it "should create a measure for us" do
             m1 = Measure.where(goods_nomenclature_item_id: "2106909829",
                                geographical_area_sid: 103,
                                validity_start_date: DateTime.parse("2008-05-01 00:00:00")).take
 
           end
+
           it "should create a measure for cn" do
             m1 = Measure.where(goods_nomenclature_item_id: "2106909829",
                                geographical_area_sid: 439,
                                validity_start_date: DateTime.parse("2008-05-01 00:00:00")).take
 
           end
+
           it "should create a measure for iq" do
             m1 = Measure.where(goods_nomenclature_item_id: "2106909829",
                                geographical_area_sid: -2,
@@ -555,6 +590,7 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
           }
 
           it 'creates no new measures' do
+            pending
             Measure.count.should == 6
           end
 
