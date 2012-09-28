@@ -11,8 +11,16 @@ class ChiefTransformer
         @measures = measures
       end
 
-      def merge
+      def uniq
         @measures.uniq! { |m| [m.measure_type, m.validity_start_date, m.additional_code_type, m.additional_code, m.goods_nomenclature_item_id, m.geographical_area, m.mfcm, m.tame] }
+      end
+
+      def merge
+        @measures = MeasureMerger.merge(@measures)
+      end
+
+      def sort
+        @measures = @measures.sort_by{|m| [m.goods_nomenclature_item_id, m.validity_start_date] }
       end
 
       def validate
@@ -78,7 +86,11 @@ class ChiefTransformer
 
               if existing_measures.any?
                 existing_measures.each do |existing_measure|
-                  existing_measure.update validity_end_date: candidate_measure.validity_start_date
+                  if candidate_measure.origin.amend_indicator == "X"
+                    existing_measure.update validity_end_date: candidate_measure.origin.fe_tsmp
+                  else
+                    existing_measure.update validity_end_date: candidate_measure.validity_start_date
+                  end
                 end
               else
                 Measure.for_candidate_measure(candidate_measure).each do |existing_measure|

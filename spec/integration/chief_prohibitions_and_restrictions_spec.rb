@@ -401,17 +401,16 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
             Measure.count.should == 6
           end
 
-          it "should end all the measures that are applicable" do
-            pending
+          it 'should end all the measures that are applicable' do
             m1 = Measure.where(goods_nomenclature_item_id: "9706000000",
-                              validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
-            m1.validity_end_date.should == DateTime.parse("2008-05-31 17:50:00")
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
+                              validity_end_date: DateTime.parse("2008-05-31 17:50:00")).take
             m2 = Measure.where(goods_nomenclature_item_id: "9706000010",
-                              validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
-            m2.validity_end_date.should == DateTime.parse("2008-05-31 17:50:00")
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
+                              validity_end_date: DateTime.parse("2008-05-31 17:50:00")).take
             m3 = Measure.where(goods_nomenclature_item_id: "9706000090",
-                              validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
-            m3.validity_end_date.should == DateTime.parse("2008-05-31 17:50:00")
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
+                              validity_end_date: DateTime.parse("2008-05-31 17:50:00")).take
           end
 
         end
@@ -419,7 +418,7 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
         context "Alternative 2: Delete TAME & TAMF" do
           let!(:tame5) { create(:tame, :prohibition,
                                        amend_indicator: "X",
-                                       fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                       fe_tsmp: DateTime.parse("2008-05-31 17:50:00"),
                                        msrgp_code: "PR",
                                        msr_type: "QRC",
                                        tar_msr_no: "97060000") }
@@ -427,7 +426,7 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
 
           let!(:tamf5) { create(:tamf, :prohibition,
                                        amend_indicator: "X",
-                                       fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                       fe_tsmp: DateTime.parse("2008-05-31 17:50:00"),
                                        msrgp_code: "PR",
                                        msr_type: "QRC",
                                        cngp_code: "A001",
@@ -441,23 +440,22 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
           end
 
           it "should end all the measures that are applicable" do
-            pending
             m1 = Measure.where(goods_nomenclature_item_id: "9706000000",
-                              validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
-            m1.validity_end_date.should == DateTime.parse("2008-05-31 17:50:00")
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
+                              validity_end_date: DateTime.parse("2008-05-31 17:50:00")).take
             m2 = Measure.where(goods_nomenclature_item_id: "9706000010",
-                              validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
-            m2.validity_end_date.should == DateTime.parse("2008-05-31 17:50:00")
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
+                              validity_end_date: DateTime.parse("2008-05-31 17:50:00")).take
             m3 = Measure.where(goods_nomenclature_item_id: "9706000090",
-                              validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
-            m3.validity_end_date.should == DateTime.parse("2008-05-31 17:50:00")
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
+                              validity_end_date: DateTime.parse("2008-05-31 17:50:00")).take
           end
         end
 
         context "Alternative 3: Delete TAME" do
           let!(:tame5) { create(:tame, :prohibition,
                                        amend_indicator: "X",
-                                       fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                       fe_tsmp: DateTime.parse("2008-05-31 17:50:00"),
                                        msrgp_code: "PR",
                                        msr_type: "QRC",
                                        tar_msr_no: "97060000") }
@@ -469,17 +467,20 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
             Measure.count.should == 6
           end
 
+          it 'should not create new measures' do
+            Measure.count.should == 6
+          end
+
           it "should end all the measures that are applicable" do
-            pending
             m1 = Measure.where(goods_nomenclature_item_id: "9706000000",
-                              validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
-            m1.validity_end_date.should == DateTime.parse("2008-05-31 17:50:00")
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
+                              validity_end_date: DateTime.parse("2008-05-31 17:50:00")).take
             m2 = Measure.where(goods_nomenclature_item_id: "9706000010",
-                              validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
-            m2.validity_end_date.should == DateTime.parse("2008-05-31 17:50:00")
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
+                              validity_end_date: DateTime.parse("2008-05-31 17:50:00")).take
             m3 = Measure.where(goods_nomenclature_item_id: "9706000090",
-                              validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
-            m3.validity_end_date.should == DateTime.parse("2008-05-31 17:50:00")
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
+                              validity_end_date: DateTime.parse("2008-05-31 17:50:00")).take
           end
         end
       end

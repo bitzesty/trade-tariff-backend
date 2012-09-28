@@ -9,9 +9,8 @@ class ChiefTransformer
           tame.mfcms.map {|mfcm|
             CandidateMeasure.new(mfcm: mfcm,
                                  tame: tame,
-                                 amend_indicator: tame.amend_indicator,
-                                 origin: :tame)
-          }
+                                 origin: tame)
+          }.flatten
         end
       end
     end

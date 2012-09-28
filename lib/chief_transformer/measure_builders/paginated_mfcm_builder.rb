@@ -24,12 +24,13 @@ class ChiefTransformer
             CandidateMeasure.new(mfcm: mfcm,
                                  tame: mfcm.tame,
                                  tamf: tamf,
-                                 amend_indicator: mfcm.amend_indicator,
-                                 origin: :mfcm)
+                                 origin: mfcm)
           }.tap! { |candidate_measures|
             # When TAME has no subsidiary TAMFs and no candidate measures are built
             # from the combo. Create Measure just from TAME record.
-            candidate_measures << CandidateMeasure.new(mfcm: mfcm, tame: mfcm.tame, amend_indicator: mfcm.amend_indicator) if candidate_measures.empty?
+            candidate_measures << CandidateMeasure.new(mfcm: mfcm,
+                                                       tame: mfcm.tame,
+                                                       origin: mfcm) if candidate_measures.empty?
           }
         end
         if mfcm.tamfs.any?
@@ -37,8 +38,7 @@ class ChiefTransformer
             CandidateMeasure.new(mfcm: mfcm,
                                  tamf: tamf,
                                  tame: tamf.tame,
-                                 amend_indicator: mfcm.amend_indicator,
-                                 origin: :mfcm)
+                                 origin: mfcm)
           }
         end
         cms

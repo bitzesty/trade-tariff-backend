@@ -19,6 +19,10 @@ class ChiefTransformer
         @map[association_name] = record
       end
 
+      def map=(new_map)
+        @map = new_map
+      end
+
       def persist
         assign_measure_sid
 

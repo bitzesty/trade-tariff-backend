@@ -27,10 +27,11 @@ class ChiefTransformer
                                     HOP HSE IWP PHC PRT QRC SFS VTA VTA VTE VTE
                                     VTS VTS VTZ VTZ SPL]
 
-    attr_accessor :mfcm, :tame, :tamf, :amend_indicator, :candidate_associations, :origin
+    attr_accessor :mfcm, :tame, :tamf, :candidate_associations, :origin
     attr_reader :chief_geographical_area
 
-    delegate :persist, to: :candidate_associations, prefix: true
+    delegate :persist, :map, to: :candidate_associations, prefix: true
+    delegate :amend_indicator, to: :origin
 
     def after_initialize
       # set default variables
@@ -45,12 +46,20 @@ class ChiefTransformer
       callbacks
     end
 
+    # TODO refactor this
     def callbacks
       assign_dates if mfcm
       assign_mfcm_attributes if mfcm
       build_conditions if tamf
       build_components
       build_footnotes
+    end
+
+    def rebuild
+      # clear pre-built
+      @candidate_associations = CandidateAssociations.new(self)
+      # re-run the drill
+      callbacks
     end
 
     def validate

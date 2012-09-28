@@ -8,10 +8,8 @@ class ChiefTransformer
         Chief::Tamf.reverse.where(query_arguments).map do |tamf|
           tamf.mfcms.map {|mfcm|
             CandidateMeasure.new(mfcm: mfcm,
-                                 tame: tamf.tame,
                                  tamf: tamf,
-                                 amend_indicator: tamf.amend_indicator,
-                                 origin: :tamf)
+                                 origin: tamf)
           }
         end
       end
