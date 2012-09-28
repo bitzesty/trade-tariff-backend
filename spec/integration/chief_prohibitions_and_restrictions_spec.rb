@@ -544,8 +544,51 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
       end
 
       describe "Daily Scenario 3: Restriction applied to wrong commodity removed \n" do
-        context "Alternative 1: Delete MFCM & TAME"
-        context "Alternative 2: Delete MFCM"
+        context "Alternative 1: Delete MFCM & TAME" do
+          let!(:tame5) { create(:tame, :prohibition,
+                                       amend_indicator: "X",
+                                       fe_tsmp: DateTime.parse("2006-07-24 08:45:00"),
+                                       msrgp_code: "HO",
+                                       msr_type: "CON",
+                                       tar_msr_no: "12113000") }
+          let!(:mfcm7){ create(:mfcm, :with_goods_nomenclature, :prohibition, 
+                                      amend_indicator: "X",
+                                      fe_tsmp: DateTime.parse("2006-07-24 08:45:00"),
+                                      msrgp_code: "HO",
+                                      msr_type: "CON",
+                                      tar_msr_no: "12113000",
+                                      cmdty_code: "12113000") }
+
+          before {
+            ChiefTransformer.instance.invoke
+          }
+
+          it "should end the measures with the current date" do
+            pending
+            m = Measure.where(goods_nomenclature_item_id: "1211300000", validity_start_date: DateTime.parse("2006-07-24 08:45:00")).first
+            m.validity_end_date.should == Date.today.to_datetime
+          end
+        end
+
+        context "Alternative 2: Delete MFCM" do
+          let!(:mfcm7){ create(:mfcm, :with_goods_nomenclature, :prohibition, 
+                                      amend_indicator: "X",
+                                      fe_tsmp: DateTime.parse("2006-07-24 08:45:00"),
+                                      msrgp_code: "HO",
+                                      msr_type: "CON",
+                                      tar_msr_no: "12113000",
+                                      cmdty_code: "12113000") }
+
+          before {
+            ChiefTransformer.instance.invoke
+          }
+
+          it "should end the measures with the current date" do
+            pending
+            m = Measure.where(goods_nomenclature_item_id: "1211300000", validity_start_date: DateTime.parse("2006-07-24 08:45:00")).first
+            m.validity_end_date.should == Date.today.to_datetime
+          end
+        end
       end
     end
   end
