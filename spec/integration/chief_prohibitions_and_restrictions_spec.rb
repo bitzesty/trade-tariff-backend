@@ -540,7 +540,23 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
       end
 
       describe "Daily Scenario 2: Updated measure with later start date \n" do
-        context "Alternative 1: Update"
+        context "Alternative 1: Update" do
+          let!(:mfcm7){ create(:mfcm, :with_goods_nomenclature, :prohibition, amend_indicator: "U", 
+                                fe_tsmp: DateTime.parse("2008-04-30 15:00:00"), 
+                                msrgp_code: "PR", 
+                                msr_type: "ATT", 
+                                tar_msr_no: "1210100010", 
+                                cmdty_code: "1210100010") }
+          before {
+            ChiefTransformer.instance.invoke
+          }
+          it "should move measure validity_start_date forward for the existing measure" do
+            pending
+            Measure.where(goods_nomenclature_item_id: "1210100010").count.should == 1
+            m = Measure.where(goods_nomenclature_item_id: "1210100010", fe_tsmp: DateTime.parse("2008-04-30 15:00:00")).take
+          end
+        end
+
       end
 
       describe "Daily Scenario 3: Restriction applied to wrong commodity removed \n" do
