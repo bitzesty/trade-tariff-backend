@@ -325,10 +325,9 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
           }
 
           it 'should end the existing measure' do
-            pending("Suspect spec")
-            # m = Measure.where(goods_nomenclature_item_id: "2106909829",
-            #                   validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
-            #                   validity_end_date: DateTime.parse("2008-05-01 00:00:00")).take
+            m = Measure.where(goods_nomenclature_item_id: "2106909829",
+                              validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
+                              validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
           end
 
           it 'should create a new measure for 2106909829' do
@@ -453,7 +452,7 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
             m3 = Measure.where(goods_nomenclature_item_id: "9706000090",
                               validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
             m3.validity_end_date.should == DateTime.parse("2008-05-31 17:50:00")
-          end          
+          end
         end
       end
 
@@ -519,13 +518,13 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
             m1 = Measure.where(goods_nomenclature_item_id: "2106909829",
                                geographical_area_sid: -2,
                                validity_start_date: DateTime.parse("2008-05-01 00:00:00")).take
-            
+
           end
         end
       end
 
       describe "Daily Scenario 4: Country removed from restriction \n" do
-      # This scenario describes an update of a restriction where the list of countries is changed to fewer countries. 
+      # This scenario describes an update of a restriction where the list of countries is changed to fewer countries.
       # The precondition is the following:
 
         context "Alternative 1: Update TAME & TAMF"
@@ -534,7 +533,7 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
 
     describe "Daily Update MFCM \n" do
       describe "Daily Scenario 1: Restriction removed for measure \n" do
-        context "Alternative 1: Update" 
+        context "Alternative 1: Update"
         context "Alternative 2: Delete"
         context "Alternative 3: Delete & Update TAME/TAMF"
         context "Alternative 4: Delete & Delete TAME"
