@@ -533,7 +533,10 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
 
     describe "Daily Update MFCM \n" do
       describe "Daily Scenario 1: Restriction removed for measure \n" do
-        context "Alternative 1: Update"
+        context "Alternative 1: Update" do
+
+        end
+
         context "Alternative 2: Delete"
         context "Alternative 3: Delete & Update TAME/TAMF"
         context "Alternative 4: Delete & Delete TAME"
@@ -541,15 +544,20 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
 
       describe "Daily Scenario 2: Updated measure with later start date \n" do
         context "Alternative 1: Update" do
-          let!(:mfcm7){ create(:mfcm, :with_goods_nomenclature, :prohibition, amend_indicator: "U", 
-                                fe_tsmp: DateTime.parse("2008-04-30 15:00:00"), 
-                                msrgp_code: "PR", 
-                                msr_type: "ATT", 
-                                tar_msr_no: "1210100010", 
+          let!(:mfcm7){ create(:mfcm, :with_goods_nomenclature, :prohibition, amend_indicator: "U",
+                                fe_tsmp: DateTime.parse("2008-04-30 15:00:00"),
+                                msrgp_code: "PR",
+                                msr_type: "ATT",
+                                tar_msr_no: "1210100010",
                                 cmdty_code: "1210100010") }
           before {
             ChiefTransformer.instance.invoke
           }
+
+          it 'creates no new measures' do
+            Measure.count.should == 6
+          end
+
           it "should move measure validity_start_date forward for the existing measure" do
             pending
             Measure.where(goods_nomenclature_item_id: "1210100010").count.should == 1
@@ -567,7 +575,7 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
                                        msrgp_code: "HO",
                                        msr_type: "CON",
                                        tar_msr_no: "12113000") }
-          let!(:mfcm7){ create(:mfcm, :with_goods_nomenclature, :prohibition, 
+          let!(:mfcm7){ create(:mfcm, :with_goods_nomenclature, :prohibition,
                                       amend_indicator: "X",
                                       fe_tsmp: DateTime.parse("2006-07-24 08:45:00"),
                                       msrgp_code: "HO",
@@ -578,6 +586,11 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
           before {
             ChiefTransformer.instance.invoke
           }
+
+          it 'creates no new measures' do
+            pending
+            Measure.count.should == 6
+          end
 
           it "should end the measures with the current date" do
             pending
@@ -587,7 +600,7 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
         end
 
         context "Alternative 2: Delete MFCM" do
-          let!(:mfcm7){ create(:mfcm, :with_goods_nomenclature, :prohibition, 
+          let!(:mfcm7){ create(:mfcm, :with_goods_nomenclature, :prohibition,
                                       amend_indicator: "X",
                                       fe_tsmp: DateTime.parse("2006-07-24 08:45:00"),
                                       msrgp_code: "HO",
@@ -598,6 +611,11 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
           before {
             ChiefTransformer.instance.invoke
           }
+
+          it 'creates no new measures' do
+            pending
+            Measure.count.should == 6
+          end
 
           it "should end the measures with the current date" do
             pending
