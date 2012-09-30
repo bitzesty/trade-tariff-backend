@@ -2,6 +2,9 @@ require 'null_object'
 
 module Chief
   class Mfcm < Sequel::Model
+    EXCISE_GROUP_CODES = %w[EX]
+    VAT_GROUP_CODES = %w[VT]
+
     set_dataset db[:chief_mfcm].
                 order(:msrgp_code.asc).
                 order_more(:msr_type.asc).
@@ -63,6 +66,10 @@ module Chief
 
     def audit_tsmp
       self[:audit_tsmp].presence || Time.now
+    end
+
+    def vat_or_excise?
+      msrgp_code.in?(EXCISE_GROUP_CODES) || msrgp_code.in?(VAT_GROUP_CODES)
     end
   end
 end

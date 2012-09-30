@@ -231,12 +231,20 @@ class Measure < Sequel::Model
       where("measures.validity_start_date >= ?", timestamp)
     end
 
-    def not_ended
+    def not_terminated
       where("measures.validity_end_date IS NULL")
+    end
+
+    def terminated
+      where("measures.validity_end_date IS NOT NULL")
     end
 
     def with_gono_id(goods_nomenclature_item_id)
       where(goods_nomenclature_item_id: goods_nomenclature_item_id)
+    end
+
+    def with_geographical_area(area)
+      where(geographical_area: area)
     end
 
     def with_measure_component_count(count)

@@ -62,7 +62,9 @@ module Chief
       end
     end
 
-    def audit_tsmp
+    def geographical_area
+      chief_geographical_area = cngp_code.presence || cntry_orig.presence || cntry_disp.presence
+      Chief::CountryCode.to_taric(chief_geographical_area)
     end
 
     def measure_components

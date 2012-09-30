@@ -9,7 +9,7 @@ class ChiefTransformer
       def end_measures_for(tame)
         Measure.with_measure_type(tame.measure_type)
                .valid_to(tame.fe_tsmp)
-               .not_ended
+               .not_terminated
                .each do |measure|
           measure.update validity_end_date: tame.fe_tsmp
         end

@@ -77,7 +77,9 @@ FactoryGirl.define do
   end
 
   factory :heading, parent: :goods_nomenclature, class: Heading do
-    goods_nomenclature_item_id { "#{4.times.map{ Random.rand(9) }.join}000000" }
+    # +1 is needed to avoid creating heading with gono id in form of
+    # xx00xxxxxx which is a Chapter
+    goods_nomenclature_item_id { "#{4.times.map{ Random.rand(8)+1 }.join}000000" }
 
     trait :declarable do
       producline_suffix { 80 }
@@ -243,7 +245,7 @@ FactoryGirl.define do
   end
 
   factory :measure_type do
-    measure_type_id     { generate(:sid) }
+    measure_type_id     { Forgery(:basic).text(exactly: 3) }
     validity_start_date { Date.today.ago(3.years) }
     validity_end_date   { nil }
 

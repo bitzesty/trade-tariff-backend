@@ -554,16 +554,6 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
           end
         end
       end
-
-      describe "Daily Scenario 4: Country removed from restriction \n" do
-      # This scenario describes an update of a restriction where the list of countries is changed to fewer countries.
-      # The precondition is the following:
-
-        context "Alternative 1: Update TAME & TAMF" do
-          it "should create two new measures"
-          it "should end the three old measures"
-        end
-      end
     end
 
     describe "Daily Update MFCM \n" do
@@ -587,7 +577,7 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
 
           it "set the end date on the measure" do
             m1 = Measure.where(goods_nomenclature_item_id: "1210100010",
-                   validity_start_date: DateTime.parse("2007-10-01 00:00:00"),
+                   validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
                    validity_end_date: DateTime.parse("2008-04-30 15:00:00")).take
           end
         end
@@ -610,10 +600,11 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
 
           it "set the end date on the measure" do
             m1 = Measure.where(goods_nomenclature_item_id: "1210100010",
-                   validity_start_date: DateTime.parse("2007-10-01 00:00:00"),
+                   validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
                    validity_end_date: DateTime.parse("2008-04-30 15:00:00")).take
           end
         end
+
         context "Alternative 3: Delete & Update TAME/TAMF" do
           let!(:mfcm7){ create(:mfcm, :with_goods_nomenclature, :prohibition,
                                 amend_indicator: "U",
@@ -650,10 +641,11 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
 
           it "set the end date on the measure" do
             m1 = Measure.where(goods_nomenclature_item_id: "1210100010",
-                   validity_start_date: DateTime.parse("2007-10-01 00:00:00"),
+                   validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
                    validity_end_date: DateTime.parse("2008-04-30 15:00:00")).take
           end
         end
+
         context "Alternative 4: Delete & Delete TAME" do
           let!(:mfcm7){ create(:mfcm, :with_goods_nomenclature, :prohibition,
                                 amend_indicator: "X",
@@ -680,7 +672,7 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
 
           it "set the end date on the measure" do
             m1 = Measure.where(goods_nomenclature_item_id: "1210100010",
-                   validity_start_date: DateTime.parse("2007-10-01 00:00:00"),
+                   validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
                    validity_end_date: DateTime.parse("2008-04-30 15:00:00")).take
           end
         end
@@ -688,7 +680,8 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
 
       describe "Daily Scenario 2: Updated measure with later start date \n" do
         context "Alternative 1: Update" do
-          let!(:mfcm7){ create(:mfcm, :with_goods_nomenclature, :prohibition, amend_indicator: "U",
+          let!(:mfcm7){ create(:mfcm, :with_goods_nomenclature, :prohibition,
+                                amend_indicator: "U",
                                 fe_tsmp: DateTime.parse("2008-04-30 15:00:00"),
                                 msrgp_code: "PR",
                                 msr_type: "ATT",
@@ -699,14 +692,11 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
           }
 
           it 'creates no new measures' do
-            pending
             Measure.count.should == 6
           end
 
           it "should move measure validity_start_date forward for the existing measure" do
-            pending
             Measure.where(goods_nomenclature_item_id: "1210100010").count.should == 1
-            m = Measure.where(goods_nomenclature_item_id: "1210100010", fe_tsmp: DateTime.parse("2008-04-30 15:00:00")).take
           end
         end
 
@@ -719,28 +709,27 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
                                        fe_tsmp: DateTime.parse("2006-07-24 08:45:00"),
                                        msrgp_code: "HO",
                                        msr_type: "CON",
-                                       tar_msr_no: "12113000") }
+                                       tar_msr_no: "1211300000") }
           let!(:mfcm7){ create(:mfcm, :with_goods_nomenclature, :prohibition,
                                       amend_indicator: "X",
                                       fe_tsmp: DateTime.parse("2006-07-24 08:45:00"),
                                       msrgp_code: "HO",
                                       msr_type: "CON",
-                                      tar_msr_no: "12113000",
-                                      cmdty_code: "12113000") }
+                                      tar_msr_no: "1211300000",
+                                      cmdty_code: "1211300000") }
 
           before {
             ChiefTransformer.instance.invoke
           }
 
           it 'creates no new measures' do
-            pending
             Measure.count.should == 6
           end
 
           it "should end the measures with the current date" do
-            pending
-            m = Measure.where(goods_nomenclature_item_id: "1211300000", validity_start_date: DateTime.parse("2006-07-24 08:45:00")).first
-            m.validity_end_date.should == Date.today.to_datetime
+            m = Measure.where(goods_nomenclature_item_id: "1211300000",
+                              validity_start_date: DateTime.parse("2006-07-24 08:45:00"),
+                              validity_end_date: DateTime.parse("2006-07-24 08:45:00")).take
           end
         end
 
@@ -751,23 +740,153 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
                                       msrgp_code: "HO",
                                       msr_type: "CON",
                                       tar_msr_no: "12113000",
-                                      cmdty_code: "12113000") }
+                                      cmdty_code: "1211300000") }
 
           before {
             ChiefTransformer.instance.invoke
           }
 
           it 'creates no new measures' do
-            pending
             Measure.count.should == 6
           end
 
           it "should end the measures with the current date" do
-            pending
-            m = Measure.where(goods_nomenclature_item_id: "1211300000", validity_start_date: DateTime.parse("2006-07-24 08:45:00")).first
-            m.validity_end_date.should == Date.today.to_datetime
+            m = Measure.where(goods_nomenclature_item_id: "1211300000",
+                              validity_start_date: DateTime.parse("2006-07-24 08:45:00"),
+                              validity_end_date: DateTime.parse("2006-07-24 08:45:00")).take
           end
         end
+      end
+    end
+  end
+
+  describe "Daily Scenario 4: Country removed from restriction \n" do
+  # This scenario describes an update of a restriction where the list of countries is changed to fewer countries.
+  # The precondition is the following:
+    let!(:us) { create(:geographical_area, geographical_area_id: "US", geographical_area_sid: 103, validity_start_date: DateTime.parse("1975-07-18 00:00:00")) }
+    let!(:cn) { create(:geographical_area, geographical_area_id: "CN", geographical_area_sid: 439, validity_start_date: DateTime.parse("1975-07-18 00:00:00")) }
+    let!(:iq) { create(:geographical_area, geographical_area_id: "IQ", geographical_area_sid: 666, validity_start_date: DateTime.parse("1975-07-18 00:00:00")) }
+
+    let!(:mfcm7){ create(:mfcm, :with_goods_nomenclature,
+                                :prohibition,
+                                amend_indicator: "I",
+                                fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
+                                msrgp_code: "PR",
+                                msr_type: "CVD",
+                                cmdty_code: "2106909829") }
+    let!(:tamf5) { create(:tamf, :prohibition,
+                                 amend_indicator: "I",
+                                 fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
+                                 msrgp_code: "PR",
+                                 msr_type: "CVD",
+                                 cngp_code: "US",
+                                 tar_msr_no: "2106909829") }
+    let!(:tamf6) { create(:tamf, :prohibition,
+                                 amend_indicator: "I",
+                                 fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
+                                 msrgp_code: "PR",
+                                 msr_type: "CVD",
+                                 cngp_code: "CN",
+                                 tar_msr_no: "2106909829") }
+    let!(:tamf7) { create(:tamf, :prohibition,
+                                 amend_indicator: "I",
+                                 fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
+                                 msrgp_code: "PR",
+                                 msr_type: "CVD",
+                                 cngp_code: "IQ",
+                                 tar_msr_no: "2106909829") }
+    let!(:tame5) { create(:tame, :prohibition,
+                                 amend_indicator: "I",
+                                 fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
+                                 msrgp_code: "PR",
+                                 msr_type: "CVD",
+                                 tar_msr_no: "2106909829") }
+    let!(:mfcm8){ create(:mfcm, :with_goods_nomenclature,
+                                :prohibition,
+                                amend_indicator: "X",
+                                fe_tsmp: DateTime.parse("2008-06-01 00:00:00"),
+                                msrgp_code: "PR",
+                                msr_type: "CVD",
+                                cmdty_code: "2106909829") }
+
+    before {
+      ChiefTransformer.instance.invoke
+    }
+
+    it 'should create three new measures for preconditions with components and footnotes' do
+      Measure.count.should == 3
+      m1 = Measure.where(goods_nomenclature_item_id: "2106909829",
+                    geographical_area: 'US',
+                    validity_start_date: DateTime.parse("2008-05-01 00:00:00")).take
+      m1.measure_conditions.count.should == 2
+      m1.footnote_association_measures.count.should == 1
+      m2 = Measure.where(goods_nomenclature_item_id: "2106909829",
+                         geographical_area: 'CN',
+                         validity_start_date: DateTime.parse("2008-05-01 00:00:00")).take
+      m2.measure_conditions.count.should == 2
+      m2.footnote_association_measures.count.should == 1
+      m3 =Measure.where(goods_nomenclature_item_id: "2106909829",
+                        geographical_area: 'IQ',
+                        validity_start_date: DateTime.parse("2008-05-01 00:00:00")).take
+      m3.measure_conditions.count.should == 2
+      m3.footnote_association_measures.count.should == 1
+    end
+
+    it 'should create no excluded countries' do
+      MeasureExcludedGeographicalArea.count.should == 0
+    end
+
+    context "Alternative 1: Update TAME & TAMF" do
+      let!(:tamf9) { create(:tamf, :prohibition,
+                                   amend_indicator: "U",
+                                   fe_tsmp: DateTime.parse("2008-06-01 00:00:00"),
+                                   msrgp_code: "PR",
+                                   msr_type: "CVD",
+                                   cngp_code: "CN",
+                                   tar_msr_no: "2106909829") }
+      let!(:tamf8) { create(:tamf, :prohibition,
+                                   amend_indicator: "U",
+                                   fe_tsmp: DateTime.parse("2008-06-01 00:00:00"),
+                                   msrgp_code: "PR",
+                                   msr_type: "CVD",
+                                   cngp_code: "IQ",
+                                   tar_msr_no: "2106909829") }
+      let!(:tame6) { create(:tame, :prohibition,
+                                   amend_indicator: "U",
+                                   fe_tsmp: DateTime.parse("2008-06-01 00:00:00"),
+                                   msrgp_code: "PR",
+                                   msr_type: "CVD",
+                                   tar_msr_no: "2106909829") }
+
+      before { ChiefTransformer.instance.invoke }
+
+      it "should create two new measures" do
+        Measure.count.should == 5
+        m1 = Measure.where(goods_nomenclature_item_id: "2106909829",
+                           geographical_area: 'CN',
+                           validity_start_date: DateTime.parse("2008-06-01 00:00:00")).take
+        m1.measure_conditions.count.should == 2
+        m1.footnote_association_measures.count.should == 1
+        m2 = Measure.where(goods_nomenclature_item_id: "2106909829",
+                           geographical_area: 'IQ',
+                           validity_start_date: DateTime.parse("2008-06-01 00:00:00")).take
+        m2.measure_conditions.count.should == 2
+        m2.footnote_association_measures.count.should == 1
+      end
+
+      it "should end the three old measures" do
+        Measure.where(goods_nomenclature_item_id: "2106909829",
+                      geographical_area: 'CN',
+                      validity_start_date: DateTime.parse("2008-05-01 00:00:00"),
+                      validity_end_date: DateTime.parse("2008-06-01 00:00:00")).take
+        Measure.where(goods_nomenclature_item_id: "2106909829",
+                      geographical_area: 'US',
+                      validity_start_date: DateTime.parse("2008-05-01 00:00:00"),
+                      validity_end_date: DateTime.parse("2008-06-01 00:00:00")).take
+        Measure.where(goods_nomenclature_item_id: "2106909829",
+                      geographical_area: 'IQ',
+                      validity_start_date: DateTime.parse("2008-05-01 00:00:00"),
+                      validity_end_date: DateTime.parse("2008-06-01 00:00:00")).take
       end
     end
   end
