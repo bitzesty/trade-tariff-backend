@@ -702,11 +702,10 @@ describe "CHIEF: VAT and Excises" do
         end
 
         it 'adds validity end date to commodity 0303030300' do
-          pending("Check if example is valid.")
-          # m = Measure.where(goods_nomenclature_item_id: "0303030300",
-          #                   validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
-          #                   validity_end_date: DateTime.parse("2008-05-01 00:00:00")).take
-          # m.measure_components.first.duty_amount.should == 15
+          m = Measure.where(goods_nomenclature_item_id: "0303030300",
+                            validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
+                            validity_end_date: DateTime.parse("2008-05-01 00:00:00")).take
+          m.measure_components.first.duty_amount.should == 15
         end
       end
     end
