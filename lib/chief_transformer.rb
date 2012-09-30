@@ -4,8 +4,8 @@ require 'date'
 require 'logger'
 require 'sequel-rails'
 require 'chief_transformer/candidate_measure'
-require 'chief_transformer/measure_builder'
-require 'chief_transformer/measure_merger'
+require 'chief_transformer/measure_builders/paginated_mfcm_builder'
+require 'chief_transformer/processor'
 
 class ChiefTransformer
   include Singleton
@@ -37,19 +37,13 @@ class ChiefTransformer
     when :initial_load
       MeasureBuilder::PaginatedMfcmBuilder.build({per_page: per_page}) { |measure_batch|
         CandidateMeasure::Collection.new(measure_batch).tap { |candidate_measures|
-          candidate_measures.uniq
           candidate_measures.persist
         }
       }
     when :update
-      query_arguments = { transformed: false }
-      candidate_measures = MeasureBuilder.build_all(query_arguments: query_arguments)
-
-      CandidateMeasure::Collection.new(candidate_measures).tap {|cms|
-        cms.merge
-        cms.sort
-        cms.persist
-      }
+      processor = Processor.new(Chief::Tame.untransformed.all,
+                                Chief::Mfcm.untransformed.all)
+      processor.process
     end
 
     clean

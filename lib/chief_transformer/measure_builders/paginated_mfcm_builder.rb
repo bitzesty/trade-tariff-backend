@@ -21,16 +21,12 @@ class ChiefTransformer
         cms = []
         cms << if mfcm.tame.present?
           mfcm.tame.tamfs.map { |tamf|
-            CandidateMeasure.new(mfcm: mfcm,
-                                 tame: mfcm.tame,
-                                 tamf: tamf,
-                                 origin: mfcm)
           }.tap! { |candidate_measures|
             # When TAME has no subsidiary TAMFs and no candidate measures are built
             # from the combo. Create Measure just from TAME record.
             candidate_measures << CandidateMeasure.new(mfcm: mfcm,
                                                        tame: mfcm.tame,
-                                                       origin: mfcm) if candidate_measures.empty?
+                                                       operation: :insert) if candidate_measures.empty?
           }
         end
         if mfcm.tamfs.any?
@@ -38,7 +34,7 @@ class ChiefTransformer
             CandidateMeasure.new(mfcm: mfcm,
                                  tamf: tamf,
                                  tame: tamf.tame,
-                                 origin: mfcm)
+                                 operation: :insert)
           }
         end
         cms

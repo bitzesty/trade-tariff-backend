@@ -13,6 +13,12 @@ module Chief
                                      class_name: 'Chief::MeasureTypeCond'
 
 
+    one_to_one :measure_type, key: {}, primary_key: {},
+      dataset: -> { Chief::MeasureTypeAdco.where(chief_measure_type_adco__measure_group_code: msrgp_code,
+                                                 chief_measure_type_adco__measure_type: msr_type,
+                                                 chief_measure_type_adco__tax_type_code: tty_code) },
+                                                 class_name: 'Chief::MeasureTypeAdco'
+
     one_to_one :measure_type_adco, key: [:measure_group_code, :measure_type, :tax_type_code],
                                    primary_key: [:msrgp_code, :msr_type, :tty_code],
                                    class_name: 'Chief::MeasureTypeAdco'
@@ -54,6 +60,9 @@ module Chief
       elsif uoq.present?
         Chief::MeasurementUnit.where(spfc_uoq: uoq).first
       end
+    end
+
+    def audit_tsmp
     end
 
     def measure_components

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Chief::Tame do
-  let(:common_tame_attributes) { attributes_for(:tame).slice(:fe_tsmp, :msrgp_code, :msr_type, :tty_code, :fe_tsmp) }
+  let(:common_tame_attributes) { attributes_for(:tame).slice(:fe_tsmp, :msrgp_code, :msr_type, :tty_code, :fe_tsmp, :amend_indicator) }
 
   describe 'associations' do
     describe 'tamfs' do

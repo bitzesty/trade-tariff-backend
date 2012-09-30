@@ -210,13 +210,15 @@ describe "CHIEF: VAT and Excises" do
                                      msr_type: "S",
                                      tty_code: "813",
                                      adval_rate: 15.000,
-                                     le_tsmp: DateTime.parse("2008-04-01 00:00:00")) }
+                                     le_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+                                     audit_tsmp: Time.now.ago(2.minutes)) }
         let!(:tame2) { create(:tame, amend_indicator: "I",
                                      fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
                                      msrgp_code: "VT",
                                      msr_type: "S",
                                      tty_code: "813",
-                                     adval_rate: 17.000) }
+                                     adval_rate: 17.000,
+                                     audit_tsmp: Time.now.ago(1.minute)) }
 
         before {
           ChiefTransformer.instance.invoke
@@ -786,6 +788,17 @@ describe "CHIEF: VAT and Excises" do
                                 msr_type: "EXF",
                                 tty_code: "570",
                                 cmdty_code: "0303030300") }
+    # NOTE: why aren't these two tames included in the example?
+    let!(:tame1) { create(:tame, amend_indicator: "I",
+                                 fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
+                                 msrgp_code: "EX",
+                                 msr_type: "EXF",
+                                 tty_code: "411") }
+    let!(:tame2) { create(:tame, amend_indicator: "I",
+                                 fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
+                                 msrgp_code: "EX",
+                                 msr_type: "EXF",
+                                 tty_code: "570") }
     let!(:tamf1) { create(:tamf, amend_indicator: "I",
                                  fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
                                  msrgp_code: "EX",
@@ -866,15 +879,14 @@ describe "CHIEF: VAT and Excises" do
                                      tty_code: "570",
                                      spfc1_rate: 10.0,
                                      spfc2_rate: 2)}
-        let!(:tame1) { create(:tame, amend_indicator: "U",
+        let!(:tame3) { create(:tame, amend_indicator: "U",
                                      fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
                                      le_tsmp: DateTime.parse("2008-04-01 00:00:00"),
                                      msrgp_code: "EX",
                                      msr_type: "EXF",
                                      tty_code: "570") }
-        let!(:tame2) { create(:tame, amend_indicator: "I",
-                                     fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
-                                     le_tsmp: DateTime.parse("2008-04-01 00:00:00"),
+        let!(:tame4) { create(:tame, amend_indicator: "I",
+                                     fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
                                      msrgp_code: "EX",
                                      msr_type: "EXF",
                                      tty_code: "570") }
@@ -901,11 +913,10 @@ describe "CHIEF: VAT and Excises" do
           m.measure_components.first.duty_amount.should == 10
         end
 
-        it 'adds additional measure component to 0303030300', :focus do
+        it 'adds additional measure component to 0303030300' do
           m = Measure.where(goods_nomenclature_item_id: "0303030300",
                             validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
                             measure_type: 'EGJ').take
-          binding.pry
           m.measure_components.first.duty_amount.should == 10
           m.measure_components.last.duty_amount.should == 2
         end
@@ -935,7 +946,7 @@ describe "CHIEF: VAT and Excises" do
                                      tty_code: "570",
                                      spfc1_rate: 10.0,
                                      spfc2_rate: 2)}
-        let!(:tame1) { create(:tame, amend_indicator: "U",
+        let!(:tame3) { create(:tame, amend_indicator: "U",
                                      fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
                                      msrgp_code: "EX",
                                      msr_type: "EXF",
@@ -1002,12 +1013,12 @@ describe "CHIEF: VAT and Excises" do
                                      tty_code: "570",
                                      spfc1_rate: 10.0,
                                      spfc2_rate: 2) }
-        let!(:tame1) { create(:tame, amend_indicator: "X",
+        let!(:tame3) { create(:tame, amend_indicator: "X",
                                      fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
                                      msrgp_code: "EX",
                                      msr_type: "EXF",
                                      tty_code: "570") }
-        let!(:tame2) { create(:tame, amend_indicator: "I",
+        let!(:tame4) { create(:tame, amend_indicator: "I",
                                      fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
                                      msrgp_code: "EX",
                                      msr_type: "EXF",
@@ -1063,6 +1074,11 @@ describe "CHIEF: VAT and Excises" do
 
     describe "TAMF Daily Scenario 2: Added max amount" do
       describe "Alt 1. Update" do
+        let!(:tame5) { create(:tame, amend_indicator: "U",
+                                     fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
+                                     msrgp_code: "EX",
+                                     msr_type: "EXF",
+                                     tty_code: "570")}
         let!(:tamf3) { create(:tamf, amend_indicator: "U",
                                      fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
                                      msrgp_code: "EX",
@@ -1120,13 +1136,13 @@ describe "CHIEF: VAT and Excises" do
                                      msr_type: "EXF",
                                      tty_code: "411",
                                      spfc1_rate: 20.0)}
-        let!(:tame1) { create(:tame, amend_indicator: "U",
+        let!(:tame3) { create(:tame, amend_indicator: "U",
                                      fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
                                      le_tsmp: DateTime.parse("2008-04-01 00:00:00"),
                                      msrgp_code: "EX",
                                      msr_type: "EXF",
                                      tty_code: "411") }
-        let!(:tame2) { create(:tame, amend_indicator: "I",
+        let!(:tame4) { create(:tame, amend_indicator: "I",
                                      fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
                                      msrgp_code: "EX",
                                      msr_type: "EXF",
@@ -1188,7 +1204,7 @@ describe "CHIEF: VAT and Excises" do
                                      msr_type: "EXF",
                                      tty_code: "411",
                                      spfc1_rate: 20.0) }
-        let!(:tame1) { create(:tame, amend_indicator: "U",
+        let!(:tame3) { create(:tame, amend_indicator: "U",
                                      fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
                                      msrgp_code: "EX",
                                      msr_type: "EXF",
@@ -1257,12 +1273,12 @@ describe "CHIEF: VAT and Excises" do
                                      msr_type: "EXF",
                                      tty_code: "411",
                                      spfc1_rate: 20.0) }
-        let!(:tame1) { create(:tame, amend_indicator: "X",
+        let!(:tame3) { create(:tame, amend_indicator: "X",
                                      fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
                                      msrgp_code: "EX",
                                      msr_type: "EXF",
                                      tty_code: "411") }
-        let!(:tame2) { create(:tame, amend_indicator: "I",
+        let!(:tame4) { create(:tame, amend_indicator: "I",
                                      fe_tsmp: DateTime.parse("2008-04-01 00:00:00"),
                                      msrgp_code: "EX",
                                      msr_type: "EXF",
@@ -1539,6 +1555,7 @@ describe "CHIEF: VAT and Excises" do
     describe "Alt 1. Multiple updates" do
       let!(:tame2) { create(:tame, amend_indicator: "U",
                                    fe_tsmp: DateTime.parse("2008-02-01 00:00:00"),
+                                   audit_tsmp: Time.now.ago(1.minute),
                                    msrgp_code: "EX",
                                    msr_type: "EXF",
                                    tty_code: "411") }
@@ -1562,24 +1579,23 @@ describe "CHIEF: VAT and Excises" do
 
       before { ChiefTransformer.instance.invoke }
 
-      # it 'creates two new measures' do
-      #   Measure.count.should == 3
-      # end
+      it 'creates two new measures' do
+        Measure.count.should == 3
+      end
 
-      # TODO fix
-      # it 'adds end date to 0101010100 with duty amount of 20%' do
-      #   m = Measure.where(goods_nomenclature_item_id: "0101010100",
-      #                     validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
-      #                     validity_end_date: DateTime.parse("2008-02-01 00:00:00")).take
-      #   m.measure_components.first.duty_amount.should == 20
-      # end
+      it 'adds end date to 0101010100 with duty amount of 20%' do
+        m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                          validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
+                          validity_end_date: DateTime.parse("2008-02-01 00:00:00")).take
+        m.measure_components.first.duty_amount.should == 20
+      end
 
-      # it 'creates new temporary measure for 0101010100 with duty amount of 20%' do
-      #   m = Measure.where(goods_nomenclature_item_id: "0101010100",
-      #                     validity_start_date: DateTime.parse("2008-02-01 00:00:00"),
-      #                     validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
-      #   m.measure_components.first.duty_amount.should == 19
-      # end
+      it 'creates new temporary measure for 0101010100 with duty amount of 20%' do
+        m = Measure.where(goods_nomenclature_item_id: "0101010100",
+                          validity_start_date: DateTime.parse("2008-02-01 00:00:00"),
+                          validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
+        m.measure_components.first.duty_amount.should == 19
+      end
 
       it 'creates new measure for 0101010100 with duty amount of 18' do
         m = Measure.where(goods_nomenclature_item_id: "0101010100",
@@ -1636,7 +1652,8 @@ describe "CHIEF: VAT and Excises" do
     describe "Alt 1. Insert and Update" do
       let!(:mfcm1) { create(:mfcm, :with_goods_nomenclature,
                                    amend_indicator: "I",
-                                   fe_tsmp: DateTime.parse("2008-01-01 00:00:00"),
+                                   fe_tsmp: DateTime.parse("2008-03-01 00:00:00"),
+                                   audit_tsmp: Time.now.ago(2.minutes),
                                    msrgp_code: "EX",
                                    msr_type: "EXF",
                                    tty_code: "411",
@@ -1644,6 +1661,7 @@ describe "CHIEF: VAT and Excises" do
       let!(:tame1) { create(:tame, amend_indicator: "I",
                                    fe_tsmp: DateTime.parse("2008-03-01 00:00:00"),
                                    msrgp_code: "EX",
+                                   audit_tsmp: Time.now.ago(1.minute),
                                    msr_type: "EXF",
                                    tty_code: "411") }
       let!(:tame2) { create(:tame, amend_indicator: "U",
@@ -1679,7 +1697,7 @@ describe "CHIEF: VAT and Excises" do
     describe "Alt 2. Insert" do
       let!(:mfcm1) { create(:mfcm, :with_goods_nomenclature,
                                    amend_indicator: "I",
-                                   fe_tsmp: DateTime.parse("2008-01-01 00:00:00"),
+                                   fe_tsmp: DateTime.parse("2008-03-01 00:00:00"),
                                    msrgp_code: "EX",
                                    msr_type: "EXF",
                                    tty_code: "411",

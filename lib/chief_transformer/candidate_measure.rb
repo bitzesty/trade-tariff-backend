@@ -27,11 +27,10 @@ class ChiefTransformer
                                     HOP HSE IWP PHC PRT QRC SFS VTA VTA VTE VTE
                                     VTS VTS VTZ VTZ SPL]
 
-    attr_accessor :mfcm, :tame, :tamf, :candidate_associations, :origin
+    attr_accessor :mfcm, :tame, :tamf, :candidate_associations, :origin, :operation
     attr_reader :chief_geographical_area
 
     delegate :persist, :map, to: :candidate_associations, prefix: true
-    delegate :amend_indicator, to: :origin
 
     def after_initialize
       # set default variables
@@ -62,6 +61,14 @@ class ChiefTransformer
       callbacks
     end
 
+    def ==(other_measure)
+      self.values == other_measure.values &&
+      self.mfcm == other_measure.mfcm &&
+      self.tame == other_measure.tame &&
+      self.tamf == other_measure.tamf &&
+      self.amend_indicator == other_measure.amend_indicator
+    end
+
     def validate
       super
 
@@ -88,6 +95,10 @@ class ChiefTransformer
         ChiefTransformer.logger.error "start date greater than end date for #{self.measure_sid}"
         self.validity_end_date = nil
       end
+    end
+
+    def audit_tsmp
+      (tame.present?) ? tame.audit_tsmp : mfcm.audit_tsmp
     end
 
     def assign_validity_start_date

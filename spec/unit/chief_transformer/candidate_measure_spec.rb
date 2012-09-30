@@ -153,15 +153,6 @@ describe ChiefTransformer::CandidateMeasure do
         end
       end
 
-      context 'tamf absent, tame start date is after the mfcm' do
-        let(:mfcm) { create :mfcm, :with_tame_start_date_after }
-        subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm,
-                                                                             tame: mfcm.tame) }
-        it "should use the tame start date" do
-          candidate_measure.validity_start_date.should == mfcm.tame.fe_tsmp
-        end
-      end
-
       context 'tamf absent, tame start date is before the mfcm' do
         let(:mfcm) { create :mfcm, :with_tame_start_date_before }
         subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm,
@@ -263,6 +254,7 @@ describe ChiefTransformer::CandidateMeasure do
         let!(:chief_measurement_unit) { create :chief_measurement_unit }
         let(:mfcm) { create :mfcm, :with_tamf_components }
         subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm,
+                                                                             tame: mfcm.tame,
                                                                              tamf: mfcm.tame.tamfs.first) }
 
         it "should build the measure component from the tamf" do
@@ -282,6 +274,7 @@ describe ChiefTransformer::CandidateMeasure do
                                    tty_code: mfcm.tty_code,
                                    fe_tsmp: mfcm.fe_tsmp }
         subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm,
+                                                                             tame: mfcm.tame,
                                                                              tamf: mfcm.tame.tamfs.first) }
 
         it 'picks duty expression that matches adval1_rate being present condition' do

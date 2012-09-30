@@ -397,7 +397,7 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
             ChiefTransformer.instance.invoke
           }
 
-          it 'creates no new measures' do
+          it 'should not create new measures' do
             Measure.count.should == 6
           end
 
@@ -435,7 +435,7 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
             ChiefTransformer.instance.invoke
           }
 
-          it 'creates no new measures' do
+          it 'should not create new measures' do
             Measure.count.should == 6
           end
 
@@ -462,10 +462,6 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
           before {
             ChiefTransformer.instance.invoke
           }
-
-          it 'creates no new measures' do
-            Measure.count.should == 6
-          end
 
           it 'should not create new measures' do
             Measure.count.should == 6
@@ -496,7 +492,7 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
                                        fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
                                        msrgp_code: "PR",
                                        msr_type: "CVD",
-                                       tar_msr_no: "92106909829") }
+                                       tar_msr_no: "2106909829") }
 
           let!(:tamf5) { create(:tamf, :prohibition,
                                        amend_indicator: "U",

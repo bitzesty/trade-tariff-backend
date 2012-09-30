@@ -215,6 +215,40 @@ class Measure < Sequel::Model
       join_table(:right, :modification_regulations, modification_regulations__modification_regulation_id: :measures__measure_generating_regulation_id)
     end
 
+    def with_measure_type(condition_measure_type)
+      where(measures__measure_type: condition_measure_type.to_s)
+    end
+
+    def valid_since(first_effective_timestamp)
+      where("measures.validity_start_date >= ?", first_effective_timestamp)
+    end
+
+    def valid_to(last_effective_timestamp)
+      where("measures.validity_start_date <= ?", last_effective_timestamp)
+    end
+
+    def valid_from(timestamp)
+      where("measures.validity_start_date >= ?", timestamp)
+    end
+
+    def not_ended
+      where("measures.validity_end_date IS NULL")
+    end
+
+    def with_gono_id(goods_nomenclature_item_id)
+      where(goods_nomenclature_item_id: goods_nomenclature_item_id)
+    end
+
+    def with_measure_component_count(count)
+      # TODO
+      self
+    end
+
+    def with_duty_amount(amount)
+      join_table(:left, MeasureComponent, measures__measure_sid: :measure_components__measure_sid).
+      where(measure_components__duty_amount: amount)
+    end
+
     def for_candidate_measure(candidate_measure)
       where(measure_type: candidate_measure.measure_type,
             validity_start_date: candidate_measure.validity_start_date,
