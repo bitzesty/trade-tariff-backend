@@ -29,6 +29,7 @@ class MeasureType < Sequel::Model
     # MT4
     validates_presence :measure_type_series_id
     # TODO: MT7
+    # TODO: MT10
   end
 
 end
