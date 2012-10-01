@@ -1,5 +1,17 @@
 class FootnoteType < Sequel::Model
-  # set_primary_key  :footnote_type_id
+  set_primary_key  :footnote_type_id
+
+
+  ######### Conformance validations 100
+  def validate
+    super
+    # FOT1
+    validates_unique :footnote_type_id
+    # TODO: FOT2
+    # FOT3
+    validates_start_date
+  end
+
  
   # has_many :footnotes, foreign_key: :footnote_type_id
   # has_many :footnote_description, foreign_key: :footnote_type_id
