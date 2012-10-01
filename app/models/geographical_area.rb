@@ -75,13 +75,32 @@ class GeographicalArea < Sequel::Model
 
   delegate :description, to: :geographical_area_description
 
-  # TODO
+  ######### Conformance validations 250
   def validate
     super
     # GA1
     validates_unique([:geographical_area_id, :validity_start_date])
     # GA2
     validates_start_date
+    # TODO: GA3
+    # TODO: GA4
+    # TODO: GA5
+    # TODO: GA6
+    # TODO: GA7
+    # TODO: GA10
+    # TODO: GA11
+    # TODO: GA12
+    # TODO: GA13
+    # TODO: GA14
+    # TODO: GA15
+    # TODO: GA16
+    # TODO: GA17
+    # TODO: GA18
+    # TODO: GA19
+    # TODO: GA20
+    # TODO: GA21
+    # TODO: GA22
+    # TODO: GA23
   end
 
   def iso_code
