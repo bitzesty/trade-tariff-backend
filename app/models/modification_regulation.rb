@@ -11,7 +11,7 @@ class ModificationRegulation < Sequel::Model
     validates_unique([:modification_regulation_id, :modification_regulation_role])
     # TODO: ROIMM3
     # TODO: ROIMM4
-    # TODO: ROIMM5
+    # ROIMM5
     validates_start_date
     # TODO: ROIMM6
     # TODO: ROIMM7
