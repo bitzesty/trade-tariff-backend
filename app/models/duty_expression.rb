@@ -7,15 +7,15 @@ class DutyExpression < Sequel::Model
 
   delegate :description, to: :duty_expression_description
 
-  ######### Conformance validations 235
+  ######### Conformance validations 230
   def validate
     super
     # DE1
     validates_unique([:duty_expression_id])
     # DE2
     validates_start_date
-    # DE3
-    # DE4
+    # TODO: DE3
+    # TODO: DE4
   end
 
 
