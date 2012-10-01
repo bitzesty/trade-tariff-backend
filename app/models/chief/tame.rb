@@ -21,6 +21,7 @@ module Chief
       Chief::Tamf.filter{ |o| {:fe_tsmp => fe_tsmp} &
                               {:msrgp_code => msrgp_code} &
                               {:msr_type => msr_type} &
+                              {:tty_code => tty_code} &
                               {:tar_msr_no => tar_msr_no} &
                               {:amend_indicator => amend_indicator}
                               }

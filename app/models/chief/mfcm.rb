@@ -14,8 +14,7 @@ module Chief
     set_primary_key [:msrgp_code, :msr_type, :tty_code, :cmdty_code, :fe_tsmp]
 
     one_to_one :tame, key: {}, primary_key: {}, dataset: -> {
-      Chief::Tame.filter{ |o| o.<=(:fe_tsmp, fe_tsmp) &
-                              {:msrgp_code => msrgp_code} &
+      Chief::Tame.filter{ |o| {:msrgp_code => msrgp_code} &
                               {:msr_type => msr_type} &
                               {:tty_code => tty_code}
                               }.order(:fe_tsmp.desc)

@@ -18,26 +18,15 @@ class ChiefTransformer
       private
 
       def build_from(mfcm)
-        cms = []
-        cms << if mfcm.tame.present?
-          mfcm.tame.tamfs.map { |tamf|
-          }.tap! { |candidate_measures|
-            # When TAME has no subsidiary TAMFs and no candidate measures are built
-            # from the combo. Create Measure just from TAME record.
-            candidate_measures << CandidateMeasure.new(mfcm: mfcm,
-                                                       tame: mfcm.tame,
-                                                       operation: :insert) if candidate_measures.empty?
+        if mfcm.tame.present?
+          cm = mfcm.tame.tamfs.map { |tamf|
+            CandidateMeasure.new(mfcm: mfcm, tame: mfcm.tame, tamf: tamf)
           }
+          # When TAME has no subsidiary TAMFs and no candidate measures are built
+          # from the combo. Create Measure just from TAME record.
+          cm << CandidateMeasure.new(mfcm: mfcm, tame: mfcm.tame) if cm.empty?
+          cm
         end
-        if mfcm.tamfs.any?
-          cms << mfcm.tamfs.map { |tamf|
-            CandidateMeasure.new(mfcm: mfcm,
-                                 tamf: tamf,
-                                 tame: tamf.tame,
-                                 operation: :insert)
-          }
-        end
-        cms
       end
     end
   end

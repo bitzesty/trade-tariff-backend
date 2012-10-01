@@ -103,7 +103,6 @@ describe "CHIEF: VAT and Excises" do
       m.measure_components.first.duty_amount.should == 22.0
       m.measure_components.second.duty_amount.should == 108.650
       m.measure_components.second.monetary_unit_code.should == 'GBP'
-      # TODO 22%+108.650GBP/1000 items
     end
 
     it "should create measures for 0303030300" do

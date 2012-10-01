@@ -11,6 +11,10 @@ class ChiefTransformer
         @measures = measures
       end
 
+      def uniq
+        @measures = @measures.uniq
+      end
+
       def log(origin)
         @measures.each do |measure|
           MeasureLogger.log(measure, :insert, {}, origin)
