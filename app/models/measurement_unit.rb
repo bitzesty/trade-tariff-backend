@@ -33,7 +33,6 @@ class MeasurementUnit < Sequel::Model
     # TODO: MU6
   end
 
-
   def to_s
     description
   end
