@@ -22,6 +22,17 @@ class MeasurementUnit < Sequel::Model
 
   delegate :description, to: :measurement_unit_description
 
+  ######### Conformance validations 210
+  def validate
+    super
+    # MU1
+    validates_unique(:measurement_unit_code)
+    # MU2
+    validates_start_date
+    # TODO: MU3
+    # TODO: MU6
+  end
+
   def to_s
     description
   end

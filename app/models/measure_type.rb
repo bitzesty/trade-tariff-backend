@@ -18,14 +18,20 @@ class MeasureType < Sequel::Model
 
   delegate :description, to: :measure_type_description
 
-  # MTS2 - TODO
+  ######### Conformance validations 235
   def validate
     super
-    # MTS1
+    # MT1
     validates_unique(:measure_type_id)
-    # MTS3
+    # MT2
     validates_start_date
+    # TODO: MT3
+    # MT4
+    validates_presence :measure_type_series_id
+    # TODO: MT7
+    # TODO: MT10
   end
+
 end
 
 
