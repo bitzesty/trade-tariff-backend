@@ -247,11 +247,6 @@ class Measure < Sequel::Model
       where(geographical_area: area)
     end
 
-    def with_measure_component_count(count)
-      # TODO
-      self
-    end
-
     def with_duty_amount(amount)
       join_table(:left, MeasureComponent, measures__measure_sid: :measure_components__measure_sid).
       where(measure_components__duty_amount: amount)

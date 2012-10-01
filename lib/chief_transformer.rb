@@ -13,7 +13,7 @@ class ChiefTransformer
   class TransformException < StandardError; end
 
   cattr_accessor :logger
-  self.logger = Logger.new('log/chief_error.log')
+  self.logger = Logger.new('log/chief_transformer.log')
 
   # Use update mode (the default) to process daily updates. Does not perform
   # pagination, processes MFCMs, TAMEs and TAMFs, merges them and persists.

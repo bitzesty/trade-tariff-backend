@@ -10,7 +10,6 @@ class ChiefTransformer
           Measure.with_measure_type(record.measure_type)
                  .valid_since(record.fe_tsmp)
                  .valid_to(record.le_tsmp)
-                 .with_measure_component_count(1)
                  .each do |measure|
             measure.update validity_end_date: record.le_tsmp
           end
