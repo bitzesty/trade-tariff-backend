@@ -76,7 +76,7 @@ module TariffSynchronizer
 
   # Initial dump date
   mattr_accessor :chief_initial_update
-  self.chief_initial_update = Date.new(2012,6,5)
+  self.chief_initial_update = Date.new(2012,6,13)
 
   # Download pending updates for Taric and National data
   # Gets latest downloaded file present in (inbox/failbox/processed) and tries
