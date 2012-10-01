@@ -42,3 +42,7 @@ Additional Data
 In some of our specs we have to create extra data, not mentioned in the scenario documentation for the transformations to complete successfully.
 
 
+Invalid specs in the test scenarios
+-----------------------------------
+
+In the tests where we feel the data is invalid because of human error we have made a note of it with the NOTE: comment.
