@@ -505,7 +505,7 @@ describe "CHIEF: VAT and Excises" do
                                 msr_type: "EXF",
                                 tty_code: "570",
                                 cmdty_code: "0303030300") }
-    # NOTE: why aren't these two tames included in the example?
+    # NOTE: these two tames are not included in the example, we feel they should be
     let!(:tame1) { create(:tame, amend_indicator: "I",
                                  fe_tsmp: DateTime.parse("2007-11-15 11:00:00"),
                                  msrgp_code: "EX",

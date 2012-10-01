@@ -227,7 +227,7 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
         end
 
         context "Alternative 3: Delete & Insert" do
-          # TODO is example wrong, fe_tsmp was adjusted
+          # NOTE: is example wrong, fe_tsmp was adjusted
           let!(:tame5) { create(:tame, :prohibition,
                                        amend_indicator: "X",
                                        fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
@@ -250,7 +250,7 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
                                        cngp_code: "D066",
                                        tar_msr_no: "2106909829") }
 
-          # TODO is example wrong, fe_tsmp was adjusted
+          # NOTE: is example wrong, fe_tsmp was adjusted
           let!(:tamf6) { create(:tamf, :prohibition,
                                        amend_indicator: "I",
                                        fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
