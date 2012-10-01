@@ -11,6 +11,7 @@ class ChiefTransformer
                .valid_to(tame.fe_tsmp)
                .not_terminated
                .each do |measure|
+          MeasureLogger.log(measure, :update, {validity_end_date: tame.fe_tsmp}, tame)
           measure.update validity_end_date: tame.fe_tsmp
         end
       end
@@ -31,6 +32,7 @@ class ChiefTransformer
                                  operation: :insert)]
           end
         end.flatten)
+        candidate_measures.log(tame)
         candidate_measures.persist
       end
 

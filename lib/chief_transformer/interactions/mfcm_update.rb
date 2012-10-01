@@ -7,6 +7,7 @@ class ChiefTransformer
                  .with_gono_id(record.cmdty_code)
                  .valid_to(record.le_tsmp)
                  .each do |measure|
+                   MeasureLogger.log(measure, :update, {validity_end_date: record.le_tsmp}, record)
                    measure.update validity_end_date: record.le_tsmp
                  end
         else
@@ -19,6 +20,7 @@ class ChiefTransformer
             candidate_measures = CandidateMeasure::Collection.new([
               CandidateMeasure.new(mfcm: record, tame: record.tame, operation: :insert)
             ])
+            candidate_measures.log(record)
             candidate_measures.persist
           end
         end

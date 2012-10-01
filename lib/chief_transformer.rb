@@ -6,6 +6,7 @@ require 'sequel-rails'
 require 'chief_transformer/candidate_measure'
 require 'chief_transformer/measure_builders/paginated_mfcm_builder'
 require 'chief_transformer/processor'
+require 'chief_transformer/measure_logger'
 
 class ChiefTransformer
   include Singleton
@@ -31,7 +32,7 @@ class ChiefTransformer
   def invoke(work_mode = :update)
     raise TransformException.new("Invalid work mode, options: #{modes}") unless work_mode.in? work_modes
 
-    logger.info "CHIEF Transformer started: #{work_mode}"
+    logger.info "#{Time.now} CHIEF Transformer started: #{work_mode}"
 
     case work_mode
     when :initial_load

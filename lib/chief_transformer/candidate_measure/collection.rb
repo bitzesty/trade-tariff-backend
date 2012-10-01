@@ -11,6 +11,12 @@ class ChiefTransformer
         @measures = measures
       end
 
+      def log(origin)
+        @measures.each do |measure|
+          MeasureLogger.log(measure, :insert, {}, origin)
+        end
+      end
+
       # Only processes initial import records
       def persist
         Sequel::Model.db.transaction do

@@ -16,6 +16,7 @@ class ChiefTransformer
                                   operation: :insert)]
           end
         ].flatten)
+        candidate_measures.log(record)
         candidate_measures.persist
       end
     end
