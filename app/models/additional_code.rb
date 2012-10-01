@@ -30,6 +30,31 @@ class AdditionalCode < Sequel::Model
   def code
     "#{additional_code_type_id}#{additional_code}"
   end
+
+
+  ######### Conformance validations 245
+  def validate
+    super
+    # ACN1
+    validates_unique([:additional_code, :additional_code_type, :validity_start_date])
+    # TODO: ACN2
+    # ACN3
+    validates_start_date
+    # TODO: ACN4
+    # TODO: ACN12
+    # TODO: ACN13
+    # TODO: ACN17
+    # TODO: ACN6
+    # TODO: ACN7
+    # TODO: ACN8
+    # TODO: ACN9
+    # TODO: ACN10
+    # TODO: ACN11
+    # TODO: ACN16
+    # TODO: ACN5
+    # TODO: ACN14
+    # TODO: ACN15
+  end
 end
 
 
