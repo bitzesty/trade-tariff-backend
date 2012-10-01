@@ -6,12 +6,12 @@ class MeasureTypeSeries < Sequel::Model
     super
     # MTS1
     validates_unique([:measure_type_series_id, :measure_type_combination])
+    # TODO: MTS2
+    # The measure type series cannot be deleted if it is associated with a measure type.
     # MTS3
     validates_start_date
   end
 
-  # MTS2 - TODO
-  # The measure type series cannot be deleted if it is associated with a measure type.
 
   # has_one :measure_type_series_description
   # has_many :measure_types

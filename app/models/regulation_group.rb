@@ -5,11 +5,11 @@ class RegulationGroup < Sequel::Model
   # has_one  :regulation_group_description, foreign_key: :regulation_group_id
 
   ######### Conformance validations 150
-  # RG2 - TODO
   def validate
     super
     # RG1
     validates_unique(:regulation_group_id)
+    # TODO: RG2
     # RG3
     validates_start_date
   end

@@ -31,11 +31,27 @@ class Footnote < Sequel::Model
 
   delegate :description, to: :footnote_description
 
-  # TODO
+  ######### Conformance validations 200
   def validate
     super
+    # FO1
+    validates_presence :footnote_type_id
+    # FO2
+    validates_unique([:footnote_id, :footnote_type_id])
     # FO3
     validates_start_date
+    # TODO: FO4
+    # TODO: FO5
+    # TODO: FO6
+    # TODO: FO7
+    # TODO: FO9
+    # TODO: FO10
+    # TODO: FO17
+    # TODO: FO11
+    # TODO: FO12
+    # TODO: FO13
+    # TODO: FO15
+    # TODO: FO16
   end
 
   def code
