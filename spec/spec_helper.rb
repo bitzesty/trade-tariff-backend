@@ -23,6 +23,7 @@ RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
   config.treat_symbols_as_metadata_keys_with_true_values = true
   config.mock_with :mocha
+  config.alias_it_should_behave_like_to :it_results_in, "it results in"
   config.include RSpec::Rails::RequestExampleGroup, type: :request,
                                                     example_group: { file_path: /spec\/api/ }
   config.include SynchronizerHelper
