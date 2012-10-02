@@ -272,11 +272,11 @@ Sequel.migration do
       column :tty_code, "varchar(5)"
       column :le_tsmp, "datetime"
       column :audit_tsmp, "datetime"
-      column :cmdty_code, "varchar(255)"
+      column :cmdty_code, "varchar(12)"
       column :cmdty_msr_xhdg, "varchar(255)"
       column :null_tri_rqd, "varchar(255)"
       column :exports_use_ind, "tinyint(1)"
-      column :tar_msr_no, "varchar(255)"
+      column :tar_msr_no, "varchar(12)"
       column :transformed, "tinyint(1)", :default=>false
       column :amend_indicator, "varchar(1)"
 
@@ -288,7 +288,7 @@ Sequel.migration do
       column :msrgp_code, "varchar(5)"
       column :msr_type, "varchar(5)"
       column :tty_code, "varchar(5)"
-      column :tar_msr_no, "varchar(255)"
+      column :tar_msr_no, "varchar(12)"
       column :le_tsmp, "datetime"
       column :adval_rate, "decimal(8,3)"
       column :alch_sgth, "decimal(8,3)"
@@ -320,7 +320,7 @@ Sequel.migration do
       column :transformed, "tinyint(1)", :default=>false
       column :amend_indicator, "varchar(1)"
 
-      index [:msrgp_code, :msr_type, :tty_code]
+      index [:msrgp_code, :msr_type, :tty_code, :tar_msr_no, :fe_tsmp], :name=>:index_chief_tame
     end
 
     create_table(:chief_tamf) do
@@ -328,7 +328,7 @@ Sequel.migration do
       column :msrgp_code, "varchar(5)"
       column :msr_type, "varchar(5)"
       column :tty_code, "varchar(5)"
-      column :tar_msr_no, "varchar(255)"
+      column :tar_msr_no, "varchar(12)"
       column :le_tsmp, "datetime"
       column :adval1_rate, "decimal(8,3)"
       column :adval2_rate, "decimal(8,3)"
@@ -355,7 +355,7 @@ Sequel.migration do
       column :transformed, "tinyint(1)", :default=>false
       column :amend_indicator, "varchar(1)"
 
-      index [:msrgp_code, :msr_type, :tty_code]
+      index [:fe_tsmp, :msrgp_code, :msr_type, :tty_code, :tar_msr_no, :amend_indicator], :name=>:index_chief_tamf
     end
 
     create_table(:complete_abrogation_regulations) do
@@ -1521,6 +1521,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20120913170136_add_national_to_measures.rb")
     self[:schema_migrations].insert(:filename => "20120919073610_remove_export_indication_from_measures.rb")
     self[:schema_migrations].insert(:filename => "20120921072412_export_refund_changes.rb")
+    self[:schema_migrations].insert(:filename => "20121001141720_adjust_chief_keys.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"

@@ -2,6 +2,9 @@ require 'null_object'
 
 module Chief
   class Mfcm < Sequel::Model
+    EXCISE_GROUP_CODES = %w[EX]
+    VAT_GROUP_CODES = %w[VT]
+
     set_dataset db[:chief_mfcm].
                 order(:msrgp_code.asc).
                 order_more(:msr_type.asc).
@@ -15,17 +18,46 @@ module Chief
                               {:msr_type => msr_type} &
                               {:tty_code => tty_code} &
                               {:tar_msr_no => tar_msr_no}
-                              }.untransformed
+                              }.order(:audit_tsmp.desc)
     }, class_name: 'Chief::Tame'
+
+    one_to_many :tames, key: {}, primary_key: {}, dataset: -> {
+      Chief::Tame.filter{ |o| {:msrgp_code => msrgp_code} &
+                              {:msr_type => msr_type} &
+                              {:tty_code => tty_code} &
+                              {:tar_msr_no => tar_msr_no}
+                              }.order(:audit_tsmp.asc)
+    }, class_name: 'Chief::Tame'
+
+    one_to_many :tamfs, key: {}, primary_key: {}, dataset: -> {
+      Chief::Tamf.filter{ |o| {:msrgp_code => msrgp_code} &
+                              {:msr_type => msr_type} &
+                              {:tty_code => tty_code}
+                              }.order(:fe_tsmp.desc)
+    }
 
     one_to_one :measure_type_adco, key: {}, primary_key: {},
       dataset: -> { Chief::MeasureTypeAdco.where(chief_measure_type_adco__measure_group_code: msrgp_code,
                                                  chief_measure_type_adco__measure_type: msr_type,
                                                  chief_measure_type_adco__tax_type_code: tty_code) }
 
+    one_to_one :measure_type, key: {}, primary_key: {},
+      dataset: -> { Chief::MeasureTypeAdco.where(chief_measure_type_adco__measure_group_code: msrgp_code,
+                                                 chief_measure_type_adco__measure_type: msr_type,
+                                                 chief_measure_type_adco__tax_type_code: tty_code) },
+                                                 class_name: 'Chief::MeasureTypeAdco'
+
     dataset_module do
       def untransformed
         filter(transformed: false)
+      end
+
+      def valid_to(timestamp)
+        where("fe_tsmp < ?", timestamp)
+      end
+
+      def valid_to_inclusive(timestamp)
+        where("fe_tsmp <= ?", timestamp)
       end
     end
 
@@ -38,6 +70,14 @@ module Chief
 
     def measure_type_adco
       _measure_type_adco_dataset.first.presence || ::NullObject.new
+    end
+
+    def audit_tsmp
+      self[:audit_tsmp].presence || Time.now
+    end
+
+    def vat_or_excise?
+      msrgp_code.in?(EXCISE_GROUP_CODES) || msrgp_code.in?(VAT_GROUP_CODES)
     end
   end
 end

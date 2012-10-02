@@ -77,7 +77,9 @@ FactoryGirl.define do
   end
 
   factory :heading, parent: :goods_nomenclature, class: Heading do
-    goods_nomenclature_item_id { "#{4.times.map{ Random.rand(9) }.join}000000" }
+    # +1 is needed to avoid creating heading with gono id in form of
+    # xx00xxxxxx which is a Chapter
+    goods_nomenclature_item_id { "#{4.times.map{ Random.rand(8)+1 }.join}000000" }
 
     trait :declarable do
       producline_suffix { 80 }
@@ -243,7 +245,7 @@ FactoryGirl.define do
   end
 
   factory :measure_type do
-    measure_type_id     { generate(:sid) }
+    measure_type_id     { Forgery(:basic).text(exactly: 3) }
     validity_start_date { Date.today.ago(3.years) }
     validity_end_date   { nil }
 
@@ -288,6 +290,10 @@ FactoryGirl.define do
                                              measure_type_id: evaluator.measure_type_id)
     }
 
+    trait :for_insert do
+      amend_indicator "I"
+    end
+
     trait :prohibition do
       tty_code { nil }
     end
@@ -321,12 +327,21 @@ FactoryGirl.define do
       }
     end
 
+    trait :untransformed do
+      transformed { false }
+    end
+
+    trait :transformed do
+      transformed { true }
+    end
+
     trait :with_tame do
       after(:create) { |mfcm|
         FactoryGirl.create(:tame, msrgp_code: mfcm.msrgp_code,
                                   msr_type: mfcm.msr_type,
                                   tty_code: mfcm.tty_code,
-                                  fe_tsmp: mfcm.fe_tsmp)
+                                  fe_tsmp: mfcm.fe_tsmp,
+                                  amend_indicator: mfcm.amend_indicator)
       }
     end
 
@@ -338,7 +353,8 @@ FactoryGirl.define do
         FactoryGirl.create(:tamf, msrgp_code: mfcm.msrgp_code,
                                   msr_type: mfcm.msr_type,
                                   tty_code: mfcm.tty_code,
-                                  fe_tsmp: mfcm.fe_tsmp)
+                                  fe_tsmp: mfcm.fe_tsmp,
+                                  amend_indicator: mfcm.amend_indicator)
         FactoryGirl.create(:measure_type_cond, measure_group_code: "PR",
                                                measure_type: "AHC",
                                                cond_cd: "B",
@@ -378,7 +394,8 @@ FactoryGirl.define do
                                   adval1_rate: nil,
                                   adval2_rate: nil,
                                   spfc1_rate: 1,
-                                  spfc2_rate: nil)
+                                  spfc2_rate: nil,
+                                  amend_indicator: mfcm.amend_indicator)
         FactoryGirl.create(:measure_type_adco, measure_group_code: "EX",
                                                measure_type: "EXF",
                                                tax_type_code: "591",
@@ -391,7 +408,8 @@ FactoryGirl.define do
         FactoryGirl.create(:tamf, msrgp_code: mfcm.msrgp_code,
                                   msr_type: mfcm.msr_type,
                                   tty_code: mfcm.tty_code,
-                                  fe_tsmp: mfcm.fe_tsmp)
+                                  fe_tsmp: mfcm.fe_tsmp,
+                                  amend_indicator: mfcm.amend_indicator)
       }
     end
 
@@ -409,7 +427,8 @@ FactoryGirl.define do
         FactoryGirl.create(:tamf, msrgp_code: mfcm.msrgp_code,
                                   msr_type: mfcm.msr_type,
                                   tty_code: mfcm.tty_code,
-                                  fe_tsmp: mfcm.fe_tsmp - 2.days)
+                                  fe_tsmp: mfcm.fe_tsmp - 2.days,
+                                  amend_indicator: mfcm.amend_indicator)
       }
     end
 
@@ -418,7 +437,8 @@ FactoryGirl.define do
         FactoryGirl.create(:tame, msrgp_code: mfcm.msrgp_code,
                                   msr_type: mfcm.msr_type,
                                   tty_code: mfcm.tty_code,
-                                  fe_tsmp: mfcm.fe_tsmp + 2.days)
+                                  fe_tsmp: mfcm.fe_tsmp + 2.days,
+                                  amend_indicator: mfcm.amend_indicator)
       }
     end
 
@@ -427,7 +447,8 @@ FactoryGirl.define do
         FactoryGirl.create(:tame, msrgp_code: mfcm.msrgp_code,
                                   msr_type: mfcm.msr_type,
                                   tty_code: mfcm.tty_code,
-                                  fe_tsmp: mfcm.fe_tsmp - 2.days)
+                                  fe_tsmp: mfcm.fe_tsmp - 2.days,
+                                  amend_indicator: mfcm.amend_indicator)
       }
     end
 
@@ -437,7 +458,9 @@ FactoryGirl.define do
         FactoryGirl.create(:tame, msrgp_code: mfcm.msrgp_code,
                                   msr_type: mfcm.msr_type,
                                   tty_code: mfcm.tty_code,
-                                  le_tsmp: mfcm.le_tsmp + 2.days)
+                                  fe_tsmp: mfcm.fe_tsmp,
+                                  le_tsmp: mfcm.le_tsmp + 2.days,
+                                  amend_indicator: mfcm.amend_indicator)
       }
     end
 
@@ -447,7 +470,8 @@ FactoryGirl.define do
         FactoryGirl.create(:tame, msrgp_code: mfcm.msrgp_code,
                                   msr_type: mfcm.msr_type,
                                   tty_code: mfcm.tty_code,
-                                  le_tsmp: mfcm.le_tsmp - 2.days)
+                                  le_tsmp: mfcm.le_tsmp - 2.days,
+                                  amend_indicator: mfcm.amend_indicator)
       }
     end
 
@@ -475,6 +499,14 @@ FactoryGirl.define do
     trait :prohibition do
       tty_code { nil }
     end
+
+    trait :untransformed do
+      transformed { false }
+    end
+
+    trait :transformed do
+      transformed { true }
+    end
   end
 
   factory :tamf, class: Chief::Tamf do
@@ -489,6 +521,14 @@ FactoryGirl.define do
 
     trait :prohibition do
       tty_code { nil }
+    end
+
+    trait :untransformed do
+      transformed { false }
+    end
+
+    trait :transformed do
+      transformed { true }
     end
   end
 

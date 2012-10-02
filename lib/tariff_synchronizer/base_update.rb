@@ -20,7 +20,7 @@ module TariffSynchronizer
                                    TariffSynchronizer.send("#{state_folder}_path".to_sym),
                                    file_name)
 
-      FileUtils.mv file_path, destination_path
+      FileUtils.mv file_path, destination_path unless destination_path.to_s =~ /#{file_path.to_s}/
     end
 
     def self.sync

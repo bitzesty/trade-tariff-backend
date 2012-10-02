@@ -7,6 +7,7 @@ class Measure < Sequel::Model
 
   many_to_one :goods_nomenclature, key: :goods_nomenclature_sid,
                                    foreign_key: :goods_nomenclature_sid
+
   many_to_one :export_refund_nomenclature, key: :export_refund_nomenclature_sid,
                                    foreign_key: :export_refund_nomenclature_sid
 
@@ -189,9 +190,9 @@ class Measure < Sequel::Model
   def validate
     super
     # ME1
-    validates_unique([:measure_type, :geographical_area, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date])
+    # validates_unique([:measure_type, :geographical_area, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date])
     # ME2 ME4 ME6 ME24
-    validates_presence([:measure_type, :geographical_area, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role])
+    # validates_presence([:measure_type, :geographical_area, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role])
     # TODO: ME3
     # The validity period of the measure type must span the validity period of the measure.
     # TODO: ME5
@@ -371,6 +372,64 @@ class Measure < Sequel::Model
       select_append(Sequel.as(:if.sql_function('measures.validity_start_date IS NOT NULL'.lit, 'measures.validity_start_date'.lit, 'modification_regulations.validity_start_date'.lit), :effective_start_date)).
       select_append(Sequel.as(:if.sql_function('measures.validity_end_date IS NOT NULL'.lit, 'measures.validity_end_date'.lit, 'modification_regulations.effective_end_date'.lit), :effective_end_date)).
       join_table(:right, :modification_regulations, modification_regulations__modification_regulation_id: :measures__measure_generating_regulation_id)
+    end
+
+    def with_measure_type(condition_measure_type)
+      where(measures__measure_type: condition_measure_type.to_s)
+    end
+
+    def valid_since(first_effective_timestamp)
+      where("measures.validity_start_date >= ?", first_effective_timestamp)
+    end
+
+    def valid_to(last_effective_timestamp)
+      where("measures.validity_start_date <= ?", last_effective_timestamp)
+    end
+
+    def valid_from(timestamp)
+      where("measures.validity_start_date >= ?", timestamp)
+    end
+
+    def not_terminated
+      where("measures.validity_end_date IS NULL")
+    end
+
+    def terminated
+      where("measures.validity_end_date IS NOT NULL")
+    end
+
+    def with_gono_id(goods_nomenclature_item_id)
+      where(goods_nomenclature_item_id: goods_nomenclature_item_id)
+    end
+
+    def with_geographical_area(area)
+      where(geographical_area: area)
+    end
+
+    def with_duty_amount(amount)
+      join_table(:left, MeasureComponent, measures__measure_sid: :measure_components__measure_sid).
+      where(measure_components__duty_amount: amount)
+    end
+
+    def for_candidate_measure(candidate_measure)
+      where(measure_type: candidate_measure.measure_type,
+            validity_start_date: candidate_measure.validity_start_date,
+            additional_code_type: candidate_measure.additional_code_type,
+            additional_code: candidate_measure.additional_code,
+            goods_nomenclature_item_id: candidate_measure.goods_nomenclature_item_id,
+            geographical_area: candidate_measure.geographical_area,
+            national: true)
+    end
+
+    def expired_before(candidate_measure)
+      where(measure_type: candidate_measure.measure_type,
+            additional_code_type: candidate_measure.additional_code_type,
+            additional_code: candidate_measure.additional_code,
+            goods_nomenclature_item_id: candidate_measure.goods_nomenclature_item_id,
+            geographical_area: candidate_measure.geographical_area,
+            national: true).
+      where("validity_start_date < ?", candidate_measure.validity_start_date).
+      where(validity_end_date: nil)
     end
   end
 

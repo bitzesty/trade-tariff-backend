@@ -18,6 +18,12 @@ class MeasureType < Sequel::Model
 
   delegate :description, to: :measure_type_description
 
+  dataset_module do
+    def national
+      where(national: true)
+    end
+  end
+
   ######### Conformance validations 235
   def validate
     super

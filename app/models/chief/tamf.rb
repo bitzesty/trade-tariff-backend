@@ -13,6 +13,12 @@ module Chief
                                      class_name: 'Chief::MeasureTypeCond'
 
 
+    one_to_one :measure_type, key: {}, primary_key: {},
+      dataset: -> { Chief::MeasureTypeAdco.where(chief_measure_type_adco__measure_group_code: msrgp_code,
+                                                 chief_measure_type_adco__measure_type: msr_type,
+                                                 chief_measure_type_adco__tax_type_code: tty_code) },
+                                                 class_name: 'Chief::MeasureTypeAdco'
+
     one_to_one :measure_type_adco, key: [:measure_group_code, :measure_type, :tax_type_code],
                                    primary_key: [:msrgp_code, :msr_type, :tty_code],
                                    class_name: 'Chief::MeasureTypeAdco'
@@ -20,6 +26,21 @@ module Chief
     one_to_one :duty_expression, key: [:adval1_rate, :adval2_rate, :spfc1_rate, :spfc2_rate],
                                  primary_key: [:adval1_rate_key, :adval2_rate_key, :spfc1_rate_key, :spfc2_rate_key],
                                  class_name: 'Chief::DutyExpression'
+
+    many_to_one :tame, key: {}, primary_key: {}, dataset: -> {
+      Chief::Tame.filter{ |o| {:fe_tsmp => fe_tsmp} &
+                              {:msrgp_code => msrgp_code} &
+                              {:msr_type => msr_type} &
+                              {:tty_code => tty_code} &
+                              {:tar_msr_no => tar_msr_no} }
+    }
+
+    one_to_many :mfcms, key: {}, primary_key: {}, dataset: -> {
+      Chief::Mfcm.filter{ |o| {:msrgp_code => msrgp_code} &
+                              {:msr_type => msr_type} &
+                              {:tty_code => tty_code}
+                              }.order(:fe_tsmp.desc)
+    }
 
     def adval1_rate_key; adval1_rate.present?; end
     def adval2_rate_key; adval2_rate.present?; end
@@ -39,6 +60,11 @@ module Chief
       elsif uoq.present?
         Chief::MeasurementUnit.where(spfc_uoq: uoq).first
       end
+    end
+
+    def geographical_area
+      chief_geographical_area = cngp_code.presence || cntry_orig.presence || cntry_disp.presence
+      Chief::CountryCode.to_taric(chief_geographical_area)
     end
 
     def measure_components

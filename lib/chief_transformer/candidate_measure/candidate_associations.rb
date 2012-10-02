@@ -3,7 +3,7 @@ class ChiefTransformer
     class CandidateAssociations
       attr_reader :map, :measure
 
-      delegate :[], :has_key?, to: :map
+      delegate :[], :has_key?, :each, to: :map
 
       def initialize(measure)
         @measure = measure
@@ -17,6 +17,10 @@ class ChiefTransformer
 
       def set(association_name, record)
         @map[association_name] = record
+      end
+
+      def map=(new_map)
+        @map = new_map
       end
 
       def persist

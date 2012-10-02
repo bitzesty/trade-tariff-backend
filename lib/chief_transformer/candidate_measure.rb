@@ -26,10 +26,11 @@ class ChiefTransformer
                                     PRE AHC ATT CEX CHM COI CVD ECM EHC EQC EWP
                                     HOP HSE IWP PHC PRT QRC SFS VTA VTA VTE VTE
                                     VTS VTS VTZ VTZ SPL]
-    attr_accessor :mfcm, :tame, :tamf, :amend_indicator, :candidate_associations
+
+    attr_accessor :mfcm, :tame, :tamf, :candidate_associations, :origin, :operation
     attr_reader :chief_geographical_area
 
-    delegate :persist, to: :candidate_associations, prefix: true
+    delegate :persist, :map, to: :candidate_associations, prefix: true
 
     def after_initialize
       # set default variables
@@ -44,12 +45,28 @@ class ChiefTransformer
       callbacks
     end
 
+    # TODO refactor this
     def callbacks
       assign_dates if mfcm
       assign_mfcm_attributes if mfcm
       build_conditions if tamf
       build_components
       build_footnotes
+    end
+
+    def rebuild
+      # clear pre-built
+      @candidate_associations = CandidateAssociations.new(self)
+      # re-run the drill
+      callbacks
+    end
+
+    def ==(other_measure)
+      self.values == other_measure.values &&
+      self.mfcm == other_measure.mfcm &&
+      self.tame == other_measure.tame &&
+      self.tamf == other_measure.tamf &&
+      self.amend_indicator == other_measure.amend_indicator
     end
 
     def validate
@@ -62,10 +79,10 @@ class ChiefTransformer
       errors.add(:measure_type, 'must have national measure type') if measure_type.present? && !measure_type.in?(NATIONAL_MEASURE_TYPES)
       errors.add(:goods_nomenclature_sid, 'must be present') if goods_nomenclature_sid.blank?
       errors.add(:geographical_area_sid, 'must be present') if geographical_area_sid.blank?
+      errors.add(:validity_end_date, 'start date greater than end date') if validity_end_date.present? && validity_start_date > validity_end_date
     end
 
     def assign_mfcm_attributes
-      self.amend_indicator = mfcm.amend_indicator
       self.goods_nomenclature_item_id = (mfcm.cmdty_code.size == 8) ? "#{mfcm.cmdty_code}00" : mfcm.cmdty_code
       self.measure_type = mfcm.measure_type_adco.measure_type_id.presence || mfcm.msr_type
       self.additional_code = mfcm.measure_type_adco.adtnl_cd
@@ -75,10 +92,10 @@ class ChiefTransformer
     def assign_dates
       assign_validity_start_date
       assign_validity_end_date
-      if validity_end_date && validity_start_date > validity_end_date
-        ChiefTransformer.logger.error "start date greater than end date for #{self.measure_sid}"
-        self.validity_end_date = nil
-      end
+    end
+
+    def audit_tsmp
+      (tame.present?) ? tame.audit_tsmp : mfcm.audit_tsmp
     end
 
     def assign_validity_start_date
@@ -211,7 +228,7 @@ class ChiefTransformer
         candidate_associations.push(:measure_conditions, taric_measure_condition)
       end
 
-      self.chief_geographical_area = tamf.cngp_code.presence || tamf.cntry_orig.presence || tamf.cntry_disp.presence
+      self.chief_geographical_area = tamf.cngp_code.presence || tamf.cntry_orig.presence || tamf.cntry_disp.presence || DEFAULT_GEOGRAPHICAL_AREA_ID
     end
 
     def build_components

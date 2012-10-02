@@ -33,10 +33,32 @@ class ChiefImporter
           rfs_code_4: 31,
           rfs_code_5: 32,
           tdr_spr_sur: 33,
-          exports_use_ind: 34
+          exports_use_ind: 34,
+          amend_indicator: 1
 
-      process(:update) { Chief::Tame.insert map }
-      process(:insert) { Chief::Tame.insert map }
+      process(:update) {
+        if (prohibition_or_restriction?(map[:msrgp_code]) ||
+            vat_or_excise?(map[:msrgp_code])) &&
+            !excluded_measure?(map[:msrgp_code], map[:msr_type])
+          Chief::Tame.insert map
+        end
+      }
+
+      process(:insert) {
+        if (prohibition_or_restriction?(map[:msrgp_code]) ||
+            vat_or_excise?(map[:msrgp_code])) &&
+            !excluded_measure?(map[:msrgp_code], map[:msr_type])
+          Chief::Tame.insert map
+        end
+      }
+
+      process(:delete) {
+        if (prohibition_or_restriction?(map[:msrgp_code]) ||
+            vat_or_excise?(map[:msrgp_code])) &&
+            !excluded_measure?(map[:msrgp_code], map[:msr_type])
+          Chief::Tame.insert map
+        end
+      }
     end
 
     class TAMF < BaseStrategy
@@ -67,10 +89,30 @@ class ChiefImporter
           spfc3_uoq: [26, :chief_string],
           tamf_dt: [27, :chief_string],
           tamf_sta: [28, :chief_string],
-          tamf_ty: [29, :chief_string]
+          tamf_ty: [29, :chief_string],
+          amend_indicator: 1
 
-      process(:update) { Chief::Tamf.insert map }
-      process(:insert) { Chief::Tamf.insert map }
+      process(:update) {
+        if (prohibition_or_restriction?(map[:msrgp_code]) ||
+            vat_or_excise?(map[:msrgp_code])) &&
+            !excluded_measure?(map[:msrgp_code], map[:msr_type])
+          Chief::Tamf.insert map
+        end
+      }
+      process(:insert) {
+        if (prohibition_or_restriction?(map[:msrgp_code]) ||
+            vat_or_excise?(map[:msrgp_code])) &&
+            !excluded_measure?(map[:msrgp_code], map[:msr_type])
+          Chief::Tamf.insert map
+        end
+      }
+      process(:delete) {
+        if (prohibition_or_restriction?(map[:msrgp_code]) ||
+            vat_or_excise?(map[:msrgp_code])) &&
+            !excluded_measure?(map[:msrgp_code], map[:msr_type])
+          Chief::Tamf.insert map
+        end
+      }
     end
 
     class MFCM < BaseStrategy
@@ -84,7 +126,8 @@ class ChiefImporter
           cmdty_code: [9, :chief_code],
           cmdty_msr_xhdg: [10, :chief_string],
           null_tri_rqd: [11, :chief_string],
-          exports_use_ind: 12
+          exports_use_ind: 12,
+          amend_indicator: 1
 
       process(:insert) {
         if (prohibition_or_restriction?(map[:msrgp_code]) ||
@@ -98,8 +141,14 @@ class ChiefImporter
         if (prohibition_or_restriction?(map[:msrgp_code]) ||
             vat_or_excise?(map[:msrgp_code])) &&
             !excluded_measure?(map[:msrgp_code], map[:msr_type])
-            # TODO FIND AND UPDATE
-            # binding.pry
+            Chief::Mfcm.insert map
+        end
+      }
+
+      process(:delete) {
+        if (prohibition_or_restriction?(map[:msrgp_code]) ||
+            vat_or_excise?(map[:msrgp_code])) &&
+            !excluded_measure?(map[:msrgp_code], map[:msr_type])
             Chief::Mfcm.insert map
         end
       }

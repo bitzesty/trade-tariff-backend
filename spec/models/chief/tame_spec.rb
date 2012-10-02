@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Chief::Tame do
-  let(:common_tame_attributes) { attributes_for(:tame).slice(:fe_tsmp, :msrgp_code, :msr_type, :tty_code, :fe_tsmp) }
+  let(:common_tame_attributes) { attributes_for(:tame).slice(:fe_tsmp, :msrgp_code, :msr_type, :tty_code, :fe_tsmp, :amend_indicator) }
 
   describe 'associations' do
     describe 'tamfs' do
@@ -21,6 +21,19 @@ describe Chief::Tame do
           tame.tamfs.should     include tamf
           tame.tamfs.should_not include tamf1
         end
+      end
+    end
+
+    describe 'mfcms' do
+      let(:common_mfcm_attributes) { attributes_for(:mfcm).slice(:fe_tsmp, :msrgp_code, :msr_type, :tty_code) }
+
+      let!(:tame)  { create :tame, common_mfcm_attributes }
+      let!(:mfcm1) { create :mfcm, common_mfcm_attributes }
+      let!(:mfcm2) { create :mfcm, common_mfcm_attributes.merge(fe_tsmp: tame.fe_tsmp + 1.day) }
+
+      it 'matches MFCMs that have fe_tsmp equal or later to own fe_tsmp' do
+        tame.mfcms.should include mfcm1
+        tame.mfcms.should include mfcm2
       end
     end
   end

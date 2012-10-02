@@ -1,8 +1,12 @@
+require 'tariff_importer'
+
+# Import CHIEF or Taric file manually. Usually needed to import initial
+# seed files.
+
 namespace :importer do
   namespace :chief do
     desc "Import CHIEF file"
-    task :import => :environment do
-      require 'tariff_importer'
+    task import: :environment do
 
       if ENV["TARGET"] && File.exists?(ENV["TARGET"])
         TariffImporter.new(ENV["TARGET"], ChiefImporter).import
@@ -11,18 +15,9 @@ namespace :importer do
       end
     end
 
-    desc "Transform Chief data into taric and save"
-    task :transform => :environment do
-      require 'chief_transformer'
-      ChiefTransformer.instance.invoke
-    end
-  end
-
   namespace :taric do
     desc "Import Tariff file"
-    task :import => :environment do
-      require 'tariff_importer'
-
+    task import: :environment do
       if ENV["TARGET"] && File.exists?(ENV["TARGET"])
         TariffImporter.new(ENV["TARGET"], TaricImporter).import
       else

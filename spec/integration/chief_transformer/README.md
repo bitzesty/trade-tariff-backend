@@ -13,6 +13,11 @@ This means that CHIEF specs which deal with dates, specifically the rounding up/
 
 This should not cause many issues, there could be a caching issue, we should ensure we're not caching too much to avoid stale data as end dates could be mid-day for example.
 
+Deletion
+--------
+
+Any alternatives or examples in the scenarios which delete records have been amended, as no data should ever be deleted and we should just set an end date.
+
 
 Commodity Code formatting
 --------------------------
@@ -37,3 +42,7 @@ Additional Data
 In some of our specs we have to create extra data, not mentioned in the scenario documentation for the transformations to complete successfully.
 
 
+Invalid specs in the test scenarios
+-----------------------------------
+
+In the tests where we feel the data is invalid because of human error we have made a note of it with the NOTE: comment.

@@ -5,6 +5,7 @@ require 'tariff_synchronizer/pending_update'
 require 'tariff_synchronizer/chief_update'
 require 'tariff_synchronizer/taric_update'
 require 'fileutils'
+require 'sequel-rails'
 
 # How TariffSynchronizer works
 #
@@ -76,7 +77,7 @@ module TariffSynchronizer
 
   # Initial dump date
   mattr_accessor :chief_initial_update
-  self.chief_initial_update = Date.new(2012,6,5)
+  self.chief_initial_update = Date.new(2012,6,13)
 
   # Download pending updates for Taric and National data
   # Gets latest downloaded file present in (inbox/failbox/processed) and tries
@@ -100,12 +101,11 @@ module TariffSynchronizer
         begin
           pending_update.apply
         rescue TaricImporter::ImportException,
-               ChiefImporter::ImportException,
-               ChiefTransformer::TransformException => exception
+               ChiefImporter::ImportException  => exception
           logger.error "Update failed: #{pending_update}"
           pending_update.move_to(:failbox)
 
-          notify_admin(pending_update.file_name, exception)
+          notify_admin(pending_update.file_path, exception)
 
           raise Sequel::Rollback
         end
