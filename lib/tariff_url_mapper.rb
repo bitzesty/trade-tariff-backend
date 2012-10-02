@@ -1,3 +1,5 @@
+require 'logger'
+
 class TariffUrlMapper
     cattr_accessor :logger
     self.logger = Logger.new('log/mapper.log')
@@ -25,7 +27,7 @@ class TariffUrlMapper
     if opts[:simulationDate]
       use_date = opts[:simulationDate]
     else
-      use_date = Date.parse("2012-06-05")
+      use_date = Date.parse("2012-10-02")
     end
     @date = "simulationDate=#{use_date.strftime("%d/%m/%y")}&"
     @new_date = "?as_of=#{use_date.strftime("%Y-%m-%d")}"
@@ -57,6 +59,16 @@ class TariffUrlMapper
 
   def to_csv
     "#{old_url},#{new_url},#{eu_url}"
+  end
+
+  def self.generate_updated
+    ids = Chief::Mfcm.order(:audit_tsmp.desc).limit(600).to_a.map(&:cmdty_code)
+    ids.each do |code|
+      GoodsNomenclature.filter("goods_nomenclature_item_id LIKE ?", code).to_a.each do |gn|
+        logger.info TariffUrlMapper.new({scrape_id: gn.goods_nomenclature_item_id}).to_csv
+      end
+    end
+    true
   end
 
   def self.generate_random
