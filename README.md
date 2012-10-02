@@ -13,7 +13,6 @@ Run the bootstrap command.
 
     ```
     brew install elasticsearch
-
     brew install mysql
     ```
 
@@ -29,19 +28,17 @@ Run the bootstrap command.
 
 2. Load database snapshot or perform importing
 
-2.1. Import EU TARIC files
+  2.1. Import EU TARIC files
 
-Download and extract the TARIC snapshot files from the 5th Jun 2012 from 
-https://github.com/downloads/alphagov/trade-tariff-backend/taric-initial-load.tar.gz
-to the tmp folder then run the following commands:
+  Download and extract the TARIC snapshot files from the 5th Jun 2012 from https://github.com/downloads/alphagov/trade-tariff-backend/taric-initial-load.tar.gz to the tmp folder then run the following commands:
 
-    bundle exec rake db:migrate
-
-    bundle exec rake importer:taric:import TARGET=tmp/OBEXTACTEN.xml
+     ```
+     bundle exec rake db:migrate
+     bundle exec rake importer:taric:import TARGET=tmp/OBEXTACT.xml
+     bundle exec rake importer:taric:import TARGET=tmp/OBEXTACTEN.xml
+     ```
     
-    bundle exec rake importer:taric:import TARGET=tmp/OBEXTACT.xml
-    
-2.2. Download the db snapshot (TODO)
+  2.2. Download and load the db snapshot
 
 3. Load Sections, Section notes, Chapter notes and other tariff data
 
@@ -58,6 +55,25 @@ to the tmp folder then run the following commands:
 ## Run TradeTariffBackend
 
     ./startup.sh
+    
+## Performing daily updates
+
+1. Synchronize updates.
+
+    ```
+    SYNC_USERNAME=
+    SYNC_PASSOWRD=
+    SYNC_HOST=
+    SYNC_EMAIL=
+    bundle exec rake tariff:sync
+    ```
+Variables:
+
+* SYNC_USERNAME - username for update server.
+* SYNC_PASSWORD - password for update server.
+* SYNC_HOST - host for update server.
+* SYNC_EMAIL - admin email to send notifications to if sync goes wrong.
+
 
 ## TODO
 
