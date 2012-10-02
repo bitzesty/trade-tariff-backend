@@ -4,6 +4,7 @@ class Measure < Sequel::Model
                         period_end_column: :effective_end_date
 
   plugin :national
+  plugin :timestamps
 
   many_to_one :goods_nomenclature, key: :goods_nomenclature_sid,
                                    foreign_key: :goods_nomenclature_sid

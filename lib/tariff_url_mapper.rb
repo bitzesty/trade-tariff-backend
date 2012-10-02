@@ -24,11 +24,13 @@ class TariffUrlMapper
       @export="export=false&"
       @new_export = "#import"
     end
+
     if opts[:simulationDate]
       use_date = opts[:simulationDate]
     else
       use_date = Date.parse("2012-10-02")
     end
+
     @date = "simulationDate=#{use_date.strftime("%d/%m/%y")}&"
     @new_date = "?as_of=#{use_date.strftime("%Y-%m-%d")}"
     @eu_date = use_date.strftime("%Y%m%d")
@@ -48,7 +50,7 @@ class TariffUrlMapper
       @base_url + @export + @date + @obj_id
     end
   end
-  
+
   def new_url
     @new_base_url + @scrape_id + @new_date + @new_export
   end
