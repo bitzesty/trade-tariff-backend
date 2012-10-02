@@ -79,6 +79,7 @@ class ChiefTransformer
       errors.add(:measure_type, 'must have national measure type') if measure_type.present? && !measure_type.in?(NATIONAL_MEASURE_TYPES)
       errors.add(:goods_nomenclature_sid, 'must be present') if goods_nomenclature_sid.blank?
       errors.add(:geographical_area_sid, 'must be present') if geographical_area_sid.blank?
+      errors.add(:validity_end_date, 'start date greater than end date') if validity_end_date.present? && validity_start_date > validity_end_date
     end
 
     def assign_mfcm_attributes
@@ -91,10 +92,6 @@ class ChiefTransformer
     def assign_dates
       assign_validity_start_date
       assign_validity_end_date
-      if validity_end_date && validity_start_date > validity_end_date
-        ChiefTransformer.logger.error "start date greater than end date for #{self.measure_sid}"
-        self.validity_end_date = nil
-      end
     end
 
     def audit_tsmp

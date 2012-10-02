@@ -5,6 +5,7 @@ require 'tariff_synchronizer/pending_update'
 require 'tariff_synchronizer/chief_update'
 require 'tariff_synchronizer/taric_update'
 require 'fileutils'
+require 'sequel-rails'
 
 # How TariffSynchronizer works
 #
@@ -100,8 +101,7 @@ module TariffSynchronizer
         begin
           pending_update.apply
         rescue TaricImporter::ImportException,
-               ChiefImporter::ImportException,
-               ChiefTransformer::TransformException => exception
+               ChiefImporter::ImportException  => exception
           logger.error "Update failed: #{pending_update}"
           pending_update.move_to(:failbox)
 

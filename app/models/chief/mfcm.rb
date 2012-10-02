@@ -16,8 +16,17 @@ module Chief
     one_to_one :tame, key: {}, primary_key: {}, dataset: -> {
       Chief::Tame.filter{ |o| {:msrgp_code => msrgp_code} &
                               {:msr_type => msr_type} &
-                              {:tty_code => tty_code}
-                              }.order(:fe_tsmp.desc)
+                              {:tty_code => tty_code} &
+                              {:tar_msr_no => tar_msr_no}
+                              }.order(:audit_tsmp.desc)
+    }, class_name: 'Chief::Tame'
+
+    one_to_many :tames, key: {}, primary_key: {}, dataset: -> {
+      Chief::Tame.filter{ |o| {:msrgp_code => msrgp_code} &
+                              {:msr_type => msr_type} &
+                              {:tty_code => tty_code} &
+                              {:tar_msr_no => tar_msr_no}
+                              }.order(:audit_tsmp.asc)
     }, class_name: 'Chief::Tame'
 
     one_to_many :tamfs, key: {}, primary_key: {}, dataset: -> {

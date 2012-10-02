@@ -30,18 +30,28 @@ class ChiefTransformer
   self.per_page = 1000
 
   def invoke(work_mode = :update)
-    raise TransformException.new("Invalid work mode, options: #{modes}") unless work_mode.in? work_modes
+    raise TransformException.new("Invalid work mode, options: #{work_modes}") unless work_mode.in? work_modes
 
     logger.info "#{Time.now} CHIEF Transformer started: #{work_mode}"
 
     case work_mode
     when :initial_load
-      MeasureBuilder::PaginatedMfcmBuilder.build({per_page: per_page}) { |measure_batch|
-        CandidateMeasure::Collection.new(measure_batch).tap { |candidate_measures|
-          candidate_measures.uniq
-          candidate_measures.persist
-        }
-      }
+      Chief::Mfcm.each_page(per_page) do |batch|
+        candidate_measures = CandidateMeasure::Collection.new(
+          batch.map { |mfcm|
+            mfcm.tames.map{|tame|
+              if tame.tamfs.any?
+                tame.tamfs.map{|tamf|
+                  CandidateMeasure.new(mfcm: mfcm, tame: tame, tamf: tamf)
+                }
+              else
+                [CandidateMeasure.new(mfcm: mfcm, tame: tame)]
+              end
+            }
+          }.flatten.compact)
+        candidate_measures.uniq
+        candidate_measures.persist
+      end
     when :update
       processor = Processor.new(Chief::Tame.untransformed.all,
                                 Chief::Mfcm.untransformed.all)

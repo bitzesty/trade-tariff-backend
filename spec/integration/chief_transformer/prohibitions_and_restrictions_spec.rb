@@ -499,7 +499,8 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
                                   fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
                                   msrgp_code: "PR",
                                   msr_type: "CVD",
-                                  cmdty_code: "2106909829") }
+                                  cmdty_code: "2106909829",
+                                  tar_msr_no: "2106909829") }
       let!(:tamf5) { create(:tamf, :prohibition,
                                    amend_indicator: "I",
                                    fe_tsmp: DateTime.parse("2008-05-01 00:00:00"),
@@ -533,7 +534,8 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
                                   fe_tsmp: DateTime.parse("2008-06-01 00:00:00"),
                                   msrgp_code: "PR",
                                   msr_type: "CVD",
-                                  cmdty_code: "2106909829") }
+                                  cmdty_code: "2106909829",
+                                  tar_msr_no: "2106909829") }
 
       before {
         ChiefTransformer.instance.invoke
