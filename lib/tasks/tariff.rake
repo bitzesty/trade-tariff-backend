@@ -27,14 +27,28 @@ namespace :tariff do
   namespace :sync do
     desc 'Download pending Taric and CHIEF updates'
     task download: :environment do
+      # Download pending updates for CHIEF and Taric
       TariffSynchronizer.download
     end
 
     desc 'Apply pending Taric and CHIEF'
     task apply: %w[environment] do
+      # Apply pending updates (use TariffImporter to import record to database)
       TariffSynchronizer.apply
-      # TODO reindex
+      # Transform imported intermediate Chief records to insert/change national measures
+      Rake::Task['tariff:sync:transform'].execute
     end
+
+    desc "Transform Chief data into taric and save"
+    task transform: :environment do
+      require 'chief_transformer'
+
+      mode = ENV["MODE"].try(:to_sym).presence || :update
+
+      ChiefTransformer.instance.invoke(mode)
+    end
+  end
+
   end
 
   namespace :install do

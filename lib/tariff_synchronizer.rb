@@ -105,7 +105,7 @@ module TariffSynchronizer
           logger.error "Update failed: #{pending_update}"
           pending_update.move_to(:failbox)
 
-          notify_admin(pending_update.file_name, exception)
+          notify_admin(pending_update.file_path, exception)
 
           raise Sequel::Rollback
         end
