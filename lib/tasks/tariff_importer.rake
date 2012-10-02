@@ -14,6 +14,7 @@ namespace :importer do
         puts "Please provide TARGET environment variable pointing to CHIEF file to import"
       end
     end
+  end
 
   namespace :taric do
     desc "Import Tariff file"
