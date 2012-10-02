@@ -381,6 +381,7 @@ class Measure < Sequel::Model
   def measure_generating_regulation_id
     result = self[:measure_generating_regulation_id]
 
+    # https://www.pivotaltracker.com/story/show/35164477
     case result
     when "D9500019"
       "D9601421"
