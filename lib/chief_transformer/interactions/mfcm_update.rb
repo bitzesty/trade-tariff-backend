@@ -1,3 +1,5 @@
+require 'chief_transformer/interactions/interaction'
+
 class ChiefTransformer
   class Processor
     class MfcmUpdate < Interaction
