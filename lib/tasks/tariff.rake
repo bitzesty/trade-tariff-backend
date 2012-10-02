@@ -49,8 +49,6 @@ namespace :tariff do
     end
   end
 
-  end
-
   namespace :install do
     desc "Load Green Page (SearchReference) entities from reference file"
     task green_pages: :environment do
