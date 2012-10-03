@@ -31,6 +31,10 @@ module TariffSynchronizer
       "#{TariffSynchronizer.root_path}/**/*.xml"
     end
 
+    def self.exists_for?(date)
+      Dir["#{TariffSynchronizer.root_path}/**/#{date}*.xml"].any?
+    end
+
     private
 
     def self.get_taric_path(date)

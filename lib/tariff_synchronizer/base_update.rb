@@ -26,7 +26,7 @@ module TariffSynchronizer
     def self.sync
       unless pending_from == Date.today
         (pending_from..Date.today).each do |date|
-          download(date)
+          download(date) unless exists_for?(date)
         end
       end
     end

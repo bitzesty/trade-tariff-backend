@@ -15,9 +15,13 @@ class ChiefTransformer
         @measures = @measures.uniq
       end
 
-      def log(origin)
+      def sort
+        @measures = @measures.sort_by(&:tame_fe_tsmp).reverse
+      end
+
+      def log(initiator)
         @measures.each do |measure|
-          MeasureLogger.log(measure, :insert, {}, origin)
+          MeasureLogger.log(measure, :insert, {}, initiator, initiator.origin)
         end
       end
 

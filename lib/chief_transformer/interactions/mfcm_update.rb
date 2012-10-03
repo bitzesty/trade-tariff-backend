@@ -9,7 +9,7 @@ class ChiefTransformer
                  .with_gono_id(record.cmdty_code)
                  .valid_to(record.le_tsmp)
                  .each do |measure|
-                   MeasureLogger.log(measure, :update, {validity_end_date: record.le_tsmp}, record)
+                   MeasureLogger.log(measure, :update, {validity_end_date: record.le_tsmp}, record, record.origin)
                    measure.update validity_end_date: record.le_tsmp
                  end
         else

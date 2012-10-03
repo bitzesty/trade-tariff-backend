@@ -49,6 +49,7 @@ class ChiefTransformer
               end
             }
           }.flatten.compact)
+        candidate_measures.sort
         candidate_measures.uniq
         candidate_measures.persist
       end

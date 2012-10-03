@@ -13,7 +13,7 @@ class ChiefTransformer
                .valid_to(tame.fe_tsmp)
                .not_terminated
                .each do |measure|
-          MeasureLogger.log(measure, :update, {validity_end_date: tame.fe_tsmp}, tame)
+          MeasureLogger.log(measure, :update, {validity_end_date: tame.fe_tsmp}, tame, tame.origin)
           measure.update validity_end_date: tame.fe_tsmp
         end
       end

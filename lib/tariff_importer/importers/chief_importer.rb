@@ -21,14 +21,15 @@ class ChiefImporter
   cattr_accessor :end_mark
   self.end_mark = "ZZZZZZZZZZZ"
 
-  attr_reader :path, :processor, :start_entry, :end_entry
+  attr_reader :path, :processor, :start_entry, :end_entry, :file_name
 
   delegate :extraction_date, to: :start_entry
   delegate :record_count, to: :end_entry
   delegate :logger, to: ::TariffImporter
 
   def initialize(path)
-    @path = path
+    @path = Pathname.new(path)
+    @file_name = @path.basename.to_s
   end
 
   def import
@@ -43,6 +44,7 @@ class ChiefImporter
         else # means it's ChangeEntry
           next unless entry.relevant?
 
+          entry.origin = file_name
           entry.process!
         end
       end

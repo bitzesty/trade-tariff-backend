@@ -279,6 +279,7 @@ Sequel.migration do
       column :tar_msr_no, "varchar(12)"
       column :transformed, "tinyint(1)", :default=>false
       column :amend_indicator, "varchar(1)"
+      column :origin, "varchar(30)"
 
       index [:msrgp_code]
     end
@@ -319,6 +320,7 @@ Sequel.migration do
       column :exports_use_ind, "tinyint(1)"
       column :transformed, "tinyint(1)", :default=>false
       column :amend_indicator, "varchar(1)"
+      column :origin, "varchar(30)"
 
       index [:msrgp_code, :msr_type, :tty_code, :tar_msr_no, :fe_tsmp], :name=>:index_chief_tame
     end
@@ -354,6 +356,7 @@ Sequel.migration do
       column :tamf_ty, "varchar(255)"
       column :transformed, "tinyint(1)", :default=>false
       column :amend_indicator, "varchar(1)"
+      column :origin, "varchar(30)"
 
       index [:fe_tsmp, :msrgp_code, :msr_type, :tty_code, :tar_msr_no, :amend_indicator], :name=>:index_chief_tamf
     end
@@ -1522,6 +1525,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20120919073610_remove_export_indication_from_measures.rb")
     self[:schema_migrations].insert(:filename => "20120921072412_export_refund_changes.rb")
     self[:schema_migrations].insert(:filename => "20121001141720_adjust_chief_keys.rb")
+    self[:schema_migrations].insert(:filename => "20121003061643_add_origin_to_chief_records.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"

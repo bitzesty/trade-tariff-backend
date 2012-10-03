@@ -86,43 +86,49 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
     end
 
     it "should create measure conditions for 1211300000" do
-      MeasureCondition.where(measure_sid: -1).count.should == 3
-      m = MeasureCondition.where(measure_sid: -1).first
+      m = Measure.where(goods_nomenclature_item_id: '1211300000').take
+      m.measure_conditions.count.should == 3
+      m = m.measure_conditions.first
       m.condition_code.should == "Z"
       m.certificate_code.should == "113"
     end
 
     it "should create measure conditions for 1210100010" do
-      MeasureCondition.where(measure_sid: -2).count.should == 3
-      m = MeasureCondition.where(measure_sid: -2).first
+      m = Measure.where(goods_nomenclature_item_id: '1210100010').take
+      m.measure_conditions.count.should == 3
+      m = m.measure_conditions.first
       m.condition_code.should == "Z"
       m.certificate_code.should == "001"
     end
 
     it "should create measure conditions for 2106909829" do
-      MeasureCondition.where(measure_sid: -3).count.should == 2
-      m = MeasureCondition.where(measure_sid: -3).first
+      m = Measure.where(goods_nomenclature_item_id: '2106909829').take
+      m.measure_conditions.count.should == 2
+      m = m.measure_conditions.first
       m.condition_code.should == "B"
       m.certificate_code.should == "853"
     end
 
     it "should create measure conditions for 9706000000" do
-      MeasureCondition.where(measure_sid: -4).count.should == 2
-      m = MeasureCondition.where(measure_sid: -4).first
+      m = Measure.where(goods_nomenclature_item_id: '9706000000').take
+      m.measure_conditions.count.should == 2
+      m = m.measure_conditions.first
       m.condition_code.should == "B"
       m.certificate_code.should == "115"
     end
 
     it "should create measure conditions for 9706000010" do
-      MeasureCondition.where(measure_sid: -5).count.should == 2
-      m = MeasureCondition.where(measure_sid: -5).first
+      m = Measure.where(goods_nomenclature_item_id: '9706000010').take
+      m.measure_conditions.count.should == 2
+      m = m.measure_conditions.first
       m.condition_code.should == "B"
       m.certificate_code.should == "115"
     end
 
     it "should create measure conditions for 9706000090" do
-      MeasureCondition.where(measure_sid: -6).count.should == 2
-      m = MeasureCondition.where(measure_sid: -6).first
+      m = Measure.where(goods_nomenclature_item_id: '9706000090').take
+      m.measure_conditions.count.should == 2
+      m = m.measure_conditions.first
       m.condition_code.should == "B"
       m.certificate_code.should == "115"
     end
@@ -131,27 +137,26 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
       MeasureExcludedGeographicalArea.all.count.should == 5
     end
 
-    # NOTE: spec is wrong, measure type CON does not have any footnotes.
-    # it "should create the following footnote association for 015" do
-    #   f = FootnoteAssociationMeasure.where(measure_sid: -1, footnote_type_id: "04", footnote_id: "015").first
-    #   f.should_not be_nil
-    #   f.national.should be_true
-    # end
+    it "should create the following footnote association for 015" do
+      f = FootnoteAssociationMeasure.where(measure_sid: -6, footnote_type_id: "04", footnote_id: "015").first
+      f.should_not be_nil
+      f.national.should be_true
+    end
 
     it "should create the following footnote association for 004" do
-      f = FootnoteAssociationMeasure.where(measure_sid: -2, footnote_type_id: "04", footnote_id: "004").first
+      f = FootnoteAssociationMeasure.where(measure_sid: -3, footnote_type_id: "04", footnote_id: "004").first
       f.should_not be_nil
       f.national.should be_true
     end
 
     it "should create the following footnote association for 006" do
-      f = FootnoteAssociationMeasure.where(measure_sid: -3, footnote_type_id: "04", footnote_id: "006").first
+      f = FootnoteAssociationMeasure.where(measure_sid: -4, footnote_type_id: "04", footnote_id: "006").first
       f.should_not be_nil
       f.national.should be_true
     end
 
     it "should create the following footnote association for 011" do
-      f = FootnoteAssociationMeasure.where(measure_sid: -4, footnote_type_id: "04", footnote_id: "011").first
+      f = FootnoteAssociationMeasure.where(measure_sid: -5, footnote_type_id: "04", footnote_id: "011").first
       f.should_not be_nil
       f.national.should be_true
     end
@@ -163,7 +168,7 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
     end
 
     it "should create the following footnote association for 011#3" do
-      f = FootnoteAssociationMeasure.where(measure_sid: -6, footnote_type_id: "04", footnote_id: "011").first
+      f = FootnoteAssociationMeasure.where(measure_sid: -5, footnote_type_id: "04", footnote_id: "011").first
       f.should_not be_nil
       f.national.should be_true
     end

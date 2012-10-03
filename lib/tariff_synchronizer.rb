@@ -71,13 +71,13 @@ module TariffSynchronizer
   mattr_accessor :request_throttle
   self.request_throttle = 1
 
-  # Initial dump date
+  # Initial dump date + 1 day
   mattr_accessor :taric_initial_update
   self.taric_initial_update = Date.new(2012,6,5)
 
-  # Initial dump date
+  # Initial dump date + 1 day
   mattr_accessor :chief_initial_update
-  self.chief_initial_update = Date.new(2012,6,13)
+  self.chief_initial_update = Date.new(2012,6,30)
 
   # Download pending updates for Taric and National data
   # Gets latest downloaded file present in (inbox/failbox/processed) and tries

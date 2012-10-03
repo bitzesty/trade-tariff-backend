@@ -9,7 +9,7 @@ describe ChiefImporter do
   describe 'initialization' do
     it 'assigns path' do
       importer = ChiefImporter.new(path)
-      importer.path.should == path
+      importer.path.to_s.should == path
     end
   end
 

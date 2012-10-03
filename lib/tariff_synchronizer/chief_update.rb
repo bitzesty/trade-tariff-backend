@@ -27,5 +27,9 @@ module TariffSynchronizer
     def self.query_for_last_file
       "#{TariffSynchronizer.root_path}/**/*.txt"
     end
+
+    def self.exists_for?(date)
+      Dir["#{TariffSynchronizer.root_path}/**/#{date}*.txt"].any?
+    end
   end
 end

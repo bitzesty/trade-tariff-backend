@@ -27,10 +27,11 @@ class ChiefTransformer
                                     HOP HSE IWP PHC PRT QRC SFS VTA VTA VTE VTE
                                     VTS VTS VTZ VTZ SPL]
 
-    attr_accessor :mfcm, :tame, :tamf, :candidate_associations, :origin, :operation
+    attr_accessor :mfcm, :tame, :tamf, :candidate_associations, :initiator, :operation
     attr_reader :chief_geographical_area
 
     delegate :persist, :map, to: :candidate_associations, prefix: true
+    delegate :fe_tsmp, to: :tame, prefix: true
 
     def after_initialize
       # set default variables

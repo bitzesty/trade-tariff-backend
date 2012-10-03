@@ -28,7 +28,7 @@ class ChiefImporter
   module Strategies
     class BaseStrategy
       attr_accessor :operation, :identifier, :params,
-                    :attributes
+                    :attributes, :origin
 
       def initialize(attributes = [])
         self.attributes = attributes
@@ -53,7 +53,7 @@ class ChiefImporter
                       end
 
                       memo
-                    }
+                    }.merge(origin: origin)
                   end
       end
 
@@ -88,6 +88,7 @@ class ChiefImporter
       EXCLUDED_MEASURE_TYPES = %(DL:SPL DO:DTI PR:ICP PR:ECP PR:ETF PR:TFC
                               PR:PRW PR:DOH PR:IOD PR:KIM PR:EKM DL:OGL
                               PR:PRP PR:PRS PR:PRZ)
+
       ##########################################
       #  CHIEF RULES
       #########################################
@@ -104,6 +105,7 @@ class ChiefImporter
       def excluded_measure?(group, type)
         EXCLUDED_MEASURE_TYPES.include?("#{group}:#{type}")
       end
+
       # If code contains a letter, then it's UK Seasonal and should
       # be skipped
       def seasonal_measure?(code)
