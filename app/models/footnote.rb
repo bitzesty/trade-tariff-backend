@@ -8,6 +8,8 @@ class Footnote < Sequel::Model
                        .join(:footnote_description_periods, footnote_description_periods__footnote_description_period_sid: :footnote_descriptions__footnote_description_period_sid,
                                                             footnote_description_periods__footnote_type_id: :footnote_descriptions__footnote_type_id,
                                                             footnote_description_periods__footnote_id: :footnote_descriptions__footnote_id)
+                       .where(footnote_descriptions__footnote_id: footnote_id,
+                               footnote_descriptions__footnote_type_id: footnote_type_id)
                        .order(:footnote_description_periods__validity_start_date.desc)
   }, eager_loader: (proc do |eo|
     eo[:rows].each{|footnote| footnote.associations[:footnote_description] = nil}
@@ -23,7 +25,7 @@ class Footnote < Sequel::Model
                               footnote_descriptions__footnote_type_id: id_map.keys.map(&:last)).all do |footnote_description|
       if footnotes = id_map[[footnote_description.footnote_id, footnote_description.footnote_type_id]]
         footnotes.each do |footnote|
-          footnote.associations[:footnote_description] = footnote_description
+          footnote.associations[:footnote_description] ||= footnote_description
         end
       end
     end
