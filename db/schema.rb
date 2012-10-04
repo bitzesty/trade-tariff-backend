@@ -1526,6 +1526,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20120921072412_export_refund_changes.rb")
     self[:schema_migrations].insert(:filename => "20121001141720_adjust_chief_keys.rb")
     self[:schema_migrations].insert(:filename => "20121003061643_add_origin_to_chief_records.rb")
+    self[:schema_migrations].insert(:filename => "20121004111601_create_tariff_updates.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"
@@ -1548,6 +1549,17 @@ Sequel.migration do
       column :title, "varchar(255)"
       column :created_at, "datetime", :null=>false
       column :updated_at, "datetime", :null=>false
+    end
+
+    create_table(:tariff_updates) do
+      column :filename, "varchar(30)", :null=>false
+      column :update_type, "varchar(15)"
+      column :state, "varchar(1)"
+      column :issue_date, "date"
+      column :updated_at, "datetime"
+      column :created_at, "datetime"
+
+      primary_key [:filename]
     end
 
     create_table(:transmission_comments) do

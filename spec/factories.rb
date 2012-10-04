@@ -1,4 +1,5 @@
 require 'chief_transformer'
+require 'tariff_synchronizer'
 
 FactoryGirl.define do
   sequence(:sid) { |n| n}
@@ -591,5 +592,35 @@ FactoryGirl.define do
     measure_type_id { Forgery(:basic).text(exactly: 3).upcase }
     footn_type_id { Forgery(:basic).text(exactly: 2).upcase }
     footn_id { Forgery(:basic).text(exactly: 3).upcase }
+  end
+
+  factory :chief_update, class: TariffSynchronizer::ChiefUpdate do
+    ignore do
+      example_date { Forgery(:date).date }
+    end
+
+    filename { TariffSynchronizer::ChiefUpdate.file_name_for(example_date)  }
+    issue_date { example_date }
+    update_type { 'ChiefUpdate' }
+    state { 'P' }
+
+    trait :applied do
+      state { 'A' }
+    end
+  end
+
+  factory :taric_update, class: TariffSynchronizer::TaricUpdate do
+    ignore do
+      example_date { Forgery(:date).date }
+    end
+
+    filename { TariffSynchronizer::TaricUpdate.file_name_for(example_date)  }
+    issue_date { example_date }
+    update_type { 'TaricUpdate' }
+    state { 'P' }
+
+    trait :applied do
+      state { 'A' }
+    end
   end
 end

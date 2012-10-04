@@ -2,53 +2,42 @@ require 'spec_helper'
 require 'tariff_synchronizer'
 
 describe TariffSynchronizer::PendingUpdate do
-  let(:example_date) { Date.new(2012,8,6) }
-  let(:example_taric_path) { create_taric_file :inbox, example_date }
-  let(:example_chief_path) { create_chief_file :inbox, "2012-05-15" }
+  let(:example_date) { Forgery(:date).date }
+  let!(:example_chief_update) { create :chief_update, example_date: example_date }
+  let!(:example_taric_update) { create :taric_update, example_date: example_date }
 
-  subject { TariffSynchronizer::PendingUpdate.new(example_taric_path) }
+  subject { TariffSynchronizer::PendingUpdate.new(example_taric_update) }
 
-  before { prepare_synchronizer_folders }
+  before {
+    prepare_synchronizer_folders
+    create_chief_file :pending, example_date
+    create_taric_file :pending, example_date
+  }
 
   describe 'initialization' do
-    it 'sets file path' do
-      subject.file_path.should == example_taric_path
-    end
-
-    it 'parses date from file path' do
-      subject.date.should be_kind_of Date
-      subject.date.should == example_date
+    it 'sets file name' do
+      subject.file_name.should == example_taric_update.filename
     end
 
     it 'chooses and initializes update processor from file path' do
-      TariffSynchronizer::PendingUpdate.new(example_taric_path).update_processor.should be_kind_of TariffSynchronizer::TaricUpdate
-      TariffSynchronizer::PendingUpdate.new(example_chief_path).update_processor.should be_kind_of TariffSynchronizer::ChiefUpdate
+      TariffSynchronizer::PendingUpdate.new(example_taric_update).update_processor.should be_kind_of TariffSynchronizer::TaricUpdate
+      TariffSynchronizer::PendingUpdate.new(example_chief_update).update_processor.should be_kind_of TariffSynchronizer::ChiefUpdate
     end
   end
 
   describe '.all' do
-    it 'returns paths to pending updates in failbox' do
-      chief_file_path = create_chief_file :failbox
-
+    it 'returns instances of pending updates for application' do
       pending_updates = TariffSynchronizer::PendingUpdate.all
       pending_updates.should be_kind_of Array
-      pending_updates.size.should == 1
-      pending_updates.map(&:file_path).should include chief_file_path
-    end
-
-    it 'returns paths to pending updates in inbox' do
-      taric_file_path = create_taric_file :inbox
-
-      pending_updates = TariffSynchronizer::PendingUpdate.all
-      pending_updates.should be_kind_of Array
-      pending_updates.size.should == 1
-      pending_updates.map(&:file_path).should include taric_file_path
+      pending_updates.size.should == 2
+      pending_updates.map(&:file_name).should include example_taric_update.filename
+      pending_updates.map(&:file_name).should include example_chief_update.filename
     end
   end
 
   describe '#to_s' do
-    it 'returns pending update file path' do
-      subject.to_s.should == example_taric_path
+    it 'returns pending update file name' do
+      subject.to_s.should == example_taric_update.filename
     end
   end
 

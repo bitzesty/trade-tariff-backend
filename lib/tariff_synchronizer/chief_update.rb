@@ -3,6 +3,9 @@ require 'tariff_synchronizer/file_service'
 
 module TariffSynchronizer
   class ChiefUpdate < BaseUpdate
+    set_dataset db[:tariff_updates].
+                filter(update_type: 'ChiefUpdate')
+
     self.update_priority = 1
 
     def self.download(date)
@@ -12,24 +15,26 @@ module TariffSynchronizer
       FileService.get_content(file_url).tap {|contents|
         FileService.write_file(update_path(date, file_name), contents) if contents.present?
       }
+
+      create(filename: "#{date}_#{file_name}",
+             update_type: 'ChiefUpdate',
+             state: 'P',
+             issue_date: date)
+    end
+
+    def self.file_name_for(date)
+      "#{date}_KBT009(#{date.strftime("%y")}#{date.yday}).txt"
     end
 
     def apply
       TariffImporter.new(file_path, ChiefImporter).import
-      move_to :processed
+
+      mark_as_applied
       logger.info "Successfully applied CHIEF update: #{file_path}"
     end
 
     def self.update_type
       :chief
-    end
-
-    def self.query_for_last_file
-      "#{TariffSynchronizer.root_path}/**/*.txt"
-    end
-
-    def self.exists_for?(date)
-      Dir["#{TariffSynchronizer.root_path}/**/#{date}*.txt"].any?
     end
   end
 end

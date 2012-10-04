@@ -3,6 +3,9 @@ require 'tariff_synchronizer/file_service'
 
 module TariffSynchronizer
   class TaricUpdate < BaseUpdate
+    set_dataset db[:tariff_updates].
+                filter(update_type: 'TaricUpdate')
+
     self.update_priority = 2
 
     def self.download(date)
@@ -12,6 +15,11 @@ module TariffSynchronizer
         FileService.get_content(taric_data_url).tap{|contents|
           FileService.write_file(update_path(date, file_name), contents) if contents.present?
         }
+
+        create(filename: "#{date}_#{file_name}",
+               update_type: 'TaricUpdate',
+               state: 'P',
+               issue_date: date)
       else
         TariffSynchronizer.logger.error "No Taric file found for #{date}."
       end
@@ -19,20 +27,17 @@ module TariffSynchronizer
 
     def apply
       TariffImporter.new(file_path, TaricImporter).import
+
+      mark_as_applied
       logger.info "Successfully applied Taric update: #{file_path}"
-      move_to :processed
     end
 
     def self.update_type
       :taric
     end
 
-    def self.query_for_last_file
-      "#{TariffSynchronizer.root_path}/**/*.xml"
-    end
-
-    def self.exists_for?(date)
-      Dir["#{TariffSynchronizer.root_path}/**/#{date}*.xml"].any?
+    def self.file_name_for(date)
+      "#{date}_TGB#{date.strftime("%y")}#{date.yday}.xml"
     end
 
     private

@@ -2,10 +2,13 @@ require 'fileutils'
 
 module SynchronizerHelper
   mattr_accessor :sync_states
-  self.sync_states = %w[inbox failbox processed]
+  self.sync_states = {
+    pending: 'P',
+    applied: 'A'
+  }
 
   def create_taric_file(state, date = Date.today)
-    raise "Invalid state requested" unless state.to_s.in?(sync_states)
+    raise "Invalid state requested" unless sync_states.has_key?(state)
 
     date = Date.parse(date.to_s)
 
@@ -34,14 +37,14 @@ module SynchronizerHelper
       </env:envelope>
     }
 
-    taric_file_path = File.join(TariffSynchronizer.send("#{state}_path".to_sym), "#{date}_TGB0001.xml")
+    taric_file_path = File.join(TariffSynchronizer.root_path, 'taric', "#{date}_TGB#{date.strftime("%y")}#{date.yday}.xml")
     create_file taric_file_path, content
 
     Pathname.new(taric_file_path)
   end
 
   def create_chief_file(state, date = Date.today)
-    raise "Invalid state requested" unless state.to_s.in?(sync_states)
+    raise "Invalid state requested" unless sync_states.has_key?(state)
 
     date = Date.parse(date.to_s)
 
@@ -52,26 +55,20 @@ module SynchronizerHelper
       "ZZZZZZZZZZZ","31/12/9999:23:59:59"," ",434,
     }
 
-    chief_file_path = File.join(TariffSynchronizer.send("#{state}_path".to_sym),"#{date}_KBT009(#{date.strftime("%y")}#{date.yday}).txt")
+    chief_file_path = File.join(TariffSynchronizer.root_path, 'chief', "#{date}_KBT009(#{date.strftime("%y")}#{date.yday}).txt")
     create_file chief_file_path, content
 
     Pathname.new(chief_file_path)
   end
 
   def prepare_synchronizer_folders
-    sync_states.each do |state|
-      FileUtils.mkdir_p File.join(Rails.root, TariffSynchronizer.send("#{state}_path".to_sym))
-    end
+    FileUtils.mkdir_p File.join(Rails.root, TariffSynchronizer.root_path)
+    FileUtils.mkdir_p File.join(Rails.root, TariffSynchronizer.root_path, 'taric')
+    FileUtils.mkdir_p File.join(Rails.root, TariffSynchronizer.root_path, 'chief')
   end
 
   def purge_synchronizer_folders
-    sync_states.each do |state|
-      FileUtils.rm_rf File.join(Rails.root, TariffSynchronizer.send("#{state}_path".to_sym))
-    end
-  end
-
-  def data_folder_contains?(state, filename)
-    File.exists?("#{TariffSynchronizer.send("#{state}_path".to_sym)}/#{filename}")
+    FileUtils.rm_rf File.join(Rails.root, TariffSynchronizer.root_path)
   end
 
   private

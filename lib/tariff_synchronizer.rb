@@ -1,3 +1,7 @@
+# NOTE sequel-rails initializes too late, fasten it up.
+Sequel::Rails.configuration.init_database(Rails.configuration.database_configuration)
+Sequel::Rails.connect(Rails.env)
+
 require 'tariff_importer'
 require 'date'
 require 'logger'
@@ -5,7 +9,6 @@ require 'tariff_synchronizer/pending_update'
 require 'tariff_synchronizer/chief_update'
 require 'tariff_synchronizer/taric_update'
 require 'fileutils'
-require 'sequel-rails'
 
 # How TariffSynchronizer works
 #
@@ -59,21 +62,12 @@ module TariffSynchronizer
   mattr_accessor :root_path
   self.root_path = Rails.env.test? ? "tmp/data" : "data"
 
-  mattr_accessor :inbox_path
-  self.inbox_path = Rails.env.test? ? "tmp/data/inbox" : "data/inbox"
-
-  mattr_accessor :failbox_path
-  self.failbox_path = Rails.env.test? ? "tmp/data/failbox" : "data/failbox"
-
-  mattr_accessor :processed_path
-  self.processed_path = Rails.env.test? ? "tmp/data/processed" : "data/processed"
-
   mattr_accessor :request_throttle
   self.request_throttle = 1
 
   # Initial dump date + 1 day
   mattr_accessor :taric_initial_update
-  self.taric_initial_update = Date.new(2012,6,5)
+  self.taric_initial_update = Date.new(2012,6,6)
 
   # Initial dump date + 1 day
   mattr_accessor :chief_initial_update
@@ -94,7 +88,7 @@ module TariffSynchronizer
     logger.info "Starting update application at: #{Time.now}"
 
     PendingUpdate.all
-                 .sort_by(&:date)
+                 .sort_by(&:issue_date)
                  .sort_by(&:update_priority)
                  .each do |pending_update|
       Sequel::Model.db.transaction do
@@ -103,7 +97,6 @@ module TariffSynchronizer
         rescue TaricImporter::ImportException,
                ChiefImporter::ImportException  => exception
           logger.error "Update failed: #{pending_update}"
-          pending_update.move_to(:failbox)
 
           notify_admin(pending_update.file_path, exception)
 

@@ -5,10 +5,6 @@ module TariffSynchronizer
     mattr_accessor :terminating_http_codes
     self.terminating_http_codes = [200, 404]
 
-    def get_date(file_name)
-      Date.parse(file_name.to_s.match(/(.*)_(.*)$/)[1]) if file_name.present?
-    end
-
     def write_file(path, body)
       data_file = File.new(path, "w")
       data_file.write(body.encode('UTF-8', invalid: :replace, undef: :replace))
@@ -32,12 +28,18 @@ module TariffSynchronizer
     private
 
     def send_request(url)
-      crawler = Curl::Easy.new(url)
-      crawler.ssl_verify_peer = false
-      crawler.http_auth_types = :basic
-      crawler.username = TariffSynchronizer.username
-      crawler.password = TariffSynchronizer.password
-      crawler.perform
+      begin
+        crawler = Curl::Easy.new(url)
+        crawler.ssl_verify_peer = false
+        crawler.http_auth_types = :basic
+        crawler.username = TariffSynchronizer.username
+        crawler.password = TariffSynchronizer.password
+        crawler.perform
+      rescue Curl::Err::HostResolutionError => exception
+        # NOTE could be a glitch in curb because it throws HostResolutionError
+        # occasionally without any reason.
+        send_request(url)
+      end
 
       return crawler.response_code, crawler.body_str
     end
