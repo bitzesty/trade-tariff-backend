@@ -1,26 +1,37 @@
 module TariffSynchronizer
-  class BaseUpdate
+  class BaseUpdate < Sequel::Model
+    set_dataset db[:tariff_updates]
+
+    plugin :timestamps
+
     class InvalidArgument < StandardError; end
 
-    attr_reader    :file_path, :file_name, :date
+    APPLIED_STATE = 'A'
+    PENDING_STATE = 'P'
+    FAILED_STATE = 'F'
+
     cattr_accessor :update_priority
 
     delegate :logger, to: TariffSynchronizer
 
-    def initialize(file_path)
-      raise InvalidArgument.new("expects a Pathname object") unless file_path.is_a?(Pathname)
+    self.unrestrict_primary_key
 
-      @file_path = file_path
-      @file_name = file_path.basename.to_s
-      @date = FileService.get_date(@file_name)
+    dataset_module do
+      def applied
+        filter(state: APPLIED_STATE)
+      end
+
+      def pending
+        where(state: PENDING_STATE)
+      end
     end
 
-    def move_to(state_folder)
-      destination_path = File.join(Rails.root,
-                                   TariffSynchronizer.send("#{state_folder}_path".to_sym),
-                                   file_name)
+    def mark_as_applied
+      update(state: APPLIED_STATE)
+    end
 
-      FileUtils.mv file_path, destination_path unless destination_path.to_s =~ /#{file_path.to_s}/
+    def file_path
+      File.join(TariffSynchronizer.root_path, self.class.update_type.to_s, filename)
     end
 
     def self.sync
@@ -31,8 +42,8 @@ module TariffSynchronizer
       end
     end
 
-    def self.pending_from
-      FileService.get_date(last_download_date) || TariffSynchronizer.initial_update_for(update_type)
+    def self.exists_for?(date)
+      dataset.where(issue_date: date).any?
     end
 
     def self.update_type
@@ -41,14 +52,16 @@ module TariffSynchronizer
 
     private
 
-    def self.last_download_date
-      Dir[query_for_last_file].map{|p| Pathname.new(p).basename.to_s }
-                              .sort
-                              .last
+    def self.update_path(date, file_name)
+      File.join(TariffSynchronizer.root_path, update_type.to_s, "#{date}_#{file_name}")
     end
 
-    def self.update_path(date, file_name)
-      File.join(Rails.root, TariffSynchronizer.inbox_path, "#{date}_#{file_name}")
+    def self.pending_from
+      if last_download = dataset.order(:issue_date.desc).first
+        last_download.issue_date
+      else
+       TariffSynchronizer.initial_update_for(update_type)
+      end
     end
   end
 end

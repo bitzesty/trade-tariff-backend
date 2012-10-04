@@ -5,14 +5,14 @@ require 'mocha/standalone'
 describe TariffSynchronizer::TaricUpdate do
   it_behaves_like 'Base Update'
 
-  let(:example_date)      { Date.new(2010,1,1) }
+  let(:example_date)      { Forgery(:date).date }
 
   before do
     TariffSynchronizer.admin_email = "user@example.com"
   end
 
   describe '.download' do
-    let(:taric_update_name) { "TGB12345.xml" }
+    let(:taric_update_name) { "TGB#{example_date.strftime("%y")}#{example_date.yday}.xml" }
 
     before do
       TariffSynchronizer.host = "http://example.com"
@@ -39,8 +39,8 @@ describe TariffSynchronizer::TaricUpdate do
         TariffSynchronizer::FileService.expects(:get_content).with(update_url).returns('abc')
 
         TariffSynchronizer::TaricUpdate.download(example_date)
-        File.exists?("#{TariffSynchronizer.inbox_path}/#{example_date}_#{taric_update_name}").should be_true
-        File.read("#{TariffSynchronizer.inbox_path}/#{example_date}_#{taric_update_name}").should == 'abc'
+        File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_true
+        File.read("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should == 'abc'
       end
 
       it 'does not write Taric file contents to file if they are blank' do
@@ -49,7 +49,7 @@ describe TariffSynchronizer::TaricUpdate do
         TariffSynchronizer::FileService.expects(:get_content).with(update_url).returns(nil)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
-        File.exists?("#{TariffSynchronizer.inbox_path}/#{example_date}_#{taric_update_name}").should be_false
+        File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_false
       end
     end
 
@@ -66,46 +66,41 @@ describe TariffSynchronizer::TaricUpdate do
     after  { purge_synchronizer_folders }
   end
 
-  describe ".query_for_last_file" do
-    it 'returns query for Taric files' do
-      TariffSynchronizer::TaricUpdate.query_for_last_file.should == "#{TariffSynchronizer.root_path}/**/*.xml"
-    end
-  end
-
   describe "#apply" do
-    before { prepare_synchronizer_folders }
+    let(:state) { :pending }
+    let!(:example_taric_update) { create :taric_update, example_date: example_date }
 
-    let(:example_taric_path) { create_taric_file :inbox, "2012-05-15" }
+    before {
+      prepare_synchronizer_folders
+      create_taric_file :pending, example_date
+    }
 
     it 'executes Taric importer' do
-      mock_importer = stub
-      mock_importer.expects(:import).returns(true)
-      TariffImporter.expects(:new).with(example_taric_path, TaricImporter).returns(mock_importer)
+      mock_importer = stub_everything
+      TariffImporter.expects(:new).with(example_taric_update.file_path, TaricImporter).returns(mock_importer)
 
-      TariffSynchronizer::TaricUpdate.new(example_taric_path).apply
+      TariffSynchronizer::TaricUpdate.first.apply
     end
 
-    it 'moves file to processed' do
+    it 'updates file entry state to processed' do
       mock_importer = stub_everything
-      TariffImporter.expects(:new).with(example_taric_path, TaricImporter).returns(mock_importer)
+      TariffImporter.expects(:new).with(example_taric_update.file_path, TaricImporter).returns(mock_importer)
 
-      File.exists?(example_taric_path).should be_true
-      taric_update = TariffSynchronizer::TaricUpdate.new(example_taric_path)
-      taric_update.apply
-      File.exists?(example_taric_path).should be_false
-      File.exists?("#{TariffSynchronizer.processed_path}/#{taric_update.file_name}").should be_true
+      TariffSynchronizer::TaricUpdate.pending.count.should == 1
+      TariffSynchronizer::TaricUpdate.first.apply
+      TariffSynchronizer::TaricUpdate.pending.count.should == 0
+      TariffSynchronizer::TaricUpdate.applied.count.should == 1
     end
 
     it 'does not move file to processed if import fails' do
       mock_importer = stub
       mock_importer.expects(:import).raises(TaricImporter::ImportException)
-      TariffImporter.expects(:new).with(example_taric_path, TaricImporter).returns(mock_importer)
+      TariffImporter.expects(:new).with(example_taric_update.file_path, TaricImporter).returns(mock_importer)
 
-      File.exists?(example_taric_path).should be_true
-      taric_update = TariffSynchronizer::TaricUpdate.new(example_taric_path)
-      rescuing { taric_update.apply }
-      File.exists?(example_taric_path).should be_true
-      File.exists?("#{TariffSynchronizer.processed_path}/#{taric_update.file_name}").should be_false
+      TariffSynchronizer::TaricUpdate.pending.count.should == 1
+      rescuing { TariffSynchronizer::TaricUpdate.first.apply }
+      TariffSynchronizer::TaricUpdate.pending.count.should == 1
+      TariffSynchronizer::TaricUpdate.applied.count.should == 0
     end
 
     after  { purge_synchronizer_folders }

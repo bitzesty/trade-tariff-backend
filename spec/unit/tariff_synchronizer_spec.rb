@@ -59,12 +59,6 @@ describe TariffSynchronizer do
         rescuing { TariffSynchronizer.apply }
       end
 
-      it 'failed updated gets moved to failbox' do
-        update_2.expects(:move_to).with(:failbox).returns(true)
-
-        rescuing { TariffSynchronizer.apply }
-      end
-
       it 'admin gets notified' do
         mailer_stub = stub
         mailer_stub.expects(:deliver).returns(true)
