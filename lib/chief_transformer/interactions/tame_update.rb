@@ -17,7 +17,7 @@ class ChiefTransformer
         else
           end_measures_for(record)
           update_or_create_tame_components_for(record)
-          create_new_measures_for(record) unless record.was_processed?
+          create_new_measures_for(record)
         end
       end
     end

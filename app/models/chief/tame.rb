@@ -1,10 +1,7 @@
 module Chief
   class Tame < Sequel::Model
     set_dataset db[:chief_tame].
-                order(:msrgp_code.asc).
-                order_more(:msr_type.asc).
-                order_more(:tty_code.asc).
-                order_more(:fe_tsmp.desc)
+                order(:audit_tsmp.asc)
 
     set_primary_key [:msrgp_code, :msr_type, :tty_code, :fe_tsmp]
 
@@ -30,8 +27,9 @@ module Chief
     one_to_many :mfcms, key: {}, primary_key: {}, dataset: -> {
       Chief::Mfcm.filter{ |o| {:msrgp_code => msrgp_code} &
                               {:msr_type => msr_type} &
-                              {:tty_code => tty_code}
-                        }
+                              {:tty_code => tty_code} &
+                              {:tar_msr_no => tar_msr_no}
+                        }.order(:audit_tsmp.asc)
     }
 
     dataset_module do

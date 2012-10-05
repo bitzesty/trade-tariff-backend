@@ -81,6 +81,14 @@ class ChiefTransformer
       errors.add(:goods_nomenclature_sid, 'must be present') if goods_nomenclature_sid.blank?
       errors.add(:geographical_area_sid, 'must be present') if geographical_area_sid.blank?
       errors.add(:validity_end_date, 'start date greater than end date') if validity_end_date.present? && validity_start_date > validity_end_date
+      errors.add(:measure_sid, 'measure must be unique') if Measure.where(measure_type: measure_type,
+                                                                          geographical_area: geographical_area,
+                                                                          validity_start_date: validity_start_date,
+                                                                          validity_end_date: validity_end_date,
+                                                                          goods_nomenclature_sid: goods_nomenclature_sid,
+                                                                          additional_code_type: additional_code_type,
+                                                                          additional_code: additional_code).national.any?
+
     end
 
     def assign_mfcm_attributes
@@ -121,7 +129,7 @@ class ChiefTransformer
       self.validity_end_date =  if tame.present?
                                   if Time.after(tame.le_tsmp, mfcm.le_tsmp)
                                     mfcm.le_tsmp
-                                  else
+                                  elsif tame.le_tsmp.present?
                                     tame.le_tsmp
                                   end
                                 else

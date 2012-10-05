@@ -9,8 +9,9 @@ class ChiefTransformer
 
       # Update all earlier measures and set their validity end date to fe_tsmp
       def end_measures_for(tame)
-        Measure.with_measure_type(tame.measure_type)
-               .valid_to(tame.fe_tsmp)
+        Measure.national
+               .with_measure_type(tame.measure_type)
+               .valid_before(tame.fe_tsmp)
                .not_terminated
                .each do |measure|
           MeasureLogger.log(measure, :update, {validity_end_date: tame.fe_tsmp}, tame, tame.origin)

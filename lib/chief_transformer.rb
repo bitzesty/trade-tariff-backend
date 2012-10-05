@@ -54,8 +54,8 @@ class ChiefTransformer
         candidate_measures.persist
       end
     when :update
-      processor = Processor.new(Chief::Tame.untransformed.all,
-                                Chief::Mfcm.untransformed.all)
+      processor = Processor.new(Chief::Mfcm.untransformed.all,
+                                Chief::Tame.untransformed.all)
       processor.process
     end
 

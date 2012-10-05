@@ -387,6 +387,10 @@ class Measure < Sequel::Model
       where("measures.validity_start_date <= ?", last_effective_timestamp)
     end
 
+    def valid_before(last_effective_timestamp)
+      where("measures.validity_start_date < ?", last_effective_timestamp)
+    end
+
     def valid_from(timestamp)
       where("measures.validity_start_date >= ?", timestamp)
     end

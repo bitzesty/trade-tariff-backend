@@ -20,8 +20,21 @@ class ChiefTransformer
                     .any?
             # Create new measures for MFCMs with later start date
             candidate_measures = CandidateMeasure::Collection.new([
-              CandidateMeasure.new(mfcm: record, tame: record.tame, operation: :insert)
-            ])
+              if record.tame.present?
+                if record.tame.has_tamfs?
+                  record.tame.tamfs.map { |tamf|
+                    CandidateMeasure.new(mfcm: record,
+                                         tame: record.tame,
+                                         tamf: tamf,
+                                         operation: :insert)
+                  }
+                else
+                  [CandidateMeasure.new(mfcm: record,
+                                        tame: record.tame,
+                                        operation: :insert)]
+                end
+              end
+            ].flatten.compact)
             candidate_measures.log(record)
             candidate_measures.persist
           end
