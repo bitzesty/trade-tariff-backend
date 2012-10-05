@@ -14,10 +14,10 @@ end
 
 node(:suspension_legal_act, if: ->(measure) { !measure.national && measure.suspended? }) do |measure|
   {
-    generating_regulation_code: measure.generating_regulation_code(measure.full_temporary_stop_regulation.full_temporary_stop_regulation_id),
-    url: measure.generating_regulation_url(measure.full_temporary_stop_regulation.full_temporary_stop_regulation_id),
-    validity_end_date: measure.full_temporary_stop_regulation.effective_enddate,
-    validity_start_date: measure.full_temporary_stop_regulation.validity_start_date.to_date.to_s(:db)
+    generating_regulation_code: measure.generating_regulation_code(measure.suspending_regulation.regulation_id),
+    url: measure.generating_regulation_url(measure.suspending_regulation.regulation_id),
+    validity_end_date: measure.suspending_regulation.effective_end_date,
+    validity_start_date: measure.suspending_regulation.effective_start_date
   }
 end
 

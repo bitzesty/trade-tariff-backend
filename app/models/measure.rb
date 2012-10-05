@@ -183,6 +183,24 @@ class Measure < Sequel::Model
     end
   end)
 
+  one_to_one :measure_partial_temporary_stop, key: {}, primary_key: {}, eager_loader_key: :measure_generating_regulation_id, dataset: -> {
+    MeasurePartialTemporaryStop.actual
+                               .where(measure_partial_temporary_stops__partial_temporary_stop_regulation_id: measure_generating_regulation_id)
+  }, eager_loader: (proc do |eo|
+    eo[:rows].each{|measure| measure.associations[:measure_partial_temporary_stop] = nil}
+
+    id_map = eo[:id_map]
+
+    MeasurePartialTemporaryStop.actual
+                               .where(measure_partial_temporary_stops__partial_temporary_stop_regulation_id: id_map.keys).all do |stopped_regulation|
+      if measures = id_map[stopped_regulation[:partial_temporary_stop_regulation_id]]
+        measures.each do |measure|
+          measure.associations[:measure_partial_temporary_stop] = stopped_regulation
+        end
+      end
+    end
+  end)
+
   def_column_alias :measure_type_id, :measure_type
   def_column_alias :additional_code_id, :additional_code
   def_column_alias :geographical_area_id, :geographical_area
@@ -488,7 +506,11 @@ class Measure < Sequel::Model
   end
 
   def suspended?
-    full_temporary_stop_regulation.present?
+    full_temporary_stop_regulation.present? || measure_partial_temporary_stop.present?
+  end
+
+  def suspending_regulation
+    full_temporary_stop_regulation.presence || measure_partial_temporary_stop
   end
 end
 
