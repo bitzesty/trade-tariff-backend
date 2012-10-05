@@ -1,4 +1,8 @@
-attributes :origin, :ordernumber, :effective_start_date, :effective_end_date, :measure_type_id
+attributes :origin,
+           :ordernumber,
+           :effective_start_date,
+           :effective_end_date,
+           :measure_type_id
 
 node(:measure_type_description) { |obj|
   obj.measure_type.try(:description)

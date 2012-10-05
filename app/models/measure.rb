@@ -456,6 +456,8 @@ class Measure < Sequel::Model
     end
   end
 
+  def_column_accessor :effective_end_date, :effective_start_date
+
   def generating_regulation_present?
     measure_generating_regulation_id.present? && measure_generating_regulation_role.present?
   end

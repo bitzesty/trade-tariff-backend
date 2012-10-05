@@ -85,7 +85,7 @@ class ChiefTransformer
                                                                           geographical_area: geographical_area,
                                                                           validity_start_date: validity_start_date,
                                                                           validity_end_date: validity_end_date,
-                                                                          goods_nomenclature_sid: goods_nomenclature_sid,
+                                                                          goods_nomenclature_item_id: goods_nomenclature_item_id,
                                                                           additional_code_type: additional_code_type,
                                                                           additional_code: additional_code).national.any?
 
