@@ -20,11 +20,34 @@ describe TariffSynchronizer do
   end
 
   describe '.download' do
-    it 'invokes update downloading/syncing on all update types' do
-      TariffSynchronizer::TaricUpdate.expects(:sync).returns(true)
-      TariffSynchronizer::ChiefUpdate.expects(:sync).returns(true)
+    context 'sync variables are set' do
+      before { TariffSynchronizer.expects(:sync_variables_set?).returns(true) }
 
-      TariffSynchronizer.download
+      it 'invokes update downloading/syncing on all update types' do
+        TariffSynchronizer::TaricUpdate.expects(:sync).returns(true)
+        TariffSynchronizer::ChiefUpdate.expects(:sync).returns(true)
+
+        TariffSynchronizer.download
+      end
+    end
+
+    context 'sync variables are not set' do
+      before { TariffSynchronizer.expects(:sync_variables_set?).returns(false) }
+
+      it 'logs an error' do
+        mock_logger = mock
+        mock_logger.expects(:error).returns(true)
+        TariffSynchronizer.expects(:logger).returns(mock_logger)
+
+        TariffSynchronizer.download
+      end
+
+      it 'does not start sync process' do
+        TariffSynchronizer::TaricUpdate.expects(:sync).never
+        TariffSynchronizer::ChiefUpdate.expects(:sync).never
+
+        TariffSynchronizer.download
+      end
     end
   end
 
@@ -47,7 +70,7 @@ describe TariffSynchronizer do
       end
     end
 
-    context 'failure scenarion' do
+    context 'failure scenario' do
       before do
         update_1.expects(:apply).returns(true)
         update_2.expects(:apply).raises(TaricImporter::ImportException)

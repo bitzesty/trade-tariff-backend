@@ -45,16 +45,16 @@ module TariffSynchronizer
   extend self
 
   mattr_accessor :username
-  self.username = ENV['SYNC_USERNAME']
+  self.username = TradeTariffBackend.secrets.sync_username
 
   mattr_accessor :password
-  self.password = ENV['SYNC_PASSWORD']
+  self.password = TradeTariffBackend.secrets.sync_password
 
   mattr_accessor :host
-  self.host = ENV['SYNC_HOST']
+  self.host = TradeTariffBackend.secrets.sync_host
 
   mattr_accessor :admin_email
-  self.admin_email = ENV['SYNC_EMAIL']
+  self.admin_email = TradeTariffBackend.secrets.sync_email
 
   mattr_accessor :logger
   self.logger = Logger.new('log/sync.log')
@@ -77,9 +77,13 @@ module TariffSynchronizer
   # Gets latest downloaded file present in (inbox/failbox/processed) and tries
   # to download any further updates to current day.
   def download
-    logger.info "Starting sync at: #{Time.now}"
+    if sync_variables_set?
+      logger.info "Starting sync at: #{Time.now}"
 
-    [TaricUpdate, ChiefUpdate].map(&:sync)
+      [TaricUpdate, ChiefUpdate].map(&:sync)
+    else
+      logger.error "You need to create: config/trade_tariff_backend_secrets.yml file and set sync variables: username, password, host and email."
+    end
   end
 
   # Applies all updates (from inbox/failbox) by their date starting from the
@@ -112,6 +116,10 @@ module TariffSynchronizer
   end
 
   private
+
+  def sync_variables_set?
+    self.username.present? && self.password.present? && self.host.present? && self.admin_email.present?
+  end
 
   def notify_admin(failed_file_path, exception)
     SyncMailer.admin_notification(admin_email, failed_file_path, exception).deliver
