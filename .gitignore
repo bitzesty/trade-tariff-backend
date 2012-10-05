@@ -19,3 +19,4 @@ ERD.pdf
 data/*/*.xml
 data/*/*.txt
 *.sql
+/config/trade_tariff_backend_secrets.yml

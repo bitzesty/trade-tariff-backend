@@ -24,6 +24,11 @@ describe TariffSynchronizer::FileService do
   describe ".get_content", :webmock do
     let(:example_url) { "http://example.com/data" }
 
+    before do
+      TariffSynchronizer.username = nil
+      TariffSynchronizer.password = nil
+    end
+
     it 'downloads content from remote url' do
       VCR.use_cassette('example_get_content') do
         TariffSynchronizer::FileService.get_content(example_url).should == "Hello world"
