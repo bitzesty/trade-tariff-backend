@@ -20,8 +20,8 @@ describe TariffSynchronizer::PendingUpdate do
     end
 
     it 'chooses and initializes update processor from file path' do
-      TariffSynchronizer::PendingUpdate.new(example_taric_update).update_processor.should be_kind_of TariffSynchronizer::TaricUpdate
-      TariffSynchronizer::PendingUpdate.new(example_chief_update).update_processor.should be_kind_of TariffSynchronizer::ChiefUpdate
+      TariffSynchronizer::PendingUpdate.new(example_taric_update).update.should be_kind_of TariffSynchronizer::TaricUpdate
+      TariffSynchronizer::PendingUpdate.new(example_chief_update).update.should be_kind_of TariffSynchronizer::ChiefUpdate
     end
   end
 

@@ -3,6 +3,7 @@ module TariffSynchronizer
     set_dataset db[:tariff_updates]
 
     plugin :timestamps
+    plugin :single_table_inheritance, :update_type
 
     class InvalidArgument < StandardError; end
 

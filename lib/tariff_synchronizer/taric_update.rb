@@ -3,9 +3,6 @@ require 'tariff_synchronizer/file_service'
 
 module TariffSynchronizer
   class TaricUpdate < BaseUpdate
-    set_dataset db[:tariff_updates].
-                filter(update_type: 'TaricUpdate')
-
     self.update_priority = 2
 
     def self.download(date)
@@ -17,7 +14,7 @@ module TariffSynchronizer
         }
 
         create(filename: "#{date}_#{file_name}",
-               update_type: 'TaricUpdate',
+               update_type: 'TariffSynchronizer::TaricUpdate',
                state: 'P',
                issue_date: date)
       else

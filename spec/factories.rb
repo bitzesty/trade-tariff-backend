@@ -601,7 +601,7 @@ FactoryGirl.define do
 
     filename { TariffSynchronizer::ChiefUpdate.file_name_for(example_date)  }
     issue_date { example_date }
-    update_type { 'ChiefUpdate' }
+    update_type { 'TariffSynchronizer::ChiefUpdate' }
     state { 'P' }
 
     trait :applied do
@@ -616,7 +616,7 @@ FactoryGirl.define do
 
     filename { TariffSynchronizer::TaricUpdate.file_name_for(example_date)  }
     issue_date { example_date }
-    update_type { 'TaricUpdate' }
+    update_type { 'TariffSynchronizer::TaricUpdate' }
     state { 'P' }
 
     trait :applied do
