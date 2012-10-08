@@ -396,6 +396,7 @@ Sequel.migration do
       column :monetary_unit_applicability_code, "int(11)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
+      column :abbreviation, "varchar(30)"
 
       index [:duty_expression_id], :name=>:primary_key, :unique=>true
     end
@@ -1528,6 +1529,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20121003061643_add_origin_to_chief_records.rb")
     self[:schema_migrations].insert(:filename => "20121004111601_create_tariff_updates.rb")
     self[:schema_migrations].insert(:filename => "20121004172558_extend_tariff_updates_size.rb")
+    self[:schema_migrations].insert(:filename => "20121008175409_add_abbreviation_to_duty_expression.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"
