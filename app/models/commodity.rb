@@ -134,12 +134,12 @@ class Commodity < GoodsNomenclature
         description: chapter.description.downcase
       },
       heading: {
-        goods_nomenclature_sid: heading.chapter.goods_nomenclature_sid,
-        goods_nomenclature_item_id: heading.chapter.goods_nomenclature_item_id,
-        producline_suffix: heading.chapter.producline_suffix,
-        validity_start_date: heading.chapter.validity_start_date,
-        validity_end_date: heading.chapter.validity_end_date,
-        description: heading.chapter.description,
+        goods_nomenclature_sid: heading.goods_nomenclature_sid,
+        goods_nomenclature_item_id: heading.goods_nomenclature_item_id,
+        producline_suffix: heading.producline_suffix,
+        validity_start_date: heading.validity_start_date,
+        validity_end_date: heading.validity_end_date,
+        description: heading.description,
         number_indents: heading.number_indents
       }
     }.to_json
