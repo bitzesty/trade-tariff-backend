@@ -49,8 +49,8 @@ class GoodsNomenclature < Sequel::Model
     end
   end)
 
-  delegate :number_indents, to: :goods_nomenclature_indent
-  delegate :description, to: :goods_nomenclature_description
+  delegate :number_indents, to: :goods_nomenclature_indent, allow_nil: true
+  delegate :description, to: :goods_nomenclature_description, allow_nil: true
 
   one_to_one :goods_nomenclature_origin, key: [:goods_nomenclature_item_id,
                                                :productline_suffix],
