@@ -382,6 +382,7 @@ Sequel.migration do
       column :description, "text"
       column :created_at, "datetime"
       column :updated_at, "datetime"
+      column :abbreviation, "varchar(30)"
 
       index [:language_id], :name=>:index_duty_expression_descriptions_on_language_id
       index [:duty_expression_id], :name=>:primary_key, :unique=>true
@@ -396,7 +397,6 @@ Sequel.migration do
       column :monetary_unit_applicability_code, "int(11)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
-      column :abbreviation, "varchar(30)"
 
       index [:duty_expression_id], :name=>:primary_key, :unique=>true
     end
