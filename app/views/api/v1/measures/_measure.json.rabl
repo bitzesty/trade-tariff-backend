@@ -26,7 +26,7 @@ node(:suspension_legal_act, if: ->(measure) { !measure.national && measure.suspe
 end
 
 child(measure_components: :measure_components) do
-  attributes :duty_amount, :duty_expression_id
+  attributes :duty_amount, :duty_expression_id, :duty_expression_description
 
   node(:monetary_unit) { |component|
     component.monetary_unit_code
@@ -43,7 +43,7 @@ child(measure_conditions: :measure_conditions) do
   attributes :document_code, :requirement_type, :requirement, :action, :condition
 
   child(measure_condition_components: :components) do
-    attributes :duty_amount, :duty_expression_id
+    attributes :duty_amount, :duty_expression_id, :duty_expression_description
 
     node(:monetary_unit) { |component|
       component.monetary_unit_code

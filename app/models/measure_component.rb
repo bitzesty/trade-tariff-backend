@@ -13,6 +13,7 @@ class MeasureComponent < Sequel::Model
     id_map = eo[:id_map]
 
     DutyExpression.actual
+                  .eager(:duty_expression_description)
                   .where(duty_expression_id: id_map.keys).all do |duty_expression|
       if measure_components = id_map[duty_expression.duty_expression_id]
         measure_components.each do |component|
