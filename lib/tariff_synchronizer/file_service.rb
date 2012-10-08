@@ -6,8 +6,8 @@ module TariffSynchronizer
     self.terminating_http_codes = [200, 404]
 
     def write_file(path, body)
-      data_file = File.new(path, "w")
-      data_file.write(body.encode('UTF-8', invalid: :replace, undef: :replace))
+      data_file = File.new(path, "wb")
+      data_file.write(body)
       data_file.close
     end
 

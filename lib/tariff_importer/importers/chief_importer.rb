@@ -34,7 +34,7 @@ class ChiefImporter
 
   def import
     begin
-      CSV.foreach(path) do |line|
+      CSV.foreach(path, encoding: 'ISO-8859-1') do |line|
         entry = Entry.build(line)
 
         if entry.is_a?(StartEntry)

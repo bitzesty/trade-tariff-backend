@@ -102,7 +102,7 @@ module TariffSynchronizer
                ChiefImporter::ImportException  => exception
           logger.error "Update failed: #{pending_update}"
 
-          notify_admin(pending_update.file_path, exception)
+          notify_admin(pending_update.file_name, exception)
 
           raise Sequel::Rollback
         end
