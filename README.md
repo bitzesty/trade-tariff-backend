@@ -58,22 +58,28 @@ Run the bootstrap command.
     
 ## Performing daily updates
 
-1. Synchronize updates.
+1. Synchronize updates
 
-    ```
-    SYNC_USERNAME=
-    SYNC_PASSOWRD=
-    SYNC_HOST=
-    SYNC_EMAIL=
-    bundle exec rake tariff:sync
-    ```
-Variables:
+  1.1. Create config/trade_tariff_backend_secrets.yml file with correct values.
 
-* SYNC_USERNAME - username for update server.
-* SYNC_PASSWORD - password for update server.
-* SYNC_HOST - host for update server.
-* SYNC_EMAIL - admin email to send notifications to if sync goes wrong.
+  ```yaml
+  sync_username:
+  sync_password:                                                           
+  sync_host:
+  sync_email:
+  ```
 
+  1.2. Download pending updates.
+
+  ```
+  bundle exec rake tariff:sync:download
+  ```
+
+2. Apply updates
+
+```
+bundle exec rake tariff:sync:apply
+```
 
 ## TODO
 
