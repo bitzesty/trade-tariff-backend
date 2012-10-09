@@ -23,34 +23,18 @@ describe Api::V1::SearchController, "POST #search" do
     end
   end
 
-  describe 'reference matching', vcr: { cassette_name: "search#search_referenced", match_requests_on: [:uri] } do
-    before {
-      post :search, { q: 'Horse-Radish',  as_of: '' }
-    }
-    let(:pattern) {
-      {
-        type: 'referenced_match',
-        entries: {
-          commodities: Array,
-          headings: Array,
-          chapters: Array,
-          sections: Array
-        }
-      }
-    }
-
-    it { should respond_with(:success) }
-    it 'returns records grouped by type' do
-        response.body.should match_json_expression pattern
-    end
-  end
-
   describe 'fuzzy matching', vcr: { cassette_name: "search#search_fuzzy", match_requests_on: [:uri], erb: true } do
     let(:chapter) { create :chapter, :with_description, description: "horse", validity_start_date: Date.today }
     let(:pattern) {
       {
         type: 'fuzzy_match',
-        entries: {
+        reference_match: {
+          commodities: Array,
+          headings: Array,
+          chapters: Array,
+          sections: Array
+        },
+        goods_nomenclature_match: {
           commodities: Array,
           headings: Array,
           chapters: Array,

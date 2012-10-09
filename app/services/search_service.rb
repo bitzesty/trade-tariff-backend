@@ -52,45 +52,24 @@ class SearchService
     end
   end
 
-  class ReferencedSearch < BaseSearch
-    def search!
-      @results = Tire.search('search_references', { query: {
-                                         term: {
-                                           title: query_string
-                                         }
-                                       },
-                                       size: INDEX_SIZE_MAX
-                                     }
-                             ).results
-      self
-    end
-
-    def serializable_hash
-      {
-        type: "referenced_match",
-        entries: {
-          sections: results.select{|r| r.reference['class'] == 'Section' },
-          chapters: results.select{|r| r.reference['class'] == 'Chapter' },
-          headings: results.select{|r| r.reference['class'] == 'Heading' },
-          commodities: []
-        }
-      }
-    end
-  end
-
   class FuzzySearch < BaseSearch
+    BLANK_RESULT = {
+      goods_nomenclature_match: {
+        sections: [], chapters: [], headings: [], commodities: []
+      },
+      reference_match: {
+        sections: [], chapters: [], headings: []
+      }
+    }
+
     def search!
-      @results = begin
-                  {
-                    sections: results_for('sections', query_string, date, query_string: { fields: ["title"] }),
-                    chapters: results_for('chapters', query_string, date),
-                    headings: results_for('headings', query_string, date),
-                    commodities: results_for('commodities', query_string, date)
-                  }
-                # rescue from malformed queries, return empty resultset in that case
-                rescue Tire::Search::SearchRequestFailed
-                  { sections: [], chapters: [], headings: [], commodities: [] }
-                end
+      begin
+        @results = { goods_nomenclature_match: search_results_for(query_string, date),
+                     reference_match: reference_results_for(query_string) }
+      rescue Tire::Search::SearchRequestFailed
+        # rescue from malformed queries, return empty resultset in that case
+        BLANK_RESULT
+      end
 
       self
     end
@@ -98,11 +77,39 @@ class SearchService
     def serializable_hash
       {
         type: "fuzzy_match",
-        entries: results
-      }
+      }.merge(results)
     end
 
     private
+
+    def search_results_for(query_string, date)
+      {
+        sections: results_for('sections', query_string, date, query_string: { fields: ["title"] }),
+        chapters: results_for('chapters', query_string, date),
+        headings: results_for('headings', query_string, date),
+        commodities: results_for('commodities', query_string, date)
+      }
+    end
+
+    def reference_results_for(query_string)
+      {
+        sections: reference_search(query_string).select{|r| r.reference['class'] == 'Section' },
+        chapters: reference_search(query_string).select{|r| r.reference['class'] == 'Chapter' },
+        headings: reference_search(query_string).select{|r| r.reference['class'] == 'Heading' },
+        commodities: []
+      }
+    end
+
+    def reference_search(query_string)
+      @reference_results ||= Tire.search('search_references', { query: {
+                                               term: {
+                                                 title: query_string
+                                               }
+                                             },
+                                             size: INDEX_SIZE_MAX
+                                           }
+                                        ).results
+    end
 
     def results_for(index, query_string, date, query_opts = {})
       Tire.search(index, { query: {
@@ -179,7 +186,6 @@ class SearchService
 
   def perform
     @result = ExactSearch.new(q, as_of).search!.presence ||
-              ReferencedSearch.new(q, as_of).search!.presence ||
               FuzzySearch.new(q, as_of).search!.presence
   end
 end
