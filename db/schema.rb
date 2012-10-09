@@ -1531,6 +1531,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20121004172558_extend_tariff_updates_size.rb")
     self[:schema_migrations].insert(:filename => "20121008175409_add_abbreviation_to_duty_expression.rb")
     self[:schema_migrations].insert(:filename => "20121008181507_manual_add_abbreviations.rb")
+    self[:schema_migrations].insert(:filename => "20121009092643_change_asx_to_asv.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"
