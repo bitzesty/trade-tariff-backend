@@ -1,6 +1,8 @@
 require 'api_constraints'
 
 TradeTariffBackend::Application.routes.draw do
+  get "healthcheck" => "healthcheck#index"
+
   namespace :api, defaults: {format: 'json'}, path: "/" do
     # How (or even if) API versioning will be implemented is still an open question. We can defer
     # the choice until we need to expose the API to clients which we don't control.
