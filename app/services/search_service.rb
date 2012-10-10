@@ -32,7 +32,7 @@ class SearchService
                 when /^[0-9]{10}$/
                   Commodity.actual.by_code(query_string).declarable.first.presence ||
                   Heading.actual.by_declarable_code(query_string).declarable.first.presence
-                when /^\d{2}\s{1}\d{2}\s{1}\d{2}\s{1}\d{2}\s{1}\d{2}$/ # matches commodity codes in format of ## ## ## ## ##
+                when /^\d{2}\s*\d{2}\s*\d{2}\s*\d{2}\s*\d{2}$/
                   Commodity.actual.by_code(query_string.gsub(/\s+/, '')).declarable.first.presence ||
                   Heading.actual.by_declarable_code(query_string.gsub(/\s+/, '')).declarable.first.presence
                 when /^[0-9]{11,12}$/
