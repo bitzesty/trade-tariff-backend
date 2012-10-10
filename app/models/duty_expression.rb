@@ -5,7 +5,7 @@ class DutyExpression < Sequel::Model
 
   one_to_one :duty_expression_description
 
-  delegate :description, to: :duty_expression_description
+  delegate :abbreviation, :description, to: :duty_expression_description
 
   ######### Conformance validations 230
   def validate
