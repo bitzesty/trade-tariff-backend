@@ -53,6 +53,23 @@ module TariffSynchronizer
 
     private
 
+    def self.file_written_for?(date, file_name, contents)
+      update_path = update_path(date, file_name)
+
+      if contents.present?
+        FileService.write_file(update_path, contents)
+      else
+        TariffSynchronizer.logger.error "Could not write update file: #{file_name}. Nothing was downloaded."
+      end
+    end
+
+    def self.create_update_entry(date, file_name, update_type)
+      create(filename: "#{date}_#{file_name}",
+             update_type: "TariffSynchronizer::#{update_type}",
+             state: 'P',
+             issue_date: date)
+    end
+
     def self.update_path(date, file_name)
       File.join(TariffSynchronizer.root_path, update_type.to_s, "#{date}_#{file_name}")
     end

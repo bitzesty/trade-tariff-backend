@@ -10,13 +10,8 @@ module TariffSynchronizer
         taric_data_url = "#{TariffSynchronizer.host}/taric/#{file_name}"
         TariffSynchronizer.logger.info "Downloading Taric file for #{date} at: #{taric_data_url}"
         FileService.get_content(taric_data_url).tap{|contents|
-          FileService.write_file(update_path(date, file_name), contents) if contents.present?
+          create_update_entry(date, file_name, "TaricUpdate") if file_written_for?(date, file_name, contents)
         }
-
-        create(filename: "#{date}_#{file_name}",
-               update_type: 'TariffSynchronizer::TaricUpdate',
-               state: 'P',
-               issue_date: date)
       else
         TariffSynchronizer.logger.error "No Taric file found for #{date}."
       end
