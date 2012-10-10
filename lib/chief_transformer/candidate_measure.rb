@@ -96,6 +96,7 @@ class ChiefTransformer
       self.measure_type = mfcm.measure_type_adco.measure_type_id.presence || mfcm.msr_type
       self.additional_code = mfcm.measure_type_adco.adtnl_cd
       self.additional_code_type = mfcm.measure_type_adco.adtnl_cd_type_id
+      self.tariff_measure_number = mfcm.tar_msr_no
     end
 
     def assign_dates

@@ -1081,6 +1081,7 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
       column :national, "tinyint(1)"
+      column :tariff_measure_number, "varchar(10)"
 
       index [:additional_code_sid], :name=>:index_measures_on_additional_code_sid
       index [:geographical_area_sid], :name=>:index_measures_on_geographical_area_sid
@@ -1532,6 +1533,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20121008175409_add_abbreviation_to_duty_expression.rb")
     self[:schema_migrations].insert(:filename => "20121008181507_manual_add_abbreviations.rb")
     self[:schema_migrations].insert(:filename => "20121009092643_change_asx_to_asv.rb")
+    self[:schema_migrations].insert(:filename => "20121009120028_add_tariff_measure_number.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"

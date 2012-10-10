@@ -12,6 +12,7 @@ class ChiefTransformer
         Measure.national
                .with_measure_type(tame.measure_type)
                .valid_before(tame.fe_tsmp)
+               .with_tariff_measure_number(tame.tar_msr_no)
                .not_terminated
                .each do |measure|
           MeasureLogger.log(measure, :update, {validity_end_date: tame.fe_tsmp}, tame, tame.origin)
@@ -42,6 +43,7 @@ class ChiefTransformer
       def update_or_create_tame_components_for(tame)
         Measure.with_measure_type(tame.measure_type)
                .valid_from(tame.fe_tsmp)
+               .with_tariff_measure_number(tame.tar_msr_no)
                .eager(:measure_components)
                .all
                .each do |measure|

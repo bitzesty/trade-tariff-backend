@@ -8,6 +8,7 @@ class ChiefTransformer
           # Find all Measures that fall into record validity date range
           # and set their end dates to le_tsmp.
           Measure.with_measure_type(record.measure_type)
+                 .with_tariff_measure_number(record.tar_msr_no)
                  .valid_since(record.fe_tsmp)
                  .valid_to(record.le_tsmp)
                  .each do |measure|
