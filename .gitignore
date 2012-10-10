@@ -20,3 +20,4 @@ data/*/*.xml
 data/*/*.txt
 *.sql
 /config/trade_tariff_backend_secrets.yml
+*.sql.bz2

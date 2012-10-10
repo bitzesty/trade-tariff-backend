@@ -7,16 +7,11 @@ module TariffSynchronizer
 
     def self.download(date)
       file_name = "KBT009(#{date.strftime("%y")}#{date.yday}).txt"
-      file_url = "#{TariffSynchronizer.host}/taric/#{file_name}"
-      TariffSynchronizer.logger.info "Downloading CHIEF file for #{date} at: #{file_url}"
-      FileService.get_content(file_url).tap {|contents|
-        FileService.write_file(update_path(date, file_name), contents) if contents.present?
+      chief_url = "#{TariffSynchronizer.host}/taric/#{file_name}"
+      TariffSynchronizer.logger.info "Downloading CHIEF file for #{date} at: #{chief_url}"
+      FileService.get_content(chief_url).tap {|contents|
+        create_update_entry(date, file_name, "ChiefUpdate") if file_written_for?(date, file_name, contents)
       }
-
-      create(filename: "#{date}_#{file_name}",
-             update_type: 'TariffSynchronizer::ChiefUpdate',
-             state: 'P',
-             issue_date: date)
     end
 
     def self.file_name_for(date)

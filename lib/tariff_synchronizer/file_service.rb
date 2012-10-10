@@ -6,9 +6,15 @@ module TariffSynchronizer
     self.terminating_http_codes = [200, 404]
 
     def write_file(path, body)
-      data_file = File.new(path, "wb")
-      data_file.write(body)
-      data_file.close
+      begin
+        File.open(path, "wb") {|f|
+          if f.write(body) > 0
+            TariffSynchronizer.logger.info "Update file written to: #{File.join(Rails.root, path)}"
+          end
+        }
+      rescue Exception => e
+        TariffSynchronizer.logger.error "Could not write: #{path}. Error: #{e}."
+      end
     end
 
     def get_content(url)
@@ -16,6 +22,7 @@ module TariffSynchronizer
       # until it returns either 200 or 404
       loop do
         response_code, body = send_request(url)
+
         if response_code == 200
           return body
         end
