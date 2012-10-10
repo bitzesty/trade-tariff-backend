@@ -82,6 +82,5 @@ class MeasureConditionComponent < Sequel::Model
     end
   end)
 
-  delegate :description, to: :duty_expression, prefix: true
-
+  delegate :description, :abbreviation, to: :duty_expression, prefix: true
 end
