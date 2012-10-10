@@ -49,6 +49,28 @@ class GoodsNomenclature < Sequel::Model
     end
   end)
 
+  one_to_one :footnote, key: {}, primary_key: {}, eager_loader_key: :goods_nomenclature_sid, dataset: -> {
+    Footnote.with_actual(FootnoteAssociationGoodsNomenclature)
+            .join(FootnoteAssociationGoodsNomenclature, footnote_association_goods_nomenclatures__footnote_type: :footnotes__footnote_type_id,
+                                                        footnote_association_goods_nomenclatures__footnote_id: :footnotes__footnote_id)
+            .where(footnote_association_goods_nomenclatures__goods_nomenclature_sid: goods_nomenclature_sid)
+  }, eager_loader: (proc do |eo|
+    eo[:rows].each{|gono| gono.associations[:footnote] = nil}
+
+    id_map = eo[:id_map]
+
+    Footnote.with_actual(FootnoteAssociationGoodsNomenclature)
+            .join(FootnoteAssociationGoodsNomenclature, footnote_association_goods_nomenclatures__footnote_type: :footnotes__footnote_type_id,
+                                                        footnote_association_goods_nomenclatures__footnote_id: :footnotes__footnote_id)
+            .where(footnote_association_goods_nomenclatures__goods_nomenclature_sid: id_map.keys).all do |footnote|
+      if gonos = id_map[footnote[:goods_nomenclature_sid]]
+        gonos.each do |gono|
+          gono.associations[:footnote] = footnote
+        end
+      end
+    end
+  end)
+
   delegate :number_indents, to: :goods_nomenclature_indent, allow_nil: true
   delegate :description, to: :goods_nomenclature_description, allow_nil: true
 
