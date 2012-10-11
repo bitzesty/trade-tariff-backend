@@ -15,7 +15,6 @@ gem "builder"
 gem "jquery-rails", "1.0.19"
 gem "railties"
 
-gem "airbrake"
 gem "unicorn", "4.3.1"
 gem "curb"
 
