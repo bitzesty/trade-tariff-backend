@@ -14,11 +14,15 @@ class QuotaDefinition < Sequel::Model
                                        primary_key: :quota_definition_sid
 
   def status
-    QuotaEvent.last_for(quota_definition_sid).status
+    QuotaEvent.last_for(quota_definition_sid).status.presence || 'Open'
   end
 
   def last_balance_event
     @_last_balance_event ||= quota_balance_events.last
+  end
+
+  def balance
+    (last_balance_event.present?) ? last_balance_event.new_balance : volume
   end
 
   def last_suspension_period

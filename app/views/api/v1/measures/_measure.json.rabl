@@ -114,7 +114,7 @@ child(quota_order_number: :order_number) do
     node(:measurement_unit) { |qd| qd.measurement_unit_code }
     node(:monetary_unit) { |qd| qd.monetary_unit_code }
     node(:measurement_unit_qualifier ) { |qd| qd.measurement_unit_qualifier_code }
-    node(:balance) { |qd| qd.last_balance_event.try(:new_balance)  }
+    node(:balance) { |qd| qd.balance }
     node(:last_allocation_date) { |qd| qd.last_balance_event.try(:occurrence_timestamp) }
     node(:suspension_period_start_date) { |qd| qd.last_suspension_period.try(:suspension_start_date) }
     node(:suspension_period_end_date) { |qd| qd.last_suspension_period.try(:suspension_end_date) }
