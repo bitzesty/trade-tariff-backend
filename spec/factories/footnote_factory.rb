@@ -58,7 +58,13 @@ FactoryGirl.define do
     goods_nomenclature_sid          { generate(:goods_nomenclature_sid) }
     footnote_id                     { Forgery(:basic).text(exactly: 3) }
     footnote_type                   { Forgery(:basic).text(exactly: 2) }
-    validity_start_date                    { Date.today.ago(2.years) }
-    validity_end_date                      { nil }
+    validity_start_date             { Date.today.ago(2.years) }
+    validity_end_date               { nil }
+  end
+
+  factory :footnote_association_measure do
+    measure_sid                     { generate(:measure_sid) }
+    footnote_id                     { Forgery(:basic).text(exactly: 3) }
+    footnote_type_id                { Forgery(:basic).text(exactly: 2) }
   end
 end

@@ -4,12 +4,22 @@ Sequel.migration do
       drop_index [:certificate_type_code], name: :primary_key
       add_index [:certificate_type_code, :validity_start_date], name: :primary_key
     end
+
+    alter_table :measure_types do
+      drop_index [:measure_type_id], name: :primary_key
+      add_index [:measure_type_id, :validity_start_date], name: :primary_key
+    end
   end
 
   down do
     alter_table :certificate_types do
       drop_index [:certificate_type_code, :validity_start_date], name: :primary_key
       add_index [:certificate_type_code], name: :primary_key
+    end
+
+    alter_table :measure_types do
+      drop_index [:measure_type_id, :validity_start_date], name: :primary_key
+      add_index [:measure_type_id], name: :primary_key
     end
   end
 end

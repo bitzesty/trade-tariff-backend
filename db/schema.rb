@@ -1002,7 +1002,7 @@ Sequel.migration do
       column :measure_type_acronym, "varchar(3)"
 
       index [:measure_type_series_id], :name=>:index_measure_types_on_measure_type_series_id
-      index [:measure_type_id], :name=>:primary_key, :unique=>true
+      index [:measure_type_id, :validity_start_date], :name=>:primary_key
     end
 
     create_table(:measurement_unit_descriptions) do
