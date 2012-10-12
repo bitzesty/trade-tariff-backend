@@ -40,7 +40,6 @@ class GeographicalArea < Sequel::Model
     GeographicalArea.with_actual(GeographicalAreaMembership)
                     .join(:geographical_area_memberships, geographical_areas__geographical_area_sid: :geographical_area_memberships__geographical_area_sid)
                     .where(geographical_area_memberships__geographical_area_group_sid: geographical_area_sid)
-
   }, eager_loader: (proc do |eo|
     eo[:rows].each{|geographical_area| geographical_area.associations[:contained_geographical_areas] = []}
 

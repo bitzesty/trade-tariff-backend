@@ -68,22 +68,6 @@ FactoryGirl.define do
     }
   end
 
-  factory :geographical_area do
-    geographical_area_sid { generate(:sid) }
-    geographical_area_id { Forgery(:basic).text(exactly: 2) }
-    geographical_code { Forgery(:basic).text(exactly: 2) }
-    validity_start_date { Date.today.ago(3.years) }
-    validity_end_date   { nil }
-
-    trait :fifteen_years do
-      validity_start_date { Date.today.ago(15.years) }
-    end
-
-    trait :erga_omnes do
-      geographical_area_id { "1011" }
-    end
-  end
-
   factory :quota_definition do
     quota_definition_sid   { generate(:sid) }
     quota_order_number_sid { generate(:sid) }
