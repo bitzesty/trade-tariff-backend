@@ -33,7 +33,8 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 
   config.before(:suite) do
-    Sequel::Model.db.tables.each{|table| Sequel::Model.db.from(table).truncate}
+    Sequel::Model.db.tables.delete_if{|t| t == 'schema_migrations' }
+                           .each{|table| Sequel::Model.db.from(table).truncate}
   end
 
   config.around(:each) do |example|

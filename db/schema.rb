@@ -166,7 +166,7 @@ Sequel.migration do
       column :updated_at, "datetime"
       column :national, "tinyint(1)"
 
-      index [:certificate_type_code], :name=>:primary_key, :unique=>true
+      index [:certificate_type_code, :validity_start_date], :name=>:primary_key
     end
 
     create_table(:certificates) do
@@ -1537,6 +1537,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20121015072148_drop_tamf_le_tsmp.rb")
     self[:schema_migrations].insert(:filename => "20121019094932_convert_san_marino_to_italy_on_national_measures.rb")
     self[:schema_migrations].insert(:filename => "20121022135253_add_currency_abbreviation.rb")
+    self[:schema_migrations].insert(:filename => "20121012080652_modify_primary_keys.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"
