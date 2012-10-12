@@ -22,8 +22,6 @@ gem "nokogiri", "1.5.4"
 
 gem "whenever", "0.7.3"
 
-gem "pry-rails"
-
 group :assets do
   gem "bootstrap-sass"
   gem "sass-rails"
@@ -34,6 +32,10 @@ end
 group :development do
   gem "capistrano"
   gem "guard-rspec"
+end
+
+group :development, :test do
+  gem "pry-rails"
 end
 
 group :test do
