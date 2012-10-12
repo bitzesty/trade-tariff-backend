@@ -1,6 +1,6 @@
 require 'spec_helper'
 
 describe DutyExpression do
-  describe 'validtions' do
+  describe 'validations' do
   end
 end
