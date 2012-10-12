@@ -18,17 +18,17 @@ describe Certificate do
       context 'direct loading' do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
-            certificate.certificate_description.primary_key.should == certificate_description1.primary_key
+            certificate.certificate_description.pk.should == certificate_description1.pk
           end
         end
 
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
-            certificate.certificate_description.primary_key.should == certificate_description1.primary_key
+            certificate.certificate_description.pk.should == certificate_description1.pk
           end
 
           TimeMachine.at(3.years.ago) do
-            certificate.certificate_description.primary_key.should == certificate_description2.primary_key
+            certificate.reload.certificate_description.pk.should == certificate_description2.pk
           end
         end
       end
@@ -41,7 +41,7 @@ describe Certificate do
                         .eager(:certificate_description)
                         .all
                         .first
-                        .certificate_description.primary_key.should == certificate_description1.primary_key
+                        .certificate_description.pk.should == certificate_description1.pk
           end
         end
 
@@ -52,16 +52,16 @@ describe Certificate do
                         .eager(:certificate_description)
                         .all
                         .first
-                        .certificate_description.primary_key.should == certificate_description1.primary_key
+                        .certificate_description.pk.should == certificate_description1.pk
           end
 
-          TimeMachine.at(3.years.ago) do
+          TimeMachine.at(4.years.ago) do
             Certificate.where(certificate_type_code: certificate.certificate_type_code,
                               certificate_code: certificate.certificate_code)
-                        .eager(:certificate_description)
-                        .all
-                        .first
-                        .certificate_description.primary_key.should == certificate_description2.primary_key
+                       .eager(:certificate_description)
+                       .all
+                       .first
+                       .certificate_description.pk.should == certificate_description2.pk
           end
         end
       end
@@ -79,17 +79,17 @@ describe Certificate do
       context 'direct loading' do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
-            certificate.certificate_type.primary_key.should == certificate_type1.primary_key
+            certificate.certificate_type.pk.should == certificate_type1.pk
           end
         end
 
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
-            certificate.certificate_type.primary_key.should == certificate_type1.primary_key
+            certificate.certificate_type.pk.should == certificate_type1.pk
           end
 
           TimeMachine.at(3.years.ago) do
-            certificate.certificate_type.primary_key.should == certificate_type2.primary_key
+            certificate.reload.certificate_type.pk.should == certificate_type2.pk
           end
         end
       end
@@ -102,7 +102,7 @@ describe Certificate do
                         .eager(:certificate_type)
                         .all
                         .first
-                        .certificate_type.primary_key.should == certificate_type1.primary_key
+                        .certificate_type.pk.should == certificate_type1.pk
           end
         end
 
@@ -113,7 +113,7 @@ describe Certificate do
                         .eager(:certificate_type)
                         .all
                         .first
-                        .certificate_type.primary_key.should == certificate_type1.primary_key
+                        .certificate_type.pk.should == certificate_type1.pk
           end
 
           TimeMachine.at(3.years.ago) do
@@ -122,7 +122,7 @@ describe Certificate do
                         .eager(:certificate_type)
                         .all
                         .first
-                        .certificate_type.primary_key.should == certificate_type2.primary_key
+                        .certificate_type.pk.should == certificate_type2.pk
           end
         end
       end

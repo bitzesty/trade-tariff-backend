@@ -16,17 +16,17 @@ describe GeographicalArea do
       context 'direct loading' do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
-            geographical_area.geographical_area_description.primary_key.should == geographical_area_description1.primary_key
+            geographical_area.geographical_area_description.pk.should == geographical_area_description1.pk
           end
         end
 
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
-            geographical_area.geographical_area_description.primary_key.should == geographical_area_description1.primary_key
+            geographical_area.geographical_area_description.pk.should == geographical_area_description1.pk
           end
 
           TimeMachine.at(3.years.ago) do
-            geographical_area.geographical_area_description.primary_key.should == geographical_area_description2.primary_key
+            geographical_area.reload.geographical_area_description.pk.should == geographical_area_description2.pk
           end
         end
       end
@@ -38,7 +38,7 @@ describe GeographicalArea do
                           .eager(:geographical_area_description)
                           .all
                           .first
-                          .geographical_area_description.primary_key.should == geographical_area_description1.primary_key
+                          .geographical_area_description.pk.should == geographical_area_description1.pk
           end
         end
 
@@ -48,7 +48,7 @@ describe GeographicalArea do
                           .eager(:geographical_area_description)
                           .all
                           .first
-                          .geographical_area_description.primary_key.should == geographical_area_description1.primary_key
+                          .geographical_area_description.pk.should == geographical_area_description1.pk
           end
 
           TimeMachine.at(3.years.ago) do
@@ -56,7 +56,7 @@ describe GeographicalArea do
                           .eager(:geographical_area_description)
                           .all
                           .first
-                          .geographical_area_description.primary_key.should == geographical_area_description2.primary_key
+                          .geographical_area_description.pk.should == geographical_area_description2.pk
           end
         end
       end
@@ -90,7 +90,7 @@ describe GeographicalArea do
           end
 
           TimeMachine.at(4.years.ago) do
-            # geographical_area.contained_geographical_areas.map(&:pk).should include contained_area_past.pk
+            geographical_area.reload.contained_geographical_areas.map(&:pk).should include contained_area_past.pk
           end
         end
       end
@@ -131,5 +131,18 @@ describe GeographicalArea do
   end
 
   describe 'validations' do
+  end
+
+  describe '#iso_code' do
+    let(:geographical_area)                { build :geographical_area, geographical_area_id: 'UK' }
+    let(:geographical_area_group)          { build :geographical_area, geographical_area_id: 'Europe' }
+
+    it 'returns geographical area id if it is composed of two characters (a country)' do
+      geographical_area.iso_code.should == 'UK'
+    end
+
+    it 'returns nil if geographical area id is longer than two characters (country group)' do
+      geographical_area_group.iso_code.should be_blank
+    end
   end
 end

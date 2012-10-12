@@ -18,17 +18,17 @@ describe Footnote do
       context 'direct loading' do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
-            footnote.footnote_description.primary_key.should == footnote_description1.primary_key
+            footnote.footnote_description.pk.should == footnote_description1.pk
           end
         end
 
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
-            footnote.footnote_description.primary_key.should == footnote_description1.primary_key
+            footnote.footnote_description.pk.should == footnote_description1.pk
           end
 
           TimeMachine.at(3.years.ago) do
-            footnote.footnote_description.primary_key.should == footnote_description2.primary_key
+            footnote.reload.footnote_description.pk.should == footnote_description2.pk
           end
         end
       end
@@ -41,7 +41,7 @@ describe Footnote do
                           .eager(:footnote_description)
                           .all
                           .first
-                          .footnote_description.primary_key.should == footnote_description1.primary_key
+                          .footnote_description.pk.should == footnote_description1.pk
           end
         end
 
@@ -52,7 +52,7 @@ describe Footnote do
                           .eager(:footnote_description)
                           .all
                           .first
-                          .footnote_description.primary_key.should == footnote_description1.primary_key
+                          .footnote_description.pk.should == footnote_description1.pk
           end
 
           TimeMachine.at(3.years.ago) do
@@ -61,7 +61,7 @@ describe Footnote do
                           .eager(:footnote_description)
                           .all
                           .first
-                          .footnote_description.primary_key.should == footnote_description2.primary_key
+                          .footnote_description.pk.should == footnote_description2.pk
           end
         end
       end

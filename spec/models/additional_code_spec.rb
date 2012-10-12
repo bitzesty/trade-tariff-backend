@@ -16,17 +16,17 @@ describe AdditionalCode do
       context 'direct loading' do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
-            additional_code.additional_code_description.primary_key.should == additional_code_description1.primary_key
+            additional_code.additional_code_description.pk.should == additional_code_description1.pk
           end
         end
 
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
-            additional_code.additional_code_description.primary_key.should == additional_code_description1.primary_key
+            additional_code.additional_code_description.pk.should == additional_code_description1.pk
           end
 
           TimeMachine.at(3.years.ago) do
-            additional_code.additional_code_description.primary_key.should == additional_code_description2.primary_key
+            additional_code.reload.additional_code_description.pk.should == additional_code_description2.pk
           end
         end
       end
@@ -38,7 +38,7 @@ describe AdditionalCode do
                           .eager(:additional_code_description)
                           .all
                           .first
-                          .additional_code_description.primary_key.should == additional_code_description1.primary_key
+                          .additional_code_description.pk.should == additional_code_description1.pk
           end
         end
 
@@ -48,7 +48,7 @@ describe AdditionalCode do
                           .eager(:additional_code_description)
                           .all
                           .first
-                          .additional_code_description.primary_key.should == additional_code_description1.primary_key
+                          .additional_code_description.pk.should == additional_code_description1.pk
           end
 
           TimeMachine.at(3.years.ago) do
@@ -56,7 +56,7 @@ describe AdditionalCode do
                           .eager(:additional_code_description)
                           .all
                           .first
-                          .additional_code_description.primary_key.should == additional_code_description2.primary_key
+                          .additional_code_description.pk.should == additional_code_description2.pk
           end
         end
       end
