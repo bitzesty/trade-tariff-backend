@@ -24,6 +24,62 @@ describe Heading do
         heading.measures.map(&:measure_sid).should_not include measure.measure_sid
       end
     end
+
+    describe 'commodities' do
+      let!(:heading)    { create :heading }
+      let!(:commodity1) { create :commodity, goods_nomenclature_item_id: "#{heading.goods_nomenclature_item_id.first(4)}100000",
+                                         validity_start_date: 10.years.ago,
+                                         validity_end_date: nil }
+      let!(:commodity2) { create :commodity, goods_nomenclature_item_id: "#{heading.goods_nomenclature_item_id.first(4)}200000",
+                                         validity_start_date: 2.years.ago,
+                                         validity_end_date: nil }
+      let!(:commodity3) { create :commodity, goods_nomenclature_item_id: "#{heading.goods_nomenclature_item_id.first(4)}300000",
+                                         validity_start_date: 10.years.ago,
+                                         validity_end_date: 8.years.ago }
+
+      around(:each) do |example|
+        TimeMachine.at(1.year.ago) do
+          example.run
+        end
+      end
+
+      it 'returns commodities matched by part of own goods nomenclature item id' do
+        heading.commodities.should include commodity1
+      end
+
+      it 'returns relevant by actual time commodities' do
+        heading.commodities.should include commodity2
+      end
+
+      it 'does not return commodity that is irrelevant to given time' do
+        heading.commodities.should_not include commodity3
+      end
+    end
+
+    describe 'chapter' do
+      let!(:heading)    { create :heading }
+      let!(:chapter1) { create :chapter, goods_nomenclature_item_id: "#{heading.goods_nomenclature_item_id.first(2)}00000000",
+                                         validity_start_date: 10.years.ago,
+                                         validity_end_date: nil }
+      let!(:chapter2) { create :chapter, goods_nomenclature_item_id: "#{heading.goods_nomenclature_item_id.first(2)}00000000",
+                                         validity_start_date: 10.years.ago,
+                                         validity_end_date: 8.years.ago }
+
+
+      around(:each) do |example|
+        TimeMachine.at(1.year.ago) do
+          example.run
+        end
+      end
+
+      it 'returns chapter matched by part of own goods nomenclature item id' do
+        heading.chapter.should eq chapter1
+      end
+
+      it 'does not return commodity that is irrelevant to given time' do
+        heading.chapter.should_not eq chapter2
+      end
+    end
   end
 
   describe '#declarable' do
