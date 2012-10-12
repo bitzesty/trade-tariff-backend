@@ -104,4 +104,41 @@ FactoryGirl.define do
       }
     end
   end
+
+  factory :goods_nomenclature_indent do
+    goods_nomenclature_sid { generate(:sid) }
+    goods_nomenclature_indent_sid { generate(:sid) }
+    number_indents { Forgery(:basic).number }
+    validity_start_date { Date.today.ago(3.years) }
+    validity_end_date   { nil }
+  end
+
+  factory :goods_nomenclature_description_period do
+    goods_nomenclature_sid { generate(:sid) }
+    goods_nomenclature_description_period_sid { generate(:sid) }
+    validity_start_date { Date.today.ago(3.years) }
+    validity_end_date   { nil }
+  end
+
+  factory :goods_nomenclature_description do
+    ignore do
+      validity_start_date { Date.today.ago(3.years) }
+      validity_end_date { nil }
+      valid_at Time.now.ago(2.years)
+      valid_to nil
+    end
+
+    goods_nomenclature_sid { generate(:sid) }
+    description { Forgery(:basic).text }
+    goods_nomenclature_description_period_sid { generate(:sid) }
+
+    after(:create) { |gono_description, evaluator|
+      FactoryGirl.create(:goods_nomenclature_description_period, goods_nomenclature_description_period_sid: gono_description.goods_nomenclature_description_period_sid,
+                                                              goods_nomenclature_sid: gono_description.goods_nomenclature_sid,
+                                                              goods_nomenclature_item_id: gono_description.goods_nomenclature_item_id,
+                                                              validity_start_date: evaluator.valid_at,
+                                                              validity_end_date: evaluator.valid_to)
+    }
+  end
+
 end
