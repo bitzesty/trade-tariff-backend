@@ -28,7 +28,7 @@ class TariffUrlMapper
     if opts[:simulationDate]
       use_date = opts[:simulationDate]
     else
-      use_date = Date.parse("2012-10-02")
+      use_date = Date.today
     end
 
     @date = "simulationDate=#{use_date.strftime("%d/%m/%y")}&"
