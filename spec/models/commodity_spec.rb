@@ -30,11 +30,13 @@ describe Commodity do
       let(:measure1)     { create :measure, :with_base_regulation,
                                              measure_sid: 1,
                                              measure_type_id: measure_type.measure_type_id,
-                                             goods_nomenclature_sid: commodity.goods_nomenclature_sid  }
+                                             goods_nomenclature_sid: commodity.goods_nomenclature_sid,
+                                             validity_start_date: Date.today.ago(1.year)  }
       let(:measure2)     { create :measure,  measure_sid: 2,
                                              measure_generating_regulation_id: measure1.measure_generating_regulation_id,
                                              measure_type_id: measure_type.measure_type_id,
-                                             goods_nomenclature_sid: commodity.goods_nomenclature_sid  }
+                                             goods_nomenclature_sid: commodity.goods_nomenclature_sid,
+                                             validity_start_date: Date.today.ago(2.years)  }
 
       it 'groups measures by measure_generating_regulation_id and picks latest one' do
         measure1
