@@ -21,7 +21,7 @@ class Heading < GoodsNomenclature
   }
 
   one_to_many :third_country_duty, dataset: -> {
-    MeasureComponent.where(measure: import_measures_dataset.where(measure_type: MeasureType::THIRD_COUNTRY).all)
+    MeasureComponent.where(measure: import_measures_dataset.where(measures__measure_type: MeasureType::THIRD_COUNTRY).all)
   }, class_name: 'MeasureComponent'
 
 
