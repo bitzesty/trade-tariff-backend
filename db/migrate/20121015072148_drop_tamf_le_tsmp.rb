@@ -16,7 +16,7 @@ Sequel.migration do
 
   down do
     alter_table :chief_tamf do
-      drop_column :le_tsmp
+      add_column :le_tsmp, DateTime
       rename_column :processed, :transformed
     end
 
