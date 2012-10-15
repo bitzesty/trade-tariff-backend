@@ -38,6 +38,7 @@ module TariffSynchronizer
       begin
         crawler = Curl::Easy.new(url)
         crawler.ssl_verify_peer = false
+        crawler.ssl_verify_host = false
         crawler.http_auth_types = :basic
         crawler.username = TariffSynchronizer.username
         crawler.password = TariffSynchronizer.password
