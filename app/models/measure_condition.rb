@@ -184,7 +184,7 @@ class MeasureCondition < Sequel::Model
     when :duty_expression
       {
         sequence_number: component_sequence_number,
-        condition_amount: condition_duty_amount,
+        duty_amount: condition_duty_amount,
         monetary_unit: condition_monetary_unit_code,
         measurement_unit: measurement_unit.try(:description),
         measurement_unit_qualifier: measurement_unit_qualifier.try(:description)
