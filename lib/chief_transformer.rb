@@ -52,7 +52,9 @@ class ChiefTransformer
         candidate_measures.uniq
         candidate_measures.persist
 
-        [Chief::Mfcm, Chief::Tame, Chief::Tamf].each{|model| model.update processed: true }
+        [Chief::Mfcm, Chief::Tame, Chief::Tamf].each{|model|
+          model.unprocessed.update(processed: true)
+        }
       end
     when :update
       processor = Processor.new(Chief::Mfcm.unprocessed.all,

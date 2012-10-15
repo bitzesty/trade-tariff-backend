@@ -36,9 +36,9 @@ namespace :tariff do
       # Apply pending updates (use TariffImporter to import record to database)
       TariffSynchronizer.apply
       # Transform imported intermediate Chief records to insert/change national measures
-      # Rake::Task['tariff:sync:transform'].execute
+      Rake::Task['tariff:sync:transform'].execute
       # Reindex ElasticSearch to see new/updated commodities
-      # Rake::Task['tariff:reindex'].execute
+      Rake::Task['tariff:reindex'].execute
     end
 
     desc "Transform Chief data into taric and save"
