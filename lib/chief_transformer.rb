@@ -4,7 +4,6 @@ require 'date'
 require 'logger'
 require 'sequel-rails'
 require 'chief_transformer/candidate_measure'
-require 'chief_transformer/measure_builders/paginated_mfcm_builder'
 require 'chief_transformer/processor'
 require 'chief_transformer/measure_logger'
 
@@ -52,21 +51,13 @@ class ChiefTransformer
         candidate_measures.sort
         candidate_measures.uniq
         candidate_measures.persist
+
+        [Chief::Mfcm, Chief::Tame, Chief::Tamf].each{|model| model.update processed: true }
       end
     when :update
-      processor = Processor.new(Chief::Mfcm.untransformed.all,
-                                Chief::Tame.untransformed.all)
+      processor = Processor.new(Chief::Mfcm.unprocessed.all,
+                                Chief::Tame.unprocessed.all)
       processor.process
-    end
-
-    clean
-  end
-
-  private
-
-  def clean
-    [Chief::Mfcm, Chief::Tame, Chief::Tamf].each do |chief_model|
-      chief_model.where(transformed: false).update transformed: true
     end
   end
 end

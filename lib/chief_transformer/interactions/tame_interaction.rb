@@ -49,11 +49,8 @@ class ChiefTransformer
                .each do |measure|
                  if tame.has_tamfs?
                    tame.tamfs.each do |tamf|
-                     measure.measure_components_dataset.destroy
-                     tamf.measure_components.each do |mc|
-                       mc.measure_sid = measure.measure_sid
-                       mc.save
-                     end
+                     build_tamf_measure_components(measure, tamf.measure_components)
+                     build_excluded_geographical_areas(measure, tamf.geographical_area)
                    end
                  else
                   if tame_component = measure.measure_components
@@ -63,6 +60,41 @@ class ChiefTransformer
                     # TODO implement component creation if needed
                   end
                 end
+        end
+      end
+
+      private
+
+      def build_tamf_measure_components(measure, measure_components)
+        measure.measure_components_dataset.destroy
+
+        measure_components.each do |mc|
+          mc.measure_sid = measure.measure_sid
+          mc.save
+        end
+      end
+
+      def build_excluded_geographical_areas(measure, chief_geographical_area)
+        if chief_geographical_area.present?
+          measure.remove_all_excluded_geographical_areas
+
+          exclusion_entry = Chief::CountryGroup.where(chief_country_grp: chief_geographical_area).first
+          if exclusion_entry.present? && exclusion_entry.country_exclusions.present?
+            exclusion_entry.country_exclusions.split(",").each do |excluded_chief_code|
+              excluded_geographical_area = GeographicalArea.where(geographical_area_id: Chief::CountryCode.to_taric(excluded_chief_code))
+                                                           .latest
+                                                           .first
+
+              if excluded_geographical_area.present?
+                exclusion = MeasureExcludedGeographicalArea.new do |mega|
+                  mega.geographical_area_sid = excluded_geographical_area.geographical_area_sid
+                  mega.excluded_geographical_area = excluded_geographical_area.geographical_area_id
+                  mega.measure_sid = measure.measure_sid
+                end
+                exclusion.save
+              end
+            end
+          end
         end
       end
     end

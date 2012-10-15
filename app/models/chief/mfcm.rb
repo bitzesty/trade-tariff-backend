@@ -46,8 +46,8 @@ module Chief
                                                  class_name: 'Chief::MeasureTypeAdco'
 
     dataset_module do
-      def untransformed
-        filter(transformed: false)
+      def unprocessed
+        filter(processed: false)
       end
 
       def valid_to(timestamp)
@@ -64,6 +64,10 @@ module Chief
 
       errors.add(:name, 'cannot be seasonal commodity code') if cmdty_code.match(/\D/)
       errors.add(:name, 'cannot be pseudo commodity code') if cmdty_code.first(2) == "99"
+    end
+
+    def mark_as_processed!
+      update processed: true
     end
 
     def measure_type_adco

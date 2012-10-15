@@ -33,8 +33,8 @@ module Chief
     }
 
     dataset_module do
-      def untransformed
-        filter(transformed: false)
+      def unprocessed
+        filter(processed: false)
       end
     end
 
@@ -43,15 +43,14 @@ module Chief
     def spfc1_rate; 0; end
     def spfc2_rate; 0; end
 
-    def has_tamfs?
-      tamfs.any?
+    def mark_as_processed!
+      update processed: true
+
+      tamfs.each(&:mark_as_processed!)
     end
 
-    def was_processed?
-      mfcms_dataset.where(amend_indicator: ["I", "U"])
-                   .untransformed
-                   .order(:audit_tsmp.asc)
-                   .any?
+    def has_tamfs?
+      tamfs.any?
     end
 
     def audit_tsmp

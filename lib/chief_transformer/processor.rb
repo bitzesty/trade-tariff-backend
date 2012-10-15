@@ -10,7 +10,15 @@ class ChiefTransformer
 
     def process
       operations.each do |operation|
-        operator_for(operation).new(operation).process
+        Sequel::Model.db.transaction do
+          begin
+            operator_for(operation).new(operation).process
+
+            operation.mark_as_processed!
+          rescue Exception => e
+            raise ChiefTransformer::TransformException.new("Could not transform: #{operation.inspect}")
+          end
+        end
       end
     end
 
@@ -30,6 +38,8 @@ class ChiefTransformer
                   "Delete"
                 when "U"
                   "Update"
+                else
+                  "Insert"
                 end
       }
     end

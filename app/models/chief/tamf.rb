@@ -48,9 +48,17 @@ module Chief
     def spfc2_rate_key; spfc2_rate.present?; end
 
     dataset_module do
-      def untransformed
-        filter(transformed: false)
+      def unprocessed
+        filter(processed: false)
       end
+    end
+
+    def mark_as_processed!
+      update processed: true
+    end
+
+    def geographical_area
+      tamf.cngp_code.presence || tamf.cntry_orig.presence || tamf.cntry_disp.presence
     end
 
     def measurement_unit(cmpd_uoq, uoq)
