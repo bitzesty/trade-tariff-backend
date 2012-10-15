@@ -328,12 +328,12 @@ FactoryGirl.define do
       }
     end
 
-    trait :untransformed do
-      transformed { false }
+    trait :unprocessed do
+      processed { false }
     end
 
-    trait :transformed do
-      transformed { true }
+    trait :processed do
+      processed { true }
     end
 
     trait :with_tame do
@@ -501,12 +501,12 @@ FactoryGirl.define do
       tty_code { nil }
     end
 
-    trait :untransformed do
-      transformed { false }
+    trait :unprocessed do
+      processed { false }
     end
 
-    trait :transformed do
-      transformed { true }
+    trait :processed do
+      processed { true }
     end
   end
 
@@ -518,18 +518,17 @@ FactoryGirl.define do
     tty_code { Forgery(:basic).text(exactly: 3) }
     adval1_rate { nil }
     spfc1_rate { nil }
-    le_tsmp  { nil }
 
     trait :prohibition do
       tty_code { nil }
     end
 
-    trait :untransformed do
-      transformed { false }
+    trait :unprocessed do
+      processed { false }
     end
 
-    trait :transformed do
-      transformed { true }
+    trait :processed do
+      processed { true }
     end
   end
 

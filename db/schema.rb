@@ -277,7 +277,7 @@ Sequel.migration do
       column :null_tri_rqd, "varchar(255)"
       column :exports_use_ind, "tinyint(1)"
       column :tar_msr_no, "varchar(12)"
-      column :transformed, "tinyint(1)", :default=>false
+      column :processed, "tinyint(1)", :default=>false
       column :amend_indicator, "varchar(1)"
       column :origin, "varchar(30)"
 
@@ -318,7 +318,7 @@ Sequel.migration do
       column :rfs_code_5, "varchar(255)"
       column :tdr_spr_sur, "varchar(255)"
       column :exports_use_ind, "tinyint(1)"
-      column :transformed, "tinyint(1)", :default=>false
+      column :processed, "tinyint(1)", :default=>false
       column :amend_indicator, "varchar(1)"
       column :origin, "varchar(30)"
 
@@ -331,7 +331,6 @@ Sequel.migration do
       column :msr_type, "varchar(5)"
       column :tty_code, "varchar(5)"
       column :tar_msr_no, "varchar(12)"
-      column :le_tsmp, "datetime"
       column :adval1_rate, "decimal(8,3)"
       column :adval2_rate, "decimal(8,3)"
       column :ai_factor, "varchar(255)"
@@ -354,7 +353,7 @@ Sequel.migration do
       column :tamf_dt, "varchar(255)"
       column :tamf_sta, "varchar(255)"
       column :tamf_ty, "varchar(255)"
-      column :transformed, "tinyint(1)", :default=>false
+      column :processed, "tinyint(1)", :default=>false
       column :amend_indicator, "varchar(1)"
       column :origin, "varchar(30)"
 
@@ -1534,6 +1533,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20121008181507_manual_add_abbreviations.rb")
     self[:schema_migrations].insert(:filename => "20121009092643_change_asx_to_asv.rb")
     self[:schema_migrations].insert(:filename => "20121009120028_add_tariff_measure_number.rb")
+    self[:schema_migrations].insert(:filename => "20121015072148_drop_tamf_le_tsmp.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"

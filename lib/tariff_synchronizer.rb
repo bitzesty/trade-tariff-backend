@@ -110,6 +110,14 @@ module TariffSynchronizer
     end
   end
 
+  # Builds tariff_update entries from files available in the
+  # TariffSynchronizer.root_path directories.
+  #
+  # Warning: rebuilt updates will be marked as pending.
+  def rebuild
+    [TaricUpdate, ChiefUpdate].map(&:rebuild)
+  end
+
   # Initial update day for specific update type
   def initial_update_for(update_type)
     send("#{update_type}_initial_update".to_sym)

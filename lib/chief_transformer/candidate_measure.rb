@@ -238,7 +238,7 @@ class ChiefTransformer
         candidate_associations.push(:measure_conditions, taric_measure_condition)
       end
 
-      self.chief_geographical_area = tamf.cngp_code.presence || tamf.cntry_orig.presence || tamf.cntry_disp.presence || DEFAULT_GEOGRAPHICAL_AREA_ID
+      self.chief_geographical_area = tamf.geographical_area.presence || DEFAULT_GEOGRAPHICAL_AREA_ID
     end
 
     def build_components

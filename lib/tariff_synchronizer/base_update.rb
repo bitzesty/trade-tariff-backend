@@ -81,5 +81,15 @@ module TariffSynchronizer
        TariffSynchronizer.initial_update_for(update_type)
       end
     end
+
+    def self.parse_file_path(file_path)
+      file_name = Pathname.new(file_path).basename.to_s
+      file_name.match(/^(\d{4}-\d{2}-\d{2})_(.*)$/)[1,2]
+    end
+
+    def self.entry_exists_for?(date, file_name)
+      where(issue_date: date,
+            filename: "#{date}_#{file_name}").any?
+    end
   end
 end

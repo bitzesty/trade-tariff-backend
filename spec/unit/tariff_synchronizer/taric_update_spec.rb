@@ -105,4 +105,37 @@ describe TariffSynchronizer::TaricUpdate do
 
     after  { purge_synchronizer_folders }
   end
+
+  describe '.rebuild' do
+    before {
+      prepare_synchronizer_folders
+      create_taric_file :pending, example_date
+    }
+
+    context 'entry for the day/update does not exist yet' do
+      it 'creates db record from available file name' do
+        TariffSynchronizer::BaseUpdate.count.should == 0
+
+        TariffSynchronizer::TaricUpdate.rebuild
+
+        TariffSynchronizer::BaseUpdate.count.should == 1
+        first_update = TariffSynchronizer::BaseUpdate.first
+        first_update.issue_date.should == example_date
+      end
+    end
+
+    context 'entry for the day/update exists already' do
+      let!(:example_taric_update) { create :taric_update, example_date: example_date }
+
+      it 'does not create db record if it is already available for the day/update type combo' do
+        TariffSynchronizer::BaseUpdate.count.should == 1
+
+        TariffSynchronizer::TaricUpdate.rebuild
+
+        TariffSynchronizer::BaseUpdate.count.should == 1
+      end
+    end
+
+    after  { purge_synchronizer_folders }
+  end
 end
