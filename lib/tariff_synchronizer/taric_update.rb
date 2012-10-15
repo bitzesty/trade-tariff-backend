@@ -32,6 +32,14 @@ module TariffSynchronizer
       "#{date}_TGB#{date.strftime("%y")}#{date.yday}.xml"
     end
 
+    def self.rebuild
+      Dir[File.join(Rails.root, TariffSynchronizer.root_path, 'taric', '*.xml')].each do |file_path|
+        date, file_name = parse_file_path(file_path)
+
+        create_update_entry(date, file_name, "TaricUpdate") unless entry_exists_for?(date, file_name)
+      end
+    end
+
     private
 
     def self.get_taric_path(date)

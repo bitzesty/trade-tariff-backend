@@ -28,5 +28,13 @@ module TariffSynchronizer
     def self.update_type
       :chief
     end
+
+    def self.rebuild
+      Dir[File.join(Rails.root, TariffSynchronizer.root_path, 'chief', '*.txt')].each do |file_path|
+        date, file_name = parse_file_path(file_path)
+
+        create_update_entry(date, file_name, "ChiefUpdate") unless entry_exists_for?(date, file_name)
+      end
+    end
   end
 end
