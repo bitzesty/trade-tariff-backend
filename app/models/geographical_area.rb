@@ -104,7 +104,7 @@ class GeographicalArea < Sequel::Model
   end
 
   def iso_code
-    (geographical_area_id.size == 2) ? geographical_area_id : nil
+    geographical_area_id
   end
 end
 
