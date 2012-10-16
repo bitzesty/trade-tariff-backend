@@ -16,9 +16,14 @@ class MeasurePresenter
     if @collection.select{|m| m.measure_type_id == THIRD_COUNTRY_DUTY_ID}.size > 1
       @collection.delete_if { |m| m.measure_type_id == THIRD_COUNTRY_DUTY_ID &&
                                   m.goods_nomenclature_sid != @declarable.goods_nomenclature_sid }
-    else
-      @collection
     end
+
+    if @collection.select{|m| m.measure_type_id == 'VTS'}.any?
+      @collection.delete_if { |m| m.measure_type_id == 'VTS' &&
+                                  m.goods_nomenclature_sid != @declarable.goods_nomenclature_sid }
+    end
+
+    @collection
   end
 
   def method_missing(*args, &block)
