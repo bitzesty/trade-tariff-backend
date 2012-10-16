@@ -24,10 +24,11 @@ class MeasurePresenter
                                   m.goods_nomenclature_sid != @declarable.goods_nomenclature_sid }
     end
 
-    if @collection.select{|m| m.measure_type_id == 'VTZ'}.any?
-      @collection.delete_if { |m| m.measure_type_id == 'VTZ' &&
-                                  m.goods_nomenclature_sid != @declarable.goods_nomenclature_sid }
-    end
+    # TODO to be resolved, check 2008992300
+    # if @collection.select{|m| m.measure_type_id == 'VTZ'}.any?
+    #   @collection.delete_if { |m| m.measure_type_id == 'VTZ' &&
+    #                               m.goods_nomenclature_sid != @declarable.goods_nomenclature_sid }
+    # end
 
     @collection
   end
