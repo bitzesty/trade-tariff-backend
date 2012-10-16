@@ -25,7 +25,6 @@ class ApplicationController < ActionController::Base
   end
 
   def render_error(exception)
-    notify_airbrake(exception)
     logger.error exception
     logger.error exception.backtrace
 
