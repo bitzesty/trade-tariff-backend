@@ -10,7 +10,7 @@ module Api
                           .take
 
         if @heading.declarable?
-          @measures = @heading.measures_dataset.eager({geographical_area: [:geographical_area_description, :children_geographical_areas]},
+          @measures = MeasurePresenter.new(@heading.measures_dataset.eager({geographical_area: [:geographical_area_description, :children_geographical_areas]},
                                                       {footnotes: :footnote_description},
                                                       {measure_type: :measure_type_description},
                                                       {measure_components: [:duty_expression,
@@ -29,7 +29,7 @@ module Api
                                                       {excluded_geographical_areas: :geographical_area_description},
                                                       :additional_code,
                                                       :full_temporary_stop_regulation,
-                                                      :measure_partial_temporary_stop).all
+                                                      :measure_partial_temporary_stop).all, @measure)
         else
           @commodities = GoodsNomenclatureMapper.new(@heading.commodities_dataset.eager(:goods_nomenclature_indent,
                                                                                         :goods_nomenclature_description).all).all
