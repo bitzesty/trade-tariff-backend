@@ -18,6 +18,7 @@ class GoodsNomenclature < Sequel::Model
 
     GoodsNomenclatureIndent.actual
                            .where(goods_nomenclature_sid: id_map.keys)
+                           .order(:validity_start_date.desc)
                            .group(:goods_nomenclature_sid)
                            .all do |indent|
       if gonos = id_map[indent.goods_nomenclature_sid]
@@ -32,6 +33,7 @@ class GoodsNomenclature < Sequel::Model
     GoodsNomenclatureDescription.with_actual(GoodsNomenclatureDescriptionPeriod)
                                 .join(:goods_nomenclature_description_periods, goods_nomenclature_description_periods__goods_nomenclature_description_period_sid: :goods_nomenclature_descriptions__goods_nomenclature_description_period_sid,
                                                                                goods_nomenclature_description_periods__goods_nomenclature_sid: :goods_nomenclature_descriptions__goods_nomenclature_sid)
+                                .order(:validity_start_date.desc)
                                 .where(goods_nomenclature_descriptions__goods_nomenclature_sid: goods_nomenclature_sid)
   }, eager_loader: (proc do |eo|
     eo[:rows].each{|gono| gono.associations[:goods_nomenclature_description] = nil}
@@ -40,6 +42,7 @@ class GoodsNomenclature < Sequel::Model
     GoodsNomenclatureDescription.with_actual(GoodsNomenclatureDescriptionPeriod)
                                 .join(:goods_nomenclature_description_periods, goods_nomenclature_description_periods__goods_nomenclature_description_period_sid: :goods_nomenclature_descriptions__goods_nomenclature_description_period_sid,
                                                                                goods_nomenclature_description_periods__goods_nomenclature_sid: :goods_nomenclature_descriptions__goods_nomenclature_sid)
+                                .order(:validity_start_date.desc)
                                 .where(goods_nomenclature_descriptions__goods_nomenclature_sid: id_map.keys).all do |description|
       if gonos = id_map[description.goods_nomenclature_sid]
         gonos.each do |gono|
