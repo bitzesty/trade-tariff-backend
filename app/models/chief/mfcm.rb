@@ -9,7 +9,15 @@ module Chief
                 order(:audit_tsmp.asc)
 
 
-    set_primary_key [:msrgp_code, :msr_type, :tty_code, :cmdty_code, :fe_tsmp]
+    set_primary_key [:msrgp_code,
+                     :msr_type,
+                     :tty_code,
+                     :tar_msr_no,
+                     :cmdty_code,
+                     :fe_tsmp,
+                     :le_tsmp,
+                     :audit_tsmp,
+                     :amend_indicator]
 
     one_to_one :tame, key: {}, primary_key: {}, dataset: -> {
       Chief::Tame.filter{ |o| {:msrgp_code => msrgp_code} &
@@ -67,7 +75,7 @@ module Chief
     end
 
     def mark_as_processed!
-      update processed: true
+      self.this.unlimited.update(processed: true)
     end
 
     def measure_type_adco

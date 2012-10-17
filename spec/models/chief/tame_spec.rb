@@ -37,4 +37,21 @@ describe Chief::Tame do
       end
     end
   end
+
+  describe '#mark_as_processed!' do
+    let!(:tame) { create :tame, common_tame_attributes }
+    let!(:tamf) { create :tamf, common_tame_attributes }
+
+    it 'marks itself as processed' do
+      tame.processed.should be_false
+      tame.mark_as_processed!
+      tame.reload.processed.should be_true
+    end
+
+    it 'marks related tamfs as processed' do
+      tamf.processed.should be_false
+      tame.mark_as_processed!
+      tamf.reload.processed.should be_true
+    end
+  end
 end

@@ -6,7 +6,15 @@ module Chief
                 order_more(:tty_code.asc).
                 order_more(:fe_tsmp.asc)
 
-    set_primary_key [:msrgp_code, :msr_type, :tty_code, :cngp_code, :cntry_orig, :fe_tsmp]
+    set_primary_key [:msrgp_code,
+                     :msr_type,
+                     :tty_code,
+                     :tar_msr_no,
+                     :cngp_code,
+                     :cntry_disp,
+                     :cntry_orig,
+                     :fe_tsmp,
+                     :amend_indicator]
 
     one_to_many :measure_type_conds, key: [:measure_group_code, :measure_type],
                                      primary_key: [:msrgp_code, :msr_type],
@@ -54,7 +62,7 @@ module Chief
     end
 
     def mark_as_processed!
-      update processed: true
+      self.this.unlimited.update(processed: true)
     end
 
     def geographical_area

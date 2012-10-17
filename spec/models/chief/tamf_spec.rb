@@ -14,4 +14,14 @@ describe Chief::Tamf do
       end
     end
   end
+
+  describe '#mark_as_processed!' do
+    let!(:tamf) { create :tamf }
+
+    it 'marks itself as processed' do
+      tamf.processed.should be_false
+      tamf.mark_as_processed!
+      tamf.reload.processed.should be_true
+    end
+  end
 end

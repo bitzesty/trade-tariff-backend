@@ -3,7 +3,14 @@ module Chief
     set_dataset db[:chief_tame].
                 order(:audit_tsmp.asc)
 
-    set_primary_key [:msrgp_code, :msr_type, :tty_code, :fe_tsmp]
+    set_primary_key [:msrgp_code,
+                     :msr_type,
+                     :tty_code,
+                     :tar_msr_no,
+                     :fe_tsmp,
+                     :le_tsmp,
+                     :audit_tsmp,
+                     :amend_indicator]
 
     one_to_one :measure_type, key: {}, primary_key: {},
       dataset: -> { Chief::MeasureTypeAdco.where(chief_measure_type_adco__measure_group_code: msrgp_code,
@@ -44,7 +51,7 @@ module Chief
     def spfc2_rate; 0; end
 
     def mark_as_processed!
-      update processed: true
+      self.this.unlimited.update(processed: true)
 
       tamfs.each(&:mark_as_processed!)
     end

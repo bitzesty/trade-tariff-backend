@@ -24,4 +24,14 @@ describe Chief::Mfcm do
       end
     end
   end
+
+  describe '#mark_as_processed!' do
+    let!(:mfcm) { create :mfcm }
+
+    it 'marks itself as processed' do
+      mfcm.processed.should be_false
+      mfcm.mark_as_processed!
+      mfcm.reload.processed.should be_true
+    end
+  end
 end
