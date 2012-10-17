@@ -26,7 +26,6 @@ RSpec.configure do |config|
   config.alias_it_should_behave_like_to :it_results_in, "it results in"
   config.include RSpec::Rails::RequestExampleGroup, type: :request,
                                                     example_group: { file_path: /spec\/api/ }
-  config.include SynchronizerHelper
   config.include RescueHelper
   config.include ChiefDataHelper
 

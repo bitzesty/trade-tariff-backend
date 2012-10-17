@@ -20,6 +20,8 @@ class ChiefTransformer
             end
           end
         ].flatten.compact)
+        candidate_measures.sort
+        candidate_measures.uniq
         candidate_measures.log(record)
         candidate_measures.persist
       end

@@ -13,10 +13,9 @@ class ChiefTransformer
         Sequel::Model.db.transaction do
           begin
             operator_for(operation).new(operation).process
-
             operation.mark_as_processed!
           rescue Exception => e
-            raise ChiefTransformer::TransformException.new("Could not transform: #{operation.inspect}")
+            raise ChiefTransformer::TransformException.new("Could not transform: #{operation.inspect}. Exception: \n #{e}. Backtrace: \n #{e.backtrace.join("\n")}")
           end
         end
       end

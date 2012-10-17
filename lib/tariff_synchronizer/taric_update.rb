@@ -1,5 +1,5 @@
 require 'tariff_synchronizer/base_update'
-require 'tariff_synchronizer/file_service'
+require 'tariff_synchronizer/download_service'
 
 module TariffSynchronizer
   class TaricUpdate < BaseUpdate
@@ -9,8 +9,8 @@ module TariffSynchronizer
       if file_name = get_taric_path(date)
         taric_data_url = "#{TariffSynchronizer.host}/taric/#{file_name}"
         TariffSynchronizer.logger.info "Downloading Taric file for #{date} at: #{taric_data_url}"
-        FileService.get_content(taric_data_url).tap{|contents|
-          create_update_entry(date, file_name, "TaricUpdate") if file_written_for?(date, file_name, contents)
+        DownloadService.get_content(taric_data_url).tap{|contents|
+          create_update_entry(date, file_name, contents, "TaricUpdate") if contents.present?
         }
       else
         TariffSynchronizer.logger.error "No Taric file found for #{date}."
@@ -18,10 +18,10 @@ module TariffSynchronizer
     end
 
     def apply
-      TariffImporter.new(file_path, TaricImporter).import
+      TariffImporter.import(self, TaricImporter)
 
       mark_as_applied
-      logger.info "Successfully applied Taric update: #{file_path}"
+      logger.info "Successfully applied Taric update: #{filename}"
     end
 
     def self.update_type
@@ -32,21 +32,13 @@ module TariffSynchronizer
       "#{date}_TGB#{date.strftime("%y")}#{date.yday}.xml"
     end
 
-    def self.rebuild
-      Dir[File.join(Rails.root, TariffSynchronizer.root_path, 'taric', '*.xml')].each do |file_path|
-        date, file_name = parse_file_path(file_path)
-
-        create_update_entry(date, file_name, "TaricUpdate") unless entry_exists_for?(date, file_name)
-      end
-    end
-
     private
 
     def self.get_taric_path(date)
       date_query = Date.parse(date.to_s).strftime("%Y%m%d")
       taric_query_url = "#{TariffSynchronizer.host}/taric/TARIC3#{date_query}"
       TariffSynchronizer.logger.info "Checking for Taric file for #{date} at: #{taric_query_url}"
-      FileService.get_content(taric_query_url).tap { |file_name|
+      DownloadService.get_content(taric_query_url).tap { |file_name|
         file_name.gsub!(/[^0-9a-zA-Z\.]/i, '') if file_name.present?
       }
     end

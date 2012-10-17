@@ -16,75 +16,83 @@ describe TariffSynchronizer::TaricUpdate do
 
     before do
       TariffSynchronizer.host = "http://example.com"
-      prepare_synchronizer_folders
     end
 
     context "when file for the day is found" do
       before do
         taric_query_url = "#{TariffSynchronizer.host}/taric/TARIC3#{example_date.strftime("%Y%m%d")}"
-        TariffSynchronizer::FileService.expects(:get_content).with(taric_query_url).returns(taric_update_name)
+        TariffSynchronizer::DownloadService.expects(:get_content).with(taric_query_url).returns(taric_update_name)
       end
 
       it 'downloads Taric file for specific date' do
         update_url = "#{TariffSynchronizer.host}/taric/#{taric_update_name}"
 
-        TariffSynchronizer::FileService.expects(:get_content).with(update_url).returns(nil)
+        TariffSynchronizer::DownloadService.expects(:get_content).with(update_url).returns(nil)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
       end
 
-      it 'writes Taric file contents to file if they are not blank' do
+      it 'writes Taric file contents to db if they are not blank' do
         update_url = "#{TariffSynchronizer.host}/taric/#{taric_update_name}"
 
-        TariffSynchronizer::FileService.expects(:get_content).with(update_url).returns('abc')
+        TariffSynchronizer::DownloadService.expects(:get_content).with(update_url).returns('abc')
 
         TariffSynchronizer::TaricUpdate.download(example_date)
-        File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_true
-        File.read("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should == 'abc'
+        TariffSynchronizer::TaricUpdate.first.file.should == 'abc'
       end
 
       it 'does not write Taric file contents to file if they are blank' do
         update_url = "#{TariffSynchronizer.host}/taric/#{taric_update_name}"
 
-        TariffSynchronizer::FileService.expects(:get_content).with(update_url).returns(nil)
+        TariffSynchronizer::DownloadService.expects(:get_content).with(update_url).returns(nil)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
-        File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_false
+        TariffSynchronizer::TaricUpdate.first.should be_blank
       end
     end
 
     context "when file for the day is not found" do
       it 'does not write Taric file contents to file if they are blank' do
         taric_query_url = "#{TariffSynchronizer.host}/taric/TARIC3#{example_date.strftime("%Y%m%d")}"
-        TariffSynchronizer::FileService.expects(:get_content).with(taric_query_url).returns(nil)
+        TariffSynchronizer::DownloadService.expects(:get_content).with(taric_query_url).returns(nil)
         TariffSynchronizer.logger.expects(:error).returns(true)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
       end
     end
 
-    after  { purge_synchronizer_folders }
+    context 'when update size is greater than max_update_size constant' do
+      before do
+        taric_query_url = "#{TariffSynchronizer.host}/taric/TARIC3#{example_date.strftime("%Y%m%d")}"
+        TariffSynchronizer::DownloadService.expects(:get_content).with(taric_query_url).returns(taric_update_name)
+      end
+
+      it 'logs an error about file size' do
+        update_url = "#{TariffSynchronizer.host}/taric/#{taric_update_name}"
+        mock_content = stub(size: TariffSynchronizer.max_update_size + 1)
+        TariffSynchronizer.logger.expects(:error).returns(true)
+
+        TariffSynchronizer::DownloadService.expects(:get_content).with(update_url).returns(mock_content)
+
+        TariffSynchronizer::TaricUpdate.download(example_date)
+      end
+    end
   end
 
   describe "#apply" do
     let(:state) { :pending }
     let!(:example_taric_update) { create :taric_update, example_date: example_date }
 
-    before {
-      prepare_synchronizer_folders
-      create_taric_file :pending, example_date
-    }
-
     it 'executes Taric importer' do
       mock_importer = stub_everything
-      TariffImporter.expects(:new).with(example_taric_update.file_path, TaricImporter).returns(mock_importer)
+      TariffImporter.expects(:new).returns(mock_importer)
 
       TariffSynchronizer::TaricUpdate.first.apply
     end
 
     it 'updates file entry state to processed' do
       mock_importer = stub_everything
-      TariffImporter.expects(:new).with(example_taric_update.file_path, TaricImporter).returns(mock_importer)
+      TariffImporter.expects(:new).returns(mock_importer)
 
       TariffSynchronizer::TaricUpdate.pending.count.should == 1
       TariffSynchronizer::TaricUpdate.first.apply
@@ -95,47 +103,12 @@ describe TariffSynchronizer::TaricUpdate do
     it 'does not move file to processed if import fails' do
       mock_importer = stub
       mock_importer.expects(:import).raises(TaricImporter::ImportException)
-      TariffImporter.expects(:new).with(example_taric_update.file_path, TaricImporter).returns(mock_importer)
+      TariffImporter.expects(:new).returns(mock_importer)
 
       TariffSynchronizer::TaricUpdate.pending.count.should == 1
       rescuing { TariffSynchronizer::TaricUpdate.first.apply }
       TariffSynchronizer::TaricUpdate.pending.count.should == 1
       TariffSynchronizer::TaricUpdate.applied.count.should == 0
     end
-
-    after  { purge_synchronizer_folders }
-  end
-
-  describe '.rebuild' do
-    before {
-      prepare_synchronizer_folders
-      create_taric_file :pending, example_date
-    }
-
-    context 'entry for the day/update does not exist yet' do
-      it 'creates db record from available file name' do
-        TariffSynchronizer::BaseUpdate.count.should == 0
-
-        TariffSynchronizer::TaricUpdate.rebuild
-
-        TariffSynchronizer::BaseUpdate.count.should == 1
-        first_update = TariffSynchronizer::BaseUpdate.first
-        first_update.issue_date.should == example_date
-      end
-    end
-
-    context 'entry for the day/update exists already' do
-      let!(:example_taric_update) { create :taric_update, example_date: example_date }
-
-      it 'does not create db record if it is already available for the day/update type combo' do
-        TariffSynchronizer::BaseUpdate.count.should == 1
-
-        TariffSynchronizer::TaricUpdate.rebuild
-
-        TariffSynchronizer::BaseUpdate.count.should == 1
-      end
-    end
-
-    after  { purge_synchronizer_folders }
   end
 end

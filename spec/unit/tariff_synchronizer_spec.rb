@@ -95,13 +95,4 @@ describe TariffSynchronizer do
       end
     end
   end
-
-  describe '.rebuild' do
-    it 'invokes rebuild on TaricUpdate and ChiefUpdate' do
-      TariffSynchronizer::TaricUpdate.expects(:rebuild)
-      TariffSynchronizer::ChiefUpdate.expects(:rebuild)
-
-      TariffSynchronizer.rebuild
-    end
-  end
 end

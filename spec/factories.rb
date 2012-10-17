@@ -603,6 +603,14 @@ FactoryGirl.define do
     issue_date { example_date }
     update_type { 'TariffSynchronizer::ChiefUpdate' }
     state { 'P' }
+    file {
+      %Q{
+        "AAAAAAAAAAA","01/01/1900:00:00:00"," ","20120312",
+        "TAME       ","01/03/2012:00:00:00","U","PR","TFC",null,"03038931",null,null,null,null,"20/02/2012:09:34:00",null,null,"Y",null,"N",null,null,null,null,null,null,"Y",null,"N",null,null,null,"ITP BATCH INTERFACE",null,null,null,null,null,null,"N",
+        "TAME       ","01/03/2012:00:00:00","U","DS","G","A10","16052190 45",null,null,null,null,"20/02/2012:09:40:00",null,null,"N",null,"N",null,null,null,null,null,null,"N",null,"N",null,null,null,"ITP BATCH INTERFACE",null,null,null,null,null,null,"N",
+        "ZZZZZZZZZZZ","31/12/9999:23:59:59"," ",434,
+      }
+    }
 
     trait :applied do
       state { 'A' }
@@ -618,6 +626,32 @@ FactoryGirl.define do
     issue_date { example_date }
     update_type { 'TariffSynchronizer::TaricUpdate' }
     state { 'P' }
+    file {
+     %Q{
+      <?xml version="1.0" encoding="UTF-8"?>
+      <env:envelope xmlns="urn:publicid:-:DGTAXUD:TARIC:MESSAGE:1.0" xmlns:env="urn:publicid:-:DGTAXUD:GENERAL:ENVELOPE:1.0" id="1">
+        <env:transaction id="1">
+          <app.message id="8">
+            <transmission>
+              <record>
+                <transaction.id>2179611</transaction.id>
+                <record.code>200</record.code>
+                <subrecord.code>00</subrecord.code>
+                <record.sequence.number>388</record.sequence.number>
+                <update.type>3</update.type>
+                <footnote>
+                  <footnote.type.id>TM</footnote.type.id>
+                  <footnote.id>127</footnote.id>
+                  <validity.start.date>1972-01-01</validity.start.date>
+                  <validity.end.date>1995-12-31</validity.end.date>
+                </footnote>
+              </record>
+            </transmission>
+          </app.message>
+        </env:transaction>
+      </env:envelope>
+      }
+    }
 
     trait :applied do
       state { 'A' }

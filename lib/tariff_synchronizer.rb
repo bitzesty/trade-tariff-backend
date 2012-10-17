@@ -59,9 +59,6 @@ module TariffSynchronizer
   mattr_accessor :logger
   self.logger = Logger.new('log/sync.log')
 
-  mattr_accessor :root_path
-  self.root_path = Rails.env.test? ? "tmp/data" : "data"
-
   mattr_accessor :request_throttle
   self.request_throttle = 1
 
@@ -72,6 +69,10 @@ module TariffSynchronizer
   # Initial dump date + 1 day
   mattr_accessor :chief_initial_update
   self.chief_initial_update = Date.new(2012,6,30)
+
+  # Should be the same as set in MySQL max_allowed_packet size setting
+  mattr_accessor :max_update_size
+  self.max_update_size = 64.megabytes
 
   # Download pending updates for Taric and National data
   # Gets latest downloaded file present in (inbox/failbox/processed) and tries
@@ -108,14 +109,6 @@ module TariffSynchronizer
         end
       end
     end
-  end
-
-  # Builds tariff_update entries from files available in the
-  # TariffSynchronizer.root_path directories.
-  #
-  # Warning: rebuilt updates will be marked as pending.
-  def rebuild
-    [TaricUpdate, ChiefUpdate].map(&:rebuild)
   end
 
   # Initial update day for specific update type
