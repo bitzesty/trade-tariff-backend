@@ -25,5 +25,5 @@ delete from geographical_area_memberships where national=1;
 delete from geographical_area_descriptions where national=1;
 delete from geographical_area_description_periods where national=1;
 delete from geographical_areas where national=1;
-delete from footnote_association_goods_nomenclatures where national=1 and footnote_type='05';
-delete from footnote_association_measures where national=1 and footnote_type_id='06';
+delete from footnote_association_goods_nomenclatures where national=1;
+delete from footnote_association_measures where national=1;
