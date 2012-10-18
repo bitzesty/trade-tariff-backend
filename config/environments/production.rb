@@ -51,10 +51,6 @@ TradeTariffBackend::Application.configure do
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
   config.action_mailer.delivery_method = :ses
-  config.middleware.use ExceptionNotifier,
-    email_prefix: "[TradeTariffBackend exception] ",
-    sender_address: %{"Winston Smith-Churchill" <winston@alphagov.co.uk>},
-    exception_recipients: %w{govuk-exceptions@digital.cabinet-office.gov.uk}
 
   # Enable threaded mode
   # config.threadsafe!
