@@ -19,7 +19,7 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
     let!(:ad) { create(:geographical_area, geographical_area_id: "AD", geographical_area_sid: 140, validity_start_date: DateTime.parse("1975-07-18 00:00:00")) }
     let!(:fo) { create(:geographical_area, geographical_area_id: "FO", geographical_area_sid: 330, validity_start_date: DateTime.parse("1975-07-18 00:00:00")) }
     let!(:no) { create(:geographical_area, geographical_area_id: "NO", geographical_area_sid: 252, validity_start_date: DateTime.parse("1975-07-18 00:00:00")) }
-    let!(:sm) { create(:geographical_area, geographical_area_id: "IT", geographical_area_sid: 382, validity_start_date: DateTime.parse("1975-07-18 00:00:00")) } # IT not SM because Chief maps SM to IT check Chief::CountryCode
+    let!(:sm) { create(:geographical_area, geographical_area_id: "SM", geographical_area_sid: 382, validity_start_date: DateTime.parse("1975-07-18 00:00:00")) }
     let!(:is) { create(:geographical_area, geographical_area_id: "IS", geographical_area_sid: 53, validity_start_date: DateTime.parse("1975-07-18 00:00:00")) }
 
     let!(:tame1) { create(:tame, :prohibition, amend_indicator: "I", fe_tsmp: DateTime.parse("2006-07-24 08:45:00"), msrgp_code: "HO", msr_type: "CON", tar_msr_no: "12113000") }
