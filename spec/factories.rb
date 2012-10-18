@@ -191,6 +191,7 @@ FactoryGirl.define do
     quota_definition_sid   { generate(:sid) }
     quota_order_number_sid { generate(:sid) }
     quota_order_number_id  { 6.times.map{ Random.rand(9) }.join }
+    critical_state         { 'N' }
 
     trait :actual do
       validity_start_date { Date.today.ago(3.years) }

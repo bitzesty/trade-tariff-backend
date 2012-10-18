@@ -14,7 +14,7 @@ class QuotaDefinition < Sequel::Model
                                        primary_key: :quota_definition_sid
 
   def status
-    QuotaEvent.last_for(quota_definition_sid).status.presence || 'Open'
+    QuotaEvent.last_for(quota_definition_sid).status.presence || (critical_state? ? 'Critical' : 'Open')
   end
 
   def last_balance_event
@@ -31,6 +31,12 @@ class QuotaDefinition < Sequel::Model
 
   def last_blocking_period
     @_last_blocking_period ||= quota_blocking_periods.last
+  end
+
+  private
+
+  def critical_state?
+    critical_state == 'Y'
   end
 end
 

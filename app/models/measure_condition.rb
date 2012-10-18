@@ -28,8 +28,8 @@ class MeasureCondition < Sequel::Model
     end
   end)
 
-  many_to_one :certificate, eager_loader_key: [:certificate_code, :certificate_type_code], dataset: -> {
-    actual(Certificate).where(certificate_code: certificate_code,
+  many_to_one :certificate, key: {}, foreign_key: {}, eager_loader_key: [:certificate_code, :certificate_type_code], dataset: -> {
+    Certificate.actual.where(certificate_code: certificate_code,
                               certificate_type_code: certificate_type_code)
   }, eager_loader: (proc do |eo|
     eo[:rows].each{|measure_condition| measure_condition.associations[:certificate] = nil}
