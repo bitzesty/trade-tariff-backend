@@ -26,7 +26,7 @@ class ChiefTransformer
   # Number of MFCM entries to process per page. Can't be too high due to
   # memory constraints. Only applicable to initial_load mode.
   mattr_accessor :per_page
-  self.per_page = 1000
+  self.per_page = 5000
 
   def invoke(work_mode = :update)
     raise TransformException.new("Invalid work mode, options: #{work_modes}") unless work_mode.in? work_modes
@@ -35,7 +35,7 @@ class ChiefTransformer
 
     case work_mode
     when :initial_load
-      Chief::Mfcm.each_page(per_page) do |mfcm_batch|
+      Chief::Mfcm.initial_load.each_page(per_page) do |mfcm_batch|
         Processor.new(mfcm_batch.all).process
       end
 

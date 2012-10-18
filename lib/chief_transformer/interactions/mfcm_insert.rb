@@ -5,7 +5,7 @@ class ChiefTransformer
     class MfcmInsert < Interaction
       def process
         candidate_measures = CandidateMeasure::Collection.new([
-          if record.tame.present?
+          record.tames.map { |tame|
             if record.tame.has_tamfs?
               record.tame.tamfs.map { |tamf|
                 CandidateMeasure.new(mfcm: record,
@@ -18,7 +18,7 @@ class ChiefTransformer
                                     tame: record.tame,
                                     operation: :insert)]
             end
-          end
+          }
         ].flatten.compact)
         candidate_measures.sort
         candidate_measures.uniq
