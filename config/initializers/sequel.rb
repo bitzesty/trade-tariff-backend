@@ -1,4 +1,5 @@
 require 'sequel/extensions/pagination_compat'
+require 'sequel/extensions/db_lock'
 
 # Defaults for sensible migrations
 Sequel::MySQL.default_engine = 'InnoDB'
