@@ -74,6 +74,10 @@ module TariffSynchronizer
   mattr_accessor :chief_initial_update
   self.chief_initial_update = Date.new(2012,6,30)
 
+  # Times to retry downloading update before giving up
+  mattr_accessor :retry_count
+  self.retry_count = 10
+
   # Download pending updates for Taric and National data
   # Gets latest downloaded file present in (inbox/failbox/processed) and tries
   # to download any further updates to current day.

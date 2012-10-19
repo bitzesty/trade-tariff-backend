@@ -46,5 +46,14 @@ describe TariffSynchronizer::FileService do
 
       TariffSynchronizer::FileService.get_content(example_url).should == "Hello world"
     end
+
+    it 'retries until preset retry count is reached' do
+      TariffSynchronizer.retry_count = 2
+      TariffSynchronizer::FileService.expects(:send_request)
+                                     .twice
+                                     .returns([non_terminating_response_code, ''])
+
+      TariffSynchronizer::FileService.get_content(example_url).should == nil
+    end
   end
 end

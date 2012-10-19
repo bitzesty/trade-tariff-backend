@@ -20,7 +20,9 @@ module TariffSynchronizer
 
     def get_content(url)
       # The server in question may respond with 403 from time to time so keep retrying
-      # until it returns either 200 or 404
+      # until it returns either 200 or 404 or retry count limit is reached
+      retry_count = TariffSynchronizer.retry_count
+
       loop do
         response_code, body = send_request(url)
 
@@ -28,8 +30,9 @@ module TariffSynchronizer
           return body
         end
 
+        retry_count -= 1
         sleep TariffSynchronizer.request_throttle
-        break if is_terminating_code?(response_code)
+        break if is_terminating_code?(response_code) || retry_count == 0
       end
     end
 
