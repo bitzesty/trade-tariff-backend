@@ -1,5 +1,3 @@
-Dir[File.join(Rails.root, 'lib', 'chief_transformer/interactions/*.rb')].each{|f| require f }
-
 class ChiefTransformer
   class Processor
     attr_reader :operations

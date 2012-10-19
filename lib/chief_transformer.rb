@@ -5,7 +5,10 @@ require 'logger'
 require 'sequel-rails'
 require 'chief_transformer/candidate_measure'
 require 'chief_transformer/processor'
+require 'chief_transformer/batch_processor'
 require 'chief_transformer/measure_logger'
+
+Dir[File.join(Rails.root, 'lib', 'chief_transformer/interactions/*.rb')].each{|f| require f }
 
 class ChiefTransformer
   include Singleton
@@ -26,7 +29,7 @@ class ChiefTransformer
   # Number of MFCM entries to process per page. Can't be too high due to
   # memory constraints. Only applicable to initial_load mode.
   mattr_accessor :per_page
-  self.per_page = 5000
+  self.per_page = 2000
 
   def invoke(work_mode = :update)
     raise TransformException.new("Invalid work mode, options: #{work_modes}") unless work_mode.in? work_modes
@@ -36,7 +39,7 @@ class ChiefTransformer
     case work_mode
     when :initial_load
       Chief::Mfcm.initial_load.each_page(per_page) do |mfcm_batch|
-        Processor.new(mfcm_batch.all).process
+        BatchProcessor.new("MfcmInsert", mfcm_batch.all).process
       end
 
       [Chief::Mfcm, Chief::Tame, Chief::Tamf].each{|model|

@@ -15,7 +15,7 @@ class ChiefTransformer
                .with_tariff_measure_number(tame.tar_msr_no)
                .not_terminated
                .each do |measure|
-          MeasureLogger.log(measure, :update, {validity_end_date: tame.fe_tsmp}, tame, tame.origin)
+          MeasureLogger.log(measure, :delete, {validity_end_date: tame.fe_tsmp}, tame, tame.origin) if logging_enabled?
           measure.update validity_end_date: tame.fe_tsmp
         end
       end
@@ -36,7 +36,7 @@ class ChiefTransformer
                                  operation: :insert)]
           end
         end.flatten)
-        candidate_measures.log(tame)
+        candidate_measures.log(tame) if logging_enabled?
         candidate_measures.persist
       end
 
