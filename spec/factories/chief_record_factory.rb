@@ -321,4 +321,36 @@ FactoryGirl.define do
     footn_type_id { Forgery(:basic).text(exactly: 2).upcase }
     footn_id { Forgery(:basic).text(exactly: 3).upcase }
   end
+
+  factory :base_update, class: TariffSynchronizer::BaseUpdate do
+    ignore do
+      example_date { Forgery(:date).date }
+    end
+
+    issue_date { example_date }
+    state { 'P' }
+
+    trait :applied do
+      state { 'A' }
+    end
+
+    trait :pending do
+      state { 'P' }
+    end
+
+    trait :failed do
+      state { 'F' }
+    end
+  end
+
+  factory :chief_update, parent: :base_update, class: TariffSynchronizer::ChiefUpdate do
+    filename { TariffSynchronizer::ChiefUpdate.file_name_for(example_date)  }
+    update_type { 'TariffSynchronizer::ChiefUpdate' }
+  end
+
+  factory :taric_update, parent: :base_update, class: TariffSynchronizer::TaricUpdate do
+    filename { TariffSynchronizer::TaricUpdate.file_name_for(example_date)  }
+    issue_date { example_date }
+    update_type { 'TariffSynchronizer::TaricUpdate' }
+  end
 end

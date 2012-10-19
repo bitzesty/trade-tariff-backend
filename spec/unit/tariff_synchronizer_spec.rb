@@ -56,11 +56,12 @@ describe TariffSynchronizer do
     let(:update_2) { stub_everything(date: Date.yesterday, update_priority: 2) }
     let(:pending_updates) { [update_1, update_2] }
 
-    before {
-      TariffSynchronizer::PendingUpdate.expects(:all).returns(pending_updates)
-    }
 
     context 'success scenario' do
+      before {
+        TariffSynchronizer::PendingUpdate.expects(:all).returns(pending_updates)
+      }
+
       it 'all pending updates get applied' do
         pending_updates.each {|update|
           update.expects(:apply).returns(true)
@@ -72,6 +73,8 @@ describe TariffSynchronizer do
 
     context 'failure scenario' do
       before do
+        TariffSynchronizer::PendingUpdate.expects(:all).returns(pending_updates)
+
         update_1.expects(:apply).returns(true)
         update_2.expects(:apply).raises(TaricImporter::ImportException)
       end
@@ -92,6 +95,25 @@ describe TariffSynchronizer do
 
       it 'transaction gets rolled back' do
         expect { TariffSynchronizer.apply }.to raise_error Sequel::Rollback
+      end
+    end
+
+    context 'with failed updates present' do
+      let!(:failed_update)  { create :taric_update, :failed }
+
+      it 'does not apply pending updates' do
+        TariffSynchronizer::PendingUpdate.expects(:all).never
+
+        TariffSynchronizer.apply
+      end
+
+      it 'logs error' do
+        mock_logger = mock
+        mock_logger.expects(:info).returns(true)
+        mock_logger.expects(:error).twice.returns(true)
+        TariffSynchronizer.logger = mock_logger
+
+        TariffSynchronizer.apply
       end
     end
   end

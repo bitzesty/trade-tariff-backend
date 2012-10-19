@@ -96,20 +96,26 @@ module TariffSynchronizer
   def apply
     logger.info "Starting update application"
 
-    PendingUpdate.all
-                 .sort_by(&:issue_date)
-                 .sort_by(&:update_priority)
-                 .each do |pending_update|
-      Sequel::Model.db.transaction do
-        begin
-          pending_update.apply
-        rescue TaricImporter::ImportException,
-               ChiefImporter::ImportException  => exception
-          logger.error "Update failed: #{pending_update}"
+    if BaseUpdate.failed.any?
+      logger.error "TariffSynchronizer found failed updates that need to be fixed before running:"
 
-          notify_admin(pending_update.file_name, exception)
+      BaseUpdate.failed.each { |update| logger.error update.inspect }
+    else
+      PendingUpdate.all
+                   .sort_by(&:issue_date)
+                   .sort_by(&:update_priority)
+                   .each do |pending_update|
+        Sequel::Model.db.transaction do
+          begin
+            pending_update.apply
+          rescue TaricImporter::ImportException,
+                 ChiefImporter::ImportException  => exception
+            logger.error "Update failed: #{pending_update}"
 
-          raise Sequel::Rollback
+            notify_admin(pending_update.file_name, exception)
+
+            raise Sequel::Rollback
+          end
         end
       end
     end
