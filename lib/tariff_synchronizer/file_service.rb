@@ -2,9 +2,6 @@ module TariffSynchronizer
   module FileService
     extend self
 
-    mattr_accessor :terminating_http_codes
-    self.terminating_http_codes = [200, 404]
-
     def write_file(path, body)
       begin
         File.open(path, "wb") {|f|
@@ -27,12 +24,15 @@ module TariffSynchronizer
         response_code, body = send_request(url)
 
         if response_code == 200
-          return body
+          return :success, body
+        elsif response_code == 404
+          return :not_found, nil
+        elsif retry_count == 0
+          return :failed, nil
+        else
+          retry_count -= 1
+          sleep TariffSynchronizer.request_throttle
         end
-
-        retry_count -= 1
-        sleep TariffSynchronizer.request_throttle
-        break if is_terminating_code?(response_code) || retry_count == 0
       end
     end
 
@@ -54,10 +54,6 @@ module TariffSynchronizer
       end
 
       return crawler.response_code, crawler.body_str
-    end
-
-    def is_terminating_code?(code)
-      terminating_http_codes.include? code
     end
   end
 end

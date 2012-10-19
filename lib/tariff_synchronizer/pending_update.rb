@@ -11,7 +11,7 @@ module TariffSynchronizer
     end
 
     def self.all
-      BaseUpdate.pending.all.map { |update| new(update) }
+      BaseUpdate.pending_or_failed.all.map { |update| new(update) }
     end
 
     def to_s

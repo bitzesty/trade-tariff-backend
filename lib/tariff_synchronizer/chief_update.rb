@@ -9,8 +9,10 @@ module TariffSynchronizer
       file_name = "KBT009(#{date.strftime("%y")}#{date.yday}).txt"
       chief_url = "#{TariffSynchronizer.host}/taric/#{file_name}"
       TariffSynchronizer.logger.info "Downloading CHIEF file for #{date} at: #{chief_url}"
-      FileService.get_content(chief_url).tap {|contents|
-        create_update_entry(date, file_name, "ChiefUpdate") if file_written_for?(date, file_name, contents)
+      FileService.get_content(chief_url).tap {|status, contents|
+        create_update_entry(date, file_name, status, "ChiefUpdate")
+
+        write_update_file(date, file_name, contents) if status == :success
       }
     end
 
@@ -33,7 +35,7 @@ module TariffSynchronizer
       Dir[File.join(Rails.root, TariffSynchronizer.root_path, 'chief', '*.txt')].each do |file_path|
         date, file_name = parse_file_path(file_path)
 
-        create_update_entry(date, file_name, "ChiefUpdate") unless entry_exists_for?(date, file_name)
+        create_update_entry(date, file_name, :success, "ChiefUpdate")
       end
     end
   end

@@ -34,7 +34,7 @@ describe TariffSynchronizer::FileService do
 
     it 'downloads content from remote url' do
       VCR.use_cassette('example_get_content') do
-        TariffSynchronizer::FileService.get_content(example_url).should == "Hello world"
+        TariffSynchronizer::FileService.get_content(example_url).should == [:success, "Hello world"]
       end
     end
 
@@ -44,16 +44,16 @@ describe TariffSynchronizer::FileService do
                                      .then
                                      .returns([terminating_response_code, 'Hello world'])
 
-      TariffSynchronizer::FileService.get_content(example_url).should == "Hello world"
+      TariffSynchronizer::FileService.get_content(example_url).should == [:success, "Hello world"]
     end
 
     it 'retries until preset retry count is reached' do
       TariffSynchronizer.retry_count = 2
       TariffSynchronizer::FileService.expects(:send_request)
-                                     .twice
+                                     .times(3)
                                      .returns([non_terminating_response_code, ''])
 
-      TariffSynchronizer::FileService.get_content(example_url).should == nil
+      TariffSynchronizer::FileService.get_content(example_url).should == [:failed, nil]
     end
   end
 end

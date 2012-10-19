@@ -10,7 +10,13 @@ module TariffSynchronizer
 
     APPLIED_STATE = 'A'
     PENDING_STATE = 'P'
-    FAILED_STATE = 'F'
+    FAILED_STATE  = 'F'
+    MISSING_STATE = 'M'
+    STATE_MAP = {
+      success: PENDING_STATE,
+      not_found: MISSING_STATE,
+      failed: FAILED_STATE
+    }
 
     cattr_accessor :update_priority
 
@@ -29,6 +35,18 @@ module TariffSynchronizer
 
       def pending
         where(state: PENDING_STATE)
+      end
+
+      def missing
+        where(state: MISSING_STATE)
+      end
+
+      def failed
+        where(state: FAILED_STATE)
+      end
+
+      def pending_or_failed
+        where(state: [PENDING_STATE, FAILED_STATE])
       end
     end
 
@@ -58,7 +76,7 @@ module TariffSynchronizer
 
     private
 
-    def self.file_written_for?(date, file_name, contents)
+    def self.write_update_file(date, file_name, contents)
       update_path = update_path(date, file_name)
 
       if contents.present?
@@ -70,11 +88,12 @@ module TariffSynchronizer
       end
     end
 
-    def self.create_update_entry(date, file_name, update_type)
-      create(filename: "#{date}_#{file_name}",
-             update_type: "TariffSynchronizer::#{update_type}",
-             state: 'P',
-             issue_date: date)
+    def self.create_update_entry(date, file_name, state, update_type)
+      update = find_or_create(filename: "#{date}_#{file_name}",
+                              update_type: "TariffSynchronizer::#{update_type}",
+                              issue_date: date)
+
+      update.update(state: STATE_MAP[state])
     end
 
     def self.update_path(date, file_name)
@@ -92,11 +111,6 @@ module TariffSynchronizer
     def self.parse_file_path(file_path)
       file_name = Pathname.new(file_path).basename.to_s
       file_name.match(/^(\d{4}-\d{2}-\d{2})_(.*)$/)[1,2]
-    end
-
-    def self.entry_exists_for?(date, file_name)
-      where(issue_date: date,
-            filename: "#{date}_#{file_name}").any?
     end
   end
 end

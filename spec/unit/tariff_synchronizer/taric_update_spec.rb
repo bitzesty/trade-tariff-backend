@@ -36,7 +36,7 @@ describe TariffSynchronizer::TaricUpdate do
       it 'writes Taric file contents to file if they are not blank' do
         update_url = "#{TariffSynchronizer.host}/taric/#{taric_update_name}"
 
-        TariffSynchronizer::FileService.expects(:get_content).with(update_url).returns('abc')
+        TariffSynchronizer::FileService.expects(:get_content).with(update_url).returns([:success, 'abc'])
 
         TariffSynchronizer::TaricUpdate.download(example_date)
         File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_true
