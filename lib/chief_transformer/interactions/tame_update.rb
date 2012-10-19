@@ -12,7 +12,7 @@ class ChiefTransformer
                  .valid_since(record.fe_tsmp)
                  .valid_to(record.le_tsmp)
                  .each do |measure|
-            MeasureLogger.log(measure, :update, {validity_end_date: record.fe_tsmp}, record, record.origin)
+            MeasureLogger.log(measure, :update, {validity_end_date: record.fe_tsmp}, record, record.origin) if logging_enabled?
             measure.update validity_end_date: record.le_tsmp
           end
         else

@@ -1,21 +1,9 @@
 module TariffSynchronizer
-  module FileService
+  module DownloadService
     extend self
 
     mattr_accessor :terminating_http_codes
     self.terminating_http_codes = [200, 404]
-
-    def write_file(path, body)
-      begin
-        File.open(path, "wb") {|f|
-          if f.write(body) > 0
-            TariffSynchronizer.logger.info "Update file written to: #{File.join(Rails.root, path)}"
-          end
-        }
-      rescue Exception => e
-        TariffSynchronizer.logger.error "Could not write: #{path}. Error: #{e}."
-      end
-    end
 
     def get_content(url)
       # The server in question may respond with 403 from time to time so keep retrying

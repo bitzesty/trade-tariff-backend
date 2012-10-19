@@ -8,12 +8,6 @@ describe TariffSynchronizer::PendingUpdate do
 
   subject { TariffSynchronizer::PendingUpdate.new(example_taric_update) }
 
-  before {
-    prepare_synchronizer_folders
-    create_chief_file :pending, example_date
-    create_taric_file :pending, example_date
-  }
-
   describe 'initialization' do
     it 'sets file name' do
       subject.file_name.should == example_taric_update.filename
@@ -40,6 +34,4 @@ describe TariffSynchronizer::PendingUpdate do
       subject.to_s.should == example_taric_update.filename
     end
   end
-
-  after  { purge_synchronizer_folders }
 end

@@ -10,6 +10,21 @@ require 'tariff_importer/importers/chief_importer/strategies/strategies'
 
 class ChiefImporter
   class ImportException < StandardError; end
+  module SourceParser
+    def from_source
+      opts = { encoding: 'ISO-8859-1' }
+
+      if is_path?
+        CSV.foreach(data, opts) do |line|
+          yield line
+        end
+      else
+        CSV.parse(data, opts) do |line|
+          yield line
+        end
+      end
+    end
+  end
 
   # TODO extend this
   cattr_accessor :relevant_tables
@@ -21,20 +36,19 @@ class ChiefImporter
   cattr_accessor :end_mark
   self.end_mark = "ZZZZZZZZZZZ"
 
-  attr_reader :path, :processor, :start_entry, :end_entry, :file_name
+  attr_reader :data, :processor, :start_entry, :end_entry, :file_name
 
   delegate :extraction_date, to: :start_entry
   delegate :record_count, to: :end_entry
   delegate :logger, to: ::TariffImporter
 
-  def initialize(path)
-    @path = Pathname.new(path)
-    @file_name = @path.basename.to_s
+  def initialize(data)
+    @data = data
   end
 
   def import
     begin
-      CSV.foreach(path, encoding: 'ISO-8859-1') do |line|
+      data.from_source do |line|
         entry = Entry.build(line)
 
         if entry.is_a?(StartEntry)
@@ -44,12 +58,10 @@ class ChiefImporter
         else # means it's ChangeEntry
           next unless entry.relevant?
 
-          entry.origin = file_name
+          entry.origin = @data.filename
           entry.process!
         end
       end
-
-      puts "Imported data of: #{extraction_date}\nRecords processed: #{record_count}" unless defined? RSpec
     rescue Exception => e
       logger.error e.message
 

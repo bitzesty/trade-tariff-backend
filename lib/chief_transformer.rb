@@ -5,7 +5,10 @@ require 'logger'
 require 'sequel-rails'
 require 'chief_transformer/candidate_measure'
 require 'chief_transformer/processor'
+require 'chief_transformer/batch_processor'
 require 'chief_transformer/measure_logger'
+
+Dir[File.join(Rails.root, 'lib', 'chief_transformer/interactions/*.rb')].each{|f| require f }
 
 class ChiefTransformer
   include Singleton
@@ -26,7 +29,7 @@ class ChiefTransformer
   # Number of MFCM entries to process per page. Can't be too high due to
   # memory constraints. Only applicable to initial_load mode.
   mattr_accessor :per_page
-  self.per_page = 1000
+  self.per_page = 2000
 
   def invoke(work_mode = :update)
     raise TransformException.new("Invalid work mode, options: #{work_modes}") unless work_mode.in? work_modes
@@ -35,31 +38,16 @@ class ChiefTransformer
 
     case work_mode
     when :initial_load
-      Chief::Mfcm.each_page(per_page) do |batch|
-        candidate_measures = CandidateMeasure::Collection.new(
-          batch.map { |mfcm|
-            mfcm.tames.map{|tame|
-              if tame.tamfs.any?
-                tame.tamfs.map{|tamf|
-                  CandidateMeasure.new(mfcm: mfcm, tame: tame, tamf: tamf)
-                }
-              else
-                [CandidateMeasure.new(mfcm: mfcm, tame: tame)]
-              end
-            }
-          }.flatten.compact)
-        candidate_measures.sort
-        candidate_measures.uniq
-        candidate_measures.persist
-
-        [Chief::Mfcm, Chief::Tame, Chief::Tamf].each{|model|
-          model.unprocessed.update(processed: true)
-        }
+      Chief::Mfcm.initial_load.each_page(per_page) do |mfcm_batch|
+        BatchProcessor.new("MfcmInsert", mfcm_batch.all).process
       end
+
+      [Chief::Mfcm, Chief::Tame, Chief::Tamf].each{|model|
+        model.unprocessed.update(processed: true)
+      }
     when :update
-      processor = Processor.new(Chief::Mfcm.unprocessed.all,
-                                Chief::Tame.unprocessed.all)
-      processor.process
+      Processor.new(Chief::Mfcm.unprocessed.all,
+                    Chief::Tame.unprocessed.all).process
     end
   end
 end

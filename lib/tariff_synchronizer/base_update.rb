@@ -31,10 +31,6 @@ module TariffSynchronizer
       update(state: APPLIED_STATE)
     end
 
-    def file_path
-      File.join(TariffSynchronizer.root_path, self.class.update_type.to_s, filename)
-    end
-
     def self.sync
       unless pending_from == Date.today
         (pending_from..Date.today).each do |date|
@@ -53,25 +49,16 @@ module TariffSynchronizer
 
     private
 
-    def self.file_written_for?(date, file_name, contents)
-      update_path = update_path(date, file_name)
-
-      if contents.present?
-        FileService.write_file(update_path, contents)
+    def self.create_update_entry(date, file_name, contents, update_type)
+      if contents.size <= TariffSynchronizer.max_update_size
+        create(filename: "#{date}_#{file_name}",
+               update_type: "TariffSynchronizer::#{update_type}",
+               state: 'P',
+               issue_date: date,
+               file: contents.to_s.to_sequel_blob) unless entry_exists_for?(date, file_name)
       else
-        TariffSynchronizer.logger.error "Could not write update file: #{file_name}. Nothing was downloaded."
+        TariffSynchronizer.logger.error "#{date}_#{file_name} was greater than #{TariffSynchronizer.max_update_size} size. Please adjust the setting and retry."
       end
-    end
-
-    def self.create_update_entry(date, file_name, update_type)
-      create(filename: "#{date}_#{file_name}",
-             update_type: "TariffSynchronizer::#{update_type}",
-             state: 'P',
-             issue_date: date)
-    end
-
-    def self.update_path(date, file_name)
-      File.join(TariffSynchronizer.root_path, update_type.to_s, "#{date}_#{file_name}")
     end
 
     def self.pending_from
@@ -80,11 +67,6 @@ module TariffSynchronizer
       else
        TariffSynchronizer.initial_update_for(update_type)
       end
-    end
-
-    def self.parse_file_path(file_path)
-      file_name = Pathname.new(file_path).basename.to_s
-      file_name.match(/^(\d{4}-\d{2}-\d{2})_(.*)$/)[1,2]
     end
 
     def self.entry_exists_for?(date, file_name)
