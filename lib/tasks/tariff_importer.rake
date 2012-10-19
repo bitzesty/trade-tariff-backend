@@ -9,7 +9,7 @@ namespace :importer do
     task import: :environment do
 
       if ENV["TARGET"] && File.exists?(ENV["TARGET"])
-        TariffImporter.import(Pathname.new(ENV["TARGET"]), ChiefImporter).import
+        TariffImporter.new(ENV["TARGET"], ChiefImporter).import
       else
         puts "Please provide TARGET environment variable pointing to CHIEF file to import"
       end
@@ -20,7 +20,7 @@ namespace :importer do
     desc "Import Tariff file"
     task import: :environment do
       if ENV["TARGET"] && File.exists?(ENV["TARGET"])
-        TariffImporter.import(Pathname.new(ENV["TARGET"]), TaricImporter).import
+        TariffImporter.new(ENV["TARGET"], TaricImporter).import
       else
         puts "Please provide TARGET environment variable pointing to Tariff file to import"
       end

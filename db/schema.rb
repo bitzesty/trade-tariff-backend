@@ -1534,7 +1534,6 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20121009092643_change_asx_to_asv.rb")
     self[:schema_migrations].insert(:filename => "20121009120028_add_tariff_measure_number.rb")
     self[:schema_migrations].insert(:filename => "20121015072148_drop_tamf_le_tsmp.rb")
-    self[:schema_migrations].insert(:filename => "20121016130028_add_tariff_update_file_column.rb")
     self[:schema_migrations].insert(:filename => "20121019094932_convert_san_marino_to_italy_on_national_measures.rb")
 
     create_table(:search_references) do
@@ -1567,7 +1566,6 @@ Sequel.migration do
       column :issue_date, "date"
       column :updated_at, "datetime"
       column :created_at, "datetime"
-      column :file, "longblob"
 
       primary_key [:filename]
     end

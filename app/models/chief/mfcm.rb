@@ -58,10 +58,6 @@ module Chief
         filter(processed: false)
       end
 
-      def initial_load
-        filter(origin: nil)
-      end
-
       def valid_to(timestamp)
         where("fe_tsmp < ?", timestamp)
       end

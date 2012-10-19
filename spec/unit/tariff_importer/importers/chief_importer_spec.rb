@@ -1,23 +1,22 @@
 require 'spec_helper'
 
 require 'tariff_importer' # require it so that ActiveSupport requires get executed
-require 'tariff_synchronizer'
 require 'tariff_importer/importers/chief_importer'
 
 describe ChiefImporter do
   let(:path)       { Forgery(:basic).text }
 
   describe 'initialization' do
-    it 'assigns data' do
+    it 'assigns path' do
       importer = ChiefImporter.new(path)
-      importer.data.to_s.should == path
+      importer.path.to_s.should == path
     end
   end
 
   describe "#import" do
 
     context "when provided with valid chief file" do
-      let(:valid_file) { TariffImporter::DataUnit.new(Pathname.new("spec/fixtures/chief_samples/KBT009\(12044\).txt"), ChiefImporter) }
+      let(:valid_file) { "spec/fixtures/chief_samples/KBT009\(12044\).txt" }
 
       before(:all) do
         @importer = ChiefImporter.new(valid_file)
@@ -34,7 +33,7 @@ describe ChiefImporter do
     end
 
     context "when provided with invalid chief file" do
-      let(:invalid_file) { TariffImporter::DataUnit.new(Pathname.new("spec/fixtures/chief_samples/invalid_sample.txt"), ChiefImporter) }
+      let(:invalid_file) { "spec/fixtures/chief_samples/invalid_sample.txt" }
 
       before(:all) do
         @importer = ChiefImporter.new(invalid_file)
