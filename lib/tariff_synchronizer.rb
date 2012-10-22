@@ -58,6 +58,7 @@ module TariffSynchronizer
 
   mattr_accessor :logger
   self.logger = Logger.new('log/sync.log')
+  self.logger.formatter = Proc.new {|severity, time, progname, msg| "#{time.strftime('%Y-%m-%dT%H:%M:%S.%L %z')} #{sprintf('%5s', severity)} #{msg}" }
 
   mattr_accessor :root_path
   self.root_path = Rails.env.test? ? "tmp/data" : "data"
