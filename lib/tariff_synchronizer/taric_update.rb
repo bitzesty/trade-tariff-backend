@@ -6,18 +6,23 @@ module TariffSynchronizer
     self.update_priority = 2
 
     def self.download(date)
-      _, file_name = get_taric_path(date)
+      status, file_name = get_taric_path(date)
 
       if file_name.present?
         taric_data_url = "#{TariffSynchronizer.host}/taric/#{file_name}"
-        TariffSynchronizer.logger.info "Downloading Taric file for #{date} at: #{taric_data_url}"
+        TariffSynchronizer.logger.info "Downloading Taric update for #{date} at: #{taric_data_url}"
         FileService.get_content(taric_data_url).tap{|status, contents|
           create_update_entry(date, file_name, status, "TaricUpdate")
 
           write_update_file(date, file_name, contents) if status == :success
         }
       else
-        TariffSynchronizer.logger.error "No Taric file found for #{date}."
+        # we will be retrying a few more times today, so do not create
+        # Missing record until we are sure
+        unless date == Date.today
+          TariffSynchronizer.logger.info "Taric update for #{date} is missing."
+          create_update_entry(date, file_name, status, "TaricUpdate")
+        end
       end
     end
 

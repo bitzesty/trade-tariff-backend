@@ -10,7 +10,7 @@ module TariffSynchronizer
       chief_url = "#{TariffSynchronizer.host}/taric/#{file_name}"
       TariffSynchronizer.logger.info "Downloading CHIEF file for #{date} at: #{chief_url}"
       FileService.get_content(chief_url).tap {|status, contents|
-        create_update_entry(date, file_name, status, "ChiefUpdate")
+        create_update_entry(date, file_name, status, "ChiefUpdate") unless status == :not_found && date == Date.today
 
         write_update_file(date, file_name, contents) if status == :success
       }

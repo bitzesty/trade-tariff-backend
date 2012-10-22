@@ -53,11 +53,11 @@ describe TariffSynchronizer::TaricUpdate do
       end
     end
 
-    context "when file for the day is not found" do
+    context 'when file for the day is not found' do
       it 'does not write Taric file contents to file if they are blank' do
         taric_query_url = "#{TariffSynchronizer.host}/taric/TARIC3#{example_date.strftime("%Y%m%d")}"
-        TariffSynchronizer::FileService.expects(:get_content).with(taric_query_url).returns(nil)
-        TariffSynchronizer.logger.expects(:error).returns(true)
+        TariffSynchronizer::FileService.expects(:get_content).with(taric_query_url).returns([:not_found, nil])
+        TariffSynchronizer.logger.expects(:info).twice.returns(true)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
       end
