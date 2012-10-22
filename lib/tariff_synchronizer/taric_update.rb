@@ -6,7 +6,9 @@ module TariffSynchronizer
     self.update_priority = 2
 
     def self.download(date)
-      if file_name = get_taric_path(date)
+      _, file_name = get_taric_path(date)
+
+      if file_name.present?
         taric_data_url = "#{TariffSynchronizer.host}/taric/#{file_name}"
         TariffSynchronizer.logger.info "Downloading Taric file for #{date} at: #{taric_data_url}"
         FileService.get_content(taric_data_url).tap{|status, contents|

@@ -22,7 +22,7 @@ describe TariffSynchronizer::TaricUpdate do
     context "when file for the day is found" do
       before do
         taric_query_url = "#{TariffSynchronizer.host}/taric/TARIC3#{example_date.strftime("%Y%m%d")}"
-        TariffSynchronizer::FileService.expects(:get_content).with(taric_query_url).returns(taric_update_name)
+        TariffSynchronizer::FileService.expects(:get_content).with(taric_query_url).returns([:success, taric_update_name])
       end
 
       it 'downloads Taric file for specific date' do
