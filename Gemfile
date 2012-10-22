@@ -23,6 +23,7 @@ gem "nokogiri", "1.5.4"
 gem "whenever", "0.7.3"
 gem "aws-ses", require: "aws/ses" # Needed by exception_notification
 gem "exception_notification"
+gem "plek"
 
 group :assets do
   gem "bootstrap-sass"
