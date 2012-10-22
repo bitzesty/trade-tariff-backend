@@ -5,21 +5,21 @@ describe SearchService do
     let(:query) { Forgery(:basic).text }
 
     it 'assigns search query' do
-      SearchService.new(q: query).q.should == query
+      SearchService.new(t: query).t.should == query
     end
   end
 
   describe "#valid?" do
-    it 'is not valid if has no q param assigned' do
-      SearchService.new(q: nil).valid?.should be_false
+    it 'is not valid if has no t param assigned' do
+      SearchService.new(t: nil).valid?.should be_false
     end
 
     it 'is not valid if has no as_of param assigned' do
-      SearchService.new(q: 'value').valid?.should be_false
+      SearchService.new(t: 'value').valid?.should be_false
     end
 
-    it 'is valid if has both q and as_of params provided' do
-      SearchService.new(q: 'value', as_of: Date.today).valid?.should be_true
+    it 'is valid if has both t and as_of params provided' do
+      SearchService.new(t: 'value', as_of: Date.today).valid?.should be_true
     end
   end
 
@@ -38,14 +38,14 @@ describe SearchService do
       }
 
       it 'returns endpoint and identifier if provided with 2 symbol chapter code' do
-        result = SearchService.new(q: chapter.goods_nomenclature_item_id.first(2),
+        result = SearchService.new(t: chapter.goods_nomenclature_item_id.first(2),
                                    as_of: Date.today).to_json
 
         result.should match_json_expression pattern
       end
 
       it 'returns endpoint and identifier if provided with matching 3 symbol chapter code' do
-        result = SearchService.new(q: chapter.goods_nomenclature_item_id.first(2),
+        result = SearchService.new(t: chapter.goods_nomenclature_item_id.first(2),
                                    as_of: Date.today).to_json
 
         result.should match_json_expression pattern
@@ -65,14 +65,14 @@ describe SearchService do
       }
 
       it 'returns endpoint and identifier if provided with 4 symbol heading code' do
-        result = SearchService.new(q: heading.goods_nomenclature_item_id.first(4),
+        result = SearchService.new(t: heading.goods_nomenclature_item_id.first(4),
                                    as_of: Date.today).to_json
 
         result.should match_json_expression pattern
       end
 
       it 'returns endpoint and identifier if provided with matching 6 (or any between length of 4 to 9) symbol heading code' do
-        result = SearchService.new(q: heading.goods_nomenclature_item_id.first(6),
+        result = SearchService.new(t: heading.goods_nomenclature_item_id.first(6),
                                    as_of: Date.today).to_json
 
         result.should match_json_expression pattern
@@ -102,7 +102,7 @@ describe SearchService do
       }
 
       it 'returns endpoint and identifier if provided with 10 symbol commodity code' do
-        result = SearchService.new(q: commodity.goods_nomenclature_item_id.first(10),
+        result = SearchService.new(t: commodity.goods_nomenclature_item_id.first(10),
                                    as_of: Date.today).to_json
 
         result.should match_json_expression commodity_pattern
@@ -114,7 +114,7 @@ describe SearchService do
                 commodity.goods_nomenclature_item_id[4..5],
                 commodity.goods_nomenclature_item_id[6..7],
                 commodity.goods_nomenclature_item_id[8..9]].join("")
-        result = SearchService.new(q: code,
+        result = SearchService.new(t: code,
                                    as_of: Date.today).to_json
 
         result.should match_json_expression commodity_pattern
@@ -127,21 +127,21 @@ describe SearchService do
                  commodity.goods_nomenclature_item_id[6..7]].join("     ")
         code << "  " << commodity.goods_nomenclature_item_id[8..9]
 
-        result = SearchService.new(q: code,
+        result = SearchService.new(t: code,
                                    as_of: Date.today).to_json
 
         result.should match_json_expression commodity_pattern
       end
 
       it 'returns endpoint and identifier if provided with matching 12 symbol commodity code' do
-        result = SearchService.new(q: commodity.goods_nomenclature_item_id + commodity.producline_suffix,
+        result = SearchService.new(t: commodity.goods_nomenclature_item_id + commodity.producline_suffix,
                                    as_of: Date.today).to_json
 
         result.should match_json_expression commodity_pattern
       end
 
       it 'returns endpoint and identifier if provided with matching 10 symbol declarable heading code' do
-        result = SearchService.new(q: heading.goods_nomenclature_item_id,
+        result = SearchService.new(t: heading.goods_nomenclature_item_id,
                                    as_of: Date.today).to_json
 
         result.should match_json_expression heading_pattern

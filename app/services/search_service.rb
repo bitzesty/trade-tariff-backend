@@ -140,10 +140,10 @@ class SearchService
     end
   end
 
-  attr_accessor :q
+  attr_accessor :t
   attr_reader :result, :as_of
 
-  validates :q, presence: true
+  validates :t, presence: true
   validates :as_of, presence: true
 
   delegate :serializable_hash, to: :result
@@ -185,7 +185,7 @@ class SearchService
   private
 
   def perform
-    @result = ExactSearch.new(q, as_of).search!.presence ||
-              FuzzySearch.new(q, as_of).search!.presence
+    @result = ExactSearch.new(t, as_of).search!.presence ||
+              FuzzySearch.new(t, as_of).search!.presence
   end
 end

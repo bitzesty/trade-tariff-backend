@@ -14,7 +14,7 @@ describe Api::V1::SearchController, "POST #search" do
     }
 
     before {
-      post :search, { q: chapter.to_param, as_of: chapter.validity_start_date }
+      post :search, { t: chapter.to_param, as_of: chapter.validity_start_date }
     }
 
     it { should respond_with(:success) }
@@ -44,7 +44,7 @@ describe Api::V1::SearchController, "POST #search" do
     }
 
     before {
-      post :search, { q: chapter.description,  as_of: chapter.validity_start_date }
+      post :search, { t: chapter.description,  as_of: chapter.validity_start_date }
     }
 
     it { should respond_with(:success) }
@@ -56,7 +56,7 @@ describe Api::V1::SearchController, "POST #search" do
   describe 'errors' do
     let(:pattern) {
       {
-        q: Array,
+        t: Array,
         as_of: Array
       }
     }
