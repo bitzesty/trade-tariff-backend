@@ -26,19 +26,23 @@ namespace :tariff do
 
   namespace :sync do
     desc 'Download pending Taric and CHIEF updates'
-    task download: :environment do
-      # Download pending updates for CHIEF and Taric
-      TariffSynchronizer.download
+    task apply: :environment do
+      TradeTariffBackend.with_locked_database do
+        # Download pending updates for CHIEF and Taric
+        TariffSynchronizer.download
+        TariffSynchronizer.apply
+      end
     end
 
     desc 'Apply pending Taric and CHIEF'
-    task apply: %w[environment] do
-      # Apply pending updates (use TariffImporter to import record to database)
-      TariffSynchronizer.apply
-      # Transform imported intermediate Chief records to insert/change national measures
-      Rake::Task['tariff:sync:transform'].execute
-      # Reindex ElasticSearch to see new/updated commodities
-      Rake::Task['tariff:reindex'].execute
+    task transform: %w[environment] do
+      TradeTariffBackend.with_locked_database do
+        # Apply pending updates (use TariffImporter to import record to database)
+        # Transform imported intermediate Chief records to insert/change national measures
+        Rake::Task['tariff:sync:transform'].execute
+        # Reindex ElasticSearch to see new/updated commodities
+        Rake::Task['tariff:reindex'].execute
+      end
     end
 
     desc "Transform Chief data into taric and save"
