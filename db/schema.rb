@@ -1534,6 +1534,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20121008181507_manual_add_abbreviations.rb")
     self[:schema_migrations].insert(:filename => "20121009092643_change_asx_to_asv.rb")
     self[:schema_migrations].insert(:filename => "20121009120028_add_tariff_measure_number.rb")
+    self[:schema_migrations].insert(:filename => "20121012080652_modify_primary_keys.rb")
     self[:schema_migrations].insert(:filename => "20121015072148_drop_tamf_le_tsmp.rb")
     self[:schema_migrations].insert(:filename => "20121019094932_convert_san_marino_to_italy_on_national_measures.rb")
     self[:schema_migrations].insert(:filename => "20121022135253_add_currency_abbreviation.rb")

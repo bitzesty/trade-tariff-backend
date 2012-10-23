@@ -135,14 +135,9 @@ describe GeographicalArea do
 
   describe '#iso_code' do
     let(:geographical_area)                { build :geographical_area, geographical_area_id: 'UK' }
-    let(:geographical_area_group)          { build :geographical_area, geographical_area_id: 'Europe' }
 
-    it 'returns geographical area id if it is composed of two characters (a country)' do
+    it 'is an alias to geographical area id' do
       geographical_area.iso_code.should == 'UK'
-    end
-
-    it 'returns nil if geographical area id is longer than two characters (country group)' do
-      geographical_area_group.iso_code.should be_blank
     end
   end
 end

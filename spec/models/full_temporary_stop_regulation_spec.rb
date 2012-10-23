@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe FullTemporaryStopRegulation do
-  let(:fts_regulation) { build :full_temporary_stop_regulation, effective_enddate: Date.today }
+  let(:fts_regulation) { build :fts_regulation, effective_enddate: Date.today }
 
   describe '#regulation_id' do
     it 'is an alias for full temporary stop regulation id' do

@@ -293,11 +293,73 @@ describe Measure do
     end
 
     describe 'full temporary stop regulation' do
-      pending
+      let!(:fts_regulation1)        { create :fts_regulation, validity_start_date: Date.today.ago(3.years) }
+      let!(:fts_regulation2)        { create :fts_regulation, validity_start_date: Date.today.ago(5.years) }
+      let!(:fts_regulation_action1) { create :fts_regulation_action, fts_regulation_id: fts_regulation1.full_temporary_stop_regulation_id }
+      let!(:fts_regulation_action2) { create :fts_regulation_action, fts_regulation_id: fts_regulation2.full_temporary_stop_regulation_id }
+      let!(:measure)                { create :measure, measure_generating_regulation_id: fts_regulation_action1.stopped_regulation_id }
+
+      context 'direct loading' do
+        it 'loads associated full temporary stop regulation' do
+          measure.full_temporary_stop_regulation.pk.should eq fts_regulation1.pk
+        end
+
+        it 'does not load associated full temporary stop regulation' do
+          measure.full_temporary_stop_regulation.pk.should_not eq fts_regulation2.pk
+        end
+      end
+
+      context 'eager loading' do
+        it 'loads associated full temporary stop regulation' do
+          Measure.where(measure_sid: measure.measure_sid)
+                 .eager(:full_temporary_stop_regulation)
+                 .all
+                 .first
+                 .full_temporary_stop_regulation.pk.should eq fts_regulation1.pk
+        end
+
+        it 'does not load associated full temporary stop regulation' do
+          Measure.where(measure_sid: measure.measure_sid)
+                 .eager(:full_temporary_stop_regulation)
+                 .all
+                 .first
+                 .full_temporary_stop_regulation.pk.should_not eq fts_regulation2.pk
+        end
+      end
     end
 
     describe 'measure partial temporary stop' do
-      pending
+      let!(:mpt_stop1)        { create :measure_partial_temporary_stop, validity_start_date: Date.today.ago(3.years) }
+      let!(:mpt_stop2)        { create :measure_partial_temporary_stop, validity_start_date: Date.today.ago(5.years) }
+      let!(:measure)          { create :measure, measure_generating_regulation_id: mpt_stop1.partial_temporary_stop_regulation_id }
+
+      context 'direct loading' do
+        it 'loads associated full temporary stop regulation' do
+          measure.measure_partial_temporary_stop.pk.should eq mpt_stop1.pk
+        end
+
+        it 'does not load associated full temporary stop regulation' do
+          measure.measure_partial_temporary_stop.pk.should_not eq mpt_stop2.pk
+        end
+      end
+
+      context 'eager loading' do
+        it 'loads associated full temporary stop regulation' do
+          Measure.where(measure_sid: measure.measure_sid)
+                 .eager(:measure_partial_temporary_stop)
+                 .all
+                 .first
+                 .measure_partial_temporary_stop.pk.should eq mpt_stop1.pk
+        end
+
+        it 'does not load associated full temporary stop regulation' do
+          Measure.where(measure_sid: measure.measure_sid)
+                 .eager(:measure_partial_temporary_stop)
+                 .all
+                 .first
+                 .measure_partial_temporary_stop.pk.should_not eq mpt_stop2.pk
+        end
+      end
     end
   end
 
