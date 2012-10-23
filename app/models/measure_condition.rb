@@ -8,7 +8,7 @@ class MeasureCondition < Sequel::Model
   one_to_one :measure, key: :measure_sid,
                        primary_key: :measure_sid
 
-  many_to_one :measure_action, eager_loader_key: :action_code, dataset: -> {
+  many_to_one :measure_action, primary_key: {}, key: {}, eager_loader_key: :action_code, dataset: -> {
     actual(MeasureAction)
                  .where(action_code: action_code)
   }, eager_loader: (proc do |eo|

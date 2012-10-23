@@ -1,7 +1,7 @@
 class CertificateType < Sequel::Model
   plugin :time_machine
 
-  set_primary_key [:certificate_type_code, :validity_start_date]
+  set_primary_key :certificate_type_code
 
   many_to_one :certificate_type_description, key: :certificate_type_code,
                                              primary_key: :certificate_type_code,

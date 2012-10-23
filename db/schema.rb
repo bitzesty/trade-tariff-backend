@@ -397,7 +397,7 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
-      index [:duty_expression_id], :name=>:primary_key, :unique=>true
+      index [:duty_expression_id, :validity_start_date], :name=>:primary_key
     end
 
     create_table(:explicit_abrogation_regulations) do
@@ -1222,7 +1222,6 @@ Sequel.migration do
       column :description, "text"
       column :created_at, "datetime"
       column :updated_at, "datetime"
-      column :abbreviation, "varchar(30)"
 
       index [:language_id], :name=>:index_monetary_unit_descriptions_on_language_id
       index [:monetary_unit_code], :name=>:primary_key, :unique=>true

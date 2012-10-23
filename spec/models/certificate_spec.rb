@@ -116,7 +116,7 @@ describe Certificate do
                         .certificate_type.pk.should == certificate_type1.pk
           end
 
-          TimeMachine.at(3.years.ago) do
+          TimeMachine.at(4.years.ago) do
             Certificate.where(certificate_type_code: certificate.certificate_type_code,
                               certificate_code: certificate.certificate_code)
                         .eager(:certificate_type)
