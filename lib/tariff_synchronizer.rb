@@ -79,7 +79,7 @@ module TariffSynchronizer
   # to download any further updates to current day.
   def download
     if sync_variables_set?
-      logger.info "Starting sync at: #{Time.now}"
+      logger.info "Starting sync"
 
       [TaricUpdate, ChiefUpdate].map(&:sync)
     else
@@ -90,7 +90,7 @@ module TariffSynchronizer
   # Applies all updates (from inbox/failbox) by their date starting from the
   # oldest one.
   def apply
-    logger.info "Starting update application at: #{Time.now}"
+    logger.info "Starting update application"
 
     PendingUpdate.all
                  .sort_by(&:issue_date)
