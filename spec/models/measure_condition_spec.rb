@@ -45,6 +45,5 @@ describe MeasureCondition do
         let!(:certificate_type_code) { Forgery(:basic).text(exactly: 1) }
       end
     end
->>>>>>> Additional associations.
   end
 end
