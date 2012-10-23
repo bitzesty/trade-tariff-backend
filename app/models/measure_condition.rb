@@ -164,6 +164,8 @@ class MeasureCondition < Sequel::Model
     end
   end)
 
+  delegate :abbreviation, to: :monetary_unit, prefix: true, allow_nil: true
+
   def before_create
     self.measure_condition_sid ||= self.class.next_national_sid
 
@@ -186,6 +188,7 @@ class MeasureCondition < Sequel::Model
         sequence_number: component_sequence_number,
         duty_amount: condition_duty_amount,
         monetary_unit: condition_monetary_unit_code,
+        monetary_unit_abbreviation: monetary_unit_abbreviation,
         measurement_unit: measurement_unit.try(:description),
         measurement_unit_qualifier: measurement_unit_qualifier.try(:description)
       }

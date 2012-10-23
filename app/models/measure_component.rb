@@ -86,6 +86,7 @@ class MeasureComponent < Sequel::Model
                        primary_key: :measure_sid
 
   delegate :description, :abbreviation, to: :duty_expression, prefix: true
+  delegate :abbreviation, to: :monetary_unit, prefix: true, allow_nil: true
 end
 
 

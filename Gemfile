@@ -48,12 +48,13 @@ group :test do
   gem "forgery"
   gem "json_expressions"
   gem "rspec-rails"
-  gem "shoulda-matchers"
+  gem "shoulda-matchers", git: "https://github.com/thoughtbot/shoulda-matchers.git",
+                          ref: "9e1188eea6" # TODO change to stable version when next release comes out
+  gem "mocha", require: false
   gem "simplecov"
   gem "simplecov-rcov"
   gem "webmock"
   gem "vcr"
-  gem "mocha", require: false
 end
 
 group :router do

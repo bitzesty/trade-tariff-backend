@@ -1222,6 +1222,7 @@ Sequel.migration do
       column :description, "text"
       column :created_at, "datetime"
       column :updated_at, "datetime"
+      column :abbreviation, "varchar(30)"
 
       index [:language_id], :name=>:index_monetary_unit_descriptions_on_language_id
       index [:monetary_unit_code], :name=>:primary_key, :unique=>true
@@ -1535,6 +1536,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20121009120028_add_tariff_measure_number.rb")
     self[:schema_migrations].insert(:filename => "20121015072148_drop_tamf_le_tsmp.rb")
     self[:schema_migrations].insert(:filename => "20121019094932_convert_san_marino_to_italy_on_national_measures.rb")
+    self[:schema_migrations].insert(:filename => "20121022135253_add_currency_abbreviation.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"

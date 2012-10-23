@@ -32,6 +32,9 @@ child(measure_components: :measure_components) do
   node(:monetary_unit) { |component|
     component.monetary_unit_code
   }
+  node(:monetary_unit_abbreviation) { |component|
+    component.monetary_unit_abbreviation
+  }
   node(:measurement_unit) { |component|
     component.measurement_unit.try(:description)
   }
@@ -49,6 +52,9 @@ child(measure_conditions: :measure_conditions) do
 
     node(:monetary_unit) { |component|
       component.monetary_unit_code
+    }
+    node(:monetary_unit_abbreviation) { |component|
+      component.monetary_unit_abbreviation
     }
     node(:measurement_unit) { |component|
       component.measurement_unit.try(:description)
