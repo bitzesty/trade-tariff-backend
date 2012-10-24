@@ -321,4 +321,60 @@ FactoryGirl.define do
     footn_type_id { Forgery(:basic).text(exactly: 2).upcase }
     footn_id { Forgery(:basic).text(exactly: 3).upcase }
   end
+
+  factory :chief_update, class: TariffSynchronizer::ChiefUpdate do
+    ignore do
+      example_date { Forgery(:date).date }
+    end
+
+    filename { TariffSynchronizer::ChiefUpdate.file_name_for(example_date)  }
+    issue_date { example_date }
+    update_type { 'TariffSynchronizer::ChiefUpdate' }
+    state { 'P' }
+
+    trait :applied do
+      state { 'A' }
+    end
+  end
+
+  factory :taric_update, class: TariffSynchronizer::TaricUpdate do
+    ignore do
+      example_date { Forgery(:date).date }
+    end
+
+    filename { TariffSynchronizer::TaricUpdate.file_name_for(example_date)  }
+    issue_date { example_date }
+    update_type { 'TariffSynchronizer::TaricUpdate' }
+    state { 'P' }
+
+    trait :applied do
+      state { 'A' }
+    end
+  end
+
+  factory :footnote do
+    footnote_id { Forgery(:basic).text(exactly: 3) }
+    footnote_type_id { Forgery(:basic).text(exactly: 2) }
+    validity_start_date { Date.today.ago(2.years) }
+    validity_end_date   { nil }
+  end
+
+  factory :footnote_type do
+    footnote_type_id { Forgery(:basic).text(exactly: 2) }
+    validity_start_date { Date.today.ago(2.years) }
+    validity_end_date   { nil }
+  end
+
+  factory :certificate do
+    certificate_type_code { Forgery(:basic).text(exactly: 1) }
+    certificate_code { Forgery(:basic).text(exactly: 3) }
+    validity_start_date { Date.today.ago(2.years) }
+    validity_end_date   { nil }
+  end
+
+  factory :certificate_type do
+    certificate_type_code { Forgery(:basic).text(exactly: 1) }
+    validity_start_date { Date.today.ago(2.years) }
+    validity_end_date   { nil }
+  end
 end
