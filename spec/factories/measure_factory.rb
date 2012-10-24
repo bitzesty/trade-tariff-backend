@@ -4,9 +4,10 @@ FactoryGirl.define do
   factory :measure do
     measure_sid  { generate(:measure_sid) }
     measure_type_id { generate(:measure_sid) }
-    measure_generating_regulation_id { generate(:measure_sid) }
+    measure_generating_regulation_id { generate(:base_regulation_sid) }
     measure_generating_regulation_role { Forgery(:basic).number }
     goods_nomenclature_sid { generate(:goods_nomenclature_sid) }
+    geographical_area_sid { generate(:geographical_area_sid) }
     geographical_area_id { Forgery(:basic).text(exactly: 2).upcase }
     validity_start_date { Date.today.ago(3.years) }
     validity_end_date   { nil }
@@ -20,6 +21,13 @@ FactoryGirl.define do
     trait :with_base_regulation do
       after(:create) { |measure, evaluator|
         FactoryGirl.create(:base_regulation, base_regulation_id: measure.measure_generating_regulation_id)
+      }
+    end
+
+    trait :with_geographical_area do
+      after(:create) { |measure, evaluator|
+        FactoryGirl.create(:geographical_area, geographical_area_sid: measure.geographical_area_sid,
+                                               geographical_area_id: measure.geographical_area_id)
       }
     end
   end

@@ -1,4 +1,6 @@
 FactoryGirl.define do
+  sequence(:base_regulation_sid) { |n| n }
+
   factory :base_regulation do
     base_regulation_id { generate(:sid) }
     validity_start_date { Date.today.ago(3.years) }

@@ -212,10 +212,10 @@ class Measure < Sequel::Model
     validates_unique([:measure_type, :geographical_area, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date])
     # ME2 ME4 ME6 ME24
     validates_presence([:measure_type_id, :geographical_area_id, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role])
-    # TODO: ME3
-    # The validity period of the measure type must span the validity period of the measure.
-    # TODO: ME5
-    # The validity period of the geographical area must span the validity period of the measure.
+    # ME3
+    validates_validity_date_span_of(measure_type) if measure_type.present? # TODO it must be present
+    # ME5
+    validates_validity_date_span_of(geographical_area) if geographical_area.present? # TODO it must be present
     # TODO: ME7
     # The goods nomenclature code must be a product code; that is, it may not be an intermediate line.
     # TODO: ME8

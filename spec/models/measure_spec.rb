@@ -363,13 +363,25 @@ describe Measure do
     end
   end
 
-  describe 'validations', :focus do
-    # ME2 ME4 ME6 ME24
-    it { should validate_presence_of([:measure_type_id, :geographical_area_id, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role]) }
-    # ME25: validity_dates
-    it { should validate_validity_dates }
-    # ME1
-    it { should validate_uniqueness_of([:measure_type, :geographical_area, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date]) }
+  describe 'validations' do
+    context 'standalone' do
+      # ME2 ME4 ME6 ME24
+      it { should validate_presence_of([:measure_type_id, :geographical_area_id, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role]) }
+      # ME25: validity_dates
+      it { should validate_validity_dates }
+      # ME1
+      it { should validate_uniqueness_of([:measure_type, :geographical_area, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date]) }
+    end
+
+    context 'related' do
+      subject { create :measure, :with_measure_type,
+                                 :with_geographical_area }
+
+      # ME3
+      it { should span_validity_date_of(:measure_type) }
+      # ME5
+      it { should span_validity_date_of(:geographical_area) }
+    end
   end
 
   describe '#origin' do
