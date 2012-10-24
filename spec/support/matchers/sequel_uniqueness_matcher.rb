@@ -10,7 +10,6 @@ RSpec::Matchers.define :validate_uniqueness_of do |expected|
     }
 
     record2 = build  klass_name, similarity_hash
-    binding.pry
     !record2.valid?
   end
 

@@ -211,7 +211,7 @@ class Measure < Sequel::Model
     # ME1
     validates_unique([:measure_type, :geographical_area, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date])
     # ME2 ME4 ME6 ME24
-    validates_presence([:measure_type, :geographical_area, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role])
+    validates_presence([:measure_type_id, :geographical_area_id, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role])
     # TODO: ME3
     # The validity period of the measure type must span the validity period of the measure.
     # TODO: ME5

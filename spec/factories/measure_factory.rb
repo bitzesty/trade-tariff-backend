@@ -5,6 +5,9 @@ FactoryGirl.define do
     measure_sid  { generate(:measure_sid) }
     measure_type_id { generate(:measure_sid) }
     measure_generating_regulation_id { generate(:measure_sid) }
+    measure_generating_regulation_role { Forgery(:basic).number }
+    goods_nomenclature_sid { generate(:goods_nomenclature_sid) }
+    geographical_area_id { Forgery(:basic).text(exactly: 2).upcase }
     validity_start_date { Date.today.ago(3.years) }
     validity_end_date   { nil }
 
