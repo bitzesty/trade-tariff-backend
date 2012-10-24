@@ -1,9 +1,16 @@
 RSpec::Matchers.define :validate_uniqueness_of do |expected|
   match do |actual|
     klass_name = actual.class.name.to_s.underscore
-
+    expected_attributes = [expected].flatten
     record1 = create klass_name
-    record2 = build  klass_name, Hash[expected, record1.send(expected)]
+
+    similarity_hash = expected_attributes.inject({}) { |memo, attribute|
+      memo.merge!(Hash[attribute, record1.send(attribute)])
+      memo
+    }
+
+    record2 = build  klass_name, similarity_hash
+    binding.pry
     !record2.valid?
   end
 
