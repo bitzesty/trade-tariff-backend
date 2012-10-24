@@ -16,15 +16,13 @@ class Certificate < Sequel::Model
 
     id_map = eo[:id_map]
 
-    CertificateDescription.join_table(:inner,
-                            CertificateDescriptionPeriod.select(Sequel.as(:certificate_description_period_sid, :certificate_description_period_sid))
-                                                        .where(certificate_description_periods__certificate_code: id_map.keys.map(&:first),
-                                                               certificate_description_periods__certificate_type_code: id_map.keys.map(&:last))
-                                                        .order(:certificate_description_periods__validity_start_date.desc),
-                            {certificate_descriptions__certificate_description_period_sid: :description_periods__certificate_description_period_sid},
-                            {table_alias: 'description_periods'}
-                          ).group(:certificate_descriptions__certificate_code,
-                                  :certificate_descriptions__certificate_type_code)
+    CertificateDescription.with_actual(CertificateDescriptionPeriod)
+                          .join(:certificate_description_periods, certificate_description_periods__certificate_description_period_sid: :certificate_descriptions__certificate_description_period_sid,
+                                                                  certificate_description_periods__certificate_type_code: :certificate_descriptions__certificate_type_code,
+                                                                  certificate_description_periods__certificate_code: :certificate_descriptions__certificate_code)
+                          .where(certificate_description_periods__certificate_code: id_map.keys.map(&:first),
+                                 certificate_description_periods__certificate_type_code: id_map.keys.map(&:last))
+                          .order(:certificate_description_periods__validity_start_date.desc)
                           .all do |certificate_description|
       if certificates = id_map[[certificate_description.certificate_code, certificate_description.certificate_type_code]]
         certificates.each do |certificate|

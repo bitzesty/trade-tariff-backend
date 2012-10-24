@@ -12,12 +12,6 @@ class FootnoteType < Sequel::Model
     validates_start_date
   end
 
- 
-  # has_many :footnotes, foreign_key: :footnote_type_id
-  # has_many :footnote_description, foreign_key: :footnote_type_id
-  # has_many :footnote_description_periods, foreign_key: :footnote_type_id
-  # has_one  :footnote_type_description, foreign_key: :footnote_type_id
-
   APPLICATION_CODES = {
     1 => "CN nomencalture",
     2 => "TARIC nomencalture",

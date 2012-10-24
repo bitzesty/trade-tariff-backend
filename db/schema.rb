@@ -166,7 +166,7 @@ Sequel.migration do
       column :updated_at, "datetime"
       column :national, "tinyint(1)"
 
-      index [:certificate_type_code], :name=>:primary_key, :unique=>true
+      index [:certificate_type_code, :validity_start_date], :name=>:primary_key
     end
 
     create_table(:certificates) do
@@ -179,7 +179,7 @@ Sequel.migration do
       column :national, "tinyint(1)"
       column :national_abbrev, "varchar(255)"
 
-      index [:certificate_code, :certificate_type_code], :name=>:primary_key, :unique=>true
+      index [:certificate_code, :certificate_type_code, :validity_start_date], :name=>:primary_key
     end
 
     create_table(:chapter_notes) do
@@ -397,7 +397,7 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
-      index [:duty_expression_id], :name=>:primary_key, :unique=>true
+      index [:duty_expression_id, :validity_start_date], :name=>:primary_key
     end
 
     create_table(:explicit_abrogation_regulations) do
@@ -843,7 +843,7 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
-      index [:action_code], :name=>:primary_key, :unique=>true
+      index [:action_code, :validity_start_date], :name=>:primary_key
     end
 
     create_table(:measure_components) do
@@ -879,7 +879,7 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
-      index [:condition_code], :name=>:primary_key, :unique=>true
+      index [:condition_code, :validity_start_date], :name=>:primary_key
     end
 
     create_table(:measure_condition_components) do
@@ -1002,7 +1002,7 @@ Sequel.migration do
       column :measure_type_acronym, "varchar(3)"
 
       index [:measure_type_series_id], :name=>:index_measure_types_on_measure_type_series_id
-      index [:measure_type_id], :name=>:primary_key, :unique=>true
+      index [:measure_type_id, :validity_start_date], :name=>:primary_key
     end
 
     create_table(:measurement_unit_descriptions) do
@@ -1033,7 +1033,7 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
-      index [:measurement_unit_qualifier_code], :name=>:primary_key, :unique=>true
+      index [:measurement_unit_qualifier_code, :validity_start_date], :name=>:primary_key
     end
 
     create_table(:measurement_units) do
@@ -1043,7 +1043,7 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
-      index [:measurement_unit_code], :name=>:primary_key, :unique=>true
+      index [:measurement_unit_code, :validity_start_date], :name=>:primary_key
     end
 
     create_table(:measurements) do
@@ -1235,7 +1235,7 @@ Sequel.migration do
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
-      index [:monetary_unit_code], :name=>:primary_key, :unique=>true
+      index [:monetary_unit_code, :validity_start_date], :name=>:primary_key
     end
 
     create_table(:nomenclature_group_memberships) do
@@ -1534,6 +1534,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20121008181507_manual_add_abbreviations.rb")
     self[:schema_migrations].insert(:filename => "20121009092643_change_asx_to_asv.rb")
     self[:schema_migrations].insert(:filename => "20121009120028_add_tariff_measure_number.rb")
+    self[:schema_migrations].insert(:filename => "20121012080652_modify_primary_keys.rb")
     self[:schema_migrations].insert(:filename => "20121015072148_drop_tamf_le_tsmp.rb")
     self[:schema_migrations].insert(:filename => "20121019094932_convert_san_marino_to_italy_on_national_measures.rb")
     self[:schema_migrations].insert(:filename => "20121022135253_add_currency_abbreviation.rb")

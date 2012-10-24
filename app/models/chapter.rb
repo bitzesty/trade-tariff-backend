@@ -74,6 +74,8 @@ class Chapter < GoodsNomenclature
     serializable_hash.to_json
   end
 
+  private
+
   def relevant_headings
     "#{short_code}__000000"
   end

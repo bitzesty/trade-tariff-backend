@@ -11,10 +11,6 @@ class MeasureTypeSeries < Sequel::Model
     # MTS3
     validates_start_date
   end
-
-
-  # has_one :measure_type_series_description
-  # has_many :measure_types
 end
 
 
