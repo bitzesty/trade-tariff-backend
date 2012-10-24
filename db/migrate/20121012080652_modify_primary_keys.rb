@@ -39,6 +39,11 @@ Sequel.migration do
       drop_index [:action_code], name: :primary_key
       add_index [:action_code, :validity_start_date], name: :primary_key
     end
+
+    alter_table :certificates do
+      drop_index [:certificate_code, :certificate_type_code], name: :primary_key
+      add_index [:certificate_code, :certificate_type_code, :validity_start_date], name: :primary_key
+    end
   end
 
   down do
@@ -80,6 +85,11 @@ Sequel.migration do
     alter_table :measure_actions do
       drop_index [:action_code, :validity_start_date], name: :primary_key
       add_index [:action_code], name: :primary_key
+    end
+
+    alter_table :certificates do
+      drop_index [:certificate_code, :certificate_type_code, :validity_start_date], name: :primary_key
+      add_index [:certificate_code, :certificate_type_code], name: :primary_key
     end
   end
 end

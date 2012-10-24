@@ -23,7 +23,7 @@ describe Measure do
             measure.measure_type.pk.should == measure_type1.pk
           end
 
-          TimeMachine.at(3.years.ago) do
+          TimeMachine.at(4.years.ago) do
             measure.reload.measure_type.pk.should == measure_type2.pk
           end
         end
@@ -49,7 +49,7 @@ describe Measure do
                           .measure_type.pk.should == measure_type1.pk
           end
 
-          TimeMachine.at(3.years.ago) do
+          TimeMachine.at(4.years.ago) do
             Measure.where(measure_sid: measure.measure_sid)
                           .eager(:measure_type)
                           .all
@@ -179,7 +179,7 @@ describe Measure do
                           .footnotes.map(&:pk).should include footnote1.pk
           end
 
-          TimeMachine.at(3.years.ago) do
+          TimeMachine.at(4.years.ago) do
             Measure.where(measure_sid: measure.measure_sid)
                           .eager(:footnotes)
                           .all

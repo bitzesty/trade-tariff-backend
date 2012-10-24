@@ -1,5 +1,6 @@
 FactoryGirl.define do
   sequence(:additional_code_sid) { |n| n}
+  sequence(:additional_code_description_period_sid) { |n| n}
 
   factory :additional_code do
     additional_code_sid     { generate(:additional_code_sid) }

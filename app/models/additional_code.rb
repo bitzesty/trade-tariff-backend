@@ -36,7 +36,7 @@ class AdditionalCode < Sequel::Model
   def validate
     super
     # ACN1
-    validates_unique([:additional_code, :additional_code_type, :validity_start_date])
+    validates_unique([:additional_code, :additional_code_type_id, :validity_start_date])
     # TODO: ACN2
     # ACN3
     validates_start_date

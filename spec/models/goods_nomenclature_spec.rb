@@ -51,7 +51,7 @@ describe GoodsNomenclature do
                           .goods_nomenclature_indent.pk.should == goods_nomenclature_indent1.pk
           end
 
-          TimeMachine.at(3.years.ago) do
+          TimeMachine.at(4.years.ago) do
             GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                           .eager(:goods_nomenclature_indent)
                           .all
@@ -85,7 +85,7 @@ describe GoodsNomenclature do
             goods_nomenclature.goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
           end
 
-          TimeMachine.at(3.years.ago) do
+          TimeMachine.at(4.years.ago) do
             goods_nomenclature.reload.goods_nomenclature_description.pk.should == goods_nomenclature_description2.pk
           end
         end
@@ -111,7 +111,7 @@ describe GoodsNomenclature do
                           .goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
           end
 
-          TimeMachine.at(3.years.ago) do
+          TimeMachine.at(4.years.ago) do
             GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                           .eager(:goods_nomenclature_description)
                           .all
@@ -145,7 +145,7 @@ describe GoodsNomenclature do
             goods_nomenclature.footnote.pk.should == footnote1.pk
           end
 
-          TimeMachine.at(3.years.ago) do
+          TimeMachine.at(4.years.ago) do
             goods_nomenclature.reload.footnote.pk.should == footnote2.pk
           end
         end
@@ -171,7 +171,7 @@ describe GoodsNomenclature do
                           .footnote.pk.should == footnote1.pk
           end
 
-          TimeMachine.at(3.years.ago) do
+          TimeMachine.at(4.years.ago) do
             GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                           .eager(:footnote)
                           .all

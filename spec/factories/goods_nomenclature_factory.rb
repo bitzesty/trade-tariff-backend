@@ -141,4 +141,9 @@ FactoryGirl.define do
     }
   end
 
+  factory :section do
+    position { Forgery(:basic).number }
+    numeral { ["I", "II", "III"].sample }
+    title { Forgery(:lorem_ipsum).sentence }
+  end
 end

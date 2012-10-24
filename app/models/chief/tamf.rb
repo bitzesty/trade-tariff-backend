@@ -110,13 +110,6 @@ module Chief
           mc.duty_expression_id = duty_expression.duty_expression_id_spfc2
           mc.monetary_unit_code = duty_expression.monetary_unit_code_spfc2
         end
-        # TODO, why?
-        #     if (measurementUnitMapping == null && (tamfVO.getSpecific2UnitOfQuantity() != null || tamfVO.getSpecific1CompoundUnitOfQuantity() != null)) {
-        #         throw new TariffSystemException(this.getClass().getName() + ".getMeasureComponentMap: found no measurement unit for "
-        #                 + tamfVO.getSpecific1CompoundUnitOfQuantity()
-        #                 + ", "
-        #                 + tamfVO.getSpecific2UnitOfQuantity());
-        #     }
         if measure_component.monetary_unit_code.present?
           if m_unit = measurement_unit(spfc1_cmpd_uoq, spfc2_uoq)
             measure_component.measurement_unit_code = m_unit.measurem_unit_cd

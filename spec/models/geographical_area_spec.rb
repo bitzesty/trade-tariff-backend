@@ -25,7 +25,7 @@ describe GeographicalArea do
             geographical_area.geographical_area_description.pk.should == geographical_area_description1.pk
           end
 
-          TimeMachine.at(3.years.ago) do
+          TimeMachine.at(4.years.ago) do
             geographical_area.reload.geographical_area_description.pk.should == geographical_area_description2.pk
           end
         end
@@ -51,7 +51,7 @@ describe GeographicalArea do
                           .geographical_area_description.pk.should == geographical_area_description1.pk
           end
 
-          TimeMachine.at(3.years.ago) do
+          TimeMachine.at(4.years.ago) do
             GeographicalArea.where(geographical_area_sid: geographical_area.geographical_area_sid)
                           .eager(:geographical_area_description)
                           .all

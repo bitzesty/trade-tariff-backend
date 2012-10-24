@@ -210,11 +210,4 @@ class MeasureCondition < Sequel::Model
       :duty_expression
     end
   end
-
-  def as_duty_expression
-    DutyExpressionFormatter.format(duty_expression_id, duty_amount, monetary_unit,
-                                   measurement_unit, measurement_unit_qualifier)
-  end
 end
-
-

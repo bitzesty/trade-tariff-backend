@@ -22,9 +22,10 @@ FactoryGirl.define do
   end
 
   factory :measure_type do
-    measure_type_id     { Forgery(:basic).text(exactly: 3) }
-    validity_start_date { Date.today.ago(3.years) }
-    validity_end_date   { nil }
+    measure_type_id        { Forgery(:basic).text(exactly: 3) }
+    measure_type_series_id { Forgery(:basic).text(exactly: 1) }
+    validity_start_date    { Date.today.ago(3.years) }
+    validity_end_date      { nil }
 
     trait :export do
       trade_movement_code { 1 }

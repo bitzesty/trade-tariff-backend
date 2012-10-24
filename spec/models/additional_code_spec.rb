@@ -25,7 +25,7 @@ describe AdditionalCode do
             additional_code.additional_code_description.pk.should == additional_code_description1.pk
           end
 
-          TimeMachine.at(3.years.ago) do
+          TimeMachine.at(4.years.ago) do
             additional_code.reload.additional_code_description.pk.should == additional_code_description2.pk
           end
         end
@@ -51,7 +51,7 @@ describe AdditionalCode do
                           .additional_code_description.pk.should == additional_code_description1.pk
           end
 
-          TimeMachine.at(3.years.ago) do
+          TimeMachine.at(4.years.ago) do
             AdditionalCode.where(additional_code_sid: additional_code.additional_code_sid)
                           .eager(:additional_code_description)
                           .all
