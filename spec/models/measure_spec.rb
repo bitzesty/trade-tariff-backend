@@ -363,25 +363,33 @@ describe Measure do
     end
   end
 
-  describe 'validations' do
-    context 'standalone' do
-      # ME2 ME4 ME6 ME24
-      it { should validate_presence_of([:measure_type_id, :geographical_area_id, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role]) }
-      # ME25: validity_dates
-      it { should validate_validity_dates }
-      # ME1
-      it { should validate_uniqueness_of([:measure_type, :geographical_area, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date]) }
-    end
-
-    context 'related' do
-      subject { create :measure, :with_measure_type,
-                                 :with_geographical_area }
-
-      # ME3
-      it { should span_validity_date_of(:measure_type) }
-      # ME5
-      it { should span_validity_date_of(:geographical_area) }
-    end
+  describe 'validations', :focus do
+    # ME2 ME4 ME6 ME24 The <field name> must exist.
+    it { should validate(:presence).of([:measure_type, :geographical_area, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role]) }
+    # ME1 The combination of measure type + geographical area + goods nomenclature item id + additional code type + additional code + order number + reduction indicator + start date must be unique
+    it { should validate(:uniqueness).of([:measure_type, :geographical_area, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date]) }
+    # ME3 ME115 ME8 ME5  The validity period of the <associated record> must span the validity period of the measure
+    it { should validate(:validity_date_span).of(:geographical_area, :type, :goods_nomenclature, :additional_code) }
+    # ME25 If the measures end date is specified (implicitly or explicitly) then the start date of the measure must be less than or equal to the end date
+    it { should validate(:validity_dates).of([:validity_start_date, :validity_end_date]) }
+    # ME7 The goods nomenclature code must be a product code; that is, it may not be an intermediate line
+    # ME88 The level of the goods code, if present, cannot exceed the explosion level of the measure type.
+    it { should validate_associated(:goods_nomenclature, ensure: ->(goods_nomenclature) {
+      goods_nomenclature.producline_suffix == "80" &&
+      goods_nomenclature.number_indents <= goods_nomenclature.measure_type.measure_explosion_level
+    }) }
+    # ME10 The order number must be specified if the "order number flag" (specified in the measure type record) has the value "mandatory". If the flag is set to "not permitted" then the field cannot be entered.
+    it { should validate_associated(:ordernumber) } # TODO ensure..?
+    # ME116 When a quota order number is used in a measure then the validity period of the quota order number must span the validity period of the measure.  This rule is only applicable for measures with start date after 31/12/2007.
+    it { should validate(:validity_date_span).of([:ordernumber]) }
+    # ME12 If the additional code is specified then the additional code type must have a relationship with the measure type.
+    it { should validate(:presence).of([:goods_nomenclature_item_id]) }
+    # ME86 The role of the entered regulation must be a Base, a Modification, a Provisional Anti-Dumping, a Definitive Anti-Dumping.
+    it { should validate(:inclusion).of(:measure_generating_regulation_role) }
+    # ME26 The entered regulation may not be completely abrogated. # TODO add :from
+    it { should validate(:exclusion).of([:measure_generating_regulation_id, :measure_generating_regulation_role]) }
+    # ME27 The entered regulation may not be fully replaced. # TODO add :from
+    it { should validate(:exclusion).of([:measure_generating_regulation_id, :measure_generating_regulation_role]) }
   end
 
   describe '#origin' do

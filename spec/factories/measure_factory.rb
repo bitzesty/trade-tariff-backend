@@ -12,6 +12,15 @@ FactoryGirl.define do
     validity_start_date { Date.today.ago(3.years) }
     validity_end_date   { nil }
 
+    trait :with_goods_nomenclature do
+      after(:create) { |measure, evaluator|
+        FactoryGirl.create(:goods_nomenclature, goods_nomenclature_sid: measure.goods_nomenclature_sid,
+                                                goods_nomenclature_item_id: measure.goods_nomenclature_item_id,
+                                                producline_suffix: "80",
+                                                validity_start_date: measure.validity_start_date)
+      }
+    end
+
     trait :with_measure_type do
       after(:create) { |measure, evaluator|
         FactoryGirl.create(:measure_type, measure_type_id: measure.measure_type_id)
@@ -37,6 +46,7 @@ FactoryGirl.define do
     measure_type_series_id { Forgery(:basic).text(exactly: 1) }
     validity_start_date    { Date.today.ago(3.years) }
     validity_end_date      { nil }
+    measure_explosion_level { 10 }
 
     trait :export do
       trade_movement_code { 1 }
