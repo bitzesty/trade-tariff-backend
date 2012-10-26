@@ -4,6 +4,10 @@ class ModificationRegulation < Sequel::Model
 
   set_primary_key [:modification_regulation_id, :modification_regulation_role]
 
+  one_to_one :base_regulation, key: [:base_regulation_id, :base_regulation_role]
+
+  delegate :not_completely_abrogated, to: :base_regulation, prefix: true, allow_nil: true
+
   ######### Conformance validations 290
   def validate
     super

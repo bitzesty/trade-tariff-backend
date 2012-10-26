@@ -1,6 +1,4 @@
-# Presence validation does not need additional checks besides
-# metadata
-class PresenceValidationMatcher < TariffValidationMatcher
+class InputValidationMatcher < TariffValidationMatcher
   attr_reader :condition
 
   def matches?(subject)
@@ -9,11 +7,11 @@ class PresenceValidationMatcher < TariffValidationMatcher
 
   def failure_message
     msg = "expected #{subject.class.name} to validate #{validation_type} of #{attributes}"
-    msg << " if #{condition} is true" if condition.present?
+    msg << " and require #{condition} to return true" if condition.present?
     msg
   end
 
-  def if(condition)
+  def requires(condition)
     @condition = condition
 
     self
@@ -24,7 +22,7 @@ class PresenceValidationMatcher < TariffValidationMatcher
   def matches_collection?
     if condition.present?
       attributes.all? {|attribute|
-        reflection_for(attribute)[:if] == condition
+        reflection_for(attribute)[:requires] == condition
       }
     else
       true
@@ -32,6 +30,6 @@ class PresenceValidationMatcher < TariffValidationMatcher
   end
 end
 
-def validate_presence
-  PresenceValidationMatcher.new(:presence)
+def validate_input
+  InputValidationMatcher.new(:input)
 end

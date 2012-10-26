@@ -211,6 +211,11 @@ class Measure < Sequel::Model
     end
   end)
 
+  one_to_one :modification_regulation, key: [:modification_regulation_id,
+                                             :modification_regulation_role],
+                                       primary_key: [:measure_generating_regulation_id,
+                                                     :measure_generating_regulation_role]
+
   # def_column_alias :measure_type_id, :measure_type
   def_column_alias :additional_code_id, :additional_code
   def_column_alias :geographical_area_id, :geographical_area
@@ -241,9 +246,12 @@ class Measure < Sequel::Model
     # ME27
     exclusion_of [:measure_generating_regulation_id, :measure_generating_regulation_role],
                   from: RegulationReplacement.map([:replaced_regulation_id, :replaced_regulation_role])
-    # TODO: ME33
-    # A justification regulation may not be entered if the measure end date is not filled in.
-    # validates_
+    # ME33
+    input_of :justification_regulation_id, :justification_regulation_role, requires: :is_ended?
+    # ME34
+    presence_of :justification_regulation_id, :justification_regulation_role, if: :is_ended?
+    # ME29
+    associated :modification_regulation, ensure: :modification_regulation_base_regulation_not_completely_abrogated?
   end
 
   delegate :present?, to: :additional_code, prefix: :additional_code, allow_nil: true
@@ -257,6 +265,10 @@ class Measure < Sequel::Model
   def qualified_goods_nomenclature?
     goods_nomenclature.producline_suffix == "80" &&
     goods_nomenclature.number_indents <= goods_nomenclature.measure_type.measure_explosion_level
+  end
+
+  def is_ended?
+    validity_end_date.present?
   end
 
   ######### Conformance validations 430
@@ -299,15 +311,6 @@ class Measure < Sequel::Model
     # The VP of the measure (implicit or explicit) must reside within the effective VP of its supporting regulation. The effective VP is the VP of the regulation taking into account extensions and abrogation.
     # TODO: ME28
     # The entered regulation may not be partially replaced for the measure type, geographical area or chapter (first two digits of the goods code) of the measure.
-    # TODO: ME29
-    # If the entered regulation is a modification regulation then its base regulation may not be completely abrogated.
-    # TODO: ME34
-    # A justification regulation must be entered if the measure end date is filled in.
-
-
-
-
-
 
 
     # TODO: ME40

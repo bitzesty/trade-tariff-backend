@@ -43,6 +43,21 @@ module Sequel
           end
         end
 
+        def validates_input_of(*atts)
+         opts = {
+            :message => "cannot be set unless condition is met",
+            :requires => true,
+            :tag => :input,
+          }.merge!(extract_options!(atts))
+
+          reflect_validation(:input, opts, atts)
+
+          atts << opts
+          validates_each(*atts) do |o, a, v|
+            o.errors.add(a, opts[:message]) unless o.send(opts[:requires])
+          end
+        end
+
         def validates_exclusion_of(*atts)
           opts = extract_options!(atts)
           n = opts[:from]

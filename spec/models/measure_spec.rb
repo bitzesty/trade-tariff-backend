@@ -386,8 +386,13 @@ describe Measure do
     # ME26 The entered regulation may not be completely abrogated.
     it { should validate_exclusion.of([:measure_generating_regulation_id, :measure_generating_regulation_role]).from(CompleteAbrogationRegulation.map([:complete_abrogation_regulation_id, :complete_abrogation_regulation_role])) }
     # ME27 The entered regulation may not be fully replaced.
-    it { should validate_exclusion.of([:measure_generating_regulation_id, :measure_generating_regulation_role]).from(RegulationReplacement.map([:replaced_regulation_id, :replaced_regulation_role])
-) }
+    it { should validate_exclusion.of([:measure_generating_regulation_id, :measure_generating_regulation_role]).from(RegulationReplacement.map([:replaced_regulation_id, :replaced_regulation_role])) }
+    # ME33 A justification regulation may not be entered if the measure end date is not filled in.
+    it { should validate_input.of(:justification_regulation_id, :justification_regulation_role).requires(:is_ended?) }
+    # ME34 A justification regulation must be entered if the measure end date is filled in.
+    it { should validate_presence.of(:justification_regulation_id, :justification_regulation_role).if(:is_ended?) }
+    # ME29 If the entered regulation is a modification regulation then its base regulation may not be completely abrogated.
+    it { should validate_associated(:modification_regulation).and_ensure(:modification_regulation_base_regulation_not_completely_abrogated?) }
   end
 
   describe '#origin' do

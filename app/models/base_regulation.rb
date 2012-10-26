@@ -4,6 +4,13 @@ class BaseRegulation < Sequel::Model
 
   set_primary_key [:base_regulation_id, :base_regulation_role]
 
+  one_to_one :complete_abrogation_regulation, key: [:complete_abrogation_regulation_id,
+                                                    :complete_abrogation_regulation_role]
+
+  def not_completely_abrogated?
+    complete_abrogation_regulation.blank?
+  end
+
   ######### Conformance validations 285
   def validate
     super
