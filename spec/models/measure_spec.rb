@@ -380,7 +380,8 @@ describe Measure do
     # ME116 When a quota order number is used in a measure then the validity period of the quota order number must span the validity period of the measure.  This rule is only applicable for measures with start date after 31/12/2007.
     it { should validate_validity_date_span.of(:ordernumber) }
     # ME12 If the additional code is specified then the additional code type must have a relationship with the measure type.
-    it { should validate_presence.of(:goods_nomenclature_item_id) }
+    it { should validate_associated(:additional_code_type).and_ensure(:adco_type_related_to_measure_type?)
+                                                          .if(:additional_code_present?) }
     # ME86 The role of the entered regulation must be a Base, a Modification, a Provisional Anti-Dumping, a Definitive Anti-Dumping.
     it { should validate_inclusion.of(:measure_generating_regulation_role).in(Measure::VALID_ROLE_TYPE_IDS) }
     # ME26 The entered regulation may not be completely abrogated.
@@ -393,6 +394,8 @@ describe Measure do
     it { should validate_presence.of(:justification_regulation_id, :justification_regulation_role).if(:is_ended?) }
     # ME29 If the entered regulation is a modification regulation then its base regulation may not be completely abrogated.
     it { should validate_associated(:modification_regulation).and_ensure(:modification_regulation_base_regulation_not_completely_abrogated?) }
+    # ME9 If no additional code is specified then the goods code is mandatory.
+    it { should validate_presence.of(:goods_nomenclature_item_id).if(:additional_code_blank?) }
   end
 
   describe '#origin' do

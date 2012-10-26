@@ -20,6 +20,10 @@ class AdditionalCodeType < Sequel::Model
     4 => "Export refund for processed agricultural goods"
   }
 
+  def related_to_measure_type?
+    measure_types.any?
+  end
+
   ######### Conformance validations 120
   def validate
     super

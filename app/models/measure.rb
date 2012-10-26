@@ -155,6 +155,10 @@ class Measure < Sequel::Model
       end
     end)
 
+  many_to_one :adco_type, class_name: 'AdditionalCodeType',
+                          key: :additional_code_type,
+                          primary_key: :additional_code_type_id
+
   one_to_one :quota_order_number, eager_loader_key: :ordernumber, dataset: -> {
     actual(QuotaOrderNumber).where(quota_order_number_id: ordernumber)
   }, eager_loader: (proc do |eo|
@@ -237,7 +241,8 @@ class Measure < Sequel::Model
     # ME116
     validity_date_span_of :ordernumber, if: :should_validate_ordernumber_date_span?
     # ME12
-    presence_of :goods_nomenclature_item_id, if: :additional_code_present?
+    associated :additional_code_type, ensure: :adco_type_related_to_measure_type?,
+                                      if: :additional_code_present?
     # ME86
     inclusion_of :measure_generating_regulation_role, in: VALID_ROLE_TYPE_IDS
     # ME26
@@ -252,11 +257,14 @@ class Measure < Sequel::Model
     presence_of :justification_regulation_id, :justification_regulation_role, if: :is_ended?
     # ME29
     associated :modification_regulation, ensure: :modification_regulation_base_regulation_not_completely_abrogated?
+    # ME9
+    presence_of :goods_nomenclature_item_id, if: :additional_code_blank?
   end
 
-  delegate :present?, to: :additional_code, prefix: :additional_code, allow_nil: true
+  delegate :present?, :blank?, to: :additional_code, prefix: :additional_code, allow_nil: true
   delegate :present?, to: :quota_order_number, prefix: :quota_order_number, allow_nil: true
   delegate :order_number_capture_code_permitted?, to: :type, prefix: :type, allow_nil: true
+  delegate :related_to_measure_type?, to: :adco_type, prefix: :adco_type, allow_nil: true
 
   def should_validate_ordernumber_date_span?
     ordernumber.present? && validity_start_date > Date.new(2007,12,31)
@@ -285,8 +293,6 @@ class Measure < Sequel::Model
     # When a quota order number is used in a measure then the validity period of the quota order number must span the validity period of the measure.  This rule is only applicable for measures with start date after 31/12/2007. Only quota order numbers managed by the first come first served principle are in scope; these order number are starting with '09'; except order numbers starting with '094'
     # TODO: ME119
     # When a quota order number is used in a measure then the validity period of the quota order number origin must span the validity period of the measure.  This rule is only applicable for measures with start date after 31/12/2007. Only origins for quota order numbers managed by the first come first served principle are in scope; these order number are starting with '09'; except order numbers starting with '094'
-    # TODO: ME9
-    # If no additional code is specified then the goods code is mandatory.
     # TODO: ME13
     # If the additional code type is related to a Meursing table plan then only the additional code can be specified: no goods code, order number or reduction indicator.
     # TODO: ME14
