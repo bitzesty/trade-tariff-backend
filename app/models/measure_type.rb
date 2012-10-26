@@ -38,6 +38,9 @@ class MeasureType < Sequel::Model
     # TODO: MT10
   end
 
+  def order_number_capture_code_permitted?
+    order_number_capture_code == "1"
+  end
 end
 
 

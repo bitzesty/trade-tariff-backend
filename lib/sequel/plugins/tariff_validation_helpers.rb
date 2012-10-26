@@ -26,13 +26,14 @@ module Sequel
           end
         end
 
-        def validates_validity_dates(*atts)
+        def validates_validity_dates
+          atts = [:validity_start_date, :validity_end_date]
           opts = {
             message: "validity end date must be greater or equal to validity start date",
-            tag: :validity_dates,
+            tag: :validity_date,
           }.merge!(extract_options!(atts))
 
-          reflect_validation(:validity_dates, opts, atts)
+          reflect_validation(:validity_date, opts, atts)
           atts << opts
 
           validates_each(*atts) do |o, a, v|
@@ -67,8 +68,10 @@ module Sequel
           reflect_validation(:associated, opts, atts)
           atts << opts
 
-          validates_each(*atts) do |o, a, v|
-            opts[:ensure].call(o, o.send(a))
+          validates_each(*atts) do |object, association, value|
+            if object.send(association).present?
+              object.errors.add(association, opts[:message]) unless object.send(opts[:ensure])
+            end
           end
         end
       end

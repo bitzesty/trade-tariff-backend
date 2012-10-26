@@ -223,23 +223,16 @@ class Measure < Sequel::Model
     # ME3 ME5 ME8 ME115
     validity_date_span_of :geographical_area, :type, :goods_nomenclature, :additional_code
     # ME25
-    validity_dates :validity_start_date, :validity_end_date
+    validity_dates
     # ME7 ME88
-    associated :goods_nomenclature, ensure: ->(measure, goods_nomenclature) {
-      goods_nomenclature.producline_suffix == "80" &&
-      goods_nomenclature.number_indents <= measure.type.measure_explosion_level
-    }
+    associated :goods_nomenclature, ensure: :qualified_goods_nomenclature?
     # ME10
-    associated :ordernumber, ensure: ->(measure, ordernumber) { ordernumber.present? },
-                             if: ->(measure) { measure.type.order_number_capture_code == 1 }
+    associated :quota_order_number, ensure: :quota_order_number_present?,
+                                    if: :type_order_number_capture_code_permitted?
     # ME116
-    validity_date_span_of [:ordernumber], if: ->(measure) {
-      measure.ordernumber.present? && measure.validity_start_date > Date.new(2007,12,31)
-    }
+    validity_date_span_of :ordernumber, if: :should_validate_ordernumber_date_span?
     # ME12
-    presence_of :goods_nomenclature_item_id, if: ->(measure) {
-      measure.additional_code.present?
-    }
+    presence_of :goods_nomenclature_item_id, if: :additional_code_present?
     # ME86
     inclusion_of :measure_generating_regulation_role, in: VALID_ROLE_TYPE_IDS
     # ME26
@@ -253,9 +246,22 @@ class Measure < Sequel::Model
     # validates_
   end
 
+  delegate :present?, to: :additional_code, prefix: :additional_code, allow_nil: true
+  delegate :present?, to: :quota_order_number, prefix: :quota_order_number, allow_nil: true
+  delegate :order_number_capture_code_permitted?, to: :type, prefix: :type, allow_nil: true
+
+  def should_validate_ordernumber_date_span?
+    ordernumber.present? && validity_start_date > Date.new(2007,12,31)
+  end
+
+  def qualified_goods_nomenclature?
+    goods_nomenclature.producline_suffix == "80" &&
+    goods_nomenclature.number_indents <= goods_nomenclature.measure_type.measure_explosion_level
+  end
+
   ######### Conformance validations 430
-  def validate
-    super
+  # def validate
+    # super
 
     # TODO: ME16
     # Integrating a measure with an additional code when an equivalent or overlapping measures without additional code already exists and vice-versa, should be forbidden.
@@ -400,7 +406,7 @@ class Measure < Sequel::Model
     # There may be no overlap between different PTS periods.
     # TODO: ME104
     # The justification regulation must be either: - the measure's measure-generating regulation, or - a measure-generating regulation, valid on the day after the measure’s (explicit) end date. If the measure’s measure-generating regulation is 'approved’, then so must be the justification regulation.
-  end
+  # end
 
   dataset_module do
     def with_base_regulations

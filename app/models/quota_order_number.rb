@@ -19,7 +19,6 @@ class QuotaOrderNumber < Sequel::Model
       end
     end
   end)
-
 end
 
 
