@@ -4,12 +4,12 @@ class FootnoteType < Sequel::Model
   one_to_many :footnotes
 
   ######### Conformance validations 100
-  def validate
-    super
+
+  validates do
     # FOT1
-    validates_unique :footnote_type_id
+    uniqueness_of :footnote_type_id
     # FOT3
-    validates_start_date
+    validity_dates
   end
 
   def before_destroy

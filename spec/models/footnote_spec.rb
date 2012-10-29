@@ -68,7 +68,7 @@ describe Footnote do
     end
   end
 
-  describe 'validations' do
+  describe 'validations', :focus do
   end
 
   describe '#code' do

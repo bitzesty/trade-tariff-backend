@@ -1095,7 +1095,7 @@ Sequel.migration do
 
     create_table(:meursing_additional_codes) do
       column :meursing_additional_code_sid, "int(11)"
-      column :additional_code, "int(11)"
+      column :additional_code, "varchar(3)"
       column :validity_start_date, "datetime"
       column :created_at, "datetime"
       column :updated_at, "datetime"
@@ -1150,7 +1150,7 @@ Sequel.migration do
       column :subheading_sequence_number, "int(11)"
       column :validity_start_date, "datetime"
       column :validity_end_date, "datetime"
-      column :additional_code, "int(11)"
+      column :additional_code, "varchar(3)"
       column :created_at, "datetime"
       column :updated_at, "datetime"
 
@@ -1538,6 +1538,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20121015072148_drop_tamf_le_tsmp.rb")
     self[:schema_migrations].insert(:filename => "20121019094932_convert_san_marino_to_italy_on_national_measures.rb")
     self[:schema_migrations].insert(:filename => "20121022135253_add_currency_abbreviation.rb")
+    self[:schema_migrations].insert(:filename => "20121029133148_convert_additional_codes.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"
