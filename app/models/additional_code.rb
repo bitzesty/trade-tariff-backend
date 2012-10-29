@@ -25,7 +25,25 @@ class AdditionalCode < Sequel::Model
     end
   end)
 
+  one_to_one :meursing_additional_code, key: :additional_code,
+                                        primary_key: :additional_code
+
+  one_to_one :export_refund_nomenclature, key: :export_refund_code,
+                                          primary_key: :additional_code
+
   delegate :description, to: :additional_code_description
+
+  def exists_as_meursing_code?
+    meursing_additional_code.present?
+  end
+
+  def does_not_exist_as_meursing_code?
+    !exists_as_meursing_code?
+  end
+
+  def exists_as_export_refund_code?
+    export_refund_nomenclature.present?
+  end
 
   def code
     "#{additional_code_type_id}#{additional_code}"

@@ -9,7 +9,7 @@ class AdditionalCodeType < Sequel::Model
   one_to_many :additional_code_description_periods, key: :additional_code_type_id
   one_to_many :footnote_association_additional_codes, key: :additional_code_type_id
   many_to_many :footnotes, join_table: :footnote_association_additional_codes,
-                       class_name: 'Footnote'
+                           class_name: 'Footnote'
 
   many_to_one :meursing_table_plan
 
@@ -22,6 +22,22 @@ class AdditionalCodeType < Sequel::Model
 
   def related_to_measure_type?
     measure_types.any?
+  end
+
+  def meursing?
+    application_code == "3"
+  end
+
+  def non_meursing?
+    !meursing?
+  end
+
+  def export_refund?
+    application_code == "0"
+  end
+
+  def export_refund_agricultural?
+    application_code == "4"
   end
 
   ######### Conformance validations 120

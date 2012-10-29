@@ -1,5 +1,5 @@
 class AssociatedValidationMatcher < TariffValidationMatcher
-  attr_reader :associated_object, :ensurance_method, :condition
+  attr_reader :associated_object, :ensurance_method
 
   def initialize(validation_type, associated_object)
     @associated_object = associated_object
@@ -10,13 +10,7 @@ class AssociatedValidationMatcher < TariffValidationMatcher
   def matches?(subject)
     @attributes = [associated_object]
 
-    super && matches_conditions?
-  end
-
-  def if(condition)
-    @condition = condition
-
-    self
+    super
   end
 
   def and_ensure(ensurance_method)
@@ -31,11 +25,12 @@ class AssociatedValidationMatcher < TariffValidationMatcher
 
   private
 
-  def matches_conditions?
-    attributes.all? {|attribute|
-      reflection_for(attribute)[:if] == condition if condition.present?
-      reflection_for(attribute)[:ensure] == ensurance_method if ensurance_method.present?
-    }
+  def validate(reflections)
+    reflections.detect{|validation, opts|
+      validation == validation_type &&
+      ((condition.blank?) ? true : opts[:if] == condition) &&
+      ((ensurance_method.blank?) ? true : opts[:ensure] == ensurance_method)
+    } if reflections.present?
   end
 end
 

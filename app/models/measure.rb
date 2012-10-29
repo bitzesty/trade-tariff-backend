@@ -229,7 +229,7 @@ class Measure < Sequel::Model
     presence_of :measure_type, :geographical_area, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role
     # ME1
     uniqueness_of [:measure_type, :geographical_area, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date]
-    # ME3 ME5 ME8 ME115
+    # ME3 ME5 ME8 ME115 ME18 ME114 ME15
     validity_date_span_of :geographical_area, :type, :goods_nomenclature, :additional_code
     # ME25
     validity_dates
@@ -238,8 +238,6 @@ class Measure < Sequel::Model
     # ME10
     associated :quota_order_number, ensure: :quota_order_number_present?,
                                     if: :type_order_number_capture_code_permitted?
-    # ME116
-    validity_date_span_of :ordernumber, if: :should_validate_ordernumber_date_span?
     # ME12
     associated :additional_code_type, ensure: :adco_type_related_to_measure_type?,
                                       if: :additional_code_present?
@@ -259,15 +257,32 @@ class Measure < Sequel::Model
     associated :modification_regulation, ensure: :modification_regulation_base_regulation_not_completely_abrogated?
     # ME9
     presence_of :goods_nomenclature_item_id, if: :additional_code_blank?
+    # ME13 ME14
+    associated :additional_code, ensure: :additional_code_exists_as_meursing_code?,
+                                 if: :adco_type_meursing?
+    # ME17
+    associated :additional_code, ensure: :additional_code_does_not_exist_as_meursing_code?,
+                                 if: :adco_type_non_meursing?
+    # ME116 ME118 ME119
+    validity_date_span_of :quota_order_number, if: :should_validate_order_number_date_span?
+
+    # ME112 ME113
+    associated :additional_code, ensure: :additional_code_exists_as_export_refund_code?,
+                                 if: :adco_type_export_refund_agricultural?
+    # ME19
+    presence_of :goods_nomenclature_item_id, if: :adco_type_export_refund?
+    associated :adco_type, ensure: :quota_order_number_blank?,
+                           if: :adco_type_export_refund?
   end
 
-  delegate :present?, :blank?, to: :additional_code, prefix: :additional_code, allow_nil: true
+  delegate :present?, :blank?, :exists_as_meursing_code?, :does_not_exist_as_meursing_code?, to: :additional_code, prefix: :additional_code, allow_nil: true
   delegate :present?, to: :quota_order_number, prefix: :quota_order_number, allow_nil: true
   delegate :order_number_capture_code_permitted?, to: :type, prefix: :type, allow_nil: true
-  delegate :related_to_measure_type?, to: :adco_type, prefix: :adco_type, allow_nil: true
+  delegate :related_to_measure_type?, :meursing?, :non_meursing?, :export_refund?, :export_refund_agricultural?, to: :adco_type, prefix: :adco_type, allow_nil: true
+  delegate :blank?, to: :quota_order_number, prefix: true, allow_nil: true
 
-  def should_validate_ordernumber_date_span?
-    ordernumber.present? && validity_start_date > Date.new(2007,12,31)
+  def should_validate_order_number_date_span?
+    ordernumber.present? && validity_start_date > Date.new(2007,12,31) && ordernumber =~ /^09[^4]/
   end
 
   def qualified_goods_nomenclature?
@@ -289,30 +304,8 @@ class Measure < Sequel::Model
     # There may be no overlap in time with other measure occurrences with a goods code in the same nomenclature hierarchy which references the same measure type, geo area, order number, additional code and reduction indicator. This rule is not applicable for Meursing additional codes.
     # TODO: ME117
     # When a measure has a quota measure type then the origin must exist as a quota order number origin.  This rule is only applicable for measures with start date after 31/12/2007. Only origins for quota order numbers managed by the first come first served principle are in scope; these order number are starting with '09'; except order numbers starting with '094'
-    # TODO: ME118
-    # When a quota order number is used in a measure then the validity period of the quota order number must span the validity period of the measure.  This rule is only applicable for measures with start date after 31/12/2007. Only quota order numbers managed by the first come first served principle are in scope; these order number are starting with '09'; except order numbers starting with '094'
-    # TODO: ME119
-    # When a quota order number is used in a measure then the validity period of the quota order number origin must span the validity period of the measure.  This rule is only applicable for measures with start date after 31/12/2007. Only origins for quota order numbers managed by the first come first served principle are in scope; these order number are starting with '09'; except order numbers starting with '094'
-    # TODO: ME13
-    # If the additional code type is related to a Meursing table plan then only the additional code can be specified: no goods code, order number or reduction indicator.
-    # TODO: ME14
-    # If the additional code type is related to a Meursing table plan then the additional code must exist as a Meursing additional code.
-    # TODO: ME15
-    # If the additional code type is related to a Meursing table plan then the validity period of the additional code must span the validity period of the measure.
-    # TODO: ME17
-    # If the additional code type has as application "non-Meursing" then the additional code must exist as a non-Meursing additional code.
-    # TODO: ME18
-    # If the additional code type has as application "non-Meursing" then the validity period of the non-Meursing additional code must span the validity period of the measure.
-    # TODO: ME19
-    # If the additional code type has as application "ERN" then the goods code must be specified but the order number is blocked for input.
     # TODO: ME21
     # If the additional code type has as application "ERN" then the combination of goods code + additional code must exist as an ERN product code and its validity period must span the validity period of the measure.
-    # TODO: ME112
-    # If the additional code type has as application "Export Refund for Processed Agricultural Goods" then the measure does not require a goods code.
-    # TODO: ME113
-    # If the additional code type has as application "Export Refund for Processed Agricultural Goods" then the additional code must exist as an Export Refund for Processed Agricultural Goods additional code.
-    # TODO: ME114
-    # If the additional code type has as application "Export Refund for Processed Agricultural Goods" then the validity period of the Export Refund for Processed Agricultural Goods additional code must span the validity period of the measure.
     # TODO: ME87
     # The VP of the measure (implicit or explicit) must reside within the effective VP of its supporting regulation. The effective VP is the VP of the regulation taking into account extensions and abrogation.
     # TODO: ME28
