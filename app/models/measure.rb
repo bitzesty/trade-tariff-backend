@@ -265,7 +265,9 @@ class Measure < Sequel::Model
                                  if: :adco_type_non_meursing?
     # ME116 ME118 ME119
     validity_date_span_of :quota_order_number, if: :should_validate_order_number_date_span?
-
+    # ME117
+    associated :quota_order_number, ensure: :quota_order_number_quota_order_number_origin_present?,
+                                    if: :should_validate_order_number_date_span?
     # ME112 ME113
     associated :additional_code, ensure: :additional_code_exists_as_export_refund_code?,
                                  if: :adco_type_export_refund_agricultural?
@@ -273,16 +275,35 @@ class Measure < Sequel::Model
     presence_of :goods_nomenclature_item_id, if: :adco_type_export_refund?
     associated :adco_type, ensure: :quota_order_number_blank?,
                            if: :adco_type_export_refund?
+    # ME21
+    associated :additional_code, ensure: :ern_adco_exists?,
+                                 if: :adco_type_export_refund?
+    validity_date_span_of :export_refund_nomenclature, if: :ern_adco_exists?
+    # ME28
+    input_of :measure_generating_regulation_id, requires: :regulation_is_not_replaced?
   end
 
   delegate :present?, :blank?, :exists_as_meursing_code?, :does_not_exist_as_meursing_code?, to: :additional_code, prefix: :additional_code, allow_nil: true
   delegate :present?, to: :quota_order_number, prefix: :quota_order_number, allow_nil: true
   delegate :order_number_capture_code_permitted?, to: :type, prefix: :type, allow_nil: true
   delegate :related_to_measure_type?, :meursing?, :non_meursing?, :export_refund?, :export_refund_agricultural?, to: :adco_type, prefix: :adco_type, allow_nil: true
-  delegate :blank?, to: :quota_order_number, prefix: true, allow_nil: true
+  delegate :quota_order_number_origin_present?, :blank?, to: :quota_order_number, prefix: true, allow_nil: true
+
+  def regulation_is_not_replaced?
+    RegulationReplacement.where(replaced_regulation_id: measure_generating_regulation_id,
+                                replaced_regulation_role: measure_generating_regulation_role,
+                                geographical_area_id: geographical_area_id).none? &&
+    RegulationReplacement.where(replaced_regulation_id: measure_generating_regulation_id,
+                                replaced_regulation_role: measure_generating_regulation_role,
+                                chapter_heading: goods_nomenclature_item_id.to_s.first(2)).none?
+  end
 
   def should_validate_order_number_date_span?
     ordernumber.present? && validity_start_date > Date.new(2007,12,31) && ordernumber =~ /^09[^4]/
+  end
+
+  def ern_adco_exists?
+    export_refund_nomenclature.present?
   end
 
   def qualified_goods_nomenclature?
@@ -302,14 +323,8 @@ class Measure < Sequel::Model
     # Integrating a measure with an additional code when an equivalent or overlapping measures without additional code already exists and vice-versa, should be forbidden.
     # TODO: ME32
     # There may be no overlap in time with other measure occurrences with a goods code in the same nomenclature hierarchy which references the same measure type, geo area, order number, additional code and reduction indicator. This rule is not applicable for Meursing additional codes.
-    # TODO: ME117
-    # When a measure has a quota measure type then the origin must exist as a quota order number origin.  This rule is only applicable for measures with start date after 31/12/2007. Only origins for quota order numbers managed by the first come first served principle are in scope; these order number are starting with '09'; except order numbers starting with '094'
-    # TODO: ME21
-    # If the additional code type has as application "ERN" then the combination of goods code + additional code must exist as an ERN product code and its validity period must span the validity period of the measure.
     # TODO: ME87
     # The VP of the measure (implicit or explicit) must reside within the effective VP of its supporting regulation. The effective VP is the VP of the regulation taking into account extensions and abrogation.
-    # TODO: ME28
-    # The entered regulation may not be partially replaced for the measure type, geographical area or chapter (first two digits of the goods code) of the measure.
 
 
     # TODO: ME40

@@ -445,6 +445,14 @@ describe Measure do
     # are in scope; these order number are starting with '09';
     # except order numbers starting with '094'
     it { should validate_validity_date_span.of(:quota_order_number).if(:should_validate_order_number_date_span?) }
+    # ME117 When a measure has a quota measure type then the origin must
+    # exist as a quota order number origin.  This rule is only applicable
+    # for measures with start date after 31/12/2007. Only origins for quota
+    # order numbers managed by the first come first served principle are
+    # in scope; these order number are starting with '09'; except order
+    # numbers starting with '094'
+    it { should validate_associated(:quota_order_number).and_ensure(:quota_order_number_quota_order_number_origin_present?)
+                                                        .if(:should_validate_order_number_date_span?)}
     # ME112 If the additional code type has as application "Export Refund
     # for Processed Agricultural Goods" then the measure does not require
     # a goods code.
@@ -458,6 +466,19 @@ describe Measure do
     it { should validate_presence.of(:goods_nomenclature_item_id).if(:adco_type_export_refund?)}
     it { should validate_associated(:adco_type).and_ensure(:quota_order_number_blank?)
                                                .if(:adco_type_export_refund?)}
+    # ME21 If the additional code type has as application "ERN" then the
+    # combination of goods code + additional code must exist as an ERN
+    # product code and its validity period must span the validity
+    # period of the measure.
+    it { should validate_associated(:additional_code).and_ensure(:ern_adco_exists?)
+                                                     .if(:adco_type_export_refund?) }
+    it { should validate_validity_date_span.of(:export_refund_nomenclature)
+                                           .if(:ern_adco_exists?) }
+    # ME28 The entered regulation may not be partially replaced for the measure
+    # type, geographical area or chapter (first two digits of the goods code)
+    # of the measure.
+    it { should validate_input.of(:measure_generating_regulation_id)
+                              .requires(:regulation_is_not_replaced?) }
   end
 
   describe '#origin' do
