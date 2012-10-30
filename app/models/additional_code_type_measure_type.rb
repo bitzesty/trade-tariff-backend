@@ -5,19 +5,16 @@ class AdditionalCodeTypeMeasureType < Sequel::Model
   many_to_one :additional_code_type
 
   ######### Conformance validations 240
-  def validate
-    super
-    # AMT1
-    # AMT2
-    validates_presence([:measure_type_id, :additional_code_type_id])
+  validates do
+    # AMT1, AMT2
+    presence_of [:measure_type_id, :additional_code_type_id]
     # AMT3
-    validates_unique([:measure_type_id, :additional_code_type_id])
-    # TODO: AMT4
+    uniqueness_of [:measure_type_id, :additional_code_type_id]
     # AMT5
-    validates_start_date
+    validity_dates
+    # TODO: AMT4
     # TODO: AMT7
   end
-
 end
 
 

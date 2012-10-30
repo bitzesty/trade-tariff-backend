@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe AdditionalCodeType do
-  describe 'validations', :focus do
+  describe 'validations' do
     # CT1 The additional code type must be unique.
     it { should validate_uniqueness.of :additional_code_type_id }
     # CT2 The Meursing table plan can only be entered if the additional code
     # type has as application code "Meursing table additional code type".
-    it { should validate_input.of(:meursing_table_plan_id).requires(:meursing?) }
+    it { should validate_input.of(:meursing_table_plan_id).if(:meursing?) }
     # CT3 The Meursing table plan must exist.
     it { should validate_associated(:meursing_table_plan).and_ensure(:meursing_table_plan_present?)
                                                          .if(:should_validate_meursing_table_plan?)}
@@ -64,6 +64,7 @@ describe AdditionalCodeType do
 
     describe 'CT11' do
       specify 'The additional code type cannot be deleted if it is related with an Export Refund for Processed Agricultural Goods additional code.' do
+        pending
       end
     end
   end

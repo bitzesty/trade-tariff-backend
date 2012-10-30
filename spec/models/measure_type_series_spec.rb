@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe MeasureTypeSeries do
-  describe 'validations', :focus do
+  describe 'validations' do
     # MTS1 The measure type series must be unique.
     it { should validate_uniqueness.of [:measure_type_series_id, :measure_type_combination] }
     # MTS3 The start date must be less than or equal to the end date.

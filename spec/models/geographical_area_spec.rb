@@ -131,6 +131,10 @@ describe GeographicalArea do
   end
 
   describe 'validations' do
+    # GA1 The combination geographical area id + validity start date must be unique.
+    it { should validate_uniqueness.of([:geographical_area_id, :validity_start_date])}
+    # GA2 The start date must be less than or equal to the end date.
+    it { should validate_validity_dates }
   end
 
   describe '#iso_code' do

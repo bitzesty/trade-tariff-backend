@@ -29,7 +29,7 @@ class AdditionalCodeType < Sequel::Model
     # CT1
     uniqueness_of :additional_code_type_id
     # CT2
-    input_of :meursing_table_plan_id, requires: :meursing?
+    input_of :meursing_table_plan_id, if: :meursing?
     # CT3
     associated :meursing_table_plan, ensure: :meursing_table_plan_present?,
                                      if: :should_validate_meursing_table_plan?

@@ -14,17 +14,17 @@ describe Measure do
       context 'direct loading' do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
-            measure.measure_type.pk.should == measure_type1.pk
+            measure.type.pk.should == measure_type1.pk
           end
         end
 
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
-            measure.measure_type.pk.should == measure_type1.pk
+            measure.type.pk.should == measure_type1.pk
           end
 
           TimeMachine.at(4.years.ago) do
-            measure.reload.measure_type.pk.should == measure_type2.pk
+            measure.reload.type.pk.should == measure_type2.pk
           end
         end
       end
@@ -33,28 +33,28 @@ describe Measure do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
             Measure.where(measure_sid: measure.measure_sid)
-                          .eager(:measure_type)
+                          .eager(:type)
                           .all
                           .first
-                          .measure_type.pk.should == measure_type1.pk
+                          .type.pk.should == measure_type1.pk
           end
         end
 
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
             Measure.where(measure_sid: measure.measure_sid)
-                          .eager(:measure_type)
+                          .eager(:type)
                           .all
                           .first
-                          .measure_type.pk.should == measure_type1.pk
+                          .type.pk.should == measure_type1.pk
           end
 
           TimeMachine.at(4.years.ago) do
             Measure.where(measure_sid: measure.measure_sid)
-                          .eager(:measure_type)
+                          .eager(:type)
                           .all
                           .first
-                          .measure_type.pk.should == measure_type2.pk
+                          .type.pk.should == measure_type2.pk
           end
         end
       end
@@ -363,16 +363,16 @@ describe Measure do
     end
   end
 
-  describe 'validations', :focus do
+  describe 'validations' do
     # ME2 ME4 ME6 ME24 The <field name> must exist.
-    it { should validate_presence.of(:measure_type, :geographical_area,
+    it { should validate_presence.of(:measure_type, :geographical_area_sid,
                                      :goods_nomenclature_sid,
                                      :measure_generating_regulation_id,
                                      :measure_generating_regulation_role) }
     # ME1 The combination of measure type + geographical area +
     #     goods nomenclature item id + additional code type + additional code +
     #     order number + reduction indicator + start date must be unique
-    it { should validate_uniqueness.of([:measure_type, :geographical_area,
+    it { should validate_uniqueness.of([:measure_type, :geographical_area_sid,
                                         :goods_nomenclature_sid,
                                         :additional_code_type,
                                         :additional_code, :ordernumber,
@@ -413,15 +413,15 @@ describe Measure do
                                        :measure_generating_regulation_role])
                                   .from(RegulationReplacement.map([:replaced_regulation_id,
                                                                    :replaced_regulation_role])) }
-    # ME33 A justification regulation may not be entered if the measure
+    # ME33 TODO A justification regulation may not be entered if the measure
     # end date is not filled in.
-    it { should validate_input.of(:justification_regulation_id,
-                                  :justification_regulation_role).requires(:is_ended?) }
-    # ME34 A justification regulation must be entered if the measure
+    # it { should validate_input.of(:justification_regulation_id,
+    #                               :justification_regulation_role).requires(:is_ended?) }
+    # ME34 TODO A justification regulation must be entered if the measure
     # end date is filled in.
-    it { should validate_presence.of(:justification_regulation_id,
-                                     :justification_regulation_role)
-                                 .if(:is_ended?) }
+    # it { should validate_presence.of(:justification_regulation_id,
+    #                                  :justification_regulation_role)
+    #                              .if(:is_ended?) }
     # ME29 If the entered regulation is a modification regulation then its
     # base regulation may not be completely abrogated.
     it { should validate_associated(:modification_regulation).and_ensure(:modification_regulation_base_regulation_not_completely_abrogated?) }

@@ -5,6 +5,13 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
   before(:all) { preload_standing_data }
   after(:all)  { clear_standing_data }
 
+  # Create Measure types used in transformations, so that validations would pass.
+  # Faster than loading static_national_data.sql
+  let!(:measure_type_qrc) { create :measure_type, measure_type_id: 'QRC', validity_start_date: Date.new(1972,1,1) }
+  let!(:measure_type_att) { create :measure_type, measure_type_id: 'ATT', validity_start_date: Date.new(1972,1,1) }
+  let!(:measure_type_cvd) { create :measure_type, measure_type_id: 'CVD', validity_start_date: Date.new(1972,1,1) }
+  let!(:measure_type_coe) { create :measure_type, measure_type_id: 'COE', validity_start_date: Date.new(1972,1,1) }
+
   describe "Initial Load Scenario P&R \n" do
     # In this scenario a number of P&R measures are created. The created measures represent Export and Import restrictions for:
     # * specific countries or regions (IQ, XC)

@@ -5,6 +5,14 @@ describe "CHIEF: VAT and Excises" do
   before(:all) { preload_standing_data }
   after(:all)  { clear_standing_data }
 
+  # VAT/EXCISE measure types
+  # Create Measure types used in transformations, so that validations would pass.
+  # Faster than loading static_national_data.sql
+  let!(:measure_type_vts) { create :measure_type, measure_type_id: 'VTS', validity_start_date: Date.new(1972,1,1) }
+  let!(:measure_type_vtz) { create :measure_type, measure_type_id: 'VTZ', validity_start_date: Date.new(1972,1,1) }
+  let!(:measure_type_egj) { create :measure_type, measure_type_id: 'EGJ', validity_start_date: Date.new(1972,1,1) }
+  let!(:measure_type_daa) { create :measure_type, measure_type_id: 'DAA', validity_start_date: Date.new(1972,1,1) }
+
   context "TAME Initial Load Scenario 1: VAT measures" do
     let!(:tame1) { create(:tame, amend_indicator: "I", fe_tsmp: DateTime.parse("2005-01-01 11:00:00"), msrgp_code: "VT", msr_type: "S", tty_code: "813", adval_rate: BigDecimal('17.5')) }
     let!(:tame2) { create(:tame, amend_indicator: "I", fe_tsmp: DateTime.parse("2005-01-01 00:00:00"), msrgp_code: "VT", msr_type: "A", tty_code: "813", adval_rate: BigDecimal('5')) }

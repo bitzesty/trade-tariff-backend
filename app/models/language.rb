@@ -2,14 +2,14 @@ class Language < Sequel::Model
   set_primary_key  :language_id
 
   ######### Conformance validations 130
-  # LA2 - TODO
-  def validate
-    super
+  validates do
     # LA1
-    validates_unique(:language_id)
+    uniqueness_of :language_id
     # LA3
-    validates_start_date
+    validity_dates
   end
+
+  # LA2 - TODO
 end
 
 

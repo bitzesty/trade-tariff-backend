@@ -13,17 +13,16 @@ class CertificateType < Sequel::Model
   delegate :description, to: :certificate_type_description
 
   ######### Conformance validations 110
-  def validate
-    super
+  validates do
     # CET1
-    validates_unique :certificate_type_code
+    uniqueness_of :certificate_type_code
     # CET3
-    validates_start_date
+    validity_dates
   end
 
   def before_destroy
     # CET2
-    return !certificates.any?
+    return false if certificates.any?
 
     super
   end

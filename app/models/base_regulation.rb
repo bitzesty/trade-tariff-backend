@@ -12,12 +12,11 @@ class BaseRegulation < Sequel::Model
   end
 
   ######### Conformance validations 285
-  def validate
-    super
+  validates do
     # ROIMB1
-    validates_unique([:base_regulation_id, :base_regulation_role])
+    uniqueness_of [:base_regulation_id, :base_regulation_role]
     # ROIMB3
-    validates_start_date
+    validity_dates
     # TODO: ROIMB4
     # TODO: ROIMB5
     # TODO: ROIMB6

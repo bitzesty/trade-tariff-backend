@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe RegulationGroup do
-  describe 'validations', :focus do
+  describe 'validations' do
     # RG1 The Regulation group id must be unique.
     it { should validate_uniqueness.of :regulation_group_id }
     # RG3 The start date must be less than or equal to the end date.

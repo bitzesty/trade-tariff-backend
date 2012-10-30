@@ -54,7 +54,7 @@ module Sequel
 
           atts << opts
           validates_each(*atts) do |o, a, v|
-            o.errors.add(a, opts[:message]) unless o.send(opts[:requires])
+            o.errors.add(a, opts[:message]) if o.send(a).present? && !o.send(opts[:requires])
           end
         end
 

@@ -98,10 +98,9 @@ class GoodsNomenclature < Sequel::Model
   end
 
   # TODO
-  def validate
-    super
+  validates do
     # NIG4
-    validates_start_date
+    validity_dates
   end
 
   def id

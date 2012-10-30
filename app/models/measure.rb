@@ -220,15 +220,15 @@ class Measure < Sequel::Model
                                        primary_key: [:measure_generating_regulation_id,
                                                      :measure_generating_regulation_role]
 
-  # def_column_alias :measure_type_id, :measure_type
+  def_column_alias :measure_type_id, :measure_type
   def_column_alias :additional_code_id, :additional_code
   def_column_alias :geographical_area_id, :geographical_area
 
   validates do
     # ME2 ME4 ME6 ME24
-    presence_of :measure_type, :geographical_area, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role
+    presence_of :measure_type, :geographical_area_sid, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role
     # ME1
-    uniqueness_of [:measure_type, :geographical_area, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date]
+    uniqueness_of [:measure_type, :geographical_area_sid, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date]
     # ME3 ME5 ME8 ME115 ME18 ME114 ME15
     validity_date_span_of :geographical_area, :type, :goods_nomenclature, :additional_code
     # ME25
@@ -250,9 +250,9 @@ class Measure < Sequel::Model
     exclusion_of [:measure_generating_regulation_id, :measure_generating_regulation_role],
                   from: RegulationReplacement.map([:replaced_regulation_id, :replaced_regulation_role])
     # ME33
-    input_of :justification_regulation_id, :justification_regulation_role, requires: :is_ended?
+    # input_of :justification_regulation_id, :justification_regulation_role, requires: :is_ended?
     # ME34
-    presence_of :justification_regulation_id, :justification_regulation_role, if: :is_ended?
+    # presence_of :justification_regulation_id, :justification_regulation_role, if: :is_ended?
     # ME29
     associated :modification_regulation, ensure: :modification_regulation_base_regulation_not_completely_abrogated?
     # ME9
@@ -308,7 +308,7 @@ class Measure < Sequel::Model
 
   def qualified_goods_nomenclature?
     goods_nomenclature.producline_suffix == "80" &&
-    goods_nomenclature.number_indents <= goods_nomenclature.measure_type.measure_explosion_level
+    goods_nomenclature.number_indents <= type.measure_explosion_level
   end
 
   def is_ended?

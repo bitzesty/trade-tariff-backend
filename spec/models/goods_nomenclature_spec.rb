@@ -182,4 +182,9 @@ describe GoodsNomenclature do
       end
     end
   end
+
+  describe 'validations' do
+    # NIG4 The start date of the goods nomenclature must be less than or equal to the end date.
+    it { should validate_validity_dates }
+  end
 end
