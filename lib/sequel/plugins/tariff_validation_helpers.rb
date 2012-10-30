@@ -72,11 +72,11 @@ module Sequel
           end
         end
 
-        def validates_associated(association, config = {})
-          atts = [association]
+        def validates_associated(associations, config = {})
+          atts = [associations].flatten
 
           opts = {
-            message: "#{association} must be valid",
+            message: "%s must be valid",
             tag: :associated,
           }.merge!(extract_options!(atts)).merge!(config)
 
@@ -85,7 +85,7 @@ module Sequel
 
           validates_each(*atts) do |object, association, value|
             if object.send(association).present?
-              object.errors.add(association, opts[:message]) unless object.send(opts[:ensure])
+              object.errors.add(association, opts[:message] % [association]) unless object.send(opts[:ensure])
             end
           end
         end
