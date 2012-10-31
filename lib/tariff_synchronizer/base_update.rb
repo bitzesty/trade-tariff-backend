@@ -4,6 +4,7 @@ module TariffSynchronizer
 
     plugin :timestamps
     plugin :single_table_inheritance, :update_type
+    plugin :validation_class_methods
 
     class InvalidArgument < StandardError; end
 
@@ -16,6 +17,10 @@ module TariffSynchronizer
     delegate :logger, to: TariffSynchronizer
 
     self.unrestrict_primary_key
+
+    validates do
+      presence_of :filename, :issue_date, :state
+    end
 
     dataset_module do
       def applied
