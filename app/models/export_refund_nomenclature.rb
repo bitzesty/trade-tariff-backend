@@ -84,10 +84,9 @@ class ExportRefundNomenclature < Sequel::Model
   end
 
   # TODO
-  def validate
-    super
+  validates do
     # ERN5
-    validates_start_date
+    validity_dates
   end
 
   def additional_code

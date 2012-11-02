@@ -4,13 +4,19 @@ class BaseRegulation < Sequel::Model
 
   set_primary_key [:base_regulation_id, :base_regulation_role]
 
+  one_to_one :complete_abrogation_regulation, key: [:complete_abrogation_regulation_id,
+                                                    :complete_abrogation_regulation_role]
+
+  def not_completely_abrogated?
+    complete_abrogation_regulation.blank?
+  end
+
   ######### Conformance validations 285
-  def validate
-    super
+  validates do
     # ROIMB1
-    validates_unique([:base_regulation_id, :base_regulation_role])
+    uniqueness_of [:base_regulation_id, :base_regulation_role]
     # ROIMB3
-    validates_start_date
+    validity_dates
     # TODO: ROIMB4
     # TODO: ROIMB5
     # TODO: ROIMB6

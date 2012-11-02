@@ -130,4 +130,9 @@ describe ExportRefundNomenclature do
       export_refund_nomenclature.additional_code.should eq "#{export_refund_nomenclature.additional_code_type}#{export_refund_nomenclature.export_refund_code}"
     end
   end
+
+  describe 'validations' do
+    # ERN5 start date of the ERN must be less than or equal to the end date.
+    it { should validate_validity_dates }
+  end
 end

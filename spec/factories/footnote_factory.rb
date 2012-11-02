@@ -3,15 +3,22 @@ FactoryGirl.define do
 
   factory :footnote do
     ignore do
-      valid_at Time.now.ago(2.years)
+      valid_at Date.today.ago(2.years)
       valid_to nil
       goods_nomenclature_sid { generate(:goods_nomenclature_sid) }
     end
 
     footnote_id      { Forgery(:basic).text(exactly: 3) }
     footnote_type_id { Forgery(:basic).text(exactly: 2) }
-    validity_start_date     { Date.today.ago(2.years) }
+    validity_start_date     { Date.today.ago(2.years).localtime }
     validity_end_date       { nil }
+
+    after(:build) { |ftn, evaluator|
+      FactoryGirl.create(:footnote_type, footnote_type_id: ftn.footnote_type_id)
+      FactoryGirl.create(:footnote_description_period, footnote_type_id: ftn.footnote_type_id,
+                                                       footnote_id: ftn.footnote_id,
+                                                       validity_start_date: ftn.validity_start_date)
+    }
 
     trait :with_gono_association do
       after(:create) { |ftn, evaluator|
@@ -34,7 +41,7 @@ FactoryGirl.define do
 
   factory :footnote_description do
     ignore do
-      valid_at Time.now.ago(2.years)
+      valid_at Date.today.ago(2.years)
       valid_to nil
     end
 
@@ -58,6 +65,14 @@ FactoryGirl.define do
     goods_nomenclature_sid          { generate(:goods_nomenclature_sid) }
     footnote_id                     { Forgery(:basic).text(exactly: 3) }
     footnote_type                   { Forgery(:basic).text(exactly: 2) }
+    validity_start_date             { Date.today.ago(3.years) }
+    validity_end_date               { nil }
+  end
+
+  factory :footnote_association_ern do
+    export_refund_nomenclature_sid  { generate(:export_refund_nomenclature_sid) }
+    footnote_id                     { Forgery(:basic).text(exactly: 3) }
+    footnote_type                   { Forgery(:basic).text(exactly: 2) }
     validity_start_date             { Date.today.ago(2.years) }
     validity_end_date               { nil }
   end
@@ -66,5 +81,28 @@ FactoryGirl.define do
     measure_sid                     { generate(:measure_sid) }
     footnote_id                     { Forgery(:basic).text(exactly: 3) }
     footnote_type_id                { Forgery(:basic).text(exactly: 2) }
+  end
+
+  factory :footnote_association_additional_code do
+    additional_code_sid             { generate(:additional_code_sid) }
+    footnote_id                     { Forgery(:basic).text(exactly: 3) }
+    footnote_type_id                { Forgery(:basic).text(exactly: 2) }
+    validity_start_date             { Date.today.ago(2.years) }
+    validity_end_date               { nil }
+  end
+
+  factory :footnote_association_meursing_heading do
+    meursing_table_plan_id          { Forgery(:basic).text(exactly: 2) }
+    meursing_heading_number         { Forgery(:basic).number }
+    footnote_id                     { Forgery(:basic).text(exactly: 3) }
+    footnote_type                   { Forgery(:basic).text(exactly: 2) }
+    validity_start_date             { Date.today.ago(2.years) }
+    validity_end_date               { nil }
+  end
+
+  factory :footnote_type do
+    footnote_type_id { Forgery(:basic).text(exactly: 2) }
+    validity_start_date { Date.today.ago(2.years) }
+    validity_end_date   { nil }
   end
 end

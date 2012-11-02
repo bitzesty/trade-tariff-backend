@@ -16,6 +16,8 @@ class MeasureType < Sequel::Model
   one_to_many :measures, key: :measure_type,
                          foreign_key: :measure_type_id
 
+  many_to_one :measure_type_series
+
   delegate :description, to: :measure_type_description
 
   dataset_module do
@@ -25,19 +27,25 @@ class MeasureType < Sequel::Model
   end
 
   ######### Conformance validations 235
-  def validate
-    super
+  validates do
     # MT1
-    validates_unique(:measure_type_id)
+    uniqueness_of :measure_type_id
     # MT2
-    validates_start_date
+    validity_dates
     # TODO: MT3
     # MT4
-    validates_presence :measure_type_series_id
+    presence_of :measure_type_series, if: :has_measure_type_series_reference?
     # TODO: MT7
     # TODO: MT10
   end
 
+  def order_number_capture_code_permitted?
+    order_number_capture_code == "1"
+  end
+
+  def has_measure_type_series_reference?
+    measure_type_series_id.present?
+  end
 end
 
 

@@ -1,4 +1,11 @@
 class Measure < Sequel::Model
+  VALID_ROLE_TYPE_IDS = [
+    1, # Base regulation
+    2, # Modification
+    3, # Provisional anti-dumping/countervailing duty
+    4  # Definitive anti-dumping/countervailing duty
+  ]
+
   set_primary_key :measure_sid
   plugin :time_machine, period_start_column: :effective_start_date,
                         period_end_column: :effective_end_date
@@ -12,7 +19,10 @@ class Measure < Sequel::Model
   many_to_one :export_refund_nomenclature, key: :export_refund_nomenclature_sid,
                                    foreign_key: :export_refund_nomenclature_sid
 
-  many_to_one :measure_type, key: :measure_type_id, dataset: -> {
+  many_to_one :type, primary_key: :measure_type,
+                     key: :measure_type,
+                     class_name: MeasureType,
+                     dataset: -> {
     actual(MeasureType).where(measure_type_id: self[:measure_type])
   }, eager_loader: (proc do |eo|
     eo[:rows].each{|measure| measure.associations[:measure_type] = nil}
@@ -145,6 +155,10 @@ class Measure < Sequel::Model
       end
     end)
 
+  many_to_one :adco_type, class_name: 'AdditionalCodeType',
+                          key: :additional_code_type,
+                          primary_key: :additional_code_type_id
+
   one_to_one :quota_order_number, eager_loader_key: :ordernumber, dataset: -> {
     actual(QuotaOrderNumber).where(quota_order_number_id: ordernumber)
   }, eager_loader: (proc do |eo|
@@ -201,85 +215,118 @@ class Measure < Sequel::Model
     end
   end)
 
+  one_to_one :modification_regulation, key: [:modification_regulation_id,
+                                             :modification_regulation_role],
+                                       primary_key: [:measure_generating_regulation_id,
+                                                     :measure_generating_regulation_role]
+
   def_column_alias :measure_type_id, :measure_type
   def_column_alias :additional_code_id, :additional_code
   def_column_alias :geographical_area_id, :geographical_area
 
-  ######### Conformance validations 430
-  def validate
-    super
-    # ME1
-    # validates_unique([:measure_type, :geographical_area, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date])
+  validates do
     # ME2 ME4 ME6 ME24
-    # validates_presence([:measure_type, :geographical_area, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role])
-    # TODO: ME3
-    # The validity period of the measure type must span the validity period of the measure.
-    # TODO: ME5
-    # The validity period of the geographical area must span the validity period of the measure.
-    # TODO: ME7
-    # The goods nomenclature code must be a product code; that is, it may not be an intermediate line.
-    # TODO: ME8
-    # The validity period of the goods code must span the validity period of the measure.
-    # TODO: ME88
-    # The level of the goods code, if present, cannot exceed the explosion level of the measure type.
+    presence_of :measure_type, :geographical_area_sid, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role
+    # ME1
+    uniqueness_of [:measure_type, :geographical_area_sid, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date]
+    # ME3 ME5 ME8 ME115 ME18 ME114 ME15
+    validity_date_span_of :geographical_area, :type, :goods_nomenclature, :additional_code
+    # ME25
+    validity_dates
+    # ME7 ME88
+    associated :goods_nomenclature, ensure: :qualified_goods_nomenclature?
+    # ME10
+    associated :quota_order_number, ensure: :quota_order_number_present?,
+                                    if: :type_order_number_capture_code_permitted?
+    # ME12
+    associated :additional_code_type, ensure: :adco_type_related_to_measure_type?,
+                                      if: :additional_code_present?
+    # ME86
+    inclusion_of :measure_generating_regulation_role, in: VALID_ROLE_TYPE_IDS
+    # ME26
+    exclusion_of [:measure_generating_regulation_id, :measure_generating_regulation_role],
+                  from: CompleteAbrogationRegulation.map([:complete_abrogation_regulation_id, :complete_abrogation_regulation_role])
+    # ME27
+    exclusion_of [:measure_generating_regulation_id, :measure_generating_regulation_role],
+                  from: RegulationReplacement.map([:replaced_regulation_id, :replaced_regulation_role])
+    # ME33
+    # input_of :justification_regulation_id, :justification_regulation_role, requires: :is_ended?
+    # ME34
+    # presence_of :justification_regulation_id, :justification_regulation_role, if: :is_ended?
+    # ME29
+    associated :modification_regulation, ensure: :modification_regulation_base_regulation_not_completely_abrogated?
+    # ME9
+    presence_of :goods_nomenclature_item_id, if: :additional_code_blank?
+    # ME13 ME14
+    associated :additional_code, ensure: :additional_code_exists_as_meursing_code?,
+                                 if: :adco_type_meursing?
+    # ME17
+    associated :additional_code, ensure: :additional_code_does_not_exist_as_meursing_code?,
+                                 if: :adco_type_non_meursing?
+    # ME116 ME118 ME119
+    validity_date_span_of :quota_order_number, if: :should_validate_order_number_date_span?
+    # ME117
+    associated :quota_order_number, ensure: :quota_order_number_quota_order_number_origin_present?,
+                                    if: :should_validate_order_number_date_span?
+    # ME112 ME113
+    associated :additional_code, ensure: :additional_code_exists_as_export_refund_code?,
+                                 if: :adco_type_export_refund_agricultural?
+    # ME19
+    presence_of :goods_nomenclature_item_id, if: :adco_type_export_refund?
+    associated :adco_type, ensure: :quota_order_number_blank?,
+                           if: :adco_type_export_refund?
+    # ME21
+    associated :additional_code, ensure: :ern_adco_exists?,
+                                 if: :adco_type_export_refund?
+    validity_date_span_of :export_refund_nomenclature, if: :ern_adco_exists?
+    # ME28
+    input_of :measure_generating_regulation_id, requires: :regulation_is_not_replaced?
+  end
+
+  delegate :present?, :blank?, :exists_as_meursing_code?, :does_not_exist_as_meursing_code?, to: :additional_code, prefix: :additional_code, allow_nil: true
+  delegate :present?, to: :quota_order_number, prefix: :quota_order_number, allow_nil: true
+  delegate :order_number_capture_code_permitted?, to: :type, prefix: :type, allow_nil: true
+  delegate :related_to_measure_type?, :meursing?, :non_meursing?, :export_refund?, :export_refund_agricultural?, to: :adco_type, prefix: :adco_type, allow_nil: true
+  delegate :quota_order_number_origin_present?, :blank?, to: :quota_order_number, prefix: true, allow_nil: true
+
+  def regulation_is_not_replaced?
+    RegulationReplacement.where(replaced_regulation_id: measure_generating_regulation_id,
+                                replaced_regulation_role: measure_generating_regulation_role,
+                                geographical_area_id: geographical_area_id).none? &&
+    RegulationReplacement.where(replaced_regulation_id: measure_generating_regulation_id,
+                                replaced_regulation_role: measure_generating_regulation_role,
+                                chapter_heading: goods_nomenclature_item_id.to_s.first(2)).none?
+  end
+
+  def should_validate_order_number_date_span?
+    ordernumber.present? && validity_start_date > Date.new(2007,12,31) && ordernumber =~ /^09[^4]/
+  end
+
+  def ern_adco_exists?
+    export_refund_nomenclature.present?
+  end
+
+  def qualified_goods_nomenclature?
+    goods_nomenclature.producline_suffix == "80" &&
+    goods_nomenclature.number_indents <= type.measure_explosion_level
+  end
+
+  def is_ended?
+    validity_end_date.present?
+  end
+
+  ######### Conformance validations 430
+  # def validate
+    # super
+
     # TODO: ME16
     # Integrating a measure with an additional code when an equivalent or overlapping measures without additional code already exists and vice-versa, should be forbidden.
-    # TODO: ME115
-    # The validity period of the referenced additional code must span the validity period of the measure
-    # ME25
-    validates_start_date
     # TODO: ME32
     # There may be no overlap in time with other measure occurrences with a goods code in the same nomenclature hierarchy which references the same measure type, geo area, order number, additional code and reduction indicator. This rule is not applicable for Meursing additional codes.
-    # TODO: ME10
-    # The order number must be specified if the "order number flag" (specified in the measure type record) has the value "mandatory". If the flag is set to "not permitted" then the field cannot be entered.
-    # TODO: ME116
-    # When a quota order number is used in a measure then the validity period of the quota order number must span the validity period of the measure.  This rule is only applicable for measures with start date after 31/12/2007.
-    # TODO: ME117
-    # When a measure has a quota measure type then the origin must exist as a quota order number origin.  This rule is only applicable for measures with start date after 31/12/2007. Only origins for quota order numbers managed by the first come first served principle are in scope; these order number are starting with '09'; except order numbers starting with '094'
-    # TODO: ME118
-    # When a quota order number is used in a measure then the validity period of the quota order number must span the validity period of the measure.  This rule is only applicable for measures with start date after 31/12/2007. Only quota order numbers managed by the first come first served principle are in scope; these order number are starting with '09'; except order numbers starting with '094'
-    # TODO: ME119
-    # When a quota order number is used in a measure then the validity period of the quota order number origin must span the validity period of the measure.  This rule is only applicable for measures with start date after 31/12/2007. Only origins for quota order numbers managed by the first come first served principle are in scope; these order number are starting with '09'; except order numbers starting with '094'
-    # TODO: ME9
-    # If no additional code is specified then the goods code is mandatory.
-    # TODO: ME12
-    # If the additional code is specified then the additional code type must have a relationship with the measure type.
-    # TODO: ME13
-    # If the additional code type is related to a Meursing table plan then only the additional code can be specified: no goods code, order number or reduction indicator.
-    # TODO: ME14
-    # If the additional code type is related to a Meursing table plan then the additional code must exist as a Meursing additional code.
-    # TODO: ME15
-    # If the additional code type is related to a Meursing table plan then the validity period of the additional code must span the validity period of the measure.
-    # TODO: ME17
-    # If the additional code type has as application "non-Meursing" then the additional code must exist as a non-Meursing additional code.
-    # TODO: ME18
-    # If the additional code type has as application "non-Meursing" then the validity period of the non-Meursing additional code must span the validity period of the measure.
-    # TODO: ME19
-    # If the additional code type has as application "ERN" then the goods code must be specified but the order number is blocked for input.
-    # TODO: ME21
-    # If the additional code type has as application "ERN" then the combination of goods code + additional code must exist as an ERN product code and its validity period must span the validity period of the measure.
-    # TODO: ME112
-    # If the additional code type has as application "Export Refund for Processed Agricultural Goods" then the measure does not require a goods code.
-    # TODO: ME113
-    # If the additional code type has as application "Export Refund for Processed Agricultural Goods" then the additional code must exist as an Export Refund for Processed Agricultural Goods additional code.
-    # TODO: ME114
-    # If the additional code type has as application "Export Refund for Processed Agricultural Goods" then the validity period of the Export Refund for Processed Agricultural Goods additional code must span the validity period of the measure.
-    # TODO: ME86
-    # The role of the entered regulation must be a Base, a Modification, a Provisional Anti-Dumping, a Definitive Anti-Dumping.
     # TODO: ME87
     # The VP of the measure (implicit or explicit) must reside within the effective VP of its supporting regulation. The effective VP is the VP of the regulation taking into account extensions and abrogation.
-    # TODO: ME26
-    # The entered regulation may not be completely abrogated.
-    # TODO: ME27
-    # The entered regulation may not be fully replaced.
-    # TODO: ME28
-    # The entered regulation may not be partially replaced for the measure type, geographical area or chapter (first two digits of the goods code) of the measure.
-    # TODO: ME29
-    # If the entered regulation is a modification regulation then its base regulation may not be completely abrogated.
-    # TODO: ME33
-    # A justification regulation may not be entered if the measure end date is not filled in.
-    # TODO: ME34
-    # A justification regulation must be entered if the measure end date is filled in.
+
+
     # TODO: ME40
     # If the flag "duty expression" on measure type is "mandatory" then at least one measure component or measure condition component record must be specified. If the flag is set ""not permitted"" then no measure component or measure condition component must exist. Measure components and measure condition components are mutually exclusive. A measure can have either components or condition components (if the 'duty expression’ flag is 'mandatory’ or 'optional’) but not both.
     # TODO: ME41
@@ -376,7 +423,7 @@ class Measure < Sequel::Model
     # There may be no overlap between different PTS periods.
     # TODO: ME104
     # The justification regulation must be either: - the measure's measure-generating regulation, or - a measure-generating regulation, valid on the day after the measure’s (explicit) end date. If the measure’s measure-generating regulation is 'approved’, then so must be the justification regulation.
-  end
+  # end
 
   dataset_module do
     def with_base_regulations

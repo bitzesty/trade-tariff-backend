@@ -1,0 +1,35 @@
+class InputValidationMatcher < TariffValidationMatcher
+  attr_reader :required_condition
+
+  def matches?(subject)
+    super && matches_required_condition?
+  end
+
+  def failure_message
+    msg = "expected #{subject.class.name} to validate #{validation_type} of #{attributes}"
+    msg << " and require #{required_condition} to return true" if required_condition.present?
+    msg
+  end
+
+  def requires(condition)
+    @required_condition = condition
+
+    self
+  end
+
+  private
+
+  def matches_required_condition?
+    if required_condition.present?
+      attributes.all? {|attribute|
+        reflection_for(attribute)[:requires] == required_condition
+      }
+    else
+      true
+    end
+  end
+end
+
+def validate_input
+  InputValidationMatcher.new(:input)
+end

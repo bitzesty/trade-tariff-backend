@@ -1,14 +1,21 @@
 class RegulationGroup < Sequel::Model
   set_primary_key  :regulation_group_id
 
+  one_to_many :base_regulations
+
   ######### Conformance validations 150
-  def validate
-    super
+  validates do
     # RG1
-    validates_unique(:regulation_group_id)
-    # TODO: RG2
+    uniqueness_of :regulation_group_id
     # RG3
-    validates_start_date
+    validity_dates
+  end
+
+  def before_destroy
+    # RG2
+    return false if base_regulations.any?
+
+    super
   end
 end
 

@@ -1,25 +1,22 @@
 class FootnoteType < Sequel::Model
   set_primary_key  :footnote_type_id
 
+  one_to_many :footnotes
 
   ######### Conformance validations 100
-  def validate
-    super
+
+  validates do
     # FOT1
-    validates_unique :footnote_type_id
-    # TODO: FOT2
+    uniqueness_of :footnote_type_id
     # FOT3
-    validates_start_date
+    validity_dates
   end
 
-  APPLICATION_CODES = {
-    1 => "CN nomencalture",
-    2 => "TARIC nomencalture",
-    3 => "Export refund nomencalture",
-    5 => "Additional codes",
-    6 => "CN Measures",
-    7 => "Other Measures",
-    8 => "Measuring Heading",
-  }
+  def before_destroy
+    # FOT2
+    return !footnotes.any?
+
+    super
+  end
 end
 

@@ -64,6 +64,10 @@ describe AdditionalCode do
   end
 
   describe 'validations' do
+    # ACN1
+    it { should validate_uniqueness.of([:additional_code, :additional_code_type_id, :validity_start_date]) }
+    # ACN3
+    it { should validate_validity_dates }
   end
 
   describe "#code" do
