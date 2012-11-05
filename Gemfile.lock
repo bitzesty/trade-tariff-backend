@@ -1,12 +1,4 @@
 GIT
-  remote: https://github.com/nulogy/sequel-rails.git
-  revision: 5357612ede620f9c2f1e48f1e4a0f43b20f2f2c3
-  branch: deploy
-  specs:
-    nulogy-sequel-rails (0.3.7)
-      sequel (~> 3.28)
-
-GIT
   remote: https://github.com/thoughtbot/shoulda-matchers.git
   revision: 9e1188eea68c47d9a56ce6280e45027da6187ab1
   ref: 9e1188eea6
@@ -134,6 +126,8 @@ GEM
       net-ssh (>= 1.99.1)
     nokogiri (1.5.4)
     null_logger (0.0.1)
+    nulogy-sequel-rails (0.3.9)
+      sequel (~> 3.28)
     plek (0.5.0)
       builder
     polyglot (0.3.3)
@@ -143,7 +137,7 @@ GEM
       slop (~> 3.3.1)
     pry-rails (0.2.1)
       pry (>= 0.9.10)
-    rabl (0.6.14)
+    rabl (0.7.6)
       activesupport (>= 2.3.14)
       multi_json (~> 1.0)
     rack (1.4.1)
@@ -237,7 +231,7 @@ GEM
       rack
       raindrops (~> 0.7)
     vcr (2.2.5)
-    webmock (1.8.10)
+    webmock (1.8.11)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)
     whenever (0.7.3)
@@ -267,10 +261,10 @@ DEPENDENCIES
   multi_json
   mysql2
   nokogiri (= 1.5.4)
-  nulogy-sequel-rails!
+  nulogy-sequel-rails (= 0.3.9)
   plek (= 0.5.0)
   pry-rails
-  rabl (= 0.6.14)
+  rabl (= 0.7.6)
   rails (= 3.2.8)
   railties
   router-client (= 3.0.1)
