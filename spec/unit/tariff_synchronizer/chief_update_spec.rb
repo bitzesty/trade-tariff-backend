@@ -40,7 +40,7 @@ describe TariffSynchronizer::ChiefUpdate do
       it 'creates pending ChiefUpdate entry in the table' do
         url = "#{TariffSynchronizer.host}/taric/KBT009(101).txt"
 
-        TariffSynchronizer::FileService.expects(:get_content).with(url).returns(nil)
+        TariffSynchronizer::FileService.expects(:get_content).with(url).returns('something')
         TariffSynchronizer::ChiefUpdate.download(example_date)
         TariffSynchronizer::ChiefUpdate.count.should == 1
         TariffSynchronizer::ChiefUpdate.first.issue_date.should == example_date

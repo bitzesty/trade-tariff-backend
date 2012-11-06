@@ -65,6 +65,8 @@ module TariffSynchronizer
         FileService.write_file(update_path, contents)
       else
         TariffSynchronizer.logger.error "Could not write update file: #{file_name}. Nothing was downloaded."
+
+        false
       end
     end
 

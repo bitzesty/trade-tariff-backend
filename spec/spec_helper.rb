@@ -19,6 +19,7 @@ require Rails.root.join("spec/support/tariff_validation_matcher.rb")
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 RSpec.configure do |config|
+  config.order = "random"
   config.infer_base_class_for_anonymous_controllers = false
   config.filter_run focus: true
   config.run_all_when_everything_filtered = true
