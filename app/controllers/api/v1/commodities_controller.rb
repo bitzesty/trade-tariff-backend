@@ -10,7 +10,7 @@ module Api
 
         @measures = MeasurePresenter.new(@commodity.measures_dataset.eager({geographical_area: [:geographical_area_description, :children_geographical_areas]},
                                                       {footnotes: :footnote_description},
-                                                      {measure_type: :measure_type_description},
+                                                      {type: :measure_type_description},
                                                       {measure_components: [{duty_expression: :duty_expression_description},
                                                                             {measurement_unit: :measurement_unit_description},
                                                                             :monetary_unit,

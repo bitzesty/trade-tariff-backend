@@ -42,11 +42,13 @@ describe ChiefImporter::ChangeEntry do
   end
 
   describe "#relevant?" do
-    it 'returns true if table is relevant' do
+    it 'returns false if table is relevant' do
       ChiefImporter::ChangeEntry.new(invalid_args).relevant?.should be_false
     end
 
-    it 'returns false if table is not relevant' do
+    it 'returns true if table is relevant' do
+      ChiefImporter.relevant_tables += valid_args
+
       ChiefImporter::ChangeEntry.new(valid_args).relevant?.should be_true
     end
   end

@@ -8,10 +8,8 @@ module Api
       end
 
       def show
-        @section = Section.eager(chapters: :goods_nomenclature_description)
-                          .where(position: params[:id])
-                          .all
-                          .first
+        @section = Section.where(position: params[:id])
+                          .take
 
         respond_with @section
       end

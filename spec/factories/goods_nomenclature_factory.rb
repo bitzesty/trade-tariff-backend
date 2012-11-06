@@ -56,6 +56,18 @@ FactoryGirl.define do
     trait :non_declarable do
       producline_suffix { 10 }
     end
+
+    trait :with_chapter do
+      after(:create) { |commodity, evaluator|
+        FactoryGirl.create(:chapter, :with_section, goods_nomenclature_item_id: "#{commodity.chapter_id}")
+      }
+    end
+
+    trait :with_heading do
+      after(:create) { |commodity, evaluator|
+        FactoryGirl.create(:heading, goods_nomenclature_item_id: "#{commodity.goods_nomenclature_item_id.first(4)}000000")
+      }
+    end
   end
 
   factory :chapter, parent: :goods_nomenclature, class: Chapter do
@@ -65,6 +77,7 @@ FactoryGirl.define do
       after(:create) { |chapter, evaluator|
         section = FactoryGirl.create(:section)
         chapter.add_section section
+        chapter.save
       }
     end
 

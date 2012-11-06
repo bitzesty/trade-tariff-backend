@@ -60,5 +60,9 @@ module Model
     def export_refund_uptree
       @_export_refund_uptree ||= export_refund_nomenclatures.map(&:uptree).flatten
     end
+
+    def chapter_id
+      "#{goods_nomenclature_item_id.first(2)}00000000"
+    end
   end
 end
