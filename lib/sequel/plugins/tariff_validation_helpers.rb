@@ -4,7 +4,7 @@ module Sequel
       module ClassMethods
         def validates_validity_date_span_of(*atts)
           opts = {
-            message: "%s does not span validity date of associated %s",
+            message: "%s does not span validity date of %s",
             tag: :validity_date_span,
           }.merge!(extract_options!(atts))
 
@@ -13,14 +13,14 @@ module Sequel
 
           validates_each(*atts) do |o, a, v|
             associated_record = o.send(a)
-            error_message = opts[:message] % [o.class.name, associated_record.class.name]
+            error_message = opts[:message] % [associated_record.class.name, o.class.name]
 
             if associated_record.present?
               if o.validity_start_date.present? && associated_record.validity_start_date.present?
-                 o.errors.add(a, error_message) if o.validity_start_date < associated_record.validity_start_date
+                 o.errors.add(a, error_message) if associated_record.validity_start_date > o.validity_start_date
               end
               if o.validity_end_date.present? && associated_record.validity_end_date.present?
-                 o.errors.add(a, error_message) if o.validity_end_date > associated_record.validity_end_date
+                 o.errors.add(a, error_message) if associated_record.validity_end_date < o.validity_end_date
               end
             end
           end

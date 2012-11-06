@@ -16,7 +16,7 @@ class ChiefTransformer
 
             operation.mark_as_processed!
           rescue Exception => e
-            raise ChiefTransformer::TransformException.new("Could not transform: #{operation.inspect}")
+            raise ChiefTransformer::TransformException.new("Could not transform: #{operation.inspect}. \n #{e} \nBacktrace: \n#{e.backtrace.join("\n")}")
           end
         end
       end
