@@ -14,6 +14,7 @@ module TariffSynchronizer
         }
       rescue Exception => e
         TariffSynchronizer.logger.error "Could not write: #{path}. Error: #{e}."
+        false
       end
     end
 
