@@ -117,6 +117,13 @@ namespace :tariff do
                   remove:chief:static_national_data]
 
   namespace :remove do
+    namespace :updates do
+      desc "Remove pending tariff_update entries"
+      task pending: :environment do
+        Sequel::Model.db.run("DELETE FROM tariff_updates WHERE state = 'P'");
+      end
+    end
+
     namespace :taric do
       desc "Remove Sections and Chapter<->Section association records"
       task sections: :environment do
