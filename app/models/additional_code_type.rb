@@ -46,8 +46,8 @@ class AdditionalCodeType < Sequel::Model
     return false if export_refund? && export_refund_nomenclatures.any?
     # CT10
     return false if measure_types.any?
-    # CT11
-    return false if
+    # TODO CT11
+    # return false if
 
     super
   end
