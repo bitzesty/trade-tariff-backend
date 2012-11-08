@@ -16,7 +16,8 @@ class ChiefTransformer
                .not_terminated
                .each do |measure|
           MeasureLogger.log(measure, :update, {validity_end_date: tame.fe_tsmp}, tame, tame.origin)
-          measure.update validity_end_date: tame.fe_tsmp
+          end_date = (measure.goods_nomenclature.validity_end_date.present? && record.fe_tsmp > measure.goods_nomenclature.validity_end_date) ? measure.goods_nomenclature.validity_end_date : record.fe_tsmp
+          measure.update validity_end_date: end_date
         end
       end
 

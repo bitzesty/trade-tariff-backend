@@ -1539,6 +1539,11 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20121019094932_convert_san_marino_to_italy_on_national_measures.rb")
     self[:schema_migrations].insert(:filename => "20121022135253_add_currency_abbreviation.rb")
     self[:schema_migrations].insert(:filename => "20121029133148_convert_additional_codes.rb")
+    self[:schema_migrations].insert(:filename => "20121107085018_remove_spl_measures.rb")
+    self[:schema_migrations].insert(:filename => "20121108102904_fix_chief_le_tsmps.rb")
+    self[:schema_migrations].insert(:filename => "20121109110125_create_update_measure_explosions.rb")
+    self[:schema_migrations].insert(:filename => "20121109121107_fix_chief_last_effective_dates.rb")
+    self[:schema_migrations].insert(:filename => "20121109121219_remove_invalid_measures.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"

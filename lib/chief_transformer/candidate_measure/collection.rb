@@ -12,11 +12,16 @@ class ChiefTransformer
       end
 
       def uniq
-        @measures = @measures.uniq
+        @measures = @measures.uniq {|m|
+          [m.measure_type, m.geographical_area, m.goods_nomenclature_item_id,
+           m.additional_code_type, m.additional_code, m.validity_start_date].join
+        }
       end
 
       def sort
-        @measures = @measures.sort_by(&:tame_fe_tsmp).reverse
+        @measures = @measures.sort_by {|m|
+          m.validity_end_date.to_s
+        }.reverse
       end
 
       def log(initiator)
@@ -25,7 +30,6 @@ class ChiefTransformer
         end
       end
 
-      # Only processes initial import records
       def persist
         Sequel::Model.db.transaction do
           @measures.each do |candidate_measure|

@@ -151,7 +151,7 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
     end
 
     it "should create the following footnote association for 004" do
-      f = FootnoteAssociationMeasure.where(measure_sid: -3, footnote_type_id: "04", footnote_id: "004").first
+      f = FootnoteAssociationMeasure.where(measure_sid: -5, footnote_type_id: "04", footnote_id: "004").first
       f.should_not be_nil
       f.national.should be_true
     end
@@ -163,19 +163,19 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
     end
 
     it "should create the following footnote association for 011" do
-      f = FootnoteAssociationMeasure.where(measure_sid: -5, footnote_type_id: "04", footnote_id: "011").first
+      f = FootnoteAssociationMeasure.where(measure_sid: -1, footnote_type_id: "04", footnote_id: "011").first
       f.should_not be_nil
       f.national.should be_true
     end
 
     it "should create the following footnote association for 011#2" do
-      f = FootnoteAssociationMeasure.where(measure_sid: -5, footnote_type_id: "04", footnote_id: "011").first
+      f = FootnoteAssociationMeasure.where(measure_sid: -2, footnote_type_id: "04", footnote_id: "011").first
       f.should_not be_nil
       f.national.should be_true
     end
 
     it "should create the following footnote association for 011#3" do
-      f = FootnoteAssociationMeasure.where(measure_sid: -5, footnote_type_id: "04", footnote_id: "011").first
+      f = FootnoteAssociationMeasure.where(measure_sid: -3, footnote_type_id: "04", footnote_id: "011").first
       f.should_not be_nil
       f.national.should be_true
     end

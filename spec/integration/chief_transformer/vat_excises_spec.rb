@@ -149,8 +149,6 @@ describe "CHIEF: VAT and Excises" do
 
     let!(:mfcm1){ create(:mfcm, :with_goods_nomenclature, amend_indicator: "I", fe_tsmp: DateTime.parse("2005-01-01 11:00:00"), msrgp_code: "EX", msr_type: "EXF", tty_code: "423", cmdty_code: "0101010100") }
 
-    let!(:geographical_area) { create :geographical_area, :fifteen_years, :erga_omnes }
-
     before { ChiefTransformer.instance.invoke(:initial_load) }
 
     # If there are several TAMF records with values in CNTRYORIG or CNGPCODE this will result in that a Taric measure is created for each country/country group.

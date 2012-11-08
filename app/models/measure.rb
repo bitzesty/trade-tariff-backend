@@ -228,13 +228,13 @@ class Measure < Sequel::Model
     # ME2 ME4 ME6 ME24
     presence_of :measure_type, :geographical_area_sid, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role
     # ME1
-    # uniqueness_of [:measure_type, :geographical_area_sid, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date]
+    uniqueness_of [:measure_type, :geographical_area_sid, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date]
     # ME3 ME5 ME8 ME115 ME18 ME114 ME15
-    # validity_date_span_of :geographical_area, :type, :goods_nomenclature, :additional_code
+    validity_date_span_of :geographical_area, :type, :goods_nomenclature, :additional_code
     # ME25
     validity_dates
     # ME7 ME88
-    # associated :goods_nomenclature, ensure: :qualified_goods_nomenclature?
+    associated :goods_nomenclature, ensure: :qualified_goods_nomenclature?
     # ME10
     associated :quota_order_number, ensure: :quota_order_number_present?,
                                     if: :type_order_number_capture_code_permitted?
@@ -288,6 +288,7 @@ class Measure < Sequel::Model
   delegate :order_number_capture_code_permitted?, to: :type, prefix: :type, allow_nil: true
   delegate :related_to_measure_type?, :meursing?, :non_meursing?, :export_refund?, :export_refund_agricultural?, to: :adco_type, prefix: :adco_type, allow_nil: true
   delegate :quota_order_number_origin_present?, :blank?, to: :quota_order_number, prefix: true, allow_nil: true
+  delegate :base_regulation_not_completely_abrogated?, to: :modification_regulation, prefix: true, allow_nil: true
 
   def regulation_is_not_replaced?
     RegulationReplacement.where(replaced_regulation_id: measure_generating_regulation_id,
