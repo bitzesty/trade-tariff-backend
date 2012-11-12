@@ -10,27 +10,30 @@ module TariffSynchronizer
 
       if file_name.present?
         taric_data_url = "#{TariffSynchronizer.host}/taric/#{file_name}"
-        TariffSynchronizer.logger.info "Downloading Taric update for #{date} at: #{taric_data_url}"
-        FileService.get_content(taric_data_url).tap{|status, contents|
-          create_update_entry(date, file_name, status, "TaricUpdate")
 
-          write_update_file(date, file_name, contents) if status == :success
-        }
+        ActiveSupport::Notifications.instrument("download_taric.tariff_synchronizer", date: date, url: taric_data_url) do
+          FileService.get_content(taric_data_url).tap{|status, contents|
+            create_update_entry(date, file_name, status, "TaricUpdate")
+
+            write_update_file(date, file_name, contents) if status == :success
+          }
+        end
       else
         # we will be retrying a few more times today, so do not create
         # Missing record until we are sure
         unless date == Date.today
-          TariffSynchronizer.logger.info "Taric update for #{date} is missing."
+          ActiveSupport::Notifications.instrument("not_found_taric.tariff_synchronizer", date: date)
           create_update_entry(date, file_name, status, "TaricUpdate")
         end
       end
     end
 
     def apply
-      TariffImporter.new(file_path, TaricImporter).import
+      ActiveSupport::Notifications.instrument("apply_taric.tariff_synchronizer", filename: filename) do
+        TariffImporter.new(file_path, TaricImporter).import
 
-      mark_as_applied
-      logger.info "Successfully applied Taric update: #{file_path}"
+        mark_as_applied
+      end
     end
 
     def self.update_type
@@ -54,10 +57,12 @@ module TariffSynchronizer
     def self.get_taric_path(date)
       date_query = Date.parse(date.to_s).strftime("%Y%m%d")
       taric_query_url = "#{TariffSynchronizer.host}/taric/TARIC3#{date_query}"
-      TariffSynchronizer.logger.info "Checking for Taric file for #{date} at: #{taric_query_url}"
-      FileService.get_content(taric_query_url).tap { |status, file_name|
-        file_name.gsub!(/[^0-9a-zA-Z\.]/i, '') if file_name.present?
-      }
+
+      ActiveSupport::Notifications.instrument("get_path_taric.tariff_synchronizer", date: date, url: taric_query_url) do
+        FileService.get_content(taric_query_url).tap { |status, file_name|
+          file_name.gsub!(/[^0-9a-zA-Z\.]/i, '') if file_name.present?
+        }
+      end
     end
   end
 end

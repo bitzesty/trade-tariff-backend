@@ -5,41 +5,15 @@ Sequel::Rails.connect(Rails.env)
 require 'tariff_importer'
 require 'date'
 require 'logger'
+require 'fileutils'
+require 'active_support/notifications'
+require 'active_support/log_subscriber'
 require 'tariff_synchronizer/pending_update'
 require 'tariff_synchronizer/chief_update'
 require 'tariff_synchronizer/taric_update'
-require 'fileutils'
+require 'tariff_synchronizer/logger'
 
 # How TariffSynchronizer works
-#
-# Basic workflow:
-#
-# Sync
-# ====
-# Download all pending updates that are either older than files present in data directory (inbox/failbox/processed)
-# for all update types (Taric/CHIEF)
-#
-# Apply
-# =====
-# Get oldest date in source directories.
-# If files exist for both EU and National
-#   If dates are the same for both EU and National file
-#       Run import of EU file
-#       Run import of National file
-#   Else
-#       If National file is oldest
-#           Run National file if it is (a Saturday or Sunday) or (Monday - Friday whith no EU file produced)
-#       Else
-#           Run EU file if it is a date whith no National file produced
-#       Endif
-#   Endif
-# Else
-#   If only National file exists
-#       Run National file if it is (a Saturday or Sunday) or (Monday - Friday whith no EU file produced)
-#   Else
-#       Run EU file if it is a date whith no National file produced
-#   Endif
-# Endif
 
 module TariffSynchronizer
   extend self
@@ -55,10 +29,6 @@ module TariffSynchronizer
 
   mattr_accessor :admin_email
   self.admin_email = TradeTariffBackend.secrets.sync_email
-
-  mattr_accessor :logger
-  self.logger = Logger.new('log/sync.log')
-  self.logger.formatter = Proc.new {|severity, time, progname, msg| "#{time.strftime('%Y-%m-%dT%H:%M:%S.%L %z')} #{sprintf('%5s', severity)} #{msg}\n" }
 
   mattr_accessor :root_path
   self.root_path = Rails.env.test? ? "tmp/data" : "data"
@@ -83,38 +53,38 @@ module TariffSynchronizer
   # to download any further updates to current day.
   def download
     if sync_variables_set?
-      logger.info "Starting sync"
-
-      [TaricUpdate, ChiefUpdate].map(&:sync)
+      ActiveSupport::Notifications.instrument("download.tariff_synchronizer") do
+        [TaricUpdate, ChiefUpdate].map(&:sync)
+      end
     else
-      logger.error "You need to create: config/trade_tariff_backend_secrets.yml file and set sync variables: username, password, host and email."
+      ActiveSupport::Notifications.instrument("config_error.tariff_synchronizer")
     end
   end
 
   # Applies all updates (from inbox/failbox) by their date starting from the
   # oldest one.
   def apply
-    logger.info "Starting update application"
-
     if BaseUpdate.failed.any?
-      logger.error "TariffSynchronizer found failed updates that need to be fixed before running:"
+      file_names = BaseUpdate.failed.map(&:filename)
 
-      BaseUpdate.failed.each { |update| logger.error update.inspect }
+      ActiveSupport::Notifications.instrument("failed_updates_present.tariff_synchronizer", file_names: file_names)
     else
-      PendingUpdate.all
-                   .sort_by(&:issue_date)
-                   .sort_by(&:update_priority)
-                   .each do |pending_update|
-        Sequel::Model.db.transaction do
-          begin
-            pending_update.apply
-          rescue TaricImporter::ImportException,
-                 ChiefImporter::ImportException  => exception
-            logger.error "Update failed: #{pending_update}"
+      ActiveSupport::Notifications.instrument("apply.tariff_synchronizer") do
+        PendingUpdate.all
+                     .sort_by(&:issue_date)
+                     .sort_by(&:update_priority)
+                     .each do |pending_update|
+          Sequel::Model.db.transaction do
+            begin
+              pending_update.apply
+            rescue TaricImporter::ImportException,
+                   ChiefImporter::ImportException  => exception
+              ActiveSupport::Notifications.instrument("failed_update.tariff_synchronizer", update: pending_update)
 
-            notify_admin(pending_update.file_name, exception)
+              notify_admin(pending_update.file_name, exception)
 
-            raise Sequel::Rollback
+              raise Sequel::Rollback
+            end
           end
         end
       end
@@ -126,7 +96,9 @@ module TariffSynchronizer
   #
   # Warning: rebuilt updates will be marked as pending.
   def rebuild
-    [TaricUpdate, ChiefUpdate].map(&:rebuild)
+    ActiveSupport::Notifications.instrument("rebuild.tariff_synchronizer") do
+      [TaricUpdate, ChiefUpdate].map(&:rebuild)
+    end
   end
 
   # Initial update day for specific update type

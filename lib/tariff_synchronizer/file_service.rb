@@ -6,11 +6,11 @@ module TariffSynchronizer
       begin
         File.open(path, "wb") {|f|
           if f.write(body) > 0
-            TariffSynchronizer.logger.info "Update file written to: #{File.join(Rails.root, path)}"
+            ActiveSupport::Notifications.instrument("tariff_synchronizer.written", path: path)
           end
         }
       rescue Exception => e
-        TariffSynchronizer.logger.error "Could not write: #{path}. Error: #{e}."
+        ActiveSupport::Notifications.instrument("tariff_synchronizer.non_writable", path: path, exception: e)
         false
       end
     end

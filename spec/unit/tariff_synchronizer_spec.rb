@@ -3,9 +3,6 @@ require 'tariff_synchronizer'
 
 describe TariffSynchronizer do
   before do
-    # Do not pollute the log file with messages from test runs
-    TariffSynchronizer.logger = Logger.new('/dev/null')
-
     # Use default email address
     TariffSynchronizer.admin_email = "user@example.com"
   end
@@ -33,14 +30,6 @@ describe TariffSynchronizer do
 
     context 'sync variables are not set' do
       before { TariffSynchronizer.expects(:sync_variables_set?).returns(false) }
-
-      it 'logs an error' do
-        mock_logger = mock
-        mock_logger.expects(:error).returns(true)
-        TariffSynchronizer.expects(:logger).returns(mock_logger)
-
-        TariffSynchronizer.download
-      end
 
       it 'does not start sync process' do
         TariffSynchronizer::TaricUpdate.expects(:sync).never
@@ -79,12 +68,6 @@ describe TariffSynchronizer do
         update_2.expects(:apply).raises(TaricImporter::ImportException)
       end
 
-      it 'error gets logged' do
-        TariffSynchronizer.logger.expects(:error).returns(true)
-
-        rescuing { TariffSynchronizer.apply }
-      end
-
       it 'admin gets notified' do
         mailer_stub = stub
         mailer_stub.expects(:deliver).returns(true)
@@ -103,15 +86,6 @@ describe TariffSynchronizer do
 
       it 'does not apply pending updates' do
         TariffSynchronizer::PendingUpdate.expects(:all).never
-
-        TariffSynchronizer.apply
-      end
-
-      it 'logs error' do
-        mock_logger = mock
-        mock_logger.expects(:info).returns(true)
-        mock_logger.expects(:error).twice.returns(true)
-        TariffSynchronizer.logger = mock_logger
 
         TariffSynchronizer.apply
       end

@@ -20,12 +20,10 @@ module TariffSynchronizer
 
     cattr_accessor :update_priority
 
-    delegate :logger, to: TariffSynchronizer
-
     self.unrestrict_primary_key
 
     validates do
-      presence_of :filename, :issue_date, :state
+      presence_of :filename, :issue_date
     end
 
     dataset_module do
@@ -76,28 +74,28 @@ module TariffSynchronizer
 
     private
 
-    def self.write_update_file(date, file_name, contents)
-      update_path = update_path(date, file_name)
+    def self.write_update_file(date, filename, contents)
+      update_path = update_path(date, filename)
 
       if contents.present?
         FileService.write_file(update_path, contents)
       else
-        TariffSynchronizer.logger.error "Could not write update file: #{file_name}. Nothing was downloaded."
+        ActiveSupport::Notifications.instrument("blank_update.tariff_synchronizer", date: date, filename: filename)
 
         false
       end
     end
 
-    def self.create_update_entry(date, file_name, state, update_type)
-      update = find_or_create(filename: "#{date}_#{file_name}",
+    def self.create_update_entry(date, filename, state, update_type)
+      update = find_or_create(filename: "#{date}_#{filename}",
                               update_type: "TariffSynchronizer::#{update_type}",
                               issue_date: date)
 
       update.update(state: STATE_MAP[state])
     end
 
-    def self.update_path(date, file_name)
-      File.join(TariffSynchronizer.root_path, update_type.to_s, "#{date}_#{file_name}")
+    def self.update_path(date, filename)
+      File.join(TariffSynchronizer.root_path, update_type.to_s, "#{date}_#{filename}")
     end
 
     def self.pending_from
@@ -109,8 +107,8 @@ module TariffSynchronizer
     end
 
     def self.parse_file_path(file_path)
-      file_name = Pathname.new(file_path).basename.to_s
-      file_name.match(/^(\d{4}-\d{2}-\d{2})_(.*)$/)[1,2]
+      filename = Pathname.new(file_path).basename.to_s
+      filename.match(/^(\d{4}-\d{2}-\d{2})_(.*)$/)[1,2]
     end
   end
 end

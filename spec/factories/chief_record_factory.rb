@@ -327,6 +327,7 @@ FactoryGirl.define do
       example_date { Forgery(:date).date }
     end
 
+    filename { Forgery(:basic).text }
     issue_date { example_date }
     state { 'P' }
 

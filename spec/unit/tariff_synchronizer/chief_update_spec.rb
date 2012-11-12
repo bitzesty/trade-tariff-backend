@@ -62,8 +62,6 @@ describe TariffSynchronizer::ChiefUpdate do
         url = "#{TariffSynchronizer.host}/taric/#{file_name}"
 
         TariffSynchronizer::FileService.expects(:get_content).with(url).returns([:success, 'abc'])
-        # Expect error about permissions to be logged
-        TariffSynchronizer.logger.expects(:error).returns(true)
 
         TariffSynchronizer::ChiefUpdate.download(example_date)
 
