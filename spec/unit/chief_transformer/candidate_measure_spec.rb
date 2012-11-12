@@ -99,8 +99,8 @@ describe ChiefTransformer::CandidateMeasure do
     context 'setting chief geographical area' do
       let!(:country_code) { create :country_code }
 
-      let!(:excluded_country_code1) { create :country_code }
-      let!(:excluded_country_code2) { create :country_code }
+      let!(:excluded_country_code1) { create :country_code, country_cd: 'AB' }
+      let!(:excluded_country_code2) { create :country_code, country_cd: 'DE' }
 
       let!(:country_group) { create :country_group, chief_country_grp: country_code.chief_country_cd,
                                                     country_exclusions: "#{excluded_country_code1.chief_country_cd},#{excluded_country_code2.chief_country_cd}" }

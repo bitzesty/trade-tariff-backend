@@ -68,6 +68,31 @@ module TariffSynchonizer
     def get_path_taric(event)
       info "Checking for TARIC update for #{event.payload[:date]} at #{event.payload[:url]}"
     end
+
+    # Update file written to file system
+    def file_written(event)
+      info "Update file written to file system: #{event.payload[:path]}"
+    end
+
+    # Can't open file for writing
+    def cant_open_file(event)
+      error "Can't open file for writting update at #{event.payload[:path]}"
+    end
+
+    # Can't write to file
+    def cant_write_to_file(event)
+      error "Can't write to update file at #{event.payload[:path]}"
+    end
+
+    # No permission to write update file
+    def write_permission_error(event)
+      error "No permission to write update to #{event.payload[:path]}"
+    end
+
+    # Delayed update fetching
+    def delay_download(event)
+      warn "Delaying update fetching: #{event.payload[:url]}"
+    end
   end
 end
 

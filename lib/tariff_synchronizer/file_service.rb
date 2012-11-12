@@ -6,12 +6,17 @@ module TariffSynchronizer
       begin
         File.open(path, "wb") {|f|
           if f.write(body) > 0
-            ActiveSupport::Notifications.instrument("tariff_synchronizer.written", path: path)
+            ActiveSupport::Notifications.instrument("file_written.tariff_synchronizer", path: path)
           end
         }
-      rescue Exception => e
-        ActiveSupport::Notifications.instrument("tariff_synchronizer.non_writable", path: path, exception: e)
-        false
+      rescue Errno::ENOENT => e
+        ActiveSupport::Notifications.instrument("cant_open_file.tariff_synchronizer", path: path)
+      rescue IOError => e
+        ActiveSupport::Notifications.instrument("cant_write_to_file.tariff_synchronizer", path: path)
+      rescue Errno::EACCES => e
+        ActiveSupport::Notifications.instrument("write_permission_error.tariff_synchronizer", path: path)
+      ensure
+        return false
       end
     end
 
@@ -31,6 +36,7 @@ module TariffSynchronizer
           return :failed, nil
         else
           retry_count -= 1
+          ActiveSupport::Notifications.instrument("delay_download.tariff_synchronizer", url: url)
           sleep TariffSynchronizer.request_throttle
         end
       end
