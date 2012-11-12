@@ -63,60 +63,122 @@ describe GoodsNomenclature do
     end
 
     describe 'goods nomenclature description' do
-      let!(:goods_nomenclature)                { create :goods_nomenclature }
-      let!(:goods_nomenclature_description1)   { create :goods_nomenclature_description,
-                                                            goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
-                                                            valid_at: 2.years.ago,
-                                                            valid_to: nil }
-      let!(:goods_nomenclature_description2) { create :goods_nomenclature_description,
-                                                            goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
-                                                            valid_at: 5.years.ago,
-                                                            valid_to: 3.years.ago }
+      context 'at least one end date present' do
+        let!(:goods_nomenclature)                { create :goods_nomenclature }
+        let!(:goods_nomenclature_description1)   { create :goods_nomenclature_description,
+                                                              goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
+                                                              valid_at: 2.years.ago,
+                                                              valid_to: nil }
+        let!(:goods_nomenclature_description2) { create :goods_nomenclature_description,
+                                                              goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
+                                                              valid_at: 5.years.ago,
+                                                              valid_to: 3.years.ago }
 
-      context 'direct loading' do
-        it 'loads correct description respecting given actual time' do
-          TimeMachine.now do
-            goods_nomenclature.goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
+        context 'direct loading' do
+          it 'loads correct description respecting given actual time' do
+            TimeMachine.now do
+              goods_nomenclature.goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
+            end
+          end
+
+          it 'loads correct description respecting given time' do
+            TimeMachine.at(1.year.ago) do
+              goods_nomenclature.goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
+            end
+
+            TimeMachine.at(4.years.ago) do
+              goods_nomenclature.reload.goods_nomenclature_description.pk.should == goods_nomenclature_description2.pk
+            end
           end
         end
 
-        it 'loads correct description respecting given time' do
-          TimeMachine.at(1.year.ago) do
-            goods_nomenclature.goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
+        context 'eager loading' do
+          it 'loads correct description respecting given actual time' do
+            TimeMachine.now do
+              GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                            .eager(:goods_nomenclature_description)
+                            .all
+                            .first
+                            .goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
+            end
           end
 
-          TimeMachine.at(4.years.ago) do
-            goods_nomenclature.reload.goods_nomenclature_description.pk.should == goods_nomenclature_description2.pk
+          it 'loads correct description respecting given time' do
+            TimeMachine.at(1.year.ago) do
+              GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                            .eager(:goods_nomenclature_description)
+                            .all
+                            .first
+                            .goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
+            end
+
+            TimeMachine.at(4.years.ago) do
+              GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                            .eager(:goods_nomenclature_description)
+                            .all
+                            .first
+                            .goods_nomenclature_description.pk.should == goods_nomenclature_description2.pk
+            end
           end
         end
       end
 
-      context 'eager loading' do
-        it 'loads correct description respecting given actual time' do
-          TimeMachine.now do
-            GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
-                          .eager(:goods_nomenclature_description)
-                          .all
-                          .first
-                          .goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
+      context 'blank end dates' do
+        let!(:goods_nomenclature)                { create :goods_nomenclature }
+        let!(:goods_nomenclature_description1)   { create :goods_nomenclature_description,
+                                                              goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
+                                                              valid_at: 3.years.ago,
+                                                              valid_to: nil }
+        let!(:goods_nomenclature_description2) { create :goods_nomenclature_description,
+                                                              goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
+                                                              valid_at: 5.years.ago,
+                                                              valid_to: nil }
+
+        context 'direct loading' do
+          it 'loads correct description respecting given actual time' do
+            TimeMachine.now do
+              goods_nomenclature.goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
+            end
+          end
+
+          it 'loads correct description respecting given time' do
+            TimeMachine.at(2.years.ago) do
+              goods_nomenclature.goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
+            end
+
+            TimeMachine.at(4.years.ago) do
+              goods_nomenclature.reload.goods_nomenclature_description.pk.should == goods_nomenclature_description2.pk
+            end
           end
         end
 
-        it 'loads correct description respecting given time' do
-          TimeMachine.at(1.year.ago) do
-            GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
-                          .eager(:goods_nomenclature_description)
-                          .all
-                          .first
-                          .goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
+        context 'eager loading' do
+          it 'loads correct description respecting given actual time' do
+            TimeMachine.now do
+              GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                            .eager(:goods_nomenclature_description)
+                            .all
+                            .first
+                            .goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
+            end
           end
 
-          TimeMachine.at(4.years.ago) do
-            GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
-                          .eager(:goods_nomenclature_description)
-                          .all
-                          .first
-                          .goods_nomenclature_description.pk.should == goods_nomenclature_description2.pk
+          it 'loads correct description respecting given time' do
+            TimeMachine.at(2.years.ago) do
+              GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                            .eager(:goods_nomenclature_description)
+                            .all
+                            .first
+                            .goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
+            end
+
+            TimeMachine.at(4.years.ago) do
+              GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                            .eager(:goods_nomenclature_description)
+                            .all
+                            .first
+                            .goods_nomenclature_description.pk.should == goods_nomenclature_description2.pk
+            end
           end
         end
       end

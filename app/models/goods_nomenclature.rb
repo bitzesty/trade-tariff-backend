@@ -30,20 +30,28 @@ class GoodsNomenclature < Sequel::Model
   end)
 
   one_to_one :goods_nomenclature_description, dataset: -> {
-    GoodsNomenclatureDescription.with_actual(GoodsNomenclatureDescriptionPeriod)
+    GoodsNomenclatureDescription.select_all(:goods_nomenclature_descriptions)
+                                .with_actual(GoodsNomenclatureDescriptionPeriod)
                                 .join(:goods_nomenclature_description_periods, goods_nomenclature_description_periods__goods_nomenclature_description_period_sid: :goods_nomenclature_descriptions__goods_nomenclature_description_period_sid,
                                                                                goods_nomenclature_description_periods__goods_nomenclature_sid: :goods_nomenclature_descriptions__goods_nomenclature_sid)
-                                .order(:validity_start_date.desc)
                                 .where(goods_nomenclature_descriptions__goods_nomenclature_sid: goods_nomenclature_sid)
+                                .order(:goods_nomenclature_description_periods__validity_start_date.desc)
+                                .from_self(alias: :descriptions)
+                                .group(:descriptions__goods_nomenclature_sid)
   }, eager_loader: (proc do |eo|
     eo[:rows].each{|gono| gono.associations[:goods_nomenclature_description] = nil}
 
     id_map = eo[:id_map]
-    GoodsNomenclatureDescription.with_actual(GoodsNomenclatureDescriptionPeriod)
+
+    GoodsNomenclatureDescription.select_all(:goods_nomenclature_descriptions)
+                                .with_actual(GoodsNomenclatureDescriptionPeriod)
                                 .join(:goods_nomenclature_description_periods, goods_nomenclature_description_periods__goods_nomenclature_description_period_sid: :goods_nomenclature_descriptions__goods_nomenclature_description_period_sid,
                                                                                goods_nomenclature_description_periods__goods_nomenclature_sid: :goods_nomenclature_descriptions__goods_nomenclature_sid)
-                                .order(:validity_start_date.desc)
-                                .where(goods_nomenclature_descriptions__goods_nomenclature_sid: id_map.keys).all do |description|
+                                .where(goods_nomenclature_descriptions__goods_nomenclature_sid: id_map.keys)
+                                .order(:goods_nomenclature_description_periods__validity_start_date.desc)
+                                .from_self(alias: :descriptions)
+                                .group(:descriptions__goods_nomenclature_sid)
+                                .all do |description|
       if gonos = id_map[description.goods_nomenclature_sid]
         gonos.each do |gono|
           gono.associations[:goods_nomenclature_description] = description
