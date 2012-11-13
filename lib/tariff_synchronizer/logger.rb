@@ -1,7 +1,7 @@
 module TariffSynchonizer
   class Logger < ActiveSupport::LogSubscriber
     cattr_accessor :logger
-    self.logger = ::Logger.new('log/sync.log')
+    self.logger = ::Logger.new('log/tariff_synchronizer.log')
     self.logger.formatter = Proc.new {|severity, time, progname, msg| "#{time.strftime('%Y-%m-%dT%H:%M:%S.%L %z')} #{sprintf('%5s', severity)} #{msg}\n" }
 
     # Download all pending Taric and Chief updates
