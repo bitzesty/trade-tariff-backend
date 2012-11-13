@@ -48,6 +48,18 @@ module TariffSynchronizer
   mattr_accessor :retry_count
   self.retry_count = 10
 
+  # CHIEF update url template
+  mattr_accessor :chief_update_url_template
+  self.chief_update_url_template = "%{host}/taric/%{file_name}"
+
+  # Taric query url template
+  mattr_accessor :taric_query_url_template
+  self.taric_query_url_template = "%{host}/taric/TARIC3%{date}"
+
+  # Taric update url template
+  mattr_accessor :taric_update_url_template
+  self.taric_update_url_template = "%{host}/taric/%{file_name}"
+
   # Download pending updates for Taric and National data
   # Gets latest downloaded file present in (inbox/failbox/processed) and tries
   # to download any further updates to current day.

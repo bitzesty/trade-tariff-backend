@@ -12,7 +12,11 @@ describe TariffSynchronizer::TaricUpdate do
   end
 
   describe '.download' do
-    let(:taric_update_name) { "TGB#{example_date.strftime("%y")}#{example_date.yday}.xml" }
+    let(:taric_update_name)  { "TGB#{example_date.strftime("%y")}#{example_date.yday}.xml" }
+    let(:taric_query_url)    { "#{TariffSynchronizer.host}/taric/TARIC3#{example_date.strftime("%Y%m%d")}" }
+    let(:blank_response)     { build :response, content: nil }
+    let(:not_found_response) { build :response, :not_found }
+    let(:success_response)   { build :response, :success, content: 'abc' }
 
     before do
       TariffSynchronizer.host = "http://example.com"
@@ -20,33 +24,39 @@ describe TariffSynchronizer::TaricUpdate do
     end
 
     context "when file for the day is found" do
-      before do
-        taric_query_url = "#{TariffSynchronizer.host}/taric/TARIC3#{example_date.strftime("%Y%m%d")}"
-        TariffSynchronizer::FileService.expects(:get_content).with(taric_query_url).returns([:success, taric_update_name])
-      end
+      let(:query_response)     { build :response, :success, url: taric_query_url,
+                                                         content: taric_update_name }
+      let(:update_url)         { "#{TariffSynchronizer.host}/taric/#{taric_update_name}" }
+
+      before {
+        TariffSynchronizer::TaricUpdate.expects(:download_content)
+                                       .with(taric_query_url)
+                                       .returns(query_response)
+      }
 
       it 'downloads Taric file for specific date' do
-        update_url = "#{TariffSynchronizer.host}/taric/#{taric_update_name}"
-
-        TariffSynchronizer::FileService.expects(:get_content).with(update_url).returns(nil)
+        TariffSynchronizer::TaricUpdate.expects(:download_content)
+                                       .with(update_url)
+                                       .returns(blank_response)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
       end
 
       it 'writes Taric file contents to file if they are not blank' do
-        update_url = "#{TariffSynchronizer.host}/taric/#{taric_update_name}"
-
-        TariffSynchronizer::FileService.expects(:get_content).with(update_url).returns([:success, 'abc'])
+        TariffSynchronizer::TaricUpdate.expects(:download_content)
+                                       .with(update_url)
+                                       .returns(success_response)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
+
         File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_true
         File.read("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should == 'abc'
       end
 
       it 'does not write Taric file contents to file if they are blank' do
-        update_url = "#{TariffSynchronizer.host}/taric/#{taric_update_name}"
-
-        TariffSynchronizer::FileService.expects(:get_content).with(update_url).returns(nil)
+        TariffSynchronizer::TaricUpdate.expects(:download_content)
+                                       .with(update_url)
+                                       .returns(blank_response)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
         File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_false
@@ -55,8 +65,9 @@ describe TariffSynchronizer::TaricUpdate do
 
     context 'when file for the day is not found' do
       it 'does not write Taric file contents to file if they are blank' do
-        taric_query_url = "#{TariffSynchronizer.host}/taric/TARIC3#{example_date.strftime("%Y%m%d")}"
-        TariffSynchronizer::FileService.expects(:get_content).with(taric_query_url).returns([:not_found, nil])
+        TariffSynchronizer::TaricUpdate.expects(:download_content)
+                                       .with(taric_query_url)
+                                       .returns(not_found_response)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
       end

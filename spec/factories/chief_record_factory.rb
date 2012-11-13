@@ -354,4 +354,27 @@ FactoryGirl.define do
     issue_date { example_date }
     update_type { 'TariffSynchronizer::TaricUpdate' }
   end
+
+  factory :response, class: TariffSynchronizer::Response do
+    url { Forgery::Internet.domain_name }
+    response_code { [200, 404, 403].sample }
+    content { Forgery(:basic).text }
+
+    trait :success do
+      response_code { 200 }
+    end
+
+    trait :not_found do
+      response_code { 404 }
+      content { nil }
+    end
+
+    trait :error do
+      response_code { 403 }
+    end
+
+    initialize_with {
+      new(url, response_code, content)
+    }
+  end
 end

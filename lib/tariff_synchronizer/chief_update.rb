@@ -5,22 +5,30 @@ module TariffSynchronizer
   class ChiefUpdate < BaseUpdate
     self.update_priority = 1
 
-    def self.download(date)
-      ActiveSupport::Notifications.instrument("download_chief.tariff_synchronizer", date: date) do
-        file_name = "KBT009(#{date.strftime("%y")}#{date.yday}).txt"
-        chief_url = "#{TariffSynchronizer.host}/taric/#{file_name}"
-
-        FileService.get_content(chief_url).tap {|status, contents|
-          # TODO log not found
-          create_update_entry(date, file_name, status, "ChiefUpdate") unless status == :not_found && date == Date.today
-
-          write_update_file(date, file_name, contents) if status == :success
-        }
+    class << self
+      def download(date)
+        ActiveSupport::Notifications.instrument("download_chief.tariff_synchronizer", date: date) do
+          download_content(chief_update_url_for(date)).tap { |response|
+            create_entry(date, response)
+          }
+        end
       end
-    end
 
-    def self.file_name_for(date)
-      "#{date}_KBT009(#{date.strftime("%y")}#{date.yday}).txt"
+      def update_type
+        :chief
+      end
+
+      def rebuild
+        Dir[File.join(Rails.root, TariffSynchronizer.root_path, 'chief', '*.txt')].each do |file_path|
+          date, file_name = parse_file_path(file_path)
+
+          create_update_entry(Date.parse(date), BaseUpdate::PENDING_STATE)
+        end
+      end
+
+      def file_name_for(date)
+        "#{date}_#{chief_file_name_for(date)}"
+      end
     end
 
     def apply
@@ -31,16 +39,15 @@ module TariffSynchronizer
       end
     end
 
-    def self.update_type
-      :chief
+    private
+
+    def self.chief_file_name_for(date)
+      "KBT009(#{date.strftime("%y")}#{date.yday}).txt"
     end
 
-    def self.rebuild
-      Dir[File.join(Rails.root, TariffSynchronizer.root_path, 'chief', '*.txt')].each do |file_path|
-        date, file_name = parse_file_path(file_path)
-
-        create_update_entry(date, file_name, :success, "ChiefUpdate")
-      end
+    def self.chief_update_url_for(date)
+      TariffSynchronizer.chief_update_url_template % { host: TariffSynchronizer.host,
+                                                       file_name: chief_file_name_for(date)}
     end
   end
 end

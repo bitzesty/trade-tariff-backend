@@ -1,5 +1,7 @@
 module TariffSynchronizer
   class BaseUpdate < Sequel::Model
+    include FileService
+
     set_dataset db[:tariff_updates]
 
     plugin :timestamps
@@ -12,11 +14,6 @@ module TariffSynchronizer
     PENDING_STATE = 'P'
     FAILED_STATE  = 'F'
     MISSING_STATE = 'M'
-    STATE_MAP = {
-      success: PENDING_STATE,
-      not_found: MISSING_STATE,
-      failed: FAILED_STATE
-    }
 
     cattr_accessor :update_priority
 
@@ -74,28 +71,41 @@ module TariffSynchronizer
 
     private
 
-    def self.write_update_file(date, filename, contents)
-      update_path = update_path(date, filename)
+    def self.create_entry(date, response)
+      if response.content_present?
+        create_update_entry(date, PENDING_STATE)
+        write_update_file(date, response.content)
+      elsif response.retry_count_exceeded?
+        create_update_entry(date, FAILED_STATE)
+        ActiveSupport::Notifications.instrument("retry_exceeded.tariff_synchronizer", date: date)
+      elsif response.not_found?
+        create_update_entry(date, MISSING_STATE)
+        ActiveSupport::Notifications.instrument("not_found.tariff_synchronizer", date: date, url: response.url)
+      end
+    end
+
+    def self.write_update_file(date, contents)
+      update_path = update_path(date, file_name_for(date))
 
       if contents.present?
-        FileService.write_file(update_path, contents)
+        write_file(update_path, contents)
+
+        ActiveSupport::Notifications.instrument("update_written.tariff_synchronizer", date: date, size: contents.size)
       else
-        ActiveSupport::Notifications.instrument("blank_update.tariff_synchronizer", date: date, filename: filename)
+        ActiveSupport::Notifications.instrument("blank_update.tariff_synchronizer", date: date, filename: update_path)
 
         false
       end
     end
 
-    def self.create_update_entry(date, filename, state, update_type)
-      update = find_or_create(filename: "#{date}_#{filename}",
-                              update_type: "TariffSynchronizer::#{update_type}",
-                              issue_date: date)
-
-      update.update(state: STATE_MAP[state])
+    def self.create_update_entry(date, state)
+      find_or_create(filename: file_name_for(date),
+                     update_type: self.name,
+                     issue_date: date).update(state: state)
     end
 
-    def self.update_path(date, filename)
-      File.join(TariffSynchronizer.root_path, update_type.to_s, "#{date}_#{filename}")
+    def self.update_path(date, file_name)
+      File.join(TariffSynchronizer.root_path, update_type.to_s, file_name)
     end
 
     def self.pending_from

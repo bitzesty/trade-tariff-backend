@@ -11,6 +11,10 @@ describe TariffSynchronizer::ChiefUpdate do
   end
 
   describe '.download' do
+    let(:blank_response)     { build :response, content: nil }
+    let(:not_found_response) { build :response, :not_found }
+    let(:success_response)   { build :response, :success, content: 'abc' }
+
     context 'has permission to write update file' do
       before do
         TariffSynchronizer.host = "http://example.com"
@@ -20,7 +24,9 @@ describe TariffSynchronizer::ChiefUpdate do
       it 'downloads CHIEF file for specific date' do
         url = "#{TariffSynchronizer.host}/taric/KBT009(101).txt"
 
-        TariffSynchronizer::FileService.expects(:get_content).with(url).returns(nil)
+        TariffSynchronizer::ChiefUpdate.expects(:download_content)
+                                       .with(url)
+                                       .returns(blank_response)
 
         TariffSynchronizer::ChiefUpdate.download(example_date)
       end
@@ -29,7 +35,9 @@ describe TariffSynchronizer::ChiefUpdate do
         file_name = "KBT009(101).txt"
         url = "#{TariffSynchronizer.host}/taric/#{file_name}"
 
-        TariffSynchronizer::FileService.expects(:get_content).with(url).returns([:success, 'abc'])
+        TariffSynchronizer::ChiefUpdate.expects(:download_content)
+                                       .with(url)
+                                       .returns(success_response)
 
         TariffSynchronizer::ChiefUpdate.download(example_date)
 
@@ -40,7 +48,9 @@ describe TariffSynchronizer::ChiefUpdate do
       it 'creates pending ChiefUpdate entry in the table' do
         url = "#{TariffSynchronizer.host}/taric/KBT009(101).txt"
 
-        TariffSynchronizer::FileService.expects(:get_content).with(url).returns('something')
+        TariffSynchronizer::ChiefUpdate.expects(:download_content)
+                                       .with(url)
+                                       .returns(success_response)
         TariffSynchronizer::ChiefUpdate.download(example_date)
         TariffSynchronizer::ChiefUpdate.count.should == 1
         TariffSynchronizer::ChiefUpdate.first.issue_date.should == example_date
@@ -61,7 +71,9 @@ describe TariffSynchronizer::ChiefUpdate do
         file_name = "KBT009(101).txt"
         url = "#{TariffSynchronizer.host}/taric/#{file_name}"
 
-        TariffSynchronizer::FileService.expects(:get_content).with(url).returns([:success, 'abc'])
+        TariffSynchronizer::ChiefUpdate.expects(:download_content)
+                                       .with(url)
+                                       .returns(success_response)
 
         TariffSynchronizer::ChiefUpdate.download(example_date)
 

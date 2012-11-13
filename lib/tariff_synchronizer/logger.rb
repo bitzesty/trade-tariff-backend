@@ -41,17 +41,17 @@ module TariffSynchonizer
 
     # Download chief update
     def download_chief(event)
-      info "Downloading CHIEF update for #{event.payload[:date]}"
+      info "Downloaded CHIEF update for #{event.payload[:date]}"
     end
 
     # Apply CHIEF update
     def apply_chief(event)
-      info "Applying CHIEF update #{event.payload[:filename]}"
+      info "Applied CHIEF update #{event.payload[:filename]}"
     end
 
     # Download TARIC update
     def download_taric(event)
-      info "Downloading TARIC update for #{event.payload[:date]} at #{event.payload[:url]}"
+      info "Downloaded TARIC update for #{event.payload[:date]} at #{event.payload[:url]}"
     end
 
     # Taric update not found
@@ -59,9 +59,14 @@ module TariffSynchonizer
       warn "TARIC update not found for #{event.payload[:date]}"
     end
 
+    # CHIEF update not found
+    def not_found_chief(event)
+      warn "CHIEF update not found for #{event.payload[:date]}"
+    end
+
     # Apply TARIC update
     def apply_taric(event)
-      info "Applying TARIC update #{event.payload[:filename]}"
+      info "Applied TARIC update #{event.payload[:filename]}"
     end
 
     # Query for TARIC update path
