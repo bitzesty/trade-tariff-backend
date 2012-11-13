@@ -34,9 +34,14 @@ module TariffSynchonizer
       info "Rebuilding updates from file system"
     end
 
-    # Update with blank content received
-    def blank_update(event)
-      error "Blank update content received for #{event.payload[:date]}: #{event.payload[:filename]}"
+    # Exceeded retry count
+    def retry_exceeded(event)
+      error "Download retry count exceeded for #{event.payload[:date]}"
+    end
+
+    # Update not found
+    def not_found(event)
+      warn "Update not found for #{event.payload[:date]} at #{event.payload[:url]}"
     end
 
     # Download chief update
@@ -54,29 +59,24 @@ module TariffSynchonizer
       info "Downloaded TARIC update for #{event.payload[:date]} at #{event.payload[:url]}"
     end
 
-    # Taric update not found
-    def not_found_taric(event)
-      warn "TARIC update not found for #{event.payload[:date]}"
-    end
-
-    # CHIEF update not found
-    def not_found_chief(event)
-      warn "CHIEF update not found for #{event.payload[:date]}"
-    end
-
     # Apply TARIC update
     def apply_taric(event)
       info "Applied TARIC update #{event.payload[:filename]}"
     end
 
     # Query for TARIC update path
-    def get_path_taric(event)
+    def get_taric_update_name(event)
       info "Checking for TARIC update for #{event.payload[:date]} at #{event.payload[:url]}"
     end
 
     # Update file written to file system
-    def file_written(event)
-      info "Update file written to file system: #{event.payload[:path]}"
+    def update_written(event)
+      info "Update file written to file system: #{event.payload[:path]} (size: #{event.payload[:size]})"
+    end
+
+    # Update with blank content received
+    def blank_update(event)
+      error "Blank update content received for #{event.payload[:date]}: #{event.payload[:url]}"
     end
 
     # Can't open file for writing

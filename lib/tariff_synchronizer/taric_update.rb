@@ -9,7 +9,8 @@ module TariffSynchronizer
       def download(date)
         taric_update_url_for(date).tap do |taric_update_url|
           if taric_update_url.present?
-            ActiveSupport::Notifications.instrument("download_taric.tariff_synchronizer", date: date) do
+            ActiveSupport::Notifications.instrument("download_taric.tariff_synchronizer", date: date,
+                                                                                          url: taric_update_url) do
               download_content(taric_update_url).tap { |response|
                 create_entry(date, response)
               }
@@ -18,7 +19,8 @@ module TariffSynchronizer
             # We will be retrying a few more times today, so do not create
             # missing record until we are sure
             create_update_entry(date, BaseUpdate::MISSING_STATE) unless date.today?
-            ActiveSupport::Notifications.instrument("not_found.tariff_synchronizer", date: date, url: taric_update_url)
+            ActiveSupport::Notifications.instrument("not_found.tariff_synchronizer", date: date,
+                                                                                     url: taric_update_url)
           end
         end
       end
@@ -53,8 +55,8 @@ module TariffSynchronizer
     def self.taric_update_name_for(date)
       taric_query_url = taric_query_url_for(date)
 
-      ActiveSupport::Notifications.instrument("get_taric_update_name_for.tariff_synchronizer", date: date,
-                                                                                               url: taric_query_url) do
+      ActiveSupport::Notifications.instrument("get_taric_update_name.tariff_synchronizer", date: date,
+                                                                                           url: taric_query_url) do
         download_content(taric_query_url).content.tap! { |content|
           content.gsub!(/[^0-9a-zA-Z\.]/i, '') if content.present?
         }

@@ -36,6 +36,10 @@ module TariffSynchronizer
         where(state: MISSING_STATE)
       end
 
+      def with_issue_date(date)
+        where(issue_date: date)
+      end
+
       def failed
         where(state: FAILED_STATE)
       end
@@ -72,29 +76,29 @@ module TariffSynchronizer
     private
 
     def self.create_entry(date, response)
-      if response.content_present?
+      if response.success? && response.content_present?
         create_update_entry(date, PENDING_STATE)
         write_update_file(date, response.content)
+      elsif response.success? && !response.content_present?
+        ActiveSupport::Notifications.instrument("blank_update.tariff_synchronizer", date: date,
+                                                                                    url: response.url)
       elsif response.retry_count_exceeded?
         create_update_entry(date, FAILED_STATE)
         ActiveSupport::Notifications.instrument("retry_exceeded.tariff_synchronizer", date: date)
       elsif response.not_found?
         create_update_entry(date, MISSING_STATE)
-        ActiveSupport::Notifications.instrument("not_found.tariff_synchronizer", date: date, url: response.url)
+        ActiveSupport::Notifications.instrument("not_found.tariff_synchronizer", date: date,
+                                                                                 url: response.url)
       end
     end
 
     def self.write_update_file(date, contents)
       update_path = update_path(date, file_name_for(date))
 
-      if contents.present?
+      ActiveSupport::Notifications.instrument("update_written.tariff_synchronizer", date: date,
+                                                                                    path: update_path,
+                                                                                    size: contents.size) do
         write_file(update_path, contents)
-
-        ActiveSupport::Notifications.instrument("update_written.tariff_synchronizer", date: date, size: contents.size)
-      else
-        ActiveSupport::Notifications.instrument("blank_update.tariff_synchronizer", date: date, filename: update_path)
-
-        false
       end
     end
 

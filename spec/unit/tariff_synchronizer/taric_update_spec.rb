@@ -17,6 +17,9 @@ describe TariffSynchronizer::TaricUpdate do
     let(:blank_response)     { build :response, content: nil }
     let(:not_found_response) { build :response, :not_found }
     let(:success_response)   { build :response, :success, content: 'abc' }
+    let(:failed_response)    { build :response, :failed }
+    let(:update_url)         { "#{TariffSynchronizer.host}/taric/#{taric_update_name}" }
+
 
     before do
       TariffSynchronizer.host = "http://example.com"
@@ -26,8 +29,6 @@ describe TariffSynchronizer::TaricUpdate do
     context "when file for the day is found" do
       let(:query_response)     { build :response, :success, url: taric_query_url,
                                                          content: taric_update_name }
-      let(:update_url)         { "#{TariffSynchronizer.host}/taric/#{taric_update_name}" }
-
       before {
         TariffSynchronizer::TaricUpdate.expects(:download_content)
                                        .with(taric_query_url)
@@ -64,12 +65,51 @@ describe TariffSynchronizer::TaricUpdate do
     end
 
     context 'when file for the day is not found' do
-      it 'does not write Taric file contents to file if they are blank' do
+      before {
         TariffSynchronizer::TaricUpdate.expects(:download_content)
                                        .with(taric_query_url)
                                        .returns(not_found_response)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
+      }
+
+      it 'does not write Taric file contents to file if they are blank' do
+        File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_false
+      end
+
+      it 'creates not found entry' do
+        TariffSynchronizer::TaricUpdate.missing
+                                       .with_issue_date(example_date)
+                                       .present?.should be_true
+      end
+    end
+
+    context 'retry count exceeded (failed update)' do
+      let(:update_url) { "#{TariffSynchronizer.host}/taric/abc" }
+
+      before {
+        TariffSynchronizer.retry_count = 1
+
+        TariffSynchronizer::TaricUpdate.expects(:send_request)
+                                       .with(taric_query_url)
+                                       .returns(success_response)
+
+        TariffSynchronizer::TaricUpdate.expects(:send_request)
+                                       .with(update_url)
+                                       .twice
+                                       .returns(failed_response)
+
+        TariffSynchronizer::TaricUpdate.download(example_date)
+      }
+
+      it 'does not write file to file system' do
+        File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_false
+      end
+
+      it 'creates failed update entry' do
+        TariffSynchronizer::TaricUpdate.failed
+                                       .with_issue_date(example_date)
+                                       .present?.should be_true
       end
     end
 

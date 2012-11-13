@@ -121,7 +121,10 @@ module TariffSynchronizer
   private
 
   def sync_variables_set?
-    self.username.present? && self.password.present? && self.host.present? && self.admin_email.present?
+    username.present? &&
+    password.present? &&
+    host.present? &&
+    admin_email.present?
   end
 
   def notify_admin(failed_file_path, exception)

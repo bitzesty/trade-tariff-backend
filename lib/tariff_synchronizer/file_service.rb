@@ -8,9 +8,7 @@ module TariffSynchronizer
       def write_file(path, body)
         begin
           File.open(path, "wb") {|f|
-            if f.write(body) > 0
-              ActiveSupport::Notifications.instrument("file_written.tariff_synchronizer", path: path)
-            end
+            f.write(body)
           }
         rescue Errno::ENOENT
           ActiveSupport::Notifications.instrument("cant_open_file.tariff_synchronizer", path: path)

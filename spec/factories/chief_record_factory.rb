@@ -369,8 +369,9 @@ FactoryGirl.define do
       content { nil }
     end
 
-    trait :error do
+    trait :failed do
       response_code { 403 }
+      content { nil }
     end
 
     initialize_with {

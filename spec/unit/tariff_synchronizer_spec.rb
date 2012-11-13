@@ -29,7 +29,12 @@ describe TariffSynchronizer do
     end
 
     context 'sync variables are not set' do
-      before { TariffSynchronizer.expects(:sync_variables_set?).returns(false) }
+      before {
+        TariffSynchronizer.username = nil
+        TariffSynchronizer.password = nil
+        TariffSynchronizer.host = nil
+        TariffSynchronizer.admin_email = nil
+      }
 
       it 'does not start sync process' do
         TariffSynchronizer::TaricUpdate.expects(:sync).never

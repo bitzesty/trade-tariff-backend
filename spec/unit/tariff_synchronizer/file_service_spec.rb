@@ -29,7 +29,7 @@ describe TariffSynchronizer::FileService do
 
   describe ".download_content", :webmock do
     let(:example_url) { "http://example.com/data" }
-    let(:error_response)   { build :response, :error }
+    let(:error_response)   { build :response, :failed }
     let(:success_response) { build :response, :success, content: 'Hello world',
                                                         url: example_url }
 
