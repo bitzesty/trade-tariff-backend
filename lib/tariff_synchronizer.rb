@@ -8,14 +8,35 @@ require 'logger'
 require 'fileutils'
 require 'active_support/notifications'
 require 'active_support/log_subscriber'
-require 'tariff_synchronizer/pending_update'
-require 'tariff_synchronizer/chief_update'
-require 'tariff_synchronizer/taric_update'
-require 'tariff_synchronizer/logger'
 
 # How TariffSynchronizer works
+#
+# Download
+#
+# Try downloading all updates up until today & try redownload failed updates(?)
+#   If any errors occur while downloading retry until retry_count is reached and then mark as failed.
+#
+# Apply
+#
+# Updates marked as failed present
+#   Log error, send error email
+# No updates marked as failed
+#   Try applying updates
+#   Errors occured while applying
+#     Log error, send email
+#     Revert everything back
+#     Mark update as failed
+#   No errors occured while applying
+#     Log info message?
+#     Send success email?
 
 module TariffSynchronizer
+  autoload :Logger,        'tariff_synchronizer/logger'
+  autoload :Mailer,        'tariff_synchronizer/mailer'
+  autoload :PendingUpdate, 'tariff_synchronizer/pending_update'
+  autoload :TaricUpdate,   'tariff_synchronizer/taric_update'
+  autoload :ChiefUpdate,   'tariff_synchronizer/chief_update'
+
   extend self
 
   mattr_accessor :username
@@ -91,9 +112,8 @@ module TariffSynchronizer
               pending_update.apply
             rescue TaricImporter::ImportException,
                    ChiefImporter::ImportException  => exception
-              ActiveSupport::Notifications.instrument("failed_update.tariff_synchronizer", update: pending_update)
-
-              notify_admin(pending_update.file_name, exception)
+              ActiveSupport::Notifications.instrument("failed_update.tariff_synchronizer", exception: exception,
+                                                                                           update: pending_update)
 
               raise Sequel::Rollback
             end
@@ -125,9 +145,5 @@ module TariffSynchronizer
     password.present? &&
     host.present? &&
     admin_email.present?
-  end
-
-  def notify_admin(failed_file_path, exception)
-    SyncMailer.admin_notification(admin_email, failed_file_path, exception).deliver
   end
 end

@@ -17,6 +17,8 @@ module TariffSynchonizer
     # There are failed updates (can't proceed)
     def failed_updates_present(event)
       error "TariffSynchronizer found failed updates that need to be fixed before running: #{event.payload[:file_names]}"
+
+      Mailer.failures_reminder(event.payload[:file_names]).deliver
     end
 
     # Apply all pending Taric and Chief updates
@@ -27,6 +29,9 @@ module TariffSynchonizer
     # Update failed to be applied
     def failed_update(event)
       error "Update failed: #{event.payload[:update]}"
+
+      Mailer.exception(event.payload[:exception], event.payload[:update])
+            .deliver
     end
 
     # Update rebuild from files present in the file system

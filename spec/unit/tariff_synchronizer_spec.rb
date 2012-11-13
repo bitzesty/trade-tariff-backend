@@ -73,14 +73,6 @@ describe TariffSynchronizer do
         update_2.expects(:apply).raises(TaricImporter::ImportException)
       end
 
-      it 'admin gets notified' do
-        mailer_stub = stub
-        mailer_stub.expects(:deliver).returns(true)
-        SyncMailer.expects(:admin_notification).returns(mailer_stub)
-
-        rescuing { TariffSynchronizer.apply }
-      end
-
       it 'transaction gets rolled back' do
         expect { TariffSynchronizer.apply }.to raise_error Sequel::Rollback
       end
