@@ -9,7 +9,14 @@ require 'tariff_importer/importers/chief_importer/strategies/base_strategy'
 require 'tariff_importer/importers/chief_importer/strategies/strategies'
 
 class ChiefImporter
-  class ImportException < StandardError; end
+  class ImportException < StandardError
+    attr_reader :original
+
+    def initialize(msg = "ChiefImporter::ImportException", original=$!)
+      super(msg)
+      @original = original
+    end
+  end
 
   # TODO extend this
   cattr_accessor :relevant_tables
@@ -53,7 +60,7 @@ class ChiefImporter
     rescue Exception => e
       logger.error e.message
 
-      raise ImportException
+      raise ImportException.new(e.message, e)
     end
   end
 end

@@ -5,7 +5,7 @@ module TariffSynchronizer
 
     def exception(exception, update)
       @failed_file_path = update.file_path
-      @exception = exception
+      @exception = exception.original.presence || exception
 
       mail subject: '[error] Failed Trade Tariff update'
     end

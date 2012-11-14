@@ -80,8 +80,15 @@ describe TariffSynchronizer::Logger do
                                      update_priority: 1,
                                      file_path: '/') }
 
+
     before {
-      mock_pending_update.expects(:apply).raises(TaricImporter::ImportException)
+      class MockException < StandardError
+        def backtrace
+          []
+        end
+      end
+
+      mock_pending_update.expects(:apply).raises(TaricImporter::ImportException.new("", MockException.new))
 
       TariffSynchronizer::PendingUpdate.expects(:all).returns([mock_pending_update])
       rescuing {
@@ -97,7 +104,13 @@ describe TariffSynchronizer::Logger do
     it 'sends email error email' do
       ActionMailer::Base.deliveries.should_not be_empty
       email = ActionMailer::Base.deliveries.last
-      email.encoded.should =~ /exception/
+      email.encoded.should =~ /Backtrace/
+    end
+
+    it 'email includes information about original exception' do
+      ActionMailer::Base.deliveries.should_not be_empty
+      email = ActionMailer::Base.deliveries.last
+      email.encoded.should =~ /MockException/
     end
   end
 
