@@ -374,6 +374,18 @@ FactoryGirl.define do
       content { nil }
     end
 
+    trait :blank do
+      success
+
+      content { nil }
+    end
+
+    trait :retry_exceeded do
+      failed
+
+      after(:build) { |response| response.retry_count_exceeded! }
+    end
+
     initialize_with {
       new(url, response_code, content)
     }

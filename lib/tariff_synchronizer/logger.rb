@@ -1,4 +1,4 @@
-module TariffSynchonizer
+module TariffSynchronizer
   class Logger < ActiveSupport::LogSubscriber
     cattr_accessor :logger
     self.logger = ::Logger.new('log/tariff_synchronizer.log')
@@ -41,7 +41,9 @@ module TariffSynchonizer
 
     # Exceeded retry count
     def retry_exceeded(event)
-      error "Download retry count exceeded for #{event.payload[:date]}"
+      warn "Download retry count exceeded for #{event.payload[:url]}"
+
+      Mailer.retry_exceeded(event.payload[:url], event.payload[:date]).deliver
     end
 
     # Update not found
@@ -89,21 +91,29 @@ module TariffSynchonizer
     # Update with blank content received
     def blank_update(event)
       error "Blank update content received for #{event.payload[:date]}: #{event.payload[:url]}"
+
+      Mailer.blank_update(event.payload[:url], event.payload[:url]).deliver
     end
 
     # Can't open file for writing
     def cant_open_file(event)
-      error "Can't open file for writting update at #{event.payload[:path]}"
+      error "Can't open file for writing update at #{event.payload[:path]}"
+
+      Mailer.file_write_error(event.payload[:path], "can't open for writing").deliver
     end
 
     # Can't write to file
     def cant_write_to_file(event)
       error "Can't write to update file at #{event.payload[:path]}"
+
+      Mailer.file_write_error(event.payload[:path], "can't write to file").deliver
     end
 
     # No permission to write update file
     def write_permission_error(event)
       error "No permission to write update to #{event.payload[:path]}"
+
+      Mailer.file_write_error(event.payload[:path], 'permission error').deliver
     end
 
     # Delayed update fetching
@@ -113,4 +123,4 @@ module TariffSynchonizer
   end
 end
 
-TariffSynchonizer::Logger.attach_to :tariff_synchronizer
+TariffSynchronizer::Logger.attach_to :tariff_synchronizer

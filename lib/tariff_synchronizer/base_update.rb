@@ -90,7 +90,8 @@ module TariffSynchronizer
                                                                                       url: response.url)
         elsif response.retry_count_exceeded?
           create_update_entry(date, FAILED_STATE)
-          ActiveSupport::Notifications.instrument("retry_exceeded.tariff_synchronizer", date: date)
+          ActiveSupport::Notifications.instrument("retry_exceeded.tariff_synchronizer", date: date,
+                                                                                        url: response.url)
         elsif response.not_found?
           create_update_entry(date, MISSING_STATE)
           ActiveSupport::Notifications.instrument("not_found.tariff_synchronizer", date: date,
