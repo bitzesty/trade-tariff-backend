@@ -103,7 +103,7 @@ module TariffSynchronizer
 
       ActiveSupport::Notifications.instrument("failed_updates_present.tariff_synchronizer", file_names: file_names)
     else
-      ActiveSupport::Notifications.instrument("apply.tariff_synchronizer") do
+      ActiveSupport::Notifications.instrument("apply.tariff_synchronizer", count: PendingUpdate.count) do
         PendingUpdate.all
                      .sort_by(&:issue_date)
                      .sort_by(&:update_priority)

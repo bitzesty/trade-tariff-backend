@@ -24,6 +24,10 @@ module TariffSynchronizer
     # Apply all pending Taric and Chief updates
     def apply(event)
       info "Finished applying updates"
+
+      if !event.payload.has_key?(:exception) && event.payload[:count] > 0
+        Mailer.applied(event.payload[:count]).deliver
+      end
     end
 
     # Update failed to be applied

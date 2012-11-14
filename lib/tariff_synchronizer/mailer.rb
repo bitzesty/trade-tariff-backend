@@ -42,5 +42,11 @@ module TariffSynchronizer
 
       mail subject: '[error] Update fetch failed: cannot write update file to file system'
     end
+
+    def applied(count)
+      @count = count
+
+      mail subject: '[info] Tariff updates applied'
+    end
   end
 end
