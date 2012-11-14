@@ -7,11 +7,19 @@ module TariffSynchonizer
       @failed_file_path = update.file_path
       @exception = exception
 
-      mail subject: "Failed Trade Tariff update", data: data
+      mail subject: 'Failed Trade Tariff update'
     end
 
     def failures_reminder(file_names)
-      mail subject: "Failed Trade Tariff updates still present", file_names: file_names
+      @file_names = file_names
+
+      mail subject: 'Update application failed: failed Trade Tariff updates present'
+    end
+
+    def file_not_found_on_filesystem(path)
+      @path = path
+
+      mail subject: 'Update application failed: update file not found'
     end
   end
 end

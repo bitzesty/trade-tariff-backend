@@ -32,10 +32,12 @@ module TariffSynchronizer
     end
 
     def apply
-      ActiveSupport::Notifications.instrument("apply_chief.tariff_synchronizer", filename: filename) do
-        TariffImporter.new(file_path, ChiefImporter).import
+      if super
+        ActiveSupport::Notifications.instrument("apply_chief.tariff_synchronizer", filename: filename) do
+          TariffImporter.new(file_path, ChiefImporter).import
 
-        mark_as_applied
+          mark_as_applied
+        end
       end
     end
 

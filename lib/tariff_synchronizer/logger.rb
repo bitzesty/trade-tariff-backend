@@ -49,6 +49,13 @@ module TariffSynchonizer
       warn "Update not found for #{event.payload[:date]} at #{event.payload[:url]}"
     end
 
+    # Update not found on file system
+    def not_found_on_file_system(event)
+      error "Update not found on file system at #{event.payload[:path]}"
+
+      Mailer.file_not_found_on_filesystem(event.payload[:path]).deliver
+    end
+
     # Download chief update
     def download_chief(event)
       info "Downloaded CHIEF update for #{event.payload[:date]}"

@@ -57,72 +57,79 @@ module TariffSynchronizer
       File.join(TariffSynchronizer.root_path, self.class.update_type.to_s, filename)
     end
 
-    def self.sync
-      unless pending_from == Date.today
-        (pending_from..Date.today).each do |date|
-          download(date) unless exists_for?(date)
+    def apply
+      File.exists?(file_path) || ActiveSupport::Notifications.instrument("not_found_on_file_system.tariff_synchronizer", path: file_path)
+    end
+
+    class << self
+      def sync
+        unless pending_from == Date.today
+          (pending_from..Date.today).each do |date|
+            download(date) unless exists_for?(date)
+          end
         end
       end
-    end
 
-    def self.exists_for?(date)
-      dataset.where(issue_date: date).any?
-    end
-
-    def self.update_type
-      raise "Update Type should be specified in inheriting class"
-    end
-
-    private
-
-    def self.create_entry(date, response)
-      if response.success? && response.content_present?
-        create_update_entry(date, PENDING_STATE)
-        write_update_file(date, response.content)
-      elsif response.success? && !response.content_present?
-        ActiveSupport::Notifications.instrument("blank_update.tariff_synchronizer", date: date,
-                                                                                    url: response.url)
-      elsif response.retry_count_exceeded?
-        create_update_entry(date, FAILED_STATE)
-        ActiveSupport::Notifications.instrument("retry_exceeded.tariff_synchronizer", date: date)
-      elsif response.not_found?
-        create_update_entry(date, MISSING_STATE)
-        ActiveSupport::Notifications.instrument("not_found.tariff_synchronizer", date: date,
-                                                                                 url: response.url)
+      def exists_for?(date)
+        dataset.where(issue_date: date).any?
       end
-    end
 
-    def self.write_update_file(date, contents)
-      update_path = update_path(date, file_name_for(date))
-
-      ActiveSupport::Notifications.instrument("update_written.tariff_synchronizer", date: date,
-                                                                                    path: update_path,
-                                                                                    size: contents.size) do
-        write_file(update_path, contents)
+      def update_type
+        raise "Update Type should be specified in inheriting class"
       end
-    end
 
-    def self.create_update_entry(date, state)
-      find_or_create(filename: file_name_for(date),
-                     update_type: self.name,
-                     issue_date: date).update(state: state)
-    end
+      private
 
-    def self.update_path(date, file_name)
-      File.join(TariffSynchronizer.root_path, update_type.to_s, file_name)
-    end
-
-    def self.pending_from
-      if last_download = dataset.order(:issue_date.desc).first
-        last_download.issue_date
-      else
-       TariffSynchronizer.initial_update_for(update_type)
+      def create_entry(date, response)
+        if response.success? && response.content_present?
+          create_update_entry(date, PENDING_STATE)
+          write_update_file(date, response.content)
+        elsif response.success? && !response.content_present?
+          create_update_entry(date, FAILED_STATE)
+          ActiveSupport::Notifications.instrument("blank_update.tariff_synchronizer", date: date,
+                                                                                      url: response.url)
+        elsif response.retry_count_exceeded?
+          create_update_entry(date, FAILED_STATE)
+          ActiveSupport::Notifications.instrument("retry_exceeded.tariff_synchronizer", date: date)
+        elsif response.not_found?
+          create_update_entry(date, MISSING_STATE)
+          ActiveSupport::Notifications.instrument("not_found.tariff_synchronizer", date: date,
+                                                                                   url: response.url)
+        end
       end
-    end
 
-    def self.parse_file_path(file_path)
-      filename = Pathname.new(file_path).basename.to_s
-      filename.match(/^(\d{4}-\d{2}-\d{2})_(.*)$/)[1,2]
+      def write_update_file(date, contents)
+        update_path = update_path(date, file_name_for(date))
+
+        ActiveSupport::Notifications.instrument("update_written.tariff_synchronizer", date: date,
+                                                                                      path: update_path,
+                                                                                      size: contents.size) do
+          write_file(update_path, contents)
+        end
+      end
+
+      def create_update_entry(date, state)
+        find_or_create(filename: file_name_for(date),
+                       update_type: self.name,
+                       issue_date: date).update(state: state)
+      end
+
+      def update_path(date, file_name)
+        File.join(TariffSynchronizer.root_path, update_type.to_s, file_name)
+      end
+
+      def pending_from
+        if last_download = dataset.order(:issue_date.desc).first
+          last_download.issue_date
+        else
+         TariffSynchronizer.initial_update_for(update_type)
+        end
+      end
+
+      def parse_file_path(file_path)
+        filename = Pathname.new(file_path).basename.to_s
+        filename.match(/^(\d{4}-\d{2}-\d{2})_(.*)$/)[1,2]
+      end
     end
   end
 end

@@ -113,6 +113,33 @@ describe TariffSynchronizer::TaricUpdate do
       end
     end
 
+    context 'downloaded file is blank' do
+      let(:update_url) { "#{TariffSynchronizer.host}/taric/abc" }
+      let(:blank_success_response)   { build :response, :success, content: '' }
+
+      before {
+        TariffSynchronizer::TaricUpdate.expects(:send_request)
+                                       .with(taric_query_url)
+                                       .returns(success_response)
+
+        TariffSynchronizer::TaricUpdate.expects(:send_request)
+                                       .with(update_url)
+                                       .returns(blank_success_response)
+
+        TariffSynchronizer::TaricUpdate.download(example_date)
+      }
+
+      it 'does not write file to file system' do
+        File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_false
+      end
+
+      it 'creates failed update entry' do
+        TariffSynchronizer::TaricUpdate.failed
+                                       .with_issue_date(example_date)
+                                       .present?.should be_true
+      end
+    end
+
     after  { purge_synchronizer_folders }
   end
 
