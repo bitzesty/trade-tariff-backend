@@ -9,6 +9,8 @@ require 'fileutils'
 require 'active_support/notifications'
 require 'active_support/log_subscriber'
 
+require 'tariff_synchronizer/logger'
+
 # How TariffSynchronizer works
 #
 # Download
@@ -31,7 +33,6 @@ require 'active_support/log_subscriber'
 #     Send success email?
 
 module TariffSynchronizer
-  autoload :Logger,        'tariff_synchronizer/logger'
   autoload :Mailer,        'tariff_synchronizer/mailer'
   autoload :PendingUpdate, 'tariff_synchronizer/pending_update'
   autoload :TaricUpdate,   'tariff_synchronizer/taric_update'

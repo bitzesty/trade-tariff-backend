@@ -85,7 +85,7 @@ module TariffSynchronizer
 
     # Update file written to file system
     def update_written(event)
-      info "Update file written to file system: #{event.payload[:path]} (size: #{event.payload[:size]})"
+      info "Update file written to file system: #{File.join(Rails.root, event.payload[:path])} (size: #{event.payload[:size]})"
     end
 
     # Update with blank content received

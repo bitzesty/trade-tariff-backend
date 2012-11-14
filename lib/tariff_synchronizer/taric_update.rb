@@ -20,7 +20,7 @@ module TariffSynchronizer
           elsif date < Date.today
             create_update_entry(date, BaseUpdate::MISSING_STATE)
             ActiveSupport::Notifications.instrument("not_found.tariff_synchronizer", date: date,
-                                                                                     url: taric_update_url)
+                                                                                     url: taric_query_url_for(date))
           end
         end
       end
@@ -59,9 +59,8 @@ module TariffSynchronizer
 
       ActiveSupport::Notifications.instrument("get_taric_update_name.tariff_synchronizer", date: date,
                                                                                            url: taric_query_url) do
-        download_content(taric_query_url).content.tap! { |content|
-          content.gsub!(/[^0-9a-zA-Z\.]/i, '') if content.present?
-        }
+        response = download_content(taric_query_url)
+        response.content.gsub!(/[^0-9a-zA-Z\.]/i, '') if response.success? && response.content_present?
       end
     end
 
