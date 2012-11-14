@@ -15,10 +15,10 @@ module TariffSynchronizer
                 create_entry(date, response)
               }
             end
-          else
-            # We will be retrying a few more times today, so do not create
-            # missing record until we are sure
-            create_update_entry(date, BaseUpdate::MISSING_STATE) unless date.today?
+          # We will be retrying a few more times today, so do not create
+          # missing record until we are sure
+          elsif date < Date.today
+            create_update_entry(date, BaseUpdate::MISSING_STATE)
             ActiveSupport::Notifications.instrument("not_found.tariff_synchronizer", date: date,
                                                                                      url: taric_update_url)
           end

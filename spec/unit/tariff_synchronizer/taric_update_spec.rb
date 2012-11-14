@@ -67,19 +67,28 @@ describe TariffSynchronizer::TaricUpdate do
     context 'when file for the day is not found' do
       before {
         TariffSynchronizer::TaricUpdate.expects(:download_content)
-                                       .with(taric_query_url)
                                        .returns(not_found_response)
-
-        TariffSynchronizer::TaricUpdate.download(example_date)
       }
 
-      it 'does not write Taric file contents to file if they are blank' do
+      it 'does not write Taric file contents to file' do
+        TariffSynchronizer::TaricUpdate.download(example_date)
+
         File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_false
       end
 
-      it 'creates not found entry' do
+      it 'does not create not found entry if update is still for today' do
+        TariffSynchronizer::TaricUpdate.download(Date.today)
+
         TariffSynchronizer::TaricUpdate.missing
-                                       .with_issue_date(example_date)
+                                       .with_issue_date(Date.today)
+                                       .present?.should be_false
+      end
+
+      it 'creates not found entry if date has passed' do
+        TariffSynchronizer::TaricUpdate.download(Date.yesterday)
+
+        TariffSynchronizer::TaricUpdate.missing
+                                       .with_issue_date(Date.yesterday)
                                        .present?.should be_true
       end
     end

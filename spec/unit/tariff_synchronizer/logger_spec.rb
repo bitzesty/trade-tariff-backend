@@ -142,7 +142,7 @@ describe TariffSynchronizer::Logger do
     before {
       TariffSynchronizer::ChiefUpdate.expects(:download_content).returns(not_found_response)
 
-      TariffSynchronizer::ChiefUpdate.download(Date.today)
+      TariffSynchronizer::ChiefUpdate.download(Date.yesterday)
     }
 
     it 'logs a warning event' do
