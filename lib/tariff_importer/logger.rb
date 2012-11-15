@@ -9,7 +9,7 @@ class TariffImporter
     end
 
     def chief_failed(event)
-      error "CHIEF import for #{event.payload[:date]} of #{event.payload[:path]} failed: Reason: #{event.payload[:exception]}"
+      error "CHIEF import of #{File.join(Rails.root, event.payload[:path])} failed: Reason: #{event.payload[:exception]}"
     end
 
     def taric_failed(event)

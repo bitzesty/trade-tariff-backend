@@ -63,7 +63,6 @@ class ChiefImporter
                                                                                 count: record_count)
     rescue Exception => exception
       ActiveSupport::Notifications.instrument("chief_failed.tariff_importer", path: path,
-                                                                              date: extraction_date,
                                                                               exception: exception)
 
       raise ImportException.new(exception.message, exception)
