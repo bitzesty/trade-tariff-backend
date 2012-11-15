@@ -9,6 +9,10 @@ module TradeTariffBackend
       'tariff-lock'
     end
 
+    def log_formatter
+      Proc.new {|severity, time, progname, msg| "#{time.strftime('%Y-%m-%dT%H:%M:%S.%L %z')} #{sprintf('%5s', severity)} #{msg}\n" }
+    end
+
     def with_locked_database(&block)
       begin
         if Sequel::Model.db.get_lock(db_lock_key)

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<env:envelope xmlns="urn:publicid:-:DGTAXUD:TARIC:MESSAGE:1.0" xmlns:env="urn:publicid:-:DGTAXUD:GENERAL:ENVELOPE:1.0" id="12091">
+  <env:transaction id="13350542">
+    <env:app.message id="2">
+      <oub:transmission xmlns:oub="urn:publicid:-:DGTAXUD:TARIC:MESSAGE:1.0" xmlns:env="urn:publicid:-:DGTAXUD:GENERAL:ENVELOPE:1.0">
+        <oub:record>
+          <oub:transaction.id>13350542</oub:transaction.id>
+          <oub:record.code>280</oub:record.code>
+          <oub:subrecord.code>00</oub:subrecord.code>
+          <oub:record.sequence.number>1</oub:record.sequence.number>
+          <oub:update.type>99</oub:update.type>
+          <oub:explicit.abrogation.regulation>
+            <oub:explicit.abrogation.regulation.role>7</oub:explicit.abrogation.regulation.role>
+            <oub:explicit.abrogation.regulation.id>D1202470</oub:explicit.abrogation.regulation.id>
+            <oub:published.date>2012-05-08</oub:published.date>
+            <oub:officialjournal.number>L 121</oub:officialjournal.number>
+            <oub:officialjournal.page>36</oub:officialjournal.page>
+            <oub:replacement.indicator>0</oub:replacement.indicator>
+            <oub:abrogation.date>2012-05-08</oub:abrogation.date>
+            <oub:information.text>DUMP (termination) - BY - Chap 73</oub:information.text>
+            <oub:approved.flag>1</oub:approved.flag>
+          </oub:explicit.abrogation.regulation>
+        </oub:record>
+      </oub:transmission>
+    </env:app.message>
+  </env:transaction>
+</env:envelope>

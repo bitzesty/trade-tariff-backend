@@ -37,7 +37,7 @@ describe ChiefImporter do
 
       before(:all) do
         @importer = ChiefImporter.new(invalid_file)
-        @importer.import
+        rescuing { @importer.import }
       end
 
       it 'does not assign start entry' do
