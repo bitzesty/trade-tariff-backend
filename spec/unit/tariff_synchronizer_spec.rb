@@ -3,9 +3,6 @@ require 'tariff_synchronizer'
 
 describe TariffSynchronizer do
   before do
-    # Do not pollute the log file with messages from test runs
-    TariffSynchronizer.logger = Logger.new('/dev/null')
-
     # Use default email address
     TariffSynchronizer.admin_email = "user@example.com"
   end
@@ -32,15 +29,12 @@ describe TariffSynchronizer do
     end
 
     context 'sync variables are not set' do
-      before { TariffSynchronizer.expects(:sync_variables_set?).returns(false) }
-
-      it 'logs an error' do
-        mock_logger = mock
-        mock_logger.expects(:error).returns(true)
-        TariffSynchronizer.expects(:logger).returns(mock_logger)
-
-        TariffSynchronizer.download
-      end
+      before {
+        TariffSynchronizer.username = nil
+        TariffSynchronizer.password = nil
+        TariffSynchronizer.host = nil
+        TariffSynchronizer.admin_email = nil
+      }
 
       it 'does not start sync process' do
         TariffSynchronizer::TaricUpdate.expects(:sync).never
@@ -56,11 +50,12 @@ describe TariffSynchronizer do
     let(:update_2) { stub_everything(date: Date.yesterday, update_priority: 2) }
     let(:pending_updates) { [update_1, update_2] }
 
-    before {
-      TariffSynchronizer::PendingUpdate.expects(:all).returns(pending_updates)
-    }
 
     context 'success scenario' do
+      before {
+        TariffSynchronizer::PendingUpdate.expects(:all).returns(pending_updates)
+      }
+
       it 'all pending updates get applied' do
         pending_updates.each {|update|
           update.expects(:apply).returns(true)
@@ -72,26 +67,24 @@ describe TariffSynchronizer do
 
     context 'failure scenario' do
       before do
+        TariffSynchronizer::PendingUpdate.expects(:all).returns(pending_updates)
+
         update_1.expects(:apply).returns(true)
         update_2.expects(:apply).raises(TaricImporter::ImportException)
       end
 
-      it 'error gets logged' do
-        TariffSynchronizer.logger.expects(:error).returns(true)
-
-        rescuing { TariffSynchronizer.apply }
-      end
-
-      it 'admin gets notified' do
-        mailer_stub = stub
-        mailer_stub.expects(:deliver).returns(true)
-        SyncMailer.expects(:admin_notification).returns(mailer_stub)
-
-        rescuing { TariffSynchronizer.apply }
-      end
-
       it 'transaction gets rolled back' do
         expect { TariffSynchronizer.apply }.to raise_error Sequel::Rollback
+      end
+    end
+
+    context 'with failed updates present' do
+      let!(:failed_update)  { create :taric_update, :failed }
+
+      it 'does not apply pending updates' do
+        TariffSynchronizer::PendingUpdate.expects(:all).never
+
+        TariffSynchronizer.apply
       end
     end
   end

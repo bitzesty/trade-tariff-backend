@@ -5,36 +5,51 @@ module TariffSynchronizer
   class ChiefUpdate < BaseUpdate
     self.update_priority = 1
 
-    def self.download(date)
-      file_name = "KBT009(#{date.strftime("%y")}#{date.yday}).txt"
-      chief_url = "#{TariffSynchronizer.host}/taric/#{file_name}"
-      TariffSynchronizer.logger.info "Downloading CHIEF file for #{date} at: #{chief_url}"
-      FileService.get_content(chief_url).tap {|contents|
-        create_update_entry(date, file_name, "ChiefUpdate") if file_written_for?(date, file_name, contents)
-      }
-    end
+    class << self
+      def download(date)
+        ActiveSupport::Notifications.instrument("download_chief.tariff_synchronizer", date: date) do
+          download_content(chief_update_url_for(date)).tap { |response|
+            create_entry(date, response)
+          }
+        end
+      end
 
-    def self.file_name_for(date)
-      "#{date}_KBT009(#{date.strftime("%y")}#{date.yday}).txt"
+      def update_type
+        :chief
+      end
+
+      def rebuild
+        Dir[File.join(Rails.root, TariffSynchronizer.root_path, 'chief', '*.txt')].each do |file_path|
+          date, file_name = parse_file_path(file_path)
+
+          create_update_entry(Date.parse(date), BaseUpdate::PENDING_STATE)
+        end
+      end
+
+      def file_name_for(date)
+        "#{date}_#{chief_file_name_for(date)}"
+      end
     end
 
     def apply
-      TariffImporter.new(file_path, ChiefImporter).import
+      if super
+        ActiveSupport::Notifications.instrument("apply_chief.tariff_synchronizer", filename: filename) do
+          TariffImporter.new(file_path, ChiefImporter).import
 
-      mark_as_applied
-      logger.info "Successfully applied CHIEF update: #{file_path}"
-    end
-
-    def self.update_type
-      :chief
-    end
-
-    def self.rebuild
-      Dir[File.join(Rails.root, TariffSynchronizer.root_path, 'chief', '*.txt')].each do |file_path|
-        date, file_name = parse_file_path(file_path)
-
-        create_update_entry(date, file_name, "ChiefUpdate") unless entry_exists_for?(date, file_name)
+          mark_as_applied
+        end
       end
+    end
+
+    private
+
+    def self.chief_file_name_for(date)
+      "KBT009(#{date.strftime("%y")}#{date.yday}).txt"
+    end
+
+    def self.chief_update_url_for(date)
+      TariffSynchronizer.chief_update_url_template % { host: TariffSynchronizer.host,
+                                                       file_name: chief_file_name_for(date)}
     end
   end
 end

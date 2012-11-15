@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Api::V1::ChaptersController, "GET #show" do
   render_views
 
-  let!(:chapter) { create :chapter, :with_description, :with_section }
+  let!(:chapter) { create :chapter, :with_description, :with_section, goods_nomenclature_item_id: "1100000000" }
 
   let(:pattern) {
     {

@@ -10,8 +10,12 @@ module TariffSynchronizer
       @update = update
     end
 
+    def self.count
+      BaseUpdate.pending_or_failed.count
+    end
+
     def self.all
-      BaseUpdate.pending.all.map { |update| new(update) }
+      BaseUpdate.pending_or_failed.all.map { |update| new(update) }
     end
 
     def to_s

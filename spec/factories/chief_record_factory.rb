@@ -321,4 +321,73 @@ FactoryGirl.define do
     footn_type_id { Forgery(:basic).text(exactly: 2).upcase }
     footn_id { Forgery(:basic).text(exactly: 3).upcase }
   end
+
+  factory :base_update, class: TariffSynchronizer::BaseUpdate do
+    ignore do
+      example_date { Forgery(:date).date }
+    end
+
+    filename { Forgery(:basic).text }
+    issue_date { example_date }
+    state { 'P' }
+
+    trait :applied do
+      state { 'A' }
+    end
+
+    trait :pending do
+      state { 'P' }
+    end
+
+    trait :failed do
+      state { 'F' }
+    end
+  end
+
+  factory :chief_update, parent: :base_update, class: TariffSynchronizer::ChiefUpdate do
+    filename { TariffSynchronizer::ChiefUpdate.file_name_for(example_date)  }
+    update_type { 'TariffSynchronizer::ChiefUpdate' }
+  end
+
+  factory :taric_update, parent: :base_update, class: TariffSynchronizer::TaricUpdate do
+    filename { TariffSynchronizer::TaricUpdate.file_name_for(example_date)  }
+    issue_date { example_date }
+    update_type { 'TariffSynchronizer::TaricUpdate' }
+  end
+
+  factory :response, class: TariffSynchronizer::Response do
+    url { Forgery::Internet.domain_name }
+    response_code { [200, 404, 403].sample }
+    content { Forgery(:basic).text }
+
+    trait :success do
+      response_code { 200 }
+    end
+
+    trait :not_found do
+      response_code { 404 }
+      content { nil }
+    end
+
+    trait :failed do
+      response_code { 403 }
+      content { nil }
+    end
+
+    trait :blank do
+      success
+
+      content { nil }
+    end
+
+    trait :retry_exceeded do
+      failed
+
+      after(:build) { |response| response.retry_count_exceeded! }
+    end
+
+    initialize_with {
+      new(url, response_code, content)
+    }
+  end
 end

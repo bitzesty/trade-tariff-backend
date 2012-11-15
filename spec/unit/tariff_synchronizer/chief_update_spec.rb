@@ -11,39 +11,78 @@ describe TariffSynchronizer::ChiefUpdate do
   end
 
   describe '.download' do
+    let(:blank_response)     { build :response, content: nil }
+    let(:not_found_response) { build :response, :not_found }
+    let(:success_response)   { build :response, :success, content: 'abc' }
+    let(:update_name)        { "KBT009(101).txt" }
+    let(:url)                { "#{TariffSynchronizer.host}/taric/#{update_name}" }
+
+
     context 'has permission to write update file' do
-      before do
-        TariffSynchronizer.host = "http://example.com"
-        prepare_synchronizer_folders
+      context 'file for the day is found' do
+        before do
+          TariffSynchronizer.host = "http://example.com"
+          prepare_synchronizer_folders
+        end
+
+        it 'downloads CHIEF file for specific date' do
+          TariffSynchronizer::ChiefUpdate.expects(:download_content)
+                                         .with(url)
+                                         .returns(blank_response)
+
+          TariffSynchronizer::ChiefUpdate.download(example_date)
+        end
+
+        it 'writes CHIEF file contents to file if they are not blank' do
+          TariffSynchronizer::ChiefUpdate.expects(:download_content)
+                                         .with(url)
+                                         .returns(success_response)
+
+          TariffSynchronizer::ChiefUpdate.download(example_date)
+
+          File.exists?("#{TariffSynchronizer.root_path}/chief/#{example_date}_#{update_name}").should be_true
+          File.read("#{TariffSynchronizer.root_path}/chief/#{example_date}_#{update_name}").should == 'abc'
+        end
+
+        it 'creates pending ChiefUpdate entry in the table' do
+          TariffSynchronizer::ChiefUpdate.expects(:download_content)
+                                         .with(url)
+                                         .returns(success_response)
+          TariffSynchronizer::ChiefUpdate.download(example_date)
+          TariffSynchronizer::ChiefUpdate.count.should == 1
+          TariffSynchronizer::ChiefUpdate.first.issue_date.should == example_date
+        end
       end
 
-      it 'downloads CHIEF file for specific date' do
-        url = "#{TariffSynchronizer.host}/taric/KBT009(101).txt"
+      context 'when file for the day is not found' do
+        let(:not_found_response) { build :response, :not_found }
 
-        TariffSynchronizer::FileService.expects(:get_content).with(url).returns(nil)
+        before {
+          TariffSynchronizer::ChiefUpdate.expects(:download_content)
+                                         .returns(not_found_response)
+        }
 
-        TariffSynchronizer::ChiefUpdate.download(example_date)
-      end
+        it 'does not write CHIEF file contents to file' do
+          TariffSynchronizer::ChiefUpdate.download(example_date)
 
-      it 'writes CHIEF file contents to file if they are not blank' do
-        file_name = "KBT009(101).txt"
-        url = "#{TariffSynchronizer.host}/taric/#{file_name}"
+          File.exists?("#{TariffSynchronizer.root_path}/chief/#{example_date}_#{update_name}").should be_false
+        end
 
-        TariffSynchronizer::FileService.expects(:get_content).with(url).returns('abc')
+        it 'does not create not found entry if update is still for today' do
+          TariffSynchronizer::ChiefUpdate.download(Date.today)
 
-        TariffSynchronizer::ChiefUpdate.download(example_date)
+          TariffSynchronizer::ChiefUpdate.missing
+                                         .with_issue_date(Date.today)
+                                         .present?.should be_false
+        end
 
-        File.exists?("#{TariffSynchronizer.root_path}/chief/#{example_date}_#{file_name}").should be_true
-        File.read("#{TariffSynchronizer.root_path}/chief/#{example_date}_#{file_name}").should == 'abc'
-      end
+        it 'creates not found entry if date has passed' do
+          TariffSynchronizer::ChiefUpdate.download(Date.today)
 
-      it 'creates pending ChiefUpdate entry in the table' do
-        url = "#{TariffSynchronizer.host}/taric/KBT009(101).txt"
-
-        TariffSynchronizer::FileService.expects(:get_content).with(url).returns('something')
-        TariffSynchronizer::ChiefUpdate.download(example_date)
-        TariffSynchronizer::ChiefUpdate.count.should == 1
-        TariffSynchronizer::ChiefUpdate.first.issue_date.should == example_date
+          TariffSynchronizer::ChiefUpdate.missing
+                                         .with_issue_date(Date.today)
+                                         .present?.should be_false
+        end
       end
 
       after  { purge_synchronizer_folders }
@@ -58,16 +97,13 @@ describe TariffSynchronizer::ChiefUpdate do
       end
 
       it 'logs error about permissions' do
-        file_name = "KBT009(101).txt"
-        url = "#{TariffSynchronizer.host}/taric/#{file_name}"
-
-        TariffSynchronizer::FileService.expects(:get_content).with(url).returns('abc')
-        # Expect error about permissions to be logged
-        TariffSynchronizer.logger.expects(:error).returns(true)
+        TariffSynchronizer::ChiefUpdate.expects(:download_content)
+                                       .with(url)
+                                       .returns(success_response)
 
         TariffSynchronizer::ChiefUpdate.download(example_date)
 
-        File.exists?("#{TariffSynchronizer.root_path}/chief/#{example_date}_#{file_name}").should be_false
+        File.exists?("#{TariffSynchronizer.root_path}/chief/#{example_date}_#{update_name}").should be_false
       end
 
       after  {

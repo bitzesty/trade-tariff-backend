@@ -163,6 +163,7 @@ class ChiefTransformer
                                                    .try(:geographical_area_sid)
       if self.geographical_area_sid.blank?
         self[:geographical_area] = DEFAULT_GEOGRAPHICAL_AREA_ID
+
         self.geographical_area_sid = GeographicalArea.where(geographical_area_id: geographical_area)
                                                      .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
                                                      .first

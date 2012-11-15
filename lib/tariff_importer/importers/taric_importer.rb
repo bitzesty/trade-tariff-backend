@@ -8,7 +8,14 @@ require 'tariff_importer/importers/taric_importer/strategies/strategies'
 class TaricImporter
   include TaricImporter::Helpers::StringHelper
 
-  class ImportException < StandardError; end
+  class ImportException < StandardError
+    attr_reader :original
+
+    def initialize(msg = "TaricImporter::ImportException", original=$!)
+      super(msg)
+      @original = original
+    end
+  end
 
   cattr_accessor :opening_element
   self.opening_element = 1
@@ -56,12 +63,12 @@ class TaricImporter
               rescue NameError => e
                 print_error(mxml)
 
-                raise TaricImportException
+                raise ImportException.new(e.message, e)
               rescue Exception => e
                 logger.error e.message
                 logger.error xml.to_xml(indent: 2)
 
-                raise ImportException
+                raise ImportException.new(e.message, e)
               end
             end
           end
@@ -70,7 +77,7 @@ class TaricImporter
     rescue RuntimeError => e
       logger.error e.message
 
-      raise ImportException
+      raise ImportException.new(e.message, e)
     end
   end
 

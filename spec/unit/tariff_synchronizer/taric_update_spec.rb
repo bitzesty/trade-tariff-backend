@@ -12,7 +12,14 @@ describe TariffSynchronizer::TaricUpdate do
   end
 
   describe '.download' do
-    let(:taric_update_name) { "TGB#{example_date.strftime("%y")}#{example_date.yday}.xml" }
+    let(:taric_update_name)  { "TGB#{example_date.strftime("%y")}#{example_date.yday}.xml" }
+    let(:taric_query_url)    { "#{TariffSynchronizer.host}/taric/TARIC3#{example_date.strftime("%Y%m%d")}" }
+    let(:blank_response)     { build :response, content: nil }
+    let(:not_found_response) { build :response, :not_found }
+    let(:success_response)   { build :response, :success, content: 'abc' }
+    let(:failed_response)    { build :response, :failed }
+    let(:update_url)         { "#{TariffSynchronizer.host}/taric/#{taric_update_name}" }
+
 
     before do
       TariffSynchronizer.host = "http://example.com"
@@ -20,46 +27,125 @@ describe TariffSynchronizer::TaricUpdate do
     end
 
     context "when file for the day is found" do
-      before do
-        taric_query_url = "#{TariffSynchronizer.host}/taric/TARIC3#{example_date.strftime("%Y%m%d")}"
-        TariffSynchronizer::FileService.expects(:get_content).with(taric_query_url).returns(taric_update_name)
-      end
+      let(:query_response)     { build :response, :success, url: taric_query_url,
+                                                         content: taric_update_name }
+      before {
+        TariffSynchronizer::TaricUpdate.expects(:download_content)
+                                       .with(taric_query_url)
+                                       .returns(query_response)
+      }
 
       it 'downloads Taric file for specific date' do
-        update_url = "#{TariffSynchronizer.host}/taric/#{taric_update_name}"
-
-        TariffSynchronizer::FileService.expects(:get_content).with(update_url).returns(nil)
+        TariffSynchronizer::TaricUpdate.expects(:download_content)
+                                       .with(update_url)
+                                       .returns(blank_response)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
       end
 
       it 'writes Taric file contents to file if they are not blank' do
-        update_url = "#{TariffSynchronizer.host}/taric/#{taric_update_name}"
-
-        TariffSynchronizer::FileService.expects(:get_content).with(update_url).returns('abc')
+        TariffSynchronizer::TaricUpdate.expects(:download_content)
+                                       .with(update_url)
+                                       .returns(success_response)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
+
         File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_true
         File.read("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should == 'abc'
       end
 
       it 'does not write Taric file contents to file if they are blank' do
-        update_url = "#{TariffSynchronizer.host}/taric/#{taric_update_name}"
-
-        TariffSynchronizer::FileService.expects(:get_content).with(update_url).returns(nil)
+        TariffSynchronizer::TaricUpdate.expects(:download_content)
+                                       .with(update_url)
+                                       .returns(blank_response)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
         File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_false
       end
     end
 
-    context "when file for the day is not found" do
-      it 'does not write Taric file contents to file if they are blank' do
-        taric_query_url = "#{TariffSynchronizer.host}/taric/TARIC3#{example_date.strftime("%Y%m%d")}"
-        TariffSynchronizer::FileService.expects(:get_content).with(taric_query_url).returns(nil)
-        TariffSynchronizer.logger.expects(:error).returns(true)
+    context 'when file for the day is not found' do
+      before {
+        TariffSynchronizer::TaricUpdate.expects(:download_content)
+                                       .returns(not_found_response)
+      }
+
+      it 'does not write Taric file contents to file' do
+        TariffSynchronizer::TaricUpdate.download(example_date)
+
+        File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_false
+      end
+
+      it 'does not create not found entry if update is still for today' do
+        TariffSynchronizer::TaricUpdate.download(Date.today)
+
+        TariffSynchronizer::TaricUpdate.missing
+                                       .with_issue_date(Date.today)
+                                       .present?.should be_false
+      end
+
+      it 'creates not found entry if date has passed' do
+        TariffSynchronizer::TaricUpdate.download(Date.yesterday)
+
+        TariffSynchronizer::TaricUpdate.missing
+                                       .with_issue_date(Date.yesterday)
+                                       .present?.should be_true
+      end
+    end
+
+    context 'retry count exceeded (failed update)' do
+      let(:update_url) { "#{TariffSynchronizer.host}/taric/abc" }
+
+      before {
+        TariffSynchronizer.retry_count = 1
+
+        TariffSynchronizer::TaricUpdate.expects(:send_request)
+                                       .with(taric_query_url)
+                                       .returns(success_response)
+
+        TariffSynchronizer::TaricUpdate.expects(:send_request)
+                                       .with(update_url)
+                                       .twice
+                                       .returns(failed_response)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
+      }
+
+      it 'does not write file to file system' do
+        File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_false
+      end
+
+      it 'creates failed update entry' do
+        TariffSynchronizer::TaricUpdate.failed
+                                       .with_issue_date(example_date)
+                                       .present?.should be_true
+      end
+    end
+
+    context 'downloaded file is blank' do
+      let(:update_url) { "#{TariffSynchronizer.host}/taric/abc" }
+      let(:blank_success_response)   { build :response, :success, content: '' }
+
+      before {
+        TariffSynchronizer::TaricUpdate.expects(:send_request)
+                                       .with(taric_query_url)
+                                       .returns(success_response)
+
+        TariffSynchronizer::TaricUpdate.expects(:send_request)
+                                       .with(update_url)
+                                       .returns(blank_success_response)
+
+        TariffSynchronizer::TaricUpdate.download(example_date)
+      }
+
+      it 'does not write file to file system' do
+        File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_false
+      end
+
+      it 'creates failed update entry' do
+        TariffSynchronizer::TaricUpdate.failed
+                                       .with_issue_date(example_date)
+                                       .present?.should be_true
       end
     end
 

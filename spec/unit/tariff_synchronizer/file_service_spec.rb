@@ -4,13 +4,19 @@ require 'tariff_synchronizer'
 require 'tariff_synchronizer/file_service'
 
 describe TariffSynchronizer::FileService do
+  subject {
+    Class.new do
+      include TariffSynchronizer::FileService
+    end
+  }
+
   describe ".write_file" do
     let(:example_content) { Forgery(:basic).text }
     let(:example_name)    { Forgery(:basic).text }
     let(:example_path)    { "tmp/#{example_name}.sample" }
 
     before {
-      TariffSynchronizer::FileService.write_file(example_path, example_content)
+      subject.write_file(example_path, example_content)
     }
 
     it 'writes provided content to provided path' do
@@ -21,10 +27,11 @@ describe TariffSynchronizer::FileService do
     after { File.delete(example_path) }
   end
 
-  describe ".get_content", :webmock do
+  describe ".download_content", :webmock do
     let(:example_url) { "http://example.com/data" }
-    let(:non_terminating_response_code) { 403 }
-    let(:terminating_response_code)     { 200 }
+    let(:error_response)   { build :response, :failed }
+    let(:success_response) { build :response, :success, content: 'Hello world',
+                                                        url: example_url }
 
     before do
       TariffSynchronizer.username = nil
@@ -34,17 +41,26 @@ describe TariffSynchronizer::FileService do
 
     it 'downloads content from remote url' do
       VCR.use_cassette('example_get_content') do
-        TariffSynchronizer::FileService.get_content(example_url).should == "Hello world"
+        subject.download_content(example_url).should == success_response
       end
     end
 
     it 'retries if does not receive a terminating http code' do
-      TariffSynchronizer::FileService.stubs(:send_request)
-                                     .returns([non_terminating_response_code, ''])
-                                     .then
-                                     .returns([terminating_response_code, 'Hello world'])
+      subject.stubs(:send_request)
+             .returns(error_response)
+             .then
+             .returns(success_response)
 
-      TariffSynchronizer::FileService.get_content(example_url).should == "Hello world"
+      subject.download_content(example_url).should == success_response
+    end
+
+    it 'retries until preset retry count is reached' do
+      TariffSynchronizer.retry_count = 2
+      subject.expects(:send_request)
+             .times(3)
+             .returns(error_response)
+
+      subject.download_content(example_url).should == error_response
     end
   end
 end
