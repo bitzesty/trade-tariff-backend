@@ -94,7 +94,8 @@ describe TariffSynchronizer::TaricUpdate do
     end
 
     context 'retry count exceeded (failed update)' do
-      let(:update_url) { "#{TariffSynchronizer.host}/taric/abc" }
+      let(:update_url)   { "#{TariffSynchronizer.host}/taric/abc" }
+      let(:example_date) { Date.yesterday }
 
       before {
         TariffSynchronizer.retry_count = 1

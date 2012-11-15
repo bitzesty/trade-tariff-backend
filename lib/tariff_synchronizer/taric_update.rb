@@ -60,7 +60,7 @@ module TariffSynchronizer
       ActiveSupport::Notifications.instrument("get_taric_update_name.tariff_synchronizer", date: date,
                                                                                            url: taric_query_url) do
         response = download_content(taric_query_url)
-        response.content.gsub!(/[^0-9a-zA-Z\.]/i, '') if response.success? && response.content_present?
+        response.content.gsub(/[^0-9a-zA-Z\.]/i, '') if response.success? && response.content_present?
       end
     end
 
