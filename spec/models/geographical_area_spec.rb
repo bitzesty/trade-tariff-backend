@@ -63,10 +63,12 @@ describe GeographicalArea do
     end
 
     describe 'contained geographical areas' do
-      let!(:geographical_area)                { create :geographical_area }
-      let!(:contained_area_present)           { create :geographical_area, validity_start_date: Date.today.ago(2.years),
+      let!(:geographical_area)                { create :geographical_area, geographical_area_id: 'xx' }
+      let!(:contained_area_present)           { create :geographical_area, geographical_area_id: 'ab',
+                                                                           validity_start_date: Date.today.ago(2.years),
                                                                            validity_end_date: Date.today.ago(2.years) }
-      let!(:contained_area_past)              { create :geographical_area, validity_start_date: Date.today.ago(5.years),
+      let!(:contained_area_past)              { create :geographical_area, geographical_area_id: 'de',
+                                                                           validity_start_date: Date.today.ago(5.years),
                                                                            validity_end_date: Date.today.ago(3.years) }
       let!(:geographical_area_membership1)    { create :geographical_area_membership, geographical_area_sid: contained_area_present.geographical_area_sid,
                                                                                       geographical_area_group_sid: geographical_area.geographical_area_sid,

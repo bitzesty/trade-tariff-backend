@@ -25,7 +25,7 @@ class ChiefTransformer
                                     LAE LBJ LBA LBB LBE LDA LEA LEF LFA LGJ COE
                                     PRE AHC ATT CEX CHM COI CVD ECM EHC EQC EWP
                                     HOP HSE IWP PHC PRT QRC SFS VTA VTA VTE VTE
-                                    VTS VTS VTZ VTZ SPL]
+                                    VTS VTS VTZ VTZ]
 
     attr_accessor :mfcm, :tame, :tamf, :candidate_associations, :initiator, :operation
     attr_reader :chief_geographical_area
@@ -62,14 +62,6 @@ class ChiefTransformer
       callbacks
     end
 
-    def ==(other_measure)
-      self.values == other_measure.values &&
-      self.mfcm == other_measure.mfcm &&
-      self.tame == other_measure.tame &&
-      self.tamf == other_measure.tamf &&
-      self.amend_indicator == other_measure.amend_indicator
-    end
-
     def validate
       super
 
@@ -80,7 +72,7 @@ class ChiefTransformer
       errors.add(:measure_type, 'must have national measure type') if measure_type.present? && !measure_type.in?(NATIONAL_MEASURE_TYPES)
       errors.add(:goods_nomenclature_sid, 'must be present') if goods_nomenclature_sid.blank?
       errors.add(:geographical_area_sid, 'must be present') if geographical_area_sid.blank?
-      errors.add(:validity_end_date, 'start date greater than end date') if validity_end_date.present? && validity_start_date > validity_end_date
+      errors.add(:validity_end_date, 'start date greater than end date') if validity_end_date.present? && validity_start_date >= validity_end_date
       errors.add(:measure_sid, 'measure must be unique') if Measure.where(measure_type: measure_type,
                                                                           geographical_area: geographical_area,
                                                                           validity_start_date: validity_start_date,
@@ -153,7 +145,7 @@ class ChiefTransformer
       # must happen after validity dates are set, depends on start date
       self.additional_code_sid = AdditionalCode.where(additional_code_type_id: additional_code_type,
                                                       additional_code: additional_code)
-                                               .where("validity_start_date >= ? AND (validity_end_date <= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
+                                               .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
                                                .first
                                                .try(:additional_code_sid)
       # needs to throw errors about invalid geographical area
@@ -172,6 +164,7 @@ class ChiefTransformer
 
       # needs to throw errors about invalid goods nomenclature item found
       self.goods_nomenclature_sid = GoodsNomenclature.where(goods_nomenclature_item_id: goods_nomenclature_item_id)
+                                                     .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
                                                      .declarable
                                                      .order(:validity_start_date.desc)
                                                      .first

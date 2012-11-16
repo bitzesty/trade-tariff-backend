@@ -95,8 +95,8 @@ describe Measure do
     end
 
     describe 'geographical area' do
-      let!(:geographical_area1)     { create :geographical_area }
-      let!(:geographical_area2)     { create :geographical_area }
+      let!(:geographical_area1)     { create :geographical_area, geographical_area_id: 'ab' }
+      let!(:geographical_area2)     { create :geographical_area, geographical_area_id: 'de' }
       let!(:measure)                { create :measure, geographical_area_sid: geographical_area1.geographical_area_sid }
 
       context 'direct loading' do
@@ -372,19 +372,17 @@ describe Measure do
     # ME1 The combination of measure type + geographical area +
     #     goods nomenclature item id + additional code type + additional code +
     #     order number + reduction indicator + start date must be unique
-    # TODO
-    # it { should validate_uniqueness.of([:measure_type, :geographical_area_sid,
-    #                                     :goods_nomenclature_sid,
-    #                                     :additional_code_type,
-    #                                     :additional_code, :ordernumber,
-    #                                     :reduction_indicator,
-    #                                     :validity_start_date]) }
+    it { should validate_uniqueness.of([:measure_type, :geographical_area_sid,
+                                        :goods_nomenclature_sid,
+                                        :additional_code_type,
+                                        :additional_code, :ordernumber,
+                                        :reduction_indicator,
+                                        :validity_start_date]) }
     # ME3 ME115 ME8 ME5 ME18 ME114 ME15  The validity period of the <associated record>
     # must span the validity period of the measure
-    # TODO
-    # it { should validate_validity_date_span.of(:geographical_area, :type,
-    #                                            :goods_nomenclature,
-    #                                            :additional_code) }
+    it { should validate_validity_date_span.of(:geographical_area, :type,
+                                               :goods_nomenclature,
+                                               :additional_code) }
     # ME25 If the measures end date is specified (implicitly or explicitly)
     # then the start date of the measure must be less than
     # or equal to the end date
@@ -393,8 +391,7 @@ describe Measure do
     # it may not be an intermediate line
     # ME88 The level of the goods code, if present, cannot exceed the
     # explosion level of the measure type.
-    # TODO
-    # it { should validate_associated(:goods_nomenclature).and_ensure(:qualified_goods_nomenclature?) }
+    it { should validate_associated(:goods_nomenclature).and_ensure(:qualified_goods_nomenclature?) }
     # ME10 The order number must be specified if the "order number flag"
     # (specified in the measure type record) has the value "mandatory".
     # If the flag is set to "not permitted" then the field cannot be entered.
