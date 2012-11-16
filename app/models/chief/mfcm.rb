@@ -35,13 +35,6 @@ module Chief
                               }.order(:audit_tsmp.asc)
     }, class_name: 'Chief::Tame'
 
-    one_to_many :tamfs, key: {}, primary_key: {}, dataset: -> {
-      Chief::Tamf.filter{ |o| {:msrgp_code => msrgp_code} &
-                              {:msr_type => msr_type} &
-                              {:tty_code => tty_code}
-                              }.order(:fe_tsmp.desc)
-    }
-
     one_to_one :measure_type_adco, key: {}, primary_key: {},
       dataset: -> { Chief::MeasureTypeAdco.where(chief_measure_type_adco__measure_group_code: msrgp_code,
                                                  chief_measure_type_adco__measure_type: msr_type,
@@ -60,10 +53,6 @@ module Chief
 
       def valid_to(timestamp)
         where("fe_tsmp < ?", timestamp)
-      end
-
-      def valid_to_inclusive(timestamp)
-        where("fe_tsmp <= ?", timestamp)
       end
     end
 
@@ -84,10 +73,6 @@ module Chief
 
     def audit_tsmp
       self[:audit_tsmp].presence || Time.now
-    end
-
-    def vat_or_excise?
-      msrgp_code.in?(EXCISE_GROUP_CODES) || msrgp_code.in?(VAT_GROUP_CODES)
     end
   end
 end

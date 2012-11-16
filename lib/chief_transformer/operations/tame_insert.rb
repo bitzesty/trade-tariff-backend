@@ -1,8 +1,8 @@
-require_relative 'tame_interaction'
+require_relative 'tame_operation'
 
 class ChiefTransformer
   class Processor
-    class TameInsert < TameInteraction
+    class TameInsert < TameOperation
       def process
         update_or_create_tame_components_for(record)
         create_new_measures_for(record)

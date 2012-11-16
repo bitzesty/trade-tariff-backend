@@ -24,12 +24,6 @@ class ChiefTransformer
         }.reverse
       end
 
-      def log(initiator)
-        @measures.each do |measure|
-          MeasureLogger.log(measure, :insert, {}, initiator, initiator.origin)
-        end
-      end
-
       def persist
         Sequel::Model.db.transaction do
           @measures.each do |candidate_measure|

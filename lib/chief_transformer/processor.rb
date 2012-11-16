@@ -1,4 +1,4 @@
-Dir[File.join(Rails.root, 'lib', 'chief_transformer/interactions/*.rb')].each{|f| require f }
+Dir[File.join(Rails.root, 'lib', 'chief_transformer/operations/*.rb')].each{|f| require f }
 
 class ChiefTransformer
   class Processor
@@ -10,13 +10,15 @@ class ChiefTransformer
 
     def process
       operations.each do |operation|
-        Sequel::Model.db.transaction do
-          begin
-            operator_for(operation).new(operation).process
+        ActiveSupport::Notifications.instrument("process.chief_transformer", operation: operation) do
+          Sequel::Model.db.transaction do
+            begin
+              operator_for(operation).new(operation).process
 
-            operation.mark_as_processed!
-          rescue Exception => e
-            raise ChiefTransformer::TransformException.new("Could not transform: #{operation.inspect}. \n #{e} \nBacktrace: \n#{e.backtrace.join("\n")}")
+              operation.mark_as_processed!
+            rescue Exception => e
+              raise ChiefTransformer::TransformException.new("Could not transform: #{operation.inspect}. \n #{e} \nBacktrace: \n#{e.backtrace.join("\n")}")
+            end
           end
         end
       end

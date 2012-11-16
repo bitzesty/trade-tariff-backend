@@ -1,6 +1,6 @@
 class ChiefTransformer
   class Processor
-    class Interaction
+    class Operation
       attr_reader :record
 
       def initialize(record)

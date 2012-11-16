@@ -1,8 +1,8 @@
-require 'chief_transformer/interactions/interaction'
+require 'chief_transformer/operations/operation'
 
 class ChiefTransformer
   class Processor
-    class TameInteraction < Interaction
+    class TameOperation < Operation
       TAME_DUTY_EXPRESSION_ID = "01"
 
       private
@@ -15,9 +15,7 @@ class ChiefTransformer
                .with_tariff_measure_number(tame.tar_msr_no)
                .not_terminated
                .each do |measure|
-          MeasureLogger.log(measure, :update, {validity_end_date: tame.fe_tsmp}, tame, tame.origin)
-          end_date = (measure.goods_nomenclature.validity_end_date.present? && record.fe_tsmp > measure.goods_nomenclature.validity_end_date) ? measure.goods_nomenclature.validity_end_date : record.fe_tsmp
-          measure.update validity_end_date: end_date
+          measure.update validity_end_date: tame.fe_tsmp
         end
       end
 
@@ -37,7 +35,6 @@ class ChiefTransformer
                                  operation: :insert)]
           end
         end.flatten)
-        candidate_measures.log(tame)
         candidate_measures.persist
       end
 
@@ -57,8 +54,6 @@ class ChiefTransformer
                   if tame_component = measure.measure_components
                                              .detect{|c| c.duty_expression_id == TAME_DUTY_EXPRESSION_ID }
                     tame_component.update duty_amount: tame.adval_rate
-                  else
-                    # TODO implement component creation if needed
                   end
                 end
         end

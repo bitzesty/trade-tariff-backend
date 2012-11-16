@@ -24,4 +24,23 @@ describe Chief::Tamf do
       tamf.reload.processed.should be_true
     end
   end
+
+  describe '#geographical_area' do
+    before { Chief::Tamf.unrestrict_primary_key }
+
+    it 'picks cngp_code if it is available' do
+      tamf = Chief::Tamf.new(cngp_code: 'abc')
+      tamf.geographical_area.should eq 'abc'
+    end
+
+    it 'picks cntry_orig if cngp_code is unavailable' do
+      tamf = Chief::Tamf.new(cntry_orig: 'abc')
+      tamf.geographical_area.should eq 'abc'
+    end
+
+    it 'picks cntry_disp if cngp_cod and cntry_orig are unavailable' do
+      tamf = Chief::Tamf.new(cntry_disp: 'abc')
+      tamf.geographical_area.should eq 'abc'
+    end
+  end
 end
