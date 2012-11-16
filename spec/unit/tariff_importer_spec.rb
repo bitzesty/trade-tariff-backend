@@ -24,16 +24,27 @@ describe TariffImporter do
   end
 
   describe "importing" do
-    let(:importer) { TariffImporter.new(valid_file, valid_importer) }
-    let(:stub_importer) { stub() }
+    class MockImporter
+      def initialize(abc)
+      end
+    end
 
-    before {
-      # stub_importer.expects(:import).once
-      # importer.expects(:importer).returns(stub_importer)
-    }
+    context 'file is present' do
+      let(:importer) { TariffImporter.new(valid_file, "MockImporter") }
 
-    it 'delegates import to importer' do
-      # importer.import
+      it 'delegates import to importer' do
+        MockImporter.any_instance.expects(:import)
+
+        importer.import
+      end
+    end
+
+    context 'file is not present' do
+      let(:importer) { TariffImporter.new('non-existent-file', "MockImporter") }
+
+      it 'raises NotFound exception' do
+        expect { importer.import }.to raise_error TariffImporter::NotFound
+      end
     end
   end
 end

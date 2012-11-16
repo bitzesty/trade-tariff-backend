@@ -29,8 +29,7 @@ class TaricImporter
                      when "2" then :delete
                      when "3" then :insert
                      else
-                       puts "Unexpected update type"
-                       puts xml.to_xml(indent: 2)
+                       ActiveSupport::Notifications.instrument("taric_unexpected_update_type.tariff_importer", xml: xml)
                      end
       end
 

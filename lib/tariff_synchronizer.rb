@@ -112,7 +112,8 @@ module TariffSynchronizer
             begin
               pending_update.apply
             rescue TaricImporter::ImportException,
-                   ChiefImporter::ImportException  => exception
+                   ChiefImporter::ImportException,
+                   TariffImporter::NotFound  => exception
               ActiveSupport::Notifications.instrument("failed_update.tariff_synchronizer", exception: exception,
                                                                                            update: pending_update)
 

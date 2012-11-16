@@ -1,5 +1,9 @@
 require 'csv'
 
+require 'active_support/notifications'
+require 'active_support/log_subscriber'
+require 'tariff_importer/logger'
+
 require 'tariff_importer/importers/chief_importer/entry'
 require 'tariff_importer/importers/chief_importer/start_entry'
 require 'tariff_importer/importers/chief_importer/end_entry'
@@ -18,7 +22,6 @@ class ChiefImporter
     end
   end
 
-  # TODO extend this
   cattr_accessor :relevant_tables
   self.relevant_tables = %w(MFCM TAMF TAME)
 
@@ -30,9 +33,8 @@ class ChiefImporter
 
   attr_reader :path, :processor, :start_entry, :end_entry, :file_name
 
-  delegate :extraction_date, to: :start_entry
-  delegate :record_count, to: :end_entry
-  delegate :logger, to: ::TariffImporter
+  delegate :extraction_date, to: :start_entry, allow_nil: true
+  delegate :record_count, to: :end_entry, allow_nil: true
 
   def initialize(path)
     @path = Pathname.new(path)
@@ -56,11 +58,14 @@ class ChiefImporter
         end
       end
 
-      puts "Imported data of: #{extraction_date}\nRecords processed: #{record_count}" unless defined? RSpec
-    rescue Exception => e
-      logger.error e.message
+      ActiveSupport::Notifications.instrument("chief_imported.tariff_importer", path: path,
+                                                                                date: extraction_date,
+                                                                                count: record_count)
+    rescue Exception => exception
+      ActiveSupport::Notifications.instrument("chief_failed.tariff_importer", path: path,
+                                                                              exception: exception)
 
-      raise ImportException.new(e.message, e)
+      raise ImportException.new(exception.message, exception)
     end
   end
 end

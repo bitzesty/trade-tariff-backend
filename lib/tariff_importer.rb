@@ -1,13 +1,15 @@
 require 'delegate'
 require 'date'
-require 'logger'
+require 'active_support/notifications'
+require 'active_support/log_subscriber'
 
+require 'tariff_importer/logger'
+
+require 'tariff_importer/importers/chief_importer'
+require 'tariff_importer/importers/taric_importer'
 
 class TariffImporter
   class NotFound < StandardError; end
-
-  cattr_accessor :logger
-  self.logger = Logger.new('log/importer-error.log')
 
   attr_reader :path, :importer, :processor
 
@@ -22,6 +24,3 @@ class TariffImporter
     end
   end
 end
-
-require 'tariff_importer/importers/chief_importer'
-require 'tariff_importer/importers/taric_importer'
