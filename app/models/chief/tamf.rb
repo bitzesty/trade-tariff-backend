@@ -44,10 +44,6 @@ module Chief
       self.this.unlimited.update(processed: true)
     end
 
-    def geographical_area
-      cngp_code.presence || cntry_orig.presence || cntry_disp.presence
-    end
-
     def measurement_unit(cmpd_uoq, uoq)
       if cmpd_uoq.present?
         Chief::MeasurementUnit.where(spfc_cmpd_uoq: cmpd_uoq,
