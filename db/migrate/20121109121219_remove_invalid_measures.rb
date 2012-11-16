@@ -11,7 +11,7 @@ Sequel.migration do
             measure.validity_end_date.present? &&
             measure.validity_end_date > measure.goods_nomenclature.validity_end_date
           measure.validity_end_date = measure.goods_nomenclature.validity_end_date
-          measure.save
+          measure.save(validate: false)
         end
 
         # Destroy measure if fails other validations
