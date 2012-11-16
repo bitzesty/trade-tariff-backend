@@ -17,11 +17,13 @@ class ChiefTransformer
     end
 
     def process(event)
-      if event.payload.has_key?(:exception)
-        error "Failed to process: #{event.payload[:operation]}. Exception: #{event.payload[:exception]}"
-      else
-        info "Processing: #{event.payload[:operation]}"
+      unless event.payload.has_key?(:exception)
+        info "Processed: #{event.payload[:operation].inspect}"
       end
+    end
+
+    def exception(event)
+      error "Could not transform: #{event.payload[:operation].inspect}. \n #{event.payload[:exception]} \nBacktrace: \n#{event.payload[:exception].backtrace.join("\n")}"
     end
   end
 end

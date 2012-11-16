@@ -13,7 +13,14 @@ require 'chief_transformer/logger'
 class ChiefTransformer
   include Singleton
 
-  class TransformException < StandardError; end
+  class TransformException < StandardError
+    attr_reader :original
+
+    def initialize(msg = "ChiefTransformer::TransformException", original=$!)
+      super(msg)
+      @original = original
+    end
+  end
 
   # Use update mode (the default) to process daily updates. Does not perform
   # pagination, processes MFCMs, TAMEs and TAMFs, merges them and persists.
