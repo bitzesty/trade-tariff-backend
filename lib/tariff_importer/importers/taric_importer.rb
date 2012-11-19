@@ -38,7 +38,7 @@ class TaricImporter
     ActiveSupport::Notifications.instrument("taric_imported.tariff_importer", path: path) do
       begin
         handler = File.open(path, "r")
-        reader = Nokogiri::XML::Reader(handler)
+        reader = Nokogiri::XML::Reader(handler, nil, nil, Nokogiri::XML::ParseOptions::RECOVER | Nokogiri::XML::ParseOptions::NOERROR | Nokogiri::XML::ParseOptions::NONET)
         reader.each do |node|
           if node.name == self.transaction_node && node.node_type == self.opening_element
             xml = Nokogiri::XML.parse(node.outer_xml)
