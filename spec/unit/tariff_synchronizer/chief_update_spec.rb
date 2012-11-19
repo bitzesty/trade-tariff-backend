@@ -6,10 +6,6 @@ describe TariffSynchronizer::ChiefUpdate do
 
   let(:example_date)      { Date.new(2010,1,1) }
 
-  before do
-    TariffSynchronizer.admin_email = "user@example.com"
-  end
-
   describe '.download' do
     let(:blank_response)     { build :response, content: nil }
     let(:not_found_response) { build :response, :not_found }

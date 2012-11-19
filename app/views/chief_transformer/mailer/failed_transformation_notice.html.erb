@@ -1,0 +1,21 @@
+<p>Hello,</p>
+
+<p>
+Trade Tariff failed to transform pending CHIEF records at <%= Time.now %>.
+</p>
+
+<p>
+  Changes that were possibly made by the following operation were reverted (each operation is wrapped in transaction). Operation is left in pending state.
+</p>
+
+<p>
+  <strong>Failed operation:</strong> <%= @operation.inspect %>
+</p>
+
+<p>
+  <strong>Exception: <%= @exception %></strong>
+</p>
+
+<pre>
+  <%= @exception.backtrace.join("\n") %>
+</pre>

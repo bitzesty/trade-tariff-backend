@@ -13,6 +13,7 @@ class ChiefTransformer
         error "CHIEF Transformer failed #{event.payload[:exception]}"
       else
         info "CHIEF Transformer finished successfully in #{event.duration}s"
+        Mailer.successful_transformation_notice.deliver
       end
     end
 
@@ -24,6 +25,7 @@ class ChiefTransformer
 
     def exception(event)
       error "Could not transform: #{event.payload[:operation].inspect}. \n #{event.payload[:exception]} \nBacktrace: \n#{event.payload[:exception].backtrace.join("\n")}"
+      Mailer.failed_transformation_notice(event.payload[:exception], event.payload[:operation]).deliver
     end
   end
 end

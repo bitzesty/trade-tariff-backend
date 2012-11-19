@@ -9,6 +9,7 @@ require 'active_support/notifications'
 require 'active_support/log_subscriber'
 
 require 'chief_transformer/logger'
+require 'chief_transformer/mailer'
 
 class ChiefTransformer
   include Singleton

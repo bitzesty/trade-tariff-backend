@@ -29,6 +29,12 @@ describe ChiefTransformer::Logger do
         @logger.logged(:info).size.should be >= 1
         @logger.logged(:info).last.should =~ /finished successfull/
       end
+
+      it 'sends an info email to the administrator' do
+        ActionMailer::Base.deliveries.should_not be_empty
+        email = ActionMailer::Base.deliveries.last
+        email.encoded.should =~ /successfully transformed/
+      end
     end
 
     context 'transformation with errors' do
@@ -71,6 +77,12 @@ describe ChiefTransformer::Logger do
     it 'logs an error event' do
       @logger.logged(:error).size.should eq 1
       @logger.logged(:error).last.should =~ /Could not transform/i
+    end
+
+    it 'sends an error email to the administrator' do
+      ActionMailer::Base.deliveries.should_not be_empty
+      email = ActionMailer::Base.deliveries.last
+      email.encoded.should =~ /failed to transform/
     end
   end
 end

@@ -2,11 +2,6 @@ require 'spec_helper'
 require 'tariff_synchronizer'
 
 describe TariffSynchronizer do
-  before do
-    # Use default email address
-    TariffSynchronizer.admin_email = "user@example.com"
-  end
-
   describe '.initial_update_for' do
     # helper method where update type is a param
     it 'returns initial update day for specific update type' do
@@ -33,7 +28,6 @@ describe TariffSynchronizer do
         TariffSynchronizer.username = nil
         TariffSynchronizer.password = nil
         TariffSynchronizer.host = nil
-        TariffSynchronizer.admin_email = nil
       }
 
       it 'does not start sync process' do

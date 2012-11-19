@@ -38,6 +38,8 @@ RSpec.configure do |config|
   config.before(:suite) do
     Sequel::Model.db.tables.delete_if{|t| t == 'schema_migrations' }
                            .each{|table| Sequel::Model.db.from(table).truncate}
+
+    TradeTariffBackend.stubs(:admin_email).returns("user@example.com")
   end
 
   config.around(:each) do |example|
