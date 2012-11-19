@@ -8,6 +8,7 @@ class ChiefTransformer
     set_primary_key :measure_sid
 
     plugin :national
+    plugin :timestamps
 
     DEFAULT_REGULATION_ROLE_TYPE_ID = 1
     DEFAULT_REGULATION_ID = "IYY99990"
