@@ -65,6 +65,8 @@ describe TariffSynchronizer::Logger do
   end
 
   describe '#apply logging' do
+    let!(:chief_update) { create :chief_update }
+
     before {
       TariffSynchronizer.apply
     }
@@ -72,6 +74,12 @@ describe TariffSynchronizer::Logger do
     it 'logs and info event' do
       @logger.logged(:info).size.should eq 1
       @logger.logged(:info).last.should =~ /Finished applying/
+    end
+
+    it 'sends success email' do
+      ActionMailer::Base.deliveries.should_not be_empty
+      email = ActionMailer::Base.deliveries.last
+      email.encoded.should =~ /successfully applied/
     end
   end
 

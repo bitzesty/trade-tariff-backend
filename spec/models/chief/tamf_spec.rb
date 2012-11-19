@@ -43,4 +43,27 @@ describe Chief::Tamf do
       tamf.geographical_area.should eq 'abc'
     end
   end
+
+  describe '#measurement_unit' do
+    let(:tamf) { build :tamf }
+
+    context 'cmpd_uoq present' do
+      it 'fetches Chief::MeasurementUnit with cmpd_uoq as part of the key' do
+        Chief::MeasurementUnit.expects(:where).with(spfc_cmpd_uoq: 'abc',
+                                                    spfc_uoq: 'def').returns(stub_everything)
+
+        tamf.measurement_unit('abc', 'def')
+      end
+    end
+
+    context 'cmpd_uoq blank' do
+      it 'fetches Chief::MeasurementUnit with uoq as key' do
+        Chief::MeasurementUnit.expects(:where)
+                              .with(spfc_uoq: 'abc')
+                              .returns(stub_everything)
+
+        tamf.measurement_unit(nil, 'abc')
+      end
+    end
+  end
 end
