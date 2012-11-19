@@ -143,6 +143,6 @@ module TariffSynchronizer
     username.present? &&
     password.present? &&
     host.present? &&
-    admin_email.present?
+    TradeTariffBackend.admin_email.present?
   end
 end
