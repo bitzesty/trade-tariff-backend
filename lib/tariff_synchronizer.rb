@@ -8,6 +8,7 @@ require 'logger'
 require 'fileutils'
 require 'active_support/notifications'
 require 'active_support/log_subscriber'
+require 'chief_transformer'
 
 require 'tariff_synchronizer/logger'
 
@@ -108,6 +109,8 @@ module TariffSynchronizer
           Sequel::Model.db.transaction do
             begin
               pending_update.apply
+
+              ::ChiefTransformer.instance.invoke(:update) if pending_update.is_a?(ChiefUpdate)
             rescue TaricImporter::ImportException,
                    ChiefImporter::ImportException,
                    TariffImporter::NotFound  => exception

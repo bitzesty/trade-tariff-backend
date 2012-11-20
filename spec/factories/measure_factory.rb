@@ -13,7 +13,7 @@ FactoryGirl.define do
     validity_end_date   { nil }
 
     trait :national do
-      national { true }
+      sequence(:measure_sid) { |n| -1 * n }
     end
 
     trait :with_goods_nomenclature do

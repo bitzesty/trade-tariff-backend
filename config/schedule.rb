@@ -4,10 +4,6 @@ every 1.hour do
   rake "tariff:sync:apply"
 end
 
-every 1.day, at: '6am' do
-  rake "tariff:sync:transform"
-end
-
 every 1.day, at: '10pm' do
   rake "tariff:support:clean_national_measures"
 end

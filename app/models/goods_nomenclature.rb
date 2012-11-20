@@ -121,6 +121,8 @@ class GoodsNomenclature < Sequel::Model
 
   # TODO
   validates do
+    # NIG30 When a goods nomenclature is used in a goods measure then the validity period of the goods nomenclature must span the validity period of the goods measure.
+    # associated :measures, ensure: :measures_are_valid
     # NIG4
     validity_dates
   end

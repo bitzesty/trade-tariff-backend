@@ -59,8 +59,7 @@ describe TaricImporter do
       }
 
       it 'processes updates' do
-        # update_record.xml is inserting to ExplicitAbrogationRegulation
-
+        # update_record.xml is updating to ExplicitAbrogationRegulation
         db_stub, filter_stub, update_stub = stub(), stub(), stub()
         ExplicitAbrogationRegulation.expects(:db).returns(db_stub)
         db_stub.expects(:[]).returns(filter_stub)
