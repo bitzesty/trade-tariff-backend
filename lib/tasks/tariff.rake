@@ -158,20 +158,22 @@ namespace :tariff do
     # that do not comply.
     desc "Validate and remove invalid national measures"
     task clean_national_measures: :environment do
-      Measure.national.each_page(1000) { |measure_batch|
-        measure_batch.each { |measure|
-          # Adjust measure validity date span
-          if measure.goods_nomenclature.validity_end_date.present? &&
-              measure.validity_end_date.present? &&
-              measure.validity_end_date > measure.goods_nomenclature.validity_end_date
-            measure.validity_end_date = measure.goods_nomenclature.validity_end_date
-            measure.save(validate: false)
-          end
+      Measure.national.each_page(1000) do |measure_batch|
+        Sequel::Model.db.transaction do
+          measure_batch.each do |measure|
+            # Adjust measure validity date span
+            if measure.goods_nomenclature.validity_end_date.present? &&
+                measure.validity_end_date.present? &&
+                measure.validity_end_date > measure.goods_nomenclature.validity_end_date
+              measure.validity_end_date = measure.goods_nomenclature.validity_end_date
+              measure.save(validate: false)
+            end
 
-          # Destroy measure if fails other validations
-          measure.destroy unless measure.valid?
-        }
-      }
+            # Destroy measure if fails other validations
+            measure.destroy unless measure.valid?
+          end
+        end
+      end
     end
   end
 end
