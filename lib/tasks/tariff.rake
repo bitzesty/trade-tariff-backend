@@ -151,4 +151,29 @@ namespace :tariff do
       end
     end
   end
+
+  namespace :support do
+    # Traverse national measures and remove the ones that are not valid
+    # Used when Mesure conformance validations are extended to remove the ones
+    # that do not comply.
+    desc "Validate and remove invalid national measures"
+    task clean_national_measures: :environment do
+      Measure.national.each_page(1000) do |measure_batch|
+        Sequel::Model.db.transaction do
+          measure_batch.each do |measure|
+            # Adjust measure validity date span
+            if measure.goods_nomenclature.validity_end_date.present? &&
+                measure.validity_end_date.present? &&
+                measure.validity_end_date > measure.goods_nomenclature.validity_end_date
+              measure.validity_end_date = measure.goods_nomenclature.validity_end_date
+              measure.save(validate: false)
+            end
+
+            # Destroy measure if fails other validations
+            measure.destroy unless measure.valid?
+          end
+        end
+      end
+    end
+  end
 end
