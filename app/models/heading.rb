@@ -72,9 +72,14 @@ class Heading < GoodsNomenclature
     [self, self.chapter].compact
   end
 
+  def non_grouping?
+    producline_suffix != "10"
+  end
+
   def declarable
-    actual(GoodsNomenclature).where("goods_nomenclature_item_id LIKE ?", "#{short_code}______")
-                             .count == 1
+    non_grouping? && actual(GoodsNomenclature).where("goods_nomenclature_item_id LIKE ?", "#{short_code}______")
+                                              .where("goods_nomenclature_item_id > ?", goods_nomenclature_item_id)
+                                              .none?
   end
   alias :declarable? :declarable
 
