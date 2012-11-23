@@ -4,6 +4,20 @@ class GoodsNomenclature < Sequel::Model
   plugin :time_machine, period_start_column: :goods_nomenclatures__validity_start_date,
                         period_end_column:   :goods_nomenclatures__validity_end_date
 
+  plugin :sti, class_determinator: ->(record) {
+    gono_id = record[:goods_nomenclature_item_id].to_s
+
+    if gono_id.ends_with?('00000000')
+      'Chapter'
+    elsif gono_id.ends_with?('000000') && gono_id.slice(2,2) != '00'
+      'Heading'
+    elsif !gono_id.ends_with?('000000')
+      'Commodity'
+    else
+      'GoodsNomenclature'
+    end
+  }
+
   set_dataset order(:goods_nomenclatures__goods_nomenclature_item_id.asc)
 
   set_primary_key :goods_nomenclature_sid

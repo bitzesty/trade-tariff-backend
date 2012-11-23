@@ -34,6 +34,8 @@ FactoryGirl.define do
     trait :with_indent do
       after(:create) { |gono, evaluator|
         FactoryGirl.create(:goods_nomenclature_indent, goods_nomenclature_sid: gono.goods_nomenclature_sid,
+                                                       validity_start_date: gono.validity_start_date,
+                                                       validity_end_date: gono.validity_end_date,
                                                        number_indents: evaluator.indents)
       }
     end

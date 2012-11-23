@@ -1,0 +1,33 @@
+# Based on: https://github.com/jeremyevans/sequel/blob/master/lib/sequel/plugins/single_table_inheritance.rb
+
+module Sequel
+  module Plugins
+    module Sti
+      def self.configure(model, opts={})
+        model.instance_eval do
+          @class_determinator = opts[:class_determinator]
+          dataset.row_proc = lambda{|r| model.sti_load(r) }
+        end
+      end
+
+      module ClassMethods
+        attr_reader :class_determinator
+
+        def inherited(subclass)
+          super
+
+          cd = class_determinator
+          rp = dataset.row_proc
+          subclass.instance_eval do
+            @class_determinator = cd
+            dataset.row_proc = lambda{|r| model.sti_load(r) }
+          end
+        end
+
+        def sti_load(r)
+          constantize(class_determinator.call(r)).call(r)
+        end
+      end
+    end
+  end
+end
