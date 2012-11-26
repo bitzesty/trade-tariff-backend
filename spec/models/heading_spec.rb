@@ -84,7 +84,7 @@ describe Heading do
 
   describe '#declarable' do
     context 'different commodity codes' do
-      let!(:declarable_heading)     { create :heading, goods_nomenclature_item_id: "0101000000"}
+      let!(:declarable_heading)     { create :heading, :declarable, goods_nomenclature_item_id: "0101000000" }
       let!(:non_declarable_heading) { create :heading, goods_nomenclature_item_id: "0102000000", producline_suffix: "10" }
       let!(:commodity)              { create :commodity, goods_nomenclature_item_id: "0102000010",
                                                          producline_suffix: "80",
