@@ -7,10 +7,6 @@ describe TariffSynchronizer::TaricUpdate do
 
   let(:example_date)      { Forgery(:date).date }
 
-  before do
-    TariffSynchronizer.admin_email = "user@example.com"
-  end
-
   describe '.download' do
     let(:taric_update_name)  { "TGB#{example_date.strftime("%y")}#{example_date.yday}.xml" }
     let(:taric_query_url)    { "#{TariffSynchronizer.host}/taric/TARIC3#{example_date.strftime("%Y%m%d")}" }

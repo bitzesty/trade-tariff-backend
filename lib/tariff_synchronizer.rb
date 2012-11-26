@@ -49,9 +49,6 @@ module TariffSynchronizer
   mattr_accessor :host
   self.host = TradeTariffBackend.secrets.sync_host
 
-  mattr_accessor :admin_email
-  self.admin_email = TradeTariffBackend.secrets.sync_email
-
   mattr_accessor :root_path
   self.root_path = Rails.env.test? ? "tmp/data" : "data"
 
@@ -146,6 +143,6 @@ module TariffSynchronizer
     username.present? &&
     password.present? &&
     host.present? &&
-    admin_email.present?
+    TradeTariffBackend.admin_email.present?
   end
 end

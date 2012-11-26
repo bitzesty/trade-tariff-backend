@@ -1,8 +1,8 @@
-require 'chief_transformer/interactions/interaction'
+require 'chief_transformer/operations/operation'
 
 class ChiefTransformer
   class Processor
-    class MfcmInsert < Interaction
+    class MfcmInsert < Operation
       def process
         candidate_measures = CandidateMeasure::Collection.new([
           if record.tame.present?
@@ -20,7 +20,6 @@ class ChiefTransformer
             end
           end
         ].flatten.compact)
-        candidate_measures.log(record)
         candidate_measures.persist
       end
     end

@@ -1,7 +1,7 @@
 module TariffSynchronizer
   class Mailer < ActionMailer::Base
     default from: "DO NOT REPLY <trade-tariff-alerts@digital.cabinet-office.gov.uk>",
-            to: TariffSynchronizer.admin_email
+            to: TradeTariffBackend.admin_email
 
     def exception(exception, update)
       @failed_file_path = update.file_path

@@ -13,6 +13,11 @@ module TradeTariffBackend
       Proc.new {|severity, time, progname, msg| "#{time.strftime('%Y-%m-%dT%H:%M:%S.%L %z')} #{sprintf('%5s', severity)} #{msg}\n" }
     end
 
+    # Email of the user who receives all info/error notifications
+    def admin_email
+      secrets.sync_email
+    end
+
     def with_locked_database(&block)
       begin
         if Sequel::Model.db.get_lock(db_lock_key)

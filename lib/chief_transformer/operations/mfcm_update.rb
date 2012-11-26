@@ -1,15 +1,14 @@
-require 'chief_transformer/interactions/interaction'
+require 'chief_transformer/operations/operation'
 
 class ChiefTransformer
   class Processor
-    class MfcmUpdate < Interaction
+    class MfcmUpdate < Operation
       def process
         if record.le_tsmp.present?
           Measure.with_measure_type(record.measure_type)
                  .with_gono_id(record.cmdty_code)
                  .valid_to(record.le_tsmp)
                  .each do |measure|
-                   MeasureLogger.log(measure, :update, {validity_end_date: record.le_tsmp}, record, record.origin)
                    measure.update validity_end_date: record.le_tsmp
                  end
         else
@@ -35,7 +34,6 @@ class ChiefTransformer
                 end
               end
             ].flatten.compact)
-            candidate_measures.log(record)
             candidate_measures.persist
           end
         end

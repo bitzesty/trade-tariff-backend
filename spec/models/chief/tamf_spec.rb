@@ -24,4 +24,46 @@ describe Chief::Tamf do
       tamf.reload.processed.should be_true
     end
   end
+
+  describe '#geographical_area' do
+    before { Chief::Tamf.unrestrict_primary_key }
+
+    it 'picks cngp_code if it is available' do
+      tamf = Chief::Tamf.new(cngp_code: 'abc')
+      tamf.geographical_area.should eq 'abc'
+    end
+
+    it 'picks cntry_orig if cngp_code is unavailable' do
+      tamf = Chief::Tamf.new(cntry_orig: 'abc')
+      tamf.geographical_area.should eq 'abc'
+    end
+
+    it 'picks cntry_disp if cngp_cod and cntry_orig are unavailable' do
+      tamf = Chief::Tamf.new(cntry_disp: 'abc')
+      tamf.geographical_area.should eq 'abc'
+    end
+  end
+
+  describe '#measurement_unit' do
+    let(:tamf) { build :tamf }
+
+    context 'cmpd_uoq present' do
+      it 'fetches Chief::MeasurementUnit with cmpd_uoq as part of the key' do
+        Chief::MeasurementUnit.expects(:where).with(spfc_cmpd_uoq: 'abc',
+                                                    spfc_uoq: 'def').returns(stub_everything)
+
+        tamf.measurement_unit('abc', 'def')
+      end
+    end
+
+    context 'cmpd_uoq blank' do
+      it 'fetches Chief::MeasurementUnit with uoq as key' do
+        Chief::MeasurementUnit.expects(:where)
+                              .with(spfc_uoq: 'abc')
+                              .returns(stub_everything)
+
+        tamf.measurement_unit(nil, 'abc')
+      end
+    end
+  end
 end

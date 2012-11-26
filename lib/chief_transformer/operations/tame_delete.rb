@@ -1,8 +1,8 @@
-require_relative 'tame_interaction'
+require_relative 'tame_operation'
 
 class ChiefTransformer
   class Processor
-    class TameDelete < TameInteraction
+    class TameDelete < TameOperation
       def process
         end_measures_for(record)
       end

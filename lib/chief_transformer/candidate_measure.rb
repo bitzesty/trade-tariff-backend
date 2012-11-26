@@ -8,6 +8,7 @@ class ChiefTransformer
     set_primary_key :measure_sid
 
     plugin :national
+    plugin :timestamps
 
     DEFAULT_REGULATION_ROLE_TYPE_ID = 1
     DEFAULT_REGULATION_ID = "IYY99990"
@@ -40,13 +41,75 @@ class ChiefTransformer
            stopped_flag: false,
            national: true })
 
-      # TODO geograhical area can come from either one of mfcm, tamf or tame
       set({geographical_area: DEFAULT_GEOGRAPHICAL_AREA_ID}) if geographical_area.blank?
 
       callbacks
     end
 
-    # TODO refactor this
+    def before_validation
+      # set excluded_country geographical area_sid
+      # must happen after validity dates are set, depends on start date
+      self.additional_code_sid = AdditionalCode.where(additional_code_type_id: additional_code_type,
+                                                      additional_code: additional_code)
+                                               .where("validity_start_date >= ? AND (validity_end_date <= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
+                                               .first
+                                               .try(:additional_code_sid)
+      # needs to throw errors about invalid geographical area
+      self.geographical_area_sid = GeographicalArea.where(geographical_area_id: geographical_area)
+                                                   .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
+                                                   .first
+                                                   .try(:geographical_area_sid)
+      if self.geographical_area_sid.blank?
+        self[:geographical_area] = DEFAULT_GEOGRAPHICAL_AREA_ID
+
+        self.geographical_area_sid = GeographicalArea.where(geographical_area_id: geographical_area)
+                                                     .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
+                                                     .first
+                                                     .try(:geographical_area_sid)
+      end
+
+      # needs to throw errors about invalid goods nomenclature item found
+      self.goods_nomenclature_sid = GoodsNomenclature.where(goods_nomenclature_item_id: goods_nomenclature_item_id)
+                                                     .declarable
+                                                     .order(:validity_start_date.desc)
+                                                     .first
+                                                     .try(:goods_nomenclature_sid)
+
+      # assign negative, National sid before saving record
+      self.measure_sid = self.class.next_national_sid
+
+      super
+    end
+
+    def after_save
+      # traverse associations hash, create association records
+      candidate_associations_persist
+
+      super
+    end
+
+    def before_save
+      exclusion_entry = Chief::CountryGroup.where(chief_country_grp: chief_geographical_area).first
+      if exclusion_entry.present? && exclusion_entry.country_exclusions.present?
+        exclusion_entry.country_exclusions.split(",").each do |excluded_chief_code|
+          excluded_geographical_area = GeographicalArea.where(geographical_area_id: Chief::CountryCode.to_taric(excluded_chief_code))
+                                                       .latest
+                                                       .first
+
+          if excluded_geographical_area.present?
+            exclusion = MeasureExcludedGeographicalArea.new do |mega|
+              mega.geographical_area_sid = excluded_geographical_area.geographical_area_sid
+              mega.excluded_geographical_area = excluded_geographical_area.geographical_area_id
+            end
+
+            candidate_associations.push(:excluded_geographical_areas, exclusion)
+          end
+        end
+      end
+
+      super
+    end
+
     def callbacks
       assign_dates if mfcm
       assign_mfcm_attributes if mfcm
@@ -140,65 +203,6 @@ class ChiefTransformer
       @candidate_associations ||= CandidateAssociations.new(self)
     end
 
-    def before_validation
-      # set excluded_country geographical area_sid
-      # must happen after validity dates are set, depends on start date
-      self.additional_code_sid = AdditionalCode.where(additional_code_type_id: additional_code_type,
-                                                      additional_code: additional_code)
-                                               .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
-                                               .first
-                                               .try(:additional_code_sid)
-      # needs to throw errors about invalid geographical area
-      self.geographical_area_sid = GeographicalArea.where(geographical_area_id: geographical_area)
-                                                   .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
-                                                   .first
-                                                   .try(:geographical_area_sid)
-      if self.geographical_area_sid.blank?
-        self[:geographical_area] = DEFAULT_GEOGRAPHICAL_AREA_ID
-
-        self.geographical_area_sid = GeographicalArea.where(geographical_area_id: geographical_area)
-                                                     .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
-                                                     .first
-                                                     .try(:geographical_area_sid)
-      end
-
-      # needs to throw errors about invalid goods nomenclature item found
-      self.goods_nomenclature_sid = GoodsNomenclature.where(goods_nomenclature_item_id: goods_nomenclature_item_id)
-                                                     .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
-                                                     .declarable
-                                                     .order(:validity_start_date.desc)
-                                                     .first
-                                                     .try(:goods_nomenclature_sid)
-
-      # assign negative, National sid before saving record
-      self.measure_sid = self.class.next_national_sid
-
-      super
-    end
-
-    def before_save
-      # TODO move to proper place
-      exclusion_entry = Chief::CountryGroup.where(chief_country_grp: chief_geographical_area).first
-      if exclusion_entry.present? && exclusion_entry.country_exclusions.present?
-        exclusion_entry.country_exclusions.split(",").each do |excluded_chief_code|
-          excluded_geographical_area = GeographicalArea.where(geographical_area_id: Chief::CountryCode.to_taric(excluded_chief_code))
-                                                       .latest
-                                                       .first
-
-          if excluded_geographical_area.present?
-            exclusion = MeasureExcludedGeographicalArea.new do |mega|
-              mega.geographical_area_sid = excluded_geographical_area.geographical_area_sid
-              mega.excluded_geographical_area = excluded_geographical_area.geographical_area_id
-            end
-
-            candidate_associations.push(:excluded_geographical_areas, exclusion)
-          end
-        end
-      end
-
-      super
-    end
-
     def is_vat_or_excise?
       mfcm.present? && (mfcm.msrgp_code.in?(EXCISE_GROUP_CODES) || mfcm.msrgp_code.in?(VAT_GROUP_CODES))
     end
@@ -211,14 +215,8 @@ class ChiefTransformer
       mfcm.present? && (mfcm.msrgp_code.in?(RESTRICTION_GROUP_CODES))
     end
 
-    def after_save
-      # traverse associations hash, create association records
-      candidate_associations_persist
-    end
-
     private
 
-    # TODO missing setting of update type
     def build_conditions
       tamf.measure_type_conds.each do |chief_measure_condition|
         taric_measure_condition = MeasureCondition.new do |mc|

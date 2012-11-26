@@ -1,19 +1,27 @@
 require 'delegate'
 require 'singleton'
 require 'date'
-require 'logger'
 require 'sequel-rails'
 require 'chief_transformer/candidate_measure'
 require 'chief_transformer/processor'
-require 'chief_transformer/measure_logger'
+
+require 'active_support/notifications'
+require 'active_support/log_subscriber'
+
+require 'chief_transformer/logger'
+require 'chief_transformer/mailer'
 
 class ChiefTransformer
   include Singleton
 
-  class TransformException < StandardError; end
+  class TransformException < StandardError
+    attr_reader :original
 
-  cattr_accessor :logger
-  self.logger = Logger.new('log/chief_transformer.log')
+    def initialize(msg = "ChiefTransformer::TransformException", original=$!)
+      super(msg)
+      @original = original
+    end
+  end
 
   # Use update mode (the default) to process daily updates. Does not perform
   # pagination, processes MFCMs, TAMEs and TAMFs, merges them and persists.
@@ -31,35 +39,37 @@ class ChiefTransformer
   def invoke(work_mode = :update)
     raise TransformException.new("Invalid work mode, options: #{work_modes}") unless work_mode.in? work_modes
 
-    logger.info "#{Time.now} CHIEF Transformer started: #{work_mode}"
+    ActiveSupport::Notifications.instrument("start_transform.chief_transformer", mode: work_mode)
 
-    case work_mode
-    when :initial_load
-      Chief::Mfcm.each_page(per_page) do |batch|
-        candidate_measures = CandidateMeasure::Collection.new(
-          batch.map { |mfcm|
-            mfcm.tames.map{|tame|
-              if tame.tamfs.any?
-                tame.tamfs.map{|tamf|
-                  CandidateMeasure.new(mfcm: mfcm, tame: tame, tamf: tamf)
-                }
-              else
-                [CandidateMeasure.new(mfcm: mfcm, tame: tame)]
-              end
-            }
-          }.flatten.compact)
-        candidate_measures.sort
-        candidate_measures.uniq
-        candidate_measures.persist
+    ActiveSupport::Notifications.instrument("transform.chief_transformer") do
+      case work_mode
+      when :initial_load
+        Chief::Mfcm.each_page(per_page) do |batch|
+          candidate_measures = CandidateMeasure::Collection.new(
+            batch.map { |mfcm|
+              mfcm.tames.map{|tame|
+                if tame.tamfs.any?
+                  tame.tamfs.map{|tamf|
+                    CandidateMeasure.new(mfcm: mfcm, tame: tame, tamf: tamf)
+                  }
+                else
+                  [CandidateMeasure.new(mfcm: mfcm, tame: tame)]
+                end
+              }
+            }.flatten.compact)
+          candidate_measures.sort
+          candidate_measures.uniq
+          candidate_measures.persist
 
-        [Chief::Mfcm, Chief::Tame, Chief::Tamf].each{|model|
-          model.unprocessed.update(processed: true)
-        }
+          [Chief::Mfcm, Chief::Tame, Chief::Tamf].each{|model|
+            model.unprocessed.update(processed: true)
+          }
+        end
+      when :update
+        processor = Processor.new(Chief::Mfcm.unprocessed.all,
+                                  Chief::Tame.unprocessed.all)
+        processor.process
       end
-    when :update
-      processor = Processor.new(Chief::Mfcm.unprocessed.all,
-                                Chief::Tame.unprocessed.all)
-      processor.process
     end
   end
 end
