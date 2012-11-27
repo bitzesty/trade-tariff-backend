@@ -53,6 +53,7 @@ FactoryGirl.define do
     trait :with_goods_nomenclature do
       before(:create) { |mfcm|
         FactoryGirl.create :goods_nomenclature, :fifteen_years, :declarable,
+                           :with_indent,
                            goods_nomenclature_item_id: mfcm.cmdty_code
       }
     end

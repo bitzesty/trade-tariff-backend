@@ -22,6 +22,12 @@ module Sequel
               if o.validity_end_date.present? && associated_record.validity_end_date.present?
                  o.errors.add(a, error_message) if associated_record.validity_end_date < o.validity_end_date
               end
+              if o.validity_start_date.present? && associated_record.validity_end_date.present?
+                 o.errors.add(a, error_message) if associated_record.validity_end_date < o.validity_start_date
+              end
+              if o.validity_end_date.present? && associated_record.validity_start_date.present?
+                 o.errors.add(a, error_message) if associated_record.validity_start_date > o.validity_end_date
+              end
             end
           end
         end
@@ -85,7 +91,12 @@ module Sequel
 
           validates_each(*atts) do |object, association, value|
             if object.send(association).present?
-              object.errors.add(association, opts[:message] % [association]) unless object.send(opts[:ensure])
+              if opts[:ensure].present?
+                object.errors.add(association, opts[:message] % [association]) unless object.send(opts[:ensure])
+              else
+                associated_records = [object.send(association)].flatten
+                object.errors.add(association, opts[:message] % [association]) unless associated_records.all?(&:valid?)
+              end
             end
           end
         end

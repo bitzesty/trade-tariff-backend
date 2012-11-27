@@ -12,6 +12,10 @@ FactoryGirl.define do
     validity_start_date { Date.today.ago(3.years) }
     validity_end_date   { nil }
 
+    trait :national do
+      national { true }
+    end
+
     trait :with_goods_nomenclature do
       after(:create) { |measure, evaluator|
         FactoryGirl.create(:goods_nomenclature, goods_nomenclature_sid: measure.goods_nomenclature_sid,
