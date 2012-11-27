@@ -7,18 +7,20 @@ module TariffSynchronizer
 
     class << self
       def download(date)
-        taric_update_url_for(date).tap do |taric_update_url|
-          if taric_update_url.present?
-            ActiveSupport::Notifications.instrument("download_taric.tariff_synchronizer", date: date,
-                                                                                          url: taric_update_url) do
-              download_content(taric_update_url).tap { |response|
-                create_entry(date, response)
-              }
+        taric_update_urls_for(date).tap do |taric_update_urls|
+          if taric_update_urls.present?
+            taric_update_urls.each do |taric_update_url|
+              ActiveSupport::Notifications.instrument("download_taric.tariff_synchronizer", date: date,
+                                                                                            url: taric_update_url) do
+                download_content(taric_update_url).tap { |response|
+                  create_entry(date, response, "#{date}_#{response.file_name}")
+                }
+              end
             end
           # We will be retrying a few more times today, so do not create
           # missing record until we are sure
           elsif date < Date.today
-            create_update_entry(date, BaseUpdate::MISSING_STATE)
+            create_update_entry(date, BaseUpdate::MISSING_STATE, missing_update_name_for(date))
             ActiveSupport::Notifications.instrument("not_found.tariff_synchronizer", date: date,
                                                                                      url: taric_query_url_for(date))
           end
@@ -37,7 +39,7 @@ module TariffSynchronizer
         Dir[File.join(Rails.root, TariffSynchronizer.root_path, 'taric', '*.xml')].each do |file_path|
           date, file_name = parse_file_path(file_path)
 
-          create_update_entry(Date.parse(date), BaseUpdate::PENDING_STATE)
+          create_update_entry(Date.parse(date), BaseUpdate::PENDING_STATE, Pathname.new(file_path).basename.to_s)
         end
       end
     end
@@ -60,16 +62,18 @@ module TariffSynchronizer
       ActiveSupport::Notifications.instrument("get_taric_update_name.tariff_synchronizer", date: date,
                                                                                            url: taric_query_url) do
         response = download_content(taric_query_url)
-        response.content.gsub(/[^0-9a-zA-Z\.]/i, '') if response.success? && response.content_present?
+        response.content.split("\n").map{|name| name.gsub(/[^0-9a-zA-Z\.]/i, '') } if response.success? && response.content_present?
       end
     end
 
-    def self.taric_update_url_for(date)
-      update_name = taric_update_name_for(date)
+    def self.taric_update_urls_for(date)
+      update_names = taric_update_name_for(date)
 
-      if update_name.present?
-        TariffSynchronizer.taric_update_url_template % { host: TariffSynchronizer.host,
-                                                         file_name: update_name }
+      if update_names.present?
+        update_names.map {|name|
+          TariffSynchronizer.taric_update_url_template % { host: TariffSynchronizer.host,
+                                                           file_name: name }
+        }
       end
     end
 

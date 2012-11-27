@@ -228,11 +228,14 @@ class Measure < Sequel::Model
     # ME2 ME4 ME6 ME24
     presence_of :measure_type, :geographical_area_sid, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role
     # ME1
+    # TODO
     # uniqueness_of [:measure_type, :geographical_area_sid, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date]
     # ME3 ME5 ME8 ME115 ME18 ME114 ME15
+    # TODO
     # validity_date_span_of :geographical_area, :type, :goods_nomenclature, :additional_code
     # ME25
-    validity_dates
+    # TODO
+    # validity_dates
     # ME7 ME88
     # associated :goods_nomenclature, ensure: :qualified_goods_nomenclature?
     # ME10

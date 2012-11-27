@@ -83,4 +83,5 @@ class MeasureConditionComponent < Sequel::Model
   end)
 
   delegate :description, :abbreviation, to: :duty_expression, prefix: true
+  delegate :abbreviation, to: :monetary_unit, prefix: true, allow_nil: true
 end

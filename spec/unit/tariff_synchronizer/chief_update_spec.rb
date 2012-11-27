@@ -15,7 +15,7 @@ describe TariffSynchronizer::ChiefUpdate do
 
 
     context 'has permission to write update file' do
-      context 'file for the day is found' do
+      context 'single file for the day is found' do
         before do
           TariffSynchronizer.host = "http://example.com"
           prepare_synchronizer_folders
@@ -36,8 +36,8 @@ describe TariffSynchronizer::ChiefUpdate do
 
           TariffSynchronizer::ChiefUpdate.download(example_date)
 
-          File.exists?("#{TariffSynchronizer.root_path}/chief/#{example_date}_#{update_name}").should be_true
-          File.read("#{TariffSynchronizer.root_path}/chief/#{example_date}_#{update_name}").should == 'abc'
+          File.exists?("#{TariffSynchronizer.root_path}/chief/#{example_date}_#{success_response.file_name}").should be_true
+          File.read("#{TariffSynchronizer.root_path}/chief/#{example_date}_#{success_response.file_name}").should == 'abc'
         end
 
         it 'creates pending ChiefUpdate entry in the table' do
