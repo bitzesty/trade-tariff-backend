@@ -234,7 +234,7 @@ describe TariffSynchronizer::Logger do
 
     before {
       # Skip Taric update file name fetching
-      TariffSynchronizer::TaricUpdate.expects(:taric_update_url_for).returns('abc')
+      TariffSynchronizer::TaricUpdate.expects(:taric_update_urls_for).returns(['abc'])
       # Download mock response
       TariffSynchronizer::TaricUpdate.expects(:download_content).returns(success_response)
       # Do not write file to file system

@@ -126,6 +126,7 @@ module TariffSynchronizer
   # TariffSynchronizer.root_path directories.
   #
   # Warning: rebuilt updates will be marked as pending.
+  # missing or failed updates are not restored.
   def rebuild
     ActiveSupport::Notifications.instrument("rebuild.tariff_synchronizer") do
       [TaricUpdate, ChiefUpdate].map(&:rebuild)

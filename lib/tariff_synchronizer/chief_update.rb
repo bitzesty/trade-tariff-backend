@@ -9,7 +9,7 @@ module TariffSynchronizer
       def download(date)
         ActiveSupport::Notifications.instrument("download_chief.tariff_synchronizer", date: date) do
           download_content(chief_update_url_for(date)).tap { |response|
-            create_entry(date, response)
+            create_entry(date, response, "#{date}_#{response.file_name}")
           }
         end
       end
@@ -22,7 +22,7 @@ module TariffSynchronizer
         Dir[File.join(Rails.root, TariffSynchronizer.root_path, 'chief', '*.txt')].each do |file_path|
           date, file_name = parse_file_path(file_path)
 
-          create_update_entry(Date.parse(date), BaseUpdate::PENDING_STATE)
+          create_update_entry(Date.parse(date), BaseUpdate::PENDING_STATE, Pathname.new(file_path).basename.to_s)
         end
       end
 

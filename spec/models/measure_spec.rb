@@ -388,7 +388,8 @@ describe Measure do
     # ME25 If the measures end date is specified (implicitly or explicitly)
     # then the start date of the measure must be less than
     # or equal to the end date
-    it { should validate_validity_dates }
+    # TODO
+    # it { should validate_validity_dates }
     # ME7 The goods nomenclature code must be a product code; that is,
     # it may not be an intermediate line
     # ME88 The level of the goods code, if present, cannot exceed the

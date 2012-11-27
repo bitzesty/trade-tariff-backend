@@ -80,39 +80,43 @@ module TariffSynchronizer
 
       private
 
-      def create_entry(date, response)
+      def create_entry(date, response, file_name)
         if response.success? && response.content_present?
-          create_update_entry(date, PENDING_STATE)
-          write_update_file(date, response.content)
+          create_update_entry(date, PENDING_STATE, file_name)
+          write_update_file(date, response, file_name)
         elsif response.success? && !response.content_present?
-          create_update_entry(date, FAILED_STATE)
+          create_update_entry(date, FAILED_STATE, file_name)
           ActiveSupport::Notifications.instrument("blank_update.tariff_synchronizer", date: date,
                                                                                       url: response.url)
         elsif response.retry_count_exceeded?
-          create_update_entry(date, FAILED_STATE)
+          create_update_entry(date, FAILED_STATE, file_name)
           ActiveSupport::Notifications.instrument("retry_exceeded.tariff_synchronizer", date: date,
                                                                                         url: response.url)
         elsif response.not_found?
           if date < Date.today
-            create_update_entry(date, MISSING_STATE)
+            create_update_entry(date, MISSING_STATE, missing_update_name_for(date))
             ActiveSupport::Notifications.instrument("not_found.tariff_synchronizer", date: date,
                                                                                      url: response.url)
           end
         end
       end
 
-      def write_update_file(date, contents)
-        update_path = update_path(date, file_name_for(date))
+      def write_update_file(date, response, file_name)
+        update_path = update_path(date, file_name)
 
         ActiveSupport::Notifications.instrument("update_written.tariff_synchronizer", date: date,
                                                                                       path: update_path,
-                                                                                      size: contents.size) do
-          write_file(update_path, contents)
+                                                                                      size: response.content.size) do
+          write_file(update_path, response.content)
         end
       end
 
-      def create_update_entry(date, state)
-        find_or_create(filename: file_name_for(date),
+      def missing_update_name_for(date)
+        "#{date}_#{update_type}"
+      end
+
+      def create_update_entry(date, state, file_name = file_name_for(date))
+        find_or_create(filename: file_name,
                        update_type: self.name,
                        issue_date: date).update(state: state)
       end
