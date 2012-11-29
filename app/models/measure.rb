@@ -229,15 +229,15 @@ class Measure < Sequel::Model
     presence_of :measure_type, :geographical_area_sid, :goods_nomenclature_sid, :measure_generating_regulation_id, :measure_generating_regulation_role
     # ME1
     # TODO
-    # uniqueness_of [:measure_type, :geographical_area_sid, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date]
+    uniqueness_of [:measure_type, :geographical_area_sid, :goods_nomenclature_sid, :additional_code_type, :additional_code, :ordernumber, :reduction_indicator, :validity_start_date]
     # ME3 ME5 ME8 ME115 ME18 ME114 ME15
     # TODO
-    # validity_date_span_of :geographical_area, :type, :goods_nomenclature, :additional_code
+    validity_date_span_of :geographical_area, :type, :goods_nomenclature, :additional_code
     # ME25
     # TODO
-    # validity_dates
+    validity_dates
     # ME7 ME88
-    # associated :goods_nomenclature, ensure: :qualified_goods_nomenclature?
+    associated :goods_nomenclature, ensure: :qualified_goods_nomenclature?
     # ME10
     associated :quota_order_number, ensure: :quota_order_number_present?,
                                     if: :type_order_number_capture_code_permitted?
@@ -317,6 +317,15 @@ class Measure < Sequel::Model
 
   def is_ended?
     validity_end_date.present?
+  end
+
+  # Soft-deleted
+  def invalidated?
+    invalidated_by.present?
+  end
+
+  def validate
+    model.validate(self) unless self.invalidated?
   end
 
   ######### Conformance validations 430
@@ -508,6 +517,10 @@ class Measure < Sequel::Model
             national: true).
       where("validity_start_date < ?", candidate_measure.validity_start_date).
       where(validity_end_date: nil)
+    end
+
+    def non_invalidated
+      where(measures__invalidated_at: nil)
     end
   end
 

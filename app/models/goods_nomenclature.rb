@@ -113,6 +113,9 @@ class GoodsNomenclature < Sequel::Model
     actual(ExportRefundNomenclature).where(goods_nomenclature_sid: goods_nomenclature_sid)
   }
 
+  one_to_many :measures, key: :goods_nomenclature_sid,
+                         foreign_key: :goods_nomenclature_sid
+
   dataset_module do
    def declarable
       filter(producline_suffix: 80)
@@ -121,6 +124,8 @@ class GoodsNomenclature < Sequel::Model
 
   # TODO
   validates do
+    # NIG30 When a goods nomenclature is used in a goods measure then the validity period of the goods nomenclature must span the validity period of the goods measure.
+    # associated :measures, ensure: :measures_are_valid
     # NIG4
     validity_dates
   end

@@ -51,7 +51,7 @@ class ChiefTransformer
       # must happen after validity dates are set, depends on start date
       self.additional_code_sid = AdditionalCode.where(additional_code_type_id: additional_code_type,
                                                       additional_code: additional_code)
-                                               .where("validity_start_date >= ? AND (validity_end_date <= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
+                                               .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
                                                .first
                                                .try(:additional_code_sid)
       # needs to throw errors about invalid geographical area
@@ -70,6 +70,7 @@ class ChiefTransformer
 
       # needs to throw errors about invalid goods nomenclature item found
       self.goods_nomenclature_sid = GoodsNomenclature.where(goods_nomenclature_item_id: goods_nomenclature_item_id)
+                                                     .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
                                                      .declarable
                                                      .order(:validity_start_date.desc)
                                                      .first
@@ -123,6 +124,10 @@ class ChiefTransformer
       @candidate_associations = CandidateAssociations.new(self)
       # re-run the drill
       callbacks
+    end
+
+    def self.validations
+      []
     end
 
     def validate

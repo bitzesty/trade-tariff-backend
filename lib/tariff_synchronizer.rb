@@ -108,6 +108,8 @@ module TariffSynchronizer
           Sequel::Model.db.transaction do
             begin
               pending_update.apply
+
+              ::ChiefTransformer.instance.invoke(:update) if pending_update.update_type == "TariffSynchronizer::ChiefUpdate"
             rescue TaricImporter::ImportException,
                    ChiefImporter::ImportException,
                    TariffImporter::NotFound  => exception

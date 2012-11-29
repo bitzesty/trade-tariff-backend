@@ -23,9 +23,13 @@ class ChiefTransformer
       end
     end
 
-    def exception(event)
-      error "Could not transform: #{event.payload[:operation].inspect}. \n #{event.payload[:exception]} \nBacktrace: \n#{event.payload[:exception].backtrace.join("\n")}"
-      Mailer.failed_transformation_notice(event.payload[:exception], event.payload[:operation]).deliver
+    def invalid_operation(event)
+      error "Could not transform #{event.payload[:operation].inspect}. \nFailed model: #{event.payload[:model].inspect}. \nErrors: #{event.payload[:errors].inspect}. \nException: #{event.payload[:exception]}. \nBacktrace: #{event.payload[:exception].backtrace.join("\n")}"
+
+      Mailer.failed_transformation_notice(event.payload[:operation],
+                                          event.payload[:exception],
+                                          event.payload[:model],
+                                          event.payload[:errors]).deliver
     end
   end
 end

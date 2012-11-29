@@ -59,12 +59,9 @@ describe TaricImporter do
       }
 
       it 'processes updates' do
-        # update_record.xml is inserting to ExplicitAbrogationRegulation
-
-        db_stub, filter_stub, update_stub = stub(), stub(), stub()
-        ExplicitAbrogationRegulation.expects(:db).returns(db_stub)
-        db_stub.expects(:[]).returns(filter_stub)
-        filter_stub.expects(:filter).with({:explicit_abrogation_regulation_id=>"D1202470", :explicit_abrogation_regulation_role=>"7"}).returns(update_stub)
+        # update_record.xml is updating to ExplicitAbrogationRegulation
+        update_stub = stub()
+        ExplicitAbrogationRegulation.expects(:filter).returns(update_stub)
         update_stub.expects(:update).with(expected_attributes).returns(true)
 
         @importer = TaricImporter.new(update_record)
@@ -78,10 +75,8 @@ describe TaricImporter do
       it 'processes deletions' do
         # update_record.xml is inserting to ExplicitAbrogationRegulation
 
-        db_stub, filter_stub, destroy_stub = stub(), stub(), stub()
-        ExplicitAbrogationRegulation.expects(:db).returns(db_stub)
-        db_stub.expects(:[]).returns(filter_stub)
-        filter_stub.expects(:filter).with({:explicit_abrogation_regulation_id=>"D1202470", :explicit_abrogation_regulation_role=>"7"}).returns(destroy_stub)
+        destroy_stub = stub()
+        ExplicitAbrogationRegulation.expects(:filter).with({:explicit_abrogation_regulation_id=>"D1202470", :explicit_abrogation_regulation_role=>"7"}).returns(destroy_stub)
         destroy_stub.expects(:delete).returns(true)
 
         @importer = TaricImporter.new(delete_record)

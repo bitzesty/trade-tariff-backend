@@ -7,9 +7,11 @@ class ChiefTransformer
       mail subject: '[info] Successful CHIEF transformation'
     end
 
-    def failed_transformation_notice(exception, operation)
-      @exception = exception
+    def failed_transformation_notice(operation, exception, model, errors)
       @operation = operation
+      @exception = exception
+      @model = model
+      @errors = errors
 
       mail subject: '[error] Failed CHIEF transformation'
     end

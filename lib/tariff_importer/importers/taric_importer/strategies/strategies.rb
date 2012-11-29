@@ -129,6 +129,21 @@ class TaricImporter
     class QuotaUnsuspensionEvent < BaseStrategy
     end
     class GoodsNomenclature < BaseStrategy
+      # NOTE Taric update on GoodsNomenclature may result in associated national measures
+      # becoming invalid as a result of ME8 conformance validation.
+      # Therefore we do a soft delete by setting invalidated columns. No further
+      # validations will be performed on such measures. They won't be provided
+      # via API either.
+      process(:update) {
+        goods_nomenclature = klass.filter(self.attributes.slice(*primary_key).symbolize_keys).first
+        goods_nomenclature.update(self.attributes.except(*primary_key).symbolize_keys)
+        goods_nomenclature.measures_dataset.national.non_invalidated.each do |measure|
+          unless measure.valid?
+            measure.update invalidated_by: transaction_id,
+                           invalidated_at: Time.now
+          end
+        end
+      }
     end
     class GoodsNomenclatureIndent < BaseStrategy
     end

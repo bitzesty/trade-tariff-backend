@@ -3,7 +3,7 @@ module TariffSynchronizer
     attr_reader :update,
                 :file_name
 
-    delegate :apply, :issue_date, :update_priority, to: :update
+    delegate :apply, :issue_date, :update_type, :update_priority, to: :update
 
     def initialize(update)
       @file_name = update.filename

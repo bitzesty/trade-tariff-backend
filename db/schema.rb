@@ -1081,6 +1081,8 @@ Sequel.migration do
       column :updated_at, "datetime"
       column :national, "tinyint(1)"
       column :tariff_measure_number, "varchar(10)"
+      column :invalidated_by, "int(11)"
+      column :invalidated_at, "datetime"
 
       index [:additional_code_sid], :name=>:index_measures_on_additional_code_sid
       index [:geographical_area_sid], :name=>:index_measures_on_geographical_area_sid
@@ -1544,6 +1546,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20121109110125_create_update_measure_explosions.rb")
     self[:schema_migrations].insert(:filename => "20121109121107_fix_chief_last_effective_dates.rb")
     self[:schema_migrations].insert(:filename => "20121109121219_remove_invalid_measures.rb")
+    self[:schema_migrations].insert(:filename => "20121129094209_add_invalidated_columns_to_measures.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"

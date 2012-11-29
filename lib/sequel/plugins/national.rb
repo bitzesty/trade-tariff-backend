@@ -3,7 +3,7 @@ module Sequel
     module National
       module DatasetMethods
         def national
-          where("#{model.primary_key} < 0").order(model.primary_key.desc)
+          where(Sequel.qualify(model.table_name, model.primary_key) < 0).order(Sequel.qualify(model.table_name, model.primary_key).desc)
         end
       end
 

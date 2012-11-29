@@ -1,20 +1,42 @@
 <p>Hello,</p>
 
 <p>
-Trade Tariff failed to transform pending CHIEF records at <%= Time.now %>.
+Trade Tariff stumbled upon invalid CHIEF operation.
 </p>
 
 <p>
-  Changes that were possibly made by the following operation were reverted (each operation is wrapped in transaction). Operation is left in pending state.
+  The following operation was not marked as processed. Either fix it or remove the operation entry to not receive this letter again.
 </p>
 
-<p>
-  <strong>Failed operation:</strong> <%= @operation.inspect %>
-</p>
+<h3>Operation:</h3>
 
-<p>
-  <strong>Exception: <%= @exception %></strong>
-</p>
+<pre>
+  <%= @operation.inspect %>
+</pre>
+
+<% if @model.present? %>
+  <h3>Model:</h3>
+
+  <pre>
+    <%= @model.inspect %>
+  </pre>
+<% end %>
+
+<% if @errors.present? %>
+  <h3>Errors:</h3>
+
+  <pre>
+    <%= @errors.inspect %>
+  </pre>
+<% end %>
+
+<h3>Exception</h3>
+
+<pre>
+  <%= @exception %>
+</pre>
+
+<h3>Backtrace</h3>
 
 <pre>
   <%= @exception.backtrace.join("\n") %>
