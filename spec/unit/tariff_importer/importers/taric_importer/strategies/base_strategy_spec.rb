@@ -67,10 +67,8 @@ describe TaricImporter::Strategies::BaseStrategy do
         subject { TaricImporter::Strategies::ExplicitAbrogationRegulation.new(update_xml) }
 
         it 'calls Sequel record update by default' do
-          db_stub, filter_stub, update_stub = stub(), stub(), stub()
-          ExplicitAbrogationRegulation.expects(:db).returns(db_stub)
-          db_stub.expects(:[]).returns(filter_stub)
-          filter_stub.expects(:filter).returns(update_stub)
+          update_stub = stub()
+          ExplicitAbrogationRegulation.expects(:filter).returns(update_stub)
           update_stub.expects(:update).returns(true)
 
           subject.process!
@@ -86,10 +84,8 @@ describe TaricImporter::Strategies::BaseStrategy do
         subject { TaricImporter::Strategies::ExplicitAbrogationRegulation.new(delete_xml) }
 
         it 'calls Sequel record deletion by default' do
-          db_stub, filter_stub, destroy_stub = stub(), stub(), stub()
-          ExplicitAbrogationRegulation.expects(:db).returns(db_stub)
-          db_stub.expects(:[]).returns(filter_stub)
-          filter_stub.expects(:filter).returns(destroy_stub)
+          destroy_stub = stub()
+          ExplicitAbrogationRegulation.expects(:filter).returns(destroy_stub)
           destroy_stub.expects(:delete).returns(true)
 
           subject.process!

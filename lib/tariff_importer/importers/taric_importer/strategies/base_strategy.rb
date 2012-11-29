@@ -3,12 +3,14 @@ class TaricImporter
     class BaseStrategy
       include TaricImporter::Helpers::StringHelper
 
-      attr_accessor :xml, :operation, :processor, :attributes, :record_attributes
+      attr_accessor :xml, :operation, :processor, :attributes, :record_attributes,
+                    :klass, :primary_key, :transaction_id
 
       def initialize(xml)
         self.xml = xml
         self.operation = xml.xpath("record/update.type").text
         self.attributes = xml.xpath("record/update.type/following-sibling::*").first.children
+        self.transaction_id = xml.xpath("record/transaction.id").text
         self.record_attributes = {
           record_code: xml.xpath("record/record.code").text,
           subrecord_code: xml.xpath("record/subrecord.code").text,
@@ -36,6 +38,9 @@ class TaricImporter
       def processors; self.class.processors; end
 
       def process!
+        @klass = "::#{self.class.name.demodulize}".constantize
+        @primary_key = [klass.primary_key].flatten.map(&:to_s)
+
         # execute either defined or default strategy process action
         if processors.has_key?(operation) &&
            processors[operation].is_a?(Proc)
@@ -50,17 +55,14 @@ class TaricImporter
       private
 
       def default_process
-        klass = "::#{self.class.name.demodulize}".constantize
-        primary_key = [klass.primary_key].flatten.map(&:to_s)
-
         case operation
         when :insert
           klass.model.insert(self.attributes)
         when :delete
-          klass.db[klass.table_name].filter(self.attributes.slice(*primary_key).symbolize_keys).delete
+          klass.filter(self.attributes.slice(*primary_key).symbolize_keys).delete
         when :update
-          klass.db[klass.table_name].filter(self.attributes.slice(*primary_key).symbolize_keys)
-                                    .update(self.attributes.symbolize_keys)
+          klass.filter(self.attributes.slice(*primary_key).symbolize_keys)
+               .update(self.attributes.symbolize_keys)
         end
       end
 

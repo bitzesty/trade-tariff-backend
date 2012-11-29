@@ -319,6 +319,15 @@ class Measure < Sequel::Model
     validity_end_date.present?
   end
 
+  # Soft-deleted
+  def invalidated?
+    invalidated_by.present?
+  end
+
+  def validate
+    model.validate(self) unless self.invalidated?
+  end
+
   ######### Conformance validations 430
   # def validate
     # super
@@ -508,6 +517,10 @@ class Measure < Sequel::Model
             national: true).
       where("validity_start_date < ?", candidate_measure.validity_start_date).
       where(validity_end_date: nil)
+    end
+
+    def non_invalidated
+      where(measures__invalidated_at: nil)
     end
   end
 

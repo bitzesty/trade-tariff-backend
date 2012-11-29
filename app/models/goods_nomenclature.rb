@@ -113,6 +113,9 @@ class GoodsNomenclature < Sequel::Model
     actual(ExportRefundNomenclature).where(goods_nomenclature_sid: goods_nomenclature_sid)
   }
 
+  one_to_many :measures, key: :goods_nomenclature_sid,
+                         foreign_key: :goods_nomenclature_sid
+
   dataset_module do
    def declarable
       filter(producline_suffix: 80)
