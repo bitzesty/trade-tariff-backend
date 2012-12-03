@@ -23,18 +23,23 @@ class GoodsNomenclature < Sequel::Model
   set_primary_key :goods_nomenclature_sid
 
   one_to_one :goods_nomenclature_indent, dataset: -> {
-    actual(GoodsNomenclatureIndent).filter(goods_nomenclature_sid: goods_nomenclature_sid)
-                                   .order(:validity_start_date.desc)
+    actual(GoodsNomenclatureIndent).select_all(:goods_nomenclature_indents)
+                                .where(goods_nomenclature_indents__goods_nomenclature_sid: goods_nomenclature_sid)
+                                .order(:goods_nomenclature_indents__validity_start_date.desc)
+                                .from_self(alias: :indents)
+                                .group(:indents__goods_nomenclature_sid)
   }, eager_loader: (proc do |eo|
     eo[:rows].each{|gono| gono.associations[:goods_nomenclature_indent] = nil}
 
     id_map = eo[:id_map]
 
-    GoodsNomenclatureIndent.actual
-                           .where(goods_nomenclature_sid: id_map.keys)
-                           .order(:validity_start_date.desc)
-                           .group(:goods_nomenclature_sid)
-                           .all do |indent|
+  GoodsNomenclatureIndent.actual
+                         .select_all(:goods_nomenclature_indents)
+                         .where(goods_nomenclature_indents__goods_nomenclature_sid: id_map.keys)
+                         .order(:goods_nomenclature_indents__validity_start_date.desc)
+                         .from_self(alias: :indents)
+                         .group(:indents__goods_nomenclature_sid)
+                         .all do |indent|
       if gonos = id_map[indent.goods_nomenclature_sid]
         gonos.each do |gono|
           gono.associations[:goods_nomenclature_indent] = indent

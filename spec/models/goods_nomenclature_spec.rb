@@ -10,9 +10,12 @@ describe GoodsNomenclature do
                                                                   validity_end_date: nil }
       let!(:goods_nomenclature_indent2)        { create :goods_nomenclature_indent,
                                                             goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
+                                                            validity_start_date: 6.years.ago,
+                                                            validity_end_date: 3.years.ago }
+      let!(:goods_nomenclature_indent3)        { create :goods_nomenclature_indent,
+                                                            goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
                                                             validity_start_date: 5.years.ago,
                                                             validity_end_date: 3.years.ago }
-
       context 'direct loading' do
         it 'loads correct indent respecting given actual time' do
           TimeMachine.now do
@@ -26,7 +29,7 @@ describe GoodsNomenclature do
           end
 
           TimeMachine.at(4.years.ago) do
-            goods_nomenclature.reload.goods_nomenclature_indent.pk.should == goods_nomenclature_indent2.pk
+            goods_nomenclature.reload.goods_nomenclature_indent.pk.should == goods_nomenclature_indent3.pk
           end
         end
       end
@@ -56,7 +59,7 @@ describe GoodsNomenclature do
                           .eager(:goods_nomenclature_indent)
                           .all
                           .first
-                          .goods_nomenclature_indent.pk.should == goods_nomenclature_indent2.pk
+                          .goods_nomenclature_indent.pk.should == goods_nomenclature_indent3.pk
           end
         end
       end
