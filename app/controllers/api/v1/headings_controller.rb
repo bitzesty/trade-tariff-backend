@@ -32,7 +32,9 @@ module Api
                                                       :measure_partial_temporary_stop).all, @heading).validate!
         else
           @commodities = GoodsNomenclatureMapper.new(@heading.commodities_dataset.eager(:goods_nomenclature_indent,
-                                                                                        :goods_nomenclature_description).all).all
+                                                                                        :goods_nomenclature_description)
+                                                             .all
+                                                             .delete_if{|c| c.goods_nomenclature_item_id =~ HiddenGoodsNomenclature.to_pattern}).all
 
         end
 
