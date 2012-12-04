@@ -13,6 +13,10 @@ describe Chapter do
       let!(:heading3) { create :heading, goods_nomenclature_item_id: "#{chapter.goods_nomenclature_item_id.first(2)}30000000",
                                          validity_start_date: 10.years.ago,
                                          validity_end_date: 8.years.ago }
+      let!(:heading4) { create :heading, goods_nomenclature_item_id: "#{chapter.goods_nomenclature_item_id.first(2)}40000000",
+                                         validity_start_date: 10.years.ago,
+                                         validity_end_date: nil }
+      let!(:hidden_gono)  { create :hidden_goods_nomenclature, goods_nomenclature_item_id: heading4.goods_nomenclature_item_id }
 
       around(:each) do |example|
         TimeMachine.at(1.year.ago) do
@@ -30,6 +34,10 @@ describe Chapter do
 
       it 'does not return heading that is irrelevant to given time' do
         chapter.headings.should_not include heading3
+      end
+
+      it 'does not include hidden commodity' do
+        chapter.headings.should_not include heading4
       end
     end
   end

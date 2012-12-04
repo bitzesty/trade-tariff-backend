@@ -14,6 +14,7 @@ class Heading < GoodsNomenclature
 
   one_to_many :commodities, dataset: -> {
     actual(Commodity).filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
+                     .where(~{goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes })
   }
 
   one_to_one :chapter, dataset: -> {

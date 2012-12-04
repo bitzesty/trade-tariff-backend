@@ -3,12 +3,9 @@ require 'goods_nomenclature_mapper'
 module Api
   module V1
     class HeadingsController < ApplicationController
-      def show
-        @heading = Heading.actual
-                          .non_grouping
-                          .where(goods_nomenclatures__goods_nomenclature_item_id: heading_id)
-                          .take
+      before_filter :find_heading, only: [:show]
 
+      def show
         if @heading.declarable?
           @measures = MeasurePresenter.new(@heading.measures_dataset.eager({geographical_area: [:geographical_area_description, :children_geographical_areas]},
                                                       {footnotes: :footnote_description},
@@ -32,11 +29,23 @@ module Api
                                                       :measure_partial_temporary_stop).all, @heading).validate!
         else
           @commodities = GoodsNomenclatureMapper.new(@heading.commodities_dataset.eager(:goods_nomenclature_indent,
-                                                                                        :goods_nomenclature_description).all).all
+                                                                                        :goods_nomenclature_description)
+                                                             .all).all
 
         end
 
         respond_with @heading
+      end
+
+      private
+
+      def find_heading
+        @heading = Heading.actual
+                          .non_grouping
+                          .where(goods_nomenclatures__goods_nomenclature_item_id: heading_id)
+                          .take
+
+        raise Sequel::RecordNotFound if @heading.goods_nomenclature_item_id.in? HiddenGoodsNomenclature.codes
       end
 
       def heading_id

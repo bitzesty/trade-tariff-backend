@@ -19,6 +19,13 @@ namespace :tariff do
       ENV['CLASS'] = klass
       Rake::Task['tire:import'].execute
     end
+
+    # Remove hidden goods nomenclatures
+    # TODO: is there a better solution?
+
+    GoodsNomenclature.where(goods_nomenclature_item_id: HiddenGoodsNomenclature.codes).all.each do |gono|
+      gono.class.tire.index.remove gono
+    end
   end
 
   desc 'Download and apply Taric and CHIEF data'

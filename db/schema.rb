@@ -808,6 +808,12 @@ Sequel.migration do
       index [:goods_nomenclature_sid], :name=>:primary_key, :unique=>true
     end
 
+    create_table(:hidden_goods_nomenclatures) do
+      column :goods_nomenclature_item_id, "varchar(255)"
+      column :updated_at, "datetime"
+      column :created_at, "datetime"
+    end
+
     create_table(:language_descriptions) do
       column :language_code_id, "varchar(255)"
       column :language_id, "varchar(5)"
@@ -1547,6 +1553,8 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20121109121107_fix_chief_last_effective_dates.rb")
     self[:schema_migrations].insert(:filename => "20121109121219_remove_invalid_measures.rb")
     self[:schema_migrations].insert(:filename => "20121129094209_add_invalidated_columns_to_measures.rb")
+    self[:schema_migrations].insert(:filename => "20121204130816_create_hidden_goods_nomenclatures.rb")
+    self[:schema_migrations].insert(:filename => "20121204143748_add_hidden_commodities.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"

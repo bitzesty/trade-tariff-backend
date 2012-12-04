@@ -1,13 +1,9 @@
 module Api
   module V1
     class CommoditiesController < ApplicationController
+      before_filter :find_commodity, only: [:show]
 
       def show
-        @commodity = Commodity.actual
-                              .declarable
-                              .by_code(params[:id])
-                              .take
-
         @measures = MeasurePresenter.new(@commodity.measures_dataset.eager({geographical_area: [:geographical_area_description, :children_geographical_areas]},
                                                       {footnotes: :footnote_description},
                                                       {type: :measure_type_description},
@@ -30,6 +26,17 @@ module Api
                                                       :measure_partial_temporary_stop).all, @commodity).validate!
 
         respond_with @commodity
+      end
+
+      private
+
+      def find_commodity
+        @commodity = Commodity.actual
+                              .declarable
+                              .by_code(params[:id])
+                              .take
+
+        raise Sequel::RecordNotFound if @commodity.goods_nomenclature_item_id.in? HiddenGoodsNomenclature.codes
       end
     end
   end

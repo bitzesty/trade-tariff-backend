@@ -21,8 +21,22 @@ describe Api::V1::HeadingsController, "GET #show" do
     context 'when record is present' do
       it 'returns rendered record' do
         get :show, id: heading, format: :json
-
         response.body.should match_json_expression pattern
+      end
+    end
+
+    context 'when record is present and commodity has hidden commodities' do
+      let!(:commodity1) { create :commodity, :with_indent, :with_description, :with_chapter, :declarable, goods_nomenclature_item_id: "#{heading.short_code}010000"}
+      let!(:commodity2) { create :commodity, :with_indent, :with_description, :with_chapter, :declarable, goods_nomenclature_item_id: "#{heading.short_code}020000"}
+
+      let!(:hidden_goods_nomenclature) { create :hidden_goods_nomenclature, goods_nomenclature_item_id: commodity2.goods_nomenclature_item_id }
+
+      it 'does not include hidden commodities in the response' do
+        get :show, id: heading, format: :json
+
+        body = JSON.parse(response.body)
+        body["commodities"].map{|c| c["goods_nomenclature_item_id"] }.should     include commodity1.goods_nomenclature_item_id
+        body["commodities"].map{|c| c["goods_nomenclature_item_id"] }.should_not include commodity2.goods_nomenclature_item_id
       end
     end
 
@@ -59,6 +73,14 @@ describe Api::V1::HeadingsController, "GET #show" do
     context 'when record is not present' do
       it 'returns not found if record was not found' do
         expect { get :show, id: "1234", format: :json }.to raise_error Sequel::RecordNotFound
+      end
+    end
+
+    context 'when record is hidden' do
+      let!(:hidden_goods_nomenclature) { create :hidden_goods_nomenclature, goods_nomenclature_item_id: heading.goods_nomenclature_item_id }
+
+      it 'returns not found' do
+        expect { get :show, id: heading.goods_nomenclature_item_id.first(4), format: :json }.to raise_error Sequel::RecordNotFound
       end
     end
   end

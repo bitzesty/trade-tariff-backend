@@ -27,4 +27,12 @@ describe Api::V1::ChaptersController, "GET #show" do
       expect { get :show, id: "55", format: :json }.to raise_error Sequel::RecordNotFound
     end
   end
+
+  context 'when record is hidden' do
+    let!(:hidden_goods_nomenclature) { create :hidden_goods_nomenclature, goods_nomenclature_item_id: chapter.goods_nomenclature_item_id }
+
+    it 'returns not found' do
+      expect { get :show, id: chapter.goods_nomenclature_item_id.first(2), format: :json }.to raise_error Sequel::RecordNotFound
+    end
+  end
 end

@@ -122,8 +122,12 @@ class GoodsNomenclature < Sequel::Model
                          foreign_key: :goods_nomenclature_sid
 
   dataset_module do
-   def declarable
+    def declarable
       filter(producline_suffix: 80)
+    end
+
+    def non_hidden
+      filter(~{goods_nomenclature_item_id: HiddenGoodsNomenclature.codes})
     end
   end
 
@@ -156,3 +160,6 @@ class GoodsNomenclature < Sequel::Model
   end
 end
 
+require 'heading'
+require 'chapter'
+require 'commodity'
