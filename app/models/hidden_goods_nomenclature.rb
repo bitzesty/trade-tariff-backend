@@ -8,6 +8,12 @@ class HiddenGoodsNomenclature < Sequel::Model
   end
 
   def self.to_pattern
-    /^(#{all.map(&:goods_code_identifier).join("|")})/
+    all.tap! { |patterns|
+      if patterns.any?
+        /^(#{patterns.map(&:goods_code_identifier).join("|")})/
+      else
+        /(?!.*)/ # does not match anything
+      end
+    }
   end
 end
