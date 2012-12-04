@@ -160,3 +160,6 @@ class GoodsNomenclature < Sequel::Model
   end
 end
 
+require 'heading'
+require 'chapter'
+require 'commodity'

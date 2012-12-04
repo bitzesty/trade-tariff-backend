@@ -22,8 +22,9 @@ namespace :tariff do
 
     # Remove hidden goods nomenclatures
     # TODO: is there a better solution?
-    GoodsNomenclature.where(goods_nomenclature_item_id: HiddenGoodsNomenclature.codes).each do |gono|
-      gono.class.tire.index.remove gono.goods_nomenclature_sid
+
+    GoodsNomenclature.where(goods_nomenclature_item_id: HiddenGoodsNomenclature.codes).all.each do |gono|
+      gono.class.tire.index.remove gono
     end
   end
 
