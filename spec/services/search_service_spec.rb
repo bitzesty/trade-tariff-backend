@@ -81,7 +81,7 @@ describe SearchService do
 
     context 'commodities' do
       let(:commodity) { create :commodity, :declarable }
-      let(:heading) { create :heading, :declarable }
+      let(:heading)   { create :heading, :declarable }
       let(:commodity_pattern) {
         {
           type: 'exact_match',
@@ -145,6 +145,30 @@ describe SearchService do
                                    as_of: Date.today).to_json
 
         result.should match_json_expression heading_pattern
+      end
+    end
+
+    context 'hidden commodities' do
+      let!(:commodity)    { create :commodity, :declarable }
+      let!(:hidden_gono)  { create :hidden_goods_nomenclature, goods_nomenclature_item_id: commodity.goods_nomenclature_item_id }
+
+      let(:commodity_pattern) {
+        {
+          type: 'exact_match',
+          entry: {
+            endpoint: 'commodities',
+            id: commodity.goods_nomenclature_item_id.first(10)
+          }
+        }
+      }
+
+      before {
+        @result = SearchService.new(t: commodity.goods_nomenclature_item_id.first(10),
+                                    as_of: Date.today).to_json
+      }
+
+      it 'does not return hidden commodity as exact match' do
+        @result.should_not match_json_expression commodity_pattern
       end
     end
   end

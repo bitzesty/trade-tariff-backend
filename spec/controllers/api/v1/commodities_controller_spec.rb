@@ -34,7 +34,7 @@ describe Api::V1::CommoditiesController, "GET #show" do
   end
 
   context 'when record is hidden' do
-    let!(:hidden_goods_nomenclature) { create :hidden_goods_nomenclature, goods_code_identifier: commodity.goods_nomenclature_item_id }
+    let!(:hidden_goods_nomenclature) { create :hidden_goods_nomenclature, goods_nomenclature_item_id: commodity.goods_nomenclature_item_id }
 
     it 'returns not found' do
       expect { get :show, id: commodity.goods_nomenclature_item_id, format: :json }.to raise_error Sequel::RecordNotFound

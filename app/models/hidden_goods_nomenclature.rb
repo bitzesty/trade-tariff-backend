@@ -1,19 +1,13 @@
 class HiddenGoodsNomenclature < Sequel::Model
   plugin :timestamps
 
-  set_dataset order(:goods_code_identifier.asc)
+  set_dataset order(:goods_nomenclature_item_id.asc)
 
   validates do
-    presence_of :goods_code_identifier
+    presence_of :goods_nomenclature_item_id
   end
 
-  def self.to_pattern
-    all.tap! { |patterns|
-      if patterns.any?
-        /^(#{patterns.map(&:goods_code_identifier).join("|")})/
-      else
-        /(?!.*)/ # does not match anything
-      end
-    }
+  def self.codes
+    all.map(&:goods_nomenclature_item_id)
   end
 end

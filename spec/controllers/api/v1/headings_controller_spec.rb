@@ -29,7 +29,7 @@ describe Api::V1::HeadingsController, "GET #show" do
       let!(:commodity1) { create :commodity, :with_indent, :with_description, :with_chapter, :declarable, goods_nomenclature_item_id: "#{heading.short_code}010000"}
       let!(:commodity2) { create :commodity, :with_indent, :with_description, :with_chapter, :declarable, goods_nomenclature_item_id: "#{heading.short_code}020000"}
 
-      let!(:hidden_goods_nomenclature) { create :hidden_goods_nomenclature, goods_code_identifier: commodity2.goods_nomenclature_item_id }
+      let!(:hidden_goods_nomenclature) { create :hidden_goods_nomenclature, goods_nomenclature_item_id: commodity2.goods_nomenclature_item_id }
 
       it 'does not include hidden commodities in the response' do
         get :show, id: heading, format: :json
