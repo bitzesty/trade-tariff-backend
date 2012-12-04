@@ -75,5 +75,13 @@ describe Api::V1::HeadingsController, "GET #show" do
         expect { get :show, id: "1234", format: :json }.to raise_error Sequel::RecordNotFound
       end
     end
+
+    context 'when record is hidden' do
+      let!(:hidden_goods_nomenclature) { create :hidden_goods_nomenclature, goods_nomenclature_item_id: heading.goods_nomenclature_item_id }
+
+      it 'returns not found' do
+        expect { get :show, id: heading.goods_nomenclature_item_id.first(4), format: :json }.to raise_error Sequel::RecordNotFound
+      end
+    end
   end
 end
