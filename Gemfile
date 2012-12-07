@@ -10,6 +10,7 @@ gem "rabl", "0.7.6"
 gem "sequel"
 gem "nulogy-sequel-rails", "0.3.9"
 gem "tire"
+gem "addressable"
 
 gem "builder"
 gem "jquery-rails", "1.0.19"
