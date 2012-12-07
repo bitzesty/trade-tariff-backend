@@ -238,7 +238,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  addressable
+  addressable (= 2.3.2)
   aws-ses
   bootstrap-sass
   brakeman (= 1.7.0)

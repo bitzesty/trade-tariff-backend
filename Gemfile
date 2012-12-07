@@ -3,6 +3,7 @@ source "https://gems.gemfury.com/vo6ZrmjBQu5szyywDszE/"
 
 gem "rails", "3.2.8"
 
+gem "addressable", "2.3.2"
 gem "mysql2"
 gem "multi_json"
 gem "yajl-ruby", require: "yajl"
@@ -10,7 +11,6 @@ gem "rabl", "0.7.6"
 gem "sequel"
 gem "nulogy-sequel-rails", "0.3.9"
 gem "tire"
-gem "addressable"
 
 gem "builder"
 gem "jquery-rails", "1.0.19"
