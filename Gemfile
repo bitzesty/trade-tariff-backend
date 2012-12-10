@@ -18,7 +18,7 @@ gem "plek", "0.5.0"
 gem "railties"
 
 gem "unicorn", "4.3.1"
-gem "curb"
+gem "curb", "0.8.3"
 
 gem "nokogiri", "1.5.4"
 

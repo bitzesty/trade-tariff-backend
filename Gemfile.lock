@@ -63,7 +63,7 @@ GEM
       builder (>= 2.1.2)
     coderay (1.0.7)
     crack (0.3.1)
-    curb (0.8.1)
+    curb (0.8.3)
     diff-lcs (1.1.3)
     erubis (2.7.0)
     exception_notification (2.6.1)
@@ -245,7 +245,7 @@ DEPENDENCIES
   builder
   capistrano
   ci_reporter
-  curb
+  curb (= 0.8.3)
   exception_notification
   factory_girl_rails
   forgery
