@@ -144,6 +144,17 @@ class TaricImporter
           end
         end
       }
+
+      process(:delete) {
+        goods_nomenclature = klass.filter(self.attributes.slice(*primary_key).symbolize_keys).first
+        goods_nomenclature.delete
+        goods_nomenclature.measures_dataset.national.non_invalidated.each do |measure|
+          if measure.goods_nomenclature.blank?
+            measure.update invalidated_by: transaction_id,
+                           invalidated_at: Time.now
+          end
+        end
+      }
     end
     class GoodsNomenclatureIndent < BaseStrategy
     end
