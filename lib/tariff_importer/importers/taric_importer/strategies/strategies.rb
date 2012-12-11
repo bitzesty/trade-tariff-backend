@@ -137,8 +137,23 @@ class TaricImporter
       process(:update) {
         goods_nomenclature = klass.filter(self.attributes.slice(*primary_key).symbolize_keys).first
         goods_nomenclature.update(self.attributes.except(*primary_key).symbolize_keys)
-        goods_nomenclature.measures_dataset.national.non_invalidated.each do |measure|
+        ::Measure.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+               .national
+               .non_invalidated.each do |measure|
           unless measure.valid?
+            measure.update invalidated_by: transaction_id,
+                           invalidated_at: Time.now
+          end
+        end
+      }
+
+      process(:delete) {
+        goods_nomenclature = klass.filter(self.attributes.slice(*primary_key).symbolize_keys).first
+        goods_nomenclature.delete
+        ::Measure.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+               .national
+               .non_invalidated.each do |measure|
+          if measure.goods_nomenclature.blank?
             measure.update invalidated_by: transaction_id,
                            invalidated_at: Time.now
           end

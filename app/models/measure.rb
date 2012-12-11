@@ -292,6 +292,7 @@ class Measure < Sequel::Model
   delegate :related_to_measure_type?, :meursing?, :non_meursing?, :export_refund?, :export_refund_agricultural?, to: :adco_type, prefix: :adco_type, allow_nil: true
   delegate :quota_order_number_origin_present?, :blank?, to: :quota_order_number, prefix: true, allow_nil: true
   delegate :base_regulation_not_completely_abrogated?, to: :modification_regulation, prefix: true, allow_nil: true
+  delegate :validity_end_date, to: :goods_nomenclature, prefix: true, allow_nil: true
 
   def regulation_is_not_replaced?
     RegulationReplacement.where(replaced_regulation_id: measure_generating_regulation_id,
@@ -581,6 +582,10 @@ class Measure < Sequel::Model
 
   def suspending_regulation
     full_temporary_stop_regulation.presence || measure_partial_temporary_stop
+  end
+
+  def associated_to_non_open_ended_gono?
+    goods_nomenclature.present? && goods_nomenclature.validity_end_date.present?
   end
 end
 

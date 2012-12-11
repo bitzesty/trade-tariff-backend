@@ -70,4 +70,72 @@ describe 'CHIEF: Custom scenarions' do
       end
     end
   end
+
+  describe 'Scenario: TARIC deletion invalidates CHIEF measures' do
+    let!(:measure_type)       { create :measure_type, measure_type_id: 'CVD' }
+    let!(:geographical_area)  { create :geographical_area, :erga_omnes }
+    let!(:goods_nomenclature) { create :goods_nomenclature, :declarable,
+                                                            :with_indent,
+                                                            goods_nomenclature_item_id: "0305720040",
+                                                            goods_nomenclature_sid: 96196,
+                                                            validity_start_date: DateTime.parse("2012-01-01 00:00:00 -0700"),
+                                                            validity_end_date: nil }
+    let!(:goods_nomenclature_indent) { create :goods_nomenclature_indent, number_indents: 10,
+                                                                          validity_start_date: DateTime.parse("2012-01-01 00:00:00 -0700"),
+                                                                          goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
+                                                                          goods_nomenclature_item_id: goods_nomenclature.goods_nomenclature_item_id }
+    let(:national_measure) { create :measure, :national, :with_base_regulation,
+                                                         measure_type: measure_type.measure_type_id,
+                                                         geographical_area_id: geographical_area.geographical_area_id,
+                                                         geographical_area_sid: geographical_area.geographical_area_sid,
+                                                         goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
+                                                         goods_nomenclature_item_id: goods_nomenclature.goods_nomenclature_item_id,
+                                                         tariff_measure_number: goods_nomenclature.goods_nomenclature_item_id,
+                                                         validity_start_date: DateTime.parse("2012-07-01 00:00:00 +0200")   }
+
+    specify 'national measure is valid before update' do
+      national_measure.valid?.should be_true
+    end
+
+    context 'Taric update occurs' do
+      let(:transaction_id) { 13590603 }
+
+      # Goods Nomenclature deletion Makes national measures invalid.
+      def perform_transaction()
+        transaction_xml = Nokogiri::XML.parse(%Q{
+          <oub:record>
+            <oub:transaction.id>#{transaction_id}</oub:transaction.id>
+            <oub:record.code>400</oub:record.code>
+            <oub:subrecord.code>00</oub:subrecord.code>
+            <oub:record.sequence.number>105</oub:record.sequence.number>
+            <oub:update.type>2</oub:update.type>
+            <oub:goods.nomenclature>
+              <oub:goods.nomenclature.sid>96196</oub:goods.nomenclature.sid>
+              <oub:goods.nomenclature.item.id>0305720040</oub:goods.nomenclature.item.id>
+              <oub:producline.suffix>80</oub:producline.suffix>
+              <oub:validity.start.date>2012-01-01</oub:validity.start.date>
+              <oub:statistical.indicator>0</oub:statistical.indicator>
+            </oub:goods.nomenclature>
+          </oub:record>
+        })
+        transaction_xml.remove_namespaces!
+
+        TaricImporter::Strategies::GoodsNomenclature.new(transaction_xml).process!
+      end
+
+      before {
+        national_measure
+
+        perform_transaction
+      }
+
+      specify 'sets national measures invalidate_by to Taric transaction number' do
+        national_measure.reload.invalidated_by.should eq transaction_id
+      end
+
+      specify 'deletes goods nomenclature' do
+        expect { goods_nomenclature.reload }.to raise_error Sequel::Error
+      end
+    end
+  end
 end
