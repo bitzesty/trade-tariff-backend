@@ -62,5 +62,14 @@ describe TariffSynchronizer::FileService do
 
       subject.download_content(example_url).should == error_response
     end
+
+    it "will abort send_request if it gets too many HostResolutionErrors" do
+      # Very promiscuous knowledge of the internals here!
+      Curl::Easy.any_instance.stubs(:perform).raises(Curl::Err::HostResolutionError)
+
+      expect {
+        subject.download_content(example_url)
+      }.to raise_error(StandardError)
+    end
   end
 end
