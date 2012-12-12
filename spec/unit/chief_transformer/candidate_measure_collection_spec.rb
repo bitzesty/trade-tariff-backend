@@ -60,4 +60,95 @@ describe ChiefTransformer::CandidateMeasure::Collection do
       end
     end
   end
+
+  describe "#uniq" do
+    context 'different validity end dates' do
+      let!(:mfcm) { create :mfcm, :unprocessed,
+                                  cmdty_code: '8452300000',
+                                  msrgp_code: 'VT',
+                                  msr_type: 'S',
+                                  tty_code: 'B00',
+                                  fe_tsmp: DateTime.new(2012,1,1) }
+
+      let!(:tame1) { create :tame, :unprocessed,
+                                   fe_tsmp: DateTime.new(2007,10,1),
+                                   le_tsmp: DateTime.new(2008,12,1),
+                                   msrgp_code: 'VT',
+                                   msr_type: 'S',
+                                   tty_code: 'B00' }
+
+      let!(:tame2) { create :tame, :unprocessed,
+                                   fe_tsmp: DateTime.new(2008,12,1),
+                                   le_tsmp: DateTime.new(2010,1,1),
+                                   msrgp_code: 'VT',
+                                   msr_type: 'S',
+                                   tty_code: 'B00' }
+
+      let!(:tame3) { create :tame, :unprocessed,
+                                   fe_tsmp: DateTime.new(2010,1,1),
+                                   le_tsmp: DateTime.new(2011,1,4),
+                                   msrgp_code: 'VT',
+                                   msr_type: 'S',
+                                   tty_code: 'B00' }
+
+      let!(:tame4) { create :tame, :unprocessed,
+                                   fe_tsmp: DateTime.new(2011,1,4),
+                                   msrgp_code: 'VT',
+                                   msr_type: 'S',
+                                   tty_code: 'B00' }
+
+      let(:candidate_measures) {
+        ChiefTransformer::CandidateMeasure::Collection.new(mfcm.tames.map{|tame|
+          ChiefTransformer::CandidateMeasure.new(mfcm: mfcm, tame: tame)
+        })
+      }
+
+      it 'validity end dates differentiate measures' do
+        candidate_measures.uniq.size.should eq mfcm.tames.size
+      end
+    end
+
+    context 'same validity end dates' do
+      let!(:mfcm) { create :mfcm, :unprocessed,
+                                  cmdty_code: '8452300000',
+                                  msrgp_code: 'VT',
+                                  msr_type: 'S',
+                                  tty_code: 'B00',
+                                  fe_tsmp: DateTime.new(2012,1,1) }
+
+      let!(:tame1) { create :tame, :unprocessed,
+                                   fe_tsmp: DateTime.new(2007,10,1),
+                                   msrgp_code: 'VT',
+                                   msr_type: 'S',
+                                   tty_code: 'B00' }
+
+      let!(:tame2) { create :tame, :unprocessed,
+                                   fe_tsmp: DateTime.new(2008,12,1),
+                                   msrgp_code: 'VT',
+                                   msr_type: 'S',
+                                   tty_code: 'B00' }
+
+      let!(:tame3) { create :tame, :unprocessed,
+                                   fe_tsmp: DateTime.new(2010,1,1),
+                                   msrgp_code: 'VT',
+                                   msr_type: 'S',
+                                   tty_code: 'B00' }
+
+      let!(:tame4) { create :tame, :unprocessed,
+                                   fe_tsmp: DateTime.new(2011,1,4),
+                                   msrgp_code: 'VT',
+                                   msr_type: 'S',
+                                   tty_code: 'B00' }
+
+      let(:candidate_measures) {
+        ChiefTransformer::CandidateMeasure::Collection.new(mfcm.tames.map{|tame|
+          ChiefTransformer::CandidateMeasure.new(mfcm: mfcm, tame: tame)
+        })
+      }
+
+      it 'removes duplicate measures' do
+        candidate_measures.uniq.size.should eq 1
+      end
+    end
+  end
 end

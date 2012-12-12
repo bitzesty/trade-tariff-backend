@@ -25,9 +25,6 @@ class TaricImporter
   cattr_accessor :transaction_node
   self.transaction_node = 'env:transaction'
 
-  cattr_accessor :ignored_strategies
-  self.ignored_strategies = %w()
-
   attr_reader :path
 
   def initialize(path)
@@ -48,10 +45,7 @@ class TaricImporter
                 begin
                   node_name = mxml.xpath("record/update.type/following-sibling::*").first.node_name
                   record_type = strategy_for(node_name)
-
-                  unless self.ignored_strategies.include?(record_type)
-                    record_type.constantize.new(mxml).process!
-                  end
+                  record_type.constantize.new(mxml).process!
                 rescue NameError => exception
                   ActiveSupport::Notifications.instrument("taric_failed.tariff_importer", exception: exception,
                                                                                           xml: mxml)
