@@ -45,7 +45,7 @@ module TariffSynchronizer
 
       private
 
-      def send_request(url)
+      def send_request(url, count = 0)
         begin
           crawler = Curl::Easy.new(url)
           crawler.ssl_verify_peer = false
@@ -57,7 +57,11 @@ module TariffSynchronizer
         rescue Curl::Err::HostResolutionError => exception
           # NOTE could be a glitch in curb because it throws HostResolutionError
           # occasionally without any reason.
-          send_request(url)
+          if count < 10
+            send_request(url, count + 1)
+          else
+            raise StandardError.new(exception.to_s + " for <#{url}>")
+          end
         end
 
         return Response.new(url, crawler.response_code, crawler.body_str)

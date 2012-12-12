@@ -37,6 +37,9 @@ module TariffSynchronizer
   autoload :PendingUpdate, 'tariff_synchronizer/pending_update'
   autoload :TaricUpdate,   'tariff_synchronizer/taric_update'
   autoload :ChiefUpdate,   'tariff_synchronizer/chief_update'
+  autoload :TaricArchive,  "tariff_synchronizer/taric_archive"
+  autoload :ChiefArchive,  "tariff_synchronizer/chief_archive"
+
 
   extend self
 
@@ -86,6 +89,16 @@ module TariffSynchronizer
     if sync_variables_set?
       ActiveSupport::Notifications.instrument("download.tariff_synchronizer") do
         [TaricUpdate, ChiefUpdate].map(&:sync)
+      end
+    else
+      ActiveSupport::Notifications.instrument("config_error.tariff_synchronizer")
+    end
+  end
+
+  def download_archive
+    if sync_variables_set?
+      ActiveSupport::Notifications.instrument("download.tariff_synchronizer") do
+        [TaricArchive, ChiefArchive].map(&:sync)
       end
     else
       ActiveSupport::Notifications.instrument("config_error.tariff_synchronizer")
