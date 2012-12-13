@@ -160,6 +160,12 @@ class TaricImporter
         end
       }
     end
+    class Commodity < GoodsNomenclature
+    end
+    class Heading < GoodsNomenclature
+    end
+    class Chapter < GoodsNomenclature
+    end
     class GoodsNomenclatureIndent < BaseStrategy
     end
     class GoodsNomenclatureDescriptionPeriod < BaseStrategy
