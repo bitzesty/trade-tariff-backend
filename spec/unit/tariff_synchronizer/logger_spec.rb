@@ -414,9 +414,9 @@ describe TariffSynchronizer::Logger do
       TariffSynchronizer::ChiefUpdate.download(Date.today)
     }
 
-    it 'logs a warning event' do
-      @logger.logged(:warn).size.should eq 1
-      @logger.logged(:warn).last.should =~ /Delaying update fetching/
+    it 'logs an info event' do
+      @logger.logged(:info).size.should be > 1
+      @logger.logged(:info).to_s.should =~ /Delaying update fetching/
     end
   end
 end
