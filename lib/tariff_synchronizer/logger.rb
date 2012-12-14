@@ -122,7 +122,7 @@ module TariffSynchronizer
 
     # Delayed update fetching
     def delay_download(event)
-      warn "Delaying update fetching: #{event.payload[:url]}"
+      info "Delaying update fetching: #{event.payload[:url]}"
     end
   end
 end
