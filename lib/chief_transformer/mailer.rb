@@ -4,7 +4,7 @@ class ChiefTransformer
             to: TradeTariffBackend.admin_email
 
     def successful_transformation_notice
-      mail subject: '[info] Successful CHIEF transformation'
+      mail subject: "[info] Successful CHIEF transformation on #{Plek.current.environment}"
     end
 
     def failed_transformation_notice(operation, exception, model, errors)
@@ -13,7 +13,7 @@ class ChiefTransformer
       @model = model
       @errors = errors
 
-      mail subject: '[error] Failed CHIEF transformation'
+      mail subject: "[error] Failed CHIEF transformation on #{Plek.current.environment}"
     end
   end
 end
