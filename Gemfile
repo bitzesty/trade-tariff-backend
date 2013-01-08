@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 source "https://gems.gemfury.com/vo6ZrmjBQu5szyywDszE/"
 
-gem "rails", "3.2.10"
+gem "rails", "3.2.11"
 
 gem "addressable", "2.3.2"
 gem "mysql2"
