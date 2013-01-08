@@ -48,19 +48,6 @@ class SearchService
                           .non_hidden
                           .first
                           .presence
-                 when /^\d{2}\s*\d{2}\s*\d{2}\s*\d{2}\s*\d{2}$/
-                   Commodity.actual
-                            .by_code(query_string.gsub(/\s+/, ''))
-                            .declarable
-                            .non_hidden
-                            .first
-                            .presence ||
-                   Heading.actual
-                          .by_declarable_code(query_string.gsub(/\s+/, ''))
-                          .declarable
-                          .non_hidden
-                          .first
-                          .presence
                  when /^[0-9]{11,12}$/
                    Commodity.actual
                             .by_code(query_string)
@@ -197,6 +184,16 @@ class SearchService
              rescue
                Date.today
              end
+  end
+
+  def t=(term)
+    # if search term has no letters extract the digits
+    # and perform search with just the digits
+    @t = if term =~ /^(?!.*[A-Za-z]+).*$/
+           term.scan(/\d+/).join
+         else
+           term
+         end
   end
 
   def exact_match?
