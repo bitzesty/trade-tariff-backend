@@ -10,6 +10,15 @@ class SearchService
   class EmptyQuery < StandardError; end
 
   class BaseSearch
+    BLANK_RESULT = {
+      goods_nomenclature_match: {
+        sections: [], chapters: [], headings: [], commodities: []
+      },
+      reference_match: {
+        sections: [], chapters: [], headings: []
+      }
+    }
+
     attr_reader :query_string, :results, :date
 
     def initialize(query_string, date)
@@ -75,15 +84,6 @@ class SearchService
   end
 
   class FuzzySearch < BaseSearch
-    BLANK_RESULT = {
-      goods_nomenclature_match: {
-        sections: [], chapters: [], headings: [], commodities: []
-      },
-      reference_match: {
-        sections: [], chapters: [], headings: []
-      }
-    }
-
     def search!
       begin
         @results = { goods_nomenclature_match: search_results_for(query_string, date),
@@ -162,6 +162,12 @@ class SearchService
     end
   end
 
+  class NullSearch < BaseSearch
+    def serializable_hash
+      BLANK_RESULT
+    end
+  end
+
   attr_accessor :t
   attr_reader :result, :as_of
 
@@ -218,6 +224,7 @@ class SearchService
 
   def perform
     @result = ExactSearch.new(t, as_of).search!.presence ||
-              FuzzySearch.new(t, as_of).search!.presence
+              FuzzySearch.new(t, as_of).search!.presence ||
+              NullSearch.new(t, as_of)
   end
 end
