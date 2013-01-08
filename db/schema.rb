@@ -1556,6 +1556,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20121204130816_create_hidden_goods_nomenclatures.rb")
     self[:schema_migrations].insert(:filename => "20121204143748_add_hidden_commodities.rb")
     self[:schema_migrations].insert(:filename => "20130108084950_update_footnotes_04005_04018.rb")
+    self[:schema_migrations].insert(:filename => "20130108131537_remove_links_from_04005_04018.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"
