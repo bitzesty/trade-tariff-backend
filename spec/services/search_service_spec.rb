@@ -26,29 +26,51 @@ describe SearchService do
   # Searching in local tables
   describe 'exact search' do
     context 'chapters' do
-      let(:chapter) { create :chapter }
-      let(:pattern) {
-        {
-          type: 'exact_match',
-          entry: {
-            endpoint: 'chapters',
-            id: chapter.goods_nomenclature_item_id.first(2)
+      context 'chapter goods id has not got preceding zero' do
+        let(:chapter) { create :chapter, goods_nomenclature_item_id: '1100000000' }
+        let(:pattern) {
+          {
+            type: 'exact_match',
+            entry: {
+              endpoint: 'chapters',
+              id: chapter.goods_nomenclature_item_id.first(2)
+            }
           }
         }
-      }
 
-      it 'returns endpoint and identifier if provided with 2 symbol chapter code' do
-        result = SearchService.new(t: chapter.goods_nomenclature_item_id.first(2),
-                                   as_of: Date.today).to_json
+        it 'returns endpoint and identifier if provided with 2 digit chapter code' do
+          result = SearchService.new(t: chapter.goods_nomenclature_item_id.first(2),
+                                     as_of: Date.today).to_json
 
-        result.should match_json_expression pattern
+          result.should match_json_expression pattern
+        end
+
+        it 'returns endpoint and identifier if provided with matching 3 digit chapter code' do
+          result = SearchService.new(t: chapter.goods_nomenclature_item_id.first(2),
+                                     as_of: Date.today).to_json
+
+          result.should match_json_expression pattern
+        end
       end
 
-      it 'returns endpoint and identifier if provided with matching 3 symbol chapter code' do
-        result = SearchService.new(t: chapter.goods_nomenclature_item_id.first(2),
-                                   as_of: Date.today).to_json
+      context 'chapter goods code id has got preceding zero' do
+        let(:chapter) { create :chapter, goods_nomenclature_item_id: '0100000000' }
+        let(:pattern) {
+          {
+            type: 'exact_match',
+            entry: {
+              endpoint: 'chapters',
+              id: "0#{chapter.goods_nomenclature_item_id[1,1]}"
+            }
+          }
+        }
 
-        result.should match_json_expression pattern
+        it 'returns endpoint and identifier if provided with 1 digit chapter code' do
+          result = SearchService.new(t: chapter.goods_nomenclature_item_id.first(2),
+                                     as_of: Date.today).to_json
+
+          result.should match_json_expression pattern
+        end
       end
     end
 
