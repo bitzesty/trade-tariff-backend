@@ -11,6 +11,9 @@ TradeTariffBackend::Application.routes.draw do
       resources :chapters, only: [:show], constraints: { id: /\d{2}/ }
       resources :headings, only: [:show], constraints: { id: /\d{4}/ }
       resources :commodities, only: [:show], constraints: { id: /\d{10}/ }
+      resources :geographical_areas, only: [:countries] do
+        collection { get :countries }
+      end
 
       post "search" => "search#search", via: :post, as: :search
     end

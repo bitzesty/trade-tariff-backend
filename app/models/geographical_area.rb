@@ -70,6 +70,10 @@ class GeographicalArea < Sequel::Model
     def latest
       order(:created_at.desc)
     end
+
+    def countries
+      where(geographical_code: '0')
+    end
   end
 
   delegate :description, to: :geographical_area_description
