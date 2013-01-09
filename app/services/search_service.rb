@@ -10,6 +10,15 @@ class SearchService
   class EmptyQuery < StandardError; end
 
   class BaseSearch
+    BLANK_RESULT = {
+      goods_nomenclature_match: {
+        sections: [], chapters: [], headings: [], commodities: []
+      },
+      reference_match: {
+        sections: [], chapters: [], headings: []
+      }
+    }
+
     attr_reader :query_string, :results, :date
 
     def initialize(query_string, date)
@@ -48,19 +57,6 @@ class SearchService
                           .non_hidden
                           .first
                           .presence
-                 when /^\d{2}\s*\d{2}\s*\d{2}\s*\d{2}\s*\d{2}$/
-                   Commodity.actual
-                            .by_code(query_string.gsub(/\s+/, ''))
-                            .declarable
-                            .non_hidden
-                            .first
-                            .presence ||
-                   Heading.actual
-                          .by_declarable_code(query_string.gsub(/\s+/, ''))
-                          .declarable
-                          .non_hidden
-                          .first
-                          .presence
                  when /^[0-9]{11,12}$/
                    Commodity.actual
                             .by_code(query_string)
@@ -88,15 +84,6 @@ class SearchService
   end
 
   class FuzzySearch < BaseSearch
-    BLANK_RESULT = {
-      goods_nomenclature_match: {
-        sections: [], chapters: [], headings: [], commodities: []
-      },
-      reference_match: {
-        sections: [], chapters: [], headings: []
-      }
-    }
-
     def search!
       begin
         @results = { goods_nomenclature_match: search_results_for(query_string, date),
@@ -175,6 +162,12 @@ class SearchService
     end
   end
 
+  class NullSearch < BaseSearch
+    def serializable_hash
+      BLANK_RESULT
+    end
+  end
+
   attr_accessor :t
   attr_reader :result, :as_of
 
@@ -199,6 +192,16 @@ class SearchService
              end
   end
 
+  def t=(term)
+    # if search term has no letters extract the digits
+    # and perform search with just the digits
+    @t = if term =~ /^(?!.*[A-Za-z]+).*$/
+           term.scan(/\d+/).join
+         else
+           term
+         end
+  end
+
   def exact_match?
     result.is_a?(ExactSearch)
   end
@@ -221,6 +224,7 @@ class SearchService
 
   def perform
     @result = ExactSearch.new(t, as_of).search!.presence ||
-              FuzzySearch.new(t, as_of).search!.presence
+              FuzzySearch.new(t, as_of).search!.presence ||
+              NullSearch.new(t, as_of)
   end
 end

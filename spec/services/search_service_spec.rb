@@ -133,6 +133,31 @@ describe SearchService do
         result.should match_json_expression commodity_pattern
       end
 
+      it 'returns endpoint and identifier if provided with 10 symbol commodity code separated by dots' do
+        code = [commodity.goods_nomenclature_item_id[0..1],
+                commodity.goods_nomenclature_item_id[2..3],
+                commodity.goods_nomenclature_item_id[4..5],
+                commodity.goods_nomenclature_item_id[6..7],
+                commodity.goods_nomenclature_item_id[8..9]].join(".")
+        result = SearchService.new(t: code,
+                                   as_of: Date.today).to_json
+
+        result.should match_json_expression commodity_pattern
+      end
+
+      it 'returns endpoint and identifier if provided with 10 digits separated by various non number characters' do
+        code =  [commodity.goods_nomenclature_item_id[0..1],
+                 commodity.goods_nomenclature_item_id[2..3]].join("|")
+        code << [commodity.goods_nomenclature_item_id[4..5],
+                 commodity.goods_nomenclature_item_id[6..7]].join("!!  !!!")
+        code << "  " << commodity.goods_nomenclature_item_id[8..9]
+
+        result = SearchService.new(t: code,
+                                   as_of: Date.today).to_json
+
+        result.should match_json_expression commodity_pattern
+      end
+
       it 'returns endpoint and identifier if provided with matching 12 symbol commodity code' do
         result = SearchService.new(t: commodity.goods_nomenclature_item_id + commodity.producline_suffix,
                                    as_of: Date.today).to_json
