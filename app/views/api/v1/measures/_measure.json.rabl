@@ -1,8 +1,10 @@
-attributes :origin,
+attributes :measure_sid,
+           :origin,
            :ordernumber,
            :effective_start_date,
            :effective_end_date,
-           :measure_type_id
+           :measure_type_id,
+           :import
 
 node(:measure_type_description) { |obj|
   obj.type.try(:description)
