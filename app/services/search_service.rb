@@ -124,8 +124,10 @@ class SearchService
 
     def reference_search(query_string)
       @reference_results ||= Tire.search('search_references', { query: {
-                                               term: {
-                                                 title: query_string
+                                               query_string: {
+                                                 fields: ['title'],
+                                                 analyzer: 'snowball',
+                                                 query: query_string
                                                }
                                              },
                                              size: INDEX_SIZE_MAX
