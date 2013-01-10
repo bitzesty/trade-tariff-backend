@@ -10,10 +10,9 @@ class SearchReference < Sequel::Model
     document_type 'search_reference'
 
     mapping do
-      indexes :title,        analyzer: :simple
+      indexes :title,        analyzer: :snowball, type: :string
     end
   end
-
 
   def referenced_entity
     @referenced_entity ||= case reference
