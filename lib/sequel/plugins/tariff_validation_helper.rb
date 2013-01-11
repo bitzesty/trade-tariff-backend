@@ -1,6 +1,6 @@
 module Sequel
   module Plugins
-    module TariffValidationHelpers
+    module TariffValidationHelper
       module ClassMethods
         def validates_validity_date_span_of(*atts)
           opts = {
