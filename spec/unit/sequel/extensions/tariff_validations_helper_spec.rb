@@ -205,7 +205,7 @@ describe Sequel::Model do
         context 'associated records are all valid' do
           it 'should validate associated' do
             @c.validates_associated :mushrooms
-            @m.stubs(:mushrooms).returns([stub(valid?: true)])
+            @m.stubs(:mushrooms).returns([stub_everything(valid?: true)])
             @m.should be_valid
           end
         end
@@ -213,8 +213,8 @@ describe Sequel::Model do
         context 'some associated records are not valid' do
           it 'should validate associated' do
             @c.validates_associated :mushrooms
-            @m.stubs(:mushrooms).returns([stub(valid?: true),
-                                          stub(valid?: false)])
+            @m.stubs(:mushrooms).returns([stub_everything(valid?: true),
+                                          stub_everything(valid?: false)])
             @m.should_not be_valid
           end
         end
