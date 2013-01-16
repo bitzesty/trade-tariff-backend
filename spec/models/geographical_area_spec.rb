@@ -138,12 +138,4 @@ describe GeographicalArea do
     # GA2 The start date must be less than or equal to the end date.
     it { should validate_validity_dates }
   end
-
-  describe '#iso_code' do
-    let(:geographical_area)                { build :geographical_area, geographical_area_id: 'UK' }
-
-    it 'is an alias to geographical area id' do
-      geographical_area.iso_code.should == 'UK'
-    end
-  end
 end
