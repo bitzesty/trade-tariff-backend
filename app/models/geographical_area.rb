@@ -104,10 +104,6 @@ class GeographicalArea < Sequel::Model
     # TODO: GA22
     # TODO: GA23
   end
-
-  def iso_code
-    geographical_area_id
-  end
 end
 
 
