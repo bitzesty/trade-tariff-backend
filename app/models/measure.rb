@@ -587,6 +587,14 @@ class Measure < Sequel::Model
   def associated_to_non_open_ended_gono?
     goods_nomenclature.present? && goods_nomenclature.validity_end_date.present?
   end
+
+  def order_number
+    if quota_order_number.present?
+      quota_order_number
+    elsif ordernumber.present?
+      QuotaOrderNumber.new(quota_order_number_id: ordernumber)
+    end
+  end
 end
 
 
