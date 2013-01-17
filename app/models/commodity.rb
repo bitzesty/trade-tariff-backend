@@ -48,8 +48,8 @@ class Commodity < GoodsNomenclature
 
   def ancestors
     Commodity.select(:goods_nomenclatures.*)
-      .eager(:goods_nomenclature_indent,
-             :goods_nomenclature_description)
+      .eager(:goods_nomenclature_indents,
+             :goods_nomenclature_descriptions)
       .join_table(:inner,
         GoodsNomenclatureIndent
                  .select(Sequel.as(:goods_nomenclatures__goods_nomenclature_sid, :gono_sid),

@@ -28,8 +28,8 @@ module Api
                                                       :full_temporary_stop_regulations,
                                                       :measure_partial_temporary_stops).all, @heading).validate!
         else
-          @commodities = GoodsNomenclatureMapper.new(@heading.commodities_dataset.eager(:goods_nomenclature_indent,
-                                                                                        :goods_nomenclature_description)
+          @commodities = GoodsNomenclatureMapper.new(@heading.commodities_dataset.eager(:goods_nomenclature_indents,
+                                                                                        :goods_nomenclature_descriptions)
                                                              .all).all
 
         end
