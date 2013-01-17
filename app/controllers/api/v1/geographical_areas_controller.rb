@@ -2,7 +2,7 @@ module Api
   module V1
     class GeographicalAreasController < ApplicationController
       def countries
-        @geographical_areas = GeographicalArea.eager(:geographical_area_description)
+        @geographical_areas = GeographicalArea.eager(:geographical_area_descriptions)
                                               .countries
                                               .all
 
