@@ -36,8 +36,8 @@ class ExportRefundNomenclature < Sequel::Model
 
   def ancestors
     ExportRefundNomenclature.select(:export_refund_nomenclatures.*)
-      .eager(:export_refund_nomenclature_indent,
-             :export_refund_nomenclature_description)
+      .eager(:export_refund_nomenclature_indents,
+             :export_refund_nomenclature_descriptions)
       .join_table(:inner,
         ExportRefundNomenclatureIndent
                  .select(Sequel.as(:export_refund_nomenclatures__export_refund_nomenclature_sid, :gono_sid),
