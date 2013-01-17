@@ -1,0 +1,1 @@
+MAILER_ENV = "development"

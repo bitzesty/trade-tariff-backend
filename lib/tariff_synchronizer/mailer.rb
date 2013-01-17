@@ -1,5 +1,7 @@
 module TariffSynchronizer
   class Mailer < ActionMailer::Base
+    include MailerEnvironment
+
     default from: "DO NOT REPLY <trade-tariff-alerts@digital.cabinet-office.gov.uk>",
             to: TradeTariffBackend.admin_email
 
@@ -47,11 +49,6 @@ module TariffSynchronizer
       @count = count
 
       mail subject: "[info] Tariff updates applied #{environment_indicator}"
-    end
-
-    private
-    def environment_indicator
-      "on #{Plek.current.environment}"
     end
   end
 end
