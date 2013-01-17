@@ -14,7 +14,7 @@ gem "tire"
 
 gem "builder"
 gem "jquery-rails", "1.0.19"
-gem "plek", "0.5.0"
+gem "plek", "1.0.0"
 gem "railties"
 
 gem "unicorn", "4.3.1"
