@@ -312,7 +312,7 @@ describe Measure do
       context 'eager loading' do
         it 'loads associated full temporary stop regulation' do
           Measure.where(measure_sid: measure.measure_sid)
-                 .eager(:full_temporary_stop_regulation)
+                 .eager(:full_temporary_stop_regulations)
                  .all
                  .first
                  .full_temporary_stop_regulation.pk.should eq fts_regulation1.pk
@@ -320,7 +320,7 @@ describe Measure do
 
         it 'does not load associated full temporary stop regulation' do
           Measure.where(measure_sid: measure.measure_sid)
-                 .eager(:full_temporary_stop_regulation)
+                 .eager(:full_temporary_stop_regulations)
                  .all
                  .first
                  .full_temporary_stop_regulation.pk.should_not eq fts_regulation2.pk
@@ -346,7 +346,7 @@ describe Measure do
       context 'eager loading' do
         it 'loads associated full temporary stop regulation' do
           Measure.where(measure_sid: measure.measure_sid)
-                 .eager(:measure_partial_temporary_stop)
+                 .eager(:measure_partial_temporary_stops)
                  .all
                  .first
                  .measure_partial_temporary_stop.pk.should eq mpt_stop1.pk
@@ -354,7 +354,7 @@ describe Measure do
 
         it 'does not load associated full temporary stop regulation' do
           Measure.where(measure_sid: measure.measure_sid)
-                 .eager(:measure_partial_temporary_stop)
+                 .eager(:measure_partial_temporary_stops)
                  .all
                  .first
                  .measure_partial_temporary_stop.pk.should_not eq mpt_stop2.pk

@@ -25,8 +25,8 @@ module Api
                                                       {quota_order_number: :quota_definition},
                                                       {excluded_geographical_areas: :geographical_area_description},
                                                       :additional_code,
-                                                      :full_temporary_stop_regulation,
-                                                      :measure_partial_temporary_stop).all, @heading).validate!
+                                                      :full_temporary_stop_regulations,
+                                                      :measure_partial_temporary_stops).all, @heading).validate!
         else
           @commodities = GoodsNomenclatureMapper.new(@heading.commodities_dataset.eager(:goods_nomenclature_indent,
                                                                                         :goods_nomenclature_description)

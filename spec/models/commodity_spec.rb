@@ -147,10 +147,10 @@ describe Commodity do
     let!(:expired_commodity) { create :commodity, :expired }
 
     context 'when not in TimeMachine block' do
-      it 'fetches commodities that are actual Today' do
-        commodities = Commodity.actual.all
+      it 'fetches all commodities' do
+        commodities = Commodity.all
         commodities.should include actual_commodity
-        commodities.should_not include expired_commodity
+        commodities.should include expired_commodity
       end
     end
 

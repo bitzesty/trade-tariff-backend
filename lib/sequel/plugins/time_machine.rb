@@ -33,7 +33,7 @@ module Sequel
         end
 
         def point_in_time
-          Thread.current[::TimeMachine::THREAD_DATETIME_KEY] || Date.today
+          Thread.current[::TimeMachine::THREAD_DATETIME_KEY] #|| Date.today
         end
 
         def strategy
@@ -67,7 +67,38 @@ module Sequel
         def with_actual(assoc)
           klass = assoc.to_s.classify.constantize
 
-          filter{|o| o.<=(klass.period_start_date_column, klass.point_in_time) & (o.>=(klass.period_end_date_column, klass.point_in_time) | ({klass.period_end_date_column => nil})) }
+          if klass.point_in_time.present?
+            filter{|o| o.<=(klass.period_start_date_column, klass.point_in_time) & (o.>=(klass.period_end_date_column, klass.point_in_time) | ({klass.period_end_date_column => nil})) }
+          else
+            self
+          end
+        end
+
+        def associated(name)
+          raise Error, "unrecognized association name: #{name.inspect}" unless r = model.association_reflection(name)
+          ds = r.associated_class.dataset
+          sds = opts[:limit] ? self : unordered
+          ds = case r[:type]
+          when :many_to_one
+            ds.filter(r.qualified_primary_key=>sds.select(*Array(r[:qualified_key])))
+          when :one_to_one, :one_to_many
+            ds.filter(r.qualified_key=>sds.select(*Array(r.qualified_primary_key)))
+          when :many_to_many
+            ds.filter(r.qualified_right_primary_key=>sds.select(*Array(r.qualified_right_key)).
+              join(r[:join_table], r[:left_keys].zip(r[:left_primary_keys]), :implicit_qualifier=>model.table_name))
+          when :many_through_many
+            fre = r.reverse_edges.first
+            fe, *edges = r.edges
+            sds = sds.select(*Array(r.qualify(fre[:table], fre[:left]))).
+              join(fe[:table], Array(fe[:right]).zip(Array(fe[:left])), :implicit_qualifier=>model.table_name)
+            edges.each{|e| sds = sds.join(e[:table], Array(e[:right]).zip(Array(e[:left])))}
+            ds.filter(r.qualified_right_primary_key=>sds)
+          else
+            raise Error, "unrecognized association type for association #{name.inspect}: #{r[:type].inspect}"
+          end
+          ds = model.apply_association_dataset_opts(r, ds)
+          r[:extend].each{|m| ds.extend(m)}
+          ds
         end
       end
     end
