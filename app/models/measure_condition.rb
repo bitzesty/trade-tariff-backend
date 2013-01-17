@@ -37,7 +37,7 @@ class MeasureCondition < Sequel::Model
     id_map = eo[:id_map]
 
     Certificate.actual
-               .eager(:certificate_description)
+               .eager(:certificate_descriptions)
                .where(certificate_code: id_map.keys.map(&:first),
                       certificate_type_code: id_map.keys.map(&:last)).all do |certificate|
       if measure_conditions = id_map[[certificate.certificate_code, certificate.certificate_type_code]]
