@@ -29,7 +29,7 @@ class GoodsNomenclature < Sequel::Model
   end
 
   def goods_nomenclature_indent
-    goods_nomenclature_indents_dataset.first
+    goods_nomenclature_indents.first
   end
 
   many_to_many :goods_nomenclature_descriptions, join_table: :goods_nomenclature_description_periods,
@@ -41,7 +41,7 @@ class GoodsNomenclature < Sequel::Model
                                                  end
 
   def goods_nomenclature_description
-    goods_nomenclature_descriptions_dataset.first
+    goods_nomenclature_descriptions.first
   end
 
   many_to_many :footnotes, join_table: :footnote_association_goods_nomenclatures,
@@ -53,7 +53,7 @@ class GoodsNomenclature < Sequel::Model
   end
 
   def footnote
-    footnotes_dataset.first
+    footnotes.first
   end
 
   delegate :number_indents, to: :goods_nomenclature_indent, allow_nil: true

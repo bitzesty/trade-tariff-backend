@@ -15,7 +15,7 @@ class ExportRefundNomenclature < Sequel::Model
                                                          end
 
   def export_refund_nomenclature_description
-    export_refund_nomenclature_descriptions_dataset.first
+    export_refund_nomenclature_descriptions.first
   end
 
   one_to_many :export_refund_nomenclature_indents, key: :export_refund_nomenclature_sid,
@@ -24,7 +24,7 @@ class ExportRefundNomenclature < Sequel::Model
   end
 
   def export_refund_nomenclature_indent
-    export_refund_nomenclature_indents_dataset.first
+    export_refund_nomenclature_indents.first
   end
 
   delegate :description, to: :export_refund_nomenclature_description

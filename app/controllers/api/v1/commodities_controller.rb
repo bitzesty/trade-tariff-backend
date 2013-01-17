@@ -4,15 +4,16 @@ module Api
       before_filter :find_commodity, only: [:show]
 
       def show
-        @measures = MeasurePresenter.new(@commodity.measures_dataset.eager({geographical_area: [:geographical_area_description, :children_geographical_areas]},
-                                                      {footnotes: :footnote_description},
+        @measures = MeasurePresenter.new(@commodity.measures_dataset.eager({geographical_area: [:geographical_area_descriptions,
+                                                                                                { contained_geographical_areas: :geographical_area_descriptions }]},
+                                                      {footnotes: :footnote_descriptions},
                                                       {type: :measure_type_description},
                                                       {measure_components: [{duty_expression: :duty_expression_description},
                                                                             {measurement_unit: :measurement_unit_description},
                                                                             :monetary_unit,
                                                                             :measurement_unit_qualifier]},
                                                       {measure_conditions: [{measure_action: :measure_action_description},
-                                                                            {certificate: :certificate_description},
+                                                                            {certificate: :certificate_descriptions},
                                                                             {certificate_type: :certificate_type_description},
                                                                             {measurement_unit: :measurement_unit_description},
                                                                             :monetary_unit,
@@ -20,7 +21,7 @@ module Api
                                                                             :measure_condition_code,
                                                                             :measure_condition_components]},
                                                       {quota_order_number: :quota_definition},
-                                                      {excluded_geographical_areas: :geographical_area_description},
+                                                      {excluded_geographical_areas: :geographical_area_descriptions},
                                                       :additional_code,
                                                       :full_temporary_stop_regulations,
                                                       :measure_partial_temporary_stops).all, @commodity).validate!

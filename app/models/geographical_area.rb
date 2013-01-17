@@ -14,12 +14,12 @@ class GeographicalArea < Sequel::Model
   end
 
   def geographical_area_description
-    geographical_area_descriptions_dataset.first
+    geographical_area_descriptions.first
   end
 
+  many_to_one :parent_geographical_area, class: self
   one_to_many :children_geographical_areas, key: :parent_geographical_area_group_sid,
-                                            primary_key: :geographical_area_sid,
-                                            class_name: 'GeographicalArea'
+                                            class: self
 
   one_to_one :parent_geographical_area, key: :geographical_area_sid,
                                         primary_key: :parent_geographical_area_group_sid,

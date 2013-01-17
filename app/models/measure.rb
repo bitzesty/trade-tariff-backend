@@ -72,14 +72,14 @@ class Measure < Sequel::Model
                                                  end
 
   def full_temporary_stop_regulation
-    full_temporary_stop_regulations_dataset.first
+    full_temporary_stop_regulations.first
   end
 
   one_to_many :measure_partial_temporary_stops, primary_key: :measure_generating_regulation_id,
                                                 key: :partial_temporary_stop_regulation_id
 
   def measure_partial_temporary_stop
-    measure_partial_temporary_stops_dataset.first
+    measure_partial_temporary_stops.first
   end
 
   one_to_one :modification_regulation, key: [:modification_regulation_id,

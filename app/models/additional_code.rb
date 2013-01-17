@@ -11,7 +11,7 @@ class AdditionalCode < Sequel::Model
                                               end
 
   def additional_code_description
-    additional_code_descriptions_dataset.first
+    additional_code_descriptions.first
   end
 
   one_to_one :meursing_additional_code, key: :additional_code,

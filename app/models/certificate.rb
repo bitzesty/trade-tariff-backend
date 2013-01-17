@@ -10,7 +10,7 @@ class Certificate < Sequel::Model
   end
 
   def certificate_description
-    certificate_descriptions_dataset.first
+    certificate_descriptions.first
   end
 
   one_to_many :certificate_types, key: :certificate_type_code,
@@ -19,7 +19,7 @@ class Certificate < Sequel::Model
   end
 
   def certificate_type
-    certificate_types_dataset.first
+    certificate_types.first
   end
 
   delegate :description, to: :certificate_description

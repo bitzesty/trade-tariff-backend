@@ -16,7 +16,7 @@ class Footnote < Sequel::Model
   end
 
   def footnote_description
-    footnote_descriptions_dataset.first
+    footnote_descriptions.first
   end
 
   one_to_one :footnote_type, primary_key: :footnote_type_id,
