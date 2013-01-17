@@ -1,6 +1,5 @@
 attributes :measure_sid,
            :origin,
-           :ordernumber,
            :effective_start_date,
            :effective_end_date,
            :measure_type_id,
@@ -113,7 +112,7 @@ node(:additional_code, if: ->(measure) { measure.export_refund_nomenclature_sid.
   }
 end
 
-child(quota_order_number: :order_number) do
+child(order_number: :order_number) do
   node(:number) { |qon| qon.quota_order_number_id }
 
   child(quota_definition: :definition) do
@@ -130,4 +129,3 @@ child(quota_order_number: :order_number) do
     node(:blocking_period_end_date) { |qd| qd.last_blocking_period.try(:blocking_end_date) }
   end
 end
-
