@@ -5,6 +5,14 @@ class InputValidationMatcher < TariffValidationMatcher
     super && matches_required_condition?
   end
 
+  def description
+    if required_condition.present?
+      "validate #{validation_type} of #{attributes} and require #{required_condition} to return true"
+    else
+      super
+    end
+  end
+
   def failure_message
     msg = "expected #{subject.class.name} to validate #{validation_type} of #{attributes}"
     msg << " and require #{required_condition} to return true" if required_condition.present?

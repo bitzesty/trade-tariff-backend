@@ -19,6 +19,14 @@ class AssociatedValidationMatcher < TariffValidationMatcher
     self
   end
 
+  def description
+    if ensurance_method.present?
+      "validate #{validation_type} #{associated_object} and ensure that #{ensurance_method} is truthy"
+    else
+      "validate #{validation_type} #{associated_object}"
+    end
+  end
+
   def failure_message
     "expected #{subject.class.name} to validate #{validation_type} #{associated_object} and ensure that #{ensurance_method} is truthy"
   end
