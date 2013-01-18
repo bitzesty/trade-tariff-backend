@@ -239,6 +239,7 @@ Sequel.migration do
       column :uoq_code_cdu3, "varchar(3)"
       column :whse_cmdty, "tinyint(1)"
       column :wines_cmdty, "tinyint(1)"
+      column :origin, "varchar(30)"
     end
 
     create_table(:chief_country_code) do
