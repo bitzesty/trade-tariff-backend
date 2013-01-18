@@ -3,27 +3,16 @@ class AdditionalCode < Sequel::Model
 
   set_primary_key :additional_code_sid
 
-  one_to_one :additional_code_description, eager_loader_key: :additional_code_sid, dataset: -> {
-    AdditionalCodeDescription.with_actual(AdditionalCodeDescriptionPeriod)
-                             .join(:additional_code_description_periods, additional_code_description_periods__additional_code_description_period_sid: :additional_code_descriptions__additional_code_description_period_sid,
-                                                                         additional_code_description_periods__additional_code_sid: :additional_code_descriptions__additional_code_sid)
-                             .where(additional_code_descriptions__additional_code_sid: additional_code_sid)
-  }, eager_loader: (proc do |eo|
-    eo[:rows].each{|additional_code| additional_code.associations[:additional_code_description] = nil}
+  many_to_many :additional_code_descriptions, join_table: :additional_code_description_periods,
+                                              left_key: :additional_code_sid,
+                                              right_key: [:additional_code_description_period_sid,
+                                                          :additional_code_sid] do |ds|
+                                                ds.with_actual(AdditionalCodeDescriptionPeriod)
+                                              end
 
-    id_map = eo[:id_map]
-
-    AdditionalCodeDescription.with_actual(AdditionalCodeDescriptionPeriod)
-                             .join(:additional_code_description_periods, additional_code_description_periods__additional_code_description_period_sid: :additional_code_descriptions__additional_code_description_period_sid,
-                                                                         additional_code_description_periods__additional_code_sid: :additional_code_descriptions__additional_code_sid)
-                             .where(additional_code_descriptions__additional_code_sid: id_map.keys).all do |additional_code_description|
-      if additional_codes = id_map[additional_code_description.additional_code_sid]
-        additional_codes.each do |additional_code|
-          additional_code.associations[:additional_code_description] = additional_code_description
-        end
-      end
-    end
-  end)
+  def additional_code_description
+    additional_code_descriptions.first
+  end
 
   one_to_one :meursing_additional_code, key: :additional_code,
                                         primary_key: :additional_code

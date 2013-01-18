@@ -6,8 +6,8 @@ module Api
       before_filter :find_chapter, only: [:show]
       def show
         @headings = GoodsNomenclatureMapper.new(@chapter.headings_dataset
-                                                        .eager(:goods_nomenclature_description,
-                                                               :goods_nomenclature_indent)
+                                                        .eager(:goods_nomenclature_descriptions,
+                                                               :goods_nomenclature_indents)
                                                         .all).root_entries
 
         respond_with @chapter

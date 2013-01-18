@@ -38,7 +38,7 @@ describe Footnote do
           TimeMachine.now do
             Footnote.where(footnote_id: footnote.footnote_id,
                            footnote_type_id: footnote.footnote_type_id)
-                          .eager(:footnote_description)
+                          .eager(:footnote_descriptions)
                           .all
                           .first
                           .footnote_description.pk.should == footnote_description1.pk
@@ -49,7 +49,7 @@ describe Footnote do
           TimeMachine.at(1.year.ago) do
             Footnote.where(footnote_id: footnote.footnote_id,
                            footnote_type_id: footnote.footnote_type_id)
-                          .eager(:footnote_description)
+                          .eager(:footnote_descriptions)
                           .all
                           .first
                           .footnote_description.pk.should == footnote_description1.pk
@@ -58,7 +58,7 @@ describe Footnote do
           TimeMachine.at(4.years.ago) do
             Footnote.where(footnote_id: footnote.footnote_id,
                            footnote_type_id: footnote.footnote_type_id)
-                          .eager(:footnote_description)
+                          .eager(:footnote_descriptions)
                           .all
                           .first
                           .footnote_description.pk.should == footnote_description2.pk

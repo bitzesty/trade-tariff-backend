@@ -35,7 +35,7 @@ describe ExportRefundNomenclature do
         it 'loads correct indent respecting given actual time' do
           TimeMachine.now do
             ExportRefundNomenclature.where(export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid)
-                             .eager(:export_refund_nomenclature_indent)
+                             .eager(:export_refund_nomenclature_indents)
                              .all
                              .first
                              .export_refund_nomenclature_indent.pk.should == export_refund_nomenclature_indent1.pk
@@ -45,7 +45,7 @@ describe ExportRefundNomenclature do
         it 'loads correct indent respecting given time' do
           TimeMachine.at(1.year.ago) do
             ExportRefundNomenclature.where(export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid)
-                          .eager(:export_refund_nomenclature_indent)
+                          .eager(:export_refund_nomenclature_indents)
                           .all
                           .first
                           .export_refund_nomenclature_indent.pk.should == export_refund_nomenclature_indent1.pk
@@ -53,7 +53,7 @@ describe ExportRefundNomenclature do
 
           TimeMachine.at(4.years.ago) do
             ExportRefundNomenclature.where(export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid)
-                          .eager(:export_refund_nomenclature_indent)
+                          .eager(:export_refund_nomenclature_indents)
                           .all
                           .first
                           .export_refund_nomenclature_indent.pk.should == export_refund_nomenclature_indent2.pk
@@ -95,7 +95,7 @@ describe ExportRefundNomenclature do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
             ExportRefundNomenclature.where(export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid)
-                          .eager(:export_refund_nomenclature_description)
+                          .eager(:export_refund_nomenclature_descriptions)
                           .all
                           .first
                           .export_refund_nomenclature_description.pk.should == export_refund_nomenclature_description1.pk
@@ -105,7 +105,7 @@ describe ExportRefundNomenclature do
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
             ExportRefundNomenclature.where(export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid)
-                          .eager(:export_refund_nomenclature_description)
+                          .eager(:export_refund_nomenclature_descriptions)
                           .all
                           .first
                           .export_refund_nomenclature_description.pk.should == export_refund_nomenclature_description1.pk
@@ -113,7 +113,7 @@ describe ExportRefundNomenclature do
 
           TimeMachine.at(4.years.ago) do
             ExportRefundNomenclature.where(export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid)
-                          .eager(:export_refund_nomenclature_description)
+                          .eager(:export_refund_nomenclature_descriptions)
                           .all
                           .first
                           .export_refund_nomenclature_description.pk.should == export_refund_nomenclature_description2.pk
