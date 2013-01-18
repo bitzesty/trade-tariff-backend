@@ -38,10 +38,32 @@ module Sequel
       end
 
       module DatasetMethods
+        # Use for fetching record inside TimeMachine block.
+        #
+        # Example:
+        #
+        #   TimeMachine.now { Commodity.actual.first }
+        #
+        # Will fetch first commodity that is valid at this point in time.
+        # Invoking outside time machine block will probably yield no as
+        # current time variable will be nil.
+        #
         def actual
           filter{|o| o.<=(model.period_start_date_column, model.point_in_time) & (o.>=(model.period_end_date_column, model.point_in_time) | ({model.period_end_date_column => nil})) }
         end
 
+        # Use for extending datasets and associations, so that specified
+        # klass would respect current time in TimeMachine.
+        #
+        # Example
+        #
+        #   TimeMachine.now { Footnote.actual
+        #                             .with_actual(FootnoteDescriptionPeriod)
+        #                             .joins(:footnote_description_periods)
+        #                             .first }
+        #
+        # Useful for forming time bound associations.
+        #
         def with_actual(assoc)
           klass = assoc.to_s.classify.constantize
 

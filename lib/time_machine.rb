@@ -3,7 +3,7 @@ require "date"
 module TimeMachine
   THREAD_DATETIME_KEY = :time_machine_now
 
-  # Temporary for easier console access
+  # Travel to specified date and time
   def self.at(datetime, &block)
       datetime = DateTime.now if datetime.blank?
       datetime = begin
