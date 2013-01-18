@@ -35,28 +35,6 @@ module Sequel
         def point_in_time
           Thread.current[::TimeMachine::THREAD_DATETIME_KEY]
         end
-
-        def strategy
-          Thread.current[::TimeMachine::THREAD_STRATEGY_KEY] || :relevant
-        end
-      end
-
-      module InstanceMethods
-        def point_in_time
-          self.class.point_in_time
-        end
-
-        def actual(assoc)
-          klass = assoc.to_s.classify.constantize
-
-          case self.class.strategy
-          when :absolute
-            klass.filter{|o| o.<=(klass.period_start_date_column, klass.point_in_time) & (o.>=(klass.period_end_date_column, klass.point_in_time) | ({klass.period_end_date_column => nil})) }
-          else # relevant
-            klass.filter{|o| o.<=(klass.period_start_date_column, validity_start_date) & (o.>=(klass.period_end_date_column, validity_end_date) | ({klass.period_end_date_column => nil})) }
-          end
-        end
-        private :actual
       end
 
       module DatasetMethods

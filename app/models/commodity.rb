@@ -12,12 +12,14 @@ class Commodity < GoodsNomenclature
   set_primary_key :goods_nomenclature_sid
 
   one_to_one :heading, dataset: -> {
-    actual(Heading).declarable
-                   .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
+    Heading.actual
+           .declarable
+           .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
   }
 
   one_to_one :chapter, dataset: -> {
-    actual(Chapter).filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
+    Chapter.actual
+           .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
   }
 
   one_to_many :third_country_duty, dataset: -> {
