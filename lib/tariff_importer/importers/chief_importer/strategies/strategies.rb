@@ -152,5 +152,59 @@ class ChiefImporter
         end
       }
     end
+
+    class COMM < BaseStrategy
+      map fe_tsmp: [0, :chief_date],
+          amend_indicator: 1,
+          cmdty_code: [2, :chief_code],
+          le_tsmp: [3, :chief_date],
+          add_rlf_alwd_ind: 4,
+          alcohol_cmdty: 5,
+          audit_tsmp: [6, :chief_date],
+          chi_doti_rqd: 7,
+          cmdty_bbeer: 8,
+          cmdty_beer: 9,
+          cmdty_euse_alwd: 10,
+          cmdty_exp_rfnd: 11,
+          cmdty_mdecln: 12,
+          exp_lcnc_rqd: 13,
+          ex_ec_scode_rqd: 14,
+          full_dty_adval1: [15, :chief_decimal],
+          full_dty_adval2: [16, :chief_decimal],
+          full_dty_exch: [17, :chief_string],
+          full_dty_spfc1: [18, :chief_decimal],
+          full_dty_spfc2: [19, :chief_decimal],
+          full_dty_ttype: [20, :chief_string],
+          full_dty_uoq_c2: [21, :chief_string],
+          full_dty_uoq1: [22, :chief_string],
+          full_dty_uoq2: [23, :chief_string],
+          full_duty_type: [24, :chief_string],
+          im_ec_score_rqd: 25,
+          imp_exp_use: 26,
+          nba_id: [27, :chief_string],
+          perfume_cmdty: 28,
+          rfa: [29, :chief_string],
+          season_end: 30,
+          season_start: 31,
+          spv_code: [32, :chief_string],
+          spv_xhdg: 33,
+          uoq_code_cdu1: [34, :chief_string],
+          uoq_code_cdu2: [35, :chief_string],
+          uoq_code_cdu3: [36, :chief_string],
+          whse_cmdty: 37,
+          wines_cmdty: 38
+
+      process(:update) {
+        Chief::Comm.insert(map)
+      }
+
+      process(:insert) {
+        Chief::Comm.insert(map)
+      }
+
+      process(:delete) {
+        Chief::Comm.insert(map)
+      }
+    end
   end
 end
