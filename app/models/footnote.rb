@@ -13,6 +13,7 @@ class Footnote < Sequel::Model
                                                            :footnote_type_id,
                                                            :footnote_id] do |ds|
     ds.with_actual(FootnoteDescriptionPeriod)
+      .order(:footnote_description_periods__validity_start_date.desc)
   end
 
   def footnote_description

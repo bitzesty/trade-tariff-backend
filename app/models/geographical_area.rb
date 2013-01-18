@@ -11,6 +11,7 @@ class GeographicalArea < Sequel::Model
                                                 right_primary_key: [:geographical_area_description_period_sid,
                                                                     :geographical_area_sid] do |ds|
     ds.with_actual(GeographicalAreaDescriptionPeriod)
+      .order(:geographical_area_description_periods__validity_start_date.desc)
   end
 
   def geographical_area_description
