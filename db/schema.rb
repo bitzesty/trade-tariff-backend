@@ -1289,6 +1289,13 @@ Sequel.migration do
       index [:monetary_unit_code, :validity_start_date], :name=>:primary_key
     end
 
+    create_table(:national_measurement_units) do
+      column :measurement_unit_code, "varchar(3)"
+      column :description, "varchar(100)"
+
+      index [:measurement_unit_code], :name=>:primary_key, :unique=>true
+    end
+
     create_table(:nomenclature_group_memberships) do
       column :goods_nomenclature_sid, "int(11)"
       column :goods_nomenclature_group_type, "varchar(1)"
