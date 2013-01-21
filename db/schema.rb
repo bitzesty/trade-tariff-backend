@@ -745,6 +745,14 @@ Sequel.migration do
       index [:geographical_area_sid], :name=>:primary_key, :unique=>true
     end
 
+    create_table(:goods_nomenclature_association_national_measurement_units) do
+      column :goods_nomenclature_sid, "int(11)"
+      column :measurement_unit_code, "varchar(3)"
+      column :measurement_unit_quantity_level, "int(11)"
+
+      index [:goods_nomenclature_sid, :measurement_unit_code], :name=>:primary_key
+    end
+
     create_table(:goods_nomenclature_description_periods) do
       column :goods_nomenclature_description_period_sid, "int(11)"
       column :goods_nomenclature_sid, "int(11)"
@@ -1609,6 +1617,11 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20130108131537_remove_links_from_04005_04018.rb")
     self[:schema_migrations].insert(:filename => "20130121114856_clear_invalid_chief_updates.rb")
     self[:schema_migrations].insert(:filename => "20130130132054_add_hydrocarbon_oils_footnote.rb")
+    self[:schema_migrations].insert(:filename => "20130118122518_create_comms.rb")
+    self[:schema_migrations].insert(:filename => "20130118150014_add_origin_to_comm.rb")
+    self[:schema_migrations].insert(:filename => "20130121081354_create_national_measurement_units.rb")
+    self[:schema_migrations].insert(:filename => "20130121114856_clear_invalid_chief_updates.rb")
+    self[:schema_migrations].insert(:filename => "20130121190252_create_goods_nomenclature_association_national_measurement_units.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"
