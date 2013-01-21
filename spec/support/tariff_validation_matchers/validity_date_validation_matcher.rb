@@ -5,11 +5,6 @@ class ValidityDateMatcher < TariffValidationMatcher
     super && matches_in_integration?
   end
 
-  def description
-    "validate validity dates of #{@subject.class.name}"
-  end
-
-
   def matches_in_integration?
     subject.validity_start_date = Time.now.in(10.minutes)
     subject.validity_end_date = Time.now.ago(10.minutes)

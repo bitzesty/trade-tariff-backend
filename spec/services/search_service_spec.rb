@@ -25,10 +25,6 @@ describe SearchService do
 
   # Searching in local tables
   describe 'exact search' do
-    around(:each) do |example|
-      TimeMachine.now { example.run }
-    end
-
     context 'chapters' do
       context 'chapter goods id has not got preceding zero' do
         let(:chapter) { create :chapter, goods_nomenclature_item_id: '1100000000' }

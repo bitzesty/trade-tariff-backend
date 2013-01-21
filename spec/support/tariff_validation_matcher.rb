@@ -26,9 +26,6 @@ class TariffValidationMatcher
     self
   end
 
-  def description
-    "validate #{validation_type} of #{attributes}"
-  end
 
   def failure_message
     "expected #{subject.class.name} to validate #{validation_type} of #{attributes}"
