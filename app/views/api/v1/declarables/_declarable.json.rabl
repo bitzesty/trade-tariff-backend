@@ -15,6 +15,17 @@ child :footnote do
   }
 end
 
+child goods_nomenclature_association_national_measurement_units: :national_measurement_units do
+  attributes :level
+
+  node(:measurement_unit_code) { |measurement_unit_assoc|
+    measurement_unit_assoc.measurement_unit_code
+  }
+  node(:description) { |measurement_unit_assoc|
+    measurement_unit_assoc.national_measurement_unit.description
+  }
+end
+
 node(:import_measures) { |declarable|
   @measures.select(&:import).map do |import_measure|
     partial "api/v1/measures/measure", object: import_measure
