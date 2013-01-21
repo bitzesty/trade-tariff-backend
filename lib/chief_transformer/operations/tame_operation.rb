@@ -15,7 +15,14 @@ class ChiefTransformer
                .with_tariff_measure_number(tame.tar_msr_no)
                .not_terminated
                .each do |measure|
-          measure.update validity_end_date: tame.fe_tsmp
+          end_date = if (measure.associated_to_non_open_ended_gono? &&
+                         record.fe_tsmp > measure.goods_nomenclature_validity_end_date)
+                       measure.goods_nomenclature_validity_end_date
+                     else
+                       record.fe_tsmp
+                     end
+
+          measure.update validity_end_date: end_date
         end
       end
 

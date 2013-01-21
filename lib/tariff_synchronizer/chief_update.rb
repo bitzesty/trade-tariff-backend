@@ -44,7 +44,9 @@ module TariffSynchronizer
     private
 
     def self.chief_file_name_for(date)
-      "KBT009(#{date.strftime("%y")}#{date.yday}).txt"
+      day = sprintf("%03d", date.yday)
+
+      "KBT009(#{date.strftime("%y")}#{day}).txt"
     end
 
     def self.chief_update_url_for(date)

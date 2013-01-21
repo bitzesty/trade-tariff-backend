@@ -138,4 +138,39 @@ describe 'CHIEF: Custom scenarions' do
       end
     end
   end
+
+  # Based on real data
+  describe 'Scenario: TAME deletion yields national measure invalid' do
+    let!(:gono) { create :goods_nomenclature, :with_indent,
+                                             goods_nomenclature_sid: 86487,
+                                             goods_nomenclature_item_id: '1211908500',
+                                             producline_suffix: 80,
+                                             validity_start_date: Date.new(2007,1,1),
+                                             validity_end_date: Date.new(2012,12,13) }
+    let!(:measure) { create :measure, :national, measure_sid: -262016,
+                                                 measure_type: 'COE',
+                                                 goods_nomenclature_item_id: '1211908500',
+                                                 goods_nomenclature_sid: 86487,
+                                                 validity_start_date: DateTime.new(2012,7,25,11,1),
+                                                 validity_end_date: nil,
+                                                 tariff_measure_number: '12110985' }
+    let!(:measure_type) { create :measure_type, measure_type_id: 'COE' }
+    let!(:tame) { create :tame, fe_tsmp: DateTime.new(2013,1,1),
+                                msrgp_code: 'HO',
+                                msr_type: 'CON',
+                                tty_code: nil,
+                                tar_msr_no: '12110985',
+                                le_tsmp: nil,
+                                processed: false,
+                                amend_indicator: 'X' }
+    before {
+      ChiefTransformer.instance.invoke
+    }
+
+    it 'should set measure validity end date to gono validity end date' do
+      # so that ME8 validation on Measure is kept valid
+      measure.reload.validity_end_date.should eq gono.validity_end_date
+      measure.validity_end_date.should_not eq tame.fe_tsmp
+    end
+  end
 end
