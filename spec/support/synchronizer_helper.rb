@@ -55,7 +55,8 @@ module SynchronizerHelper
       "ZZZZZZZZZZZ","31/12/9999:23:59:59"," ",434,
     }
 
-    chief_file_path = File.join(TariffSynchronizer.root_path, 'chief', "#{date}_KBT009(#{date.strftime("%y")}#{date.yday}).txt")
+    day = sprintf('%03d', date.yday)
+    chief_file_path = File.join(TariffSynchronizer.root_path, 'chief', "#{date}_KBT009(#{date.strftime("%y")}#{day}).txt")
     create_file chief_file_path, content
 
     Pathname.new(chief_file_path)

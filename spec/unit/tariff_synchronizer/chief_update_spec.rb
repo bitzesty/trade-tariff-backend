@@ -10,7 +10,7 @@ describe TariffSynchronizer::ChiefUpdate do
     let(:blank_response)     { build :response, content: nil }
     let(:not_found_response) { build :response, :not_found }
     let(:success_response)   { build :response, :success, content: 'abc' }
-    let(:update_name)        { "KBT009(101).txt" }
+    let(:update_name)        { "KBT009(10001).txt" }
     let(:url)                { "#{TariffSynchronizer.host}/taric/#{update_name}" }
 
 
