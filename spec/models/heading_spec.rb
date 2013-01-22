@@ -10,6 +10,39 @@ describe Heading do
   end
 
   describe 'associations' do
+    describe 'chapter' do
+      let!(:heading1)  { create :heading, validity_start_date: Date.new(1999,1,1),
+                                          validity_end_date: Date.new(2013,1,1) }
+      let!(:heading2)  { create :heading, goods_nomenclature_item_id: heading1.goods_nomenclature_item_id,
+                                          validity_start_date: Date.new(2005,1,1),
+                                          validity_end_date: Date.new(2013,1,1) }
+      let!(:chapter1) { create :chapter, goods_nomenclature_item_id: "#{heading1.goods_nomenclature_item_id.first(2)}00000000",
+                                         validity_start_date: Date.new(1991,1,1),
+                                         validity_end_date: Date.new(2002,1,1) }
+      let!(:chapter2) { create :chapter, goods_nomenclature_item_id: "#{heading1.goods_nomenclature_item_id.first(2)}00000000",
+                                         validity_start_date: Date.new(2002,1,1),
+                                         validity_end_date: Date.new(2014,1,1) }
+
+      context 'fetching actual' do
+        it 'fetches correct chapter' do
+          TimeMachine.at("2000-1-1") {
+            heading1.reload.chapter.pk.should eq chapter1.pk
+          }
+          TimeMachine.at("2010-1-1") {
+            heading1.reload.chapter.pk.should eq chapter2.pk
+          }
+        end
+      end
+
+      context 'fetching relevant' do
+        it 'fetches correct chapter' do
+          TimeMachine.with_relevant_validity_periods {
+            heading2.reload.chapter.pk.should eq chapter2.pk
+          }
+        end
+      end
+    end
+
     describe 'measures' do
       let(:measure_type) { create :measure_type, measure_type_id: MeasureType::EXCLUDED_TYPES.sample }
       let(:heading)      { create :heading, :with_indent }

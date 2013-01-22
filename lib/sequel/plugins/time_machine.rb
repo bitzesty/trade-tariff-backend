@@ -25,15 +25,33 @@ module Sequel
         end
 
         def period_start_date_column
-          @period_start_date_column.presence || "#{table_name}__validity_start_date".to_sym
+          @period_start_date_column.presence || Sequel.qualify(table_name, :validity_start_date)
         end
 
         def period_end_date_column
-          @period_end_date_column.presence || "#{table_name}__validity_end_date".to_sym
+          @period_end_date_column.presence || Sequel.qualify(table_name, :validity_end_date)
         end
 
         def point_in_time
           Thread.current[::TimeMachine::THREAD_DATETIME_KEY]
+        end
+
+        def relevant_query?
+          Thread.current[::TimeMachine::THREAD_RELEVANT_KEY]
+        end
+      end
+
+      module InstanceMethods
+        # Use for fetching associated records with relevant validity period
+        # to parent record.
+        def actual_or_relevant(klass)
+          if self.class.point_in_time.present?
+            klass.filter{|o| o.<=(self.class.period_start_date_column, self.class.point_in_time) & (o.>=(self.class.period_end_date_column, self.class.point_in_time) | ({self.class.period_end_date_column => nil})) }
+          elsif self.class.relevant_query?
+            klass.filter{|o| o.<=(klass.period_start_date_column, self.send(self.class.period_start_date_column.column)) & (o.>=(klass.period_end_date_column, self.send(self.class.period_end_date_column.column)) | ({klass.period_end_date_column => nil})) }
+          else
+            klass
+          end
         end
       end
 
@@ -49,7 +67,11 @@ module Sequel
         # current time variable will be nil.
         #
         def actual
-          filter{|o| o.<=(model.period_start_date_column, model.point_in_time) & (o.>=(model.period_end_date_column, model.point_in_time) | ({model.period_end_date_column => nil})) }
+          if model.point_in_time.present?
+            filter{|o| o.<=(model.period_start_date_column, model.point_in_time) & (o.>=(model.period_end_date_column, model.point_in_time) | ({model.period_end_date_column => nil})) }
+          else
+            self
+          end
         end
 
         # Use for extending datasets and associations, so that specified
@@ -64,10 +86,12 @@ module Sequel
         #
         # Useful for forming time bound associations.
         #
-        def with_actual(assoc)
+        def with_actual(assoc, parent = nil)
           klass = assoc.to_s.classify.constantize
 
-          if klass.point_in_time.present?
+          if parent && klass.relevant_query?
+            filter{|o| o.<=(klass.period_start_date_column, parent.send(parent.class.period_start_date_column.column)) & (o.>=(klass.period_end_date_column, parent.send(parent.class.period_end_date_column.column)) | ({klass.period_end_date_column => nil})) }
+          elsif klass.point_in_time.present?
             filter{|o| o.<=(klass.period_start_date_column, klass.point_in_time) & (o.>=(klass.period_end_date_column, klass.point_in_time) | ({klass.period_end_date_column => nil})) }
           else
             self

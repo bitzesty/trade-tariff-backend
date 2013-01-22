@@ -13,14 +13,13 @@ class Heading < GoodsNomenclature
   set_primary_key :goods_nomenclature_sid
 
   one_to_many :commodities, dataset: -> {
-    Commodity.actual
+    actual_or_relevant(Commodity)
              .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
              .where(~{goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes })
   }
 
   one_to_one :chapter, dataset: -> {
-    Chapter.actual
-           .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
+    actual_or_relevant(Chapter).filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
   }
 
   one_to_many :third_country_duty, dataset: -> {

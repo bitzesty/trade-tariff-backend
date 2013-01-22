@@ -1,8 +1,8 @@
 require 'time_machine'
 
 class GoodsNomenclature < Sequel::Model
-  plugin :time_machine, period_start_column: :goods_nomenclatures__validity_start_date,
-                        period_end_column:   :goods_nomenclatures__validity_end_date
+  plugin :time_machine, period_start_column: Sequel.qualify(:goods_nomenclatures, :validity_start_date),
+                        period_end_column:   Sequel.qualify(:goods_nomenclatures, :validity_end_date)
 
   plugin :sti, class_determinator: ->(record) {
     gono_id = record[:goods_nomenclature_item_id].to_s
@@ -24,7 +24,7 @@ class GoodsNomenclature < Sequel::Model
 
   one_to_many :goods_nomenclature_indents, key: :goods_nomenclature_sid,
                                            primary_key: :goods_nomenclature_sid do |ds|
-    ds.with_actual(GoodsNomenclatureIndent)
+    ds.with_actual(GoodsNomenclatureIndent, self)
       .order(:goods_nomenclature_indents__validity_start_date.desc)
   end
 
@@ -37,7 +37,7 @@ class GoodsNomenclature < Sequel::Model
                                                  left_key: :goods_nomenclature_sid,
                                                  right_key: [:goods_nomenclature_description_period_sid, :goods_nomenclature_sid],
                                                  right_primary_key: [:goods_nomenclature_description_period_sid, :goods_nomenclature_sid] do |ds|
-    ds.with_actual(GoodsNomenclatureDescriptionPeriod)
+    ds.with_actual(GoodsNomenclatureDescriptionPeriod, self)
       .order(:goods_nomenclature_description_periods__validity_start_date.desc)
   end
 

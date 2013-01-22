@@ -15,9 +15,12 @@ namespace :tariff do
   task reindex: %w[environment
                    install:green_pages] do
     ENV['FORCE'] = 'true'
-    ['Section','Chapter','Heading','Commodity','SearchReference'].each do |klass|
-      ENV['CLASS'] = klass
-      Rake::Task['tire:import'].execute
+
+    TimeMachine.with_relevant_validity_periods do
+      ['Section','Chapter','Heading','Commodity','SearchReference'].each do |klass|
+        ENV['CLASS'] = klass
+        Rake::Task['tire:import'].execute
+      end
     end
 
     # Remove hidden goods nomenclatures
