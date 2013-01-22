@@ -6,6 +6,74 @@ describe Commodity do
   end
 
   describe 'associations' do
+    describe 'heading' do
+      let!(:gono1)  { create :commodity, validity_start_date: Date.new(1999,1,1),
+                                         validity_end_date: Date.new(2013,1,1) }
+      let!(:gono2)  { create :commodity, goods_nomenclature_item_id: gono1.goods_nomenclature_item_id,
+                                         validity_start_date: Date.new(2005,1,1),
+                                         validity_end_date: Date.new(2013,1,1) }
+      let!(:heading1) { create :heading, goods_nomenclature_item_id: "#{gono1.goods_nomenclature_item_id.first(4)}000000",
+                                         validity_start_date: Date.new(1991,1,1),
+                                         validity_end_date: Date.new(2002,1,1),
+                                         producline_suffix: 80 }
+      let!(:heading2) { create :heading, goods_nomenclature_item_id: "#{gono1.goods_nomenclature_item_id.first(4)}000000",
+                                         validity_start_date: Date.new(2002,1,1),
+                                         validity_end_date: Date.new(2014,1,1),
+                                         producline_suffix: 80 }
+
+      context 'fetching actual' do
+        it 'fetches correct chapter' do
+          TimeMachine.at("2000-1-1") {
+            gono1.reload.heading.pk.should eq heading1.pk
+          }
+          TimeMachine.at("2010-1-1") {
+            gono1.reload.heading.pk.should eq heading2.pk
+          }
+        end
+      end
+
+      context 'fetching relevant' do
+        it 'fetches correct chapter' do
+          TimeMachine.with_relevant_validity_periods {
+            gono2.reload.heading.pk.should eq heading2.pk
+          }
+        end
+      end
+    end
+
+    describe 'chapter' do
+      let!(:gono1)  { create :heading, validity_start_date: Date.new(1999,1,1),
+                                          validity_end_date: Date.new(2013,1,1) }
+      let!(:gono2)  { create :heading, goods_nomenclature_item_id: gono1.goods_nomenclature_item_id,
+                                          validity_start_date: Date.new(2005,1,1),
+                                          validity_end_date: Date.new(2013,1,1) }
+      let!(:chapter1) { create :chapter, goods_nomenclature_item_id: "#{gono1.goods_nomenclature_item_id.first(2)}00000000",
+                                         validity_start_date: Date.new(1991,1,1),
+                                         validity_end_date: Date.new(2002,1,1) }
+      let!(:chapter2) { create :chapter, goods_nomenclature_item_id: "#{gono1.goods_nomenclature_item_id.first(2)}00000000",
+                                         validity_start_date: Date.new(2002,1,1),
+                                         validity_end_date: Date.new(2014,1,1) }
+
+      context 'fetching actual' do
+        it 'fetches correct chapter' do
+          TimeMachine.at("2000-1-1") {
+            gono1.reload.chapter.pk.should eq chapter1.pk
+          }
+          TimeMachine.at("2010-1-1") {
+            gono1.reload.chapter.pk.should eq chapter2.pk
+          }
+        end
+      end
+
+      context 'fetching relevant' do
+        it 'fetches correct chapter' do
+          TimeMachine.with_relevant_validity_periods {
+            gono2.reload.chapter.pk.should eq chapter2.pk
+          }
+        end
+      end
+    end
+
     describe 'measures' do
       let(:measure_type) { create :measure_type, measure_type_id: MeasureType::EXCLUDED_TYPES.sample }
       let(:commodity)    { create :commodity, :with_indent }
@@ -147,10 +215,10 @@ describe Commodity do
     let!(:expired_commodity) { create :commodity, :expired }
 
     context 'when not in TimeMachine block' do
-      it 'fetches commodities that are actual Today' do
-        commodities = Commodity.actual.all
+      it 'fetches all commodities' do
+        commodities = Commodity.all
         commodities.should include actual_commodity
-        commodities.should_not include expired_commodity
+        commodities.should include expired_commodity
       end
     end
 

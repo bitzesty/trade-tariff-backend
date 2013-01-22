@@ -13,12 +13,13 @@ class Heading < GoodsNomenclature
   set_primary_key :goods_nomenclature_sid
 
   one_to_many :commodities, dataset: -> {
-    actual(Commodity).filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
-                     .where(~{goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes })
+    actual_or_relevant(Commodity)
+             .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
+             .where(~{goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes })
   }
 
   one_to_one :chapter, dataset: -> {
-    actual(Chapter).filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
+    actual_or_relevant(Chapter).filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
   }
 
   one_to_many :third_country_duty, dataset: -> {
@@ -78,9 +79,10 @@ class Heading < GoodsNomenclature
   end
 
   def declarable
-    non_grouping? && actual(GoodsNomenclature).where("goods_nomenclature_item_id LIKE ?", "#{short_code}______")
-                                              .where("goods_nomenclature_item_id > ?", goods_nomenclature_item_id)
-                                              .none?
+    non_grouping? && GoodsNomenclature.actual
+                                      .where("goods_nomenclature_item_id LIKE ?", "#{short_code}______")
+                                      .where("goods_nomenclature_item_id > ?", goods_nomenclature_item_id)
+                                      .none?
   end
   alias :declarable? :declarable
 

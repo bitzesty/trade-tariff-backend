@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-shared_examples_for 'one to one to' do |associated_object|
+shared_examples_for 'one to one to' do |associated_object, eager_load_association = associated_object|
   @source_record =  :"#{described_class.to_s.underscore}"
   let!(:primary_key)               { associated_object.to_s.classify.constantize.primary_key }
   let!(:left_primary_key)          { primary_key }
@@ -63,7 +63,7 @@ shared_examples_for 'one to one to' do |associated_object|
     it "loads correct #{associated_object.to_s.humanize} respecting given actual time" do
       TimeMachine.now do
         described_class.where(association_conditions)
-                       .eager(associated_object)
+                       .eager(eager_load_association)
                        .all
                        .first
                        .send(associated_object).pk.should == send(:"#{associated_object}1").pk
@@ -73,7 +73,7 @@ shared_examples_for 'one to one to' do |associated_object|
     it "loads correct #{associated_object.to_s.humanize} respecting given time" do
       TimeMachine.at(1.year.ago) do
         described_class.where(association_conditions)
-                       .eager(associated_object)
+                       .eager(eager_load_association)
                        .all
                        .first
                        .send(associated_object).pk.should == send(:"#{associated_object}1").pk
@@ -81,7 +81,7 @@ shared_examples_for 'one to one to' do |associated_object|
 
       TimeMachine.at(4.years.ago) do
         described_class.where(association_conditions)
-                       .eager(associated_object)
+                       .eager(eager_load_association)
                        .all
                        .first
                        .send(associated_object).pk.should == send(:"#{associated_object}2").pk

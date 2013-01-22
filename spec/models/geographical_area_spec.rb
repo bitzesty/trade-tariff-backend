@@ -35,7 +35,7 @@ describe GeographicalArea do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
             GeographicalArea.where(geographical_area_sid: geographical_area.geographical_area_sid)
-                          .eager(:geographical_area_description)
+                          .eager(:geographical_area_descriptions)
                           .all
                           .first
                           .geographical_area_description.pk.should == geographical_area_description1.pk
@@ -45,7 +45,7 @@ describe GeographicalArea do
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
             GeographicalArea.where(geographical_area_sid: geographical_area.geographical_area_sid)
-                          .eager(:geographical_area_description)
+                          .eager(:geographical_area_descriptions)
                           .all
                           .first
                           .geographical_area_description.pk.should == geographical_area_description1.pk
@@ -53,7 +53,7 @@ describe GeographicalArea do
 
           TimeMachine.at(4.years.ago) do
             GeographicalArea.where(geographical_area_sid: geographical_area.geographical_area_sid)
-                          .eager(:geographical_area_description)
+                          .eager(:geographical_area_descriptions)
                           .all
                           .first
                           .geographical_area_description.pk.should == geographical_area_description2.pk

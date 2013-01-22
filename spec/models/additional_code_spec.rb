@@ -35,7 +35,7 @@ describe AdditionalCode do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
             AdditionalCode.where(additional_code_sid: additional_code.additional_code_sid)
-                          .eager(:additional_code_description)
+                          .eager(:additional_code_descriptions)
                           .all
                           .first
                           .additional_code_description.pk.should == additional_code_description1.pk
@@ -45,7 +45,7 @@ describe AdditionalCode do
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
             AdditionalCode.where(additional_code_sid: additional_code.additional_code_sid)
-                          .eager(:additional_code_description)
+                          .eager(:additional_code_descriptions)
                           .all
                           .first
                           .additional_code_description.pk.should == additional_code_description1.pk
@@ -53,7 +53,7 @@ describe AdditionalCode do
 
           TimeMachine.at(4.years.ago) do
             AdditionalCode.where(additional_code_sid: additional_code.additional_code_sid)
-                          .eager(:additional_code_description)
+                          .eager(:additional_code_descriptions)
                           .all
                           .first
                           .additional_code_description.pk.should == additional_code_description2.pk

@@ -6,47 +6,28 @@ class ExportRefundNomenclature < Sequel::Model
 
   set_primary_key :export_refund_nomenclature_sid
 
-  one_to_one :export_refund_nomenclature_description, dataset: -> {
-    ExportRefundNomenclatureDescription.with_actual(ExportRefundNomenclatureDescriptionPeriod)
-                                .join(:export_refund_nomenclature_description_periods, export_refund_nomenclature_description_periods__export_refund_nomenclature_description_period_sid: :export_refund_nomenclature_descriptions__export_refund_nomenclature_description_period_sid,
-                                                                               export_refund_nomenclature_description_periods__export_refund_nomenclature_sid: :export_refund_nomenclature_descriptions__export_refund_nomenclature_sid)
-                                .where(export_refund_nomenclature_descriptions__export_refund_nomenclature_sid: export_refund_nomenclature_sid)
-  }, eager_loader: (proc do |eo|
-    eo[:rows].each{|gono| gono.associations[:export_refund_nomenclature_description] = nil}
+  many_to_many :export_refund_nomenclature_descriptions, join_table: :export_refund_nomenclature_description_periods,
+                                                         left_primary_key: :export_refund_nomenclature_sid,
+                                                         left_key: :export_refund_nomenclature_sid,
+                                                         right_key: [:export_refund_nomenclature_description_period_sid, :export_refund_nomenclature_sid],
+                                                         right_primary_key: [:export_refund_nomenclature_description_period_sid, :export_refund_nomenclature_sid] do |ds|
+                                                           ds.with_actual(ExportRefundNomenclatureDescriptionPeriod)
+                                                             .order(:export_refund_nomenclature_description_periods__validity_start_date.desc)
+                                                         end
 
-    id_map = eo[:id_map]
+  def export_refund_nomenclature_description
+    export_refund_nomenclature_descriptions.first
+  end
 
-    ExportRefundNomenclatureDescription.with_actual(ExportRefundNomenclatureDescriptionPeriod)
-                                .join(:export_refund_nomenclature_description_periods, export_refund_nomenclature_description_periods__export_refund_nomenclature_description_period_sid: :export_refund_nomenclature_descriptions__export_refund_nomenclature_description_period_sid,
-                                                                               export_refund_nomenclature_description_periods__export_refund_nomenclature_sid: :export_refund_nomenclature_descriptions__export_refund_nomenclature_sid)
-                                .where(export_refund_nomenclature_descriptions__export_refund_nomenclature_sid: id_map.keys).all do |description|
-      if gonos = id_map[description.export_refund_nomenclature_sid]
-        gonos.each do |gono|
-          gono.associations[:export_refund_nomenclature_description] = description
-        end
-      end
-    end
-  end)
+  one_to_many :export_refund_nomenclature_indents, key: :export_refund_nomenclature_sid,
+                                                   primary_key: :export_refund_nomenclature_sid do |ds|
+    ds.with_actual(ExportRefundNomenclatureIndent)
+      .order(:export_refund_nomenclature_indents__validity_start_date.desc)
+  end
 
-  one_to_one :export_refund_nomenclature_indent, dataset: -> {
-    actual(ExportRefundNomenclatureIndent).filter(export_refund_nomenclature_sid: export_refund_nomenclature_sid)
-                                   .order(:validity_start_date.desc)
-  }, eager_loader: (proc do |eo|
-    eo[:rows].each{|gono| gono.associations[:export_refund_nomenclature_indent] = nil}
-
-    id_map = eo[:id_map]
-
-    ExportRefundNomenclatureIndent.actual
-                           .where(export_refund_nomenclature_sid: id_map.keys)
-                           .group(:export_refund_nomenclature_sid)
-                           .all do |indent|
-      if gonos = id_map[indent.export_refund_nomenclature_sid]
-        gonos.each do |gono|
-          gono.associations[:export_refund_nomenclature_indent] = indent
-        end
-      end
-    end
-  end)
+  def export_refund_nomenclature_indent
+    export_refund_nomenclature_indents.first
+  end
 
   delegate :description, to: :export_refund_nomenclature_description
   delegate :number_indents, to: :export_refund_nomenclature_indent
@@ -57,8 +38,8 @@ class ExportRefundNomenclature < Sequel::Model
 
   def ancestors
     ExportRefundNomenclature.select(:export_refund_nomenclatures.*)
-      .eager(:export_refund_nomenclature_indent,
-             :export_refund_nomenclature_description)
+      .eager(:export_refund_nomenclature_indents,
+             :export_refund_nomenclature_descriptions)
       .join_table(:inner,
         ExportRefundNomenclatureIndent
                  .select(Sequel.as(:export_refund_nomenclatures__export_refund_nomenclature_sid, :gono_sid),
