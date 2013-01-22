@@ -14,8 +14,9 @@ class Chapter < GoodsNomenclature
                           join_table: :chapters_sections
 
   one_to_many :headings, dataset: -> {
-    actual(Heading).filter("goods_nomenclature_item_id LIKE ? AND goods_nomenclature_item_id NOT LIKE '__00______'", relevant_headings)
-                   .where(~{goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes })
+    Heading.actual
+           .filter("goods_nomenclature_item_id LIKE ? AND goods_nomenclature_item_id NOT LIKE '__00______'", relevant_headings)
+           .where(~{goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes })
   }
 
   one_to_one :chapter_note, dataset: -> {

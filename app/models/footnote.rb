@@ -3,36 +3,26 @@ class Footnote < Sequel::Model
 
   set_primary_key :footnote_id, :footnote_type_id
 
-  one_to_one :footnote_description, key: [:footnote_id, :footnote_type_id], dataset: -> {
-    FootnoteDescription.with_actual(FootnoteDescriptionPeriod)
-                       .join(:footnote_description_periods, footnote_description_periods__footnote_description_period_sid: :footnote_descriptions__footnote_description_period_sid,
-                                                            footnote_description_periods__footnote_type_id: :footnote_descriptions__footnote_type_id,
-                                                            footnote_description_periods__footnote_id: :footnote_descriptions__footnote_id)
-                       .where(footnote_descriptions__footnote_id: footnote_id,
-                               footnote_descriptions__footnote_type_id: footnote_type_id)
-                       .order(:footnote_description_periods__validity_start_date.desc)
-  }, eager_loader: (proc do |eo|
-    eo[:rows].each{|footnote| footnote.associations[:footnote_description] = nil}
+  many_to_many :footnote_descriptions, join_table: :footnote_description_periods,
+                                       left_primary_key: [:footnote_id, :footnote_type_id],
+                                       left_key: [:footnote_id, :footnote_type_id],
+                                       right_key: [:footnote_description_period_sid,
+                                                   :footnote_type_id,
+                                                   :footnote_id],
+                                       right_primary_key: [:footnote_description_period_sid,
+                                                           :footnote_type_id,
+                                                           :footnote_id] do |ds|
+    ds.with_actual(FootnoteDescriptionPeriod)
+      .order(:footnote_description_periods__validity_start_date.desc)
+  end
 
-    id_map = eo[:id_map]
-
-    FootnoteDescription.with_actual(FootnoteDescriptionPeriod)
-                       .join(:footnote_description_periods, footnote_description_periods__footnote_description_period_sid: :footnote_descriptions__footnote_description_period_sid,
-                                                            footnote_description_periods__footnote_type_id: :footnote_descriptions__footnote_type_id,
-                                                            footnote_description_periods__footnote_id: :footnote_descriptions__footnote_id)
-                       .order(:footnote_description_periods__validity_start_date.desc)
-                       .where(footnote_descriptions__footnote_id: id_map.keys.map(&:first),
-                              footnote_descriptions__footnote_type_id: id_map.keys.map(&:last)).all do |footnote_description|
-      if footnotes = id_map[[footnote_description.footnote_id, footnote_description.footnote_type_id]]
-        footnotes.each do |footnote|
-          footnote.associations[:footnote_description] ||= footnote_description
-        end
-      end
-    end
-  end)
+  def footnote_description
+    footnote_descriptions.first
+  end
 
   one_to_one :footnote_type, primary_key: :footnote_type_id,
                              key: :footnote_type_id
+
   one_to_many :footnote_description_periods, primary_key: [:footnote_id,
                                                            :footnote_type_id],
                                              key: [:footnote_id,

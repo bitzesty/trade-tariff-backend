@@ -22,84 +22,40 @@ class GoodsNomenclature < Sequel::Model
 
   set_primary_key :goods_nomenclature_sid
 
-  one_to_one :goods_nomenclature_indent, dataset: -> {
-    actual(GoodsNomenclatureIndent).select_all(:goods_nomenclature_indents)
-                                .where(goods_nomenclature_indents__goods_nomenclature_sid: goods_nomenclature_sid)
-                                .order(:goods_nomenclature_indents__validity_start_date.desc)
-                                .from_self(alias: :indents)
-                                .group(:indents__goods_nomenclature_sid)
-  }, eager_loader: (proc do |eo|
-    eo[:rows].each{|gono| gono.associations[:goods_nomenclature_indent] = nil}
+  one_to_many :goods_nomenclature_indents, key: :goods_nomenclature_sid,
+                                           primary_key: :goods_nomenclature_sid do |ds|
+    ds.with_actual(GoodsNomenclatureIndent)
+      .order(:goods_nomenclature_indents__validity_start_date.desc)
+  end
 
-    id_map = eo[:id_map]
+  def goods_nomenclature_indent
+    goods_nomenclature_indents.first
+  end
 
-  GoodsNomenclatureIndent.actual
-                         .select_all(:goods_nomenclature_indents)
-                         .where(goods_nomenclature_indents__goods_nomenclature_sid: id_map.keys)
-                         .order(:goods_nomenclature_indents__validity_start_date.desc)
-                         .from_self(alias: :indents)
-                         .group(:indents__goods_nomenclature_sid)
-                         .all do |indent|
-      if gonos = id_map[indent.goods_nomenclature_sid]
-        gonos.each do |gono|
-          gono.associations[:goods_nomenclature_indent] = indent
-        end
-      end
-    end
-  end)
+  many_to_many :goods_nomenclature_descriptions, join_table: :goods_nomenclature_description_periods,
+                                                 left_primary_key: :goods_nomenclature_sid,
+                                                 left_key: :goods_nomenclature_sid,
+                                                 right_key: [:goods_nomenclature_description_period_sid, :goods_nomenclature_sid],
+                                                 right_primary_key: [:goods_nomenclature_description_period_sid, :goods_nomenclature_sid] do |ds|
+    ds.with_actual(GoodsNomenclatureDescriptionPeriod)
+      .order(:goods_nomenclature_description_periods__validity_start_date.desc)
+  end
 
-  one_to_one :goods_nomenclature_description, dataset: -> {
-    GoodsNomenclatureDescription.select_all(:goods_nomenclature_descriptions)
-                                .with_actual(GoodsNomenclatureDescriptionPeriod)
-                                .join(:goods_nomenclature_description_periods, goods_nomenclature_description_periods__goods_nomenclature_description_period_sid: :goods_nomenclature_descriptions__goods_nomenclature_description_period_sid,
-                                                                               goods_nomenclature_description_periods__goods_nomenclature_sid: :goods_nomenclature_descriptions__goods_nomenclature_sid)
-                                .where(goods_nomenclature_descriptions__goods_nomenclature_sid: goods_nomenclature_sid)
-                                .order(:goods_nomenclature_description_periods__validity_start_date.desc)
-                                .from_self(alias: :descriptions)
-                                .group(:descriptions__goods_nomenclature_sid)
-  }, eager_loader: (proc do |eo|
-    eo[:rows].each{|gono| gono.associations[:goods_nomenclature_description] = nil}
+  def goods_nomenclature_description
+    goods_nomenclature_descriptions.first
+  end
 
-    id_map = eo[:id_map]
+  many_to_many :footnotes, join_table: :footnote_association_goods_nomenclatures,
+                           left_primary_key: :goods_nomenclature_sid,
+                           left_key: :goods_nomenclature_sid,
+                           right_key: [:footnote_type, :footnote_id],
+                           right_primary_key: [:footnote_type_id, :footnote_id] do |ds|
+    ds.with_actual(FootnoteAssociationGoodsNomenclature)
+  end
 
-    GoodsNomenclatureDescription.select_all(:goods_nomenclature_descriptions)
-                                .with_actual(GoodsNomenclatureDescriptionPeriod)
-                                .join(:goods_nomenclature_description_periods, goods_nomenclature_description_periods__goods_nomenclature_description_period_sid: :goods_nomenclature_descriptions__goods_nomenclature_description_period_sid,
-                                                                               goods_nomenclature_description_periods__goods_nomenclature_sid: :goods_nomenclature_descriptions__goods_nomenclature_sid)
-                                .where(goods_nomenclature_descriptions__goods_nomenclature_sid: id_map.keys)
-                                .order(:goods_nomenclature_description_periods__validity_start_date.desc)
-                                .from_self(alias: :descriptions)
-                                .group(:descriptions__goods_nomenclature_sid)
-                                .all do |description|
-      if gonos = id_map[description.goods_nomenclature_sid]
-        gonos.each do |gono|
-          gono.associations[:goods_nomenclature_description] = description
-        end
-      end
-    end
-  end)
-
-  one_to_one :footnote, key: {}, primary_key: {}, eager_loader_key: :goods_nomenclature_sid, dataset: -> {
-    Footnote.with_actual(FootnoteAssociationGoodsNomenclature)
-            .join(FootnoteAssociationGoodsNomenclature, footnote_association_goods_nomenclatures__footnote_type: :footnotes__footnote_type_id,
-                                                        footnote_association_goods_nomenclatures__footnote_id: :footnotes__footnote_id)
-            .where(footnote_association_goods_nomenclatures__goods_nomenclature_sid: goods_nomenclature_sid)
-  }, eager_loader: (proc do |eo|
-    eo[:rows].each{|gono| gono.associations[:footnote] = nil}
-
-    id_map = eo[:id_map]
-
-    Footnote.with_actual(FootnoteAssociationGoodsNomenclature)
-            .join(FootnoteAssociationGoodsNomenclature, footnote_association_goods_nomenclatures__footnote_type: :footnotes__footnote_type_id,
-                                                        footnote_association_goods_nomenclatures__footnote_id: :footnotes__footnote_id)
-            .where(footnote_association_goods_nomenclatures__goods_nomenclature_sid: id_map.keys).all do |footnote|
-      if gonos = id_map[footnote[:goods_nomenclature_sid]]
-        gonos.each do |gono|
-          gono.associations[:footnote] = footnote
-        end
-      end
-    end
-  end)
+  def footnote
+    footnotes.first
+  end
 
   delegate :number_indents, to: :goods_nomenclature_indent, allow_nil: true
   delegate :description, to: :goods_nomenclature_description, allow_nil: true
@@ -114,9 +70,10 @@ class GoodsNomenclature < Sequel::Model
                                               primary_key: [:goods_nomenclature_item_id,
                                                             :producline_suffix]
 
-  one_to_many :export_refund_nomenclatures, dataset: -> {
-    actual(ExportRefundNomenclature).where(goods_nomenclature_sid: goods_nomenclature_sid)
-  }
+  one_to_many :export_refund_nomenclatures, key: :goods_nomenclature_sid,
+                                            primary_key: :goods_nomenclature_sid do |ds|
+    ds.with_actual(ExportRefundNomenclature)
+  end
 
   one_to_many :measures, key: :goods_nomenclature_sid,
                          foreign_key: :goods_nomenclature_sid

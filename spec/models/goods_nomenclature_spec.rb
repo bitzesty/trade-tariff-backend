@@ -38,7 +38,7 @@ describe GoodsNomenclature do
         it 'loads correct indent respecting given actual time' do
           TimeMachine.now do
             GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
-                          .eager(:goods_nomenclature_indent)
+                          .eager(:goods_nomenclature_indents)
                           .all
                           .first
                           .goods_nomenclature_indent.pk.should == goods_nomenclature_indent1.pk
@@ -48,7 +48,7 @@ describe GoodsNomenclature do
         it 'loads correct indent respecting given time' do
           TimeMachine.at(1.year.ago) do
             GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
-                          .eager(:goods_nomenclature_indent)
+                          .eager(:goods_nomenclature_indents)
                           .all
                           .first
                           .goods_nomenclature_indent.pk.should == goods_nomenclature_indent1.pk
@@ -56,7 +56,7 @@ describe GoodsNomenclature do
 
           TimeMachine.at(4.years.ago) do
             GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
-                          .eager(:goods_nomenclature_indent)
+                          .eager(:goods_nomenclature_indents)
                           .all
                           .first
                           .goods_nomenclature_indent.pk.should == goods_nomenclature_indent3.pk
@@ -99,7 +99,7 @@ describe GoodsNomenclature do
           it 'loads correct description respecting given actual time' do
             TimeMachine.now do
               GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
-                            .eager(:goods_nomenclature_description)
+                            .eager(:goods_nomenclature_descriptions)
                             .all
                             .first
                             .goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
@@ -109,7 +109,7 @@ describe GoodsNomenclature do
           it 'loads correct description respecting given time' do
             TimeMachine.at(1.year.ago) do
               GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
-                            .eager(:goods_nomenclature_description)
+                            .eager(:goods_nomenclature_descriptions)
                             .all
                             .first
                             .goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
@@ -117,7 +117,7 @@ describe GoodsNomenclature do
 
             TimeMachine.at(4.years.ago) do
               GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
-                            .eager(:goods_nomenclature_description)
+                            .eager(:goods_nomenclature_descriptions)
                             .all
                             .first
                             .goods_nomenclature_description.pk.should == goods_nomenclature_description2.pk
@@ -159,7 +159,7 @@ describe GoodsNomenclature do
           it 'loads correct description respecting given actual time' do
             TimeMachine.now do
               GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
-                            .eager(:goods_nomenclature_description)
+                            .eager(:goods_nomenclature_descriptions)
                             .all
                             .first
                             .goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
@@ -169,7 +169,7 @@ describe GoodsNomenclature do
           it 'loads correct description respecting given time' do
             TimeMachine.at(2.years.ago) do
               GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
-                            .eager(:goods_nomenclature_description)
+                            .eager(:goods_nomenclature_descriptions)
                             .all
                             .first
                             .goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
@@ -177,7 +177,7 @@ describe GoodsNomenclature do
 
             TimeMachine.at(4.years.ago) do
               GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
-                            .eager(:goods_nomenclature_description)
+                            .eager(:goods_nomenclature_descriptions)
                             .all
                             .first
                             .goods_nomenclature_description.pk.should == goods_nomenclature_description2.pk
@@ -220,7 +220,7 @@ describe GoodsNomenclature do
         it 'loads correct indent respecting given actual time' do
           TimeMachine.now do
             GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
-                          .eager(:footnote)
+                          .eager(:footnotes)
                           .all
                           .first
                           .footnote.pk.should == footnote1.pk
@@ -230,7 +230,7 @@ describe GoodsNomenclature do
         it 'loads correct indent respecting given time' do
           TimeMachine.at(1.year.ago) do
             GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
-                          .eager(:footnote)
+                          .eager(:footnotes)
                           .all
                           .first
                           .footnote.pk.should == footnote1.pk
@@ -238,7 +238,7 @@ describe GoodsNomenclature do
 
           TimeMachine.at(4.years.ago) do
             GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
-                          .eager(:footnote)
+                          .eager(:footnotes)
                           .all
                           .first
                           .footnote.pk.should == footnote2.pk

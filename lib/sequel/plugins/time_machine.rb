@@ -33,41 +33,45 @@ module Sequel
         end
 
         def point_in_time
-          Thread.current[::TimeMachine::THREAD_DATETIME_KEY] || Date.today
+          Thread.current[::TimeMachine::THREAD_DATETIME_KEY]
         end
-
-        def strategy
-          Thread.current[::TimeMachine::THREAD_STRATEGY_KEY] || :relevant
-        end
-      end
-
-      module InstanceMethods
-        def point_in_time
-          self.class.point_in_time
-        end
-
-        def actual(assoc)
-          klass = assoc.to_s.classify.constantize
-
-          case self.class.strategy
-          when :absolute
-            klass.filter{|o| o.<=(klass.period_start_date_column, klass.point_in_time) & (o.>=(klass.period_end_date_column, klass.point_in_time) | ({klass.period_end_date_column => nil})) }
-          else # relevant
-            klass.filter{|o| o.<=(klass.period_start_date_column, validity_start_date) & (o.>=(klass.period_end_date_column, validity_end_date) | ({klass.period_end_date_column => nil})) }
-          end
-        end
-        private :actual
       end
 
       module DatasetMethods
+        # Use for fetching record inside TimeMachine block.
+        #
+        # Example:
+        #
+        #   TimeMachine.now { Commodity.actual.first }
+        #
+        # Will fetch first commodity that is valid at this point in time.
+        # Invoking outside time machine block will probably yield no as
+        # current time variable will be nil.
+        #
         def actual
           filter{|o| o.<=(model.period_start_date_column, model.point_in_time) & (o.>=(model.period_end_date_column, model.point_in_time) | ({model.period_end_date_column => nil})) }
         end
 
+        # Use for extending datasets and associations, so that specified
+        # klass would respect current time in TimeMachine.
+        #
+        # Example
+        #
+        #   TimeMachine.now { Footnote.actual
+        #                             .with_actual(FootnoteDescriptionPeriod)
+        #                             .joins(:footnote_description_periods)
+        #                             .first }
+        #
+        # Useful for forming time bound associations.
+        #
         def with_actual(assoc)
           klass = assoc.to_s.classify.constantize
 
-          filter{|o| o.<=(klass.period_start_date_column, klass.point_in_time) & (o.>=(klass.period_end_date_column, klass.point_in_time) | ({klass.period_end_date_column => nil})) }
+          if klass.point_in_time.present?
+            filter{|o| o.<=(klass.period_start_date_column, klass.point_in_time) & (o.>=(klass.period_end_date_column, klass.point_in_time) | ({klass.period_end_date_column => nil})) }
+          else
+            self
+          end
         end
       end
     end
