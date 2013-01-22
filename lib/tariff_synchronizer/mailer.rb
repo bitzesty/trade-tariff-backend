@@ -50,5 +50,12 @@ module TariffSynchronizer
 
       mail subject: "[info] Tariff updates applied #{environment_indicator}"
     end
+
+    def missing_updates(count, update_type)
+      @count = count
+      @update_type = update_type
+
+      mail subject: "[warn] Missing #{count} #{update_type.upcase} updates in a row #{environment_indicator}"
+    end
   end
 end

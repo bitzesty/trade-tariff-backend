@@ -40,7 +40,6 @@ module TariffSynchronizer
   autoload :TaricArchive,  "tariff_synchronizer/taric_archive"
   autoload :ChiefArchive,  "tariff_synchronizer/chief_archive"
 
-
   extend self
 
   mattr_accessor :username
@@ -81,6 +80,10 @@ module TariffSynchronizer
   # Taric update url template
   mattr_accessor :taric_update_url_template
   self.taric_update_url_template = "%{host}/taric/%{file_name}"
+
+  # Number of days to warn about missing updates after
+  mattr_accessor :warning_day_count
+  self.warning_day_count = 3
 
   # Download pending updates for Taric and National data
   # Gets latest downloaded file present in (inbox/failbox/processed) and tries

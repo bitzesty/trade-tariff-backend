@@ -124,6 +124,15 @@ module TariffSynchronizer
     def delay_download(event)
       info "Delaying update fetching: #{event.payload[:url]}"
     end
+
+    # We missed three update files in a row
+    # Might be okay for Taric, but most likely not ok for CHIEF
+    # this is precautionary measure
+    def missing_updates(event)
+      warn "Missing #{event.payload[:count]} updates in a row for #{event.payload[:update_type].to_s.upcase}"
+
+      Mailer.missing_updates(event.payload[:count], event.payload[:update_type].to_s).deliver
+    end
   end
 end
 

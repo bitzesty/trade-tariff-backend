@@ -419,4 +419,27 @@ describe TariffSynchronizer::Logger do
       @logger.logged(:info).to_s.should =~ /Delaying update fetching/
     end
   end
+
+  describe '#missing_updates' do
+    let(:not_found_response) { build :response, :not_found }
+    let!(:chief_update1) { create :chief_update, :missing, issue_date: Date.today.ago(2.days) }
+    let!(:chief_update2) { create :chief_update, :missing, issue_date: Date.today.ago(3.days) }
+
+    before {
+      TariffSynchronizer::ChiefUpdate.stubs(:download_content)
+                                     .returns(not_found_response)
+      TariffSynchronizer::ChiefUpdate.sync
+    }
+
+    it 'logs a warn event' do
+      @logger.logged(:warn).size.should be > 1
+      @logger.logged(:warn).to_s.should =~ /Missing/
+    end
+
+    it 'sends a warning email' do
+      ActionMailer::Base.deliveries.should_not be_empty
+      email = ActionMailer::Base.deliveries.last
+      email.encoded.should =~ /missing/
+    end
+  end
 end

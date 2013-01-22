@@ -343,6 +343,10 @@ FactoryGirl.define do
     trait :failed do
       state { 'F' }
     end
+
+    trait :missing do
+      state { 'M' }
+    end
   end
 
   factory :chief_update, parent: :base_update, class: TariffSynchronizer::ChiefUpdate do
