@@ -109,6 +109,26 @@ describe TariffSynchronizer::ChiefUpdate do
     end
   end
 
+  describe '.sync' do
+    let(:not_found_response) { build :response, :not_found }
+
+    context 'file not found for nth time in a row' do
+      let!(:chief_update1) { create :chief_update, :missing, issue_date: Date.today.ago(2.days) }
+      let!(:chief_update2) { create :chief_update, :missing, issue_date: Date.today.ago(3.days) }
+      let!(:stub_logger)   { stub }
+
+      before {
+        TariffSynchronizer::ChiefUpdate.stubs(:download_content)
+                                       .returns(not_found_response)
+      }
+
+      it 'notifies about several missing updates in a row' do
+        TariffSynchronizer::ChiefUpdate.expects(:notify_about_missing_updates).returns(true)
+        TariffSynchronizer::ChiefUpdate.sync
+      end
+    end
+  end
+
   describe "#apply" do
     let(:example_date) { Forgery(:date).date }
     let(:state) { :pending }

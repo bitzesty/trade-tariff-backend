@@ -204,6 +204,25 @@ describe TariffSynchronizer::TaricUpdate do
     after  { purge_synchronizer_folders }
   end
 
+  describe '.sync' do
+    let(:not_found_response) { build :response, :not_found }
+
+    context 'file not found for nth time in a row' do
+      let!(:taric_update1) { create :taric_update, :missing, issue_date: Date.today.ago(2.days) }
+      let!(:taric_update2) { create :taric_update, :missing, issue_date: Date.today.ago(3.days) }
+
+      before {
+        TariffSynchronizer::TaricUpdate.stubs(:download_content)
+                                       .returns(not_found_response)
+      }
+
+      it 'notifies about several missing updates in a row' do
+        TariffSynchronizer::TaricUpdate.expects(:notify_about_missing_updates).returns(true)
+        TariffSynchronizer::TaricUpdate.sync
+      end
+    end
+  end
+
   describe "#apply" do
     let(:state) { :pending }
     let!(:example_taric_update) { create :taric_update, example_date: example_date }

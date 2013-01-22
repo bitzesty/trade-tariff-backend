@@ -49,6 +49,10 @@ module TariffSynchronizer
       end
     end
 
+    def missing?
+      state == MISSING_STATE
+    end
+
     def mark_as_applied
       update(state: APPLIED_STATE)
     end
@@ -68,6 +72,8 @@ module TariffSynchronizer
             download(date) unless exists_for?(date)
           end
         end
+
+        notify_about_missing_updates if self.order(:issue_date.desc).last(TariffSynchronizer.warning_day_count).all?(&:missing?)
       end
 
       def exists_for?(date)
@@ -136,6 +142,11 @@ module TariffSynchronizer
       def parse_file_path(file_path)
         filename = Pathname.new(file_path).basename.to_s
         filename.match(/^(\d{4}-\d{2}-\d{2})_(.*)$/)[1,2]
+      end
+
+      def notify_about_missing_updates
+        ActiveSupport::Notifications.instrument("missing_updates.tariff_synchronizer", update_type: update_type,
+                                                                                       count: TariffSynchronizer.warning_day_count)
       end
     end
   end
