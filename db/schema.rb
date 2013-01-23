@@ -215,11 +215,11 @@ Sequel.migration do
       column :cmdty_mdecln, "tinyint(1)"
       column :exp_lcnc_rqd, "tinyint(1)"
       column :ex_ec_scode_rqd, "tinyint(1)"
-      column :full_dty_adval1, "decimal(3,3)"
-      column :full_dty_adval2, "decimal(3,3)"
+      column :full_dty_adval1, "decimal(6,3)"
+      column :full_dty_adval2, "decimal(6,3)"
       column :full_dty_exch, "varchar(3)"
-      column :full_dty_spfc1, "decimal(7,4)"
-      column :full_dty_spfc2, "decimal(7,4)"
+      column :full_dty_spfc1, "decimal(8,4)"
+      column :full_dty_spfc2, "decimal(8,4)"
       column :full_dty_ttype, "varchar(3)"
       column :full_dty_uoq_c2, "varchar(3)"
       column :full_dty_uoq1, "varchar(3)"
@@ -1636,6 +1636,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20130121190252_create_goods_nomenclature_association_national_measurement_units.rb")
     self[:schema_migrations].insert(:filename => "20130123090129_create_tbl9s.rb")
     self[:schema_migrations].insert(:filename => "20130123095635_add_processed_indicator_to_chief_tables.rb")
+    self[:schema_migrations].insert(:filename => "20130123125153_adjust_chief_decimal_columns.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"
