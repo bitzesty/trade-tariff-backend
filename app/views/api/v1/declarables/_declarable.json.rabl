@@ -15,15 +15,8 @@ child :footnote do
   }
 end
 
-child goods_nomenclature_association_national_measurement_units: :national_measurement_units do
-  attributes :level
-
-  node(:measurement_unit_code) { |measurement_unit_assoc|
-    measurement_unit_assoc.measurement_unit_code
-  }
-  node(:description) { |measurement_unit_assoc|
-    measurement_unit_assoc.national_measurement_unit.description
-  }
+child national_measurement_unit_set_units: :national_measurement_units do
+  attributes :level, :measurement_unit_code, :description
 end
 
 node(:import_measures) { |declarable|

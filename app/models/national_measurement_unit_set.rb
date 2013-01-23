@@ -12,10 +12,12 @@ class NationalMeasurementUnitSet < Sequel::Model
 
   set_primary_key  :tbl_code
 
-  def units
+  def national_measurement_unit_set_units
     [NationalMeasurementUnit.new(measurement_unit_code: second_quantity_code,
-                                 description: second_quantity_description),
+                                 description: second_quantity_description,
+                                 level: 2),
      NationalMeasurementUnit.new(measurement_unit_code: third_quantity_code,
-                                 description: third_quantity_description)]
+                                 description: third_quantity_description,
+                                 level: 3)]
   end
 end
