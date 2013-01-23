@@ -57,13 +57,8 @@ class GoodsNomenclature < Sequel::Model
     footnotes.first
   end
 
-  one_to_many :goods_nomenclature_association_national_measurement_units, key: :goods_nomenclature_sid,
-                                                                          primary_key: :goods_nomenclature_sid
-  many_to_many :national_measurement_units, join_table: :goods_nomenclature_association_national_measurement_units,
-                                            left_key: :goods_nomenclature_sid,
-                                            left_primary_key: :goods_nomenclature_sid,
-                                            right_key: :measurement_unit_code,
-                                            right_primary_key: :measurement_unit_code
+  one_to_one :national_measurement_unit_set, key: :cmdty_code,
+                                             primary_key: :goods_nomenclature_item_id
 
   delegate :number_indents, to: :goods_nomenclature_indent, allow_nil: true
   delegate :description, to: :goods_nomenclature_description, allow_nil: true

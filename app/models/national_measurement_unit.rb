@@ -1,11 +1,8 @@
-class NationalMeasurementUnit < Sequel::Model
-  set_primary_key  :measurement_unit_code
+class NationalMeasurementUnit
+  attr_reader :measurement_unit_code, :description
 
-  validates do
-    uniqueness_of :measurement_unit_code
-  end
-
-  def to_s
-    description
+  def initialize(attributes = {})
+    @measurement_unit_code = attributes.fetch(:measurement_unit_code, nil)
+    @description = attributes.fetch(:description, nil)
   end
 end
