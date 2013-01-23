@@ -240,6 +240,7 @@ Sequel.migration do
       column :whse_cmdty, "tinyint(1)"
       column :wines_cmdty, "tinyint(1)"
       column :origin, "varchar(30)"
+      column :processed, "tinyint(1)"
     end
 
     create_table(:chief_country_code) do
@@ -409,7 +410,9 @@ Sequel.migration do
       column :tbl_type, "varchar(4)"
       column :tbl_code, "varchar(10)"
       column :txtlnno, "int(11)"
-      column :tbltxt, "varchar(100)"
+      column :tbl_txt, "varchar(100)"
+      column :origin, "varchar(30)"
+      column :processed, "tinyint(1)"
     end
 
     create_table(:complete_abrogation_regulations) do
@@ -1632,6 +1635,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20130121114856_clear_invalid_chief_updates.rb")
     self[:schema_migrations].insert(:filename => "20130121190252_create_goods_nomenclature_association_national_measurement_units.rb")
     self[:schema_migrations].insert(:filename => "20130123090129_create_tbl9s.rb")
+    self[:schema_migrations].insert(:filename => "20130123095635_add_processed_indicator_to_chief_tables.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"

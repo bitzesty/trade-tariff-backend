@@ -6,7 +6,7 @@ Sequel.migration do
       String   :tbl_type, size: 4
       String   :tbl_code, size: 10
       Integer  :txtlnno
-      String   :tbltxt, size: 100
+      String   :tbl_txt, size: 100
     end
   end
 end

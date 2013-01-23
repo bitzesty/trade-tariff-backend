@@ -14,5 +14,15 @@ module Chief
     one_to_one :third_unit_of_quantity, class_name: 'Chief::Unoq',
                                         key: :tbl_code,
                                         primary_key: :uoq_code_cdu3
+
+    dataset_module do
+      def with_additional_national_quantities
+        filter{~{uoq_code_cdu2: nil} | ~{uoq_code_cdu3: nil}}
+      end
+
+      def without_additional_national_quantities
+        filter(uoq_code_cdu2: nil, uoq_code_cdu3: nil)
+      end
+    end
   end
 end

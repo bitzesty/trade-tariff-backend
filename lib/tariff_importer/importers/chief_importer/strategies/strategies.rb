@@ -213,7 +213,7 @@ class ChiefImporter
           tbl_type: [2, :chief_string],
           tbl_code: [3, :chief_string],
           txtlnno: 4,
-          tbltxt: [6, :chief_string]
+          tbl_txt: [6, :chief_string]
 
       process(:update) {
         # TODO we only need UNOQ table at this point
@@ -230,6 +230,5 @@ class ChiefImporter
         Chief::Tbl9.insert(map)
       }
     end
-  end
   end
 end
