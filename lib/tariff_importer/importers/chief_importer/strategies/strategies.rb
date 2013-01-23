@@ -216,21 +216,15 @@ class ChiefImporter
           tbl_txt: [6, :chief_string]
 
       process(:update) {
-        if map[:tbl_type] == 'UNOQ'
-          Chief::Tbl9.insert(map)
-        end
+        Chief::Tbl9.insert(map)
       }
 
       process(:insert) {
-        if map[:tbl_type] == 'UNOQ'
-          Chief::Tbl9.insert(map)
-        end
+        Chief::Tbl9.insert(map)
       }
 
       process(:delete) {
-        if map[:tbl_type] == 'UNOQ'
-          Chief::Tbl9.insert(map)
-        end
+        Chief::Tbl9.insert(map)
       }
     end
   end
