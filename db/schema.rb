@@ -403,6 +403,15 @@ Sequel.migration do
       index [:fe_tsmp, :msrgp_code, :msr_type, :tty_code, :tar_msr_no, :amend_indicator], :name=>:index_chief_tamf
     end
 
+    create_table(:chief_tbl9) do
+      column :fe_tsmp, "datetime"
+      column :amend_indicator, "varchar(1)"
+      column :tbl_type, "varchar(4)"
+      column :tbl_code, "varchar(10)"
+      column :txtlnno, "int(11)"
+      column :tbltxt, "varchar(100)"
+    end
+
     create_table(:complete_abrogation_regulations) do
       column :complete_abrogation_regulation_role, "int(11)"
       column :complete_abrogation_regulation_id, "varchar(255)"
@@ -1622,6 +1631,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20130121081354_create_national_measurement_units.rb")
     self[:schema_migrations].insert(:filename => "20130121114856_clear_invalid_chief_updates.rb")
     self[:schema_migrations].insert(:filename => "20130121190252_create_goods_nomenclature_association_national_measurement_units.rb")
+    self[:schema_migrations].insert(:filename => "20130123090129_create_tbl9s.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"

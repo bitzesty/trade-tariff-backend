@@ -206,5 +206,30 @@ class ChiefImporter
         Chief::Comm.insert(map)
       }
     end
+
+    class TBL9 < BaseStrategy
+      map fe_tsmp: [0, :chief_date],
+          amend_indicator: 1,
+          tbl_type: [2, :chief_string],
+          tbl_code: [3, :chief_string],
+          txtlnno: 4,
+          tbltxt: [6, :chief_string]
+
+      process(:update) {
+        # TODO we only need UNOQ table at this point
+        Chief::Tbl9.insert(map)
+      }
+
+      process(:insert) {
+        # TODO we only need UNOQ table at this point
+        Chief::Tbl9.insert(map)
+      }
+
+      process(:delete) {
+        # TODO we only need UNOQ table at this point
+        Chief::Tbl9.insert(map)
+      }
+    end
+  end
   end
 end
