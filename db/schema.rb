@@ -757,14 +757,6 @@ Sequel.migration do
       index [:geographical_area_sid], :name=>:primary_key, :unique=>true
     end
 
-    create_table(:goods_nomenclature_association_national_measurement_units) do
-      column :goods_nomenclature_sid, "int(11)"
-      column :measurement_unit_code, "varchar(3)"
-      column :measurement_unit_quantity_level, "int(11)"
-
-      index [:goods_nomenclature_sid, :measurement_unit_code], :name=>:primary_key
-    end
-
     create_table(:goods_nomenclature_description_periods) do
       column :goods_nomenclature_description_period_sid, "int(11)"
       column :goods_nomenclature_sid, "int(11)"
@@ -1309,13 +1301,6 @@ Sequel.migration do
       index [:monetary_unit_code, :validity_start_date], :name=>:primary_key
     end
 
-    create_table(:national_measurement_units) do
-      column :measurement_unit_code, "varchar(3)"
-      column :description, "varchar(100)"
-
-      index [:measurement_unit_code], :name=>:primary_key, :unique=>true
-    end
-
     create_table(:nomenclature_group_memberships) do
       column :goods_nomenclature_sid, "int(11)"
       column :goods_nomenclature_group_type, "varchar(1)"
@@ -1631,9 +1616,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20130130132054_add_hydrocarbon_oils_footnote.rb")
     self[:schema_migrations].insert(:filename => "20130118122518_create_comms.rb")
     self[:schema_migrations].insert(:filename => "20130118150014_add_origin_to_comm.rb")
-    self[:schema_migrations].insert(:filename => "20130121081354_create_national_measurement_units.rb")
     self[:schema_migrations].insert(:filename => "20130121114856_clear_invalid_chief_updates.rb")
-    self[:schema_migrations].insert(:filename => "20130121190252_create_goods_nomenclature_association_national_measurement_units.rb")
     self[:schema_migrations].insert(:filename => "20130123090129_create_tbl9s.rb")
     self[:schema_migrations].insert(:filename => "20130123095635_add_processed_indicator_to_chief_tables.rb")
     self[:schema_migrations].insert(:filename => "20130123125153_adjust_chief_decimal_columns.rb")
