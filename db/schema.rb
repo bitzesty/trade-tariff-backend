@@ -240,7 +240,10 @@ Sequel.migration do
       column :whse_cmdty, "tinyint(1)"
       column :wines_cmdty, "tinyint(1)"
       column :origin, "varchar(30)"
-      column :processed, "tinyint(1)"
+
+      index [:cmdty_code], :name=>:cmdty_code_index
+      index [:uoq_code_cdu2], :name=>:uoq_code_cdu2_index
+      index [:uoq_code_cdu3], :name=>:uoq_code_cdu3_index
     end
 
     create_table(:chief_country_code) do
@@ -412,7 +415,9 @@ Sequel.migration do
       column :txtlnno, "int(11)"
       column :tbl_txt, "varchar(100)"
       column :origin, "varchar(30)"
-      column :processed, "tinyint(1)"
+
+      index [:tbl_code], :name=>:tbl_code_index
+      index [:tbl_type], :name=>:tbl_type_index
     end
 
     create_table(:complete_abrogation_regulations) do
@@ -1620,6 +1625,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20130123090129_create_tbl9s.rb")
     self[:schema_migrations].insert(:filename => "20130123095635_add_processed_indicator_to_chief_tables.rb")
     self[:schema_migrations].insert(:filename => "20130123125153_adjust_chief_decimal_columns.rb")
+    self[:schema_migrations].insert(:filename => "20130124080334_add_comm_tbl9_indexes.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"
