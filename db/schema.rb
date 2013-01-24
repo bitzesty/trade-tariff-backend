@@ -368,6 +368,7 @@ Sequel.migration do
       column :processed, "tinyint(1)", :default=>false
       column :amend_indicator, "varchar(1)"
       column :origin, "varchar(30)"
+      column :ec_sctr, "varchar(10)"
 
       index [:msrgp_code, :msr_type, :tty_code, :tar_msr_no, :fe_tsmp], :name=>:index_chief_tame
     end
@@ -391,11 +392,11 @@ Sequel.migration do
       column :ec_exch_rate, "varchar(255)"
       column :spcl_inst, "varchar(255)"
       column :spfc1_cmpd_uoq, "varchar(255)"
-      column :spfc1_rate, "decimal(7,4)"
+      column :spfc1_rate, "decimal(8,4)"
       column :spfc1_uoq, "varchar(255)"
-      column :spfc2_rate, "decimal(7,4)"
+      column :spfc2_rate, "decimal(8,4)"
       column :spfc2_uoq, "varchar(255)"
-      column :spfc3_rate, "decimal(7,4)"
+      column :spfc3_rate, "decimal(8,4)"
       column :spfc3_uoq, "varchar(255)"
       column :tamf_dt, "varchar(255)"
       column :tamf_sta, "varchar(255)"
@@ -1626,6 +1627,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20130123095635_add_processed_indicator_to_chief_tables.rb")
     self[:schema_migrations].insert(:filename => "20130123125153_adjust_chief_decimal_columns.rb")
     self[:schema_migrations].insert(:filename => "20130124080334_add_comm_tbl9_indexes.rb")
+    self[:schema_migrations].insert(:filename => "20130124085812_fix_chief_field_lengths.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"
