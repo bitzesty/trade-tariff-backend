@@ -459,7 +459,10 @@ class Measure < Sequel::Model
     if quota_order_number.present?
       quota_order_number
     elsif ordernumber.present?
-      QuotaOrderNumber.new(quota_order_number_id: ordernumber)
+      # TODO refactor and test this
+      qon = QuotaOrderNumber.new(quota_order_number_id: ordernumber)
+      qon.associations[:quota_definition] = nil
+      qon
     end
   end
 end
