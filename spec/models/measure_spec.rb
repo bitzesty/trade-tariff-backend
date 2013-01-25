@@ -505,4 +505,28 @@ describe Measure do
       measure.measure_generating_regulation_id.should == "D9601421"
     end
   end
+
+  describe "#order_number" do
+    context "quota_order_number associated" do
+      let(:quota_order_number) { create :quota_order_number }
+      let(:measure) { create :measure, ordernumber: quota_order_number.quota_order_number_id }
+
+      it 'should return associated quota order nmber' do
+        measure.order_number.should eq quota_order_number
+      end
+    end
+
+    context "quota_order_number missing" do
+      let(:ordernumber) { 6.times.map{ Random.rand(9) }.join }
+      let(:measure) { create :measure, ordernumber: ordernumber }
+
+      it 'should return a mock quota order number with just the number set' do
+        measure.order_number.quota_order_number_id.should eq ordernumber
+      end
+
+      it 'associated mock quota order number should have no quota definition' do
+        measure.order_number.quota_definition.should be_blank
+      end
+    end
+  end
 end
