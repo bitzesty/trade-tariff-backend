@@ -4,9 +4,11 @@ class NationalMeasurementUnitSet < Sequel::Model
               select_more(Sequel.as(:tbl92__tbl_code, :third_quantity_code)).
               select_more(Sequel.as(:tbl91__tbl_txt, :second_quantity_description)).
               select_more(Sequel.as(:tbl92__tbl_txt, :third_quantity_description)).
-              join_table(:inner, :chief_tbl9, {tbl91__tbl_code: :chief_comm__uoq_code_cdu2}, table_alias: :tbl91).
-              join_table(:inner, :chief_tbl9, {tbl92__tbl_code: :chief_comm__uoq_code_cdu3}, table_alias: :tbl92).
-              filter{~{chief_comm__uoq_code_cdu2: nil} | ~{chief_comm__uoq_code_cdu3: nil}}
+              join_table(:left, :chief_tbl9, {tbl91__tbl_code: :chief_comm__uoq_code_cdu2,
+                                              tbl91__tbl_type: 'UNOQ'}, table_alias: :tbl91).
+              join_table(:left, :chief_tbl9, {tbl92__tbl_code: :chief_comm__uoq_code_cdu3,
+                                              tbl92__tbl_type: 'UNOQ'}, table_alias: :tbl92).
+              filter{~{chief_comm__uoq_code_cdu2: nil} | ~{chief_comm__uoq_code_cdu3: nil}}.
               order(:chief_comm__audit_tsmp.desc)
 
   set_primary_key  :tbl_code
