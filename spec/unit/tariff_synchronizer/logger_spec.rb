@@ -65,8 +65,6 @@ describe TariffSynchronizer::Logger do
   end
 
   describe '#apply logging' do
-    let!(:chief_update) { create :chief_update }
-
     before {
       TariffSynchronizer.apply
     }
