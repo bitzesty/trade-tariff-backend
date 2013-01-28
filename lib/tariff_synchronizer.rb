@@ -116,27 +116,29 @@ module TariffSynchronizer
 
       ActiveSupport::Notifications.instrument("failed_updates_present.tariff_synchronizer", file_names: file_names)
     else
-      ActiveSupport::Notifications.instrument("apply.tariff_synchronizer", count: PendingUpdate.count) do
-        PendingUpdate.all
-                     .sort_by(&:issue_date)
-                     .sort_by(&:update_priority)
-                     .each do |pending_update|
-          Sequel::Model.db.transaction do
-            begin
-              pending_update.apply
+      pending_update_count = PendingUpdate.count
 
-              ::ChiefTransformer.instance.invoke(:update) if pending_update.update_type == "TariffSynchronizer::ChiefUpdate"
-            rescue TaricImporter::ImportException,
-                   ChiefImporter::ImportException,
-                   TariffImporter::NotFound  => exception
-              ActiveSupport::Notifications.instrument("failed_update.tariff_synchronizer", exception: exception,
-                                                                                           update: pending_update)
+      PendingUpdate.all
+                   .sort_by(&:issue_date)
+                   .sort_by(&:update_priority)
+                   .each do |pending_update|
+        Sequel::Model.db.transaction do
+          begin
+            pending_update.apply
 
-              raise Sequel::Rollback
-            end
+            ::ChiefTransformer.instance.invoke(:update) if pending_update.update_type == "TariffSynchronizer::ChiefUpdate"
+          rescue TaricImporter::ImportException,
+                 ChiefImporter::ImportException,
+                 TariffImporter::NotFound  => exception
+            ActiveSupport::Notifications.instrument("failed_update.tariff_synchronizer", exception: exception,
+                                                                                         update: pending_update)
+
+            raise Sequel::Rollback
           end
         end
       end
+
+      ActiveSupport::Notifications.instrument("apply.tariff_synchronizer", count: pending_update_count) if BaseUpdate.pending_or_failed.none?
     end
   end
 

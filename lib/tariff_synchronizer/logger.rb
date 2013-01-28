@@ -25,9 +25,7 @@ module TariffSynchronizer
     def apply(event)
       info "Finished applying updates"
 
-      if !event.payload.has_key?(:exception) && event.payload[:count] > 0
-        Mailer.applied(event.payload[:count]).deliver
-      end
+      Mailer.applied(event.payload[:count]).deliver
     end
 
     # Update failed to be applied
