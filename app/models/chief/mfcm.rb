@@ -54,6 +54,10 @@ module Chief
       def valid_to(timestamp)
         where("fe_tsmp < ?", timestamp)
       end
+
+      def initial_load
+        where(origin: nil)
+      end
     end
 
     def validate

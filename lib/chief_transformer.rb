@@ -44,7 +44,9 @@ class ChiefTransformer
 
     case work_mode
     when :initial_load
-      processor = InitialLoadProcessor.new(per_page)
+      processor = InitialLoadProcessor.new(Chief::Mfcm.initial_load
+                                                      .unprocessed,
+                                           per_page)
     when :update
       processor = Processor.new(Chief::Mfcm.unprocessed.all,
                                 Chief::Tame.unprocessed.all)

@@ -13,24 +13,8 @@ require 'tariff_synchronizer/logger'
 
 # How TariffSynchronizer works
 #
-# Download
+# See https://github.com/alphagov/trade-tariff-backend/wiki/Synchronization-process
 #
-# Try downloading all updates up until today & try redownload failed updates(?)
-#   If any errors occur while downloading retry until retry_count is reached and then mark as failed.
-#
-# Apply
-#
-# Updates marked as failed present
-#   Log error, send error email
-# No updates marked as failed
-#   Try applying updates
-#   Errors occured while applying
-#     Log error, send email
-#     Revert everything back
-#     Mark update as failed
-#   No errors occured while applying
-#     Log info message?
-#     Send success email?
 
 module TariffSynchronizer
   autoload :Mailer,        'tariff_synchronizer/mailer'

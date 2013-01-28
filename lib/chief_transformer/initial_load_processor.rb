@@ -1,13 +1,14 @@
 class ChiefTransformer
   class InitialLoadProcessor
-    attr_reader :per_page
+    attr_reader :dataset, :per_page
 
-    def initialize(per_page)
+    def initialize(dataset, per_page)
+      @dataset = dataset
       @per_page = per_page
     end
 
     def process
-      Chief::Mfcm.each_page(per_page) do |batch|
+      dataset.each_page(per_page) do |batch|
         candidate_measures = CandidateMeasure::Collection.new(
           batch.map { |mfcm|
             mfcm.tames.map{|tame|
@@ -22,6 +23,7 @@ class ChiefTransformer
           }.flatten.compact)
         candidate_measures.sort
         candidate_measures.uniq
+        candidate_measures.validate
         candidate_measures.persist
       end
 
