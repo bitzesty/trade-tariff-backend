@@ -11,11 +11,6 @@ FactoryGirl.define do
     end
   end
 
-  factory :national_measurement_unit do
-    # measurement_unit_code { Forgery(:basic).text(exactly: 3) }
-    # description { Forgery(:basic).text }
-  end
-
   factory :measurement_unit_description do
     measurement_unit_code { Forgery(:basic).text(exactly: 3) }
     description { Forgery(:basic).text }
