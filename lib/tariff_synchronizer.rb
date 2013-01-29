@@ -138,7 +138,7 @@ module TariffSynchronizer
         end
       end
 
-      ActiveSupport::Notifications.instrument("apply.tariff_synchronizer", count: pending_update_count) if BaseUpdate.pending_or_failed.none?
+      ActiveSupport::Notifications.instrument("apply.tariff_synchronizer", count: pending_update_count) if pending_update_count && BaseUpdate.pending_or_failed.none?
     end
   end
 
