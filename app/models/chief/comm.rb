@@ -1,5 +1,8 @@
 module Chief
   class Comm < Sequel::Model
+    plugin :time_machine, period_start_column: Sequel.qualify(:chief_comm, :fe_tsmp),
+                          period_end_column: Sequel.qualify(:chief_comm, :le_tsmp)
+
     set_dataset db[:chief_comm].
                 order(:fe_tsmp.asc)
 

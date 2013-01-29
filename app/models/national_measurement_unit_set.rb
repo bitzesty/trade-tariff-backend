@@ -1,4 +1,6 @@
 class NationalMeasurementUnitSet < Sequel::Model
+  plugin :time_machine
+
   set_dataset db[:chief_comm].
               select(Sequel.as(:tbl91__tbl_code, :second_quantity_code)).
               select_more(Sequel.as(:tbl92__tbl_code, :third_quantity_code)).
