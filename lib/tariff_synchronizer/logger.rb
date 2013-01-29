@@ -25,7 +25,8 @@ module TariffSynchronizer
     def apply(event)
       info "Finished applying updates"
 
-      Mailer.applied(event.payload[:count]).deliver
+      Mailer.applied(event.payload[:update_names],
+                     event.payload[:count]).deliver
     end
 
     # Update failed to be applied

@@ -3,3 +3,11 @@
 <p>
   Trade Tariff successfully applied <%= @count %> update(s) at <%= Time.now %>.
 </p>
+
+<p>Following updates were applied:</p>
+
+<ul>
+  <% @update_names.each do |update_name| %>
+    <li><%= update_name %></li>
+  <% end %>
+</ul>

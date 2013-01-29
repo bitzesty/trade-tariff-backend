@@ -65,19 +65,45 @@ describe TariffSynchronizer::Logger do
   end
 
   describe '#apply logging' do
-    before {
-      TariffSynchronizer.apply
-    }
+    context 'pending update present' do
+      let(:example_date)  { Date.today }
+      let!(:taric_update) { create :taric_update, example_date: example_date }
 
-    it 'logs and info event' do
-      @logger.logged(:info).size.should eq 1
-      @logger.logged(:info).last.should =~ /Finished applying/
+      before {
+        prepare_synchronizer_folders
+        create_taric_file :pending, example_date
+
+        TariffSynchronizer.apply
+      }
+
+      it 'logs and info event' do
+        @logger.logged(:info).size.should be > 0
+        @logger.logged(:info).last.should =~ /Finished applying/
+      end
+
+      it 'sends success email' do
+        ActionMailer::Base.deliveries.should_not be_empty
+        email = ActionMailer::Base.deliveries.last
+        email.encoded.should =~ /successfully applied/
+        email.encoded.should =~ /#{taric_update.filename}/
+      end
+
+      after  { purge_synchronizer_folders }
     end
 
-    it 'sends success email' do
-      ActionMailer::Base.deliveries.should_not be_empty
-      email = ActionMailer::Base.deliveries.last
-      email.encoded.should =~ /successfully applied/
+    context 'no pending updates present' do
+      before {
+        ActionMailer::Base.deliveries = []
+        TariffSynchronizer.apply
+      }
+
+      it 'logs and info event' do
+        @logger.logged(:info).size.should eq 0
+      end
+
+      it 'does not send success email' do
+        ActionMailer::Base.deliveries.should be_empty
+      end
     end
   end
 
