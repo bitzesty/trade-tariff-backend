@@ -116,29 +116,29 @@ module TariffSynchronizer
 
       ActiveSupport::Notifications.instrument("failed_updates_present.tariff_synchronizer", file_names: file_names)
     else
-      pending_update_count = PendingUpdate.count
+      PendingUpdate.all.tap do |pending_updates|
+        pending_updates.sort_by(&:issue_date)
+                       .sort_by(&:update_priority)
+                       .each do |pending_update|
+          Sequel::Model.db.transaction do
+            begin
+              pending_update.apply
 
-      PendingUpdate.all
-                   .sort_by(&:issue_date)
-                   .sort_by(&:update_priority)
-                   .each do |pending_update|
-        Sequel::Model.db.transaction do
-          begin
-            pending_update.apply
+              ::ChiefTransformer.instance.invoke(:update) if pending_update.update_type == "TariffSynchronizer::ChiefUpdate"
+            rescue TaricImporter::ImportException,
+                   ChiefImporter::ImportException,
+                   TariffImporter::NotFound  => exception
+              ActiveSupport::Notifications.instrument("failed_update.tariff_synchronizer", exception: exception,
+                                                                                           update: pending_update)
 
-            ::ChiefTransformer.instance.invoke(:update) if pending_update.update_type == "TariffSynchronizer::ChiefUpdate"
-          rescue TaricImporter::ImportException,
-                 ChiefImporter::ImportException,
-                 TariffImporter::NotFound  => exception
-            ActiveSupport::Notifications.instrument("failed_update.tariff_synchronizer", exception: exception,
-                                                                                         update: pending_update)
-
-            raise Sequel::Rollback
+              raise Sequel::Rollback
+            end
           end
         end
-      end
 
-      ActiveSupport::Notifications.instrument("apply.tariff_synchronizer", count: pending_update_count) if pending_update_count && BaseUpdate.pending_or_failed.none?
+        ActiveSupport::Notifications.instrument("apply.tariff_synchronizer", update_names: pending_updates.map(&:file_name),
+                                                                             count: pending_updates.size) if pending_updates.any? && BaseUpdate.pending_or_failed.none?
+      end
     end
   end
 
