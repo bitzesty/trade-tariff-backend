@@ -1,0 +1,19 @@
+<p>Hello,</p>
+
+<p>
+  Trade Tariff failed to reindex on <%= Date.today %>.
+</p>
+
+<p>
+  <strong><%= @exception %></strong>
+</p>
+
+<p>
+  <strong>Backtrace:</strong>
+</p>
+
+<p>
+  <pre>
+  <%= @exception.backtrace.join("\n") %>
+  </pre>
+</p>
