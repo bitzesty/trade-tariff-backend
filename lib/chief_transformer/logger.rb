@@ -8,15 +8,6 @@ class ChiefTransformer
       info "CHIEF Transformer started in #{event.payload[:mode]} mode"
     end
 
-    def transform(event)
-      if event.payload.has_key?(:exception)
-        error "CHIEF Transformer failed #{event.payload[:exception]}"
-      else
-        info "CHIEF Transformer finished successfully in #{event.duration}s"
-        Mailer.successful_transformation_notice.deliver
-      end
-    end
-
     def process(event)
       unless event.payload.has_key?(:exception)
         info "Processed: #{event.payload[:operation].inspect}"

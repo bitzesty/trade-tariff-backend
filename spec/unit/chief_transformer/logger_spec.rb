@@ -24,19 +24,6 @@ describe ChiefTransformer::Logger do
   describe '#transform logging' do
     before { ChiefTransformer.instance.invoke }
 
-    context 'successuful transformation' do
-      it 'logs and info event' do
-        @logger.logged(:info).size.should be >= 1
-        @logger.logged(:info).last.should =~ /finished successfull/
-      end
-
-      it 'sends an info email to the administrator' do
-        ActionMailer::Base.deliveries.should_not be_empty
-        email = ActionMailer::Base.deliveries.last
-        email.encoded.should =~ /successfully transformed/
-      end
-    end
-
     context 'transformation with errors' do
       let!(:tame)    { create :tame, :unprocessed }
       let!(:measure) { create :measure }
@@ -49,8 +36,8 @@ describe ChiefTransformer::Logger do
       }
 
       it 'logs an error event' do
-        @logger.logged(:error).size.should be >= 2
-        @logger.logged(:error).last.should =~ /transformer failed/i
+        @logger.logged(:error).size.should eq 1
+        @logger.logged(:error).last.should =~ /Could not transform/i
       end
 
       it 'sends an error email' do

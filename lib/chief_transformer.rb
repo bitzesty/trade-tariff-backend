@@ -41,35 +41,33 @@ class ChiefTransformer
 
     ActiveSupport::Notifications.instrument("start_transform.chief_transformer", mode: work_mode)
 
-    ActiveSupport::Notifications.instrument("transform.chief_transformer") do
-      case work_mode
-      when :initial_load
-        Chief::Mfcm.each_page(per_page) do |batch|
-          candidate_measures = CandidateMeasure::Collection.new(
-            batch.map { |mfcm|
-              mfcm.tames.map{|tame|
-                if tame.tamfs.any?
-                  tame.tamfs.map{|tamf|
-                    CandidateMeasure.new(mfcm: mfcm, tame: tame, tamf: tamf)
-                  }
-                else
-                  [CandidateMeasure.new(mfcm: mfcm, tame: tame)]
-                end
-              }
-            }.flatten.compact)
-          candidate_measures.sort
-          candidate_measures.uniq
-          candidate_measures.persist
+    case work_mode
+    when :initial_load
+      Chief::Mfcm.each_page(per_page) do |batch|
+        candidate_measures = CandidateMeasure::Collection.new(
+          batch.map { |mfcm|
+            mfcm.tames.map{|tame|
+              if tame.tamfs.any?
+                tame.tamfs.map{|tamf|
+                  CandidateMeasure.new(mfcm: mfcm, tame: tame, tamf: tamf)
+                }
+              else
+                [CandidateMeasure.new(mfcm: mfcm, tame: tame)]
+              end
+            }
+          }.flatten.compact)
+        candidate_measures.sort
+        candidate_measures.uniq
+        candidate_measures.persist
 
-          [Chief::Mfcm, Chief::Tame, Chief::Tamf].each{|model|
-            model.unprocessed.update(processed: true)
-          }
-        end
-      when :update
-        processor = Processor.new(Chief::Mfcm.unprocessed.all,
-                                  Chief::Tame.unprocessed.all)
-        processor.process
+        [Chief::Mfcm, Chief::Tame, Chief::Tamf].each{|model|
+          model.unprocessed.update(processed: true)
+        }
       end
+    when :update
+      processor = Processor.new(Chief::Mfcm.unprocessed.all,
+                                Chief::Tame.unprocessed.all)
+      processor.process
     end
   end
 end
