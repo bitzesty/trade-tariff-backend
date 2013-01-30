@@ -34,7 +34,7 @@ module TradeTariffBackend
     def reindex(indexer = Indexer)
       begin
         indexer.run
-      rescue Exception => e
+      rescue StandardError => e
         Mailer.reindex_exception(e).deliver
       end
     end
