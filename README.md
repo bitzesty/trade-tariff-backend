@@ -20,37 +20,7 @@ Run the bootstrap command.
 
 ## Setup TradeTariffBackend
 
-1. Create database
-
-    ```
-    bundle exec rake db:create
-    ```
-
-2. Load database snapshot or perform importing
-
-  2.1. Import EU TARIC files
-
-  Download and extract the TARIC snapshot files from the 5th Jun 2012 from https://github.com/downloads/alphagov/trade-tariff-backend/taric-initial-load.tar.gz to the tmp folder then run the following commands:
-
-     ```
-     bundle exec rake db:migrate
-     bundle exec rake importer:taric:import TARGET=tmp/OBEXTACT.xml
-     bundle exec rake importer:taric:import TARGET=tmp/OBEXTACTEN.xml
-     ```
-    
-  2.2. Download and load the db snapshot
-
-3. Load Sections, Section notes, Chapter notes and other tariff data
-
-    ```
-    bundle exec rake tariff:install
-    ```
-
-4. Index on ElasticSearch
-
-    ```
-    bundle exec rake tariff:reindex
-    ```
+Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff-backend/wiki/System-rebuild-procedure).
 
 ## Run TradeTariffBackend
 
@@ -58,9 +28,7 @@ Run the bootstrap command.
     
 ## Performing daily updates
 
-1. Synchronize updates
-
-  1.1. Create config/trade_tariff_backend_secrets.yml file with correct values.
+1. Create config/trade_tariff_backend_secrets.yml file with correct values.
 
   ```yaml
   sync_username:
@@ -69,19 +37,12 @@ Run the bootstrap command.
   sync_email:
   ```
 
-  1.2. Download pending updates.
-
-  ```
-  bundle exec rake tariff:sync:download
-  ```
-
 2. Apply updates
 
-```
-bundle exec rake tariff:sync:apply
-```
+    ```
+    bundle exec rake tariff:sync:apply
+    ```
 
 ## TODO
 
-* Instructions on how to run the CHIEF importers
 * Timezone config
