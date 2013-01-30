@@ -14,21 +14,7 @@ namespace :tariff do
   desc 'Reindex relevant entities on ElasticSearch'
   task reindex: %w[environment
                    install:green_pages] do
-    ENV['FORCE'] = 'true'
-
-    TimeMachine.with_relevant_validity_periods do
-      ['Section','Chapter','Heading','Commodity','SearchReference'].each do |klass|
-        ENV['CLASS'] = klass
-        Rake::Task['tire:import'].execute
-      end
-    end
-
-    # Remove hidden goods nomenclatures
-    # TODO: is there a better solution?
-
-    GoodsNomenclature.where(goods_nomenclature_item_id: HiddenGoodsNomenclature.codes).all.each do |gono|
-      gono.class.tire.index.remove gono
-    end
+    TradeTariffBackend.reindex
   end
 
   desc 'Download and apply Taric and CHIEF data'

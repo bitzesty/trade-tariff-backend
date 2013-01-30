@@ -1,6 +1,9 @@
 require 'ostruct'
 
 module TradeTariffBackend
+  autoload :Indexer, 'trade_tariff_backend/indexer'
+  autoload :Mailer,  'trade_tariff_backend/mailer'
+
   class << self
 
     # Lock key used for DB locks to keep just one instance of synchronizer
@@ -25,6 +28,14 @@ module TradeTariffBackend
         end
       ensure
         Sequel::Model.db.release_lock(db_lock_key)
+      end
+    end
+
+    def reindex(indexer = Indexer)
+      begin
+        indexer.run
+      rescue StandardError => e
+        Mailer.reindex_exception(e).deliver
       end
     end
 
