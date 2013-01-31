@@ -1622,7 +1622,6 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20130130132054_add_hydrocarbon_oils_footnote.rb")
     self[:schema_migrations].insert(:filename => "20130118122518_create_comms.rb")
     self[:schema_migrations].insert(:filename => "20130118150014_add_origin_to_comm.rb")
-    self[:schema_migrations].insert(:filename => "20130121114856_clear_invalid_chief_updates.rb")
     self[:schema_migrations].insert(:filename => "20130123090129_create_tbl9s.rb")
     self[:schema_migrations].insert(:filename => "20130123095635_add_processed_indicator_to_chief_tables.rb")
     self[:schema_migrations].insert(:filename => "20130123125153_adjust_chief_decimal_columns.rb")
