@@ -199,6 +199,53 @@ Sequel.migration do
       index [:goods_nomenclature_sid, :section_id], :name=>:index_chapters_sections_on_goods_nomenclature_sid_and_section_id, :unique=>true
     end
 
+    create_table(:chief_comm) do
+      column :fe_tsmp, "datetime"
+      column :amend_indicator, "varchar(1)"
+      column :cmdty_code, "varchar(12)"
+      column :le_tsmp, "datetime"
+      column :add_rlf_alwd_ind, "tinyint(1)"
+      column :alcohol_cmdty, "tinyint(1)"
+      column :audit_tsmp, "datetime"
+      column :chi_doti_rqd, "tinyint(1)"
+      column :cmdty_bbeer, "tinyint(1)"
+      column :cmdty_beer, "tinyint(1)"
+      column :cmdty_euse_alwd, "tinyint(1)"
+      column :cmdty_exp_rfnd, "tinyint(1)"
+      column :cmdty_mdecln, "tinyint(1)"
+      column :exp_lcnc_rqd, "tinyint(1)"
+      column :ex_ec_scode_rqd, "tinyint(1)"
+      column :full_dty_adval1, "decimal(6,3)"
+      column :full_dty_adval2, "decimal(6,3)"
+      column :full_dty_exch, "varchar(3)"
+      column :full_dty_spfc1, "decimal(8,4)"
+      column :full_dty_spfc2, "decimal(8,4)"
+      column :full_dty_ttype, "varchar(3)"
+      column :full_dty_uoq_c2, "varchar(3)"
+      column :full_dty_uoq1, "varchar(3)"
+      column :full_dty_uoq2, "varchar(3)"
+      column :full_duty_type, "varchar(2)"
+      column :im_ec_score_rqd, "tinyint(1)"
+      column :imp_exp_use, "tinyint(1)"
+      column :nba_id, "varchar(6)"
+      column :perfume_cmdty, "tinyint(1)"
+      column :rfa, "varchar(255)"
+      column :season_end, "int(11)"
+      column :season_start, "int(11)"
+      column :spv_code, "varchar(7)"
+      column :spv_xhdg, "tinyint(1)"
+      column :uoq_code_cdu1, "varchar(3)"
+      column :uoq_code_cdu2, "varchar(3)"
+      column :uoq_code_cdu3, "varchar(3)"
+      column :whse_cmdty, "tinyint(1)"
+      column :wines_cmdty, "tinyint(1)"
+      column :origin, "varchar(30)"
+
+      index [:cmdty_code], :name=>:cmdty_code_index
+      index [:uoq_code_cdu2], :name=>:uoq_code_cdu2_index
+      index [:uoq_code_cdu3], :name=>:uoq_code_cdu3_index
+    end
+
     create_table(:chief_country_code) do
       column :chief_country_cd, "varchar(2)"
       column :country_cd, "varchar(2)"
@@ -321,6 +368,7 @@ Sequel.migration do
       column :processed, "tinyint(1)", :default=>false
       column :amend_indicator, "varchar(1)"
       column :origin, "varchar(30)"
+      column :ec_sctr, "varchar(10)"
 
       index [:msrgp_code, :msr_type, :tty_code, :tar_msr_no, :fe_tsmp], :name=>:index_chief_tame
     end
@@ -344,11 +392,11 @@ Sequel.migration do
       column :ec_exch_rate, "varchar(255)"
       column :spcl_inst, "varchar(255)"
       column :spfc1_cmpd_uoq, "varchar(255)"
-      column :spfc1_rate, "decimal(7,4)"
+      column :spfc1_rate, "decimal(8,4)"
       column :spfc1_uoq, "varchar(255)"
-      column :spfc2_rate, "decimal(7,4)"
+      column :spfc2_rate, "decimal(8,4)"
       column :spfc2_uoq, "varchar(255)"
-      column :spfc3_rate, "decimal(7,4)"
+      column :spfc3_rate, "decimal(8,4)"
       column :spfc3_uoq, "varchar(255)"
       column :tamf_dt, "varchar(255)"
       column :tamf_sta, "varchar(255)"
@@ -358,6 +406,19 @@ Sequel.migration do
       column :origin, "varchar(30)"
 
       index [:fe_tsmp, :msrgp_code, :msr_type, :tty_code, :tar_msr_no, :amend_indicator], :name=>:index_chief_tamf
+    end
+
+    create_table(:chief_tbl9) do
+      column :fe_tsmp, "datetime"
+      column :amend_indicator, "varchar(1)"
+      column :tbl_type, "varchar(4)"
+      column :tbl_code, "varchar(10)"
+      column :txtlnno, "int(11)"
+      column :tbl_txt, "varchar(100)"
+      column :origin, "varchar(30)"
+
+      index [:tbl_code], :name=>:tbl_code_index
+      index [:tbl_type], :name=>:tbl_type_index
     end
 
     create_table(:complete_abrogation_regulations) do
@@ -1559,6 +1620,14 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20130108131537_remove_links_from_04005_04018.rb")
     self[:schema_migrations].insert(:filename => "20130121114856_clear_invalid_chief_updates.rb")
     self[:schema_migrations].insert(:filename => "20130130132054_add_hydrocarbon_oils_footnote.rb")
+    self[:schema_migrations].insert(:filename => "20130118122518_create_comms.rb")
+    self[:schema_migrations].insert(:filename => "20130118150014_add_origin_to_comm.rb")
+    self[:schema_migrations].insert(:filename => "20130121114856_clear_invalid_chief_updates.rb")
+    self[:schema_migrations].insert(:filename => "20130123090129_create_tbl9s.rb")
+    self[:schema_migrations].insert(:filename => "20130123095635_add_processed_indicator_to_chief_tables.rb")
+    self[:schema_migrations].insert(:filename => "20130123125153_adjust_chief_decimal_columns.rb")
+    self[:schema_migrations].insert(:filename => "20130124080334_add_comm_tbl9_indexes.rb")
+    self[:schema_migrations].insert(:filename => "20130124085812_fix_chief_field_lengths.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"

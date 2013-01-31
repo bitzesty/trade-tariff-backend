@@ -395,4 +395,22 @@ FactoryGirl.define do
       new(url, response_code, content)
     }
   end
+
+  factory :comm, class: Chief::Comm do
+    fe_tsmp { Date.today.ago(2.years) }
+    le_tsmp { nil }
+    cmdty_code    { 10.times.map{ Random.rand(9) }.join }
+    uoq_code_cdu2 { 3.times.map{ Random.rand(9) }.join }
+    uoq_code_cdu3 { 3.times.map{ Random.rand(9) }.join }
+  end
+
+  factory :tbl9, class: Chief::Tbl9 do
+    tbl_code { 3.times.map{ Random.rand(9) }.join }
+    txtlnno  { 1 }
+    tbl_txt  { Forgery(:basic).text }
+
+    trait :unoq do
+      tbl_type { 'UNOQ' }
+    end
+  end
 end

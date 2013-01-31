@@ -15,6 +15,10 @@ child :footnote do
   }
 end
 
+child national_measurement_unit_set_units: :national_measurement_units do
+  attributes :level, :measurement_unit_code, :description
+end
+
 node(:import_measures) { |declarable|
   @measures.select(&:import).map do |import_measure|
     partial "api/v1/measures/measure", object: import_measure

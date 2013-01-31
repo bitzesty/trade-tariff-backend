@@ -4,6 +4,7 @@ require 'date'
 require 'sequel-rails'
 require 'chief_transformer/candidate_measure'
 require 'chief_transformer/processor'
+require 'chief_transformer/initial_load_processor'
 
 require 'active_support/notifications'
 require 'active_support/log_subscriber'
@@ -43,31 +44,14 @@ class ChiefTransformer
 
     case work_mode
     when :initial_load
-      Chief::Mfcm.each_page(per_page) do |batch|
-        candidate_measures = CandidateMeasure::Collection.new(
-          batch.map { |mfcm|
-            mfcm.tames.map{|tame|
-              if tame.tamfs.any?
-                tame.tamfs.map{|tamf|
-                  CandidateMeasure.new(mfcm: mfcm, tame: tame, tamf: tamf)
-                }
-              else
-                [CandidateMeasure.new(mfcm: mfcm, tame: tame)]
-              end
-            }
-          }.flatten.compact)
-        candidate_measures.sort
-        candidate_measures.uniq
-        candidate_measures.persist
-
-        [Chief::Mfcm, Chief::Tame, Chief::Tamf].each{|model|
-          model.unprocessed.update(processed: true)
-        }
-      end
+      processor = InitialLoadProcessor.new(Chief::Mfcm.initial_load
+                                                      .unprocessed,
+                                           per_page)
     when :update
       processor = Processor.new(Chief::Mfcm.unprocessed.all,
                                 Chief::Tame.unprocessed.all)
-      processor.process
     end
+
+    processor.process
   end
 end

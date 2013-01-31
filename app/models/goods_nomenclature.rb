@@ -57,6 +57,13 @@ class GoodsNomenclature < Sequel::Model
     footnotes.first
   end
 
+  one_to_one :national_measurement_unit_set, key: :cmdty_code,
+                                             primary_key: :goods_nomenclature_item_id do |ds|
+    ds.with_actual(Chief::Comm)
+  end
+
+  delegate :national_measurement_unit_set_units, to: :national_measurement_unit_set, allow_nil: true
+
   delegate :number_indents, to: :goods_nomenclature_indent, allow_nil: true
   delegate :description, to: :goods_nomenclature_description, allow_nil: true
 
