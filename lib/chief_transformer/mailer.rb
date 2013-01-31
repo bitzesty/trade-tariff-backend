@@ -1,3 +1,5 @@
+require 'mailer_environment'
+
 class ChiefTransformer
   class Mailer < ActionMailer::Base
     include MailerEnvironment
@@ -11,7 +13,7 @@ class ChiefTransformer
       @model = model
       @errors = errors
 
-      mail subject: "[error] Failed CHIEF transformation #{environment_indicator}"
+      mail subject: "#{subject_prefix(:error)} Failed CHIEF transformation"
     end
   end
 end

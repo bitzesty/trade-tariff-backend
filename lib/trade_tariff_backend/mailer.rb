@@ -1,3 +1,5 @@
+require 'mailer_environment'
+
 module TradeTariffBackend
   class Mailer < ActionMailer::Base
     include MailerEnvironment
@@ -8,7 +10,7 @@ module TradeTariffBackend
     def reindex_exception(exception)
       @exception = exception
 
-      mail subject: "[error] Trade Tariff reindex failure #{environment_indicator}"
+      mail subject: "#{subject_prefix(:error)} Trade Tariff reindex failure"
     end
   end
 end
