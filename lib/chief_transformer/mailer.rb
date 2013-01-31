@@ -1,7 +1,5 @@
 class ChiefTransformer
   class Mailer < ActionMailer::Base
-    include MailerEnvironment
-
     default from: "DO NOT REPLY <trade-tariff-alerts@digital.cabinet-office.gov.uk>",
             to: TradeTariffBackend.admin_email
 
@@ -11,7 +9,7 @@ class ChiefTransformer
       @model = model
       @errors = errors
 
-      mail subject: "[error] Failed CHIEF transformation #{environment_indicator}"
+      mail subject: "[error][#{TradeTariffBackend.platform}] Failed CHIEF transformation"
     end
   end
 end

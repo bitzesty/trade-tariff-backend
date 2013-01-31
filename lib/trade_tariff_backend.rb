@@ -21,6 +21,10 @@ module TradeTariffBackend
       secrets.sync_email
     end
 
+    def platform
+      ENV["FACTER_govuk_platform"] || Rails.env
+    end
+
     def with_locked_database(&block)
       begin
         if Sequel::Model.db.get_lock(db_lock_key)
