@@ -4,6 +4,17 @@ module TariffSynchronizer
   module FileService
     extend ActiveSupport::Concern
 
+    class DownloadException < StandardError
+      attr_reader :url, :original
+
+      def initialize(url, original)
+        super("TariffSynchronizer::FileService::DownloadException")
+
+        @url = url
+        @original = original
+      end
+    end
+
     module ClassMethods
       def write_file(path, body)
         begin
@@ -45,7 +56,7 @@ module TariffSynchronizer
 
       private
 
-      def send_request(url, count = 0)
+      def send_request(url)
         begin
           crawler = Curl::Easy.new(url)
           crawler.ssl_verify_peer = false
@@ -54,17 +65,15 @@ module TariffSynchronizer
           crawler.username = TariffSynchronizer.username
           crawler.password = TariffSynchronizer.password
           crawler.perform
-        rescue Curl::Err::HostResolutionError => exception
+        rescue Curl::Err::HostResolutionError,
+               Curl::Err::ConnectionFailedError,
+               Curl::Err::PartialFileError => exception
           # NOTE could be a glitch in curb because it throws HostResolutionError
           # occasionally without any reason.
-          if count < 10
-            send_request(url, count + 1)
-          else
-            raise StandardError.new(exception.to_s + " for <#{url}>")
-          end
+          raise DownloadException.new(url, exception)
         end
 
-        return Response.new(url, crawler.response_code, crawler.body_str)
+        Response.new(url, crawler.response_code, crawler.body_str)
       end
     end
   end

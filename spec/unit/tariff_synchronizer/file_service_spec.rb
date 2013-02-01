@@ -1,75 +1,36 @@
 require 'spec_helper'
-require 'date'
 require 'tariff_synchronizer'
-require 'tariff_synchronizer/file_service'
 
 describe TariffSynchronizer::FileService do
-  subject {
+  let(:klass) {
     Class.new do
       include TariffSynchronizer::FileService
     end
   }
 
-  describe ".write_file" do
-    let(:example_content) { Forgery(:basic).text }
-    let(:example_name)    { Forgery(:basic).text }
-    let(:example_path)    { "tmp/#{example_name}.sample" }
+  describe '.download_content' do
+    context 'partial content received' do
+      before { Curl::Easy.any_instance.expects(:perform).raises(Curl::Err::PartialFileError) }
 
-    before {
-      subject.write_file(example_path, example_content)
-    }
-
-    it 'writes provided content to provided path' do
-      File.exists?(example_path).should be_true
-      File.read(example_path).should == example_content
-    end
-
-    after { File.delete(example_path) }
-  end
-
-  describe ".download_content", :webmock do
-    let(:example_url) { "http://example.com/data" }
-    let(:error_response)   { build :response, :failed }
-    let(:success_response) { build :response, :success, content: 'Hello world',
-                                                        url: example_url }
-
-    before do
-      TariffSynchronizer.username = nil
-      TariffSynchronizer.password = nil
-      TariffSynchronizer.request_throttle = 0
-    end
-
-    it 'downloads content from remote url' do
-      VCR.use_cassette('example_get_content') do
-        subject.download_content(example_url).should == success_response
+      it 'raises DownloadException' do
+        expect { klass.download_content("http://localhost:9999/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
       end
     end
 
-    it 'retries if does not receive a terminating http code' do
-      subject.stubs(:send_request)
-             .returns(error_response)
-             .then
-             .returns(success_response)
+    context 'unable to connect' do
+      before { Curl::Easy.any_instance.expects(:perform).raises(Curl::Err::ConnectionFailedError) }
 
-      subject.download_content(example_url).should == success_response
+      it 'raises DownloadException' do
+        expect { klass.download_content("http://localhost:9999/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
+      end
     end
 
-    it 'retries until preset retry count is reached' do
-      TariffSynchronizer.retry_count = 2
-      subject.expects(:send_request)
-             .times(3)
-             .returns(error_response)
+    context 'host resultion error' do
+      before { Curl::Easy.any_instance.expects(:perform).raises(Curl::Err::HostResolutionError) }
 
-      subject.download_content(example_url).should == error_response
-    end
-
-    it "will abort send_request if it gets too many HostResolutionErrors" do
-      # Very promiscuous knowledge of the internals here!
-      Curl::Easy.any_instance.stubs(:perform).raises(Curl::Err::HostResolutionError)
-
-      expect {
-        subject.download_content(example_url)
-      }.to raise_error(StandardError)
+      it 'raises DownloadException' do
+        expect { klass.download_content("http://localhost:9999/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
+      end
     end
   end
 end

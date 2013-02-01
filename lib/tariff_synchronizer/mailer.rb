@@ -14,6 +14,13 @@ module TariffSynchronizer
       mail subject: "#{subject_prefix(:error)} Failed Trade Tariff update"
     end
 
+    def failed_download(exception, url)
+      @url = url
+      @exception = exception
+
+      mail subject: "#{subject_prefix(:error)} Trade Tariff download failure"
+    end
+
     def failures_reminder(file_names)
       @file_names = file_names
 

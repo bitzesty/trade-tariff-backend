@@ -75,7 +75,14 @@ module TariffSynchronizer
   def download
     if sync_variables_set?
       ActiveSupport::Notifications.instrument("download.tariff_synchronizer") do
-        [TaricUpdate, ChiefUpdate].map(&:sync)
+        begin
+          [TaricUpdate, ChiefUpdate].map(&:sync)
+        rescue FileService::DownloadException => exception
+          ActiveSupport::Notifications.instrument("failed_download.tariff_synchronizer", exception: exception.original,
+                                                                                         url: exception.url)
+
+          raise exception.original
+        end
       end
     else
       ActiveSupport::Notifications.instrument("config_error.tariff_synchronizer")

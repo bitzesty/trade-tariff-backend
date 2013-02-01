@@ -1,0 +1,19 @@
+<p>Hello,</p>
+
+<p>
+  Trade Tariff failed to download update at <%= @url %>.
+</p>
+
+<p>
+  <strong><%= @exception %></strong>
+</p>
+
+<p>
+  <strong>Backtrace:</strong>
+</p>
+
+<p>
+  <pre>
+  <%= @exception.backtrace.join("\n") %>
+  </pre>
+</p>
