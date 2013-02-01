@@ -146,6 +146,35 @@ describe TariffSynchronizer::Logger do
     end
   end
 
+  describe '#failed_download logging' do
+    before {
+       TariffSynchronizer.retry_count = 0
+       TariffSynchronizer.stubs(:sync_variables_set?).returns(true)
+
+       Curl::Easy.any_instance
+                 .expects(:perform)
+                 .raises(Curl::Err::HostResolutionError)
+
+      rescuing { TariffSynchronizer.download }
+    }
+
+    it 'logs and info event' do
+      @logger.logged(:error).size.should eq 1
+      @logger.logged(:error).last.should =~ /Download failed/
+    end
+
+    it 'sends email error email' do
+      ActionMailer::Base.deliveries.should_not be_empty
+      email = ActionMailer::Base.deliveries.last
+      email.encoded.should =~ /Backtrace/
+    end
+
+    it 'email includes information about exception' do
+      email = ActionMailer::Base.deliveries.last
+      email.encoded.should =~ /Curl::Err::HostResolutionError/
+    end
+  end
+
   describe '#rebuild logging' do
     before {
       TariffSynchronizer::TaricUpdate.expects(:rebuild).returns(true)
@@ -439,7 +468,7 @@ describe TariffSynchronizer::Logger do
     }
 
     it 'logs an info event' do
-      @logger.logged(:info).size.should be > 1
+      @logger.logged(:info).size.should be >= 1
       @logger.logged(:info).to_s.should =~ /Delaying update fetching/
     end
   end

@@ -1618,15 +1618,15 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20121204143748_add_hidden_commodities.rb")
     self[:schema_migrations].insert(:filename => "20130108084950_update_footnotes_04005_04018.rb")
     self[:schema_migrations].insert(:filename => "20130108131537_remove_links_from_04005_04018.rb")
-    self[:schema_migrations].insert(:filename => "20130121114856_clear_invalid_chief_updates.rb")
-    self[:schema_migrations].insert(:filename => "20130130132054_add_hydrocarbon_oils_footnote.rb")
     self[:schema_migrations].insert(:filename => "20130118122518_create_comms.rb")
     self[:schema_migrations].insert(:filename => "20130118150014_add_origin_to_comm.rb")
+    self[:schema_migrations].insert(:filename => "20130121114856_clear_invalid_chief_updates.rb")
     self[:schema_migrations].insert(:filename => "20130123090129_create_tbl9s.rb")
     self[:schema_migrations].insert(:filename => "20130123095635_add_processed_indicator_to_chief_tables.rb")
     self[:schema_migrations].insert(:filename => "20130123125153_adjust_chief_decimal_columns.rb")
     self[:schema_migrations].insert(:filename => "20130124080334_add_comm_tbl9_indexes.rb")
     self[:schema_migrations].insert(:filename => "20130124085812_fix_chief_field_lengths.rb")
+    self[:schema_migrations].insert(:filename => "20130130132054_add_hydrocarbon_oils_footnote.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"

@@ -37,6 +37,19 @@ describe TariffSynchronizer do
         TariffSynchronizer.download
       end
     end
+
+    context 'with download exceptions' do
+      before {
+        TariffSynchronizer.expects(:sync_variables_set?).returns(true)
+
+        Curl::Easy.any_instance
+                  .expects(:perform)
+                  .raises(Curl::Err::HostResolutionError) }
+
+      it 'raises original exception ending process' do
+        expect { TariffSynchronizer.download }.to raise_error Curl::Err::HostResolutionError
+      end
+    end
   end
 
   describe '.apply' do

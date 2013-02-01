@@ -37,6 +37,14 @@ module TariffSynchronizer
             .deliver
     end
 
+    # Update download failed
+    def failed_download(event)
+      error "Download failed: #{event.payload[:exception].to_s}, url: #{event.payload[:url]}"
+
+      Mailer.failed_download(event.payload[:exception], event.payload[:url])
+            .deliver
+    end
+
     # Update rebuild from files present in the file system
     def rebuild(event)
       info "Rebuilding updates from file system"
