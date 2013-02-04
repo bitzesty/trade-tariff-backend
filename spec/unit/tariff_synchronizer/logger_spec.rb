@@ -459,6 +459,7 @@ describe TariffSynchronizer::Logger do
     let(:success_response) { build :response, :success }
 
     before {
+      TariffSynchronizer.retry_count = 10
       TariffSynchronizer::ChiefUpdate.expects(:send_request)
                                      .twice
                                      .returns(failed_response)
