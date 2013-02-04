@@ -53,8 +53,8 @@ describe TariffSynchronizer do
   end
 
   describe '.apply' do
-    let(:update_1) { stub_everything(date: Date.today, update_priority: 1) }
-    let(:update_2) { stub_everything(date: Date.yesterday, update_priority: 2) }
+    let(:update_1) { stub_everything(issue_date: Date.yesterday, update_priority: 1) }
+    let(:update_2) { stub_everything(issue_date: Date.today, update_priority: 1) }
     let(:pending_updates) { [update_1, update_2] }
 
 
@@ -76,12 +76,18 @@ describe TariffSynchronizer do
       before do
         TariffSynchronizer::PendingUpdate.expects(:all).returns(pending_updates)
 
-        update_1.expects(:apply).returns(true)
-        update_2.expects(:apply).raises(TaricImporter::ImportException)
+        update_1.expects(:apply).raises(TaricImporter::ImportException)
       end
 
       it 'transaction gets rolled back' do
-        expect { TariffSynchronizer.apply }.to raise_error Sequel::Rollback
+        expect { TariffSynchronizer.apply }.to raise_error TaricImporter::ImportException
+      end
+
+      it 'update gets marked as failed' do
+        update_1.expects(:mark_as_failed).returns(true)
+        update_2.expects(:apply).never
+
+        rescuing { TariffSynchronizer.apply }
       end
     end
 
