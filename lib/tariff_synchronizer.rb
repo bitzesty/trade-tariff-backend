@@ -122,7 +122,11 @@ module TariffSynchronizer
               ActiveSupport::Notifications.instrument("failed_update.tariff_synchronizer", exception: exception,
                                                                                            update: pending_update)
 
-              raise Sequel::Rollback
+              pending_update.mark_as_failed
+
+              # re-raise to end application process here
+              # Sequel transaction gets rolled back too
+              raise exception
             end
           end
         end

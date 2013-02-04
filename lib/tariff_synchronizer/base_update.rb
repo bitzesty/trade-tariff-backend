@@ -57,6 +57,10 @@ module TariffSynchronizer
       update(state: APPLIED_STATE)
     end
 
+    def mark_as_failed
+      update(state: FAILED_STATE)
+    end
+
     def file_path
       File.join(TariffSynchronizer.root_path, self.class.update_type.to_s, filename)
     end
