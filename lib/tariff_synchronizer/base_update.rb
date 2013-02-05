@@ -53,6 +53,10 @@ module TariffSynchronizer
       state == MISSING_STATE
     end
 
+    def failed?
+      state == FAILED_STATE
+    end
+
     def mark_as_applied
       update(state: APPLIED_STATE)
     end
