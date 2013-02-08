@@ -12,7 +12,7 @@ describe FootnoteType do
       let!(:footnote)      { create :footnote, footnote_type_id: footnote_type.footnote_type_id }
 
       it 'should not allow footnote_type deletion' do
-        expect { footnote_type.destroy }.to raise_error Sequel::HookFailed
+        expect { footnote_type.destroy }.to raise_error Sequel::ValidationFailed
       end
     end
   end

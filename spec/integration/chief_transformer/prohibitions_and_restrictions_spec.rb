@@ -2,7 +2,12 @@ require 'spec_helper'
 require 'chief_transformer'
 
 describe "CHIEF: Prohibitions and Restrictions \n" do
-  before(:all) { preload_standing_data }
+  before(:all) {
+    preload_standing_data
+
+    create :base_regulation, base_regulation_id: 'IYY99990',
+                             validity_start_date: Date.new(1971,12,31)
+  }
   after(:all)  { clear_standing_data }
 
   # Create Measure types used in transformations, so that validations would pass.
@@ -59,37 +64,37 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
     it "should create measure for 1211300000" do
       m = Measure.where(goods_nomenclature_item_id: "1211300000", validity_start_date: DateTime.parse("2006-07-24 08:45:00")).first
       m.should_not be_nil
-      m[:geographical_area].should == "IQ"
+      m[:geographical_area_id].should == "IQ"
     end
 
     it "should create measure for 1210100010" do
       m = Measure.where(goods_nomenclature_item_id: "1210100010", validity_start_date: DateTime.parse("2008-04-01 00:00:00")).first
       m.should_not be_nil
-      m[:geographical_area].should == "XC"
+      m[:geographical_area_id].should == "XC"
     end
 
     it "should create measure for 2106909829" do
       m = Measure.where(goods_nomenclature_item_id: "2106909829", validity_start_date: DateTime.parse("2008-04-01 00:00:00")).first
       m.should_not be_nil
-      m[:geographical_area].should == "1011"
+      m[:geographical_area_id].should == "1011"
     end
 
     it "should create measure for 9706000000" do
       m = Measure.where(goods_nomenclature_item_id: "9706000000", validity_start_date: DateTime.parse("2008-04-01 00:00:00")).first
       m.should_not be_nil
-      m[:geographical_area].should == "A001"
+      m[:geographical_area_id].should == "A001"
     end
 
     it "should create measure for 9706000010" do
       m = Measure.where(goods_nomenclature_item_id: "9706000010", validity_start_date: DateTime.parse("2008-04-01 00:00:00")).first
       m.should_not be_nil
-      m[:geographical_area].should == "A001"
+      m[:geographical_area_id].should == "A001"
     end
 
     it "should create measure for 9706000090" do
       m = Measure.where(goods_nomenclature_item_id: "9706000090", validity_start_date: DateTime.parse("2008-04-01 00:00:00")).first
       m.should_not be_nil
-      m[:geographical_area].should == "A001"
+      m[:geographical_area_id].should == "A001"
     end
 
     it "should create measure conditions for 1211300000" do
@@ -556,17 +561,17 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
       it 'should create three new measures for preconditions with components and footnotes' do
         Measure.count.should == 3
         m1 = Measure.where(goods_nomenclature_item_id: "2106909829",
-                      geographical_area: 'US',
+                      geographical_area_id: 'US',
                       validity_start_date: DateTime.parse("2008-05-01 00:00:00")).take
         m1.measure_conditions.count.should == 2
         m1.footnote_association_measures.count.should == 1
         m2 = Measure.where(goods_nomenclature_item_id: "2106909829",
-                           geographical_area: 'CN',
+                           geographical_area_id: 'CN',
                            validity_start_date: DateTime.parse("2008-05-01 00:00:00")).take
         m2.measure_conditions.count.should == 2
         m2.footnote_association_measures.count.should == 1
         m3 =Measure.where(goods_nomenclature_item_id: "2106909829",
-                          geographical_area: 'IQ',
+                          geographical_area_id: 'IQ',
                           validity_start_date: DateTime.parse("2008-05-01 00:00:00")).take
         m3.measure_conditions.count.should == 2
         m3.footnote_association_measures.count.should == 1

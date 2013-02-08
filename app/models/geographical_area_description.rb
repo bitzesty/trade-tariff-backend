@@ -1,5 +1,7 @@
 class GeographicalAreaDescription < Sequel::Model
   plugin :time_machine
+  plugin :oplog, primary_key: [:geographical_area_description_period_sid,
+                               :geographical_area_sid]
 
   set_primary_key [:geographical_area_description_period_sid, :geographical_area_sid]
 
@@ -10,7 +12,7 @@ class GeographicalAreaDescription < Sequel::Model
 
   dataset_module do
     def latest
-      order(:created_at.desc)
+      order(:operation_date.desc)
     end
   end
 end

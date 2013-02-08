@@ -1,8 +1,10 @@
 require 'ostruct'
 
 module TradeTariffBackend
-  autoload :Indexer, 'trade_tariff_backend/indexer'
-  autoload :Mailer,  'trade_tariff_backend/mailer'
+  autoload :Auditor,   'trade_tariff_backend/auditor'
+  autoload :Indexer,   'trade_tariff_backend/indexer'
+  autoload :Mailer,    'trade_tariff_backend/mailer'
+  autoload :Validator, 'trade_tariff_backend/validator'
 
   class << self
 

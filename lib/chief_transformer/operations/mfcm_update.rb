@@ -9,7 +9,10 @@ class ChiefTransformer
                  .with_gono_id(record.cmdty_code)
                  .valid_to(record.le_tsmp)
                  .each do |measure|
-                   measure.update validity_end_date: record.le_tsmp
+                   measure.update validity_end_date: record.le_tsmp,
+                                  justification_regulation_id: measure.measure_generating_regulation_id,
+                                  justification_regulation_role: measure.measure_generating_regulation_role,
+                                  operation_date: operation_date
                  end
         else
           if Measure.with_measure_type(record.measure_type)
@@ -25,12 +28,14 @@ class ChiefTransformer
                     CandidateMeasure.new(mfcm: record,
                                          tame: record.tame,
                                          tamf: tamf,
-                                         operation: :insert)
+                                         operation: :create,
+                                         operation_date: record.operation_date)
                   }
                 else
                   [CandidateMeasure.new(mfcm: record,
                                         tame: record.tame,
-                                        operation: :insert)]
+                                        operation: :create,
+                                        operation_date: record.operation_date)]
                 end
               end
             ].flatten.compact)

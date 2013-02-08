@@ -39,6 +39,12 @@ module Chief
                         }.order(:audit_tsmp.asc)
     }
 
+    one_to_one :chief_update, key: :filename,
+                              primary_key: :origin,
+                              class_name: TariffSynchronizer::ChiefUpdate
+
+    delegate :issue_date, to: :chief_update, allow_nil: true
+
     dataset_module do
       def unprocessed
         filter(processed: false)
@@ -62,6 +68,10 @@ module Chief
 
     def audit_tsmp
       self[:audit_tsmp].presence || Time.now
+    end
+
+    def operation_date
+      issue_date
     end
   end
 end

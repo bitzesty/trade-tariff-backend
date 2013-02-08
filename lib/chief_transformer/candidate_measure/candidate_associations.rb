@@ -28,7 +28,7 @@ class ChiefTransformer
 
         Sequel::Model.db.transaction do
           @map.each do |association, records|
-            (records.is_a?(Array)) ? records.each(&:save) : records.save
+            [records].flatten.each(&:save)
           end
         end
       end

@@ -36,7 +36,7 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 
   config.before(:suite) do
-    Sequel::Model.db.tables.delete_if{|t| t == 'schema_migrations' }
+    Sequel::Model.db.tables.delete_if{|t| t == :schema_migrations }
                            .each{|table| Sequel::Model.db.from(table).truncate}
 
     TradeTariffBackend.stubs(:admin_email).returns("user@example.com")

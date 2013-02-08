@@ -73,6 +73,9 @@ describe TariffSynchronizer::Logger do
         prepare_synchronizer_folders
         create_taric_file :pending, example_date
 
+        Footnote.unrestrict_primary_key
+        Footnote.set_active_validations []
+
         TariffSynchronizer.apply
       }
 
@@ -88,7 +91,10 @@ describe TariffSynchronizer::Logger do
         email.encoded.should =~ /#{taric_update.filename}/
       end
 
-      after  { purge_synchronizer_folders }
+      after  {
+        purge_synchronizer_folders
+        Footnote.reset_active_validations
+      }
     end
 
     context 'no pending updates present' do

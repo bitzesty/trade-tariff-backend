@@ -99,16 +99,21 @@ FactoryGirl.define do
       msr_type "EXF"
       tty_code "591"
       after(:create) { |mfcm|
-        FactoryGirl.create(:tame, msrgp_code: mfcm.msrgp_code,
-                                  msr_type: mfcm.msr_type,
-                                  tty_code: mfcm.tty_code,
-                                  fe_tsmp: mfcm.fe_tsmp,
-                                  adval_rate: 20)
+        tame = FactoryGirl.create(:tame, msrgp_code: mfcm.msrgp_code,
+                                         msr_type: mfcm.msr_type,
+                                         tty_code: mfcm.tty_code,
+                                         fe_tsmp: mfcm.fe_tsmp,
+                                         adval_rate: 20)
         FactoryGirl.create(:measure_type_adco, measure_group_code: "EX",
                                                measure_type: "EXF",
                                                tax_type_code: "591",
                                                measure_type_id: "",
                                                adtnl_cd_type_id: 'EIA')
+         FactoryGirl.create(:chief_duty_expression, duty_expression_id_adval1: Forgery(:basic).number,
+                                                    adval1_rate: tame.adval1_rate,
+                                                    adval2_rate: tame.adval2_rate,
+                                                    spfc1_rate: tame.spfc1_rate,
+                                                    spfc2_rate: tame.spfc2_rate)
       }
     end
 

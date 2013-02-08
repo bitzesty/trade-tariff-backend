@@ -13,7 +13,7 @@ Sequel.migration do
     end
 
     alter_table :measures do
-      set_column_type :measure_type, String, size: 3
+      set_column_type :measure_type_id, String, size: 3
     end
 
     alter_table :regulation_replacements do

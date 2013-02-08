@@ -4,6 +4,7 @@ class Commodity < GoodsNomenclature
   include Tire::Model::Search
   include Model::Declarable
 
+  plugin :oplog, primary_key: :goods_nomenclature_sid
   plugin :json_serializer
 
   set_dataset filter("goods_nomenclatures.goods_nomenclature_item_id NOT LIKE ?", '____000000').
@@ -22,7 +23,7 @@ class Commodity < GoodsNomenclature
   }
 
   one_to_many :third_country_duty, dataset: -> {
-    MeasureComponent.where(measure: import_measures_dataset.where(measures__measure_type: MeasureType::THIRD_COUNTRY).all)
+    MeasureComponent.where(measure: import_measures_dataset.where(measures__measure_type_id: MeasureType::THIRD_COUNTRY).all)
   }, class_name: 'MeasureComponent'
 
   delegate :section, to: :chapter

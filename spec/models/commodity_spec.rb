@@ -77,9 +77,8 @@ describe Commodity do
     describe 'measures' do
       let(:measure_type) { create :measure_type, measure_type_id: MeasureType::EXCLUDED_TYPES.sample }
       let(:commodity)    { create :commodity, :with_indent }
-      let(:measure)      { create :measure, :with_base_regulation,
-                                             measure_type_id: measure_type.measure_type_id,
-                                             goods_nomenclature_sid: commodity.goods_nomenclature_sid  }
+      let(:measure)      { create :measure, measure_type_id: measure_type.measure_type_id,
+                                            goods_nomenclature_sid: commodity.goods_nomenclature_sid  }
 
       it 'does not include measures for excluded measure types' do
         measure_type
@@ -95,9 +94,9 @@ describe Commodity do
       # need to group and choose the latest one
       let(:measure_type) { create :measure_type }
       let(:commodity)    { create :commodity, :with_indent, validity_start_date: Date.today.ago(3.years) }
-      let!(:measure1)    { create :measure, :with_base_regulation,
-                                            measure_sid: 1,
+      let!(:measure1)    { create :measure, measure_sid: 1,
                                             measure_type_id: measure_type.measure_type_id,
+                                            additional_code_type_id: nil,
                                             goods_nomenclature_sid: commodity.goods_nomenclature_sid,
                                             validity_start_date: Date.today.ago(1.year)  }
       let!(:measure2)    { create :measure,  measure_sid: 2,
@@ -106,6 +105,8 @@ describe Commodity do
                                              measure_type_id: measure_type.measure_type_id,
                                              geographical_area_sid: measure1.geographical_area_sid,
                                              goods_nomenclature_sid: commodity.goods_nomenclature_sid,
+                                             additional_code_type_id: measure1.additional_code_type_id,
+                                             additional_code_id: measure1.additional_code_id,
                                              validity_start_date: Date.today.ago(2.years)  }
 
       it 'groups measures by measure_generating_regulation_id and picks latest one' do
@@ -118,14 +119,12 @@ describe Commodity do
       context 'trade movement code' do
         let(:export_measure_type) { create :measure_type, :export }
         let(:commodity1)          { create :commodity, :with_indent }
-        let(:export_measure)      { create :measure, :with_base_regulation,
-                                                     measure_type_id: export_measure_type.measure_type_id,
+        let(:export_measure)      { create :measure, measure_type_id: export_measure_type.measure_type_id,
                                                      goods_nomenclature_sid: commodity1.goods_nomenclature_sid  }
 
         let(:import_measure_type) { create :measure_type, :import }
         let(:commodity2)          { create :commodity, :with_indent }
-        let(:import_measure)      { create :measure, :with_base_regulation,
-                                                     measure_type_id: import_measure_type.measure_type_id,
+        let(:import_measure)      { create :measure, measure_type_id: import_measure_type.measure_type_id,
                                                      goods_nomenclature_sid: commodity2.goods_nomenclature_sid  }
 
 
@@ -148,8 +147,7 @@ describe Commodity do
         let!(:commodity) { create :commodity, :with_indent }
         let!(:export_refund_nomenclature) { create :export_refund_nomenclature, :with_indent,
                                                                                 goods_nomenclature_sid: commodity.goods_nomenclature_sid }
-        let!(:export_measure)             { create :measure, :with_base_regulation,
-                                                             export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid,
+        let!(:export_measure)             { create :measure, export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid,
                                                              goods_nomenclature_item_id: commodity.goods_nomenclature_item_id  }
 
         it 'includes measures that belongs to related export refund nomenclature' do

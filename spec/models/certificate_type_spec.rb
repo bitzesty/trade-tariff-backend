@@ -12,7 +12,7 @@ describe CertificateType do
       let!(:certificate)      { create :certificate, certificate_type_code: certificate_type.certificate_type_code }
 
       specify 'The certificate type cannot be deleted if it is used in a certificate.' do
-        expect { certificate_type.destroy }.to raise_error Sequel::HookFailed
+        expect { certificate_type.destroy }.to raise_error Sequel::ValidationFailed
       end
     end
   end

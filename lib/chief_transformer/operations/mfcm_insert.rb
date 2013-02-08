@@ -11,12 +11,14 @@ class ChiefTransformer
                 CandidateMeasure.new(mfcm: record,
                                      tame: record.tame,
                                      tamf: tamf,
-                                     operation: :insert)
+                                     operation: :create,
+                                     operation_date: record.operation_date)
               }
             else
               [CandidateMeasure.new(mfcm: record,
                                     tame: record.tame,
-                                    operation: :insert)]
+                                    operation: :create,
+                                    operation_date: record.operation_date)]
             end
           end
         ].flatten.compact)

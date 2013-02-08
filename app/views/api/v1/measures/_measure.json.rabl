@@ -6,7 +6,7 @@ attributes :measure_sid,
            :import
 
 node(:measure_type_description) { |obj|
-  obj.type.try(:description)
+  obj.measure_type.try(:description)
 }
 
 node(:legal_act, if: ->(measure) { !measure.national && measure.generating_regulation_present? }) do |measure|

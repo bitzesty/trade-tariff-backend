@@ -142,14 +142,14 @@ describe TariffSynchronizer::ChiefUpdate do
     it 'executes importer' do
       mock_importer = stub
       mock_importer.expects(:import).returns(true)
-      TariffImporter.expects(:new).with(example_chief_update.file_path, ChiefImporter).returns(mock_importer)
+      TariffImporter.expects(:new).returns(mock_importer)
 
       TariffSynchronizer::ChiefUpdate.first.apply
     end
 
     it 'updates file entry state to processed' do
       mock_importer = stub_everything
-      TariffImporter.expects(:new).with(example_chief_update.file_path, ChiefImporter).returns(mock_importer)
+      TariffImporter.expects(:new).returns(mock_importer)
 
       TariffSynchronizer::ChiefUpdate.pending.count.should == 1
       TariffSynchronizer::ChiefUpdate.first.apply
@@ -160,7 +160,7 @@ describe TariffSynchronizer::ChiefUpdate do
     it 'does not move file to processed if import fails' do
       mock_importer = stub
       mock_importer.expects(:import).raises(ChiefImporter::ImportException)
-      TariffImporter.expects(:new).with(example_chief_update.file_path, ChiefImporter).returns(mock_importer)
+      TariffImporter.expects(:new).returns(mock_importer)
 
       TariffSynchronizer::ChiefUpdate.pending.count.should == 1
       rescuing { TariffSynchronizer::ChiefUpdate.first.apply }

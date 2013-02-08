@@ -1,8 +1,13 @@
 require 'time_machine'
+require 'trackable'
 
 class GoodsNomenclature < Sequel::Model
+  set_dataset order(:goods_nomenclatures__goods_nomenclature_item_id.asc)
+  set_primary_key :goods_nomenclature_sid
+
   plugin :time_machine, period_start_column: Sequel.qualify(:goods_nomenclatures, :validity_start_date),
                         period_end_column:   Sequel.qualify(:goods_nomenclatures, :validity_end_date)
+  plugin :oplog, primary_key: :goods_nomenclature_sid
 
   plugin :sti, class_determinator: ->(record) {
     gono_id = record[:goods_nomenclature_item_id].to_s
@@ -17,10 +22,6 @@ class GoodsNomenclature < Sequel::Model
       'GoodsNomenclature'
     end
   }
-
-  set_dataset order(:goods_nomenclatures__goods_nomenclature_item_id.asc)
-
-  set_primary_key :goods_nomenclature_sid
 
   one_to_many :goods_nomenclature_indents, key: :goods_nomenclature_sid,
                                            primary_key: :goods_nomenclature_sid do |ds|
@@ -93,14 +94,6 @@ class GoodsNomenclature < Sequel::Model
     def non_hidden
       filter(~{goods_nomenclature_item_id: HiddenGoodsNomenclature.codes})
     end
-  end
-
-  # TODO
-  validates do
-    # NIG30 When a goods nomenclature is used in a goods measure then the validity period of the goods nomenclature must span the validity period of the goods measure.
-    # associated :measures, ensure: :measures_are_valid
-    # NIG4
-    validity_dates
   end
 
   def id

@@ -46,9 +46,8 @@ describe Heading do
     describe 'measures' do
       let(:measure_type) { create :measure_type, measure_type_id: MeasureType::EXCLUDED_TYPES.sample }
       let(:heading)      { create :heading, :with_indent }
-      let(:measure)      { create :measure, :with_base_regulation,
-                                             measure_type_id: measure_type.measure_type_id,
-                                             goods_nomenclature_sid: heading.goods_nomenclature_sid  }
+      let(:measure)      { create :measure, measure_type_id: measure_type.measure_type_id,
+                                            goods_nomenclature_sid: heading.goods_nomenclature_sid  }
 
       it 'does not include measures for excluded measure types' do
         measure_type

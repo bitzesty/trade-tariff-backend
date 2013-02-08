@@ -15,10 +15,10 @@ class TariffImporter
 
   delegate :import, to: :importer
 
-  def initialize(path, importer)
+  def initialize(path, importer, issue_date = nil)
     if File.exists?(path)
       @path = path
-      @importer = importer.to_s.constantize.new(path)
+      @importer = importer.to_s.constantize.new(path, issue_date)
     else
       raise NotFound.new("#{path} was not found.")
     end

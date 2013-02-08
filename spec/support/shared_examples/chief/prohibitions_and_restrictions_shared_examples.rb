@@ -14,7 +14,7 @@ shared_examples_for "P&R Daily Update TAME and TAMF Daily Scenario 1: Changed co
   it 'should create a new measure for 2106909829' do
     m = Measure.where(goods_nomenclature_item_id: "2106909829",
                       validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
-    m[:geographical_area].should == "1011"
+    m[:geographical_area_id].should == "1011"
     m.measure_conditions.count.should == 2
   end
 
@@ -142,12 +142,12 @@ shared_examples_for "P&R Daily Update TAME and TAMF Daily Scenario 4: Country re
   it "should create two new measures" do
     Measure.count.should == 5
     m1 = Measure.where(goods_nomenclature_item_id: "2106909829",
-                       geographical_area: 'CN',
+                       geographical_area_id: 'CN',
                        validity_start_date: DateTime.parse("2008-06-01 00:00:00")).take
     m1.measure_conditions.count.should == 2
     m1.footnote_association_measures.count.should == 1
     m2 = Measure.where(goods_nomenclature_item_id: "2106909829",
-                       geographical_area: 'IQ',
+                       geographical_area_id: 'IQ',
                        validity_start_date: DateTime.parse("2008-06-01 00:00:00")).take
     m2.measure_conditions.count.should == 2
     m2.footnote_association_measures.count.should == 1
@@ -155,15 +155,15 @@ shared_examples_for "P&R Daily Update TAME and TAMF Daily Scenario 4: Country re
 
   it "should end the three old measures" do
     Measure.where(goods_nomenclature_item_id: "2106909829",
-                  geographical_area: 'CN',
+                  geographical_area_id: 'CN',
                   validity_start_date: DateTime.parse("2008-05-01 00:00:00"),
                   validity_end_date: DateTime.parse("2008-06-01 00:00:00")).take
     Measure.where(goods_nomenclature_item_id: "2106909829",
-                  geographical_area: 'US',
+                  geographical_area_id: 'US',
                   validity_start_date: DateTime.parse("2008-05-01 00:00:00"),
                   validity_end_date: DateTime.parse("2008-06-01 00:00:00")).take
     Measure.where(goods_nomenclature_item_id: "2106909829",
-                  geographical_area: 'IQ',
+                  geographical_area_id: 'IQ',
                   validity_start_date: DateTime.parse("2008-05-01 00:00:00"),
                   validity_end_date: DateTime.parse("2008-06-01 00:00:00")).take
   end

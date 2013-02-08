@@ -8,8 +8,7 @@ namespace :tariff do
                    install:taric:section_notes
                    install:taric:chapter_notes
                    install:chief:static_national_data
-                   install:chief:standing_data
-                   reindex]
+                   install:chief:standing_data]
 
   desc 'Reindex relevant entities on ElasticSearch'
   task reindex: %w[environment
@@ -22,7 +21,11 @@ namespace :tariff do
 
   namespace :sync do
     desc 'Download pending Taric and CHIEF updates'
-    task apply: :environment do
+    task apply: [:environment, :class_eager_load] do
+      # We will be fetching updates from Taric and modifying primary keys
+      # so unrestrict it for all models.
+      Sequel::Model.descendants.each(&:unrestrict_primary_key)
+
       TradeTariffBackend.with_locked_database do
         # Download pending updates for CHIEF and Taric
         TariffSynchronizer.download
@@ -196,6 +199,17 @@ namespace :tariff do
           end
         end
       end
+    end
+  end
+
+  # TODO rake task for eager loaded app
+
+  namespace :audit do
+    desc "Traverse all TARIC tables and perform conformance validations on all the records"
+    task verify: [:environment, :class_eager_load] do
+      models = (ENV['MODELS']) ? ENV['MODELS'].split(',') : []
+
+      TradeTariffBackend::Auditor.new(models, ENV["SINCE"], ENV["AUDIT_LOG"]).run
     end
   end
 end

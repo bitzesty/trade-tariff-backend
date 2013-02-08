@@ -4,6 +4,7 @@ class Chapter < GoodsNomenclature
   include Tire::Model::Search
 
   plugin :json_serializer
+  plugin :oplog, primary_key: :goods_nomenclature_sid
 
   set_dataset filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", '__00000000').
               order(:goods_nomenclature_item_id.asc)
