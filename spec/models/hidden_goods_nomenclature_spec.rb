@@ -1,7 +1,10 @@
 require 'spec_helper'
 
 describe HiddenGoodsNomenclature do
-  it { should validate_presence.of(:goods_nomenclature_item_id) }
+  it 'validates presence of goods_nomenclature_item_id' do
+    hidden_goods_nomenclature = build :hidden_goods_nomenclature, goods_nomenclature_item_id: nil
+    hidden_goods_nomenclature.valid?.should be_false
+  end
 
   describe '.codes' do
     let!(:hidden_gono1) { create :hidden_goods_nomenclature, goods_nomenclature_item_id: "9900000000" }

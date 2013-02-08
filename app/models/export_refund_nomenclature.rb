@@ -1,6 +1,7 @@
 class ExportRefundNomenclature < Sequel::Model
   plugin :time_machine, period_start_column: :export_refund_nomenclatures__validity_start_date,
                         period_end_column:   :export_refund_nomenclatures__validity_end_date
+  plugin :oplog, primary_key: :export_refund_nomenclature_sid
 
   set_dataset order(:export_refund_nomenclatures__goods_nomenclature_item_id.asc)
 
@@ -62,12 +63,6 @@ class ExportRefundNomenclature < Sequel::Model
       .map(&:first)
       .reverse
       .sort_by(&:number_indents)
-  end
-
-  # TODO
-  validates do
-    # ERN5
-    validity_dates
   end
 
   def additional_code

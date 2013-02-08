@@ -50,9 +50,12 @@ describe TariffImporter::Logger do
   end
 
   describe '#taric_imported logging' do
-    let(:valid_file) { "spec/fixtures/taric_samples/update_record.xml" }
+    let(:valid_file) { "spec/fixtures/taric_samples/insert_record.xml" }
 
-    before { TaricImporter.new(valid_file).import }
+    before {
+      ExplicitAbrogationRegulation.unrestrict_primary_key
+      TaricImporter.new(valid_file).import
+    }
 
     it 'logs an info event' do
       @logger.logged(:info).size.should eq 1
@@ -63,11 +66,15 @@ describe TariffImporter::Logger do
   describe '#taric_unexpected_update_type logging' do
     let(:unknown_file) { "spec/fixtures/taric_samples/unknown_record.xml" }
 
-    before { TaricImporter.new(unknown_file).import }
-
     it 'logs an info event' do
-      @logger.logged(:error).size.should eq 1
-      @logger.logged(:error).last.should =~ /Unexpected Taric operation/
+      rescuing { TaricImporter.new(unknown_file).import }
+
+      @logger.logged(:error).size.should be >= 1
+      @logger.logged(:error).first.should =~ /Unexpected Taric operation/
+    end
+
+    it 'raises ImportException' do
+      expect { TaricImporter.new(unknown_file).import }.to raise_error TaricImporter::ImportException
     end
   end
 end

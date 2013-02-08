@@ -7,10 +7,11 @@ class ChiefTransformer
 
       def_delegator ActiveSupport::Notifications, :instrument
 
-      attr_reader :record
+      attr_reader :record, :operation_date
 
       def initialize(record)
         @record = record
+        @operation_date = record.operation_date
       end
 
       def update_record(record, attributes = {})

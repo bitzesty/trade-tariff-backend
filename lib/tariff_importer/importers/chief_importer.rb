@@ -31,13 +31,15 @@ class ChiefImporter
   cattr_accessor :end_mark
   self.end_mark = "ZZZZZZZZZZZ"
 
-  attr_reader :path, :processor, :start_entry, :end_entry, :file_name
+  attr_reader :path, :processor, :start_entry,
+              :end_entry, :file_name, :issue_date
 
   delegate :extraction_date, to: :start_entry, allow_nil: true
   delegate :record_count, to: :end_entry, allow_nil: true
 
-  def initialize(path)
+  def initialize(path, issue_date = nil)
     @path = Pathname.new(path)
+    @issue_date = issue_date
     @file_name = @path.basename.to_s
   end
 

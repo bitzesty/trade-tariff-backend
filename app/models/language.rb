@@ -1,15 +1,6 @@
 class Language < Sequel::Model
+  plugin :oplog, primary_key: :language_id
   set_primary_key  :language_id
-
-  ######### Conformance validations 130
-  validates do
-    # LA1
-    uniqueness_of :language_id
-    # LA3
-    validity_dates
-  end
-
-  # LA2 - TODO
 end
 
 

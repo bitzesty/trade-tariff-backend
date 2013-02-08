@@ -22,14 +22,14 @@ class TariffImporter
   cattr_accessor :logger
   self.logger = Logger.new('log/importer-error.log')
 
-  attr_reader :path, :importer
+  attr_reader :path, :importer, :issue_date
 
   delegate :import, to: :importer
 
-  def initialize(path, importer)
+  def initialize(path, importer, issue_date = Date.today)
     if File.exists?(path)
       @path = path
-      @importer = importer.to_s.constantize.new(path)
+      @importer = importer.to_s.constantize.new(path, issue_date)
     else
       raise NotFound.new("#{path} was not found.")
     end

@@ -11,9 +11,16 @@ FactoryGirl.define do
     # do not allow zeroes in the goods item id as it causes unpredictable
     # results
     goods_nomenclature_item_id { 10.times.map{ Random.rand(9) + 1 }.join }
-    producline_suffix   { [10,20,80].sample }
+    producline_suffix   { 80 }
     validity_start_date { Date.today.ago(2.years) }
     validity_end_date   { nil }
+
+    after(:build) { |gono, evaluator|
+      FactoryGirl.create(:goods_nomenclature_indent, goods_nomenclature_sid: gono.goods_nomenclature_sid,
+                                                     validity_start_date: gono.validity_start_date,
+                                                     validity_end_date: gono.validity_end_date,
+                                                     number_indents: evaluator.indents)
+    }
 
     trait :actual do
       validity_start_date { Date.today.ago(3.years) }
@@ -34,12 +41,7 @@ FactoryGirl.define do
     end
 
     trait :with_indent do
-      after(:create) { |gono, evaluator|
-        FactoryGirl.create(:goods_nomenclature_indent, goods_nomenclature_sid: gono.goods_nomenclature_sid,
-                                                       validity_start_date: gono.validity_start_date,
-                                                       validity_end_date: gono.validity_end_date,
-                                                       number_indents: evaluator.indents)
-      }
+      # noop
     end
 
     trait :with_description do

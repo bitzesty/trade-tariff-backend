@@ -1,6 +1,7 @@
 class FullTemporaryStopRegulation < Sequel::Model
   plugin :time_machine
-
+  plugin :oplog, primary_key: [:full_temporary_stop_regulation_id,
+                               :full_temporary_stop_regulation_role]
   set_primary_key [:full_temporary_stop_regulation_id, :full_temporary_stop_regulation_role]
 
   def regulation_id

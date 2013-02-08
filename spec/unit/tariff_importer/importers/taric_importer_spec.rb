@@ -2,8 +2,6 @@ require 'spec_helper'
 
 require 'tariff_importer' # require it so that ActiveSupport requires get executed
 require 'tariff_importer/importers/taric_importer'
-require 'tariff_importer/importers/taric_importer/strategies/base_strategy'
-require 'tariff_importer/importers/taric_importer/strategies/strategies'
 
 describe TaricImporter do
   let(:path)       { Forgery(:basic).text }
@@ -20,7 +18,7 @@ describe TaricImporter do
       let(:valid_file) { "spec/fixtures/taric_samples/footnote.xml" }
 
       it 'instantiates appropriate processing strategy' do
-        TaricImporter::Strategies::Footnote.any_instance.expects(:process!)
+        TaricImporter::RecordProcessor.any_instance.expects(:process!)
 
         @importer = TaricImporter.new(valid_file)
         @importer.import
@@ -32,10 +30,8 @@ describe TaricImporter do
 
       it 'processes inserts' do
         # insert_record.xml is inserting to ExplicitAbrogationRegulation
-
-        db_stub, model_stub = stub(), stub()
-        ExplicitAbrogationRegulation.expects(:model).returns(model_stub)
-        model_stub.expects(:insert).returns(true)
+        model_stub = stub(validate!: true, save: true)
+        ExplicitAbrogationRegulation.expects(:new).returns(model_stub)
 
         @importer = TaricImporter.new(insert_record)
         @importer.import
@@ -60,9 +56,9 @@ describe TaricImporter do
 
       it 'processes updates' do
         # update_record.xml is updating to ExplicitAbrogationRegulation
-        update_stub = stub()
-        ExplicitAbrogationRegulation.expects(:filter).returns(update_stub)
-        update_stub.expects(:update).with(expected_attributes).returns(true)
+        update_stub = stub(save: true, validate!: true, set: true, columns: [])
+        dataset = stub(first: update_stub)
+        ExplicitAbrogationRegulation.expects(:filter).returns(dataset)
 
         @importer = TaricImporter.new(update_record)
         @importer.import
@@ -76,8 +72,9 @@ describe TaricImporter do
         # update_record.xml is inserting to ExplicitAbrogationRegulation
 
         destroy_stub = stub()
-        ExplicitAbrogationRegulation.expects(:filter).with({:explicit_abrogation_regulation_id=>"D1202470", :explicit_abrogation_regulation_role=>"7"}).returns(destroy_stub)
-        destroy_stub.expects(:delete).returns(true)
+        dataset_stub = stub(first: destroy_stub)
+        ExplicitAbrogationRegulation.expects(:filter).returns(dataset_stub)
+        destroy_stub.expects(:destroy).returns(true)
 
         @importer = TaricImporter.new(delete_record)
         @importer.import

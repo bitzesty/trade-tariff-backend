@@ -1,4 +1,5 @@
 class CertificateType < Sequel::Model
+  plugin :oplog, primary_key: :certificate_type_code
   plugin :time_machine
 
   set_primary_key :certificate_type_code
@@ -11,21 +12,6 @@ class CertificateType < Sequel::Model
                              primary_key: :certificate_type_code
 
   delegate :description, to: :certificate_type_description
-
-  ######### Conformance validations 110
-  validates do
-    # CET1
-    uniqueness_of :certificate_type_code
-    # CET3
-    validity_dates
-  end
-
-  def before_destroy
-    # CET2
-    return false if certificates.any?
-
-    super
-  end
 end
 
 

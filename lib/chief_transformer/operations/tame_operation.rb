@@ -16,13 +16,16 @@ class ChiefTransformer
                .not_terminated
                .each do |measure|
           end_date = if (measure.associated_to_non_open_ended_gono? &&
-                         record.fe_tsmp > measure.goods_nomenclature_validity_end_date)
-                       measure.goods_nomenclature_validity_end_date
+                         record.fe_tsmp > measure.goods_nomenclature.validity_end_date)
+                       measure.goods_nomenclature.validity_end_date
                      else
                        record.fe_tsmp
                      end
-
-          update_record(measure, validity_end_date: end_date)
+          update_record(measure,
+            validity_end_date: end_date,
+            justification_regulation_id: measure.measure_generating_regulation_id,
+            justification_regulation_role: measure.measure_generating_regulation_role,
+            operation_date: operation_date)
         end
       end
 
@@ -34,12 +37,14 @@ class ChiefTransformer
               CandidateMeasure.new(mfcm: mfcm,
                                    tame: tame,
                                    tamf: tamf,
-                                   operation: :insert)
+                                   operation: :create,
+                                   operation_date: tame.operation_date)
             }
           else
             [CandidateMeasure.new(mfcm: mfcm,
-                                 tame: tame,
-                                 operation: :insert)]
+                                  tame: tame,
+                                  operation: :create,
+                                  operation_date: tame.operation_date)]
           end
         end.flatten)
         candidate_measures.persist
@@ -54,13 +59,14 @@ class ChiefTransformer
                .each do |measure|
                  if tame.has_tamfs?
                    tame.tamfs.each do |tamf|
-                     build_tamf_measure_components(measure, tamf.measure_components)
-                     build_excluded_geographical_areas(measure, tamf.geographical_area)
+                     build_tamf_measure_components(tame, measure, tamf.measure_components)
+                     build_excluded_geographical_areas(tame, measure, tamf.geographical_area)
                    end
                  else
                   if tame_component = measure.measure_components
                                              .detect{|c| c.duty_expression_id == TAME_DUTY_EXPRESSION_ID }
-                    tame_component.update duty_amount: tame.adval_rate
+                    tame_component.update duty_amount: tame.adval_rate,
+                                          operation_date: tame.operation_date
                   end
                 end
         end
@@ -68,18 +74,25 @@ class ChiefTransformer
 
       private
 
-      def build_tamf_measure_components(measure, measure_components)
-        measure.measure_components_dataset.destroy
+      def build_tamf_measure_components(tame, measure, measure_components)
+        measure.measure_components.each do |measure_component|
+          measure_component.operation_date = tame.operation_date
+          measure_component.destroy
+        end
 
         measure_components.each do |mc|
           mc.measure_sid = measure.measure_sid
+          mc.operation_date = tame.operation_date
           mc.save
         end
       end
 
-      def build_excluded_geographical_areas(measure, chief_geographical_area)
+      def build_excluded_geographical_areas(tame, measure, chief_geographical_area)
         if chief_geographical_area.present?
-          measure.remove_all_excluded_geographical_areas
+          measure.measure_excluded_geographical_areas.each do |excl_geo_area|
+            excl_geo_area.operation_date = tame.operation_date
+            excl_geo_area.destroy
+          end
 
           exclusion_entry = Chief::CountryGroup.where(chief_country_grp: chief_geographical_area).first
           if exclusion_entry.present? && exclusion_entry.country_exclusions.present?
@@ -93,6 +106,7 @@ class ChiefTransformer
                   mega.geographical_area_sid = excluded_geographical_area.geographical_area_sid
                   mega.excluded_geographical_area = excluded_geographical_area.geographical_area_id
                   mega.measure_sid = measure.measure_sid
+                  mega.operation_date = tame.operation_date
                 end
                 exclusion.save
               end

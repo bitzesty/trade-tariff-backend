@@ -14,10 +14,14 @@ FactoryGirl.define do
     validity_end_date       { nil }
 
     after(:build) { |ftn, evaluator|
-      FactoryGirl.create(:footnote_type, footnote_type_id: ftn.footnote_type_id)
-      FactoryGirl.create(:footnote_description_period, footnote_type_id: ftn.footnote_type_id,
+      FactoryGirl.create(:footnote_type, footnote_type_id: ftn.footnote_type_id,
+                                         validity_start_date: ftn.validity_start_date - 1.day)
+      ftn_desc_period = FactoryGirl.create(:footnote_description_period, footnote_type_id: ftn.footnote_type_id,
                                                        footnote_id: ftn.footnote_id,
                                                        validity_start_date: ftn.validity_start_date)
+      FactoryGirl.create(:footnote_description, footnote_type_id: ftn.footnote_type_id,
+                                                footnote_id: ftn.footnote_id,
+                                                footnote_description_period_sid: ftn_desc_period.footnote_description_period_sid)
     }
 
     trait :with_gono_association do

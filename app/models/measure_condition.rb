@@ -1,7 +1,7 @@
 class MeasureCondition < Sequel::Model
   plugin :time_machine
   plugin :national
-  plugin :timestamps
+  plugin :oplog, primary_key: :measure_condition_sid
 
   set_primary_key :measure_condition_sid
 

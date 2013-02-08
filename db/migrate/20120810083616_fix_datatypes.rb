@@ -25,7 +25,7 @@ Sequel.migration do
     end
 
     alter_table :measures do
-      set_column_type :additional_code_type, String
+      set_column_type :additional_code_type_id, String
     end
   end
 

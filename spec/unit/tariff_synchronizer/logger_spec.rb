@@ -78,6 +78,9 @@ describe TariffSynchronizer::Logger do
         prepare_synchronizer_folders
         create_taric_file :pending, example_date
 
+        Footnote.unrestrict_primary_key
+        Footnote.set_active_validations []
+
         TariffSynchronizer.apply
       }
 

@@ -234,14 +234,14 @@ describe TariffSynchronizer::TaricUpdate do
 
     it 'executes Taric importer' do
       mock_importer = stub_everything
-      TariffImporter.expects(:new).with(example_taric_update.file_path, TaricImporter).returns(mock_importer)
+      TariffImporter.expects(:new).returns(mock_importer)
 
       TariffSynchronizer::TaricUpdate.first.apply
     end
 
     it 'updates file entry state to processed' do
       mock_importer = stub_everything
-      TariffImporter.expects(:new).with(example_taric_update.file_path, TaricImporter).returns(mock_importer)
+      TariffImporter.expects(:new).returns(mock_importer)
 
       TariffSynchronizer::TaricUpdate.pending.count.should == 1
       TariffSynchronizer::TaricUpdate.first.apply
@@ -252,7 +252,7 @@ describe TariffSynchronizer::TaricUpdate do
     it 'does not move file to processed if import fails' do
       mock_importer = stub
       mock_importer.expects(:import).raises(TaricImporter::ImportException)
-      TariffImporter.expects(:new).with(example_taric_update.file_path, TaricImporter).returns(mock_importer)
+      TariffImporter.expects(:new).returns(mock_importer)
 
       TariffSynchronizer::TaricUpdate.pending.count.should == 1
       rescuing { TariffSynchronizer::TaricUpdate.first.apply }

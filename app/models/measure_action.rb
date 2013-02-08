@@ -1,5 +1,6 @@
 class MeasureAction < Sequel::Model
   plugin :time_machine
+  plugin :oplog, primary_key: :action_code
 
   set_primary_key :action_code
 

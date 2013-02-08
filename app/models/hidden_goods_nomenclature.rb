@@ -1,6 +1,4 @@
 class HiddenGoodsNomenclature < Sequel::Model
-  plugin :timestamps
-
   set_dataset order(:goods_nomenclature_item_id.asc)
 
   validates do

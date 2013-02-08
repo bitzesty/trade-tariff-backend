@@ -1,5 +1,6 @@
 class MeasureConditionCode < Sequel::Model
   plugin :time_machine
+  plugin :oplog, primary_key: :condition_code
 
   set_primary_key :condition_code
 

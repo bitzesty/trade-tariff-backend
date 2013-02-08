@@ -25,7 +25,7 @@ describe TariffImporter do
 
   describe "importing" do
     class MockImporter
-      def initialize(abc)
+      def initialize(abc, issue_date = nil)
       end
     end
 
