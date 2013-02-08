@@ -12,7 +12,6 @@ gem "ruby-progressbar"
 gem "sequel"
 gem "tire", "0.6.0"
 gem "tire-contrib", github: "karmi/tire-contrib",  require: 'tire/namespace'
-gem "tire"
 gem "yajl-ruby", require: "yajl"
 
 gem "builder"

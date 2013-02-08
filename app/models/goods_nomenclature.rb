@@ -1,4 +1,5 @@
 require 'time_machine'
+require 'trackable'
 
 class GoodsNomenclature < Sequel::Model
   set_dataset order(:goods_nomenclatures__goods_nomenclature_item_id.asc)
@@ -9,6 +10,7 @@ class GoodsNomenclature < Sequel::Model
   plugin :tire
   plugin :oplog, primary_key: :goods_nomenclature_sid
   plugin :tire
+  plugin :oplog, primary_key: :goods_nomenclature_sid
 
   plugin :sti, class_determinator: ->(record) {
     gono_id = record[:goods_nomenclature_item_id].to_s

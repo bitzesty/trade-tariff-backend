@@ -48,11 +48,10 @@ describe AdditionalCodeType do
       end
 
       context 'meursing table plan does not exist' do
-        let!(:additional_code_type) { build :additional_code_type, :meursing,
-                                      meursing_table_plan_id: 'XX' }
+        let!(:additional_code_type) { build :additional_code_type, meursing_table_plan_id: 'XX' }
 
         it 'should not be valid' do
-          additional_code_type.should_not be_conformant
+          additional_code_type.should_not be_valid
         end
       end
     end
