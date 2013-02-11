@@ -36,7 +36,7 @@ class SearchService
       @results = case query_string
                  when /^[0-9]{1,3}$/
                    Chapter.actual
-                          .by_code(sprintf("%02d",query_string.to_s))
+                          .by_code(query_string.to_s.rjust(2, '0'))
                           .non_hidden
                           .first
                  when /^[0-9]{4,9}$/

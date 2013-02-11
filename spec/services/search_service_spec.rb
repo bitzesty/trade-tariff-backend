@@ -58,7 +58,7 @@ describe SearchService do
       end
 
       context 'chapter goods code id has got preceding zero' do
-        let(:chapter) { create :chapter, goods_nomenclature_item_id: '0100000000' }
+        let(:chapter) { create :chapter, goods_nomenclature_item_id: '0800000000' }
         let(:pattern) {
           {
             type: 'exact_match',
