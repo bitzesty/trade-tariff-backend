@@ -45,12 +45,8 @@ module Chief
     end
 
     def measurement_unit(cmpd_uoq, uoq)
-      if cmpd_uoq.present?
-        Chief::MeasurementUnit.where(spfc_cmpd_uoq: cmpd_uoq,
-                                     spfc_uoq: uoq).first
-      elsif uoq.present?
-        Chief::MeasurementUnit.where(spfc_uoq: uoq).first
-      end
+      Chief::MeasurementUnit.where(spfc_cmpd_uoq: cmpd_uoq,
+                                   spfc_uoq: uoq).first
     end
 
     def geographical_area
