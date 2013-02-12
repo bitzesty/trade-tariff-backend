@@ -45,24 +45,21 @@ describe Chief::Tamf do
   end
 
   describe '#measurement_unit' do
+    let!(:chief_measurement_unit1) { create :chief_measurement_unit, spfc_cmpd_uoq: '12',
+                                                                    spfc_uoq: '13' }
+    let!(:chief_measurement_unit2) { create :chief_measurement_unit, spfc_cmpd_uoq: nil,
+                                                                    spfc_uoq: '13' }
     let(:tamf) { build :tamf }
 
     context 'cmpd_uoq present' do
       it 'fetches Chief::MeasurementUnit with cmpd_uoq as part of the key' do
-        Chief::MeasurementUnit.expects(:where).with(spfc_cmpd_uoq: 'abc',
-                                                    spfc_uoq: 'def').returns(stub_everything)
-
-        tamf.measurement_unit('abc', 'def')
+        tamf.measurement_unit('12', '13').should eq chief_measurement_unit1
       end
     end
 
     context 'cmpd_uoq blank' do
       it 'fetches Chief::MeasurementUnit with uoq as key' do
-        Chief::MeasurementUnit.expects(:where)
-                              .with(spfc_uoq: 'abc')
-                              .returns(stub_everything)
-
-        tamf.measurement_unit(nil, 'abc')
+        tamf.measurement_unit(nil, '13').should eq chief_measurement_unit2
       end
     end
   end
