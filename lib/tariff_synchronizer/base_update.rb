@@ -1,5 +1,5 @@
 module TariffSynchronizer
-  class BaseUpdate < Sequel::Model
+  class BaseUpdate < Sequel::Model(:tariff_updates)
     include FileService
 
     set_dataset db[:tariff_updates]
