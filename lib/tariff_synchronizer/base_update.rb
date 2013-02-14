@@ -1,5 +1,5 @@
 module TariffSynchronizer
-  class BaseUpdate < Sequel::Model
+  class BaseUpdate < Sequel::Model(:tariff_updates)
     include FileService
 
     set_dataset db[:tariff_updates]
@@ -46,6 +46,10 @@ module TariffSynchronizer
 
       def pending_or_failed
         where(state: [PENDING_STATE, FAILED_STATE])
+      end
+
+      def latest_applied_of_both_kinds
+        order(:issue_date.desc).from_self.group(:update_type).applied
       end
     end
 

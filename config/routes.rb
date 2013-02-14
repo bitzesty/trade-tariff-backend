@@ -14,6 +14,7 @@ TradeTariffBackend::Application.routes.draw do
       resources :geographical_areas, only: [:countries] do
         collection { get :countries }
       end
+      resources :updates, only: [:index]
 
       post "search" => "search#search", via: :post, as: :search
     end
