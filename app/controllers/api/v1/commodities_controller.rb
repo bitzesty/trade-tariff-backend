@@ -42,7 +42,6 @@ module Api
                               .by_code(params[:id])
                               .take
 
-        raise Sequel::RecordNotFound if @commodity.children.any?
         raise Sequel::RecordNotFound if @commodity.goods_nomenclature_item_id.in? HiddenGoodsNomenclature.codes
       end
     end
