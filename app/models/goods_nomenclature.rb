@@ -1,5 +1,4 @@
 require 'time_machine'
-require 'trackable'
 
 class GoodsNomenclature < Sequel::Model
   set_dataset order(:goods_nomenclatures__goods_nomenclature_item_id.asc)

@@ -1,5 +1,3 @@
-require 'trackable'
-
 class Footnote < Sequel::Model
   plugin :time_machine
   plugin :oplog, primary_key: [:footnote_id, :footnote_type_id]
