@@ -1,0 +1,1171 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:9200/sections/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=2007-01-01&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=2007-01-01&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=water&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=title&payload%5Bsize%5D=1000000
+    body:
+      encoding: US-ASCII
+      string: ! '{"query":{"constant_score":{"filter":{"and":[{"query":{"query_string":{"query":"water","fields":["description"],"query_string":{"fields":["title"]}}}},{"or":[{"and":[{"range":{"validity_end_date":{"gte":"2007-01-01"}}}]},{"and":[{"range":{"validity_start_date":{"lte":"2007-01-01"}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}]}}},"size":1000000}'
+    headers:
+      Accept:
+      - ! '*/*; q=0.5, application/xml'
+      Accept-Encoding:
+      - gzip, deflate
+      Content-Length:
+      - '384'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '122'
+    body:
+      encoding: US-ASCII
+      string: ! '{"took":1,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
+    http_version: 
+  recorded_at: Mon, 18 Mar 2013 14:37:46 GMT
+- request:
+    method: get
+    uri: http://localhost:9200/chapters/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=2007-01-01&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=2007-01-01&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=water&payload%5Bsize%5D=1000000
+    body:
+      encoding: US-ASCII
+      string: ! '{"query":{"constant_score":{"filter":{"and":[{"query":{"query_string":{"query":"water","fields":["description"]}}},{"or":[{"and":[{"range":{"validity_end_date":{"gte":"2007-01-01"}}}]},{"and":[{"range":{"validity_start_date":{"lte":"2007-01-01"}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}]}}},"size":1000000}'
+    headers:
+      Accept:
+      - ! '*/*; q=0.5, application/xml'
+      Accept-Encoding:
+      - gzip, deflate
+      Content-Length:
+      - '348'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '122'
+    body:
+      encoding: US-ASCII
+      string: ! '{"took":1,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
+    http_version: 
+  recorded_at: Mon, 18 Mar 2013 14:37:46 GMT
+- request:
+    method: get
+    uri: http://localhost:9200/headings/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=2007-01-01&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=2007-01-01&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=water&payload%5Bsize%5D=1000000
+    body:
+      encoding: US-ASCII
+      string: ! '{"query":{"constant_score":{"filter":{"and":[{"query":{"query_string":{"query":"water","fields":["description"]}}},{"or":[{"and":[{"range":{"validity_end_date":{"gte":"2007-01-01"}}}]},{"and":[{"range":{"validity_start_date":{"lte":"2007-01-01"}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}]}}},"size":1000000}'
+    headers:
+      Accept:
+      - ! '*/*; q=0.5, application/xml'
+      Accept-Encoding:
+      - gzip, deflate
+      Content-Length:
+      - '348'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '18508'
+    body:
+      encoding: US-ASCII
+      string: ! '{"took":1,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":21,"max_score":1.0,"hits":[{"_index":"headings","_type":"heading","_id":"48039","_score":1.0,
+        "_source" : {"id":48039,"goods_nomenclature_item_id":"8419000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Machinery,
+        plant or laboratory equipment, whether or not electrically heated, for the
+        treatment of materials by a process involving a change of temperature such
+        as heating, cooking, roasting, distilling, rectifying, sterilizing, pasteurising,
+        steaming, drying, evaporating, vapourising, condensing or cooling, other than
+        machinery or plant of a kind used for domestic purposes; instantaneous or
+        storage water heaters, non-electric","number_indents":0,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"}}},{"_index":"headings","_type":"heading","_id":"29984","_score":1.0,
+        "_source" : {"id":29984,"goods_nomenclature_item_id":"0408000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Birds''
+        eggs, not in shell, and egg yolks, fresh, dried, cooked by steaming or by
+        boiling in water, moulded, frozen or otherwise preserved, whether or not containing
+        added sugar or other sweetening matter","number_indents":0,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":29417,"goods_nomenclature_item_id":"0400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"dairy
+        produce; birds''eggs; natural honey; edible products of animal origin, not
+        elsewhere specified or included"}}},{"_index":"headings","_type":"heading","_id":"30626","_score":1.0,
+        "_source" : {"id":30626,"goods_nomenclature_item_id":"0711000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Vegetables
+        provisionally preserved (for example, by sulphur dioxide gas, in brine, in
+        sulphur water or in other preservative solutions), but unsuitable in that
+        state for immediate consumption","number_indents":0,"section":{"numeral":"II","title":"Vegetable
+        products (chapters 6 to 14)","position":2},"chapter":{"goods_nomenclature_sid":30240,"goods_nomenclature_item_id":"0700000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"edible
+        vegetables and certain roots and tubers"}}},{"_index":"headings","_type":"heading","_id":"31698","_score":1.0,
+        "_source" : {"id":31698,"goods_nomenclature_item_id":"0814000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Peel
+        of citrus fruit or melons (including watermelons), fresh, frozen, dried or
+        provisionally preserved in brine, in sulphur water or in other preservative
+        solutions","number_indents":0,"section":{"numeral":"II","title":"Vegetable
+        products (chapters 6 to 14)","position":2},"chapter":{"goods_nomenclature_sid":30808,"goods_nomenclature_item_id":"0800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"edible
+        fruit and nuts; peel of citrus fruit or melons"}}},{"_index":"headings","_type":"heading","_id":"37932","_score":1.0,
+        "_source" : {"id":37932,"goods_nomenclature_item_id":"3210000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Other
+        paints and varnishes (including enamels, lacquers and distempers); prepared
+        water pigments of a kind used for finishing leather","number_indents":0,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":37842,"goods_nomenclature_item_id":"3200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"tanning
+        or dyeing extracts; tannins and their derivatives; dyes, pigments and other
+        colouring matter; paints and varnishes; putty and other mastics; inks"}}},{"_index":"headings","_type":"heading","_id":"38024","_score":1.0,
+        "_source" : {"id":38024,"goods_nomenclature_item_id":"3303000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Perfumes
+        and toilet waters","number_indents":0,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":37964,"goods_nomenclature_item_id":"3300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"essential
+        oils and resinoids; perfumery, cosmetic or toilet preparations"}}},{"_index":"headings","_type":"heading","_id":"47741","_score":1.0,
+        "_source" : {"id":47741,"goods_nomenclature_item_id":"8410000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Hydraulic
+        turbines, water wheels, and regulators therefor","number_indents":0,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"}}},{"_index":"headings","_type":"heading","_id":"30588","_score":1.0,
+        "_source" : {"id":30588,"goods_nomenclature_item_id":"0710000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Vegetables
+        (uncooked or cooked by steaming or boiling in water), frozen","number_indents":0,"section":{"numeral":"II","title":"Vegetable
+        products (chapters 6 to 14)","position":2},"chapter":{"goods_nomenclature_sid":30240,"goods_nomenclature_item_id":"0700000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"edible
+        vegetables and certain roots and tubers"}}},{"_index":"headings","_type":"heading","_id":"31524","_score":1.0,
+        "_source" : {"id":31524,"goods_nomenclature_item_id":"0811000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fruit
+        and nuts, uncooked or cooked by steaming or boiling in water, frozen, whether
+        or not containing added sugar or other sweetening matter","number_indents":0,"section":{"numeral":"II","title":"Vegetable
+        products (chapters 6 to 14)","position":2},"chapter":{"goods_nomenclature_sid":30808,"goods_nomenclature_item_id":"0800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"edible
+        fruit and nuts; peel of citrus fruit or melons"}}},{"_index":"headings","_type":"heading","_id":"31644","_score":1.0,
+        "_source" : {"id":31644,"goods_nomenclature_item_id":"0812000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fruit
+        and nuts, provisionally preserved (for example, by sulphur dioxide gas, in
+        brine, in sulphur water or in other preservative solutions), but unsuitable
+        in that state for immediate consumption","number_indents":0,"section":{"numeral":"II","title":"Vegetable
+        products (chapters 6 to 14)","position":2},"chapter":{"goods_nomenclature_sid":30808,"goods_nomenclature_item_id":"0800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"edible
+        fruit and nuts; peel of citrus fruit or melons"}}},{"_index":"headings","_type":"heading","_id":"32635","_score":1.0,
+        "_source" : {"id":32635,"goods_nomenclature_item_id":"1520000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Glycerol
+        (glycerine), whether or not pure; glycerol waters and glycerol lyes","number_indents":0,"section":{"numeral":"III","title":"Animal
+        or vegetable fats and oils and their cleavage products; prepared edible fats;
+        animal or vegetable waxes (chapter 15)","position":3},"chapter":{"goods_nomenclature_sid":32355,"goods_nomenclature_item_id":"1500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"animal
+        or vegetable fats and oils and their cleavage products; prepared edible fats;
+        animal or vegetable waxes"}}},{"_index":"headings","_type":"heading","_id":"34629","_score":1.0,
+        "_source" : {"id":34629,"goods_nomenclature_item_id":"2201000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Waters,
+        including natural or artificial mineral waters and aerated waters, not containing
+        added sugar or other sweetening matter nor flavoured; ice and snow","number_indents":0,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":34628,"goods_nomenclature_item_id":"2200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"beverages,
+        spirits and vinegar"}}},{"_index":"headings","_type":"heading","_id":"35297","_score":1.0,
+        "_source" : {"id":35297,"goods_nomenclature_item_id":"2501000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Salt
+        (including table salt and denatured salt) and pure sodium chloride, whether
+        or not in aqueous solution; sea water","number_indents":0,"section":{"numeral":"V","title":"Mineral
+        products (chapters 25 to 27)","position":5},"chapter":{"goods_nomenclature_sid":35296,"goods_nomenclature_item_id":"2500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"salt;
+        sulphur; earths and stone; plastering materials, lime and cement"}}},{"_index":"headings","_type":"heading","_id":"44382","_score":1.0,
+        "_source" : {"id":44382,"goods_nomenclature_item_id":"6910000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Ceramic
+        sinks, washbasins, washbasin pedestals, baths, bidets, water closet pans,
+        flushing cisterns, urinals and similar sanitary fixtures","number_indents":0,"section":{"numeral":"XIII","title":"Articles
+        of stone, plaster, cement, asbestos, mica or similar materials; ceramic products;
+        glass and glassware (chapters 68 to 70)","position":13},"chapter":{"goods_nomenclature_sid":44310,"goods_nomenclature_item_id":"6900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"ceramic
+        products"}}},{"_index":"headings","_type":"heading","_id":"29272","_score":1.0,
+        "_source" : {"id":29272,"goods_nomenclature_item_id":"0306000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Crustaceans,
+        whether in shell or not, live, fresh, chilled, frozen, dried, salted or in
+        brine; crustaceans, in shell, cooked by steaming or by boiling in water, whether
+        or not chilled, frozen, dried, salted or in brine","number_indents":0,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
+        and crustaceans, molluscs and other aquatic invertebrates"}}},{"_index":"headings","_type":"heading","_id":"85159","_score":1.0,
+        "_source" : {"id":85159,"goods_nomenclature_item_id":"2853000000","producline_suffix":"80","validity_start_date":"2007-01-01T00:00:00+02:00","validity_end_date":null,"description":"Other
+        inorganic compounds (including distilled or conductivity water and water of
+        similar purity); liquid air (whether or not rare gases have been removed);
+        compressed air; amalgams, other than amalgams of precious metals","number_indents":0,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":35719,"goods_nomenclature_item_id":"2800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"inorganic
+        chemicals; organic or inorganic compounds of precious metals, of rare-earth
+        metals, of radioactive elements or of isotopes"}}},{"_index":"headings","_type":"heading","_id":"50001","_score":1.0,
+        "_source" : {"id":50001,"goods_nomenclature_item_id":"8516000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Electric
+        instantaneous or storage water heaters and immersion heaters; electric space
+        heating apparatus and soil heating apparatus; electro-thermic hair-dressing
+        apparatus (for example, hair dryers, hair curlers, curling tong heaters) and
+        hand dryers; electric smoothing irons; other electro-thermic appliances of
+        a kind used for domestic purposes; electric heating resistors, other than
+        those of heading No  8545","number_indents":0,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":49496,"goods_nomenclature_item_id":"8500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"electrical
+        machinery and equipment and parts thereof; sound recorders and reproducers,
+        television image and sound recorders and reproducers, and parts and accessories
+        of such articles"}}},{"_index":"headings","_type":"heading","_id":"34638","_score":1.0,
+        "_source" : {"id":34638,"goods_nomenclature_item_id":"2202000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Waters,
+        including mineral waters and aerated waters, containing added sugar or other
+        sweetening matter or flavoured, and other non-alcoholic beverages, not including
+        fruit or vegetable juices of heading|2009","number_indents":0,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":34628,"goods_nomenclature_item_id":"2200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"beverages,
+        spirits and vinegar"}}},{"_index":"headings","_type":"heading","_id":"35542","_score":1.0,
+        "_source" : {"id":35542,"goods_nomenclature_item_id":"2705000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Coal
+        gas, water gas, producer gas and similar gases, other than petroleum gases
+        and other gaseous hydrocarbons","number_indents":0,"section":{"numeral":"V","title":"Mineral
+        products (chapters 25 to 27)","position":5},"chapter":{"goods_nomenclature_sid":35521,"goods_nomenclature_item_id":"2700000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"mineral
+        fuels, mineral oils and products of their distillation; bituminous substances;
+        mineral waxes"}}},{"_index":"headings","_type":"heading","_id":"47585","_score":1.0,
+        "_source" : {"id":47585,"goods_nomenclature_item_id":"8402000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Steam
+        or other vapour generating boilers (other than central heating hot water boilers
+        capable also of producing low pressure steam); superheated water boilers","number_indents":0,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"}}},{"_index":"headings","_type":"heading","_id":"47605","_score":1.0,
+        "_source" : {"id":47605,"goods_nomenclature_item_id":"8405000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Producer
+        gas or water gas generators, with or without their purifiers; acetylene gas
+        generators and similar water process gas generators, with or without their
+        purifiers","number_indents":0,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"}}}]}}'
+    http_version: 
+  recorded_at: Mon, 18 Mar 2013 14:37:46 GMT
+- request:
+    method: get
+    uri: http://localhost:9200/commodities/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=2007-01-01&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=2007-01-01&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=water&payload%5Bsize%5D=1000000
+    body:
+      encoding: US-ASCII
+      string: ! '{"query":{"constant_score":{"filter":{"and":[{"query":{"query_string":{"query":"water","fields":["description"]}}},{"or":[{"and":[{"range":{"validity_end_date":{"gte":"2007-01-01"}}}]},{"and":[{"range":{"validity_start_date":{"lte":"2007-01-01"}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}]}}},"size":1000000}'
+    headers:
+      Accept:
+      - ! '*/*; q=0.5, application/xml'
+      Accept-Encoding:
+      - gzip, deflate
+      Content-Length:
+      - '348'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '101576'
+    body:
+      encoding: US-ASCII
+      string: ! '{"took":41,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":82,"max_score":1.0,"hits":[{"_index":"commodities","_type":"commodity","_id":"29313","_score":1.0,
+        "_source" : {"id":29313,"goods_nomenclature_item_id":"0306233100","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":"2011-12-31T00:00:00+02:00","description":"Fresh,
+        chilled or cooked by steaming or by boiling in water","number_indents":4,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
+        and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":29272,"goods_nomenclature_item_id":"0306000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Crustaceans,
+        whether in shell or not, live, fresh, chilled, frozen, dried, salted or in
+        brine; crustaceans, in shell, cooked by steaming or by boiling in water, whether
+        or not chilled, frozen, dried, salted or in brine","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"75854","_score":1.0,
+        "_source" : {"id":75854,"goods_nomenclature_item_id":"0406201010","producline_suffix":"80","validity_start_date":"2002-06-01T00:00:00+02:00","validity_end_date":"2007-06-30T00:00:00+03:00","description":"Of
+        a water content not exceeding 400 g/kg of cheese","number_indents":3,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":29417,"goods_nomenclature_item_id":"0400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"dairy
+        produce; birds''eggs; natural honey; edible products of animal origin, not
+        elsewhere specified or included"},"heading":{"goods_nomenclature_sid":29719,"goods_nomenclature_item_id":"0406000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Cheese
+        and curd","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"29887","_score":1.0,
+        "_source" : {"id":29887,"goods_nomenclature_item_id":"0406906100","producline_suffix":"20","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Of
+        a fat content, by weight, not exceeding 40|% and a water content, by weight,
+        in the non-fatty matter","number_indents":5,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":29417,"goods_nomenclature_item_id":"0400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"dairy
+        produce; birds''eggs; natural honey; edible products of animal origin, not
+        elsewhere specified or included"},"heading":{"goods_nomenclature_sid":29719,"goods_nomenclature_item_id":"0406000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Cheese
+        and curd","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"33073","_score":1.0,
+        "_source" : {"id":33073,"goods_nomenclature_item_id":"1704905111","producline_suffix":"10","validity_start_date":"1992-03-01T00:00:00+02:00","validity_end_date":"2007-12-31T00:00:00+02:00","description":"Sugar
+        fondant, composed of a blend of sucrose, glucose syrup (ratio 4/1) and water","number_indents":4,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":32980,"goods_nomenclature_item_id":"1700000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"sugars
+        and sugar confectionery"},"heading":{"goods_nomenclature_sid":33059,"goods_nomenclature_item_id":"1704000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Sugar
+        confectionery (including white chocolate), not containing cocoa","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"88395","_score":1.0,
+        "_source" : {"id":88395,"goods_nomenclature_item_id":"2009809993","producline_suffix":"80","validity_start_date":"2007-07-01T00:00:00+03:00","validity_end_date":"2011-12-31T00:00:00+02:00","description":"Untreated
+        frozen coconut water, not put up for retail sale","number_indents":8,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":33378,"goods_nomenclature_item_id":"2000000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"preparations
+        of vegetables, fruit, nuts or other parts of plants"},"heading":{"goods_nomenclature_sid":34165,"goods_nomenclature_item_id":"2009000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fruit
+        juices (including grape must) and vegetable juices, unfermented and not containing
+        added spirit, whether or not containing added sugar or other sweetening matter","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"34639","_score":1.0,
+        "_source" : {"id":34639,"goods_nomenclature_item_id":"2202100000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Waters,
+        including mineral waters and aerated waters, containing added sugar or other
+        sweetening matter or flavoured","number_indents":1,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":34628,"goods_nomenclature_item_id":"2200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"beverages,
+        spirits and vinegar"},"heading":{"goods_nomenclature_sid":34638,"goods_nomenclature_item_id":"2202000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Waters,
+        including mineral waters and aerated waters, containing added sugar or other
+        sweetening matter or flavoured, and other non-alcoholic beverages, not including
+        fruit or vegetable juices of heading|2009","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"96723","_score":1.0,
+        "_source" : {"id":96723,"goods_nomenclature_item_id":"3820000010","producline_suffix":"80","validity_start_date":"2012-08-25T00:00:00+03:00","validity_end_date":"2013-02-22T00:00:00+02:00","description":"Ethyl
+        alcohol produced from agricultural products (as listed in Annex I to the Treaty
+        on the Functioning of the European Union), denatured or undenatured, excluding
+        products with a water content of more than 0,3|% (m/m) measured according
+        to the standard EN 15376","number_indents":1,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38322,"goods_nomenclature_item_id":"3800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
+        chemical products"},"heading":{"goods_nomenclature_sid":38525,"goods_nomenclature_item_id":"3820000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Anti-freezing
+        preparations and prepared de-icing fluids","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"85815","_score":1.0,
+        "_source" : {"id":85815,"goods_nomenclature_item_id":"3824903000","producline_suffix":"80","validity_start_date":"2007-01-01T00:00:00+02:00","validity_end_date":null,"description":"Naphthenic
+        acids, their water-insoluble salts and their esters","number_indents":2,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38322,"goods_nomenclature_item_id":"3800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
+        chemical products"},"heading":{"goods_nomenclature_sid":59671,"goods_nomenclature_item_id":"3824000000","producline_suffix":"80","validity_start_date":"1996-01-01T00:00:00+02:00","validity_end_date":null,"description":"Prepared
+        binders for foundry moulds or cores; chemical products and preparations of
+        the chemical or allied industries (including those consisting of mixtures
+        of natural products), not elsewhere specified or included; residual products
+        of the chemical or allied industries, not elsewhere specified or included","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"85702","_score":1.0,
+        "_source" : {"id":85702,"goods_nomenclature_item_id":"3808929030","producline_suffix":"80","validity_start_date":"2007-01-01T00:00:00+02:00","validity_end_date":null,"description":"Preparation
+        consisting of a suspension of pyrithione zinc (INN) in water, containing by
+        weight 24|% or more but not more than 26|% of pyrithione zinc (INN)","number_indents":5,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38322,"goods_nomenclature_item_id":"3800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
+        chemical products"},"heading":{"goods_nomenclature_sid":38368,"goods_nomenclature_item_id":"3808000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Insecticides,
+        rodenticides, fungicides, herbicides, anti-sprouting products and plant-growth
+        regulators, disinfectants and similar products, put up in forms or packings
+        for retail sale or as preparations or articles (for example, sulphur-treated
+        bands, wicks and candles, and fly-papers)","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"96730","_score":1.0,
+        "_source" : {"id":96730,"goods_nomenclature_item_id":"3814009070","producline_suffix":"80","validity_start_date":"2012-08-25T00:00:00+03:00","validity_end_date":"2013-02-22T00:00:00+02:00","description":"Ethyl
+        alcohol produced from agricultural products (as listed in Annex I to the Treaty
+        on the Functioning of the European Union), denatured or undenatured, excluding
+        products with a water content of more than 0,3|% (m/m) measured according
+        to the standard EN 15376, as well as ethyl alcohol produced from agricultural
+        products (as listed in Annex I to the Treaty on the Functioning of the European
+        Union) contained in blends with gasoline with an ethyl alcohol content of
+        more than 10|% (v/v)","number_indents":2,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38322,"goods_nomenclature_item_id":"3800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
+        chemical products"},"heading":{"goods_nomenclature_sid":38461,"goods_nomenclature_item_id":"3814000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Organic
+        composite solvents and thinners, not elsewhere specified or included; prepared
+        paint or varnish removers","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"96728","_score":1.0,
+        "_source" : {"id":96728,"goods_nomenclature_item_id":"2207200011","producline_suffix":"80","validity_start_date":"2012-08-25T00:00:00+03:00","validity_end_date":"2013-02-22T00:00:00+02:00","description":"Ethyl
+        alcohol produced from agricultural products (as listed in Annex I to the Treaty
+        on the Functioning of the European Union), excluding products with a water
+        content of more than 0,3|% (m/m) measured according to the standard EN 15376,
+        as well as ethyl alcohol produced from agricultural products (as listed in
+        Annex I to the Treaty on the Functioning of the European Union) contained
+        in blends with gasoline with an ethyl alcohol content of more than 10|% (v/v)","number_indents":3,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":34628,"goods_nomenclature_item_id":"2200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"beverages,
+        spirits and vinegar"},"heading":{"goods_nomenclature_sid":34966,"goods_nomenclature_item_id":"2207000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Undenatured
+        ethyl alcohol of an alcoholic strength by volume of 80|%|vol or higher; ethyl
+        alcohol and other spirits, denatured, of any strength","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"65420","_score":1.0,
+        "_source" : {"id":65420,"goods_nomenclature_item_id":"3912398010","producline_suffix":"80","validity_start_date":"1997-01-01T00:00:00+02:00","validity_end_date":"2009-06-30T00:00:00+03:00","description":"Cellulose,
+        both hydroxyethylated and ethylated, insoluble in water","number_indents":4,"section":{"numeral":"VII","title":"Plastics
+        and articles thereof; rubber and articles thereof (chapters 39 to 40)","position":7},"chapter":{"goods_nomenclature_sid":38659,"goods_nomenclature_item_id":"3900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"plastics
+        and articles thereof"},"heading":{"goods_nomenclature_sid":38872,"goods_nomenclature_item_id":"3912000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Cellulose
+        and its chemical derivatives, not elsewhere specified or included, in primary
+        forms","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"90085","_score":1.0,
+        "_source" : {"id":90085,"goods_nomenclature_item_id":"2918120010","producline_suffix":"80","validity_start_date":"2006-01-28T00:00:00+02:00","validity_end_date":null,"description":"D-(-)-tartaric
+        acid with a negative optical rotation of at least 12.0|degrees, measured in
+        a water solution according to the method described in the European Pharmacopoeia","number_indents":3,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":36168,"goods_nomenclature_item_id":"2900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"organic
+        chemicals"},"heading":{"goods_nomenclature_sid":36744,"goods_nomenclature_item_id":"2918000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Carboxylic
+        acids with additional oxygen function and their anhydrides, halides, peroxides
+        and peroxyacids; their halogenated, sulphonated, nitrated or nitrosated derivatives","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"39223","_score":1.0,
+        "_source" : {"id":39223,"goods_nomenclature_item_id":"3920209091","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":"2008-12-31T00:00:00+02:00","description":"Synthetic
+        paper pulp, in the form of moist sheets, made from unconnected finely branched
+        polypropylene fibrils, whether or not blended with cellulose fibres in a quantity
+        not exceeding|15%, containing polyvinyl alcohol dissolved in water as the
+        moistening agent","number_indents":5,"section":{"numeral":"VII","title":"Plastics
+        and articles thereof; rubber and articles thereof (chapters 39 to 40)","position":7},"chapter":{"goods_nomenclature_sid":38659,"goods_nomenclature_item_id":"3900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"plastics
+        and articles thereof"},"heading":{"goods_nomenclature_sid":39155,"goods_nomenclature_item_id":"3920000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Other
+        plates, sheets, film, foil and strip, of plastics, non-cellular and not reinforced,
+        laminated, supported or similarly combined with other materials","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"86015","_score":1.0,
+        "_source" : {"id":86015,"goods_nomenclature_item_id":"3926909740","producline_suffix":"80","validity_start_date":"2007-01-01T00:00:00+02:00","validity_end_date":"2008-12-31T00:00:00+02:00","description":"Hollow
+        microspheres of a copolymer of isooctylacrylate and acrylic acid, having a
+        diameter of 10|\u00b5m or more but not exceeding 1000|\u00b5m, dispersed in
+        water","number_indents":4,"section":{"numeral":"VII","title":"Plastics and
+        articles thereof; rubber and articles thereof (chapters 39 to 40)","position":7},"chapter":{"goods_nomenclature_sid":38659,"goods_nomenclature_item_id":"3900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"plastics
+        and articles thereof"},"heading":{"goods_nomenclature_sid":39517,"goods_nomenclature_item_id":"3926000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Other
+        articles of plastics and articles of other materials of headings|3901|to 3914","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"42699","_score":1.0,
+        "_source" : {"id":42699,"goods_nomenclature_item_id":"5911909030","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Of
+        equipment for the purification of water by reverse osmosis, consisting essentially
+        of plastic-based membranes, supported internally by woven or non-woven textile
+        materials which are wound round a perforated tube, and enclosed in a cylindrical
+        plastic casing of a wall-thickness not exceeding|4|mm, whether or not housed
+        in a cylinder of a wall-thickness of|5|mm or more","number_indents":3,"section":{"numeral":"XI","title":"Textiles
+        and textile articles (chapters 50 to 63)","position":11},"chapter":{"goods_nomenclature_sid":42601,"goods_nomenclature_item_id":"5900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"impregnated,
+        coated, covered or laminated textile fabrics; textile articles of a kind suitable
+        for industrial use"},"heading":{"goods_nomenclature_sid":42676,"goods_nomenclature_item_id":"5911000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Textile
+        products and articles, for technical uses, specified in note|7|to this chapter","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"48041","_score":1.0,
+        "_source" : {"id":48041,"goods_nomenclature_item_id":"8419110000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Instantaneous
+        gas water heaters","number_indents":2,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"heading":{"goods_nomenclature_sid":48039,"goods_nomenclature_item_id":"8419000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Machinery,
+        plant or laboratory equipment, whether or not electrically heated, for the
+        treatment of materials by a process involving a change of temperature such
+        as heating, cooking, roasting, distilling, rectifying, sterilizing, pasteurising,
+        steaming, drying, evaporating, vapourising, condensing or cooling, other than
+        machinery or plant of a kind used for domestic purposes; instantaneous or
+        storage water heaters, non-electric","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"48060","_score":1.0,
+        "_source" : {"id":48060,"goods_nomenclature_item_id":"8419891000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Cooling
+        towers and similar plant for direct cooling (without a separating wall) by
+        means of recirculated water","number_indents":3,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"heading":{"goods_nomenclature_sid":48039,"goods_nomenclature_item_id":"8419000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Machinery,
+        plant or laboratory equipment, whether or not electrically heated, for the
+        treatment of materials by a process involving a change of temperature such
+        as heating, cooking, roasting, distilling, rectifying, sterilizing, pasteurising,
+        steaming, drying, evaporating, vapourising, condensing or cooling, other than
+        machinery or plant of a kind used for domestic purposes; instantaneous or
+        storage water heaters, non-electric","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"48096","_score":1.0,
+        "_source" : {"id":48096,"goods_nomenclature_item_id":"8421220000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"For
+        filtering or purifying beverages other than water","number_indents":2,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"heading":{"goods_nomenclature_sid":48083,"goods_nomenclature_item_id":"8421000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Centrifuges,
+        including centrifugal dryers; filtering or purifying machinery and apparatus,
+        for liquids or gases","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"48123","_score":1.0,
+        "_source" : {"id":48123,"goods_nomenclature_item_id":"8421990092","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Of
+        equipment for the purification of water by reverse osmosis, consisting essentially
+        of plastic-based membranes, supported internally by woven or non-woven textile
+        materials which are wound round a perforated tube, and enclosed in a cylindrical
+        plastic casing of wall-thickness of not more than 4|mm, whether or not housed
+        in a cylinder of a wall-thickness of|5|mm or more","number_indents":4,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"heading":{"goods_nomenclature_sid":48083,"goods_nomenclature_item_id":"8421000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Centrifuges,
+        including centrifugal dryers; filtering or purifying machinery and apparatus,
+        for liquids or gases","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"48185","_score":1.0,
+        "_source" : {"id":48185,"goods_nomenclature_item_id":"8424811000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Watering
+        appliances","number_indents":3,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"heading":{"goods_nomenclature_sid":48164,"goods_nomenclature_item_id":"8424000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Mechanical
+        appliances (whether or not hand-operated) for projecting, dispersing or spraying
+        liquids or powders; fire extinguishers, whether or not charged; spray guns
+        and similar appliances; steam or sandblasting machines and similar jet projecting
+        machines","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"47606","_score":1.0,
+        "_source" : {"id":47606,"goods_nomenclature_item_id":"8405100000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Producer
+        gas or water gas generators, with or without their purifiers; acetylene gas
+        generators and similar water process gas generators, with or without their
+        purifiers","number_indents":1,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"heading":{"goods_nomenclature_sid":47605,"goods_nomenclature_item_id":"8405000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Producer
+        gas or water gas generators, with or without their purifiers; acetylene gas
+        generators and similar water process gas generators, with or without their
+        purifiers","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"47877","_score":1.0,
+        "_source" : {"id":47877,"goods_nomenclature_item_id":"8413703000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Glandless
+        impeller pumps for heating systems and warm water supply","number_indents":3,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"heading":{"goods_nomenclature_sid":47835,"goods_nomenclature_item_id":"8413000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Pumps
+        for liquids, whether or not fitted with a measuring device; liquid elevators","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"50003","_score":1.0,
+        "_source" : {"id":50003,"goods_nomenclature_item_id":"8516101100","producline_suffix":"10","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":"2010-12-31T00:00:00+02:00","description":"Water
+        heaters","number_indents":2,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":49496,"goods_nomenclature_item_id":"8500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"electrical
+        machinery and equipment and parts thereof; sound recorders and reproducers,
+        television image and sound recorders and reproducers, and parts and accessories
+        of such articles"},"heading":{"goods_nomenclature_sid":50001,"goods_nomenclature_item_id":"8516000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Electric
+        instantaneous or storage water heaters and immersion heaters; electric space
+        heating apparatus and soil heating apparatus; electro-thermic hair-dressing
+        apparatus (for example, hair dryers, hair curlers, curling tong heaters) and
+        hand dryers; electric smoothing irons; other electro-thermic appliances of
+        a kind used for domestic purposes; electric heating resistors, other than
+        those of heading No  8545","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"29908","_score":1.0,
+        "_source" : {"id":29908,"goods_nomenclature_item_id":"0406908600","producline_suffix":"10","validity_start_date":"1994-01-01T00:00:00+02:00","validity_end_date":null,"description":"Other
+        cheese, of a water content, by weight, in the non-fatty matter","number_indents":7,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":29417,"goods_nomenclature_item_id":"0400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"dairy
+        produce; birds''eggs; natural honey; edible products of animal origin, not
+        elsewhere specified or included"},"heading":{"goods_nomenclature_sid":29719,"goods_nomenclature_item_id":"0406000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Cheese
+        and curd","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"34630","_score":1.0,
+        "_source" : {"id":34630,"goods_nomenclature_item_id":"2201100000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Mineral
+        waters and aerated waters","number_indents":1,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":34628,"goods_nomenclature_item_id":"2200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"beverages,
+        spirits and vinegar"},"heading":{"goods_nomenclature_sid":34629,"goods_nomenclature_item_id":"2201000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Waters,
+        including natural or artificial mineral waters and aerated waters, not containing
+        added sugar or other sweetening matter nor flavoured; ice and snow","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"81580","_score":1.0,
+        "_source" : {"id":81580,"goods_nomenclature_item_id":"2202901091","producline_suffix":"80","validity_start_date":"2005-02-01T00:00:00+02:00","validity_end_date":null,"description":"Fruit
+        juice or vegetable juice diluted with water or aerated","number_indents":4,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":34628,"goods_nomenclature_item_id":"2200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"beverages,
+        spirits and vinegar"},"heading":{"goods_nomenclature_sid":34638,"goods_nomenclature_item_id":"2202000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Waters,
+        including mineral waters and aerated waters, containing added sugar or other
+        sweetening matter or flavoured, and other non-alcoholic beverages, not including
+        fruit or vegetable juices of heading|2009","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"96750","_score":1.0,
+        "_source" : {"id":96750,"goods_nomenclature_item_id":"3814001010","producline_suffix":"80","validity_start_date":"2012-08-25T00:00:00+03:00","validity_end_date":"2013-02-22T00:00:00+02:00","description":"Ethyl
+        alcohol produced from agricultural products (as listed in Annex I to the Treaty
+        on the Functioning of the European Union), denatured or undenatured, excluding
+        products with a water content of more than 0,3|% (m/m) measured according
+        to the standard EN 15376, as well as ethyl alcohol produced from agricultural
+        products (as listed in Annex I to the Treaty on the Functioning of the European
+        Union) contained in blends with gasoline with an ethyl alcohol content of
+        more than 10|% (v/v)","number_indents":2,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38322,"goods_nomenclature_item_id":"3800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
+        chemical products"},"heading":{"goods_nomenclature_sid":38461,"goods_nomenclature_item_id":"3814000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Organic
+        composite solvents and thinners, not elsewhere specified or included; prepared
+        paint or varnish removers","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"79299","_score":1.0,
+        "_source" : {"id":79299,"goods_nomenclature_item_id":"3919903160","producline_suffix":"80","validity_start_date":"2004-01-01T00:00:00+02:00","validity_end_date":"2009-12-31T00:00:00+02:00","description":"Film
+        consisting of 1 to 3 laminated layers of poly(ethylene terephthalate) and
+        a copolymer of terephthalic acid, sebacic acid and ethylene glycol, coated
+        on one side with an acrylic abrasion resistant coating and on the other side
+        with an acrylic pressure sensitive adhesive, a water soluble methylcellulose
+        coating and a poly(ethylene terephthalate) protective liner","number_indents":5,"section":{"numeral":"VII","title":"Plastics
+        and articles thereof; rubber and articles thereof (chapters 39 to 40)","position":7},"chapter":{"goods_nomenclature_sid":38659,"goods_nomenclature_item_id":"3900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"plastics
+        and articles thereof"},"heading":{"goods_nomenclature_sid":39084,"goods_nomenclature_item_id":"3919000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Self-adhesive
+        plates, sheets, film, foil, tape, strip and other flat shapes, of plastics,
+        whether or not in rolls","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"96729","_score":1.0,
+        "_source" : {"id":96729,"goods_nomenclature_item_id":"2208909911","producline_suffix":"80","validity_start_date":"2012-08-25T00:00:00+03:00","validity_end_date":"2013-02-22T00:00:00+02:00","description":"Ethyl
+        alcohol produced from agricultural products (as listed in Annex I to the Treaty
+        on the Functioning of the European Union), excluding products with a water
+        content of more than 0,3|% (m/m) measured according to the standard EN 15376,
+        as well as ethyl alcohol produced from agricultural products (as listed in
+        Annex I to the Treaty on the Functioning of the European Union) contained
+        in blends with gasoline with an ethyl alcohol content of more than 10|% (v/v)","number_indents":5,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":34628,"goods_nomenclature_item_id":"2200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"beverages,
+        spirits and vinegar"},"heading":{"goods_nomenclature_sid":34981,"goods_nomenclature_item_id":"2208000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Undenatured
+        ethyl alcohol of an alcoholic strength by volume of less than 80|% vol; spirits,
+        liqueurs and other spirituous beverages; compound alcoholic preparations of
+        a kind used for the manufacture of beverages","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"76271","_score":1.0,
+        "_source" : {"id":76271,"goods_nomenclature_item_id":"3920995960","producline_suffix":"80","validity_start_date":"2003-01-01T00:00:00+02:00","validity_end_date":null,"description":"Film
+        of a vinyl alcohol copolymer, soluble in cold water, of a thickness of 34|\u03bcm
+        or more but not exceeding 90|\u03bcm, a tensile strength at break of 3,28.10$7|(+/-|1,21.10$7)|N/m$2
+        and an elongation at break of (675|+/-|225)|%","number_indents":6,"section":{"numeral":"VII","title":"Plastics
+        and articles thereof; rubber and articles thereof (chapters 39 to 40)","position":7},"chapter":{"goods_nomenclature_sid":38659,"goods_nomenclature_item_id":"3900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"plastics
+        and articles thereof"},"heading":{"goods_nomenclature_sid":39155,"goods_nomenclature_item_id":"3920000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Other
+        plates, sheets, film, foil and strip, of plastics, non-cellular and not reinforced,
+        laminated, supported or similarly combined with other materials","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"50004","_score":1.0,
+        "_source" : {"id":50004,"goods_nomenclature_item_id":"8516101100","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Instantaneous
+        water heaters","number_indents":3,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":49496,"goods_nomenclature_item_id":"8500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"electrical
+        machinery and equipment and parts thereof; sound recorders and reproducers,
+        television image and sound recorders and reproducers, and parts and accessories
+        of such articles"},"heading":{"goods_nomenclature_sid":50001,"goods_nomenclature_item_id":"8516000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Electric
+        instantaneous or storage water heaters and immersion heaters; electric space
+        heating apparatus and soil heating apparatus; electro-thermic hair-dressing
+        apparatus (for example, hair dryers, hair curlers, curling tong heaters) and
+        hand dryers; electric smoothing irons; other electro-thermic appliances of
+        a kind used for domestic purposes; electric heating resistors, other than
+        those of heading No  8545","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"34631","_score":1.0,
+        "_source" : {"id":34631,"goods_nomenclature_item_id":"2201101100","producline_suffix":"10","validity_start_date":"1992-01-01T00:00:00+02:00","validity_end_date":null,"description":"Natural
+        mineral waters","number_indents":2,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":34628,"goods_nomenclature_item_id":"2200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"beverages,
+        spirits and vinegar"},"heading":{"goods_nomenclature_sid":34629,"goods_nomenclature_item_id":"2201000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Waters,
+        including natural or artificial mineral waters and aerated waters, not containing
+        added sugar or other sweetening matter nor flavoured; ice and snow","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"81579","_score":1.0,
+        "_source" : {"id":81579,"goods_nomenclature_item_id":"2202901011","producline_suffix":"80","validity_start_date":"2005-02-01T00:00:00+02:00","validity_end_date":null,"description":"Fruit
+        juice or vegetable juice diluted with water or aerated","number_indents":4,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":34628,"goods_nomenclature_item_id":"2200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"beverages,
+        spirits and vinegar"},"heading":{"goods_nomenclature_sid":34638,"goods_nomenclature_item_id":"2202000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Waters,
+        including mineral waters and aerated waters, containing added sugar or other
+        sweetening matter or flavoured, and other non-alcoholic beverages, not including
+        fruit or vegetable juices of heading|2009","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"81574","_score":1.0,
+        "_source" : {"id":81574,"goods_nomenclature_item_id":"2202909110","producline_suffix":"80","validity_start_date":"2005-02-01T00:00:00+02:00","validity_end_date":null,"description":"Fruit
+        juice or vegetable juice diluted with water or aerated","number_indents":4,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":34628,"goods_nomenclature_item_id":"2200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"beverages,
+        spirits and vinegar"},"heading":{"goods_nomenclature_sid":34638,"goods_nomenclature_item_id":"2202000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Waters,
+        including mineral waters and aerated waters, containing added sugar or other
+        sweetening matter or flavoured, and other non-alcoholic beverages, not including
+        fruit or vegetable juices of heading|2009","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"75856","_score":1.0,
+        "_source" : {"id":75856,"goods_nomenclature_item_id":"0406209010","producline_suffix":"80","validity_start_date":"2002-06-01T00:00:00+02:00","validity_end_date":"2007-06-30T00:00:00+03:00","description":"Of
+        a water content not exceeding 400 g/kg of cheese","number_indents":3,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":29417,"goods_nomenclature_item_id":"0400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"dairy
+        produce; birds''eggs; natural honey; edible products of animal origin, not
+        elsewhere specified or included"},"heading":{"goods_nomenclature_sid":29719,"goods_nomenclature_item_id":"0406000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Cheese
+        and curd","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"64929","_score":1.0,
+        "_source" : {"id":64929,"goods_nomenclature_item_id":"0303781100","producline_suffix":"80","validity_start_date":"1997-01-01T00:00:00+02:00","validity_end_date":"2011-12-31T00:00:00+02:00","description":"Cape
+        hake (shallow-water hake) (Merluccius capensis) and deepwater hake (deepwater
+        Cape hake) (Merluccius paradoxus)","number_indents":4,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
+        and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28590,"goods_nomenclature_item_id":"0303000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
+        frozen, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"87116","_score":1.0,
+        "_source" : {"id":87116,"goods_nomenclature_item_id":"0711590011","producline_suffix":"80","validity_start_date":"2007-01-01T00:00:00+02:00","validity_end_date":null,"description":"Mushrooms,
+        excluding mushrooms of the genera Agaricus, Calocybe, Clitocybe, Lepista,
+        Leucoagaricus, Leucopaxillus, Lyophyllum and Tricholoma, provisionally preserved
+        in brine, in sulphur water, or in other preservative solutions, but unsuitable
+        in that state for immediate consumption, for the food-canning industry","number_indents":4,"section":{"numeral":"II","title":"Vegetable
+        products (chapters 6 to 14)","position":2},"chapter":{"goods_nomenclature_sid":30240,"goods_nomenclature_item_id":"0700000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"edible
+        vegetables and certain roots and tubers"},"heading":{"goods_nomenclature_sid":30626,"goods_nomenclature_item_id":"0711000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Vegetables
+        provisionally preserved (for example, by sulphur dioxide gas, in brine, in
+        sulphur water or in other preservative solutions), but unsuitable in that
+        state for immediate consumption","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"85843","_score":1.0,
+        "_source" : {"id":85843,"goods_nomenclature_item_id":"3824909815","producline_suffix":"80","validity_start_date":"2007-01-01T00:00:00+02:00","validity_end_date":"2007-12-31T00:00:00+02:00","description":"Mixture
+        of disodium _N_-benzyloxycarbonyl-L-aspartate and sodium chloride, in the
+        form of a solution in water","number_indents":5,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38322,"goods_nomenclature_item_id":"3800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
+        chemical products"},"heading":{"goods_nomenclature_sid":59671,"goods_nomenclature_item_id":"3824000000","producline_suffix":"80","validity_start_date":"1996-01-01T00:00:00+02:00","validity_end_date":null,"description":"Prepared
+        binders for foundry moulds or cores; chemical products and preparations of
+        the chemical or allied industries (including those consisting of mixtures
+        of natural products), not elsewhere specified or included; residual products
+        of the chemical or allied industries, not elsewhere specified or included","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"85160","_score":1.0,
+        "_source" : {"id":85160,"goods_nomenclature_item_id":"2853001000","producline_suffix":"80","validity_start_date":"2007-01-01T00:00:00+02:00","validity_end_date":null,"description":"Distilled
+        and conductivity water and water of similar purity","number_indents":1,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":35719,"goods_nomenclature_item_id":"2800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"inorganic
+        chemicals; organic or inorganic compounds of precious metals, of rare-earth
+        metals, of radioactive elements or of isotopes"},"heading":{"goods_nomenclature_sid":85159,"goods_nomenclature_item_id":"2853000000","producline_suffix":"80","validity_start_date":"2007-01-01T00:00:00+02:00","validity_end_date":null,"description":"Other
+        inorganic compounds (including distilled or conductivity water and water of
+        similar purity); liquid air (whether or not rare gases have been removed);
+        compressed air; amalgams, other than amalgams of precious metals","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"86719","_score":1.0,
+        "_source" : {"id":86719,"goods_nomenclature_item_id":"2922290035","producline_suffix":"80","validity_start_date":"2007-01-01T00:00:00+02:00","validity_end_date":null,"description":"2-Amino-4,6-dinitrophenol
+        sodium salt, containing at least 20|% water","number_indents":3,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":36168,"goods_nomenclature_item_id":"2900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"organic
+        chemicals"},"heading":{"goods_nomenclature_sid":36896,"goods_nomenclature_item_id":"2922000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Oxygen-function
+        amino-compounds","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"65434","_score":1.0,
+        "_source" : {"id":65434,"goods_nomenclature_item_id":"3920108100","producline_suffix":"80","validity_start_date":"1997-01-01T00:00:00+02:00","validity_end_date":null,"description":"Synthetic
+        paper pulp, in the form of moist sheets made from unconnected finely branched
+        polyethylene fibrils, whether or not blended with cellulose fibres in a quantity
+        not exceeding|15%, containing polyvinyl alcohol dissolved in water as the
+        moistening agent","number_indents":3,"section":{"numeral":"VII","title":"Plastics
+        and articles thereof; rubber and articles thereof (chapters 39 to 40)","position":7},"chapter":{"goods_nomenclature_sid":38659,"goods_nomenclature_item_id":"3900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"plastics
+        and articles thereof"},"heading":{"goods_nomenclature_sid":39155,"goods_nomenclature_item_id":"3920000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Other
+        plates, sheets, film, foil and strip, of plastics, non-cellular and not reinforced,
+        laminated, supported or similarly combined with other materials","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"76272","_score":1.0,
+        "_source" : {"id":76272,"goods_nomenclature_item_id":"3921190094","producline_suffix":"80","validity_start_date":"2003-01-01T00:00:00+02:00","validity_end_date":"2008-12-31T00:00:00+02:00","description":"Polyethylene
+        film, of a thickness of 16|\u03bcm or more but not exceeding 24|\u03bcm, having:\n-
+        a weight of 19|g/m$2 (+/-|2|g/m$2),\n- a water vapour transmission rate of
+        5|000|g/m$2 or more but not exceeding 30|000|g/m$2 per day (as determined
+        by the ASTM D 6701-01 method),\n- an elongation in the transverse direction
+        of 25|% or more at a load of 500|g or less,\n- an elongation in the machine
+        direction of 50|% or more but not exceeding 100|% (as determined by the ASTM
+        D 882-91 method),\nfor use in the manufacture of napkins and napkin liners
+        for babies and similar sanitary articles","number_indents":4,"section":{"numeral":"VII","title":"Plastics
+        and articles thereof; rubber and articles thereof (chapters 39 to 40)","position":7},"chapter":{"goods_nomenclature_sid":38659,"goods_nomenclature_item_id":"3900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"plastics
+        and articles thereof"},"heading":{"goods_nomenclature_sid":39406,"goods_nomenclature_item_id":"3921000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Other
+        plates, sheets, film, foil and strip, of plastics","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"49286","_score":1.0,
+        "_source" : {"id":49286,"goods_nomenclature_item_id":"8481801100","producline_suffix":"10","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Taps,
+        cocks and valves for sinks, washbasins, bidets, water cisterns, baths and
+        similar fixtures","number_indents":2,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"heading":{"goods_nomenclature_sid":49228,"goods_nomenclature_item_id":"8481000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Taps,
+        cocks, valves and similar appliances for pipes, boiler shells, tanks, vats
+        or the like, including pressure-reducing valves and thermostatically controlled
+        valves","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"48093","_score":1.0,
+        "_source" : {"id":48093,"goods_nomenclature_item_id":"8421210000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"For
+        filtering or purifying water","number_indents":2,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"heading":{"goods_nomenclature_sid":48083,"goods_nomenclature_item_id":"8421000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Centrifuges,
+        including centrifugal dryers; filtering or purifying machinery and apparatus,
+        for liquids or gases","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"48175","_score":1.0,
+        "_source" : {"id":48175,"goods_nomenclature_item_id":"8424300100","producline_suffix":"10","validity_start_date":"1993-01-01T00:00:00+02:00","validity_end_date":null,"description":"Water
+        cleaning appliances, with built-in motor","number_indents":2,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"heading":{"goods_nomenclature_sid":48164,"goods_nomenclature_item_id":"8424000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Mechanical
+        appliances (whether or not hand-operated) for projecting, dispersing or spraying
+        liquids or powders; fire extinguishers, whether or not charged; spray guns
+        and similar appliances; steam or sandblasting machines and similar jet projecting
+        machines","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"47742","_score":1.0,
+        "_source" : {"id":47742,"goods_nomenclature_item_id":"8410110000","producline_suffix":"10","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Hydraulic
+        turbines and water wheels","number_indents":1,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"heading":{"goods_nomenclature_sid":47741,"goods_nomenclature_item_id":"8410000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Hydraulic
+        turbines, water wheels, and regulators therefor","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"65597","_score":1.0,
+        "_source" : {"id":65597,"goods_nomenclature_item_id":"7325109200","producline_suffix":"80","validity_start_date":"1997-01-01T00:00:00+02:00","validity_end_date":null,"description":"For
+        sewage, water, etc., systems","number_indents":3,"section":{"numeral":"XV","title":"Base
+        metals and articles of base metal (chapters 72 to 83)","position":15},"chapter":{"goods_nomenclature_sid":46039,"goods_nomenclature_item_id":"7300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"articles
+        of iron or steel"},"heading":{"goods_nomenclature_sid":46668,"goods_nomenclature_item_id":"7325000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Other
+        cast articles of iron or steel","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"46713","_score":1.0,
+        "_source" : {"id":46713,"goods_nomenclature_item_id":"7326907000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":"2011-12-31T00:00:00+02:00","description":"Perforated
+        buckets and similar articles of sheet used to filter water at the entrance
+        to drains","number_indents":2,"section":{"numeral":"XV","title":"Base metals
+        and articles of base metal (chapters 72 to 83)","position":15},"chapter":{"goods_nomenclature_sid":46039,"goods_nomenclature_item_id":"7300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"articles
+        of iron or steel"},"heading":{"goods_nomenclature_sid":46693,"goods_nomenclature_item_id":"7326000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Other
+        articles of iron or steel","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"54571","_score":1.0,
+        "_source" : {"id":54571,"goods_nomenclature_item_id":"9506210000","producline_suffix":"10","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Water-skis,
+        surf-boards, sailboards and other water-sport equipment","number_indents":1,"section":{"numeral":"XX","title":"Miscellaneous
+        manufactured articles (chapters 94 to 96)","position":20},"chapter":{"goods_nomenclature_sid":54476,"goods_nomenclature_item_id":"9500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"toys,
+        games and sports requisites; parts and accessories thereof"},"heading":{"goods_nomenclature_sid":54562,"goods_nomenclature_item_id":"9506000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Articles
+        and equipment for gymnastics, athletics, other sports (including table-tennis)
+        or outdoor games, not specified or included elsewhere in this Chapter; swimming
+        pools and paddling pools","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"59111","_score":1.0,
+        "_source" : {"id":59111,"goods_nomenclature_item_id":"0406102010","producline_suffix":"80","validity_start_date":"1995-07-01T00:00:00+03:00","validity_end_date":null,"description":"Pizza
+        cheese, frozen, cut into pieces each weighing not more than 1|g, in containers
+        of 5|kg or more, of a water content, by weight, of 52% and a fat content,
+        by weight, of 38% or more","number_indents":3,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":29417,"goods_nomenclature_item_id":"0400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"dairy
+        produce; birds''eggs; natural honey; edible products of animal origin, not
+        elsewhere specified or included"},"heading":{"goods_nomenclature_sid":29719,"goods_nomenclature_item_id":"0406000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Cheese
+        and curd","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"64920","_score":1.0,
+        "_source" : {"id":64920,"goods_nomenclature_item_id":"0302696600","producline_suffix":"80","validity_start_date":"1997-01-01T00:00:00+02:00","validity_end_date":"2011-12-31T00:00:00+02:00","description":"Cape
+        hake (shallow-water hake) (Merluccius capensis) and deepwater hake (deepwater
+        Cape hake) (Merluccius paradoxus)","number_indents":6,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
+        and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28402,"goods_nomenclature_item_id":"0302000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
+        fresh or chilled, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"77194","_score":1.0,
+        "_source" : {"id":77194,"goods_nomenclature_item_id":"1905320500","producline_suffix":"80","validity_start_date":"2004-01-01T00:00:00+02:00","validity_end_date":null,"description":"With
+        a water content exceeding 10|% by weight","number_indents":3,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":33158,"goods_nomenclature_item_id":"1900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"preparations
+        of cereals, flour, starch or milk; pastrycooks'' products"},"heading":{"goods_nomenclature_sid":33311,"goods_nomenclature_item_id":"1905000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Bread,
+        pastry, cakes, biscuits and other bakers'' wares, whether or not containing
+        cocoa; communion wafers, empty cachets of a kind suitable for pharmaceutical
+        use, sealing wafers, rice paper and similar products","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"81575","_score":1.0,
+        "_source" : {"id":81575,"goods_nomenclature_item_id":"2202909510","producline_suffix":"80","validity_start_date":"2005-02-01T00:00:00+02:00","validity_end_date":null,"description":"Fruit
+        juice or vegetable juice diluted with water or aerated","number_indents":4,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":34628,"goods_nomenclature_item_id":"2200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"beverages,
+        spirits and vinegar"},"heading":{"goods_nomenclature_sid":34638,"goods_nomenclature_item_id":"2202000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Waters,
+        including mineral waters and aerated waters, containing added sugar or other
+        sweetening matter or flavoured, and other non-alcoholic beverages, not including
+        fruit or vegetable juices of heading|2009","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"38026","_score":1.0,
+        "_source" : {"id":38026,"goods_nomenclature_item_id":"3303009000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Toilet
+        waters","number_indents":1,"section":{"numeral":"VI","title":"Products of
+        the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":37964,"goods_nomenclature_item_id":"3300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"essential
+        oils and resinoids; perfumery, cosmetic or toilet preparations"},"heading":{"goods_nomenclature_sid":38024,"goods_nomenclature_item_id":"3303000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Perfumes
+        and toilet waters","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"82321","_score":1.0,
+        "_source" : {"id":82321,"goods_nomenclature_item_id":"3402901040","producline_suffix":"80","validity_start_date":"2006-01-01T00:00:00+02:00","validity_end_date":null,"description":"Amphoteric
+        fluorinated surfactant in a mixture of water and ethanol, containing by weight
+        25|% or more but not more than 30|% surfactant.","number_indents":3,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38054,"goods_nomenclature_item_id":"3400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"soap,
+        organic surface-active agents, washing preparations, lubricating preparations,
+        artificial waxes, prepared waxes, polishing or scouring preparations, candles
+        and similar articles, modelling pastes, \"dental waxes\" and dental preparations
+        with a basis of plaster"},"heading":{"goods_nomenclature_sid":38062,"goods_nomenclature_item_id":"3402000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Organic
+        surface-active agents (other than soap); surface-active preparations, washing
+        preparations (including auxiliary washing preparations) and cleaning preparations,
+        whether or not containing soap, other than those of heading|3401","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"66394","_score":1.0,
+        "_source" : {"id":66394,"goods_nomenclature_item_id":"3501105010","producline_suffix":"80","validity_start_date":"1990-01-01T00:00:00+03:00","validity_end_date":null,"description":"With
+        a water content of more than 50% by weight","number_indents":3,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38115,"goods_nomenclature_item_id":"3500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"albuminoidal
+        substances; modified starches; glues; enzymes"},"heading":{"goods_nomenclature_sid":38116,"goods_nomenclature_item_id":"3501000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Casein,
+        caseinates and other casein derivatives; casein glues","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"85750","_score":1.0,
+        "_source" : {"id":85750,"goods_nomenclature_item_id":"3808949010","producline_suffix":"80","validity_start_date":"2007-01-01T00:00:00+02:00","validity_end_date":"2009-06-30T00:00:00+03:00","description":"1-Dodecylguanidine
+        hydrochloride, in the form of a solution in isopropanol and water, containing
+        by weight 40|% or less of 1-dodecylguanidine hydrochloride","number_indents":4,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38322,"goods_nomenclature_item_id":"3800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
+        chemical products"},"heading":{"goods_nomenclature_sid":38368,"goods_nomenclature_item_id":"3808000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Insecticides,
+        rodenticides, fungicides, herbicides, anti-sprouting products and plant-growth
+        regulators, disinfectants and similar products, put up in forms or packings
+        for retail sale or as preparations or articles (for example, sulphur-treated
+        bands, wicks and candles, and fly-papers)","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"81633","_score":1.0,
+        "_source" : {"id":81633,"goods_nomenclature_item_id":"3815909089","producline_suffix":"80","validity_start_date":"2005-07-01T00:00:00+03:00","validity_end_date":null,"description":"Rhodococcus
+        rhodocrous J1|bacteria, containing enzymes, suspended in a polyacrylamide
+        gel or in water, for use as a catalyst in the production of acrylamide by
+        the hydration of acrylonitrile","number_indents":3,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38322,"goods_nomenclature_item_id":"3800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
+        chemical products"},"heading":{"goods_nomenclature_sid":38464,"goods_nomenclature_item_id":"3815000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Reaction
+        initiators, reaction accelerators and catalytic preparations, not elsewhere
+        specified or included","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"89562","_score":1.0,
+        "_source" : {"id":89562,"goods_nomenclature_item_id":"3824909708","producline_suffix":"80","validity_start_date":"2008-01-01T00:00:00+02:00","validity_end_date":"2008-12-31T00:00:00+02:00","description":"Preparation
+        consisting essentially of alkaline asphalt sulfonate, of:\n- a specific gravity
+        of 0,9 or more but not exceeding 1,5\nand\n- a solubility in water of 70|%
+        by weight or more","number_indents":5,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38322,"goods_nomenclature_item_id":"3800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
+        chemical products"},"heading":{"goods_nomenclature_sid":59671,"goods_nomenclature_item_id":"3824000000","producline_suffix":"80","validity_start_date":"1996-01-01T00:00:00+02:00","validity_end_date":null,"description":"Prepared
+        binders for foundry moulds or cores; chemical products and preparations of
+        the chemical or allied industries (including those consisting of mixtures
+        of natural products), not elsewhere specified or included; residual products
+        of the chemical or allied industries, not elsewhere specified or included","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"85868","_score":1.0,
+        "_source" : {"id":85868,"goods_nomenclature_item_id":"3824909845","producline_suffix":"80","validity_start_date":"2007-01-01T00:00:00+02:00","validity_end_date":"2007-12-31T00:00:00+02:00","description":"Preparations
+        consisting predominantly of ethylene glycol and:\n- either diethylene glycol,
+        dodecandioic acid and ammonia water,\n- or silicon oxide,\n- or ammonium hydrogen
+        azelate,\n- or ammonium hydrogen azelate and silicon oxide,\n- or dodecandioic
+        acid, ammonia water and silicon oxide,for the manufacture of electrolytic
+        capacitors","number_indents":5,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38322,"goods_nomenclature_item_id":"3800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
+        chemical products"},"heading":{"goods_nomenclature_sid":59671,"goods_nomenclature_item_id":"3824000000","producline_suffix":"80","validity_start_date":"1996-01-01T00:00:00+02:00","validity_end_date":null,"description":"Prepared
+        binders for foundry moulds or cores; chemical products and preparations of
+        the chemical or allied industries (including those consisting of mixtures
+        of natural products), not elsewhere specified or included; residual products
+        of the chemical or allied industries, not elsewhere specified or included","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"96721","_score":1.0,
+        "_source" : {"id":96721,"goods_nomenclature_item_id":"2207100011","producline_suffix":"80","validity_start_date":"2012-08-25T00:00:00+03:00","validity_end_date":"2013-02-22T00:00:00+02:00","description":"Ethyl
+        alcohol produced from agricultural products (as listed in Annex I to the Treaty
+        on the Functioning of the European Union), excluding products with a water
+        content of more than 0,3\u00a0% (m/m) measured according to the standard EN
+        15376, as well as ethyl alcohol produced from agricultural products (as listed
+        in Annex I to the Treaty on the Functioning of the European Union) contained
+        in blends with gasoline with an ethyl alcohol content of more than 10|% (v/v)","number_indents":3,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":34628,"goods_nomenclature_item_id":"2200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"beverages,
+        spirits and vinegar"},"heading":{"goods_nomenclature_sid":34966,"goods_nomenclature_item_id":"2207000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Undenatured
+        ethyl alcohol of an alcoholic strength by volume of 80|%|vol or higher; ethyl
+        alcohol and other spirits, denatured, of any strength","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"35298","_score":1.0,
+        "_source" : {"id":35298,"goods_nomenclature_item_id":"2501001000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Sea
+        water and salt liquors","number_indents":1,"section":{"numeral":"V","title":"Mineral
+        products (chapters 25 to 27)","position":5},"chapter":{"goods_nomenclature_sid":35296,"goods_nomenclature_item_id":"2500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"salt;
+        sulphur; earths and stone; plastering materials, lime and cement"},"heading":{"goods_nomenclature_sid":35297,"goods_nomenclature_item_id":"2501000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Salt
+        (including table salt and denatured salt) and pure sodium chloride, whether
+        or not in aqueous solution; sea water","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"36133","_score":1.0,
+        "_source" : {"id":36133,"goods_nomenclature_item_id":"2845100000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Heavy
+        water (deuterium oxide)","number_indents":1,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":35719,"goods_nomenclature_item_id":"2800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"inorganic
+        chemicals; organic or inorganic compounds of precious metals, of rare-earth
+        metals, of radioactive elements or of isotopes"},"heading":{"goods_nomenclature_sid":36132,"goods_nomenclature_item_id":"2845000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Isotopes
+        other than those of heading|2844; compounds, inorganic or organic, of such
+        isotopes, whether or not chemically defined","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"65473","_score":1.0,
+        "_source" : {"id":65473,"goods_nomenclature_item_id":"3920995950","producline_suffix":"80","validity_start_date":"1997-01-01T00:00:00+02:00","validity_end_date":null,"description":"Polytetrafluoroethylene
+        film, non-microporous, in the form of rolls, of a thickness of 0,019|mm or
+        more but not exceeding 0,14|mm, impermeable to water vapour","number_indents":6,"section":{"numeral":"VII","title":"Plastics
+        and articles thereof; rubber and articles thereof (chapters 39 to 40)","position":7},"chapter":{"goods_nomenclature_sid":38659,"goods_nomenclature_item_id":"3900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"plastics
+        and articles thereof"},"heading":{"goods_nomenclature_sid":39155,"goods_nomenclature_item_id":"3920000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Other
+        plates, sheets, film, foil and strip, of plastics, non-cellular and not reinforced,
+        laminated, supported or similarly combined with other materials","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"59410","_score":1.0,
+        "_source" : {"id":59410,"goods_nomenclature_item_id":"0405901000","producline_suffix":"80","validity_start_date":"1996-01-01T00:00:00+02:00","validity_end_date":null,"description":"Of
+        a fat content, by weight, of 99,3|% or more and of a water content, by weight,
+        not exceeding 0,5|%","number_indents":2,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":29417,"goods_nomenclature_item_id":"0400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"dairy
+        produce; birds''eggs; natural honey; edible products of animal origin, not
+        elsewhere specified or included"},"heading":{"goods_nomenclature_sid":29713,"goods_nomenclature_item_id":"0405000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Butter
+        and other fats and oils derived from milk","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"59112","_score":1.0,
+        "_source" : {"id":59112,"goods_nomenclature_item_id":"0406108010","producline_suffix":"80","validity_start_date":"1995-07-01T00:00:00+03:00","validity_end_date":null,"description":"Pizza
+        cheese, frozen, cut into pieces each weighing not more than 1|g, in containers
+        of 5|kg or more, of a water content, by weight, of 52% and a fat content,
+        by weight, of 38% or more","number_indents":3,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":29417,"goods_nomenclature_item_id":"0400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"dairy
+        produce; birds''eggs; natural honey; edible products of animal origin, not
+        elsewhere specified or included"},"heading":{"goods_nomenclature_sid":29719,"goods_nomenclature_item_id":"0406000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Cheese
+        and curd","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"85883","_score":1.0,
+        "_source" : {"id":85883,"goods_nomenclature_item_id":"0304295500","producline_suffix":"80","validity_start_date":"2007-01-01T00:00:00+02:00","validity_end_date":"2011-12-31T00:00:00+02:00","description":"Of
+        Cape hake (shallow-water hake) (Merluccius capensis) and of deepwater hake
+        (deepwater Cape hake) (Merluccius paradoxus)","number_indents":6,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
+        and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28812,"goods_nomenclature_item_id":"0304000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish
+        fillets and other fish meat (whether or not minced), fresh, chilled or frozen","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"32916","_score":1.0,
+        "_source" : {"id":32916,"goods_nomenclature_item_id":"1605100011","producline_suffix":"10","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Of
+        the species \"King\" (Paralithodes camchaticus), \"Hanasaki\" (Paralithodes
+        brevipes), \"Kegani\" (Erimacrus isenbecki), \"Queen\" and \"Snow\" (Chionoecetes
+        spp), \"Red\" (Geryon quinquedens), \"Rough stone\" (Neolithodes asperrimus),
+        Lithodes antarctica, \"Mud\" (Scylla serrata), \"Blue\" (Portunus spp), simply
+        boiled in water and shelled, whether or not frozen, in immediate packings
+        of a net content of 2|kilograms or more","number_indents":2,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":32656,"goods_nomenclature_item_id":"1600000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"preparations
+        of meat, of fish or of crustaceans, molluscs or other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":32914,"goods_nomenclature_item_id":"1605000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Crustaceans,
+        molluscs and other aquatic invertebrates, prepared or preserved","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"81576","_score":1.0,
+        "_source" : {"id":81576,"goods_nomenclature_item_id":"2202909910","producline_suffix":"80","validity_start_date":"2005-02-01T00:00:00+02:00","validity_end_date":null,"description":"Fruit
+        juice or vegetable juice diluted with water or aerated","number_indents":4,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":34628,"goods_nomenclature_item_id":"2200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"beverages,
+        spirits and vinegar"},"heading":{"goods_nomenclature_sid":34638,"goods_nomenclature_item_id":"2202000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Waters,
+        including mineral waters and aerated waters, containing added sugar or other
+        sweetening matter or flavoured, and other non-alcoholic beverages, not including
+        fruit or vegetable juices of heading|2009","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"89575","_score":1.0,
+        "_source" : {"id":89575,"goods_nomenclature_item_id":"3824909715","producline_suffix":"80","validity_start_date":"2008-01-01T00:00:00+02:00","validity_end_date":"2008-12-31T00:00:00+02:00","description":"Mixture
+        of disodium _N_-benzyloxycarbonyl-L-aspartate and sodium chloride, in the
+        form of a solution in water","number_indents":5,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38322,"goods_nomenclature_item_id":"3800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
+        chemical products"},"heading":{"goods_nomenclature_sid":59671,"goods_nomenclature_item_id":"3824000000","producline_suffix":"80","validity_start_date":"1996-01-01T00:00:00+02:00","validity_end_date":null,"description":"Prepared
+        binders for foundry moulds or cores; chemical products and preparations of
+        the chemical or allied industries (including those consisting of mixtures
+        of natural products), not elsewhere specified or included; residual products
+        of the chemical or allied industries, not elsewhere specified or included","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"85838","_score":1.0,
+        "_source" : {"id":85838,"goods_nomenclature_item_id":"3824909808","producline_suffix":"80","validity_start_date":"2007-01-01T00:00:00+02:00","validity_end_date":"2007-12-31T00:00:00+02:00","description":"Preparation
+        consisting essentially of alkaline asphalt sulfonate, of:\n- a specific gravity
+        of 0,9 or more but not exceeding 1,5\nand\n- a solubility in water of 70|%
+        by weight or more","number_indents":5,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38322,"goods_nomenclature_item_id":"3800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
+        chemical products"},"heading":{"goods_nomenclature_sid":59671,"goods_nomenclature_item_id":"3824000000","producline_suffix":"80","validity_start_date":"1996-01-01T00:00:00+02:00","validity_end_date":null,"description":"Prepared
+        binders for foundry moulds or cores; chemical products and preparations of
+        the chemical or allied industries (including those consisting of mixtures
+        of natural products), not elsewhere specified or included; residual products
+        of the chemical or allied industries, not elsewhere specified or included","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"80580","_score":1.0,
+        "_source" : {"id":80580,"goods_nomenclature_item_id":"3801209010","producline_suffix":"80","validity_start_date":"2004-07-01T00:00:00+03:00","validity_end_date":null,"description":"Colloidal
+        graphite in suspension in water, for use as internal coating in colour cathode-ray
+        tubes","number_indents":3,"section":{"numeral":"VI","title":"Products of the
+        chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38322,"goods_nomenclature_item_id":"3800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
+        chemical products"},"heading":{"goods_nomenclature_sid":38323,"goods_nomenclature_item_id":"3801000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Artificial
+        graphite; colloidal or semi-colloidal graphite; preparations based on graphite
+        or other carbon in the form of pastes, blocks, plates or other semi-manufactures","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"65361","_score":1.0,
+        "_source" : {"id":65361,"goods_nomenclature_item_id":"3905999094","producline_suffix":"80","validity_start_date":"1997-01-01T00:00:00+02:00","validity_end_date":"2010-12-31T00:00:00+02:00","description":"Polymer
+        of vinylpyrrolidone and dimethylaminoethyl methacrylate, containing by weight
+        97|% or more but not more than 99|% of vinylpyrrolidone, in the form of a
+        solution in water","number_indents":5,"section":{"numeral":"VII","title":"Plastics
+        and articles thereof; rubber and articles thereof (chapters 39 to 40)","position":7},"chapter":{"goods_nomenclature_sid":38659,"goods_nomenclature_item_id":"3900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"plastics
+        and articles thereof"},"heading":{"goods_nomenclature_sid":38757,"goods_nomenclature_item_id":"3905000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Polymers
+        of vinyl acetate or of other vinyl esters, in primary forms; other vinyl polymers
+        in primary forms","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"65099","_score":1.0,
+        "_source" : {"id":65099,"goods_nomenclature_item_id":"2921511100","producline_suffix":"80","validity_start_date":"1997-01-01T00:00:00+02:00","validity_end_date":null,"description":"m-Phenylenediamine,
+        of a purity by weight of 99|% or more and containing:-|1|% or less by weight
+        of water,-|200|mg/kg or less of o-phenylenediamine and-|450|mg/kg or less
+        of p-phenylenediamine","number_indents":4,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":36168,"goods_nomenclature_item_id":"2900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"organic
+        chemicals"},"heading":{"goods_nomenclature_sid":36826,"goods_nomenclature_item_id":"2921000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Amine-function
+        compounds","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"73294","_score":1.0,
+        "_source" : {"id":73294,"goods_nomenclature_item_id":"2933499040","producline_suffix":"80","validity_start_date":"2002-01-01T00:00:00+02:00","validity_end_date":"2008-12-31T00:00:00+02:00","description":"_N_-Ethyl-5,6,7,8-tetrahydroquinolinium
+        _p_-toluenesulfonate, in the form of a solution in water","number_indents":4,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":36168,"goods_nomenclature_item_id":"2900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"organic
+        chemicals"},"heading":{"goods_nomenclature_sid":37193,"goods_nomenclature_item_id":"2933000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Heterocyclic
+        compounds with nitrogen hetero-atom(s) only; nucleic acids and their salts","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"58676","_score":1.0,
+        "_source" : {"id":58676,"goods_nomenclature_item_id":"3920104091","producline_suffix":"80","validity_start_date":"1995-07-01T00:00:00+03:00","validity_end_date":"2008-12-31T00:00:00+02:00","description":"Synthetic
+        paper pulp, in the form of moist sheets made from unconnected finely branched
+        polyethylene fibrils, whether or not blended with cellulose fibres in a quantity
+        not exceeding|15%, containing polyvinyl alcohol dissolved in water as the
+        moistening agent","number_indents":5,"section":{"numeral":"VII","title":"Plastics
+        and articles thereof; rubber and articles thereof (chapters 39 to 40)","position":7},"chapter":{"goods_nomenclature_sid":38659,"goods_nomenclature_item_id":"3900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"plastics
+        and articles thereof"},"heading":{"goods_nomenclature_sid":39155,"goods_nomenclature_item_id":"3920000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Other
+        plates, sheets, film, foil and strip, of plastics, non-cellular and not reinforced,
+        laminated, supported or similarly combined with other materials","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"39525","_score":1.0,
+        "_source" : {"id":39525,"goods_nomenclature_item_id":"3926905000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Perforated
+        buckets and similar articles used to filter water at the entrance to drains","number_indents":3,"section":{"numeral":"VII","title":"Plastics
+        and articles thereof; rubber and articles thereof (chapters 39 to 40)","position":7},"chapter":{"goods_nomenclature_sid":38659,"goods_nomenclature_item_id":"3900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"plastics
+        and articles thereof"},"heading":{"goods_nomenclature_sid":39517,"goods_nomenclature_item_id":"3926000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Other
+        articles of plastics and articles of other materials of headings|3901|to 3914","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"48040","_score":1.0,
+        "_source" : {"id":48040,"goods_nomenclature_item_id":"8419110000","producline_suffix":"10","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Instantaneous
+        or storage water heaters, non-electric","number_indents":1,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"heading":{"goods_nomenclature_sid":48039,"goods_nomenclature_item_id":"8419000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Machinery,
+        plant or laboratory equipment, whether or not electrically heated, for the
+        treatment of materials by a process involving a change of temperature such
+        as heating, cooking, roasting, distilling, rectifying, sterilizing, pasteurising,
+        steaming, drying, evaporating, vapourising, condensing or cooling, other than
+        machinery or plant of a kind used for domestic purposes; instantaneous or
+        storage water heaters, non-electric","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"48122","_score":1.0,
+        "_source" : {"id":48122,"goods_nomenclature_item_id":"8421990091","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Of
+        equipment for the purification of water by reserve osmosis, consisting of
+        a bundle of hollow fibres of artificial plastic material with permeable walls,
+        embedded in a block of artificial plastic material at one end and passing
+        through a block of artificial plastic material at the other end, whether or
+        not housed in a cylinder","number_indents":4,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"heading":{"goods_nomenclature_sid":48083,"goods_nomenclature_item_id":"8421000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Centrifuges,
+        including centrifugal dryers; filtering or purifying machinery and apparatus,
+        for liquids or gases","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"47592","_score":1.0,
+        "_source" : {"id":47592,"goods_nomenclature_item_id":"8402200000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Superheated
+        water boilers","number_indents":1,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"heading":{"goods_nomenclature_sid":47585,"goods_nomenclature_item_id":"8402000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Steam
+        or other vapour generating boilers (other than central heating hot water boilers
+        capable also of producing low pressure steam); superheated water boilers","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"50002","_score":1.0,
+        "_source" : {"id":50002,"goods_nomenclature_item_id":"8516100000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Electric
+        instantaneous or storage water heaters and immersion heaters","number_indents":1,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":49496,"goods_nomenclature_item_id":"8500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"electrical
+        machinery and equipment and parts thereof; sound recorders and reproducers,
+        television image and sound recorders and reproducers, and parts and accessories
+        of such articles"},"heading":{"goods_nomenclature_sid":50001,"goods_nomenclature_item_id":"8516000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Electric
+        instantaneous or storage water heaters and immersion heaters; electric space
+        heating apparatus and soil heating apparatus; electro-thermic hair-dressing
+        apparatus (for example, hair dryers, hair curlers, curling tong heaters) and
+        hand dryers; electric smoothing irons; other electro-thermic appliances of
+        a kind used for domestic purposes; electric heating resistors, other than
+        those of heading No  8545","number_indents":0}}}]}}'
+    http_version: 
+  recorded_at: Mon, 18 Mar 2013 14:37:46 GMT
+- request:
+    method: get
+    uri: http://localhost:9200/search_references/_search?payload%5Bquery%5D%5Bquery_string%5D%5Banalyzer%5D=snowball&payload%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=title&payload%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=water&payload%5Bsize%5D=1000000
+    body:
+      encoding: US-ASCII
+      string: ! '{"query":{"query_string":{"fields":["title"],"analyzer":"snowball","query":"water"}},"size":1000000}'
+    headers:
+      Accept:
+      - ! '*/*; q=0.5, application/xml'
+      Accept-Encoding:
+      - gzip, deflate
+      Content-Length:
+      - '100'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '25896'
+    body:
+      encoding: US-ASCII
+      string: ! '{"took":2,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":25,"max_score":4.298147,"hits":[{"_index":"search_references","_type":"search_reference","_id":"1815","_score":4.298147,
+        "_source" : {"title":"distilled water","reference":{"id":36164,"goods_nomenclature_item_id":"2851000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":"2006-12-31T00:00:00+02:00","description":"Other
+        inorganic compounds (including distilled or conductivity water and water of
+        similar purity); liquid air (whether or not rare gases have been removed);
+        compressed air; amalgams, other than amalgams of precious metals","number_indents":0,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":35719,"goods_nomenclature_item_id":"2800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"inorganic
+        chemicals; organic or inorganic compounds of precious metals, of rare-earth
+        metals, of radioactive elements or of isotopes"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"1265","_score":4.044731,
+        "_source" : {"title":"chutes - water","reference":{"id":54614,"goods_nomenclature_item_id":"9508000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Roundabouts,
+        swings, shooting galleries and other fairground amusements; travelling circuses,
+        travelling menageries and travelling theatres","number_indents":0,"section":{"numeral":"XX","title":"Miscellaneous
+        manufactured articles (chapters 94 to 96)","position":20},"chapter":{"goods_nomenclature_sid":54476,"goods_nomenclature_item_id":"9500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"toys,
+        games and sports requisites; parts and accessories thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"5912","_score":4.0442934,
+        "_source" : {"title":"spa waters","reference":{"id":34629,"goods_nomenclature_item_id":"2201000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Waters,
+        including natural or artificial mineral waters and aerated waters, not containing
+        added sugar or other sweetening matter nor flavoured; ice and snow","number_indents":0,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":34628,"goods_nomenclature_item_id":"2200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"beverages,
+        spirits and vinegar"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"6869","_score":4.0442934,
+        "_source" : {"title":"water meters","reference":{"id":53908,"goods_nomenclature_item_id":"9028000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Gas,
+        liquid or electricity supply or production meters, including calibrating meters
+        therefor","number_indents":0,"section":{"numeral":"XVIII","title":"Optical,
+        photographic, cinematographic, measuring, checking, precision, medical or
+        surgical instruments and apparatus; clocks and watches; musical instruments;
+        parts and accessories thereof (chapters 90 to 92)","position":18},"chapter":{"goods_nomenclature_sid":53472,"goods_nomenclature_item_id":"9000000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"optical,
+        photographic, cinematographic, measuring, checking, precision, medical or
+        surgical instruments and apparatus; parts and accessories thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"6471","_score":3.948387,
+        "_source" : {"title":"toilet - water","reference":{"id":38024,"goods_nomenclature_item_id":"3303000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Perfumes
+        and toilet waters","number_indents":0,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":37964,"goods_nomenclature_item_id":"3300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"essential
+        oils and resinoids; perfumery, cosmetic or toilet preparations"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"89","_score":3.948387,
+        "_source" : {"title":"aerated waters","reference":{"id":34629,"goods_nomenclature_item_id":"2201000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Waters,
+        including natural or artificial mineral waters and aerated waters, not containing
+        added sugar or other sweetening matter nor flavoured; ice and snow","number_indents":0,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":34628,"goods_nomenclature_item_id":"2200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"beverages,
+        spirits and vinegar"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"6641","_score":3.948387,
+        "_source" : {"title":"turbines, water","reference":{"id":47741,"goods_nomenclature_item_id":"8410000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Hydraulic
+        turbines, water wheels, and regulators therefor","number_indents":0,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"5913","_score":3.4385176,
+        "_source" : {"title":"spa waters, flavoured","reference":{"id":34638,"goods_nomenclature_item_id":"2202000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Waters,
+        including mineral waters and aerated waters, containing added sugar or other
+        sweetening matter or flavoured, and other non-alcoholic beverages, not including
+        fruit or vegetable juices of heading|2009","number_indents":0,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":34628,"goods_nomenclature_item_id":"2200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"beverages,
+        spirits and vinegar"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"90","_score":3.235785,
+        "_source" : {"title":"aerated waters, flavoured or sweetened","reference":{"id":34638,"goods_nomenclature_item_id":"2202000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Waters,
+        including mineral waters and aerated waters, containing added sugar or other
+        sweetening matter or flavoured, and other non-alcoholic beverages, not including
+        fruit or vegetable juices of heading|2009","number_indents":0,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":34628,"goods_nomenclature_item_id":"2200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"beverages,
+        spirits and vinegar"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"5387","_score":3.235785,
+        "_source" : {"title":"rubber - hot water bottles","reference":{"id":39668,"goods_nomenclature_item_id":"4014000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Hygienic
+        or pharmaceutical articles (including teats), of vulcanised rubber other than
+        hard rubber, with or without fittings of hard rubber","number_indents":0,"section":{"numeral":"VII","title":"Plastics
+        and articles thereof; rubber and articles thereof (chapters 39 to 40)","position":7},"chapter":{"goods_nomenclature_sid":39532,"goods_nomenclature_item_id":"4000000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"rubber
+        and articles thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"6866","_score":3.235785,
+        "_source" : {"title":"water gas generators","reference":{"id":47605,"goods_nomenclature_item_id":"8405000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Producer
+        gas or water gas generators, with or without their purifiers; acetylene gas
+        generators and similar water process gas generators, with or without their
+        purifiers","number_indents":0,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2968","_score":3.2354345,
+        "_source" : {"title":"hot water bottles, rubber","reference":{"id":39668,"goods_nomenclature_item_id":"4014000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Hygienic
+        or pharmaceutical articles (including teats), of vulcanised rubber other than
+        hard rubber, with or without fittings of hard rubber","number_indents":0,"section":{"numeral":"VII","title":"Plastics
+        and articles thereof; rubber and articles thereof (chapters 39 to 40)","position":7},"chapter":{"goods_nomenclature_sid":39532,"goods_nomenclature_item_id":"4000000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"rubber
+        and articles thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"4661","_score":3.2354345,
+        "_source" : {"title":"petroleum - sulphonates (not water soluble)","reference":{"id":59671,"goods_nomenclature_item_id":"3824000000","producline_suffix":"80","validity_start_date":"1996-01-01T00:00:00+02:00","validity_end_date":null,"description":"Prepared
+        binders for foundry moulds or cores; chemical products and preparations of
+        the chemical or allied industries (including those consisting of mixtures
+        of natural products), not elsewhere specified or included; residual products
+        of the chemical or allied industries, not elsewhere specified or included","number_indents":0,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38322,"goods_nomenclature_item_id":"3800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
+        chemical products"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"6864","_score":3.2354345,
+        "_source" : {"title":"water - mineral or aerated","reference":{"id":34629,"goods_nomenclature_item_id":"2201000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Waters,
+        including natural or artificial mineral waters and aerated waters, not containing
+        added sugar or other sweetening matter nor flavoured; ice and snow","number_indents":0,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":34628,"goods_nomenclature_item_id":"2200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"beverages,
+        spirits and vinegar"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"6200","_score":3.1587095,
+        "_source" : {"title":"super heated water boilers","reference":{"id":47585,"goods_nomenclature_item_id":"8402000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Steam
+        or other vapour generating boilers (other than central heating hot water boilers
+        capable also of producing low pressure steam); superheated water boilers","number_indents":0,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"6863","_score":3.1587095,
+        "_source" : {"title":"water - distilled or conductivity","reference":{"id":36164,"goods_nomenclature_item_id":"2851000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":"2006-12-31T00:00:00+02:00","description":"Other
+        inorganic compounds (including distilled or conductivity water and water of
+        similar purity); liquid air (whether or not rare gases have been removed);
+        compressed air; amalgams, other than amalgams of precious metals","number_indents":0,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":35719,"goods_nomenclature_item_id":"2800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"inorganic
+        chemicals; organic or inorganic compounds of precious metals, of rare-earth
+        metals, of radioactive elements or of isotopes"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"6875","_score":3.1587095,
+        "_source" : {"title":"water repellent agents","reference":{"id":38407,"goods_nomenclature_item_id":"3809000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Finishing
+        agents, dye carriers to accelerate the dyeing or fixing of dyestuffs and other
+        products and preparations (for example, dressings and mordants), of a kind
+        used in the textile, paper, leather or like industries, not elsewhere specified
+        or included","number_indents":0,"section":{"numeral":"VI","title":"Products
+        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38322,"goods_nomenclature_item_id":"3800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
+        chemical products"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"1266","_score":3.1587095,
+        "_source" : {"title":"chutes - water sport equipment","reference":{"id":54562,"goods_nomenclature_item_id":"9506000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Articles
+        and equipment for gymnastics, athletics, other sports (including table-tennis)
+        or outdoor games, not specified or included elsewhere in this Chapter; swimming
+        pools and paddling pools","number_indents":0,"section":{"numeral":"XX","title":"Miscellaneous
+        manufactured articles (chapters 94 to 96)","position":20},"chapter":{"goods_nomenclature_sid":54476,"goods_nomenclature_item_id":"9500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"toys,
+        games and sports requisites; parts and accessories thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2031","_score":3.1587095,
+        "_source" : {"title":"water heaters, instantaneous or storage","reference":{"id":50001,"goods_nomenclature_item_id":"8516000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Electric
+        instantaneous or storage water heaters and immersion heaters; electric space
+        heating apparatus and soil heating apparatus; electro-thermic hair-dressing
+        apparatus (for example, hair dryers, hair curlers, curling tong heaters) and
+        hand dryers; electric smoothing irons; other electro-thermic appliances of
+        a kind used for domestic purposes; electric heating resistors, other than
+        those of heading No  8545","number_indents":0,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":49496,"goods_nomenclature_item_id":"8500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"electrical
+        machinery and equipment and parts thereof; sound recorders and reproducers,
+        television image and sound recorders and reproducers, and parts and accessories
+        of such articles"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"6865","_score":3.0087028,
+        "_source" : {"title":"water filters, softeners and purification equipment","reference":{"id":48083,"goods_nomenclature_item_id":"8421000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Centrifuges,
+        including centrifugal dryers; filtering or purifying machinery and apparatus,
+        for liquids or gases","number_indents":0,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2578","_score":2.831312,
+        "_source" : {"title":"gas - coal, water, producers, etc","reference":{"id":35542,"goods_nomenclature_item_id":"2705000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Coal
+        gas, water gas, producer gas and similar gases, other than petroleum gases
+        and other gaseous hydrocarbons","number_indents":0,"section":{"numeral":"V","title":"Mineral
+        products (chapters 25 to 27)","position":5},"chapter":{"goods_nomenclature_sid":35521,"goods_nomenclature_item_id":"2700000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"mineral
+        fuels, mineral oils and products of their distillation; bituminous substances;
+        mineral waxes"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"1293","_score":2.7638707,
+        "_source" : {"title":"citrus fruit juice (no added water)","reference":{"id":34165,"goods_nomenclature_item_id":"2009000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fruit
+        juices (including grape must) and vegetable juices, unfermented and not containing
+        added spirit, whether or not containing added sugar or other sweetening matter","number_indents":0,"section":{"numeral":"IV","title":"Prepared
+        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
+        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":33378,"goods_nomenclature_item_id":"2000000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"preparations
+        of vegetables, fruit, nuts or other parts of plants"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"6868","_score":2.7638707,
+        "_source" : {"title":"water heaters, instantaneous or storage, electric","reference":{"id":50001,"goods_nomenclature_item_id":"8516000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Electric
+        instantaneous or storage water heaters and immersion heaters; electric space
+        heating apparatus and soil heating apparatus; electro-thermic hair-dressing
+        apparatus (for example, hair dryers, hair curlers, curling tong heaters) and
+        hand dryers; electric smoothing irons; other electro-thermic appliances of
+        a kind used for domestic purposes; electric heating resistors, other than
+        those of heading No  8545","number_indents":0,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":49496,"goods_nomenclature_item_id":"8500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"electrical
+        machinery and equipment and parts thereof; sound recorders and reproducers,
+        television image and sound recorders and reproducers, and parts and accessories
+        of such articles"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"6090","_score":2.7638707,
+        "_source" : {"title":"storage water heaters, non electric","reference":{"id":48039,"goods_nomenclature_item_id":"8419000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Machinery,
+        plant or laboratory equipment, whether or not electrically heated, for the
+        treatment of materials by a process involving a change of temperature such
+        as heating, cooking, roasting, distilling, rectifying, sterilizing, pasteurising,
+        steaming, drying, evaporating, vapourising, condensing or cooling, other than
+        machinery or plant of a kind used for domestic purposes; instantaneous or
+        storage water heaters, non-electric","number_indents":0,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"6867","_score":2.3690321,
+        "_source" : {"title":"water heater, instantaneous or storage, non electric","reference":{"id":48039,"goods_nomenclature_item_id":"8419000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Machinery,
+        plant or laboratory equipment, whether or not electrically heated, for the
+        treatment of materials by a process involving a change of temperature such
+        as heating, cooking, roasting, distilling, rectifying, sterilizing, pasteurising,
+        steaming, drying, evaporating, vapourising, condensing or cooling, other than
+        machinery or plant of a kind used for domestic purposes; instantaneous or
+        storage water heaters, non-electric","number_indents":0,"section":{"numeral":"XVI","title":"Machinery
+        and mechanical appliances; electrical equipment; parts thereof, sound recorders
+        and reproducers, television image and sound recorders and reproducers, and
+        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"class":"Heading"}}}]}}'
+    http_version: 
+  recorded_at: Mon, 18 Mar 2013 14:37:46 GMT
+recorded_with: VCR 2.2.5

@@ -137,26 +137,54 @@ class SearchService
 
     def results_for(index, query_string, date, query_opts = {})
       Tire.search(index, { query: {
-                             query_string: {
-                               query: query_string,
-                               fields: ["description"]
-                             }.merge(query_opts)
-                           },
-                           filter: {
-                             or: [
-                               {
-                                 range: {
-                                   validity_start_date: { lte: date },
-                                   validity_end_date:   { gte: date }
-                                 }
-                               },
-                               {
-                                 and: [
-                                  { range: { validity_start_date: { lte: date } } },
-                                  { missing: { field: "validity_end_date" } }
-                                ]
-                               }
-                             ]
+                              constant_score: {
+                                filter: {
+                                  and: [
+                                    {
+                                      # match the search phrase
+                                      query: {
+                                        query_string: {
+                                          query: query_string,
+                                          fields: ["description"]
+                                        }.merge(query_opts)
+                                      }
+                                    },
+                                    {
+                                      or: [
+                                        # actual date is either between item's (validity_start_date..validity_end_date)
+                                        {
+                                          and: [
+                                            range: {
+                                              validity_start_date: { lte: date }
+                                            },
+                                            range: {
+                                              validity_end_date: { gte: date }
+                                            }
+                                          ]
+                                        },
+                                        # or is greater than item's validity_start_date
+                                        # and item has blank validity_end_date (is unbounded)
+                                        {
+                                          and: [
+                                            {
+                                              range: {
+                                                validity_start_date: { lte: date }
+                                              }
+                                            },
+                                            {
+                                              missing: {
+                                                field: "validity_end_date",
+                                                null_value: true,
+                                                existence: true
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                             }
                            },
                            size: INDEX_SIZE_MAX
                          }
