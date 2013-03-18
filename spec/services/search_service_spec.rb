@@ -261,7 +261,7 @@ describe SearchService do
       end
 
       context 'with goods codes that have unbounded validity period' do
-        # heading that has validity period of 1972-01-01 to 2006-12-31
+        # heading that has validity period starting from 1972-01-01
         let(:heading_pattern) {
           {
             type: 'fuzzy_match',
