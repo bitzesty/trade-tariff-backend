@@ -75,6 +75,10 @@ class Commodity < GoodsNomenclature
       .sort_by(&:number_indents)
   end
 
+  def declarable?
+    producline_suffix == '80' && children.none?
+  end
+
   def uptree
     @_uptree ||= [ancestors, heading, chapter, self].flatten.compact
   end
