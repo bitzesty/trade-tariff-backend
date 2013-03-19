@@ -1,12 +1,3 @@
-GIT
-  remote: git://github.com/thoughtbot/shoulda-matchers.git
-  revision: d5632b012de4fe23a01231eef2fa6a9aa161d9b7
-  branch: dc-bourne-dependency
-  specs:
-    shoulda-matchers (1.5.0)
-      activesupport (>= 3.0.0)
-      bourne (~> 1.3)
-
 GEM
   remote: https://rubygems.org/
   remote: https://BnrJb6FZyzspBboNJzYZ@gem.fury.io/govuk/
@@ -195,6 +186,9 @@ GEM
       tilt (~> 1.3)
     sequel (3.39.0)
     sexp_processor (3.2.0)
+    shoulda-matchers (1.5.1)
+      activesupport (>= 3.0.0)
+      bourne (~> 1.3)
     simplecov (0.6.4)
       multi_json (~> 1.0)
       simplecov-html (~> 0.5.3)
@@ -246,7 +240,6 @@ DEPENDENCIES
   addressable (= 2.3.2)
   aws-ses
   bootstrap-sass
-  bourne (>= 1.4.0)
   brakeman (= 1.7.0)
   builder
   capistrano
@@ -272,7 +265,7 @@ DEPENDENCIES
   rspec-rails
   sass-rails
   sequel
-  shoulda-matchers!
+  shoulda-matchers (>= 1.5.1)
   simplecov
   simplecov-rcov
   therubyracer

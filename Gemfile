@@ -49,10 +49,8 @@ group :test do
   gem "forgery"
   gem "json_expressions"
   gem "rspec-rails"
-  gem "bourne", ">= 1.4.0"
-  # Use stable version when shoulda-matchers > 1.5.0 gets released
-  gem "shoulda-matchers", github: "thoughtbot/shoulda-matchers", branch: "dc-bourne-dependency"
-  gem "mocha", ">= 0.13.3", require: false
+  gem "shoulda-matchers", '>= 1.5.1'
+  gem "mocha", ">= 0.13.3"
   gem "simplecov"
   gem "simplecov-rcov"
   gem "webmock"
