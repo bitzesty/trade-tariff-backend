@@ -18,7 +18,7 @@ module TradeTariffBackend
 
     # Email of the user who receives all info/error notifications
     def admin_email
-      secrets.sync_email
+      secrets.sync_email || 'trade-tariff-alerts@digital.cabinet-office.gov.uk'
     end
 
     def platform
