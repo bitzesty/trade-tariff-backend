@@ -4,8 +4,13 @@ describe MonetaryUnit do
   let(:monetary_unit) { create :monetary_unit }
 
   describe 'delegations' do
-    it { should delegate_method(:description).to(:monetary_unit_description) }
-    it { should delegate_method(:abbreviation).to(:monetary_unit_description) }
+    it 'delegates description to monetary unit description' do
+      expect { MonetaryUnit.new.description }.to raise_error RuntimeError
+    end
+
+    it 'delegates abbreviation to monetary unit description' do
+      expect { MonetaryUnit.new.abbreviation }.to raise_error RuntimeError
+    end
   end
 
   describe '#to_s' do

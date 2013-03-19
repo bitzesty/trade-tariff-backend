@@ -2,9 +2,17 @@ require 'spec_helper'
 
 describe MeasureComponent do
   describe 'delegations' do
-    it { should delegate_method(:duty_expression_description).to(:duty_expression).as(:description) }
-    it { should delegate_method(:duty_expression_abbreviation).to(:duty_expression).as(:abbreviation) }
-    it { should delegate_method(:monetary_unit_abbreviation).to(:monetary_unit).as(:abbreviation) }
+    it 'delegates duty expression description to duty expression' do
+      expect { MeasureComponent.new.duty_expression_description }.to raise_error RuntimeError
+    end
+
+    it 'delegates duty expression abbreviation to duty expression' do
+      expect { MeasureComponent.new.duty_expression_abbreviation }.to raise_error RuntimeError
+    end
+
+    it 'delegates monetary unit abbreviation to monetary unit' do
+      MeasureComponent.new.should respond_to :monetary_unit_abbreviation
+    end
   end
 
   describe 'associations' do

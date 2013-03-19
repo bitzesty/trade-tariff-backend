@@ -27,8 +27,8 @@ class MeasureComponent < Sequel::Model
   one_to_one :measure, key: :measure_sid,
                        primary_key: :measure_sid
 
-  delegate :description, :abbreviation, to: :duty_expression, prefix: true
-  delegate :abbreviation, to: :monetary_unit, prefix: true, allow_nil: true
+  delegate :duty_expression_description, :duty_expression_abbreviation, to: :duty_expression
+  delegate :monetary_unit_abbreviation, to: :monetary_unit, allow_nil: true
 end
 
 

@@ -48,7 +48,7 @@ class MeasureCondition < Sequel::Model
                                              primary_key: :measure_condition_sid
 
 
-  delegate :abbreviation, to: :monetary_unit, prefix: true, allow_nil: true
+  delegate :monetary_unit_abbreviation, to: :monetary_unit, allow_nil: true
 
   def before_create
     self.measure_condition_sid ||= self.class.next_national_sid
