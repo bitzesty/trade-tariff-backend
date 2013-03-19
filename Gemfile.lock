@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/thoughtbot/shoulda-matchers.git
-  revision: 36cc8cd87a8fda065d728ce4d8cf1848fce922a4
+  revision: d5632b012de4fe23a01231eef2fa6a9aa161d9b7
   branch: dc-bourne-dependency
   specs:
     shoulda-matchers (1.5.0)
