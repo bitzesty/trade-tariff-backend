@@ -16,9 +16,9 @@ describe ChiefImporter do
   describe "#import" do
 
     context "when provided with valid chief file" do
-      let(:valid_file) { "spec/fixtures/chief_samples/KBT009\(12044\).txt" }
-
       before(:all) do
+        valid_file = "spec/fixtures/chief_samples/KBT009\(12044\).txt"
+
         @importer = ChiefImporter.new(valid_file)
         @importer.import
       end
@@ -33,9 +33,9 @@ describe ChiefImporter do
     end
 
     context "when provided with invalid chief file" do
-      let(:invalid_file) { "spec/fixtures/chief_samples/invalid_sample.txt" }
-
       before(:all) do
+        invalid_file = "spec/fixtures/chief_samples/invalid_sample.txt"
+
         @importer = ChiefImporter.new(invalid_file)
         rescuing { @importer.import }
       end
