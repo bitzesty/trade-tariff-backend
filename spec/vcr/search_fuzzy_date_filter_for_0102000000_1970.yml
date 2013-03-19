@@ -24,12 +24,12 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '122'
+      - '123'
     body:
       encoding: US-ASCII
-      string: ! '{"took":1,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
+      string: ! '{"took":14,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
     http_version: 
-  recorded_at: Mon, 18 Mar 2013 14:37:48 GMT
+  recorded_at: Tue, 19 Mar 2013 15:32:32 GMT
 - request:
     method: get
     uri: http://localhost:9200/chapters/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=1970-01-01&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=1970-01-01&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=animal%20products&payload%5Bsize%5D=1000000
@@ -54,12 +54,12 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '122'
+      - '123'
     body:
       encoding: US-ASCII
-      string: ! '{"took":1,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
+      string: ! '{"took":12,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
     http_version: 
-  recorded_at: Mon, 18 Mar 2013 14:37:48 GMT
+  recorded_at: Tue, 19 Mar 2013 15:32:32 GMT
 - request:
     method: get
     uri: http://localhost:9200/headings/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=1970-01-01&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=1970-01-01&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=animal%20products&payload%5Bsize%5D=1000000
@@ -84,10 +84,10 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '1949'
+      - '1950'
     body:
       encoding: US-ASCII
-      string: ! '{"took":1,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":2,"max_score":1.0,"hits":[{"_index":"headings","_type":"heading","_id":"30036","_score":1.0,
+      string: ! '{"took":31,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":2,"max_score":1.0,"hits":[{"_index":"headings","_type":"heading","_id":"30036","_score":1.0,
         "_source" : {"id":30036,"goods_nomenclature_item_id":"0509000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":"2006-12-31T00:00:00+02:00","description":"Natural
         sponges of animal origin","number_indents":0,"section":{"numeral":"I","title":"Live
         animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":30015,"goods_nomenclature_item_id":"0500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"products
@@ -103,7 +103,7 @@ http_interactions:
         television image and sound recorders and reproducers, and parts and accessories
         of such articles"}}}]}}'
     http_version: 
-  recorded_at: Mon, 18 Mar 2013 14:37:48 GMT
+  recorded_at: Tue, 19 Mar 2013 15:32:32 GMT
 - request:
     method: get
     uri: http://localhost:9200/commodities/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=1970-01-01&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=1970-01-01&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=animal%20products&payload%5Bsize%5D=1000000
@@ -128,10 +128,10 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '771597'
+      - '771598'
     body:
       encoding: US-ASCII
-      string: ! '{"took":818,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":617,"max_score":1.0,"hits":[{"_index":"commodities","_type":"commodity","_id":"72848","_score":1.0,
+      string: ! '{"took":1550,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":617,"max_score":1.0,"hits":[{"_index":"commodities","_type":"commodity","_id":"72848","_score":1.0,
         "_source" : {"id":72848,"goods_nomenclature_item_id":"0303441100","producline_suffix":"10","validity_start_date":"2002-01-01T00:00:00+02:00","validity_end_date":"2009-12-31T00:00:00+02:00","description":"For
         the industrial manufacture of products of heading 1604","number_indents":3,"section":{"numeral":"I","title":"Live
         animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
@@ -5386,21 +5386,21 @@ http_interactions:
         toys; reduced-size (\"scale\") models and similar recreational models, working
         or not; puzzles of all kinds","number_indents":0}}}]}}'
     http_version: 
-  recorded_at: Mon, 18 Mar 2013 14:37:49 GMT
+  recorded_at: Tue, 19 Mar 2013 15:32:34 GMT
 - request:
     method: get
-    uri: http://localhost:9200/search_references/_search?payload%5Bquery%5D%5Bquery_string%5D%5Banalyzer%5D=snowball&payload%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=title&payload%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=animal%20products&payload%5Bsize%5D=1000000
+    uri: http://localhost:9200/search_references/_search?payload%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=1970-01-01&payload%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=1970-01-01&payload%5Bquery%5D%5Bfiltered%5D%5Bquery%5D%5Bquery_string%5D%5Banalyzer%5D=snowball&payload%5Bquery%5D%5Bfiltered%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=title&payload%5Bquery%5D%5Bfiltered%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=animal%20products&payload%5Bsize%5D=1000000
     body:
       encoding: US-ASCII
-      string: ! '{"query":{"query_string":{"fields":["title"],"analyzer":"snowball","query":"animal
-        products"}},"size":1000000}'
+      string: ! '{"query":{"filtered":{"query":{"query_string":{"fields":["title"],"analyzer":"snowball","query":"animal
+        products"}},"filter":{"or":[{"and":[{"range":{"validity_end_date":{"gte":"1970-01-01"}}}]},{"and":[{"range":{"validity_start_date":{"lte":"1970-01-01"}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]},{"and":[{"missing":{"field":"validity_start_date","null_value":true,"existence":true}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}}},"size":1000000}'
     headers:
       Accept:
       - ! '*/*; q=0.5, application/xml'
       Accept-Encoding:
       - gzip, deflate
       Content-Length:
-      - '110'
+      - '522'
       User-Agent:
       - Ruby
   response:
@@ -5411,509 +5411,23 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '75553'
+      - '2127'
     body:
       encoding: US-ASCII
-      string: ! '{"took":2,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":81,"max_score":1.4294593,"hits":[{"_index":"search_references","_type":"search_reference","_id":"5006","_score":1.4294593,
-        "_source" : {"title":"production counters","reference":{"id":53919,"goods_nomenclature_item_id":"9029000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Revolution
-        counters, production counters, taximeters, milometers, pedometers and the
-        like; speed indicators and tachometers, other than those of heading|9014|or
-        9015; stroboscopes","number_indents":0,"section":{"numeral":"XVIII","title":"Optical,
-        photographic, cinematographic, measuring, checking, precision, medical or
-        surgical instruments and apparatus; clocks and watches; musical instruments;
-        parts and accessories thereof (chapters 90 to 92)","position":18},"chapter":{"goods_nomenclature_sid":53472,"goods_nomenclature_item_id":"9000000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"optical,
-        photographic, cinematographic, measuring, checking, precision, medical or
-        surgical instruments and apparatus; parts and accessories thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"7123","_score":1.385952,
-        "_source" : {"title":"zoo animals","reference":{"id":27802,"goods_nomenclature_item_id":"0106000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Other
-        live animals","number_indents":0,"section":{"numeral":"I","title":"Live animals;
-        animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":27623,"goods_nomenclature_item_id":"0100000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"live
-        animals"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"720","_score":1.2964056,
-        "_source" : {"title":"blood, animal","reference":{"id":30042,"goods_nomenclature_item_id":"0511000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Animal
-        products not elsewhere specified or included; dead animals of Chapter|1|or
-        3, unfit for human consumption","number_indents":0,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":30015,"goods_nomenclature_item_id":"0500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"products
-        of animal origin, not elsewhere specified or included"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"4141","_score":1.2964056,
-        "_source" : {"title":"nail, animals","reference":{"id":30032,"goods_nomenclature_item_id":"0507000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Ivory,
-        tortoiseshell, whalebone and whalebone hair, horns, antlers, hooves, nails,
-        claws and beaks, unworked or simply prepared but not cut to shape; powder
-        and waste of these products","number_indents":0,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":30015,"goods_nomenclature_item_id":"0500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"products
-        of animal origin, not elsewhere specified or included"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"4348","_score":1.2964056,
-        "_source" : {"title":"organs (animal)","reference":{"id":30042,"goods_nomenclature_item_id":"0511000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Animal
-        products not elsewhere specified or included; dead animals of Chapter|1|or
-        3, unfit for human consumption","number_indents":0,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":30015,"goods_nomenclature_item_id":"0500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"products
-        of animal origin, not elsewhere specified or included"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"3900","_score":1.252049,
-        "_source" : {"title":"meters - gas supply or production","reference":{"id":53908,"goods_nomenclature_item_id":"9028000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Gas,
-        liquid or electricity supply or production meters, including calibrating meters
-        therefor","number_indents":0,"section":{"numeral":"XVIII","title":"Optical,
-        photographic, cinematographic, measuring, checking, precision, medical or
-        surgical instruments and apparatus; clocks and watches; musical instruments;
-        parts and accessories thereof (chapters 90 to 92)","position":18},"chapter":{"goods_nomenclature_sid":53472,"goods_nomenclature_item_id":"9000000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"optical,
-        photographic, cinematographic, measuring, checking, precision, medical or
-        surgical instruments and apparatus; parts and accessories thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"4275","_score":1.252049,
-        "_source" : {"title":"offal, for the manufacture of pharmaceutical products","reference":{"id":30039,"goods_nomenclature_item_id":"0510000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Ambergris,
-        castoreum, civet and musk; cantharides; bile, whether or not dried; glands
-        and other animal products used in the preparation of pharmaceutical products,
-        fresh, chilled, frozen or otherwise provisionally preserved","number_indents":0,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":30015,"goods_nomenclature_item_id":"0500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"products
-        of animal origin, not elsewhere specified or included"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"5095","_score":1.252049,
-        "_source" : {"title":"quilted textile products in the piece","reference":{"id":42581,"goods_nomenclature_item_id":"5811000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Quilted
-        textile products in the piece, composed of one or more layers of textile materials
-        assembled with padding by stitching or otherwise, other than embroidery of
-        heading No  5810","number_indents":0,"section":{"numeral":"XI","title":"Textiles
-        and textile articles (chapters 50 to 63)","position":11},"chapter":{"goods_nomenclature_sid":42449,"goods_nomenclature_item_id":"5800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"special
-        woven fabrics; tufted textile fabrics; lace; tapestries; trimmings; embroidery"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"46","_score":1.2068251,
-        "_source" : {"title":"acidimeters - for dairy products, of glass","reference":{"id":44617,"goods_nomenclature_item_id":"7017000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Laboratory,
-        hygienic or pharmaceutical glassware, whether or not graduated or calibrated","number_indents":0,"section":{"numeral":"XIII","title":"Articles
-        of stone, plaster, cement, asbestos, mica or similar materials; ceramic products;
-        glass and glassware (chapters 68 to 70)","position":13},"chapter":{"goods_nomenclature_sid":44408,"goods_nomenclature_item_id":"7000000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"glass
-        and glassware"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"3964","_score":1.2068251,
-        "_source" : {"title":"mixing units, record production","reference":{"id":52805,"goods_nomenclature_item_id":"8543000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Electrical
-        machines and apparatus, having individual functions, not specified or included
-        elsewhere in this chapter","number_indents":0,"section":{"numeral":"XVI","title":"Machinery
-        and mechanical appliances; electrical equipment; parts thereof, sound recorders
-        and reproducers, television image and sound recorders and reproducers, and
-        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":49496,"goods_nomenclature_item_id":"8500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"electrical
-        machinery and equipment and parts thereof; sound recorders and reproducers,
-        television image and sound recorders and reproducers, and parts and accessories
-        of such articles"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"692","_score":1.20269,
-        "_source" : {"title":"black , animal","reference":{"id":38330,"goods_nomenclature_item_id":"3802000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Activated
-        carbon; activated natural mineral products; animal black, including spent
-        animal black","number_indents":0,"section":{"numeral":"VI","title":"Products
-        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38322,"goods_nomenclature_item_id":"3800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
-        chemical products"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2067","_score":1.20269,
-        "_source" : {"title":"embryos animal","reference":{"id":30042,"goods_nomenclature_item_id":"0511000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Animal
-        products not elsewhere specified or included; dead animals of Chapter|1|or
-        3, unfit for human consumption","number_indents":0,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":30015,"goods_nomenclature_item_id":"0500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"products
-        of animal origin, not elsewhere specified or included"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"4347","_score":1.20269,
-        "_source" : {"title":"organs (animal)","reference":{"id":30039,"goods_nomenclature_item_id":"0510000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Ambergris,
-        castoreum, civet and musk; cantharides; bile, whether or not dried; glands
-        and other animal products used in the preparation of pharmaceutical products,
-        fresh, chilled, frozen or otherwise provisionally preserved","number_indents":0,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":30015,"goods_nomenclature_item_id":"0500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"products
-        of animal origin, not elsewhere specified or included"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"290","_score":1.1824193,
-        "_source" : {"title":"animal black","reference":{"id":38330,"goods_nomenclature_item_id":"3802000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Activated
-        carbon; activated natural mineral products; animal black, including spent
-        animal black","number_indents":0,"section":{"numeral":"VI","title":"Products
-        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38322,"goods_nomenclature_item_id":"3800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
-        chemical products"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"694","_score":1.1824193,
-        "_source" : {"title":"bladders, animal","reference":{"id":30023,"goods_nomenclature_item_id":"0504000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Guts,
-        bladders and stomachs of animals (other than fish), whole and pieces thereof","number_indents":0,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":30015,"goods_nomenclature_item_id":"0500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"products
-        of animal origin, not elsewhere specified or included"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2773","_score":1.1824193,
-        "_source" : {"title":"guts, animal","reference":{"id":30023,"goods_nomenclature_item_id":"0504000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Guts,
-        bladders and stomachs of animals (other than fish), whole and pieces thereof","number_indents":0,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":30015,"goods_nomenclature_item_id":"0500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"products
-        of animal origin, not elsewhere specified or included"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"4349","_score":1.1824193,
-        "_source" : {"title":"organs (animal)","reference":{"id":37615,"goods_nomenclature_item_id":"3001000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Glands
-        and other organs for organo-therapeutic uses, dried, whether or not powdered;
-        extracts of glands or other organs or of their secretions for organo-therapeutic
-        uses; heparin and its salts; other human or animal substances prepared for
-        therapeutic or prophylactic uses, not elsewhere specified or included","number_indents":0,"section":{"numeral":"VI","title":"Products
-        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":37614,"goods_nomenclature_item_id":"3000000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"pharmaceutical
-        products"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"319","_score":1.180403,
-        "_source" : {"title":"anti - sprouting products","reference":{"id":38368,"goods_nomenclature_item_id":"3808000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Insecticides,
-        rodenticides, fungicides, herbicides, anti-sprouting products and plant-growth
-        regulators, disinfectants and similar products, put up in forms or packings
-        for retail sale or as preparations or articles (for example, sulphur-treated
-        bands, wicks and candles, and fly-papers)","number_indents":0,"section":{"numeral":"VI","title":"Products
-        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38322,"goods_nomenclature_item_id":"3800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
-        chemical products"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"6363","_score":1.180403,
-        "_source" : {"title":"terpenic by products of essential oils","reference":{"id":37965,"goods_nomenclature_item_id":"3301000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Essential
-        oils (terpeneless or not), including concretes and absolutes; resinoids; concentrates
-        of essential oils in fats, in fixed oils, in waxes or the like, obtained by
-        enfleurage or maceration; terpenic by-products of the deterpenation of essential
-        oils; aqueous distillates and aqueous solutions of essential oils","number_indents":0,"section":{"numeral":"VI","title":"Products
-        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":37964,"goods_nomenclature_item_id":"3300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"essential
-        oils and resinoids; perfumery, cosmetic or toilet preparations"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"1518","_score":1.1670041,
-        "_source" : {"title":"coopers product wood","reference":{"id":40229,"goods_nomenclature_item_id":"4416000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Casks,
-        barrels, vats, tubs and other coopers'' products and parts thereof, of wood,
-        including staves","number_indents":0,"section":{"numeral":"IX","title":"Wood
-        and articles of wood; wood charcoal; cork and articles of cork; manufactures
-        of straw, of esparto or of other plaiting materials; basket-ware and wickerwork
-        (chapters 44 to 46)","position":9},"chapter":{"goods_nomenclature_sid":39988,"goods_nomenclature_item_id":"4400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"wood
-        and articles of wood; wood charcoal"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2035","_score":1.1670041,
-        "_source" : {"title":"electricity supply or production meters","reference":{"id":53908,"goods_nomenclature_item_id":"9028000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Gas,
-        liquid or electricity supply or production meters, including calibrating meters
-        therefor","number_indents":0,"section":{"numeral":"XVIII","title":"Optical,
-        photographic, cinematographic, measuring, checking, precision, medical or
-        surgical instruments and apparatus; clocks and watches; musical instruments;
-        parts and accessories thereof (chapters 90 to 92)","position":18},"chapter":{"goods_nomenclature_sid":53472,"goods_nomenclature_item_id":"9000000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"optical,
-        photographic, cinematographic, measuring, checking, precision, medical or
-        surgical instruments and apparatus; parts and accessories thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"3898","_score":1.1670041,
-        "_source" : {"title":"meters - electricity supply or production","reference":{"id":53908,"goods_nomenclature_item_id":"9028000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Gas,
-        liquid or electricity supply or production meters, including calibrating meters
-        therefor","number_indents":0,"section":{"numeral":"XVIII","title":"Optical,
-        photographic, cinematographic, measuring, checking, precision, medical or
-        surgical instruments and apparatus; clocks and watches; musical instruments;
-        parts and accessories thereof (chapters 90 to 92)","position":18},"chapter":{"goods_nomenclature_sid":53472,"goods_nomenclature_item_id":"9000000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"optical,
-        photographic, cinematographic, measuring, checking, precision, medical or
-        surgical instruments and apparatus; parts and accessories thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"3901","_score":1.1670041,
-        "_source" : {"title":"meters - liquid supply or production","reference":{"id":53908,"goods_nomenclature_item_id":"9028000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Gas,
-        liquid or electricity supply or production meters, including calibrating meters
-        therefor","number_indents":0,"section":{"numeral":"XVIII","title":"Optical,
-        photographic, cinematographic, measuring, checking, precision, medical or
-        surgical instruments and apparatus; clocks and watches; musical instruments;
-        parts and accessories thereof (chapters 90 to 92)","position":18},"chapter":{"goods_nomenclature_sid":53472,"goods_nomenclature_item_id":"9000000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"optical,
-        photographic, cinematographic, measuring, checking, precision, medical or
-        surgical instruments and apparatus; parts and accessories thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"4276","_score":1.1670041,
-        "_source" : {"title":"offal, for the manufacture of pharmaceutical products","reference":{"id":37615,"goods_nomenclature_item_id":"3001000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Glands
-        and other organs for organo-therapeutic uses, dried, whether or not powdered;
-        extracts of glands or other organs or of their secretions for organo-therapeutic
-        uses; heparin and its salts; other human or animal substances prepared for
-        therapeutic or prophylactic uses, not elsewhere specified or included","number_indents":0,"section":{"numeral":"VI","title":"Products
-        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":37614,"goods_nomenclature_item_id":"3000000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"pharmaceutical
-        products"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"1915","_score":1.1435674,
-        "_source" : {"title":"dye stuffs, intermediate products","reference":{"id":36825,"goods_nomenclature_item_id":"2921000000","producline_suffix":"10","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"IX.
-        NITROGEN-FUNCTION COMPOUNDS","number_indents":0,"section":{"numeral":"VI","title":"Products
-        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":36168,"goods_nomenclature_item_id":"2900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"organic
-        chemicals"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2588","_score":1.1435674,
-        "_source" : {"title":"gas - supply or production meters","reference":{"id":53908,"goods_nomenclature_item_id":"9028000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Gas,
-        liquid or electricity supply or production meters, including calibrating meters
-        therefor","number_indents":0,"section":{"numeral":"XVIII","title":"Optical,
-        photographic, cinematographic, measuring, checking, precision, medical or
-        surgical instruments and apparatus; clocks and watches; musical instruments;
-        parts and accessories thereof (chapters 90 to 92)","position":18},"chapter":{"goods_nomenclature_sid":53472,"goods_nomenclature_item_id":"9000000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"optical,
-        photographic, cinematographic, measuring, checking, precision, medical or
-        surgical instruments and apparatus; parts and accessories thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"3480","_score":1.1435674,
-        "_source" : {"title":"liquid supply or production meters","reference":{"id":53908,"goods_nomenclature_item_id":"9028000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Gas,
-        liquid or electricity supply or production meters, including calibrating meters
-        therefor","number_indents":0,"section":{"numeral":"XVIII","title":"Optical,
-        photographic, cinematographic, measuring, checking, precision, medical or
-        surgical instruments and apparatus; clocks and watches; musical instruments;
-        parts and accessories thereof (chapters 90 to 92)","position":18},"chapter":{"goods_nomenclature_sid":53472,"goods_nomenclature_item_id":"9000000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"optical,
-        photographic, cinematographic, measuring, checking, precision, medical or
-        surgical instruments and apparatus; parts and accessories thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"3947","_score":1.1435674,
+      string: ! '{"took":297,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":3,"max_score":1.1435674,"hits":[{"_index":"search_references","_type":"search_reference","_id":"3947","_score":1.1435674,
         "_source" : {"title":"mineral products crude","reference":{"id":35296,"goods_nomenclature_item_id":"2500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"salt;
         sulphur; earths and stone; plastering materials, lime and cement","section":{"numeral":"V","title":"Mineral
-        products (chapters 25 to 27)","position":5},"class":"Chapter"}}},{"_index":"search_references","_type":"search_reference","_id":"2414","_score":1.1087615,
-        "_source" : {"title":"flours and meals (animal foods)","reference":{"id":35126,"goods_nomenclature_item_id":"2301000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Flours,
-        meals and pellets, of meat or meat offal, of fish or of crustaceans, molluscs
-        or other aquatic invertebrates, unfit for human consumption; greaves","number_indents":0,"section":{"numeral":"IV","title":"Prepared
-        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
-        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":35125,"goods_nomenclature_item_id":"2300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"residues
-        and waste from the food industries; prepared animal fodder"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2793","_score":1.1087615,
-        "_source" : {"title":"hair, animal - prepared for wigs","reference":{"id":44155,"goods_nomenclature_item_id":"6703000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Human
-        hair, dressed, thinned, bleached or otherwise worked; wool or other animal
-        hair or other textile materials, prepared for use in making wigs or the like","number_indents":0,"section":{"numeral":"XII","title":"Footwear,
-        headgear, umbrellas, sun umbrellas, walking-sticks, seat-sticks, whips, riding-crops
-        and parts thereof; prepared feathers and articles made therewith; artificial
-        flowers; articles of human hair (chapters 64 to 67)","position":12},"chapter":{"goods_nomenclature_sid":44150,"goods_nomenclature_item_id":"6700000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"prepared
-        feathers and down and articles made of feathers or of down; artificial flowers;
-        articles of human hair"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"297","_score":1.1012503,
-        "_source" : {"title":"animals, stuffed","reference":{"id":54755,"goods_nomenclature_item_id":"9705000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Collections
-        and collectors'' pieces of zoological, botanical, mineralogical, anatomical,
-        historical, archaeological, palaeontological, ethnographic or numismatic interest","number_indents":0,"section":{"numeral":"XXI","title":"Works
-        of art, collectors'' pieces and antiques (chapters 97 to 99)","position":21},"chapter":{"goods_nomenclature_sid":54748,"goods_nomenclature_item_id":"9700000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"works
-        of art, collectors'' pieces and antiques"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"850","_score":1.1012503,
-        "_source" : {"title":"bristles, animal","reference":{"id":30017,"goods_nomenclature_item_id":"0502000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Pigs'',
-        hogs'' or boars'' bristles and hair; badger hair and other brush making hair;
-        waste of such bristles or hair","number_indents":0,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":30015,"goods_nomenclature_item_id":"0500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"products
-        of animal origin, not elsewhere specified or included"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2840","_score":1.1012503,
-        "_source" : {"title":"harness (for animals)","reference":{"id":39808,"goods_nomenclature_item_id":"4201000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Saddlery
-        and harness for any animal (including traces, leads, knee pads, muzzles, saddle-cloths,
-        saddlebags, dog coats and the like), of any material","number_indents":0,"section":{"numeral":"VIII","title":"Raw
-        hides and skins, leather, furskins and articles thereof; saddlery and harness;
-        travel goods, handbags and similar containers; articles of animal gut (other
-        than silkworm gut) (chapters 41 to 43)","position":8},"chapter":{"goods_nomenclature_sid":39807,"goods_nomenclature_item_id":"4200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"articles
-        of leather; saddlery and harness; travel goods, handbags and similar containers;
-        articles of animal gut (other than silk-worm gut)."},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"4346","_score":1.1012503,
-        "_source" : {"title":"organs (animal)","reference":{"id":30023,"goods_nomenclature_item_id":"0504000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Guts,
-        bladders and stomachs of animals (other than fish), whole and pieces thereof","number_indents":0,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":30015,"goods_nomenclature_item_id":"0500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"products
-        of animal origin, not elsewhere specified or included"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"6075","_score":1.1012503,
-        "_source" : {"title":"stomachs, animal","reference":{"id":30023,"goods_nomenclature_item_id":"0504000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Guts,
-        bladders and stomachs of animals (other than fish), whole and pieces thereof","number_indents":0,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":30015,"goods_nomenclature_item_id":"0500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"products
-        of animal origin, not elsewhere specified or included"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2473","_score":1.055972,
-        "_source" : {"title":"forage kale, roots and similar products","reference":{"id":32272,"goods_nomenclature_item_id":"1214000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Swedes,
-        mangolds, fodder roots, hay, lucerne (alfalfa), clover, sainfoin, forage kale,
-        lupines, vetches and similar forage products, whether or not in the form of
-        pellets","number_indents":0,"section":{"numeral":"II","title":"Vegetable products
-        (chapters 6 to 14)","position":2},"chapter":{"goods_nomenclature_sid":32109,"goods_nomenclature_item_id":"1200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"oil
-        seeds and oleaginous fruits; miscellaneous grains, seeds and fruit; industrial
-        or medicinal plants; straw and fodder"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"5749","_score":1.055972,
-        "_source" : {"title":"silicon alloys and products (including transistors)","reference":{"id":38517,"goods_nomenclature_item_id":"3818000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Chemical
-        elements doped for use in electronics, in the form of discs, wafers or similar
-        forms; chemical compounds doped for use in electronics","number_indents":0,"section":{"numeral":"VI","title":"Products
-        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38322,"goods_nomenclature_item_id":"3800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
-        chemical products"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"5751","_score":1.055972,
-        "_source" : {"title":"silicon alloys and products (including transistors)","reference":{"id":51101,"goods_nomenclature_item_id":"8541000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Diodes,
-        transistors and similar semiconductor devices; photosensitive semiconductor
-        devices, including photovoltaic cells whether or not assembled in modules
-        or made up into panels; light-emitting diodes; mounted piezoelectric crystals","number_indents":0,"section":{"numeral":"XVI","title":"Machinery
-        and mechanical appliances; electrical equipment; parts thereof, sound recorders
-        and reproducers, television image and sound recorders and reproducers, and
-        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":49496,"goods_nomenclature_item_id":"8500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"electrical
-        machinery and equipment and parts thereof; sound recorders and reproducers,
-        television image and sound recorders and reproducers, and parts and accessories
-        of such articles"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"294","_score":1.0371244,
-        "_source" : {"title":"animal toilet preparations","reference":{"id":38046,"goods_nomenclature_item_id":"3307000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Pre-shave,
-        shaving or after-shave preparations, personal deodorants, bath preparations,
-        depilatories and other perfumery, cosmetic or toilet preparations, not elsewhere
-        specified or included; prepared room deodorizers, whether or not perfumed
-        or having disinfectant properties","number_indents":0,"section":{"numeral":"VI","title":"Products
-        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":37964,"goods_nomenclature_item_id":"3300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"essential
-        oils and resinoids; perfumery, cosmetic or toilet preparations"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2791","_score":1.0371244,
+        products (chapters 25 to 27)","position":5},"class":"Chapter"}}},{"_index":"search_references","_type":"search_reference","_id":"2791","_score":1.0371244,
         "_source" : {"title":"hair, animal - bovine and horse","reference":{"id":30022,"goods_nomenclature_item_id":"0503000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":"2006-12-31T00:00:00+02:00","description":"Horsehair
         and horsehair waste, whether or not put up as a layer with or without supporting
         material","number_indents":0,"section":{"numeral":"I","title":"Live animals;
         animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":30015,"goods_nomenclature_item_id":"0500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"products
-        of animal origin, not elsewhere specified or included"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"3408","_score":1.0371244,
-        "_source" : {"title":"leather - harness and saddlery for animals","reference":{"id":39808,"goods_nomenclature_item_id":"4201000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Saddlery
-        and harness for any animal (including traces, leads, knee pads, muzzles, saddle-cloths,
-        saddlebags, dog coats and the like), of any material","number_indents":0,"section":{"numeral":"VIII","title":"Raw
-        hides and skins, leather, furskins and articles thereof; saddlery and harness;
-        travel goods, handbags and similar containers; articles of animal gut (other
-        than silkworm gut) (chapters 41 to 43)","position":8},"chapter":{"goods_nomenclature_sid":39807,"goods_nomenclature_item_id":"4200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"articles
-        of leather; saddlery and harness; travel goods, handbags and similar containers;
-        articles of animal gut (other than silk-worm gut)."},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"4797","_score":1.0328526,
-        "_source" : {"title":"plaits and similar products of plaiting materials","reference":{"id":40340,"goods_nomenclature_item_id":"4601000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Plaits
-        and similar products of plaiting materials, whether or not assembled into
-        strips; plaiting materials, plaits and similar products of plaiting materials,
-        bound together in parallel strands or woven, in sheet form, whether or not
-        being finished articles (for example, mats, matting, screens)","number_indents":0,"section":{"numeral":"IX","title":"Wood
-        and articles of wood; wood charcoal; cork and articles of cork; manufactures
-        of straw, of esparto or of other plaiting materials; basket-ware and wickerwork
-        (chapters 44 to 46)","position":9},"chapter":{"goods_nomenclature_sid":40339,"goods_nomenclature_item_id":"4600000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"manufactures
-        of straw, of esparto or of other plaiting materials; basketware and wickerwork"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"5750","_score":1.0211287,
-        "_source" : {"title":"silicon alloys and products (including transistors)","reference":{"id":59671,"goods_nomenclature_item_id":"3824000000","producline_suffix":"80","validity_start_date":"1996-01-01T00:00:00+02:00","validity_end_date":null,"description":"Prepared
-        binders for foundry moulds or cores; chemical products and preparations of
-        the chemical or allied industries (including those consisting of mixtures
-        of natural products), not elsewhere specified or included; residual products
-        of the chemical or allied industries, not elsewhere specified or included","number_indents":0,"section":{"numeral":"VI","title":"Products
-        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":38322,"goods_nomenclature_item_id":"3800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
-        chemical products"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"1829","_score":0.962152,
-        "_source" : {"title":"dog/animal shampoo","reference":{"id":38046,"goods_nomenclature_item_id":"3307000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Pre-shave,
-        shaving or after-shave preparations, personal deodorants, bath preparations,
-        depilatories and other perfumery, cosmetic or toilet preparations, not elsewhere
-        specified or included; prepared room deodorizers, whether or not perfumed
-        or having disinfectant properties","number_indents":0,"section":{"numeral":"VI","title":"Products
-        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":37964,"goods_nomenclature_item_id":"3300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"essential
-        oils and resinoids; perfumery, cosmetic or toilet preparations"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"721","_score":0.9459354,
-        "_source" : {"title":"block, animal for therapeutic uses","reference":{"id":37627,"goods_nomenclature_item_id":"3002000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Human
-        blood; animal blood prepared for therapeutic, prophylactic or diagnostic uses;
-        antisera and other blood fractions; vaccines, toxins, cultures of micro-organisms
-        (excluding yeasts) and similar products","number_indents":0,"section":{"numeral":"VI","title":"Products
-        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":37614,"goods_nomenclature_item_id":"3000000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"pharmaceutical
-        products"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"790","_score":0.9459354,
-        "_source" : {"title":"bovine animals (live)","reference":{"id":27633,"goods_nomenclature_item_id":"0102000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Live
-        bovine animals","number_indents":0,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":27623,"goods_nomenclature_item_id":"0100000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"live
-        animals"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2792","_score":0.9459354,
-        "_source" : {"title":"hair, animal - felt","reference":{"id":42208,"goods_nomenclature_item_id":"5602000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Felt,
-        whether or not impregnated, coated, covered or laminated","number_indents":0,"section":{"numeral":"XI","title":"Textiles
-        and textile articles (chapters 50 to 63)","position":11},"chapter":{"goods_nomenclature_sid":42190,"goods_nomenclature_item_id":"5600000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"wadding,
-        felt and nonwovens; special yarns; twine, cordage, ropes and cables and articles
-        thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"1027","_score":0.88530225,
-        "_source" : {"title":"capsules - for pharmaceutical products and mechanical
-        light fuel","reference":{"id":54625,"goods_nomenclature_item_id":"9602000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Worked
-        vegetable or mineral carving material and articles of these materials; moulded
-        or carved articles of wax, of stearin, of natural gums or natural resins or
-        of modelling pastes, and other moulded or carved articles, not elsewhere specified
-        or included; worked, unhardened gelatin (except gelatin of heading No  3503)
-        and articles of unhardened gelatin","number_indents":0,"section":{"numeral":"XX","title":"Miscellaneous
-        manufactured articles (chapters 94 to 96)","position":20},"chapter":{"goods_nomenclature_sid":54615,"goods_nomenclature_item_id":"9600000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
-        manufactured articles"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"292","_score":0.8810002,
-        "_source" : {"title":"animal hair clippers (machinery)","reference":{"id":48448,"goods_nomenclature_item_id":"8436000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Other
-        agricultural, horticultural, forestry, poultry-keeping or bee-keeping machinery,
-        including germination plant fitted with mechanical or thermal equipment; poultry
-        incubators and brooders","number_indents":0,"section":{"numeral":"XVI","title":"Machinery
-        and mechanical appliances; electrical equipment; parts thereof, sound recorders
-        and reproducers, television image and sound recorders and reproducers, and
-        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
-        reactors, boilers, machinery and mechanical appliances; parts thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"1316","_score":0.8810002,
-        "_source" : {"title":"clippers - animal hair (machinery)","reference":{"id":48448,"goods_nomenclature_item_id":"8436000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Other
-        agricultural, horticultural, forestry, poultry-keeping or bee-keeping machinery,
-        including germination plant fitted with mechanical or thermal equipment; poultry
-        incubators and brooders","number_indents":0,"section":{"numeral":"XVI","title":"Machinery
-        and mechanical appliances; electrical equipment; parts thereof, sound recorders
-        and reproducers, television image and sound recorders and reproducers, and
-        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
-        reactors, boilers, machinery and mechanical appliances; parts thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"6448","_score":0.8810002,
-        "_source" : {"title":"tissues - human or animal","reference":{"id":37615,"goods_nomenclature_item_id":"3001000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Glands
-        and other organs for organo-therapeutic uses, dried, whether or not powdered;
-        extracts of glands or other organs or of their secretions for organo-therapeutic
-        uses; heparin and its salts; other human or animal substances prepared for
-        therapeutic or prophylactic uses, not elsewhere specified or included","number_indents":0,"section":{"numeral":"VI","title":"Products
-        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":37614,"goods_nomenclature_item_id":"3000000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"pharmaceutical
-        products"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"6570","_score":0.8810002,
-        "_source" : {"title":"trophies - animal carving materials","reference":{"id":54616,"goods_nomenclature_item_id":"9601000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Worked
-        ivory, bone, tortoiseshell, horn, antlers, coral, mother-of-pearl and other
-        animal carving material, and articles of these materials (including articles
-        obtained by moulding)","number_indents":0,"section":{"numeral":"XX","title":"Miscellaneous
-        manufactured articles (chapters 94 to 96)","position":20},"chapter":{"goods_nomenclature_sid":54615,"goods_nomenclature_item_id":"9600000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
-        manufactured articles"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"6796","_score":0.8810002,
-        "_source" : {"title":"vitamin supplements for animal feeding","reference":{"id":35187,"goods_nomenclature_item_id":"2309000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Preparations
-        of a kind used in animal feeding","number_indents":0,"section":{"numeral":"IV","title":"Prepared
-        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
-        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":35125,"goods_nomenclature_item_id":"2300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"residues
-        and waste from the food industries; prepared animal fodder"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"4733","_score":0.8752531,
-        "_source" : {"title":"pig products, canned, prepared or otherwise prepared","reference":{"id":32674,"goods_nomenclature_item_id":"1602000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Other
-        prepared or preserved meat, meat offal or blood","number_indents":0,"section":{"numeral":"IV","title":"Prepared
-        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
-        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":32656,"goods_nomenclature_item_id":"1600000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"preparations
-        of meat, of fish or of crustaceans, molluscs or other aquatic invertebrates"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"293","_score":0.841883,
-        "_source" : {"title":"animal or vegetable fats and oils machinery","reference":{"id":49183,"goods_nomenclature_item_id":"8479000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Machines
-        and mechanical appliances having individual functions, not specified or included
-        elsewhere in this chapter","number_indents":0,"section":{"numeral":"XVI","title":"Machinery
-        and mechanical appliances; electrical equipment; parts thereof, sound recorders
-        and reproducers, television image and sound recorders and reproducers, and
-        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
-        reactors, boilers, machinery and mechanical appliances; parts thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2327","_score":0.841883,
-        "_source" : {"title":"fish - meal and flour (animal foods)","reference":{"id":35126,"goods_nomenclature_item_id":"2301000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Flours,
-        meals and pellets, of meat or meat offal, of fish or of crustaceans, molluscs
-        or other aquatic invertebrates, unfit for human consumption; greaves","number_indents":0,"section":{"numeral":"IV","title":"Prepared
-        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
-        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":35125,"goods_nomenclature_item_id":"2300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"residues
-        and waste from the food industries; prepared animal fodder"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2637","_score":0.841883,
-        "_source" : {"title":"glands, animal (unfit for human consumption)","reference":{"id":30039,"goods_nomenclature_item_id":"0510000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Ambergris,
-        castoreum, civet and musk; cantharides; bile, whether or not dried; glands
-        and other animal products used in the preparation of pharmaceutical products,
-        fresh, chilled, frozen or otherwise provisionally preserved","number_indents":0,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":30015,"goods_nomenclature_item_id":"0500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"products
-        of animal origin, not elsewhere specified or included"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2790","_score":0.841883,
-        "_source" : {"title":"hair, animal - badger, hog and pig","reference":{"id":30017,"goods_nomenclature_item_id":"0502000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Pigs'',
-        hogs'' or boars'' bristles and hair; badger hair and other brush making hair;
-        waste of such bristles or hair","number_indents":0,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":30015,"goods_nomenclature_item_id":"0500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"products
-        of animal origin, not elsewhere specified or included"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"295","_score":0.8276935,
-        "_source" : {"title":"animals, dead (unfit for human consumption)","reference":{"id":30042,"goods_nomenclature_item_id":"0511000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Animal
-        products not elsewhere specified or included; dead animals of Chapter|1|or
-        3, unfit for human consumption","number_indents":0,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":30015,"goods_nomenclature_item_id":"0500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"products
-        of animal origin, not elsewhere specified or included"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"413","_score":0.7708752,
-        "_source" : {"title":"automata (animated shop window display)","reference":{"id":54747,"goods_nomenclature_item_id":"9618000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Tailors''
-        dummies and other lay figures; automata and other animated displays used for
-        shop window dressing","number_indents":0,"section":{"numeral":"XX","title":"Miscellaneous
-        manufactured articles (chapters 94 to 96)","position":20},"chapter":{"goods_nomenclature_sid":54615,"goods_nomenclature_item_id":"9600000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"miscellaneous
-        manufactured articles"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"3136","_score":0.73775184,
-        "_source" : {"title":"iron or steel - continuously cast (semi-finished) products
-        of stainless steel","reference":{"id":45686,"goods_nomenclature_item_id":"7218000000","producline_suffix":"10","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"III.
-        STAINLESS STEEL","number_indents":0,"section":{"numeral":"XV","title":"Base
-        metals and articles of base metal (chapters 72 to 83)","position":15},"chapter":{"goods_nomenclature_sid":44810,"goods_nomenclature_item_id":"7200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"iron
-        and steel"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2386","_score":0.71472967,
-        "_source" : {"title":"floating or submersible drilling or production platform
-        for oil or gas extraction","reference":{"id":53453,"goods_nomenclature_item_id":"8905000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Light-vessels,
-        fire-floats, dredgers, floating cranes, and other vessels the navigability
-        of which is subsidiary to their main function; floating docks; floating or
-        submersible drilling or production platforms","number_indents":0,"section":{"numeral":"XVII","title":"Vehicles,
-        aircraft, vessels and associated transport equipment (chapters 86 to 89)","position":17},"chapter":{"goods_nomenclature_sid":53403,"goods_nomenclature_item_id":"8900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"ships,
-        boats and floating structures"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"5265","_score":0.71472967,
-        "_source" : {"title":"rigs, floating or submersible and drilling or production,
-        for oil or gas extraction","reference":{"id":53453,"goods_nomenclature_item_id":"8905000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Light-vessels,
-        fire-floats, dredgers, floating cranes, and other vessels the navigability
-        of which is subsidiary to their main function; floating docks; floating or
-        submersible drilling or production platforms","number_indents":0,"section":{"numeral":"XVII","title":"Vehicles,
-        aircraft, vessels and associated transport equipment (chapters 86 to 89)","position":17},"chapter":{"goods_nomenclature_sid":53403,"goods_nomenclature_item_id":"8900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"ships,
-        boats and floating structures"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2158","_score":0.70945156,
-        "_source" : {"title":"fabric (textile) woven - fine animal hair","reference":{"id":41029,"goods_nomenclature_item_id":"5111000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Woven
-        fabrics of carded wool or of carded fine animal hair","number_indents":0,"section":{"numeral":"XI","title":"Textiles
-        and textile articles (chapters 50 to 63)","position":11},"chapter":{"goods_nomenclature_sid":40952,"goods_nomenclature_item_id":"5100000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"wool,
-        fine or coarse animal hair, horsehair yarn and woven fabric"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"5140","_score":0.70945156,
-        "_source" : {"title":"rags, wool or other animal hair, pulled or garneted","reference":{"id":40978,"goods_nomenclature_item_id":"5104000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Garnetted
-        stock of wool or of fine or coarse animal hair","number_indents":0,"section":{"numeral":"XI","title":"Textiles
-        and textile articles (chapters 50 to 63)","position":11},"chapter":{"goods_nomenclature_sid":40952,"goods_nomenclature_item_id":"5100000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"wool,
-        fine or coarse animal hair, horsehair yarn and woven fabric"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"7083","_score":0.70945156,
-        "_source" : {"title":"yarn - animal hair, other than sheep''s or lambs","reference":{"id":41014,"goods_nomenclature_item_id":"5108000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Yarn
-        of fine animal hair (carded or combed), not put up for retail sale","number_indents":0,"section":{"numeral":"XI","title":"Textiles
-        and textile articles (chapters 50 to 63)","position":11},"chapter":{"goods_nomenclature_sid":40952,"goods_nomenclature_item_id":"5100000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"wool,
-        fine or coarse animal hair, horsehair yarn and woven fabric"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2798","_score":0.692976,
-        "_source" : {"title":"hair, animal - other (including sheep''s or lambs wool)
-        - tops","reference":{"id":40979,"goods_nomenclature_item_id":"5105000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Wool
-        and fine or coarse animal hair, carded or combed (including combed wool in
-        fragments)","number_indents":0,"section":{"numeral":"XI","title":"Textiles
-        and textile articles (chapters 50 to 63)","position":11},"chapter":{"goods_nomenclature_sid":40952,"goods_nomenclature_item_id":"5100000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"wool,
-        fine or coarse animal hair, horsehair yarn and woven fabric"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2801","_score":0.6860112,
-        "_source" : {"title":"hair, animal - other (including sheep''s or lambs wool)
-        - yarn (except coarse animal hair or horsehair), not put up for retail sale","reference":{"id":40988,"goods_nomenclature_item_id":"5106000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Yarn
-        of carded wool, not put up for retail sale","number_indents":0,"section":{"numeral":"XI","title":"Textiles
-        and textile articles (chapters 50 to 63)","position":11},"chapter":{"goods_nomenclature_sid":40952,"goods_nomenclature_item_id":"5100000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"wool,
-        fine or coarse animal hair, horsehair yarn and woven fabric"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"3538","_score":0.66075015,
-        "_source" : {"title":"machines and machinery - animal or vegetable fats and
-        oils","reference":{"id":49183,"goods_nomenclature_item_id":"8479000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Machines
-        and mechanical appliances having individual functions, not specified or included
-        elsewhere in this chapter","number_indents":0,"section":{"numeral":"XVI","title":"Machinery
-        and mechanical appliances; electrical equipment; parts thereof, sound recorders
-        and reproducers, television image and sound recorders and reproducers, and
-        parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
-        reactors, boilers, machinery and mechanical appliances; parts thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"4283","_score":0.66075015,
+        of animal origin, not elsewhere specified or included"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"4283","_score":0.66075015,
         "_source" : {"title":"oil - animal or vegetable, fish or marine mammal","reference":{"id":32355,"goods_nomenclature_item_id":"1500000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"animal
         or vegetable fats and oils and their cleavage products; prepared edible fats;
         animal or vegetable waxes","section":{"numeral":"III","title":"Animal or vegetable
         fats and oils and their cleavage products; prepared edible fats; animal or
-        vegetable waxes (chapter 15)","position":3},"class":"Chapter"}}},{"_index":"search_references","_type":"search_reference","_id":"2796","_score":0.6482028,
-        "_source" : {"title":"hair, animal - other (including sheep''s or lambs wool)
-        - not carded or combed, wool","reference":{"id":41702,"goods_nomenclature_item_id":"5401000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Sewing
-        thread of man-made filaments, whether or not put up for retail sale","number_indents":0,"section":{"numeral":"XI","title":"Textiles
-        and textile articles (chapters 50 to 63)","position":11},"chapter":{"goods_nomenclature_sid":41701,"goods_nomenclature_item_id":"5400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"man-made
-        filaments"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"3410","_score":0.6482028,
-        "_source" : {"title":"leather - of bovine or equine animals without hair on,
-        other than leather","reference":{"id":39737,"goods_nomenclature_item_id":"4104000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Leather
-        of bovine or equine animals, without hair on, other than leather of heading
-        No  4108|or  4109","number_indents":0,"section":{"numeral":"VIII","title":"Raw
-        hides and skins, leather, furskins and articles thereof; saddlery and harness;
-        travel goods, handbags and similar containers; articles of animal gut (other
-        than silkworm gut) (chapters 41 to 43)","position":8},"chapter":{"goods_nomenclature_sid":39711,"goods_nomenclature_item_id":"4100000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"raw
-        hides and skins (other than furskins) and leather"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2795","_score":0.601345,
-        "_source" : {"title":"hair, animal - other (including sheep''s or lambs wool)
-        - noils","reference":{"id":40968,"goods_nomenclature_item_id":"5103000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Waste
-        of wool or of fine or coarse animal hair, including yarn waste but excluding
-        garnetted stock","number_indents":0,"section":{"numeral":"XI","title":"Textiles
-        and textile articles (chapters 50 to 63)","position":11},"chapter":{"goods_nomenclature_sid":40952,"goods_nomenclature_item_id":"5100000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"wool,
-        fine or coarse animal hair, horsehair yarn and woven fabric"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"3407","_score":0.601345,
-        "_source" : {"title":"leather - of other animals, without hair on, other than
-        leather","reference":{"id":39789,"goods_nomenclature_item_id":"4107000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Leather
-        of other animals, without hair on, other than leather of heading No  4108|or  4109","number_indents":0,"section":{"numeral":"VIII","title":"Raw
-        hides and skins, leather, furskins and articles thereof; saddlery and harness;
-        travel goods, handbags and similar containers; articles of animal gut (other
-        than silkworm gut) (chapters 41 to 43)","position":8},"chapter":{"goods_nomenclature_sid":39711,"goods_nomenclature_item_id":"4100000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"raw
-        hides and skins (other than furskins) and leather"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2803","_score":0.5953012,
-        "_source" : {"title":"hair, animal - other (including sheep''s or lambs wool)
-        - yarn of coarse animal hair or horsehair (whether or not put up for retail
-        sale)","reference":{"id":41028,"goods_nomenclature_item_id":"5110000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Yarn
-        of coarse animal hair or of horsehair (including gimped horsehair yarn), whether
-        or not put up for retail sale","number_indents":0,"section":{"numeral":"XI","title":"Textiles
-        and textile articles (chapters 50 to 63)","position":11},"chapter":{"goods_nomenclature_sid":40952,"goods_nomenclature_item_id":"5100000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"wool,
-        fine or coarse animal hair, horsehair yarn and woven fabric"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2800","_score":0.59120965,
-        "_source" : {"title":"hair, animal - other (including sheep''s or lambs wool)
-        - waste","reference":{"id":40968,"goods_nomenclature_item_id":"5103000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Waste
-        of wool or of fine or coarse animal hair, including yarn waste but excluding
-        garnetted stock","number_indents":0,"section":{"numeral":"XI","title":"Textiles
-        and textile articles (chapters 50 to 63)","position":11},"chapter":{"goods_nomenclature_sid":40952,"goods_nomenclature_item_id":"5100000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"wool,
-        fine or coarse animal hair, horsehair yarn and woven fabric"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2155","_score":0.55062515,
-        "_source" : {"title":"fabric (textile) woven - coarse animal hair (including
-        horsehair)","reference":{"id":41063,"goods_nomenclature_item_id":"5113000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Woven
-        fabrics of coarse animal hair or of horsehair","number_indents":0,"section":{"numeral":"XI","title":"Textiles
-        and textile articles (chapters 50 to 63)","position":11},"chapter":{"goods_nomenclature_sid":40952,"goods_nomenclature_item_id":"5100000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"wool,
-        fine or coarse animal hair, horsehair yarn and woven fabric"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2794","_score":0.55062515,
-        "_source" : {"title":"hair, animal - other (including sheep''s or lambs wool)
-        - carded or combed","reference":{"id":41824,"goods_nomenclature_item_id":"5405000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Artificial
-        monofilament of 67|decitex or more and of which no cross-sectional dimension
-        exceeds 1|mm; strip and the like (for example, artificial straw), of artificial
-        textile materials, of an apparent width not exceeding 5|mm","number_indents":0,"section":{"numeral":"XI","title":"Textiles
-        and textile articles (chapters 50 to 63)","position":11},"chapter":{"goods_nomenclature_sid":41701,"goods_nomenclature_item_id":"5400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"man-made
-        filaments"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2799","_score":0.55062515,
-        "_source" : {"title":"hair, animal - other (including sheep''s or lambs wool)
-        - transmission or conveyor belts","reference":{"id":42675,"goods_nomenclature_item_id":"5910000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Transmission
-        or conveyor belts or belting, of textile material, whether or not reinforced
-        with metal or other material","number_indents":0,"section":{"numeral":"XI","title":"Textiles
-        and textile articles (chapters 50 to 63)","position":11},"chapter":{"goods_nomenclature_sid":42601,"goods_nomenclature_item_id":"5900000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"impregnated,
-        coated, covered or laminated textile fabrics; textile articles of a kind suitable
-        for industrial use"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2802","_score":0.5450911,
-        "_source" : {"title":"hair, animal - other (including sheep''s or lambs wool)
-        - yarn (except coarse animal hair or horsehair), put up for retail sale","reference":{"id":41021,"goods_nomenclature_item_id":"5109000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Yarn
-        of wool or of fine animal hair, put up for retail sale","number_indents":0,"section":{"numeral":"XI","title":"Textiles
-        and textile articles (chapters 50 to 63)","position":11},"chapter":{"goods_nomenclature_sid":40952,"goods_nomenclature_item_id":"5100000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"wool,
-        fine or coarse animal hair, horsehair yarn and woven fabric"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2797","_score":0.4729677,
-        "_source" : {"title":"hair, animal - other (including sheep''s or lambs wool)
-        - not carded or combed, other than wool","reference":{"id":40961,"goods_nomenclature_item_id":"5102000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fine
-        or coarse animal hair, not carded or combed","number_indents":0,"section":{"numeral":"XI","title":"Textiles
-        and textile articles (chapters 50 to 63)","position":11},"chapter":{"goods_nomenclature_sid":40952,"goods_nomenclature_item_id":"5100000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"wool,
-        fine or coarse animal hair, horsehair yarn and woven fabric"},"class":"Heading"}}}]}}'
+        vegetable waxes (chapter 15)","position":3},"class":"Chapter"}}}]}}'
     http_version: 
-  recorded_at: Mon, 18 Mar 2013 14:37:49 GMT
+  recorded_at: Tue, 19 Mar 2013 15:32:34 GMT
 recorded_with: VCR 2.2.5

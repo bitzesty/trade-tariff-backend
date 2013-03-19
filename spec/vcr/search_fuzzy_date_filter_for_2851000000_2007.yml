@@ -28,7 +28,7 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{"took":1,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
     http_version: 
-  recorded_at: Mon, 18 Mar 2013 14:37:46 GMT
+  recorded_at: Tue, 19 Mar 2013 15:32:28 GMT
 - request:
     method: get
     uri: http://localhost:9200/chapters/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=2007-01-01&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=2007-01-01&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=water&payload%5Bsize%5D=1000000
@@ -55,9 +55,9 @@ http_interactions:
       - '122'
     body:
       encoding: US-ASCII
-      string: ! '{"took":1,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
+      string: ! '{"took":3,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
     http_version: 
-  recorded_at: Mon, 18 Mar 2013 14:37:46 GMT
+  recorded_at: Tue, 19 Mar 2013 15:32:28 GMT
 - request:
     method: get
     uri: http://localhost:9200/headings/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=2007-01-01&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=2007-01-01&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=water&payload%5Bsize%5D=1000000
@@ -84,7 +84,7 @@ http_interactions:
       - '18508'
     body:
       encoding: US-ASCII
-      string: ! '{"took":1,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":21,"max_score":1.0,"hits":[{"_index":"headings","_type":"heading","_id":"48039","_score":1.0,
+      string: ! '{"took":3,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":21,"max_score":1.0,"hits":[{"_index":"headings","_type":"heading","_id":"48039","_score":1.0,
         "_source" : {"id":48039,"goods_nomenclature_item_id":"8419000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Machinery,
         plant or laboratory equipment, whether or not electrically heated, for the
         treatment of materials by a process involving a change of temperature such
@@ -224,7 +224,7 @@ http_interactions:
         parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
         reactors, boilers, machinery and mechanical appliances; parts thereof"}}}]}}'
     http_version: 
-  recorded_at: Mon, 18 Mar 2013 14:37:46 GMT
+  recorded_at: Tue, 19 Mar 2013 15:32:28 GMT
 - request:
     method: get
     uri: http://localhost:9200/commodities/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=2007-01-01&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=2007-01-01&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=water&payload%5Bsize%5D=1000000
@@ -248,10 +248,10 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '101576'
+      - '101577'
     body:
       encoding: US-ASCII
-      string: ! '{"took":41,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":82,"max_score":1.0,"hits":[{"_index":"commodities","_type":"commodity","_id":"29313","_score":1.0,
+      string: ! '{"took":122,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":82,"max_score":1.0,"hits":[{"_index":"commodities","_type":"commodity","_id":"29313","_score":1.0,
         "_source" : {"id":29313,"goods_nomenclature_item_id":"0306233100","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":"2011-12-31T00:00:00+02:00","description":"Fresh,
         chilled or cooked by steaming or by boiling in water","number_indents":4,"section":{"numeral":"I","title":"Live
         animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
@@ -957,20 +957,20 @@ http_interactions:
         a kind used for domestic purposes; electric heating resistors, other than
         those of heading No  8545","number_indents":0}}}]}}'
     http_version: 
-  recorded_at: Mon, 18 Mar 2013 14:37:46 GMT
+  recorded_at: Tue, 19 Mar 2013 15:32:28 GMT
 - request:
     method: get
-    uri: http://localhost:9200/search_references/_search?payload%5Bquery%5D%5Bquery_string%5D%5Banalyzer%5D=snowball&payload%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=title&payload%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=water&payload%5Bsize%5D=1000000
+    uri: http://localhost:9200/search_references/_search?payload%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=2007-01-01&payload%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=2007-01-01&payload%5Bquery%5D%5Bfiltered%5D%5Bquery%5D%5Bquery_string%5D%5Banalyzer%5D=snowball&payload%5Bquery%5D%5Bfiltered%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=title&payload%5Bquery%5D%5Bfiltered%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=water&payload%5Bsize%5D=1000000
     body:
       encoding: US-ASCII
-      string: ! '{"query":{"query_string":{"fields":["title"],"analyzer":"snowball","query":"water"}},"size":1000000}'
+      string: ! '{"query":{"filtered":{"query":{"query_string":{"fields":["title"],"analyzer":"snowball","query":"water"}},"filter":{"or":[{"and":[{"range":{"validity_end_date":{"gte":"2007-01-01"}}}]},{"and":[{"range":{"validity_start_date":{"lte":"2007-01-01"}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]},{"and":[{"missing":{"field":"validity_start_date","null_value":true,"existence":true}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}}},"size":1000000}'
     headers:
       Accept:
       - ! '*/*; q=0.5, application/xml'
       Accept-Encoding:
       - gzip, deflate
       Content-Length:
-      - '100'
+      - '512'
       User-Agent:
       - Ruby
   response:
@@ -981,17 +981,10 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '25896'
+      - '23788'
     body:
       encoding: US-ASCII
-      string: ! '{"took":2,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":25,"max_score":4.298147,"hits":[{"_index":"search_references","_type":"search_reference","_id":"1815","_score":4.298147,
-        "_source" : {"title":"distilled water","reference":{"id":36164,"goods_nomenclature_item_id":"2851000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":"2006-12-31T00:00:00+02:00","description":"Other
-        inorganic compounds (including distilled or conductivity water and water of
-        similar purity); liquid air (whether or not rare gases have been removed);
-        compressed air; amalgams, other than amalgams of precious metals","number_indents":0,"section":{"numeral":"VI","title":"Products
-        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":35719,"goods_nomenclature_item_id":"2800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"inorganic
-        chemicals; organic or inorganic compounds of precious metals, of rare-earth
-        metals, of radioactive elements or of isotopes"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"1265","_score":4.044731,
+      string: ! '{"took":10,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":23,"max_score":4.044731,"hits":[{"_index":"search_references","_type":"search_reference","_id":"1265","_score":4.044731,
         "_source" : {"title":"chutes - water","reference":{"id":54614,"goods_nomenclature_item_id":"9508000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Roundabouts,
         swings, shooting galleries and other fairground amusements; travelling circuses,
         travelling menageries and travelling theatres","number_indents":0,"section":{"numeral":"XX","title":"Miscellaneous
@@ -1078,14 +1071,7 @@ http_interactions:
         and mechanical appliances; electrical equipment; parts thereof, sound recorders
         and reproducers, television image and sound recorders and reproducers, and
         parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
-        reactors, boilers, machinery and mechanical appliances; parts thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"6863","_score":3.1587095,
-        "_source" : {"title":"water - distilled or conductivity","reference":{"id":36164,"goods_nomenclature_item_id":"2851000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":"2006-12-31T00:00:00+02:00","description":"Other
-        inorganic compounds (including distilled or conductivity water and water of
-        similar purity); liquid air (whether or not rare gases have been removed);
-        compressed air; amalgams, other than amalgams of precious metals","number_indents":0,"section":{"numeral":"VI","title":"Products
-        of the chemical or allied industries (chapters 28 to 38)","position":6},"chapter":{"goods_nomenclature_sid":35719,"goods_nomenclature_item_id":"2800000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"inorganic
-        chemicals; organic or inorganic compounds of precious metals, of rare-earth
-        metals, of radioactive elements or of isotopes"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"6875","_score":3.1587095,
+        reactors, boilers, machinery and mechanical appliances; parts thereof"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"6875","_score":3.1587095,
         "_source" : {"title":"water repellent agents","reference":{"id":38407,"goods_nomenclature_item_id":"3809000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Finishing
         agents, dye carriers to accelerate the dyeing or fixing of dyestuffs and other
         products and preparations (for example, dressings and mordants), of a kind
@@ -1167,5 +1153,5 @@ http_interactions:
         parts and accessories of such articles (chapters 84 to 85)","position":16},"chapter":{"goods_nomenclature_sid":47571,"goods_nomenclature_item_id":"8400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"nuclear
         reactors, boilers, machinery and mechanical appliances; parts thereof"},"class":"Heading"}}}]}}'
     http_version: 
-  recorded_at: Mon, 18 Mar 2013 14:37:46 GMT
+  recorded_at: Tue, 19 Mar 2013 15:32:29 GMT
 recorded_with: VCR 2.2.5

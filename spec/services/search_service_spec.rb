@@ -328,4 +328,37 @@ describe SearchService do
       end
     end
   end
+
+  context 'reference search' do
+    let(:heading_pattern) {
+      {
+        type: 'fuzzy_match',
+        reference_match: {
+          headings: [
+            {
+             reference: { "goods_nomenclature_item_id"=>"2851000000" }.ignore_extra_keys!
+            }.ignore_extra_keys!
+          ].ignore_extra_values!
+        }.ignore_extra_keys!
+      }.ignore_extra_keys!
+    }
+
+    it 'returns goods code if search date falls within validity period' do
+      VCR.use_cassette("search#fuzzy_date_filter_for_2851000000_2005") do
+        @result = SearchService.new(t: "water",
+                                    as_of: "2005-01-01").to_json
+
+        @result.should match_json_expression heading_pattern
+      end
+    end
+
+    it 'does not return goods code if search date does not fall within validity period' do
+      VCR.use_cassette("search#fuzzy_date_filter_for_2851000000_2007") do
+        @result = SearchService.new(t: "water",
+                                    as_of: "2007-01-01").to_json
+
+        @result.should_not match_json_expression heading_pattern
+      end
+    end
+  end
 end
