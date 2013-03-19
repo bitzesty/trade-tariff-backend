@@ -13,7 +13,6 @@ class Commodity < GoodsNomenclature
 
   one_to_one :heading, dataset: -> {
     actual_or_relevant(Heading)
-           .declarable
            .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
   }
 
@@ -76,6 +75,10 @@ class Commodity < GoodsNomenclature
       .sort_by(&:number_indents)
   end
 
+  def declarable?
+    producline_suffix == '80' && children.none?
+  end
+
   def uptree
     @_uptree ||= [ancestors, heading, chapter, self].flatten.compact
   end
@@ -85,7 +88,7 @@ class Commodity < GoodsNomenclature
                      .join(:goods_nomenclature_indents, goods_nomenclature_sid: :goods_nomenclature_sid)
                      .where("goods_nomenclature_indents.number_indents = ?", goods_nomenclature_indent.number_indents)
                      .where("goods_nomenclatures.goods_nomenclature_sid != ?", goods_nomenclature_sid)
-                     .where("goods_nomenclatures.producline_suffix >= ?", producline_suffix)
+                     .where("goods_nomenclatures.goods_nomenclature_item_id > ?", goods_nomenclature_item_id)
                      .where("goods_nomenclature_indents.validity_start_date <= ? AND (goods_nomenclature_indents.validity_end_date >= ? OR goods_nomenclature_indents.validity_end_date IS NULL)", point_in_time, point_in_time, point_in_time)
                      .order(nil)
                      .first
@@ -93,7 +96,7 @@ class Commodity < GoodsNomenclature
     if sibling.present?
       heading.commodities_dataset
              .join(:goods_nomenclature_indents, goods_nomenclature_sid: :goods_nomenclature_sid)
-             .where("goods_nomenclature_indents.number_indents >= ?", goods_nomenclature_indent.number_indents + 1)
+             .where("goods_nomenclature_indents.number_indents > ?", goods_nomenclature_indent.number_indents)
              .where("goods_nomenclatures.goods_nomenclature_sid != ?", goods_nomenclature_sid)
              .where("goods_nomenclatures.producline_suffix >= ?", producline_suffix)
              .where("goods_nomenclature_indents.validity_start_date <= ? AND (goods_nomenclature_indents.validity_end_date >= ? OR goods_nomenclature_indents.validity_end_date IS NULL)", point_in_time, point_in_time, point_in_time)
@@ -101,7 +104,17 @@ class Commodity < GoodsNomenclature
              .order(nil)
              .all
     else
-      []
+      # commodity is last in the list, check if there are any commodities
+      # under it
+
+      heading.commodities_dataset
+             .join(:goods_nomenclature_indents, goods_nomenclature_sid: :goods_nomenclature_sid)
+             .where("goods_nomenclature_indents.number_indents >= ?", goods_nomenclature_indent.number_indents + 1)
+             .where("goods_nomenclatures.goods_nomenclature_sid != ?", goods_nomenclature_sid)
+             .where("goods_nomenclature_indents.validity_start_date <= ? AND (goods_nomenclature_indents.validity_end_date >= ? OR goods_nomenclature_indents.validity_end_date IS NULL)", point_in_time, point_in_time, point_in_time)
+             .where("goods_nomenclatures.goods_nomenclature_item_id >= ?", goods_nomenclature_item_id)
+             .order(nil)
+             .all
     end
   end
 

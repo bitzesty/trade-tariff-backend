@@ -232,4 +232,38 @@ describe Commodity do
       end
     end
   end
+
+  describe '#children' do
+    let!(:heading)    { create :heading, goods_nomenclature_item_id: '8418000000',
+                                         validity_start_date: Date.new(2011,1,1) }
+    let!(:commodity1) { create :commodity, :with_indent,
+                                           indents: 3,
+                                           goods_nomenclature_item_id: '8418211000',
+                                           producline_suffix: '80',
+                                           validity_start_date: Date.new(2011,1,1) }
+    let!(:commodity2) { create :commodity, :with_indent,
+                                           indents: 3,
+                                           goods_nomenclature_item_id: '8418215100',
+                                           producline_suffix: '10',
+                                           validity_start_date: Date.new(2011,1,1) }
+    let!(:commodity3) { create :commodity, :with_indent,
+                                           indents: 4,
+                                           goods_nomenclature_item_id: '8418215100',
+                                           producline_suffix: '80',
+                                           validity_start_date: Date.new(2011,1,1) }
+
+    around do |example|
+      TimeMachine.at(Date.new(2011,2,1)) do
+        example.yield
+      end
+    end
+
+    it 'does not returns children if there are no commodities with higher indent levels and item ids' do
+      commodity1.children.should be_empty
+    end
+
+    it 'returns children commodities with higher ident levels and items ids' do
+      commodity2.children.map(&:pk).should include commodity3.pk
+    end
+  end
 end

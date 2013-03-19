@@ -103,99 +103,134 @@ describe SearchService do
 
         result.should match_json_expression pattern
       end
-    end
-
-    context 'commodities' do
-      let(:commodity) { create :commodity, :declarable }
-      let(:heading)   { create :heading, :declarable }
-      let(:commodity_pattern) {
-        {
-          type: 'exact_match',
-          entry: {
-            endpoint: 'commodities',
-            id: commodity.goods_nomenclature_item_id.first(10)
-          }
-        }
-      }
-      let(:heading_pattern) {
-        {
-          type: 'exact_match',
-          entry: {
-            endpoint: 'headings',
-            id: heading.goods_nomenclature_item_id.first(4)
-          }
-        }
-      }
-
-      it 'returns endpoint and identifier if provided with 10 symbol commodity code' do
-        result = SearchService.new(t: commodity.goods_nomenclature_item_id.first(10),
-                                   as_of: Date.today).to_json
-
-        result.should match_json_expression commodity_pattern
-      end
-
-      it 'returns endpoint and identifier if provided with 10 symbol commodity code separated by spaces' do
-        code = [commodity.goods_nomenclature_item_id[0..1],
-                commodity.goods_nomenclature_item_id[2..3],
-                commodity.goods_nomenclature_item_id[4..5],
-                commodity.goods_nomenclature_item_id[6..7],
-                commodity.goods_nomenclature_item_id[8..9]].join("")
-        result = SearchService.new(t: code,
-                                   as_of: Date.today).to_json
-
-        result.should match_json_expression commodity_pattern
-      end
-
-      it 'returns endpoint and identifier if provided with 10 digits separated by whitespace of varying length' do
-        code =  [commodity.goods_nomenclature_item_id[0..1],
-                 commodity.goods_nomenclature_item_id[2..3]].join("")
-        code << [commodity.goods_nomenclature_item_id[4..5],
-                 commodity.goods_nomenclature_item_id[6..7]].join("     ")
-        code << "  " << commodity.goods_nomenclature_item_id[8..9]
-
-        result = SearchService.new(t: code,
-                                   as_of: Date.today).to_json
-
-        result.should match_json_expression commodity_pattern
-      end
-
-      it 'returns endpoint and identifier if provided with 10 symbol commodity code separated by dots' do
-        code = [commodity.goods_nomenclature_item_id[0..1],
-                commodity.goods_nomenclature_item_id[2..3],
-                commodity.goods_nomenclature_item_id[4..5],
-                commodity.goods_nomenclature_item_id[6..7],
-                commodity.goods_nomenclature_item_id[8..9]].join(".")
-        result = SearchService.new(t: code,
-                                   as_of: Date.today).to_json
-
-        result.should match_json_expression commodity_pattern
-      end
-
-      it 'returns endpoint and identifier if provided with 10 digits separated by various non number characters' do
-        code =  [commodity.goods_nomenclature_item_id[0..1],
-                 commodity.goods_nomenclature_item_id[2..3]].join("|")
-        code << [commodity.goods_nomenclature_item_id[4..5],
-                 commodity.goods_nomenclature_item_id[6..7]].join("!!  !!!")
-        code << "  " << commodity.goods_nomenclature_item_id[8..9]
-
-        result = SearchService.new(t: code,
-                                   as_of: Date.today).to_json
-
-        result.should match_json_expression commodity_pattern
-      end
-
-      it 'returns endpoint and identifier if provided with matching 12 symbol commodity code' do
-        result = SearchService.new(t: commodity.goods_nomenclature_item_id + commodity.producline_suffix,
-                                   as_of: Date.today).to_json
-
-        result.should match_json_expression commodity_pattern
-      end
 
       it 'returns endpoint and identifier if provided with matching 10 symbol declarable heading code' do
         result = SearchService.new(t: heading.goods_nomenclature_item_id,
                                    as_of: Date.today).to_json
 
-        result.should match_json_expression heading_pattern
+        result.should match_json_expression pattern
+      end
+    end
+
+    context 'commodities' do
+      context 'declarable' do
+        let(:commodity) { create :commodity, :declarable, :with_heading, :with_indent }
+        let(:heading)   { commodity.heading }
+        let(:commodity_pattern) {
+          {
+            type: 'exact_match',
+            entry: {
+              endpoint: 'commodities',
+              id: commodity.goods_nomenclature_item_id.first(10)
+            }
+          }
+        }
+        let(:heading_pattern) {
+          {
+            type: 'exact_match',
+            entry: {
+              endpoint: 'headings',
+              id: heading.goods_nomenclature_item_id.first(4)
+            }
+          }
+        }
+
+        it 'returns endpoint and identifier if provided with 10 symbol commodity code' do
+          result = SearchService.new(t: commodity.goods_nomenclature_item_id.first(10),
+                                     as_of: Date.today).to_json
+
+          result.should match_json_expression commodity_pattern
+        end
+
+        it 'returns endpoint and identifier if provided with 10 symbol commodity code separated by spaces' do
+          code = [commodity.goods_nomenclature_item_id[0..1],
+                  commodity.goods_nomenclature_item_id[2..3],
+                  commodity.goods_nomenclature_item_id[4..5],
+                  commodity.goods_nomenclature_item_id[6..7],
+                  commodity.goods_nomenclature_item_id[8..9]].join("")
+          result = SearchService.new(t: code,
+                                     as_of: Date.today).to_json
+
+          result.should match_json_expression commodity_pattern
+        end
+
+        it 'returns endpoint and identifier if provided with 10 digits separated by whitespace of varying length' do
+          code =  [commodity.goods_nomenclature_item_id[0..1],
+                   commodity.goods_nomenclature_item_id[2..3]].join("")
+          code << [commodity.goods_nomenclature_item_id[4..5],
+                   commodity.goods_nomenclature_item_id[6..7]].join("     ")
+          code << "  " << commodity.goods_nomenclature_item_id[8..9]
+
+          result = SearchService.new(t: code,
+                                     as_of: Date.today).to_json
+
+          result.should match_json_expression commodity_pattern
+        end
+
+        it 'returns endpoint and identifier if provided with 10 symbol commodity code separated by dots' do
+          code = [commodity.goods_nomenclature_item_id[0..1],
+                  commodity.goods_nomenclature_item_id[2..3],
+                  commodity.goods_nomenclature_item_id[4..5],
+                  commodity.goods_nomenclature_item_id[6..7],
+                  commodity.goods_nomenclature_item_id[8..9]].join(".")
+          result = SearchService.new(t: code,
+                                     as_of: Date.today).to_json
+
+          result.should match_json_expression commodity_pattern
+        end
+
+        it 'returns endpoint and identifier if provided with 10 digits separated by various non number characters' do
+          code =  [commodity.goods_nomenclature_item_id[0..1],
+                   commodity.goods_nomenclature_item_id[2..3]].join("|")
+          code << [commodity.goods_nomenclature_item_id[4..5],
+                   commodity.goods_nomenclature_item_id[6..7]].join("!!  !!!")
+          code << "  " << commodity.goods_nomenclature_item_id[8..9]
+
+          result = SearchService.new(t: code,
+                                     as_of: Date.today).to_json
+
+          result.should match_json_expression commodity_pattern
+        end
+
+        it 'returns endpoint and identifier if provided with matching 12 symbol commodity code' do
+          result = SearchService.new(t: commodity.goods_nomenclature_item_id + commodity.producline_suffix,
+                                     as_of: Date.today).to_json
+
+          result.should match_json_expression commodity_pattern
+        end
+      end
+
+      context 'non declarable' do
+        let!(:heading)    { create :heading, goods_nomenclature_item_id: '8418000000',
+                                             validity_start_date: Date.new(2011,1,1) }
+        let!(:commodity1) { create :commodity, :with_indent,
+                                               indents: 3,
+                                               goods_nomenclature_item_id: '8418213100',
+                                               producline_suffix: '80',
+                                               validity_start_date: Date.new(2011,1,1) }
+        let!(:commodity2) { create :commodity, :with_indent,
+                                               indents: 4,
+                                               goods_nomenclature_item_id: '8418215100',
+                                               producline_suffix: '80',
+                                               validity_start_date: Date.new(2011,1,1) }
+
+        let(:heading_pattern) {
+          {
+            type: 'exact_match',
+            entry: {
+              endpoint: 'headings',
+              id: heading.goods_nomenclature_item_id.first(4)
+            }
+          }
+        }
+
+        it 'does not exact match commodity with children' do
+          # even though productline suffix (80) suggests that it is declarable
+          result = SearchService.new(t: commodity1.goods_nomenclature_item_id,
+                                     as_of: Date.today).to_json
+
+          result.should match_json_expression heading_pattern
+        end
       end
     end
 

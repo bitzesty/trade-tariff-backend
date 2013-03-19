@@ -6,6 +6,8 @@ module Sequel
       def self.configure(model, opts={})
         model.period_start_date_column = opts[:period_start_column]
         model.period_end_date_column = opts[:period_end_column]
+
+        model.delegate :point_in_time, to: model
       end
 
       module ClassMethods

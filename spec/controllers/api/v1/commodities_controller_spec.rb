@@ -40,4 +40,25 @@ describe Api::V1::CommoditiesController, "GET #show" do
       expect { get :show, id: commodity.goods_nomenclature_item_id, format: :json }.to raise_error Sequel::RecordNotFound
     end
   end
+
+  context 'when commodity has children' do
+    # According to Taric manual, commodities that have product line suffix of
+    # 80 are not declarable. Unfortunately this is not always the case, sometimes
+    # productline suffix is 80, but commodity has children and therefore should also
+    # be considered to be non-declarable.
+    let!(:heading) { create :goods_nomenclature, goods_nomenclature_item_id: '3903000000'}
+    let!(:parent_commodity) { create :commodity, :with_indent,
+                                                 :with_chapter,
+                                                 indents: 2,
+                                                 goods_nomenclature_item_id: '3903909000',
+                                                 producline_suffix: '80' }
+    let!(:child_commodity)  { create :commodity, :with_indent,
+                                                indents: 3,
+                                                goods_nomenclature_item_id: '3903909065',
+                                                producline_suffix: '80'}
+
+    it 'returns not found (is not declarable)' do
+      expect { get :show, id: parent_commodity.goods_nomenclature_item_id, format: :json }.to raise_error Sequel::RecordNotFound
+    end
+  end
 end

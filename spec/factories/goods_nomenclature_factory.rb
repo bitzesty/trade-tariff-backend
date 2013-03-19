@@ -8,7 +8,9 @@ FactoryGirl.define do
     end
 
     goods_nomenclature_sid { generate(:goods_nomenclature_sid) }
-    goods_nomenclature_item_id { 10.times.map{ Random.rand(9) }.join }
+    # do not allow zeroes in the goods item id as it causes unpredictable
+    # results
+    goods_nomenclature_item_id { 10.times.map{ Random.rand(9) + 1 }.join }
     producline_suffix   { [10,20,80].sample }
     validity_start_date { Date.today.ago(2.years) }
     validity_end_date   { nil }
