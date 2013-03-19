@@ -2,10 +2,10 @@
 http_interactions:
 - request:
     method: get
-    uri: http://localhost:9200/sections/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=2013-03-18&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=2013-03-18&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=title&payload%5Bsize%5D=1000000
+    uri: http://localhost:9200/sections/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=title&payload%5Bsize%5D=1000000
     body:
       encoding: US-ASCII
-      string: ! '{"query":{"constant_score":{"filter":{"and":[{"query":{"query_string":{"query":"horse","fields":["description"],"query_string":{"fields":["title"]}}}},{"or":[{"and":[{"range":{"validity_end_date":{"gte":"2013-03-18"}}}]},{"and":[{"range":{"validity_start_date":{"lte":"2013-03-18"}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}]}}},"size":1000000}'
+      string: ! '{"query":{"constant_score":{"filter":{"and":[{"query":{"query_string":{"query":"horse","fields":["description"],"query_string":{"fields":["title"]}}}},{"or":[{"and":[{"range":{"validity_end_date":{"gte":<%= Date.today %>}}}]},{"and":[{"range":{"validity_start_date":{"lte":<%= Date.today %>}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}]}}},"size":1000000}'
     headers:
       Accept:
       - ! '*/*; q=0.5, application/xml'
@@ -27,14 +27,14 @@ http_interactions:
     body:
       encoding: US-ASCII
       string: ! '{"took":1,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
-    http_version: 
+    http_version:
   recorded_at: Mon, 18 Mar 2013 14:37:45 GMT
 - request:
     method: get
-    uri: http://localhost:9200/chapters/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=2013-03-18&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=2013-03-18&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bsize%5D=1000000
+    uri: http://localhost:9200/chapters/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bsize%5D=1000000
     body:
       encoding: US-ASCII
-      string: ! '{"query":{"constant_score":{"filter":{"and":[{"query":{"query_string":{"query":"horse","fields":["description"]}}},{"or":[{"and":[{"range":{"validity_end_date":{"gte":"2013-03-18"}}}]},{"and":[{"range":{"validity_start_date":{"lte":"2013-03-18"}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}]}}},"size":1000000}'
+      string: ! '{"query":{"constant_score":{"filter":{"and":[{"query":{"query_string":{"query":"horse","fields":["description"]}}},{"or":[{"and":[{"range":{"validity_end_date":{"gte":<%= Date.today %>}}}]},{"and":[{"range":{"validity_start_date":{"lte":<%= Date.today %>}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}]}}},"size":1000000}'
     headers:
       Accept:
       - ! '*/*; q=0.5, application/xml'
@@ -56,14 +56,14 @@ http_interactions:
     body:
       encoding: US-ASCII
       string: ! '{"took":1,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
-    http_version: 
+    http_version:
   recorded_at: Mon, 18 Mar 2013 14:37:45 GMT
 - request:
     method: get
-    uri: http://localhost:9200/headings/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=2013-03-18&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=2013-03-18&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bsize%5D=1000000
+    uri: http://localhost:9200/headings/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bsize%5D=1000000
     body:
       encoding: US-ASCII
-      string: ! '{"query":{"constant_score":{"filter":{"and":[{"query":{"query_string":{"query":"horse","fields":["description"]}}},{"or":[{"and":[{"range":{"validity_end_date":{"gte":"2013-03-18"}}}]},{"and":[{"range":{"validity_start_date":{"lte":"2013-03-18"}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}]}}},"size":1000000}'
+      string: ! '{"query":{"constant_score":{"filter":{"and":[{"query":{"query_string":{"query":"horse","fields":["description"]}}},{"or":[{"and":[{"range":{"validity_end_date":{"gte":<%= Date.today %>}}}]},{"and":[{"range":{"validity_start_date":{"lte":<%= Date.today %>}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}]}}},"size":1000000}'
     headers:
       Accept:
       - ! '*/*; q=0.5, application/xml'
@@ -98,14 +98,14 @@ http_interactions:
         of horses, asses, mules or hinnies, fresh, chilled or frozen","number_indents":0,"section":{"numeral":"I","title":"Live
         animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":27809,"goods_nomenclature_item_id":"0200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"meat
         and edible meat offal"}}}]}}'
-    http_version: 
+    http_version:
   recorded_at: Mon, 18 Mar 2013 14:37:45 GMT
 - request:
     method: get
-    uri: http://localhost:9200/commodities/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=2013-03-18&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=2013-03-18&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bsize%5D=1000000
+    uri: http://localhost:9200/commodities/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bsize%5D=1000000
     body:
       encoding: US-ASCII
-      string: ! '{"query":{"constant_score":{"filter":{"and":[{"query":{"query_string":{"query":"horse","fields":["description"]}}},{"or":[{"and":[{"range":{"validity_end_date":{"gte":"2013-03-18"}}}]},{"and":[{"range":{"validity_start_date":{"lte":"2013-03-18"}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}]}}},"size":1000000}'
+      string: ! '{"query":{"constant_score":{"filter":{"and":[{"query":{"query_string":{"query":"horse","fields":["description"]}}},{"or":[{"and":[{"range":{"validity_end_date":{"gte":<%= Date.today %>}}}]},{"and":[{"range":{"validity_start_date":{"lte":<%= Date.today %>}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}]}}},"size":1000000}'
     headers:
       Accept:
       - ! '*/*; q=0.5, application/xml'
@@ -229,7 +229,7 @@ http_interactions:
         products (chapters 6 to 14)","position":2},"chapter":{"goods_nomenclature_sid":30240,"goods_nomenclature_item_id":"0700000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"edible
         vegetables and certain roots and tubers"},"heading":{"goods_nomenclature_sid":30726,"goods_nomenclature_item_id":"0713000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Dried
         leguminous vegetables, shelled, whether or not skinned or split","number_indents":0}}}]}}'
-    http_version: 
+    http_version:
   recorded_at: Mon, 18 Mar 2013 14:37:45 GMT
 - request:
     method: get
@@ -281,6 +281,6 @@ http_interactions:
         leguminous vegetables, shelled, whether or not skinned or split","number_indents":0,"section":{"numeral":"II","title":"Vegetable
         products (chapters 6 to 14)","position":2},"chapter":{"goods_nomenclature_sid":30240,"goods_nomenclature_item_id":"0700000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"edible
         vegetables and certain roots and tubers"},"class":"Heading"}}}]}}'
-    http_version: 
+    http_version:
   recorded_at: Mon, 18 Mar 2013 14:37:45 GMT
 recorded_with: VCR 2.2.5
