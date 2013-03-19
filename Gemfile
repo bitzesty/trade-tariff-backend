@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 source "https://BnrJb6FZyzspBboNJzYZ@gem.fury.io/govuk/"
 
-gem "rails", "3.2.12"
+gem "rails", "3.2.13"
 
 gem "addressable", "2.3.2"
 gem "mysql2"
@@ -49,8 +49,10 @@ group :test do
   gem "forgery"
   gem "json_expressions"
   gem "rspec-rails"
-  gem "shoulda-matchers"
-  gem "mocha", require: false
+  gem "bourne", ">= 1.4.0"
+  # Use stable version when shoulda-matchers > 1.5.0 gets released
+  gem "shoulda-matchers", github: "thoughtbot/shoulda-matchers", branch: "dc-bourne-dependency"
+  gem "mocha", ">= 0.13.3", require: false
   gem "simplecov"
   gem "simplecov-rcov"
   gem "webmock"
