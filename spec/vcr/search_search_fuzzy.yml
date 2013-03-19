@@ -2,17 +2,17 @@
 http_interactions:
 - request:
     method: get
-    uri: http://localhost:9200/sections/_search?payload%5Bfilter%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bfilter%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bfilter%5D%5Bor%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=<%= Date.today %>&payload%5Bfilter%5D%5Bor%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bquery%5D%5Bquery_string%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=title&payload%5Bsize%5D=1000000
+    uri: http://localhost:9200/sections/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=title&payload%5Bsize%5D=1000000
     body:
       encoding: US-ASCII
-      string: ! '{"query":{"query_string":{"query":"horse","fields":["description"],"query_string":{"fields":["title"]}}},"filter":{"or":[{"range":{"validity_start_date":{"lte":"<%= Date.today %>"},"validity_end_date":{"gte":"<%= Date.today %>"}}},{"and":[{"range":{"validity_start_date":{"lte":"<%= Date.today %>"}}},{"missing":{"field":"validity_end_date"}}]}]},"size":1000000}'
+      string: ! '{"query":{"constant_score":{"filter":{"and":[{"query":{"query_string":{"query":"horse","fields":["description"],"query_string":{"fields":["title"]}}}},{"or":[{"and":[{"range":{"validity_end_date":{"gte":<%= Date.today %>}}}]},{"and":[{"range":{"validity_start_date":{"lte":<%= Date.today %>}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}]}}},"size":1000000}'
     headers:
       Accept:
       - ! '*/*; q=0.5, application/xml'
       Accept-Encoding:
       - gzip, deflate
       Content-Length:
-      - '341'
+      - '384'
       User-Agent:
       - Ruby
   response:
@@ -28,20 +28,20 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{"took":1,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
     http_version:
-  recorded_at: Fri, 11 Jan 2013 10:05:34 GMT
+  recorded_at: Mon, 18 Mar 2013 14:37:45 GMT
 - request:
     method: get
-    uri: http://localhost:9200/chapters/_search?payload%5Bfilter%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bfilter%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bfilter%5D%5Bor%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=<%= Date.today %>&payload%5Bfilter%5D%5Bor%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bsize%5D=1000000
+    uri: http://localhost:9200/chapters/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bsize%5D=1000000
     body:
       encoding: US-ASCII
-      string: ! '{"query":{"query_string":{"query":"horse","fields":["description"]}},"filter":{"or":[{"range":{"validity_start_date":{"lte":"<%= Date.today %>"},"validity_end_date":{"gte":"<%= Date.today %>"}}},{"and":[{"range":{"validity_start_date":{"lte":"<%= Date.today %>"}}},{"missing":{"field":"validity_end_date"}}]}]},"size":1000000}'
+      string: ! '{"query":{"constant_score":{"filter":{"and":[{"query":{"query_string":{"query":"horse","fields":["description"]}}},{"or":[{"and":[{"range":{"validity_end_date":{"gte":<%= Date.today %>}}}]},{"and":[{"range":{"validity_start_date":{"lte":<%= Date.today %>}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}]}}},"size":1000000}'
     headers:
       Accept:
       - ! '*/*; q=0.5, application/xml'
       Accept-Encoding:
       - gzip, deflate
       Content-Length:
-      - '305'
+      - '348'
       User-Agent:
       - Ruby
   response:
@@ -52,25 +52,25 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '123'
+      - '122'
     body:
       encoding: US-ASCII
-      string: ! '{"took":14,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
+      string: ! '{"took":1,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
     http_version:
-  recorded_at: Fri, 11 Jan 2013 10:05:34 GMT
+  recorded_at: Mon, 18 Mar 2013 14:37:45 GMT
 - request:
     method: get
-    uri: http://localhost:9200/headings/_search?payload%5Bfilter%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bfilter%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bfilter%5D%5Bor%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=<%= Date.today %>&payload%5Bfilter%5D%5Bor%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bsize%5D=1000000
+    uri: http://localhost:9200/headings/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bsize%5D=1000000
     body:
       encoding: US-ASCII
-      string: ! '{"query":{"query_string":{"query":"horse","fields":["description"]}},"filter":{"or":[{"range":{"validity_start_date":{"lte":"<%= Date.today %>"},"validity_end_date":{"gte":"<%= Date.today %>"}}},{"and":[{"range":{"validity_start_date":{"lte":"<%= Date.today %>"}}},{"missing":{"field":"validity_end_date"}}]}]},"size":1000000}'
+      string: ! '{"query":{"constant_score":{"filter":{"and":[{"query":{"query_string":{"query":"horse","fields":["description"]}}},{"or":[{"and":[{"range":{"validity_end_date":{"gte":<%= Date.today %>}}}]},{"and":[{"range":{"validity_start_date":{"lte":<%= Date.today %>}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}]}}},"size":1000000}'
     headers:
       Accept:
       - ! '*/*; q=0.5, application/xml'
       Accept-Encoding:
       - gzip, deflate
       Content-Length:
-      - '305'
+      - '348'
       User-Agent:
       - Ruby
   response:
@@ -81,38 +81,38 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '2132'
+      - '2107'
     body:
       encoding: US-ASCII
-      string: ! '{"took":239,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":3,"max_score":2.5602632,"hits":[{"_index":"headings","_type":"heading","_id":"27624","_score":2.5602632,
-        "_source" : {"id":27624,"goods_nomenclature_item_id":"0101000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Live
-        horses, asses, mules and hinnies","number_indents":0,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":27623,"goods_nomenclature_item_id":"0100000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"live
-        animals"}}},{"_index":"headings","_type":"heading","_id":"28039","_score":1.8213481,
-        "_source" : {"id":28039,"goods_nomenclature_item_id":"0205000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Meat
-        of horses, asses, mules or hinnies, fresh, chilled or frozen","number_indents":0,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":27809,"goods_nomenclature_item_id":"0200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"meat
-        and edible meat offal"}}},{"_index":"headings","_type":"heading","_id":"28044","_score":1.4530461,
+      string: ! '{"took":10,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":3,"max_score":1.0,"hits":[{"_index":"headings","_type":"heading","_id":"28044","_score":1.0,
         "_source" : {"id":28044,"goods_nomenclature_item_id":"0206000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Edible
         offal of bovine animals, swine, sheep, goats, horses, asses, mules or hinnies,
         fresh, chilled or frozen","number_indents":0,"section":{"numeral":"I","title":"Live
         animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":27809,"goods_nomenclature_item_id":"0200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"meat
+        and edible meat offal"}}},{"_index":"headings","_type":"heading","_id":"27624","_score":1.0,
+        "_source" : {"id":27624,"goods_nomenclature_item_id":"0101000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Live
+        horses, asses, mules and hinnies","number_indents":0,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":27623,"goods_nomenclature_item_id":"0100000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"live
+        animals"}}},{"_index":"headings","_type":"heading","_id":"28039","_score":1.0,
+        "_source" : {"id":28039,"goods_nomenclature_item_id":"0205000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Meat
+        of horses, asses, mules or hinnies, fresh, chilled or frozen","number_indents":0,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":27809,"goods_nomenclature_item_id":"0200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"meat
         and edible meat offal"}}}]}}'
     http_version:
-  recorded_at: Fri, 11 Jan 2013 10:05:35 GMT
+  recorded_at: Mon, 18 Mar 2013 14:37:45 GMT
 - request:
     method: get
-    uri: http://localhost:9200/commodities/_search?payload%5Bfilter%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bfilter%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bfilter%5D%5Bor%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=<%= Date.today %>&payload%5Bfilter%5D%5Bor%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bsize%5D=1000000
+    uri: http://localhost:9200/commodities/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bsize%5D=1000000
     body:
       encoding: US-ASCII
-      string: ! '{"query":{"query_string":{"query":"horse","fields":["description"]}},"filter":{"or":[{"range":{"validity_start_date":{"lte":"<%= Date.today %>"},"validity_end_date":{"gte":"<%= Date.today %>"}}},{"and":[{"range":{"validity_start_date":{"lte":"<%= Date.today %>"}}},{"missing":{"field":"validity_end_date"}}]}]},"size":1000000}'
+      string: ! '{"query":{"constant_score":{"filter":{"and":[{"query":{"query_string":{"query":"horse","fields":["description"]}}},{"or":[{"and":[{"range":{"validity_end_date":{"gte":<%= Date.today %>}}}]},{"and":[{"range":{"validity_start_date":{"lte":<%= Date.today %>}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}]}}},"size":1000000}'
     headers:
       Accept:
       - ! '*/*; q=0.5, application/xml'
       Accept-Encoding:
       - gzip, deflate
       Content-Length:
-      - '305'
+      - '348'
       User-Agent:
       - Ruby
   response:
@@ -123,62 +123,15 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '16996'
+      - '16902'
     body:
       encoding: US-ASCII
-      string: ! '{"took":635,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":16,"max_score":8.21091,"hits":[{"_index":"commodities","_type":"commodity","_id":"93797","_score":8.21091,
-        "_source" : {"id":93797,"goods_nomenclature_item_id":"0101210000","producline_suffix":"10","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Horses","number_indents":1,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":27623,"goods_nomenclature_item_id":"0100000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"live
-        animals"},"heading":{"goods_nomenclature_sid":27624,"goods_nomenclature_item_id":"0101000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Live
-        horses, asses, mules and hinnies","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"72799","_score":4.2493424,
-        "_source" : {"id":72799,"goods_nomenclature_item_id":"0210991000","producline_suffix":"80","validity_start_date":"2002-01-01T00:00:00+02:00","validity_end_date":null,"description":"Of
-        horses, salted, in brine or dried","number_indents":4,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":27809,"goods_nomenclature_item_id":"0200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"meat
-        and edible meat offal"},"heading":{"goods_nomenclature_sid":28295,"goods_nomenclature_item_id":"0210000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Meat
-        and edible meat offal, salted, in brine, dried or smoked; edible flours and
-        meals of meat or meat offal","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"28100","_score":4.105455,
-        "_source" : {"id":28100,"goods_nomenclature_item_id":"0206809100","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Of
-        horses, asses, mules and hinnies","number_indents":3,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":27809,"goods_nomenclature_item_id":"0200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"meat
-        and edible meat offal"},"heading":{"goods_nomenclature_sid":28044,"goods_nomenclature_item_id":"0206000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Edible
-        offal of bovine animals, swine, sheep, goats, horses, asses, mules or hinnies,
-        fresh, chilled or frozen","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"28105","_score":4.105455,
-        "_source" : {"id":28105,"goods_nomenclature_item_id":"0206909100","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Of
-        horses, asses, mules and hinnies","number_indents":3,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":27809,"goods_nomenclature_item_id":"0200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"meat
-        and edible meat offal"},"heading":{"goods_nomenclature_sid":28044,"goods_nomenclature_item_id":"0206000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Edible
-        offal of bovine animals, swine, sheep, goats, horses, asses, mules or hinnies,
-        fresh, chilled or frozen","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"95674","_score":3.8943124,
+      string: ! '{"took":225,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":16,"max_score":1.0,"hits":[{"_index":"commodities","_type":"commodity","_id":"95674","_score":1.0,
         "_source" : {"id":95674,"goods_nomenclature_item_id":"0302459010","producline_suffix":"80","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Horse
         mackerel (scad) (Caranx trachurus)","number_indents":4,"section":{"numeral":"I","title":"Live
         animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
         and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28402,"goods_nomenclature_item_id":"0302000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
-        fresh or chilled, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"94180","_score":3.7181747,
-        "_source" : {"id":94180,"goods_nomenclature_item_id":"0303550000","producline_suffix":"80","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Jack
-        and horse mackerel (Trachurus spp.)","number_indents":2,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
-        and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28590,"goods_nomenclature_item_id":"0303000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
-        frozen, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"93994","_score":3.592273,
-        "_source" : {"id":93994,"goods_nomenclature_item_id":"0302451000","producline_suffix":"80","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Atlantic
-        horse mackerel (Trachurus trachurus)","number_indents":3,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
-        and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28402,"goods_nomenclature_item_id":"0302000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
-        fresh or chilled, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"96208","_score":3.592273,
-        "_source" : {"id":96208,"goods_nomenclature_item_id":"0303559010","producline_suffix":"80","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Horse
-        mackerel (scad) (Caranx trachurus)","number_indents":4,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
-        and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28590,"goods_nomenclature_item_id":"0303000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
-        frozen, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"93993","_score":3.4933133,
-        "_source" : {"id":93993,"goods_nomenclature_item_id":"0302450000","producline_suffix":"80","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Jack
-        and horse mackerel (Trachurus spp.)","number_indents":2,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
-        and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28402,"goods_nomenclature_item_id":"0302000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
-        fresh or chilled, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"94181","_score":3.4933133,
-        "_source" : {"id":94181,"goods_nomenclature_item_id":"0303551000","producline_suffix":"80","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Atlantic
-        horse mackerel (Trachurus trachurus)","number_indents":3,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
-        and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28590,"goods_nomenclature_item_id":"0303000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
-        frozen, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"74274","_score":2.7816515,
+        fresh or chilled, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"74274","_score":1.0,
         "_source" : {"id":74274,"goods_nomenclature_item_id":"2308004000","producline_suffix":"80","validity_start_date":"2002-01-01T00:00:00+02:00","validity_end_date":null,"description":"Acorns
         and horse-chestnuts; pomace or marc of fruit, other than grapes","number_indents":1,"section":{"numeral":"IV","title":"Prepared
         foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
@@ -186,31 +139,7 @@ http_interactions:
         and waste from the food industries; prepared animal fodder"},"heading":{"goods_nomenclature_sid":35179,"goods_nomenclature_item_id":"2308000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Vegetable
         materials and vegetable waste, vegetable residues and by-products, whether
         or not in the form of pellets, of a kind used in animal feeding, not elsewhere
-        specified or included","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"30763","_score":2.0527275,
-        "_source" : {"id":30763,"goods_nomenclature_item_id":"0713500000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Broad
-        beans (Vicia faba var. major) and horse beans (Vicia faba var. equina, Vicia
-        faba var. minor)","number_indents":1,"section":{"numeral":"II","title":"Vegetable
-        products (chapters 6 to 14)","position":2},"chapter":{"goods_nomenclature_sid":30240,"goods_nomenclature_item_id":"0700000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"edible
-        vegetables and certain roots and tubers"},"heading":{"goods_nomenclature_sid":30726,"goods_nomenclature_item_id":"0713000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Dried
-        leguminous vegetables, shelled, whether or not skinned or split","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"91682","_score":1.4971343,
-        "_source" : {"id":91682,"goods_nomenclature_item_id":"4412321000","producline_suffix":"80","validity_start_date":"2010-01-01T00:00:00+02:00","validity_end_date":null,"description":"Of
-        alder, ash, beech, birch, cherry, chestnut, elm, hickory, hornbeam, horse
-        chestnut, lime, maple, oak, plane tree, poplar, robinia, walnut or yellow
-        poplar","number_indents":3,"section":{"numeral":"IX","title":"Wood and articles
-        of wood; wood charcoal; cork and articles of cork; manufactures of straw,
-        of esparto or of other plaiting materials; basket-ware and wickerwork (chapters
-        44 to 46)","position":9},"chapter":{"goods_nomenclature_sid":39988,"goods_nomenclature_item_id":"4400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"wood
-        and articles of wood; wood charcoal"},"heading":{"goods_nomenclature_sid":40191,"goods_nomenclature_item_id":"4412000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Plywood,
-        veneered panels and similar laminated wood","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"91687","_score":1.4971343,
-        "_source" : {"id":91687,"goods_nomenclature_item_id":"4412994000","producline_suffix":"80","validity_start_date":"2010-01-01T00:00:00+02:00","validity_end_date":null,"description":"Of
-        alder, ash, beech, birch, cherry, chestnut, elm, hickory, hornbeam, horse
-        chestnut, lime, maple, oak, plane tree, poplar, robinia, walnut or yellow
-        poplar","number_indents":5,"section":{"numeral":"IX","title":"Wood and articles
-        of wood; wood charcoal; cork and articles of cork; manufactures of straw,
-        of esparto or of other plaiting materials; basket-ware and wickerwork (chapters
-        44 to 46)","position":9},"chapter":{"goods_nomenclature_sid":39988,"goods_nomenclature_item_id":"4400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"wood
-        and articles of wood; wood charcoal"},"heading":{"goods_nomenclature_sid":40191,"goods_nomenclature_item_id":"4412000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Plywood,
-        veneered panels and similar laminated wood","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"94153","_score":1.4356458,
+        specified or included","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"94153","_score":1.0,
         "_source" : {"id":94153,"goods_nomenclature_item_id":"0303510000","producline_suffix":"10","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Herring
         (Clupea harengus, Clupea pallasii), sardines (Sardina pilchardus, Sardinops|spp.),
         sardinella (Sardinella|spp.), brisling or sprats (Sprattus sprattus), mackerel
@@ -219,7 +148,18 @@ http_interactions:
         gladius), excluding livers and roes","number_indents":1,"section":{"numeral":"I","title":"Live
         animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
         and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28590,"goods_nomenclature_item_id":"0303000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
-        frozen, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"93985","_score":1.0623356,
+        frozen, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"94180","_score":1.0,
+        "_source" : {"id":94180,"goods_nomenclature_item_id":"0303550000","producline_suffix":"80","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Jack
+        and horse mackerel (Trachurus spp.)","number_indents":2,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
+        and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28590,"goods_nomenclature_item_id":"0303000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
+        frozen, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"72799","_score":1.0,
+        "_source" : {"id":72799,"goods_nomenclature_item_id":"0210991000","producline_suffix":"80","validity_start_date":"2002-01-01T00:00:00+02:00","validity_end_date":null,"description":"Of
+        horses, salted, in brine or dried","number_indents":4,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":27809,"goods_nomenclature_item_id":"0200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"meat
+        and edible meat offal"},"heading":{"goods_nomenclature_sid":28295,"goods_nomenclature_item_id":"0210000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Meat
+        and edible meat offal, salted, in brine, dried or smoked; edible flours and
+        meals of meat or meat offal","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"93985","_score":1.0,
         "_source" : {"id":93985,"goods_nomenclature_item_id":"0302410000","producline_suffix":"10","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Herring
         (Clupea harengus, Clupea pallasii), anchovies (Engraulis spp.), sardines (Sardina
         pilchardus, Sardinops spp.), sardinella (Sardinella spp.), brisling or sprats
@@ -228,9 +168,69 @@ http_interactions:
         canadum) and swordfish (Xiphias gladius), excluding livers and roes","number_indents":1,"section":{"numeral":"I","title":"Live
         animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
         and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28402,"goods_nomenclature_item_id":"0302000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
-        fresh or chilled, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}}]}}'
+        fresh or chilled, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"93993","_score":1.0,
+        "_source" : {"id":93993,"goods_nomenclature_item_id":"0302450000","producline_suffix":"80","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Jack
+        and horse mackerel (Trachurus spp.)","number_indents":2,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
+        and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28402,"goods_nomenclature_item_id":"0302000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
+        fresh or chilled, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"94181","_score":1.0,
+        "_source" : {"id":94181,"goods_nomenclature_item_id":"0303551000","producline_suffix":"80","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Atlantic
+        horse mackerel (Trachurus trachurus)","number_indents":3,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
+        and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28590,"goods_nomenclature_item_id":"0303000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
+        frozen, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"91682","_score":1.0,
+        "_source" : {"id":91682,"goods_nomenclature_item_id":"4412321000","producline_suffix":"80","validity_start_date":"2010-01-01T00:00:00+02:00","validity_end_date":null,"description":"Of
+        alder, ash, beech, birch, cherry, chestnut, elm, hickory, hornbeam, horse
+        chestnut, lime, maple, oak, plane tree, poplar, robinia, walnut or yellow
+        poplar","number_indents":3,"section":{"numeral":"IX","title":"Wood and articles
+        of wood; wood charcoal; cork and articles of cork; manufactures of straw,
+        of esparto or of other plaiting materials; basket-ware and wickerwork (chapters
+        44 to 46)","position":9},"chapter":{"goods_nomenclature_sid":39988,"goods_nomenclature_item_id":"4400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"wood
+        and articles of wood; wood charcoal"},"heading":{"goods_nomenclature_sid":40191,"goods_nomenclature_item_id":"4412000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Plywood,
+        veneered panels and similar laminated wood","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"91687","_score":1.0,
+        "_source" : {"id":91687,"goods_nomenclature_item_id":"4412994000","producline_suffix":"80","validity_start_date":"2010-01-01T00:00:00+02:00","validity_end_date":null,"description":"Of
+        alder, ash, beech, birch, cherry, chestnut, elm, hickory, hornbeam, horse
+        chestnut, lime, maple, oak, plane tree, poplar, robinia, walnut or yellow
+        poplar","number_indents":5,"section":{"numeral":"IX","title":"Wood and articles
+        of wood; wood charcoal; cork and articles of cork; manufactures of straw,
+        of esparto or of other plaiting materials; basket-ware and wickerwork (chapters
+        44 to 46)","position":9},"chapter":{"goods_nomenclature_sid":39988,"goods_nomenclature_item_id":"4400000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"wood
+        and articles of wood; wood charcoal"},"heading":{"goods_nomenclature_sid":40191,"goods_nomenclature_item_id":"4412000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Plywood,
+        veneered panels and similar laminated wood","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"93994","_score":1.0,
+        "_source" : {"id":93994,"goods_nomenclature_item_id":"0302451000","producline_suffix":"80","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Atlantic
+        horse mackerel (Trachurus trachurus)","number_indents":3,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
+        and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28402,"goods_nomenclature_item_id":"0302000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
+        fresh or chilled, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"96208","_score":1.0,
+        "_source" : {"id":96208,"goods_nomenclature_item_id":"0303559010","producline_suffix":"80","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Horse
+        mackerel (scad) (Caranx trachurus)","number_indents":4,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
+        and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28590,"goods_nomenclature_item_id":"0303000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
+        frozen, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"93797","_score":1.0,
+        "_source" : {"id":93797,"goods_nomenclature_item_id":"0101210000","producline_suffix":"10","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Horses","number_indents":1,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":27623,"goods_nomenclature_item_id":"0100000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"live
+        animals"},"heading":{"goods_nomenclature_sid":27624,"goods_nomenclature_item_id":"0101000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Live
+        horses, asses, mules and hinnies","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"28100","_score":1.0,
+        "_source" : {"id":28100,"goods_nomenclature_item_id":"0206809100","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Of
+        horses, asses, mules and hinnies","number_indents":3,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":27809,"goods_nomenclature_item_id":"0200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"meat
+        and edible meat offal"},"heading":{"goods_nomenclature_sid":28044,"goods_nomenclature_item_id":"0206000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Edible
+        offal of bovine animals, swine, sheep, goats, horses, asses, mules or hinnies,
+        fresh, chilled or frozen","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"28105","_score":1.0,
+        "_source" : {"id":28105,"goods_nomenclature_item_id":"0206909100","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Of
+        horses, asses, mules and hinnies","number_indents":3,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":27809,"goods_nomenclature_item_id":"0200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"meat
+        and edible meat offal"},"heading":{"goods_nomenclature_sid":28044,"goods_nomenclature_item_id":"0206000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Edible
+        offal of bovine animals, swine, sheep, goats, horses, asses, mules or hinnies,
+        fresh, chilled or frozen","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"30763","_score":1.0,
+        "_source" : {"id":30763,"goods_nomenclature_item_id":"0713500000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Broad
+        beans (Vicia faba var. major) and horse beans (Vicia faba var. equina, Vicia
+        faba var. minor)","number_indents":1,"section":{"numeral":"II","title":"Vegetable
+        products (chapters 6 to 14)","position":2},"chapter":{"goods_nomenclature_sid":30240,"goods_nomenclature_item_id":"0700000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"edible
+        vegetables and certain roots and tubers"},"heading":{"goods_nomenclature_sid":30726,"goods_nomenclature_item_id":"0713000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Dried
+        leguminous vegetables, shelled, whether or not skinned or split","number_indents":0}}}]}}'
     http_version:
-  recorded_at: Fri, 11 Jan 2013 10:05:35 GMT
+  recorded_at: Mon, 18 Mar 2013 14:37:45 GMT
 - request:
     method: get
     uri: http://localhost:9200/search_references/_search?payload%5Bquery%5D%5Bquery_string%5D%5Banalyzer%5D=snowball&payload%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=title&payload%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bsize%5D=1000000
@@ -254,10 +254,10 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '3945'
+      - '3943'
     body:
       encoding: US-ASCII
-      string: ! '{"took":156,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":5,"max_score":4.730926,"hits":[{"_index":"search_references","_type":"search_reference","_id":"2949","_score":4.730926,
+      string: ! '{"took":1,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":5,"max_score":4.730926,"hits":[{"_index":"search_references","_type":"search_reference","_id":"2949","_score":4.730926,
         "_source" : {"title":"horse beans","reference":{"id":30726,"goods_nomenclature_item_id":"0713000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Dried
         leguminous vegetables, shelled, whether or not skinned or split","number_indents":0,"section":{"numeral":"II","title":"Vegetable
         products (chapters 6 to 14)","position":2},"chapter":{"goods_nomenclature_sid":30240,"goods_nomenclature_item_id":"0700000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"edible
@@ -282,5 +282,5 @@ http_interactions:
         products (chapters 6 to 14)","position":2},"chapter":{"goods_nomenclature_sid":30240,"goods_nomenclature_item_id":"0700000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"edible
         vegetables and certain roots and tubers"},"class":"Heading"}}}]}}'
     http_version:
-  recorded_at: Fri, 11 Jan 2013 10:05:36 GMT
+  recorded_at: Mon, 18 Mar 2013 14:37:45 GMT
 recorded_with: VCR 2.2.5

@@ -226,5 +226,71 @@ describe SearchService do
 
   # Searching in ElasticSearch index
   describe 'fuzzy search' do
+    context 'filtering by date' do
+      context 'with goods codes that have bounded validity period' do
+
+        # heading that has validity period of 1972-01-01 to 2006-12-31
+        let(:heading_pattern) {
+          {
+            type: 'fuzzy_match',
+            goods_nomenclature_match: {
+              headings: [
+                { "goods_nomenclature_item_id"=>"2851000000" }.ignore_extra_keys!
+              ].ignore_extra_values!
+            }.ignore_extra_keys!
+          }.ignore_extra_keys!
+        }
+
+        it 'returns goods code if search date falls within validity period' do
+          VCR.use_cassette("search#fuzzy_date_filter_for_2851000000_2005") do
+            @result = SearchService.new(t: "water",
+                                        as_of: "2005-01-01").to_json
+
+            @result.should match_json_expression heading_pattern
+          end
+        end
+
+        it 'does not return goods code if search date does not fall within validity period' do
+          VCR.use_cassette("search#fuzzy_date_filter_for_2851000000_2007") do
+            @result = SearchService.new(t: "water",
+                                        as_of: "2007-01-01").to_json
+
+            @result.should_not match_json_expression heading_pattern
+          end
+        end
+      end
+
+      context 'with goods codes that have unbounded validity period' do
+        # heading that has validity period starting from 1972-01-01
+        let(:heading_pattern) {
+          {
+            type: 'fuzzy_match',
+            goods_nomenclature_match: {
+              headings: [
+                { "goods_nomenclature_item_id"=>"0102000000" }.ignore_extra_keys!
+              ].ignore_extra_values!
+            }.ignore_extra_keys!
+          }.ignore_extra_keys!
+        }
+
+        it 'returns goods code if search date is greater than start of validity period' do
+          VCR.use_cassette("search#fuzzy_date_filter_for_0102000000_2007") do
+            @result = SearchService.new(t: "animal products",
+                                        as_of: "2007-01-01").to_json
+
+            @result.should match_json_expression heading_pattern
+          end
+        end
+
+        it 'does not return goods code if search date is less than start of validity period' do
+          VCR.use_cassette("search#fuzzy_date_filter_for_0102000000_1970") do
+            @result = SearchService.new(t: "animal products",
+                                        as_of: "1970-01-01").to_json
+
+            @result.should_not match_json_expression heading_pattern
+          end
+        end
+      end
+    end
   end
 end
