@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe MeasureCondition do
-  it "delegates monetary unit abbreviation to monetary unit" do
-     MeasureCondition.new.should respond_to :monetary_unit_abbreviation
-  end
+  it { should delegate_method(:monetary_unit_abbreviation).to(:monetary_unit).as(:abbreviation) }
 
   describe 'associations' do
     describe 'monetary unit' do
