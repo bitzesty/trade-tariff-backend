@@ -56,7 +56,8 @@ class SearchService
     @t = if term =~ /^(?!.*[A-Za-z]+).*$/
            term.scan(/\d+/).join
          else
-           term
+           # ignore [ and ] characters to avoid range searches
+           term.to_s.gsub(/(\[|\])/,'')
          end
   end
 

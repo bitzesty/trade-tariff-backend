@@ -7,6 +7,10 @@ describe SearchService do
     it 'assigns search query' do
       SearchService.new(t: query).t.should == query
     end
+
+    it 'strips [, ] characters from search query' do
+      SearchService.new(t: '[hello] [world]').t.should == 'hello world'
+    end
   end
 
   describe "#valid?" do
