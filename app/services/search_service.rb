@@ -1,3 +1,14 @@
+# SearchService is responsible for issuing search queries
+# it tries to do ExactSearch first in case search term consists
+# of numerical values. We can guess if that was a Section, Chapter,
+# Heading ir Commodity code and redirect the user straight there.
+#
+# Otherwise it issues FuzzySearch that searches for results inside
+# green pages (synonyms) index as well as the main goods nomenclature
+# index and persents those results in single response. Fuzzy searching
+# functionality is split into ReferenceMatch and GoodsNomenclatureMatch
+# classes respectively.
+
 class SearchService
   autoload :BaseSearch,  'search_service/base_search'
   autoload :ExactSearch, 'search_service/exact_search'

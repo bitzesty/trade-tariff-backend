@@ -49,7 +49,7 @@ describe Api::V1::SearchController, "POST #search" do
 
     it { should respond_with(:success) }
     it 'returns records grouped by type' do
-        response.body.should match_json_expression pattern
+      response.body.should match_json_expression pattern
     end
   end
 
