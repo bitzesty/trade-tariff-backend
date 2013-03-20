@@ -1,0 +1,8 @@
+test:
+  adapter: mysql2
+  host: localhost
+  database: tariff_test
+  username: root
+  password:
+  encoding: utf8
+  pool: 5
