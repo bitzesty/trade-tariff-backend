@@ -10,7 +10,8 @@ class SearchReference < Sequel::Model
     document_type 'search_reference'
 
     mapping do
-      indexes :title,        analyzer: :snowball, type: :string
+      indexes :title,     type: :string, analyzer: :snowball
+      indexes :reference, type: :nested
     end
   end
 
