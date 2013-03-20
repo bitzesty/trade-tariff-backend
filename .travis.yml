@@ -5,9 +5,9 @@ before_install:
    - sudo apt-get install -qq wbritish
    - cp config/database.travis.yml config/database.yml
 script:
- - bundle exec rake db:create
- - bundle exec rake db:schema:load
- - bundle exec rake spec
+ - RAILS_ENV=test bundle exec rake db:create
+ - RAILS_ENV=test bundle exec rake db:schema:load
+ - RAILS_ENV=test bundle exec rake spec
 rvm:
   - 2.0.0
   - 1.9.3
