@@ -1920,7 +1920,6 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20130124080334_add_comm_tbl9_indexes.rb")
     self[:schema_migrations].insert(:filename => "20130124085812_fix_chief_field_lengths.rb")
     self[:schema_migrations].insert(:filename => "20130130132054_add_hydrocarbon_oils_footnote.rb")
-    self[:schema_migrations].insert(:filename => "20130212144512_fix_chief_hectolitre_mappings.rb")
     self[:schema_migrations].insert(:filename => "20130207150008_add_oplog_columns.rb")
     self[:schema_migrations].insert(:filename => "20130208142043_rename_to_oplog_tables.rb")
     self[:schema_migrations].insert(:filename => "20130208155058_add_model_views.rb")
@@ -1931,6 +1930,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20130220094325_add_index_for_regulation_replacements.rb")
     self[:schema_migrations].insert(:filename => "20130221132447_make_effective_end_dates_timestamps.rb")
     self[:schema_migrations].insert(:filename => "20130221140444_change_export_refund_nomenclature_indent_type.rb")
+    self[:schema_migrations].insert(:filename => "20130321140444_fix_chief_hectolitre_mappings.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"
