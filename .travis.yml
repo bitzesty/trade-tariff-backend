@@ -6,6 +6,8 @@ before_install:
    - cp config/database.travis.yml config/database.yml
 before_script:
  - mysql -e 'create database tariff_test;'
+services:
+ - elasticsearch
 script:
  - RAILS_ENV=test bundle exec rake db:schema:load
  - RAILS_ENV=test bundle exec rake spec
