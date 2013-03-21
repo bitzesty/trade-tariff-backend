@@ -111,11 +111,20 @@ class TaricImporter
     end
 
     def attributes=(attributes)
-      @attributes = if attribute_processor = attributes_for(klass)
-                      attribute_processor.call(attributes)
-                    else
-                      attributes
-                    end
+      attributes = if attribute_processor = attributes_for(klass)
+                     attribute_processor.call(attributes)
+                   else
+                     attributes
+                   end
+
+      @attributes = default_attributes.merge(attributes)
+    end
+
+    def default_attributes
+      klass.columns.inject({}) { |memo, column_name|
+        memo.merge!(Hash[column_name.to_s, nil])
+        memo
+      }
     end
 
     def operation=(operation)
@@ -154,13 +163,7 @@ class TaricImporter
         nil
       when :update
         model = klass.filter(attributes.slice(*primary_key).symbolize_keys).first
-        # TODO move to attributes=
-        defaults = model.columns.inject({}) { |memo, col|
-          memo.merge!(Hash[col.to_s, nil])
-          memo
-        }
-        record_attributes = defaults.merge(attributes)
-        model.set(record_attributes.except(*primary_key).symbolize_keys)
+        model.set(attributes.except(*primary_key).symbolize_keys)
         model.save(validate: false)
         model
       end
