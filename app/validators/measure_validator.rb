@@ -25,10 +25,15 @@ class MeasureValidator < TradeTariffBackend::Validator
     validates :presence, of: :goods_nomenclature, if: ->(record) {
       # ME9 If no additional code is specified then the goods code is mandatory (do not validate if additional code is there)
       # do not validate for export refund nomenclatures
+      # do not validate for if related to meursing additional code type
       # do not validate for invalidated national measures (when goods code is deleted by Taric, and CHIEF measures are left orphaned-invalidated)
-      (record.additional_code.blank?) &&
-      (record.export_refund_nomenclature.blank?) &&
-      (!record.national? || !record.invalidated?)
+      (
+       (record.additional_code.blank?) &&
+       (record.export_refund_nomenclature.blank?) &&
+       (!record.national? || !record.invalidated?)
+      ) &&
+      (record.additional_code_type.present? &&
+       !record.additional_code_type.meursing?)
     }
   end
 
@@ -62,18 +67,24 @@ class MeasureValidator < TradeTariffBackend::Validator
   end
 
   validation :ME13, 'If the additional code type is related to a Meursing table plan then only the additional code can be specified: no goods code, order number or reduction indicator.', on: [:create, :update] do |record|
-    (record.additional_code_type.present? && record.additional_code_type.meursing? &&
-     record.additional_code.present? && record.goods_nomenclature_item_id.blank? &&
-     record.ordernumber.blank? && record.reduction_indicator.blank?) ||
+    # binding.pry if record.measure_sid == 3292963
+    (record.additional_code_type.present? &&
+     record.additional_code_type.meursing? &&
+     record.meursing_additional_code.present? &&
+     record.goods_nomenclature_item_id.blank? &&
+     record.ordernumber.blank?) ||
      (record.additional_code_type.present? && !record.additional_code_type.meursing?) ||
      record.additional_code_type.blank?
   end
 
   validation :ME14, 'If the additional code type is related to a Meursing table plan then the additional code must exist as a Meursing additional code.', on: [:create, :update] do |record|
-    (record.additional_code_type.present? && record.additional_code_type.meursing? &&
-     record.additional_code.export_refund_nomenclature.present?) ||
-    (record.additional_code_type.present? && !record.additional_code_type.meursing?) ||
-    (record.additional_code_type.blank?)
+    (record.additional_code_type.present? &&
+     record.additional_code_type.meursing? &&
+     record.meursing_additional_code.present?) || (
+       record.additional_code.present? && !record.additional_code_type.meursing?
+     ) || (
+       record.additional_code_type.blank?
+     )
   end
 
   validation :ME24, 'The role + regulation id must exist. If no measure start date is specified it defaults to the regulation start date.', on: [:create, :update] do
