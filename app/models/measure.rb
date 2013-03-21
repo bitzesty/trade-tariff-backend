@@ -158,11 +158,6 @@ class Measure < Sequel::Model
     invalidated_by.present?
   end
 
-  # TODO fixme
-  # def validate
-    # model.validate(self) unless self.invalidated?
-  # end
-
   dataset_module do
     def with_base_regulations
       select(:measures.*).
