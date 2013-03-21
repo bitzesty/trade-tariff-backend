@@ -6,7 +6,10 @@ module TradeTariffBackend
 
       raise ArgumentError.new("validates :validity_date_span excepts of: option to be provided") if association.blank?
 
-      associated_records = [record.send(association)].flatten.compact.select(&:persisted?)
+      associated_records = [record.send(association)].flatten.compact.select { |record|
+        # not new == persisted
+        !record.new?
+      }
 
       associated_records.none? || associated_records.all?{ |associated_record|
         (record.validity_start_date.to_date >= associated_record.validity_start_date.to_date) &&

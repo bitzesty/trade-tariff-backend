@@ -13,7 +13,7 @@ describe TradeTariffBackend::Validations::ValidityDateSpanValidation do
     context 'of option not provided' do
       context 'associated records validity start date is less than models' do
         let(:model) { stub(validity_start_date: Date.yesterday,
-                           associated_record: stub(validity_start_date: Date.today, persisted?: true))}
+                           associated_record: stub(validity_start_date: Date.today, new?: false))}
         let(:validation) { described_class.new(:vld1, 'validity_date') }
 
         it 'should return false' do
@@ -24,7 +24,7 @@ describe TradeTariffBackend::Validations::ValidityDateSpanValidation do
       context 'associated record has validity end date and model does not' do
         let(:model) { stub(validity_start_date: Date.yesterday,
                            validity_end_date: nil,
-                           associated_record: stub(validity_start_date: Date.today, persisted?: true,
+                           associated_record: stub(validity_start_date: Date.today, new?: false,
                                                    validity_end_date: Date.yesterday))}
         let(:validation) { described_class.new(:vld1, 'validity_date') }
 
@@ -38,7 +38,7 @@ describe TradeTariffBackend::Validations::ValidityDateSpanValidation do
                            validity_end_date: Date.yesterday,
                            associated_record: stub(validity_start_date: Date.today,
                                                    validity_end_date: Date.today,
-                                                   persisted?: true))}
+                                                   new?: false))}
         let(:validation) { described_class.new(:vld1, 'validity_date') }
 
         it 'should return false' do
