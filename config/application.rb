@@ -1,7 +1,6 @@
 require File.expand_path('../boot', __FILE__)
 
 require "action_controller/railtie"
-require "sequel/rails/railtie"
 require "action_mailer/railtie"
 require "sprockets/railtie"
 
@@ -71,5 +70,8 @@ module TradeTariffBackend
 
     # Disable Rack::Cache.
     config.action_dispatch.rack_cache = nil
+
+    # Sequel schema dumps in SQL format
+    config.sequel.schema_format = :sql
   end
 end
