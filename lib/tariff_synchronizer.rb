@@ -1,7 +1,3 @@
-# NOTE sequel-rails initializes too late, fasten it up.
-# SequelRails.configuration.init_database(Rails.configuration.database_configuration)
-# SequelRails.setup Rails.env
-
 require 'tariff_importer'
 require 'date'
 require 'logger'
