@@ -202,8 +202,6 @@ namespace :tariff do
     end
   end
 
-  # TODO rake task for eager loaded app
-
   namespace :audit do
     desc "Traverse all TARIC tables and perform conformance validations on all the records"
     task verify: [:environment, :class_eager_load] do
