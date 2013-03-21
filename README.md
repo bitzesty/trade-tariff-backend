@@ -28,14 +28,14 @@ Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff
 ## Run TradeTariffBackend
 
     ./startup.sh
-    
+
 ## Performing daily updates
 
 1. Create config/trade_tariff_backend_secrets.yml file with correct values.
 
   ```yaml
   sync_username:
-  sync_password:                                                           
+  sync_password:
   sync_host:
   sync_email:
   ```
@@ -45,6 +45,11 @@ Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff
     ```
     bundle exec rake tariff:sync:apply
     ```
+
+## Notes
+
+* Project does not contain schema.rb, do not use rake db:schema:load. Sequel
+does not yet support view creation via schema file.
 
 ## TODO
 
