@@ -57,6 +57,11 @@ class Measure < Sequel::Model
     ds.with_actual(AdditionalCode)
   end
 
+  one_to_one :meursing_additional_code, key: :additional_code,
+                                        primary_key: :additional_code_id do |ds|
+    ds.with_actual(MeursingAdditionalCode)
+  end
+
   many_to_one :additional_code_type, class_name: 'AdditionalCodeType',
                           key: :additional_code_type_id,
                           primary_key: :additional_code_type_id
