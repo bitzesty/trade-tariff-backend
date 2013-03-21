@@ -141,7 +141,9 @@ describe TaricImporter::RecordProcessor do
       }
 
       it 'returns attributes passed through override filter' do
-        processor.attributes.should eq  ({ "description"=>"French" })
+        processor.attributes.should eq  ({ "description"=>"French",
+                                           "language_code_id" => nil,
+                                           "language_id" => nil })
       end
     end
 
@@ -221,32 +223,59 @@ describe TaricImporter::RecordProcessor do
       end
 
       context 'update' do
-        let(:record) {
-          {"transaction.id"=>"31946",
-           "record.code"=>"130",
-           "subrecord.code"=>"05",
-           "record.sequence.number"=>"1",
-           "update.type"=>"1",
-           "language.description"=>
-            {"language.code.id"=>"FR",
-             "language.id"=>"EN",
-             "description"=>"French!"}}
-        }
+        context 'all values get updated' do
+          let(:record) {
+            {"transaction.id"=>"31946",
+             "record.code"=>"130",
+             "subrecord.code"=>"05",
+             "record.sequence.number"=>"1",
+             "update.type"=>"1",
+             "language.description"=>
+              {"language.code.id"=>"FR",
+               "language.id"=>"EN",
+               "description"=>"French!"}}
+          }
 
-        before {
-          create :language_description, language_code_id: 'FR',
-                                        language_id: 'EN',
-                                        description: 'French'
+          before {
+            create :language_description, language_code_id: 'FR',
+                                          language_id: 'EN',
+                                          description: 'French'
 
-          processor.process!
-        }
+            processor.process!
+          }
 
-        it 'does not create new records' do
-          LanguageDescription.count.should eq 1
+          it 'does not create new records' do
+            LanguageDescription.count.should eq 1
+          end
+
+          it 'updates the record' do
+            LanguageDescription.first.description.should eq 'French!'
+          end
         end
 
-        it 'updates the record' do
-          LanguageDescription.first.description.should eq 'French!'
+        context 'update does not include all values' do
+          let(:record) {
+            {"transaction.id"=>"31946",
+             "record.code"=>"130",
+             "subrecord.code"=>"05",
+             "record.sequence.number"=>"1",
+             "update.type"=>"1",
+             "language.description"=>
+              {"language.code.id"=>"FR",
+               "language.id"=>"EN"}}
+          }
+
+          before {
+            create :language_description, language_code_id: 'FR',
+                                          language_id: 'EN',
+                                          description: 'English'
+
+            processor.process!
+          }
+
+          it 'sets missing update fields to nil' do
+            LanguageDescription.first.description.should eq nil
+          end
         end
       end
 
