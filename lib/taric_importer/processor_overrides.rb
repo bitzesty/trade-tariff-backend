@@ -1,5 +1,6 @@
 # If certain models need to be processed out in a different way
-# (see #default_process) this is a the place for these overrides, e.g.:
+# (see RecordProcessor#default_process) this is a the place for
+# these overrides, e.g.:
 #
 #  Language: {
 #    create: ->(attributes) {
@@ -9,8 +10,9 @@
 #
 # NOTE: in case of :create and :updates must return instance of model as
 #       it is going to be validated. :destroy returns nil, because we do not
-#       want to be validating non existant records.
-# NOTE: takes one argument: the arguments.
+#       want to be validating non existent records.
+# NOTE: takes one argument: for attributes it's the attributes
+# hash (string based). For create, update, destroy it's the record instance.
 #
 # Can also mutate attributes for all record operations, e.g.:
 #
