@@ -44,11 +44,11 @@ module Sequel
         def validate
           super
 
-          validator.validate(self, self.class.active_validations)
+          validator.validate(self)
         end
 
         def validate!
-          validator.validate(self, self.class.active_validations)
+          validator.validate(self)
 
           raise ValidationFailed.new(self) if self.errors.any?
         end
@@ -62,7 +62,7 @@ module Sequel
         def _destroy_delete
           self.operation = :destroy
 
-          validator.validate(self, self.class.active_validations)
+          validator.validate(self)
 
           # Run destroy validations
           # In Sequel these are modeled using before_destroy hooks
@@ -77,7 +77,6 @@ module Sequel
         def _update_columns(columns)
           self.operation = :update
 
-
           operation_klass.insert(self.values.except(:oid))
         end
       end
@@ -89,18 +88,6 @@ module Sequel
         # Hide oplog columns if asked
         def columns
           super - [:oid, :operation, :operation_date]
-        end
-
-        def set_active_validations(*validations)
-          @active_validations = validations
-        end
-
-        def active_validations
-          @active_validations || []
-        end
-
-        def reset_active_validations
-          @active_validations = []
         end
 
         def insert(*args)
