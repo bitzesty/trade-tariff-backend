@@ -67,7 +67,6 @@ class MeasureValidator < TradeTariffBackend::Validator
   end
 
   validation :ME13, 'If the additional code type is related to a Meursing table plan then only the additional code can be specified: no goods code, order number or reduction indicator.', on: [:create, :update] do |record|
-    # binding.pry if record.measure_sid == 3292963
     (record.additional_code_type.present? &&
      record.additional_code_type.meursing? &&
      record.meursing_additional_code.present? &&

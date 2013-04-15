@@ -49,7 +49,7 @@ describe TaricImporter::Transaction do
   describe '#validate' do
     subject { described_class.new(record, transaction_date) }
 
-    before { subject.stubs(:record_stack).returns([entry]) }
+    before { subject.stub(:record_stack).and_return([entry]) }
 
     context 'all records are valid' do
       let(:entry)            { stub(validate!: true) }
@@ -63,7 +63,7 @@ describe TaricImporter::Transaction do
       let(:entry)            { stub }
 
       before {
-        entry.expects(:validate!).raises(Sequel::ValidationFailed.new('ValidationError'))
+        entry.should_receive(:validate!).and_raise(Sequel::ValidationFailed.new('ValidationError'))
       }
 
       it 'raises ValidationFailed exception ending import' do

@@ -18,7 +18,7 @@ describe TaricImporter do
       let(:valid_file) { "spec/fixtures/taric_samples/footnote.xml" }
 
       it 'instantiates appropriate processing strategy' do
-        TaricImporter::RecordProcessor.any_instance.expects(:process!)
+        TaricImporter::RecordProcessor.any_instance.should_receive(:process!)
 
         @importer = TaricImporter.new(valid_file)
         @importer.import
@@ -31,7 +31,7 @@ describe TaricImporter do
       it 'processes inserts' do
         # insert_record.xml is inserting to ExplicitAbrogationRegulation
         model_stub = stub(validate!: true, save: true)
-        ExplicitAbrogationRegulation.expects(:new).returns(model_stub)
+        ExplicitAbrogationRegulation.should_receive(:new).and_return(model_stub)
 
         @importer = TaricImporter.new(insert_record)
         @importer.import
@@ -58,7 +58,7 @@ describe TaricImporter do
         # update_record.xml is updating to ExplicitAbrogationRegulation
         update_stub = stub(save: true, validate!: true, set: true, columns: [])
         dataset = stub(first: update_stub)
-        ExplicitAbrogationRegulation.expects(:filter).returns(dataset)
+        ExplicitAbrogationRegulation.should_receive(:filter).and_return(dataset)
 
         @importer = TaricImporter.new(update_record)
         @importer.import
@@ -73,8 +73,8 @@ describe TaricImporter do
 
         destroy_stub = stub()
         dataset_stub = stub(first: destroy_stub)
-        ExplicitAbrogationRegulation.expects(:filter).returns(dataset_stub)
-        destroy_stub.expects(:destroy).returns(true)
+        ExplicitAbrogationRegulation.should_receive(:filter).and_return(dataset_stub)
+        destroy_stub.should_receive(:destroy).and_return(true)
 
         @importer = TaricImporter.new(delete_record)
         @importer.import

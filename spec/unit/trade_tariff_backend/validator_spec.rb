@@ -52,7 +52,7 @@ describe TradeTariffBackend::Validator do
       before { generic_validator.new.validate(model) }
 
       it 'adds no error to object errors hash' do
-        model.errors.should have_received(:add).never
+        model.errors.should_not have_received(:add)
       end
     end
 
