@@ -43,11 +43,7 @@ describe TradeTariffBackend::Validator do
     }
 
     it 'runs validations on record' do
-<<<<<<< HEAD
       model.conformance_errors.should have_received(:add)
-=======
-      model.errors.should have_received(:add)
->>>>>>> Tariff moved to Point in Time DB architecture.
     end
   end
 
@@ -56,11 +52,7 @@ describe TradeTariffBackend::Validator do
       before { generic_validator.new.validate(model) }
 
       it 'adds no error to object errors hash' do
-<<<<<<< HEAD
         model.conformance_errors.should_not have_received(:add)
-=======
-        model.errors.should have_received(:add).never
->>>>>>> Tariff moved to Point in Time DB architecture.
       end
     end
 
@@ -74,11 +66,7 @@ describe TradeTariffBackend::Validator do
       }
 
       it 'adds error to object errors hash' do
-<<<<<<< HEAD
         model.conformance_errors.should have_received(:add)
-=======
-        model.errors.should have_received(:add)
->>>>>>> Tariff moved to Point in Time DB architecture.
       end
     end
   end
