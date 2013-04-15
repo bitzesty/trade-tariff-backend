@@ -19,22 +19,24 @@ class MeasureValidator < TradeTariffBackend::Validator
     validates :validity_date_span, of: :geographical_area
   end
 
-  validation :ME6, 'The goods code must exist.', on: [:create, :update] do
-    # NOTE wont apply to national invalidates Measures
-    # Taric may delete a Goods Code and national measures will be invalid.
-    validates :presence, of: :goods_nomenclature, if: ->(record) {
-      # ME9 If no additional code is specified then the goods code is mandatory (do not validate if additional code is there)
-      # do not validate for export refund nomenclatures
-      # do not validate for if related to meursing additional code type
-      # do not validate for invalidated national measures (when goods code is deleted by Taric, and CHIEF measures are left orphaned-invalidated)
-      (
-       (record.additional_code.blank?) &&
-       (record.export_refund_nomenclature.blank?) &&
-       (!record.national? || !record.invalidated?)
-      ) &&
-      (record.additional_code_type.present? &&
-       !record.additional_code_type.meursing?)
-    }
+  validation :ME6, 'The goods code must exist.',
+      on: [:create, :update],
+      if: ->(record) {
+        # NOTE wont apply to national invalidates Measures
+        # Taric may delete a Goods Code and national measures will be invalid.
+        # ME9 If no additional code is specified then the goods code is mandatory (do not validate if additional code is there)
+        # do not validate for export refund nomenclatures
+        # do not validate for if related to meursing additional code type
+        # do not validate for invalidated national measures (when goods code is deleted by Taric, and CHIEF measures are left orphaned-invalidated)
+        (
+         (record.additional_code.blank?) &&
+         (record.export_refund_nomenclature.blank?) &&
+         (!record.national? || !record.invalidated?)
+        ) &&
+        (record.additional_code_type.present? &&
+         !record.additional_code_type.meursing?)
+      } do
+    validates :presence, of: :goods_nomenclature
   end
 
   validation :ME7, 'The goods nomenclature code must be a product code; that is, it may not be an intermediate line.', on: [:create, :update] do |record|
@@ -47,8 +49,12 @@ class MeasureValidator < TradeTariffBackend::Validator
     )
   end
 
-  validation :ME8, 'The validity period of the goods code must span the validity period of the measure.', on: [:create, :update] do
-    validates :validity_date_span, of: :goods_nomenclature, if: ->(record) { !record.national? || !record.invalidated? }
+  validation :ME8, 'The validity period of the goods code must span the validity period of the measure.',
+      on: [:create, :update],
+      if: ->(record) {
+        !record.national? || !record.invalidated?
+      } do
+    validates :validity_date_span, of: :goods_nomenclature
   end
 
   validation :ME9, 'If no additional code is specified then the goods code is mandatory.', on: [:create, :update] do |record|
@@ -91,8 +97,12 @@ class MeasureValidator < TradeTariffBackend::Validator
     validates :presence, of: [:measure_generating_regulation_id, :measure_generating_regulation_role]
   end
 
-  validation :ME25, "If the measure's end date is specified (implicitly or explicitly) then the start date of the measure must be less than or equal to the end date.", on: [:create, :update] do
-    validates :validity_dates, if: ->(record) { (record.national? && !record.invalidated?) || !record.national? }
+  validation :ME25, "If the measure's end date is specified (implicitly or explicitly) then the start date of the measure must be less than or equal to the end date.",
+      on: [:create, :update],
+      if: ->(record) {
+        (record.national? && !record.invalidated?) ||
+         !record.national? } do
+    validates :validity_dates
   end
 
   validation :ME26, 'The entered regulation may not be completely abrogated.' do
@@ -147,9 +157,14 @@ class MeasureValidator < TradeTariffBackend::Validator
     validates :validity_date_span, of: :additional_code
   end
 
-  validation :ME116, 'When a quota order number is used in a measure then the validity period of the quota order number must span the validity period of the measure.  This rule is only applicable for measures with start date after 31/12/2007.', on: [:create, :update] do
+  validation :ME116, 'When a quota order number is used in a measure then the validity period of the quota order number must span the validity period of the measure.  This rule is only applicable for measures with start date after 31/12/2007.',
+      on: [:create, :update],
+      if: ->(record) {
+       record.validity_start_date > Date.new(2007,12,31) &&
+       record.order_number.present? && record.ordernumber =~ /^09[012356789]/
+      } do
     # Only quota order numbers managed by the first come first served principle are in scope; these order number are starting with '09'; except order numbers starting with '094'
-    validates :validity_date_span, of: :order_number, if: ->(record) { record.validity_start_date > Date.new(2007,12,31) && record.order_number.present? && record.ordernumber =~ /^09[012356789]/ }
+    validates :validity_date_span, of: :order_number
   end
 end
 
