@@ -54,7 +54,7 @@ describe MeasureCondition do
     describe 'measure condition components' do
       let!(:measure_condition)                { create :measure_condition }
       let!(:measure_condition_component1)     { create :measure_condition_component, measure_condition_sid: measure_condition.measure_condition_sid }
-      let!(:measure_condition_component2)     { create :measure_condition_component }
+      let!(:measure_condition_component2)     { create :measure_condition_component, measure_condition_sid: generate(:measure_condition_sid)  }
 
       context 'direct loading' do
         it 'loads associated measure condition components' do
