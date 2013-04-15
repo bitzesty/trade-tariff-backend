@@ -16,18 +16,16 @@ module TradeTariffBackend
       self.class.validations
     end
 
-    def validate(record, active_validations = [])
-      relevant_validations_for(record, active_validations).each {|validation|
+    def validate(record)
+      relevant_validations_for(record).each {|validation|
         record.errors.add(:conformance, validation.to_s) unless validation.valid?(record)
       }
     end
 
     private
 
-    def relevant_validations_for(record, active_validations = [])
-      validations.reject{ |validation|
-        active_validations.any? && ([validation.identifiers].flatten & active_validations).none?
-      }.select{ |validation|
+    def relevant_validations_for(record)
+      validations.select{ |validation|
         validation.operations.include?(record.operation) &&
         validation.relevant_for?(record)
       }

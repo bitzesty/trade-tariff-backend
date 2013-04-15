@@ -1,7 +1,7 @@
 # If oplog class has no associated validator class
 # NullValidator will take its place and perform no validations
 class NullValidator
-  def self.validate(record, active_validations  = [])
+  def self.validate(record)
   end
 
   def self.validations

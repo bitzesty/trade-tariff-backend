@@ -74,7 +74,8 @@ describe TariffSynchronizer::Logger do
         create_taric_file :pending, example_date
 
         Footnote.unrestrict_primary_key
-        Footnote.set_active_validations []
+        # skip validations
+        Footnote.any_instance.should_receive(:validate!).and_return(true)
 
         TariffSynchronizer.apply
       }
@@ -93,7 +94,6 @@ describe TariffSynchronizer::Logger do
 
       after  {
         purge_synchronizer_folders
-        Footnote.reset_active_validations
       }
     end
 
