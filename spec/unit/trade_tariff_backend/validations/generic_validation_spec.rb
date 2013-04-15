@@ -51,7 +51,7 @@ describe TradeTariffBackend::Validations::GenericValidation do
     end
   end
 
-  describe 'relevant_for?', :focus do
+  describe 'relevant_for?' do
     let(:validation) {
       described_class.new(:vld1, 'description', {
         if: ->(record) { record.criteria }
