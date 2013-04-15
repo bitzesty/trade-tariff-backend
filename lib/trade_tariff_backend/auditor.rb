@@ -70,7 +70,6 @@ module TradeTariffBackend
                                           format: '%e |%B| %p%% %t',
                                           total: date_filter(model).count)
         yield progress_bar
-        progress_bar.finish
       else
         yield NullObject.new
       end
