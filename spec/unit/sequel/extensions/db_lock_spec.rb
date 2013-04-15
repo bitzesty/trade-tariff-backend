@@ -8,7 +8,7 @@ describe Sequel::Database do
     end
 
     it 'returns false if lock was not acquired' do
-      Sequel::Mysql2::Dataset.any_instance.expects(:get).returns(0)
+      Sequel::Mysql2::Dataset.any_instance.should_receive(:get).and_return(0)
 
       Sequel::Model.db.get_lock('test-lock').should == false
     end

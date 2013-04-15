@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe HealthcheckController, "GET #index" do
   it 'tries to fetch section index' do
-    Section.expects(:all).returns(true)
+    Section.should_receive(:all).and_return(true)
 
     get :index
   end

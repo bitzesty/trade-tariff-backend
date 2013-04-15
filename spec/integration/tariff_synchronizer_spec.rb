@@ -9,9 +9,9 @@ describe TariffSynchronizer do
     context 'failure scenario' do
       before do
         TariffSynchronizer::PendingUpdate.any_instance
-                                         .expects(:apply)
+                                         .should_receive(:apply)
                                          .once # subsequent updates are not applied
-                                         .raises(ChiefImporter::ImportException)
+                                         .and_raise(ChiefImporter::ImportException)
       end
 
       it 'transaction gets rolled back' do

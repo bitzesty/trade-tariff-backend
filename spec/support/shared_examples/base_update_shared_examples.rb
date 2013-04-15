@@ -7,7 +7,7 @@ shared_examples_for 'Base Update' do
       let!(:example_taric_update) { create :taric_update, example_date: Date.today }
 
       it 'does not perform download' do
-        described_class.expects(:download).never
+        described_class.should_receive(:download).never
 
         described_class.sync
       end
@@ -17,8 +17,8 @@ shared_examples_for 'Base Update' do
       let!(:example_chief_update) { create :chief_update, example_date: Date.yesterday }
       let!(:example_taric_update) { create :taric_update, example_date: Date.yesterday }
 
-      it 'expects download to be invoed' do
-        described_class.expects(:download).at_least(1)
+      it 'should_receive download to be invoed' do
+        described_class.should_receive(:download).at_least(1)
 
         described_class.sync
       end

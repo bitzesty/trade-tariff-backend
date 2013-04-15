@@ -10,7 +10,7 @@ describe TariffSynchronizer::FileService do
 
   describe '.download_content' do
     context 'partial content received' do
-      before { Curl::Easy.any_instance.expects(:perform).raises(Curl::Err::PartialFileError) }
+      before { Curl::Easy.any_instance.should_receive(:perform).and_raise(Curl::Err::PartialFileError) }
 
       it 'raises DownloadException' do
         expect { klass.download_content("http://localhost:9999/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
@@ -18,7 +18,7 @@ describe TariffSynchronizer::FileService do
     end
 
     context 'unable to connect' do
-      before { Curl::Easy.any_instance.expects(:perform).raises(Curl::Err::ConnectionFailedError) }
+      before { Curl::Easy.any_instance.should_receive(:perform).and_raise(Curl::Err::ConnectionFailedError) }
 
       it 'raises DownloadException' do
         expect { klass.download_content("http://localhost:9999/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
@@ -26,7 +26,7 @@ describe TariffSynchronizer::FileService do
     end
 
     context 'host resultion error' do
-      before { Curl::Easy.any_instance.expects(:perform).raises(Curl::Err::HostResolutionError) }
+      before { Curl::Easy.any_instance.should_receive(:perform).and_raise(Curl::Err::HostResolutionError) }
 
       it 'raises DownloadException' do
         expect { klass.download_content("http://localhost:9999/test") }.to raise_error TariffSynchronizer::FileService::DownloadException

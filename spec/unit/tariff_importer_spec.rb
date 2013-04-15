@@ -33,7 +33,7 @@ describe TariffImporter do
       let(:importer) { TariffImporter.new(valid_file, "MockImporter") }
 
       it 'delegates import to importer' do
-        MockImporter.any_instance.expects(:import)
+        MockImporter.any_instance.should_receive(:import)
 
         importer.import
       end

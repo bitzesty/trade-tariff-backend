@@ -146,7 +146,7 @@ describe Sequel::Model do
     context 'attribute present' do
       it 'validates input of' do
         @c.validates_input_of :something, requires: :something_to_be_true
-        @m.stubs(:something_to_be_true).returns(true)
+        @m.stub(:something_to_be_true).and_return(true)
         @m.something = true
         @m.should be_valid
       end
@@ -163,7 +163,7 @@ describe Sequel::Model do
     context 'requirement not fullfilled' do
       it 'validates input of' do
         @c.validates_input_of :something, requires: :something_to_be_true
-        @m.stubs(:something_to_be_true).returns(false)
+        @m.stub(:something_to_be_true).and_return(false)
         @m.something = true
         @m.should_not be_valid
       end
@@ -205,7 +205,7 @@ describe Sequel::Model do
         context 'associated records are all valid' do
           it 'should validate associated' do
             @c.validates_associated :mushrooms
-            @m.stubs(:mushrooms).returns([stub_everything(valid?: true)])
+            @m.stub(:mushrooms).and_return([double('record', valid?: true).as_null_object])
             @m.should be_valid
           end
         end
@@ -213,8 +213,8 @@ describe Sequel::Model do
         context 'some associated records are not valid' do
           it 'should validate associated' do
             @c.validates_associated :mushrooms
-            @m.stubs(:mushrooms).returns([stub_everything(valid?: true),
-                                          stub_everything(valid?: false)])
+            @m.stub(:mushrooms).and_return([double('record', valid?: false).as_null_object,
+                                            double('record', valid?: false).as_null_object])
             @m.should_not be_valid
           end
         end

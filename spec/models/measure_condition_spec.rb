@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe MeasureCondition do
-  it { should delegate_method(:monetary_unit_abbreviation).to(:monetary_unit).as(:abbreviation) }
-
   describe 'associations' do
     describe 'monetary unit' do
       it_is_associated 'one to one to', :monetary_unit do

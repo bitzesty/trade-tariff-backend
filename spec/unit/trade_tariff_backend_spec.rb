@@ -16,7 +16,7 @@ describe TradeTariffBackend do
       let(:mock_indexer) { mock }
 
       before {
-        mock_indexer.expects(:run).raises(StandardError)
+        mock_indexer.should_receive(:run).and_raise(StandardError)
 
         TradeTariffBackend.reindex(mock_indexer)
       }
