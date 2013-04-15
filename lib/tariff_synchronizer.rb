@@ -133,6 +133,30 @@ module TariffSynchronizer
     end
   end
 
+  # Restore database to specific date in the past
+  # Usually you will want to run apply operation after rolling back
+  #
+  # NOTE: this does not remove records from initial seed
+  def rollback(date)
+    Sequel::Model.db.transaction do
+      # Delete all entries in oplog tables with operation > DATE
+      oplog_based_models.each do |model|
+        model.operation_klass.where { operation_date > date }.delete
+      end
+
+      # Set all applied Tariff updates to pending if issue_date > DATE
+      TariffSynchronizer::TaricUpdate.applied.where { issue_date > date }.each(&:mark_as_pending)
+      TariffSynchronizer::ChiefUpdate.applied.where { issue_date > date }.each do |chief_update|
+        # Remove CHIEF records from specific update
+        [Chief::Comm, Chief::Mfcm, Chief::Tame, Chief::Tamf, Chief::Tbl9].each do |chief_model|
+          chief_model.where(origin: chief_update.filename).delete
+        end
+
+        chief_update.mark_as_pending
+      end
+    end
+  end
+
   # Builds tariff_update entries from files available in the
   # TariffSynchronizer.root_path directories.
   #
@@ -156,5 +180,11 @@ module TariffSynchronizer
     password.present? &&
     host.present? &&
     TradeTariffBackend.admin_email.present?
+  end
+
+  def oplog_based_models
+    Sequel::Model.descendants.select { |model|
+      model.plugins.include?(Sequel::Plugins::Oplog)
+    }
   end
 end

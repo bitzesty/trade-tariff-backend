@@ -58,6 +58,7 @@ class TaricImporter
         },
         destroy: ->(record) {
           goods_nomenclature = record.klass.filter(record.attributes.slice(*record.primary_key).symbolize_keys).first
+          goods_nomenclature.set(record.attributes.except(*record.primary_key).symbolize_keys)
           goods_nomenclature.destroy
           ::Measure.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                  .national
@@ -159,6 +160,7 @@ class TaricImporter
         model
       when :destroy
         model = klass.filter(attributes.slice(*primary_key).symbolize_keys).first
+        model.set(attributes.except(*primary_key).symbolize_keys)
         model.destroy
         nil
       when :update
@@ -187,8 +189,8 @@ class TaricImporter
       attributes.inject({}) { |memo, (key, value)|
         memo.merge!(Hash[as_param(key), value.strip]) unless value.blank?
         memo
-      }.merge(operation: operation,
-              operation_date: operation_date)
+      }.merge('operation' => operation,
+              'operation_date' => operation_date)
     end
   end
 end
