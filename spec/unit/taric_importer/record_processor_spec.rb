@@ -116,15 +116,9 @@ describe TaricImporter::RecordProcessor do
   end
 
   describe '#attributes=' do
-    before { processor.attributes = {'language_code_id' => 'FR',
-                                     'language_id' => 'EN',
-                                     'description' => 'French'} }
-
     context 'model attribute override present' do
-      around(:each) { |example|
-        original_override = TaricImporter::RecordProcessor.processor_overrides
-
-        TaricImporter::RecordProcessor.processor_overrides = {
+      before {
+        stub_const("TaricImporter::PROCESSOR_OVERRIDES",
           LanguageDescription: {
             attributes: ->(attributes) {
               attributes.delete('language_code_id')
@@ -132,11 +126,11 @@ describe TaricImporter::RecordProcessor do
               attributes
             }
           }
-        }
+        )
 
-        example.run
-
-        TaricImporter::RecordProcessor.processor_overrides = original_override
+        processor.attributes = {'language_code_id' => 'FR',
+                                     'language_id' => 'EN',
+                                     'description' => 'French'}
       }
 
       it 'returns attributes passed through override filter' do
@@ -147,6 +141,12 @@ describe TaricImporter::RecordProcessor do
     end
 
     context 'model attribute override missing' do
+      before {
+        processor.attributes = {'language_code_id' => 'FR',
+                                     'language_id' => 'EN',
+                                     'description' => 'French'}
+      }
+
       it 'returns normalized attributes' do
         processor.attributes.should eq  ({ "language_code_id"=>"FR",
                                            "language_id"=>"EN",
@@ -189,20 +189,14 @@ describe TaricImporter::RecordProcessor do
 
   describe '#process!' do
     context 'process override present' do
-      around(:each) { |example|
-        original_override = TaricImporter::RecordProcessor.processor_overrides
-
-        TaricImporter::RecordProcessor.processor_overrides = {
+      before {
+        stub_const("TaricImporter::PROCESSOR_OVERRIDES",
           LanguageDescription: {
             create: ->(attributes) {
               raise TaricImporter::ImportException
             }
           }
-        }
-
-        example.run
-
-        TaricImporter::RecordProcessor.processor_overrides = original_override
+        )
       }
 
       it 'invokes process override' do
