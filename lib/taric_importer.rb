@@ -1,9 +1,8 @@
 require 'nokogiri'
 
-require 'tariff_importer/logger'
-require 'tariff_importer/importers/taric_importer/transaction'
+require 'taric_importer/transaction'
 
-class TaricImporter
+class TaricImporter < TariffImporter
   class ImportException < StandardError
     attr_reader :original
 
@@ -18,13 +17,6 @@ class TaricImporter
 
   cattr_accessor :transaction_node
   self.transaction_node = 'env:transaction'
-
-  attr_reader :path, :issue_date
-
-  def initialize(path, issue_date = nil)
-    @path = path
-    @issue_date = issue_date
-  end
 
   def import
     xml = nil

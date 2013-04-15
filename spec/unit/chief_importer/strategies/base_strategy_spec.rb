@@ -1,8 +1,7 @@
 require 'spec_helper'
 
-require 'tariff_importer' # require it so that ActiveSupport requires get executed
-require 'tariff_importer/importers/chief_importer'
-require 'tariff_importer/importers/chief_importer/strategies/base_strategy'
+require 'chief_importer'
+require 'chief_importer/strategies/base_strategy'
 
 describe ChiefImporter::Strategies::BaseStrategy do
   let(:operations)     { ['X','U','I'] }

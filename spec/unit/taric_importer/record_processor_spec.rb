@@ -1,8 +1,7 @@
 require 'spec_helper'
 
-require 'tariff_importer' # require it so that ActiveSupport requires get executed
-require 'tariff_importer/importers/taric_importer'
-require 'tariff_importer/importers/taric_importer/record_processor'
+require 'taric_importer'
+require 'taric_importer/record_processor'
 
 describe TaricImporter::RecordProcessor do
   let(:record) {

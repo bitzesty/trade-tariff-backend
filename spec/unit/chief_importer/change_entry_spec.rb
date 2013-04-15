@@ -1,11 +1,10 @@
 require 'spec_helper'
 
-require 'tariff_importer' # require it so that ActiveSupport requires get executed
-require 'tariff_importer/importers/chief_importer'
-require 'tariff_importer/importers/chief_importer/change_entry'
+require 'chief_importer'
+require 'chief_importer/change_entry'
 
 # Define a test strategy
-class ChiefImporter
+class ChiefImporter < TariffImporter
   module Strategies
     class TestStrategy < BaseStrategy
     end

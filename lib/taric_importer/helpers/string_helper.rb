@@ -1,4 +1,4 @@
-class TaricImporter
+class TaricImporter < TariffImporter
   module Helpers
     module StringHelper
       extend ActiveSupport::Concern

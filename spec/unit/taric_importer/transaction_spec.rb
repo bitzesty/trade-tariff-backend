@@ -1,5 +1,6 @@
 require 'spec_helper'
-require 'tariff_importer/importers/taric_importer/transaction'
+
+require 'taric_importer/transaction'
 
 describe TaricImporter::Transaction do
   let(:record) {

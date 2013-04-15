@@ -1,4 +1,4 @@
-class ChiefImporter
+class ChiefImporter < TariffImporter
   module Strategies
     class TAME < BaseStrategy
       map fe_tsmp: [0, :chief_date],

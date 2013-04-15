@@ -1,7 +1,7 @@
 require 'digest'
 require 'ostruct'
 
-class ChiefImporter
+class ChiefImporter < TariffImporter
   module Formatters
     class ChiefCode
       def self.format(value)
