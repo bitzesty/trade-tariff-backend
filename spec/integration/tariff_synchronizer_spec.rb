@@ -24,4 +24,48 @@ describe TariffSynchronizer do
       end
     end
   end
+
+  describe '.rollback' do
+    let!(:measure) { create :measure, operation_date: Date.today }
+    let!(:update)  { create :chief_update, :applied, issue_date: Date.today }
+    let!(:mfcm)    { create :mfcm, origin: update.filename }
+
+    context 'successful run' do
+      before {
+        TariffSynchronizer.rollback(Date.new(2010,1,1))
+      }
+
+      it 'removes entries from oplog tables' do
+        expect { Measure.none? }.to be_true
+      end
+
+      it 'marks Chief and Taric updates as pending' do
+        update.reload.should be_pending
+      end
+
+      it 'removes imported Chief records entries' do
+        expect { Chief::Mfcm.none? }.to be_true
+      end
+    end
+
+    context 'encounters an exception' do
+      before {
+        Measure.should_receive(:operation_klass).and_raise(StandardError)
+
+        rescuing { TariffSynchronizer.rollback(Date.new(2010,1,1)) }
+      }
+
+      it 'does not remove entries from oplog tables' do
+        expect { Measure.any? }.to be_true
+      end
+
+      it 'leaves Chief and Taric updates in applid state' do
+        update.reload.should be_applied
+      end
+
+      it 'removes imported Chief records entries' do
+        expect { Chief::Mfcm.any? }.to be_true
+      end
+    end
+  end
 end

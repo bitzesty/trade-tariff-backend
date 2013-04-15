@@ -27,7 +27,7 @@ class AdditionalCodeType < Sequel::Model
   }
 
   def meursing?
-    application_code == "3"
+    application_code.in?("3")
   end
 
   def non_meursing?

@@ -56,12 +56,12 @@ describe TaricImporter::RecordProcessor do
 
         it 'appends operation type' do
           # comes from update.type, see spec below
-          processor.attributes[:operation].should eq :create
+          processor.attributes['operation'].should eq :create
         end
 
         it 'appends operation date' do
           # comes from update.type, see spec below
-          processor.attributes[:operation_date].should eq operation_date
+          processor.attributes['operation_date'].should eq operation_date
         end
       end
     end

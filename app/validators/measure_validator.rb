@@ -77,10 +77,11 @@ class MeasureValidator < TradeTariffBackend::Validator
   end
 
   validation :ME14, 'If the additional code type is related to a Meursing table plan then the additional code must exist as a Meursing additional code.', on: [:create, :update] do |record|
-    (record.additional_code_type.present? &&
-     record.additional_code_type.meursing? &&
-     record.meursing_additional_code.present?) || (
-       record.additional_code.present? && !record.additional_code_type.meursing?
+     (record.additional_code_type.present? &&
+      record.additional_code_type.meursing? &&
+      record.meursing_additional_code.present?
+     ) || (
+      record.additional_code_type.present? && !record.additional_code_type.meursing?
      ) || (
        record.additional_code_type.blank?
      )

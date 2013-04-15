@@ -12,7 +12,7 @@ class AdditionalCodeTypeValidator < TradeTariffBackend::Validator
 
   validation :CT3, 'The Meursing Table plan must exist', on: [:create, :update] do |record|
     if record.meursing_table_plan_id.present?
-      record.meursing_table_plan_id.present?
+      record.meursing_table_plan.present?
     end
   end
 

@@ -2,7 +2,7 @@ module Sequel
   module Plugins
     module Oplog
       def self.configure(model, options = {})
-        primary_key = options.fetch(:primary_key, [model.primary_key].flatten)
+        primary_key = [:oid, options.fetch(:primary_key, model.primary_key)].flatten
         operation_klass = :"#{model}::Operation"
 
         # Define ModelClass::Operation

@@ -53,6 +53,14 @@ module TariffSynchronizer
       end
     end
 
+    def applied?
+      state == APPLIED_STATE
+    end
+
+    def pending?
+      state == PENDING_STATE
+    end
+
     def missing?
       state == MISSING_STATE
     end
@@ -67,6 +75,10 @@ module TariffSynchronizer
 
     def mark_as_failed
       update(state: FAILED_STATE)
+    end
+
+    def mark_as_pending
+      update(state: PENDING_STATE)
     end
 
     def file_path
