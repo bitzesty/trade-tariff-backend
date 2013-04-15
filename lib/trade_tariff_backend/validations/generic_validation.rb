@@ -36,9 +36,9 @@ module TradeTariffBackend
       end
 
       def relevant_for?(record)
-        !validation_options.has_key?(:if) ||
-         (validation_options[:if].is_a?(Proc) &&
-          validation_options[:if].call(record))
+        !options.has_key?(:if) ||
+         (options[:if].is_a?(Proc) &&
+          options[:if].call(record))
       end
 
       def to_s
