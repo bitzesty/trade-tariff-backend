@@ -41,7 +41,7 @@ class TaricImporter
             transaction.validate
           end
         end
-      rescue RuntimeError, StandardError => exception
+      rescue StandardError => exception
         ActiveSupport::Notifications.instrument("taric_failed.tariff_importer", exception: exception,
                                                                                 xml: xml)
 
