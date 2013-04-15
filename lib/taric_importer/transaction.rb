@@ -1,6 +1,3 @@
-require 'taric_importer/record_processor'
-require 'taric_importer/helpers/string_helper'
-
 class TaricImporter < TariffImporter
   class Transaction
     include TaricImporter::Helpers::StringHelper
