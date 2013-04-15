@@ -1,5 +1,6 @@
 FactoryGirl.define do
   sequence(:geographical_area_sid) { |n| n}
+  sequence(:geographical_area_id)  { |n| n}
 
   factory :geographical_area do
     geographical_area_sid { generate(:geographical_area_sid) }

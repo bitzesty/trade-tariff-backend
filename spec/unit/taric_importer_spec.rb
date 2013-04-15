@@ -1,15 +1,12 @@
 require 'spec_helper'
 
-require 'tariff_importer' # require it so that ActiveSupport requires get executed
-require 'tariff_importer/importers/taric_importer'
+require 'taric_importer'
 
 describe TaricImporter do
-  let(:path)       { Forgery(:basic).text }
-
   describe 'initialization' do
     it 'assigns path' do
-      importer = TaricImporter.new(path)
-      importer.path.should == path
+      importer = TaricImporter.new("spec/fixtures/taric_samples/footnote.xml")
+      importer.path.should == "spec/fixtures/taric_samples/footnote.xml"
     end
   end
 

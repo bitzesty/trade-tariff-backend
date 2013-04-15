@@ -1,4 +1,4 @@
-class ChiefImporter
+class ChiefImporter < TariffImporter
   class EndEntry
     attr_reader :table, :fe_tsmp, :amend_indicator, :record_count
 

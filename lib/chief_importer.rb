@@ -1,18 +1,15 @@
 require 'csv'
 
-require 'active_support/notifications'
-require 'active_support/log_subscriber'
-require 'tariff_importer/logger'
+require 'tariff_importer'
+require 'chief_importer/entry'
+require 'chief_importer/start_entry'
+require 'chief_importer/end_entry'
+require 'chief_importer/change_entry'
 
-require 'tariff_importer/importers/chief_importer/entry'
-require 'tariff_importer/importers/chief_importer/start_entry'
-require 'tariff_importer/importers/chief_importer/end_entry'
-require 'tariff_importer/importers/chief_importer/change_entry'
+require 'chief_importer/strategies/base_strategy'
+require 'chief_importer/strategies/strategies'
 
-require 'tariff_importer/importers/chief_importer/strategies/base_strategy'
-require 'tariff_importer/importers/chief_importer/strategies/strategies'
-
-class ChiefImporter
+class ChiefImporter < TariffImporter
   class ImportException < StandardError
     attr_reader :original
 
@@ -31,16 +28,16 @@ class ChiefImporter
   cattr_accessor :end_mark
   self.end_mark = "ZZZZZZZZZZZ"
 
-  attr_reader :path, :processor, :start_entry,
-              :end_entry, :file_name, :issue_date
+  attr_reader :processor, :start_entry,
+              :end_entry, :file_name
 
   delegate :extraction_date, to: :start_entry, allow_nil: true
   delegate :record_count, to: :end_entry, allow_nil: true
 
   def initialize(path, issue_date = nil)
-    @path = Pathname.new(path)
-    @issue_date = issue_date
-    @file_name = @path.basename.to_s
+    super(path, issue_date)
+
+    @file_name = Pathname.new(path).basename.to_s
   end
 
   def import

@@ -19,7 +19,7 @@ FactoryGirl.define do
     f.goods_nomenclature_sid { generate(:goods_nomenclature_sid) }
     f.goods_nomenclature_item_id { 10.times.map{ Random.rand(9) }.join }
     f.geographical_area_sid { generate(:geographical_area_sid) }
-    f.geographical_area_id { Forgery(:basic).text(exactly: 2).upcase }
+    f.geographical_area_id { generate(:geographical_area_id) }
     f.validity_start_date { Date.today.ago(3.years) }
     f.validity_end_date   { nil }
 
