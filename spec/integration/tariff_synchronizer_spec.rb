@@ -55,7 +55,7 @@ describe TariffSynchronizer do
         rescuing { TariffSynchronizer.rollback(Date.new(2010,1,1)) }
       }
 
-      it 'does not remove entries from oplog tables' do
+      it 'does not remove entries from oplog derived tables' do
         expect { Measure.any? }.to be_true
       end
 
@@ -65,6 +65,24 @@ describe TariffSynchronizer do
 
       it 'removes imported Chief records entries' do
         expect { Chief::Mfcm.any? }.to be_true
+      end
+    end
+
+    context 'when forced to redownload' do
+      before {
+        TariffSynchronizer.rollback(Date.new(2010,1,1), true)
+      }
+
+      it 'removes entries from oplog derived tables' do
+        expect { Measure.none? }.to be_true
+      end
+
+      it 'deletes Chief and Taric updates' do
+        expect { update.reload }.to raise_error Sequel::Error
+      end
+
+      it 'removes imported Chief records entries' do
+        expect { Chief::Mfcm.none? }.to be_true
       end
     end
   end
