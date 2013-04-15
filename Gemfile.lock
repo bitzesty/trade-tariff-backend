@@ -267,7 +267,7 @@ DEPENDENCIES
   ruby-progressbar
   sass-rails
   sequel
-  sequel-rails
+  sequel-rails (= 0.4.2)
   shoulda-matchers (~> 2.0.0)
   simplecov
   simplecov-rcov
