@@ -168,6 +168,10 @@ module TariffSynchronizer
         end
       end
     end
+
+    ActiveSupport::Notifications.instrument("rollback.tariff_synchronizer",
+                                            date: date,
+                                            redownload: redownload)
   end
 
   # Builds tariff_update entries from files available in the

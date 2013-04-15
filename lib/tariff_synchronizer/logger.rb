@@ -37,6 +37,10 @@ module TariffSynchronizer
             .deliver
     end
 
+    def rollback(event)
+      info "Rolled back to #{event.payload[:date]}. Forced redownload: #{!!event.payload[:redownload]}"
+    end
+
     # Update download failed
     def failed_download(event)
       error "Download failed: #{event.payload[:exception].to_s}, url: #{event.payload[:url]}"
