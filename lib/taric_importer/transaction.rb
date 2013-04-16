@@ -17,6 +17,7 @@ class TaricImporter < TariffImporter
         @record_stack << processor.new(message['transmission']['record'], @issue_date).process!
       end
 
+      # deletions return nil from process! so #compact to skip them
       @record_stack = @record_stack.compact
     end
 
@@ -24,7 +25,11 @@ class TaricImporter < TariffImporter
     # ending import process
     def validate
       while (record = record_stack.pop)
-        record.validate!
+        unless record.valid?
+          record.invalidated_by = record.transaction_id
+          record.invalidated_at = Time.now
+          record.save(validate: false)
+        end
       end
     end
 
