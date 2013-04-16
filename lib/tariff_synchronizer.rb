@@ -114,7 +114,7 @@ module TariffSynchronizer
               ::ChiefTransformer.instance.invoke(:update) if pending_update.update_type == "TariffSynchronizer::ChiefUpdate"
             rescue TaricImporter::ImportException,
                    ChiefImporter::ImportException,
-                   TariffImporter::NotFound  => exception
+                   TariffImporter::NotFound => exception
               ActiveSupport::Notifications.instrument("failed_update.tariff_synchronizer", exception: exception,
                                                                                            update: pending_update)
 
