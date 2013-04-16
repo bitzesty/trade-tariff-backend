@@ -75,7 +75,7 @@ describe TariffSynchronizer::Logger do
 
         Footnote.unrestrict_primary_key
         # skip validations
-        Footnote.any_instance.should_receive(:validate!).and_return(true)
+        Footnote.any_instance.should_receive(:valid?).and_return(true)
 
         TariffSynchronizer.apply
       }

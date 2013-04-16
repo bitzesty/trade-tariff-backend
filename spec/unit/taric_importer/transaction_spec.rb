@@ -53,7 +53,7 @@ describe TaricImporter::Transaction do
     before { subject.stub(:record_stack).and_return([entry]) }
 
     context 'all records are valid' do
-      let(:entry)            { stub(validate!: true) }
+      let(:entry)            { stub(valid?: true) }
 
       it 'does not raise an exception' do
         expect { subject.validate }.not_to raise_error
@@ -61,14 +61,17 @@ describe TaricImporter::Transaction do
     end
 
     context 'invalid records present' do
-      let(:entry)            { stub }
+      let(:entry)            { stub(valid?: false,
+                                    transaction_id: 1) }
 
       before {
-        entry.should_receive(:validate!).and_raise(Sequel::ValidationFailed.new('ValidationError'))
+        entry.should_receive(:invalidated_by=).ordered
+        entry.should_receive(:invalidated_at=).ordered
+        entry.should_receive(:save).ordered
       }
 
       it 'raises ValidationFailed exception ending import' do
-        expect { subject.validate }.to raise_error Sequel::ValidationFailed
+        subject.validate
       end
     end
   end
