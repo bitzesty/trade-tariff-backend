@@ -22,10 +22,11 @@ class ChiefTransformer
                        record.fe_tsmp
                      end
 
-          measure.update validity_end_date: end_date,
-                         justification_regulation_id: measure.measure_generating_regulation_id,
-                         justification_regulation_role: measure.measure_generating_regulation_role,
-                         operation_date: operation_date
+          measure.validity_end_date = end_date
+          measure.justification_regulation_id = measure.measure_generating_regulation_id
+          measure.justification_regulation_role = measure.measure_generating_regulation_role
+          measure.operation_date = operation_date
+          measure.save(validate: false)
         end
       end
 
