@@ -196,6 +196,11 @@ class ChiefTransformer
                                 else
                                   mfcm.le_tsmp
                                 end
+
+      if self.validity_end_date.present?
+        self.justification_regulation_role = DEFAULT_REGULATION_ROLE_TYPE_ID
+        self.justification_regulation_id = DEFAULT_REGULATION_ID
+      end
     end
 
     def chief_geographical_area=(chief_code)

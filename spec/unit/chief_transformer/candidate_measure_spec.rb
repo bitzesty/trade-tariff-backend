@@ -197,11 +197,21 @@ describe ChiefTransformer::CandidateMeasure do
           candidate_measure.validity_end_date.should == mfcm.le_tsmp
         end
       end
+
       context 'tame absent with mfcm le_tsmp nil' do
         let(:mfcm) { create :mfcm }
         subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm) }
         it "should be nil" do
           candidate_measure.validity_end_date.should == nil
+        end
+      end
+
+      context 'when validity end date is assigned (any case)' do
+        let(:mfcm) { create :mfcm, :with_le_tsmp }
+        subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm) }
+        it 'sets justifications regulation role id and type (ME33, ME34 confirmance)' do
+          candidate_measure.justification_regulation_role.should_not be_blank
+          candidate_measure.justification_regulation_id.should_not be_blank
         end
       end
     end
