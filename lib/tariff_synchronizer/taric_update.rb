@@ -54,6 +54,14 @@ module TariffSynchronizer
       end
     end
 
+    def affected_datasets
+      Sequel::Model.descendants.select { |model|
+        model.plugins.include?(Sequel::Plugins::Oplog)
+      }.map {|model|
+        model.where(operation_date: issue_date)
+      }
+    end
+
     private
 
     def self.taric_update_name_for(date)

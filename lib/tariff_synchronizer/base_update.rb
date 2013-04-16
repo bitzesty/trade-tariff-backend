@@ -89,6 +89,10 @@ module TariffSynchronizer
       File.exists?(file_path) || ActiveSupport::Notifications.instrument("not_found_on_file_system.tariff_synchronizer", path: file_path)
     end
 
+    def affected_datasets
+      raise "#affected_datasets should be overriden in inheriting class"
+    end
+
     class << self
       def sync
         unless pending_from == Date.today

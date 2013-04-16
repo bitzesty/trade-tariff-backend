@@ -80,7 +80,7 @@ describe TariffSynchronizer::Logger do
 
         Footnote.unrestrict_primary_key
         # skip validations
-        Footnote.any_instance.should_receive(:valid?).and_return(true)
+        Footnote.any_instance.stub(:valid?).and_return(true)
 
         TariffSynchronizer.apply
       }
@@ -125,7 +125,7 @@ describe TariffSynchronizer::Logger do
       end
     end
 
-    context 'with conformance errors present' do
+    context 'update contains entries with conformance errors' do
       let(:example_date)  { Date.today }
       let!(:taric_update) { create :taric_update, example_date: example_date }
 
