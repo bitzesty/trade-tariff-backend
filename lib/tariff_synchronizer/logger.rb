@@ -26,6 +26,7 @@ module TariffSynchronizer
       info "Finished applying updates"
 
       Mailer.applied(event.payload[:update_names],
+                     event.payload[:conformance_errors],
                      event.payload[:count]).deliver
     end
 

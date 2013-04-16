@@ -75,7 +75,7 @@ describe TariffSynchronizer::Logger do
 
         Footnote.unrestrict_primary_key
         # skip validations
-        Footnote.any_instance.should_receive(:valid?).and_return(true)
+        Footnote.any_instance.stub(:valid?).and_return(true)
 
         TariffSynchronizer.apply
       }
@@ -110,6 +110,32 @@ describe TariffSynchronizer::Logger do
       it 'does not send success email' do
         ActionMailer::Base.deliveries.should be_empty
       end
+    end
+
+    context 'update contains entries with conformance errors' do
+      let(:example_date)  { Date.today }
+      let!(:taric_update) { create :taric_update, example_date: example_date }
+
+      before {
+        prepare_synchronizer_folders
+        create_taric_file :pending, example_date
+
+        Footnote.unrestrict_primary_key
+
+        TariffSynchronizer.apply
+      }
+
+
+      it 'success email contains info about conformance errors' do
+        ActionMailer::Base.deliveries.should_not be_empty
+        email = ActionMailer::Base.deliveries.last
+        email.encoded.should =~ /Footnote/
+        email.encoded.should =~ /#{Footnote.first.pk}/
+      end
+
+      after  {
+        purge_synchronizer_folders
+      }
     end
   end
 

@@ -41,6 +41,10 @@ module TariffSynchronizer
       end
     end
 
+    def affected_datasets
+      [Measure.national.where(operation_date: issue_date)]
+    end
+
     private
 
     def self.chief_file_name_for(date)

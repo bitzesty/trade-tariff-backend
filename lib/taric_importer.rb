@@ -33,7 +33,6 @@ class TaricImporter < TariffImporter
             xml = Nokogiri::XML(node.outer_xml).remove_namespaces!
             transaction = Transaction.new(Hash.from_xml(xml.to_s), issue_date)
             transaction.persist
-            transaction.validate
           end
         end
       rescue StandardError => exception
