@@ -1629,6 +1629,7 @@ Sequel.migration do
     self[:schema_migrations].insert(:filename => "20130130132054_add_hydrocarbon_oils_footnote.rb")
     self[:schema_migrations].insert(:filename => "20130212144512_fix_chief_hectolitre_mappings.rb")
     self[:schema_migrations].insert(:filename => "20130417135357_add_users_table.rb")
+    self[:schema_migrations].insert(:filename => "20130418073137_rename_permission_column.rb")
 
     create_table(:search_references) do
       primary_key :id, :type=>"int(11)"
@@ -1678,7 +1679,7 @@ Sequel.migration do
       primary_key :uid, :type=>"int(11)"
       column :name, "varchar(255)"
       column :email, "varchar(255)"
-      column :permission, "text"
+      column :permissions, "text"
       column :remotely_signed_out, "tinyint(1)", :default=>false
     end
   end
