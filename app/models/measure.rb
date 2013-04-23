@@ -329,6 +329,10 @@ class Measure < Sequel::Model
       qon
     end
   end
+
+  def duty_expression
+    measure_components.map(&:duty_rate).join(" ")
+  end
 end
 
 

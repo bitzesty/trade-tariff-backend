@@ -29,6 +29,21 @@ class MeasureComponent < Sequel::Model
 
   delegate :description, :abbreviation, to: :duty_expression, prefix: true
   delegate :abbreviation, to: :monetary_unit, prefix: true, allow_nil: true
+
+  def duty_rate
+    opts = {
+      duty_amount: duty_amount,
+      duty_expression_id: duty_expression_id,
+      duty_expression_description: duty_expression.description,
+      duty_expression_abbreviation: duty_expression.abbreviation,
+      monetary_unit: monetary_unit,
+      monetary_unit_abbreviation: monetary_unit.try(:abbreviation),
+      measurement_unit: measurement_unit,
+      formatted_measurement_unit_qualifier: nil
+    }
+
+    DutyExpressionFormatter.format(opts)
+  end
 end
 
 
