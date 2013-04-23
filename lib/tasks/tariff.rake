@@ -233,6 +233,7 @@ namespace :tariff do
           commodities = Commodity.actual
                                  .declarable
                                  .all
+                                 .select(&:declarable?)
 
           progress_bar = ProgressBar.create(title: report_date.to_s,
                                             format: '%e |%B| %p%% %t',
