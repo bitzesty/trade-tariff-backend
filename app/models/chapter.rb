@@ -20,6 +20,12 @@ class Chapter < GoodsNomenclature
            .where(~{goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes })
   }
 
+  one_to_many :commodities, dataset: -> {
+    Commodity.actual
+           .filter("goods_nomenclature_item_id LIKE ? AND goods_nomenclature_item_id NOT LIKE '__00______'", relevant_commodities)
+           .where(~{goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes })
+  }
+
   one_to_one :chapter_note, dataset: -> {
     ChapterNote.where(chapter_id: to_param, section_id: section.id)
   }
@@ -81,5 +87,9 @@ class Chapter < GoodsNomenclature
 
   def relevant_headings
     "#{short_code}__000000"
+  end
+
+  def relevant_commodities
+    "#{short_code}________"
   end
 end

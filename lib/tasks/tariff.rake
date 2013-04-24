@@ -228,34 +228,40 @@ namespace :tariff do
     12.times { |month_count|
       report_date = Date.new(2012,4,1).in(month_count.months).to_date
 
+
+
       CSV.open(File.join(Rails.root, "reports", "#{report_date}_quota_report.csv"), "wb") do |csv|
         TimeMachine.at(report_date) {
-          commodities = Commodity.actual
-                                 .declarable
-                                 .all
-                                 .select(&:declarable?)
+
+          ordnums = TimeMachine.now { QuotaOrderNumber.actual
+                                                      .select(:quota_order_number_id)
+                                                      .map(&:quota_order_number_id) }
+
+
+          quota_measures = Measure.where(ordernumber: ordnums,
+                                         national: nil,
+                                         measure_type_id: [122,143,147])
+                                   .eager(:base_regulation, :modification_regulation)
+                                   .all
+                                   .select {|m|
+            m.validity_start_date.to_date <= report_date &&
+              (m.validity_end_date.blank? || m.validity_end_date.to_date > report_date)
+          }
 
           progress_bar = ProgressBar.create(title: report_date.to_s,
                                             format: '%e |%B| %p%% %t',
-                                            total: commodities.size)
+                                            total: quota_measures.size)
 
-          commodities.each { |commodity|
+          quota_measures.each { |quota_measure|
+
             progress_bar.increment
 
-            quota_measures = commodity.import_measures_dataset
-                                .where(measures__national: nil,
-                                       measures__measure_type_id: [122,143,147])
-                                .where{~{measures__ordernumber: nil}}
-                                .filter{|o| ({measures__operation_date: nil}) | (o.<=(:measures__operation_date, report_date))}
-                                .filter{|o| (o.<=(:measures__validity_start_date, report_date))}
-                                .filter{|o| ({measures__validity_end_date: nil}) | (o.>(:measures__validity_end_date, report_date))}
-                                .all
-            quota_measures.each { |quota_measure|
-              relevant_measure = commodity.import_measures_dataset
-                                .where(measures__national: nil,
-                                       measures__ordernumber: nil,
-                                       measures__geographical_area_sid: quota_measure.geographical_area_sid,
-                                       measures__measure_type_id: [142,103,106])
+            if quota_measure.goods_nomenclature.is_a?(Commodity) && quota_measure.goods_nomenclature.declarable?
+              relevant_measure = Measure.where(measures__national: nil,
+                                               measures__goods_nomenclature_sid: quota_measure.goods_nomenclature_sid,
+                                               measures__ordernumber: nil,
+                                               measures__geographical_area_sid: quota_measure.geographical_area_sid,
+                                               measures__measure_type_id: [142,103,106])
                                 .filter{~{measures__measure_sid: quota_measure.measure_sid}}
                                 .filter{|o| ({measures__operation_date: nil}) | (o.<=(:measures__operation_date, report_date))}
                                 .filter{|o| (o.<=(:measures__validity_start_date, report_date))}
@@ -264,15 +270,40 @@ namespace :tariff do
 
               next if relevant_measure.blank?
 
-              csv << [commodity.goods_nomenclature_item_id.to_s.rjust(10, '0'),
+              csv << [quota_measure.goods_nomenclature_item_id.to_s.rjust(10, '0'),
                       quota_measure.ordernumber,
                       relevant_measure.duty_expression,
                       quota_measure.duty_expression]
-              }
-            }
+            else
+              mapped_commodities = if quota_measure.goods_nomenclature.is_a?(Commodity)
+                                      GoodsNomenclatureMapper.new(quota_measure.goods_nomenclature.heading.commodities)
+                                                             .all
+                                                             .select { |c|
+                                                               c.ancestors.include?(quota_measure.goods_nomenclature)
+                                                             }
+                                     else
+                                      # heading or chapter
+                                      GoodsNomenclatureMapper.new(quota_measure.goods_nomenclature.commodities).all
+                                     end
 
-            progress_bar.increment
+              # mapped_commodities.select(&:leaf?).each { |leaf_commodity|
+              #   relevant_measure = leaf_commodity.measures.select {|measure|
+              #     measure.national.blank? &&
+              #     measure.ordernumber.blank? &&
+              #     measure.geographical_area_sid == quota_measure.geographical_area_sid &&
+              #     measure.measure_type_id.in?(['142', '103', '106'])
+              #   }.sort_by(&:goods_nomenclature_sid).reverse.first
+
+              #   next if relevant_measure.blank?
+
+              #   csv << [leaf_commodity.goods_nomenclature_item_id.to_s.rjust(10, '0'),
+              #           quota_measure.ordernumber,
+              #           relevant_measure.duty_expression,
+              #           quota_measure.duty_expression]
+              # }
+            end
           }
+        }
       end
     }
   end

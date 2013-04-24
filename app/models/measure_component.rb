@@ -34,8 +34,8 @@ class MeasureComponent < Sequel::Model
     opts = {
       duty_amount: duty_amount,
       duty_expression_id: duty_expression_id,
-      duty_expression_description: duty_expression.description,
-      duty_expression_abbreviation: duty_expression.abbreviation,
+      duty_expression_description: duty_expression.try(:description),
+      duty_expression_abbreviation: duty_expression.try(:abbreviation),
       monetary_unit: monetary_unit,
       monetary_unit_abbreviation: monetary_unit.try(:abbreviation),
       measurement_unit: measurement_unit,
