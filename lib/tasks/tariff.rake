@@ -226,11 +226,11 @@ namespace :tariff do
   # TODO refactor dirty implementation
   task quota_report: [:environment, :class_eager_load] do
     12.times { |month_count|
-      report_date = Date.new(2012,4,1).in(month_count.months).to_date
+      report_date = Date.new(2012,5,1).in(month_count.months).to_date
 
-
-
-      CSV.open(File.join(Rails.root, "reports", "#{report_date}_quota_report.csv"), "wb") do |csv|
+      CSV.open(File.join(Rails.root, "reports", "#{report_date}_quota_report.csv"), "wb",
+              write_headers: true,
+              headers: ['Commodity Code', 'Quota Order No.', 'Full duty', 'Quota reduced rate']) do |csv|
         TimeMachine.at(report_date) {
 
           ordnums = TimeMachine.now { QuotaOrderNumber.actual
@@ -257,7 +257,7 @@ namespace :tariff do
             progress_bar.increment
 
             if quota_measure.goods_nomenclature.is_a?(Commodity) && quota_measure.goods_nomenclature.declarable?
-              relevant_measure = Measure.where(measures__national: nil,
+              pair_measure = Measure.where(measures__national: nil,
                                                measures__goods_nomenclature_sid: quota_measure.goods_nomenclature_sid,
                                                measures__ordernumber: nil,
                                                measures__geographical_area_sid: quota_measure.geographical_area_sid,
@@ -268,23 +268,34 @@ namespace :tariff do
                                 .filter{|o| ({measures__validity_end_date: nil}) | (o.>(:measures__validity_end_date, report_date))}
                                 .first
 
-              next if relevant_measure.blank?
-
+              if pair_measure.blank?
+                csv << [quota_measure.goods_nomenclature_item_id.to_s.rjust(10, '0'),
+                        quota_measure.ordernumber,
+                        nil,
+                        quota_measure.duty_expression]
+              else
+                csv << [quota_measure.goods_nomenclature_item_id.to_s.rjust(10, '0'),
+                        quota_measure.ordernumber,
+                        pair_measure.duty_expression,
+                        quota_measure.duty_expression]
+              end
+            else
+              # include higher level measure
               csv << [quota_measure.goods_nomenclature_item_id.to_s.rjust(10, '0'),
                       quota_measure.ordernumber,
-                      relevant_measure.duty_expression,
+                      nil,
                       quota_measure.duty_expression]
-            else
-              mapped_commodities = if quota_measure.goods_nomenclature.is_a?(Commodity)
-                                      GoodsNomenclatureMapper.new(quota_measure.goods_nomenclature.heading.commodities)
-                                                             .all
-                                                             .select { |c|
-                                                               c.ancestors.include?(quota_measure.goods_nomenclature)
-                                                             }
-                                     else
-                                      # heading or chapter
-                                      GoodsNomenclatureMapper.new(quota_measure.goods_nomenclature.commodities).all
-                                     end
+
+              # mapped_commodities = if quota_measure.goods_nomenclature.is_a?(Commodity)
+              #                         GoodsNomenclatureMapper.new(quota_measure.goods_nomenclature.heading.commodities)
+              #                                                .all
+              #                                                .select { |c|
+              #                                                  c.ancestors.include?(quota_measure.goods_nomenclature)
+              #                                                }
+              #                        else
+              #                         # heading or chapter
+              #                         GoodsNomenclatureMapper.new(quota_measure.goods_nomenclature.commodities).all
+              #                        end
 
               # mapped_commodities.select(&:leaf?).each { |leaf_commodity|
               #   relevant_measure = leaf_commodity.measures.select {|measure|
