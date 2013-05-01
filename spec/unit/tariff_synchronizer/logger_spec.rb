@@ -156,7 +156,7 @@ describe TariffSynchronizer::Logger do
   end
 
   describe '#failed_update logging' do
-    let(:mock_pending_update) { mock(issue_date: Date.today,
+    let(:mock_pending_update) { mock(file_name: Date.today,
                                      update_priority: 1,
                                      file_path: '/') }
 

@@ -107,7 +107,7 @@ module TariffSynchronizer
       conformance_errors = {}
 
       PendingUpdate.all.tap do |pending_updates|
-        pending_updates.sort_by(&:issue_date)
+        pending_updates.sort_by(&:file_name)
                        .sort_by(&:update_priority)
                        .each do |pending_update|
           Sequel::Model.db.transaction do
