@@ -2,8 +2,8 @@ require 'spec_helper'
 require 'tariff_synchronizer'
 
 describe TariffSynchronizer do
-  let!(:update_1) { create :chief_update, :pending, issue_date: Date.yesterday }
-  let!(:update_2) { create :chief_update, :pending, issue_date: Date.today }
+  let!(:update_1) { create :chief_update, :pending, issue_date: Date.yesterday, filename: "#{Date.yesterday}" }
+  let!(:update_2) { create :chief_update, :pending, issue_date: Date.today, filename: "#{Date.today}" }
 
   describe '.apply' do
     context 'failure scenario' do
