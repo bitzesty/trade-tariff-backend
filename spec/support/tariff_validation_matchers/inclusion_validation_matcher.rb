@@ -4,7 +4,7 @@ class InclusionValidationMatcher < TariffValidationMatcher
   def matches?(subject)
     @subject = subject.dup
 
-    @validation = subject.validator
+    @validation = subject.conformance_validator
                          .validations
                          .detect{|validation| validation.type == validation_type &&
                                               validation.validation_options[:of] == @attributes &&

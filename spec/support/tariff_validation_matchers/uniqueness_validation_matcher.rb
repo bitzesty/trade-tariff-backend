@@ -4,7 +4,7 @@ class UniquenessValidationMatcher < TariffValidationMatcher
   def matches?(subject)
     super
 
-    subject.validator
+    subject.conformance_validator
            .validations
            .select{|validation| validation.type == validation_type }
            .any?{|validation|

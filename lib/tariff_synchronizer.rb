@@ -19,7 +19,6 @@ module TariffSynchronizer
   autoload :PendingUpdate, 'tariff_synchronizer/pending_update'
   autoload :TaricArchive,  'tariff_synchronizer/taric_archive'
   autoload :TaricUpdate,   'tariff_synchronizer/taric_update'
-  autoload :Validator,     'tariff_synchronizer/validator'
 
   extend self
 
@@ -104,8 +103,6 @@ module TariffSynchronizer
 
       ActiveSupport::Notifications.instrument("failed_updates_present.tariff_synchronizer", file_names: file_names)
     else
-      conformance_errors = {}
-
       PendingUpdate.all.tap do |pending_updates|
         pending_updates.sort_by(&:file_name)
                        .sort_by(&:update_priority)
@@ -115,8 +112,6 @@ module TariffSynchronizer
               pending_update.apply
 
               ::ChiefTransformer.instance.invoke(:update) if pending_update.update_type == "TariffSynchronizer::ChiefUpdate"
-
-              conformance_errors.deep_merge!(Validator.invalid_entries_for(pending_update))
             rescue TaricImporter::ImportException,
                    ChiefImporter::ImportException,
                    TariffImporter::NotFound => exception
@@ -133,7 +128,6 @@ module TariffSynchronizer
         end
 
         ActiveSupport::Notifications.instrument("apply.tariff_synchronizer", update_names: pending_updates.map(&:file_name),
-                                                                             conformance_errors: conformance_errors,
                                                                              count: pending_updates.size) if pending_updates.any? && BaseUpdate.pending_or_failed.none?
       end
     end

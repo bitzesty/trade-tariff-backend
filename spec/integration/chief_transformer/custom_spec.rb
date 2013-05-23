@@ -167,16 +167,17 @@ describe 'CHIEF: Custom scenarions' do
   end
 
   describe 'Scenario: MFCM update fails due to conformance validation (ME8)' do
-    let!(:gono) { create :goods_nomenclature, :with_indent,
+    let!(:gono) { create :goods_nomenclature, :declarable, :with_indent,
                                              goods_nomenclature_sid: 91900,
                                              goods_nomenclature_item_id: '5607509090',
                                              producline_suffix: 80,
                                              validity_start_date: Date.new(2010,1,1),
-                                             validity_end_date: Date.new(2013,02,28) }
+                                             validity_end_date: Date.new(2013,2,28) }
     let!(:measure) { create :measure, :national, measure_sid: -41534,
-                                                 measure_type: 'VTS',
-                                                 goods_nomenclature_item_id: '5607509090',
-                                                 goods_nomenclature_sid: 91900,
+                                                 measure_type_id: 'VTS',
+                                                 goods_nomenclature: gono,
+                                                 goods_nomenclature_sid: gono.goods_nomenclature_sid,
+                                                 goods_nomenclature_item_id: gono.goods_nomenclature_item_id,
                                                  validity_start_date: DateTime.new(2007,10,1,0,0),
                                                  validity_end_date: Date.new(2013,2,28),
                                                  tariff_measure_number: '12110985' }
@@ -203,7 +204,7 @@ describe 'CHIEF: Custom scenarions' do
       measure.reload.validity_end_date.should eq mfcm.le_tsmp
     end
 
-    it 'will mark measure as invalidated'  do
+    it 'will mark measure as invalidated' do
       ChiefTransformer.instance.invoke
 
       expect(measure.reload).to be_invalidated

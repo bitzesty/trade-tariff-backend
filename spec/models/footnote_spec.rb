@@ -83,7 +83,7 @@ describe Footnote do
         before { footnote.footnote_description_periods.each(&:destroy)  }
 
         it 'performs validation' do
-          footnote.reload.valid?.should be_false
+          footnote.reload.should_not be_conformant
         end
       end
 
@@ -93,7 +93,7 @@ describe Footnote do
 
         it 'performs validation' do
           desc_period.update(validity_start_date: footnote.validity_start_date + 1.day)
-          footnote.reload.valid?.should be_false
+          footnote.reload.should_not be_conformant
         end
       end
 
@@ -105,7 +105,7 @@ describe Footnote do
                                                                   validity_start_date: footnote.validity_start_date }
 
         it 'performs validation' do
-          footnote.reload.valid?.should be_false
+          footnote.reload.should_not be_conformant
         end
       end
 
@@ -116,7 +116,7 @@ describe Footnote do
         before { desc_period.update(validity_start_date: footnote.validity_end_date + 1.day) }
 
         it 'performs validation' do
-          footnote.reload.valid?.should be_false
+          footnote.reload.should_not be_conformant
         end
       end
     end
@@ -129,10 +129,10 @@ describe Footnote do
                                                                 footnote_type_id: footnote.footnote_type_id }
 
       it 'performs validation' do
-        footnote.valid?.should be_true
+        footnote.should be_conformant
 
         footnote.validity_start_date = measure.validity_start_date + 1
-        footnote.valid?.should be_false
+        footnote.should_not be_conformant
       end
     end
 
@@ -144,10 +144,10 @@ describe Footnote do
                                                                             footnote_type: footnote.footnote_type_id }
 
       it 'performs validation' do
-        footnote.valid?.should be_true
+        footnote.should be_conformant
 
         footnote.validity_start_date = goods_nomenclature.validity_start_date + 1
-        footnote.valid?.should be_false
+        footnote.should_not be_conformant
       end
     end
 
@@ -159,10 +159,10 @@ describe Footnote do
                                                              footnote_type: footnote.footnote_type_id }
 
       it 'performs validation' do
-        footnote.valid?.should be_true
+        footnote.should be_conformant
 
         footnote.validity_start_date = export_refund_nomenclature.validity_start_date + 1
-        footnote.valid?.should be_false
+        footnote.should_not be_conformant
       end
     end
 
@@ -174,10 +174,10 @@ describe Footnote do
                                                              footnote_type_id: footnote.footnote_type_id }
 
       it 'performs validation' do
-        footnote.valid?.should be_true
+        footnote.should be_conformant
 
         footnote.validity_start_date = additional_code.validity_start_date + 1
-        footnote.valid?.should be_false
+        footnote.should_not be_conformant
       end
     end
 

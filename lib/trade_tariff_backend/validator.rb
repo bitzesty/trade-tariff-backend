@@ -18,7 +18,7 @@ module TradeTariffBackend
 
     def validate(record)
       relevant_validations_for(record).each {|validation|
-        record.errors.add(:conformance, validation.to_s) unless validation.valid?(record)
+        record.conformance_errors.add(:conformance, validation.to_s) unless validation.valid?(record)
       }
     end
 

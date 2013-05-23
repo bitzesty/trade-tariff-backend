@@ -4,7 +4,7 @@ class ExclusionValidationMatcher < TariffValidationMatcher
   def matches?(subject)
     @subject = subject.dup
 
-    @validation = subject.validator
+    @validation = subject.conformance_validator
                          .validations
                          .detect do |validation|
       validation.type == validation_type

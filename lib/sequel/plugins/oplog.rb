@@ -21,7 +21,7 @@ module Sequel
                                        class_name: operation_klass
 
         # Delegations
-        model.delegate :validator, :operation_klass, to: model
+        model.delegate :conformance_validator, :operation_klass, to: model
       end
 
       module InstanceMethods
@@ -41,16 +41,14 @@ module Sequel
           end
         end
 
-        def validate
-          super
-
-          validator.validate(self)
+        def conformance_errors
+          @conformance_errors ||= Sequel::Model::Errors.new
         end
 
-        def validate!
-          validator.validate(self)
+        def conformant?
+          conformance_validator.validate(self)
 
-          raise ValidationFailed.new(self) if self.errors.any?
+          conformance_errors.none?
         end
 
         def _insert_raw(ds)
@@ -62,13 +60,14 @@ module Sequel
         def _destroy_delete
           self.operation = :destroy
 
-          validator.validate(self)
+          conformance_validator.validate(self)
 
           # Run destroy validations
           # In Sequel these are modeled using before_destroy hooks
           # which is not very pretty. It will raise an exception on #destroy
-          if self.errors.none?
-            operation_klass.insert(self.values.except(:oid))
+          # TODO should we really check for conformance errors here
+          if self.conformance_errors.none?
+           operation_klass.insert(self.values.except(:oid))
           else
             raise ValidationFailed.new(self)
           end
@@ -98,8 +97,8 @@ module Sequel
           @_operation_klass ||= "#{self}::Operation".constantize
         end
 
-        def validator
-          @_validator ||= begin
+        def conformance_validator
+          @_conformance_validator ||= begin
                             "#{self}Validator".constantize.new
                           rescue NameError
                             NullValidator

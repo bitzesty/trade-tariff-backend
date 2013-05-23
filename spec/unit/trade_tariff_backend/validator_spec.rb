@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe TradeTariffBackend::Validator do
-  let(:model) { stub(operation: :create, errors: stub(add: true)) }
+  let(:model) { stub(operation: :create, conformance_errors: stub(add: true)) }
   let(:generic_validator) {
     Class.new(TradeTariffBackend::Validator) {
       validation :verify1, 'some validation' do |record|
@@ -43,7 +43,7 @@ describe TradeTariffBackend::Validator do
     }
 
     it 'runs validations on record' do
-      model.errors.should have_received(:add)
+      model.conformance_errors.should have_received(:add)
     end
   end
 
@@ -52,7 +52,7 @@ describe TradeTariffBackend::Validator do
       before { generic_validator.new.validate(model) }
 
       it 'adds no error to object errors hash' do
-        model.errors.should_not have_received(:add)
+        model.conformance_errors.should_not have_received(:add)
       end
     end
 
@@ -66,7 +66,7 @@ describe TradeTariffBackend::Validator do
       }
 
       it 'adds error to object errors hash' do
-        model.errors.should have_received(:add)
+        model.conformance_errors.should have_received(:add)
       end
     end
   end

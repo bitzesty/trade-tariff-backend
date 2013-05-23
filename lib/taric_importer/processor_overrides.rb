@@ -44,7 +44,7 @@ class TaricImporter < TariffImporter
           ::Measure.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                  .national
                  .non_invalidated.each do |measure|
-            unless measure.valid?
+            unless measure.conformant?
               measure.invalidated_by = record.transaction_id
               measure.invalidated_at = Time.now
               measure.save(validate: false)

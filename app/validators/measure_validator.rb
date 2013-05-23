@@ -50,10 +50,7 @@ class MeasureValidator < TradeTariffBackend::Validator
   end
 
   validation :ME8, 'The validity period of the goods code must span the validity period of the measure.',
-      on: [:create, :update],
-      if: ->(record) {
-        !record.national? || !record.invalidated?
-      } do
+      on: [:create, :update] do
     validates :validity_date_span, of: :goods_nomenclature
   end
 

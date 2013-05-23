@@ -470,8 +470,8 @@ describe Measure do
       let(:measure2) { create :measure, gono_producline_suffix: "20" }
 
       it 'performs validation' do
-        measure1.should be_valid
-        measure2.should_not be_valid
+        measure1.should be_conformant
+        measure2.should_not be_conformant
       end
     end
 
@@ -481,7 +481,7 @@ describe Measure do
                                         goods_nomenclature_item_id: nil }
 
         it 'performs validation' do
-          measure.should_not be_valid
+          measure.should_not be_conformant
         end
       end
 
@@ -489,7 +489,7 @@ describe Measure do
         let(:measure) { create :measure, additional_code_id: '123' }
 
         it 'performs validation' do
-          measure.should be_valid
+          measure.should be_conformant
         end
       end
     end
@@ -500,9 +500,9 @@ describe Measure do
       let(:measure3) { create :measure, :with_quota_order_number, order_number_capture_code: 1, ordernumber: '123' }
 
       it 'performs validation' do
-        measure1.should_not be_valid
-        measure2.should_not be_valid
-        measure3.should     be_valid
+        measure1.should_not be_conformant
+        measure2.should_not be_conformant
+        measure3.should     be_conformant
       end
     end
 
@@ -511,8 +511,8 @@ describe Measure do
       let(:measure2) { create :measure, :with_related_additional_code_type }
 
       it 'performs validation' do
-        measure1.should_not be_valid
-        measure2.should be_valid
+        measure1.should_not be_conformant
+        measure2.should be_conformant
       end
     end
 
@@ -526,7 +526,7 @@ describe Measure do
                                         reduction_indicator: nil }
 
         it 'should be valid' do
-          measure.should be_valid
+          measure.should be_conformant
         end
       end
 
@@ -540,7 +540,7 @@ describe Measure do
                                         reduction_indicator: 1 }
 
         it 'should no be valid' do
-          measure.should_not be_valid
+          measure.should_not be_conformant
         end
       end
 
@@ -549,7 +549,7 @@ describe Measure do
                                         additional_code_type_id: 3 }
 
         it 'should be valid' do
-          measure.should be_valid
+          measure.should be_conformant
         end
       end
     end
@@ -567,7 +567,7 @@ describe Measure do
                                         order_number_capture_code: 1 }
 
         it 'should be valid' do
-          measure.should be_valid
+          measure.should be_conformant
         end
       end
 
@@ -582,7 +582,7 @@ describe Measure do
                                         reduction_indicator: 1 }
 
         it 'should not be valid' do
-          measure.should_not be_valid
+          measure.should_not be_conformant
         end
       end
 
@@ -591,7 +591,7 @@ describe Measure do
                                         additional_code_type_id: 3 }
 
         it 'should be valid' do
-          measure.should be_valid
+          measure.should be_conformant
         end
       end
     end
@@ -608,7 +608,7 @@ describe Measure do
         before { measure.generating_regulation.update(replacement_indicator: 1)}
 
         it 'should not be valid' do
-          measure.valid?.should be_false
+          measure.conformant?.should be_false
         end
       end
 
@@ -616,7 +616,7 @@ describe Measure do
         before { measure.generating_regulation.update(replacement_indicator: 2)}
 
         it 'should be valid' do
-          measure.valid?.should be_true
+          measure.conformant?.should be_true
         end
       end
 
@@ -624,7 +624,7 @@ describe Measure do
         before { measure.generating_regulation.update(replacement_indicator: 0)}
 
         it 'should be valid' do
-          measure.valid?.should be_true
+          measure.conformant?.should be_true
         end
       end
     end
@@ -637,7 +637,7 @@ describe Measure do
         before { measure.validity_end_date = Date.today }
 
         it 'performs validation' do
-          measure.should_not be_valid
+          measure.should_not be_conformant
         end
       end
 
@@ -645,7 +645,7 @@ describe Measure do
         before { measure.validity_end_date = nil }
 
         it 'performs validation' do
-          measure.should be_valid
+          measure.should be_conformant
         end
       end
     end
@@ -655,7 +655,7 @@ describe Measure do
         let(:measure) { create :measure, :with_abrogated_modification_regulation }
 
         it 'performs validation' do
-          measure.should_not be_valid
+          measure.should_not be_conformant
         end
       end
 
@@ -663,7 +663,7 @@ describe Measure do
         let(:measure) { create :measure }
 
         it 'performs validation' do
-          measure.should be_valid
+          measure.should be_conformant
         end
       end
     end
@@ -682,7 +682,7 @@ describe Measure do
         }
 
         it 'performs validation' do
-          measure.should be_valid
+          measure.should be_conformant
         end
       end
 
@@ -690,7 +690,7 @@ describe Measure do
         before { measure.validity_end_date = nil }
 
         it 'performs validation' do
-          measure.should_not be_valid
+          measure.should_not be_conformant
         end
       end
     end
@@ -706,8 +706,8 @@ describe Measure do
                                         gono_number_indents: 10 }
 
       it 'preforms validation' do
-        measure1.should be_valid
-        measure2.should_not be_valid
+        measure1.should be_conformant
+        measure2.should_not be_conformant
       end
     end
 

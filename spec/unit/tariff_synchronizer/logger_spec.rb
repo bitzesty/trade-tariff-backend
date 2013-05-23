@@ -547,7 +547,7 @@ describe TariffSynchronizer::Logger do
     let(:measure) { create :measure }
 
     before {
-      ChiefTransformer::Processor::Operation.new(nil)
+      ChiefTransformer::Processor::Operation.new(stub(operation_date: Date.today))
       .update_record(measure, validity_start_date: Date.today.in(10.years),
                               validity_end_date: Date.today.ago(10.years))
     }

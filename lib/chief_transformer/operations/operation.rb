@@ -17,7 +17,7 @@ class ChiefTransformer
       def update_record(record, attributes = {})
         record.set(attributes)
 
-        unless record.valid?
+        unless record.conformant?
           record.invalidated_at = Time.now
 
           instrument("invalidated.tariff_synchronizer", record: record)

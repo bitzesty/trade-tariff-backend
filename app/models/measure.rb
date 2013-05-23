@@ -251,7 +251,7 @@ class Measure < Sequel::Model
   end
 
   def invalidated?
-    invalidated_by.present?
+    invalidated_at.present?
   end
 
   def validity_date_justified?
