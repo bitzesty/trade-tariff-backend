@@ -88,6 +88,12 @@ describe TariffSynchronizer::Logger do
         email.encoded.should =~ /#{taric_update.filename}/
       end
 
+      it 'informs that no conformance errors were found' do
+        ActionMailer::Base.deliveries.should_not be_empty
+        email = ActionMailer::Base.deliveries.last
+        email.encoded.should =~ /No conformance errors found/
+      end
+
       after  { purge_synchronizer_folders }
     end
 
@@ -103,6 +109,34 @@ describe TariffSynchronizer::Logger do
 
       it 'does not send success email' do
         ActionMailer::Base.deliveries.should be_empty
+      end
+    end
+
+    context 'with conformance errors present' do
+      let(:example_date)  { Date.today }
+      let!(:taric_update) { create :taric_update, example_date: example_date }
+
+      before {
+        prepare_synchronizer_folders
+        create_taric_file :pending, example_date
+
+        TariffSynchronizer::Logger.conformance_errors << build(:measure)
+        TariffSynchronizer.apply
+      }
+
+      after {
+        # reset to previous(default) state
+        TariffSynchronizer::Logger.conformance_errors = []
+      }
+
+      it 'logs and info event' do
+        @logger.logged(:info).size.should be > 1
+      end
+
+      it 'sends email with conformance error descriptions' do
+        ActionMailer::Base.deliveries.should_not be_empty
+        email = ActionMailer::Base.deliveries.last
+        email.encoded.should_not =~ /No conformance errors found/
       end
     end
   end
@@ -494,6 +528,21 @@ describe TariffSynchronizer::Logger do
       ActionMailer::Base.deliveries.should_not be_empty
       email = ActionMailer::Base.deliveries.last
       email.encoded.should =~ /missing/
+    end
+  end
+
+  describe "#invalidated" do
+    let(:measure) { create :measure }
+
+    before {
+      ChiefTransformer::Processor::Operation.new(nil)
+      .update_record(measure, validity_start_date: Date.today.in(10.years),
+                              validity_end_date: Date.today.ago(10.years))
+    }
+
+    it 'logs a warn event' do
+      @logger.logged(:warn).size.should eq 1
+      @logger.logged(:warn).to_s.should =~ /Invalid/
     end
   end
 end

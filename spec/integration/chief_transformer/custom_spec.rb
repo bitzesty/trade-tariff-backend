@@ -173,4 +173,48 @@ describe 'CHIEF: Custom scenarions' do
       measure.validity_end_date.should_not eq tame.fe_tsmp
     end
   end
+
+  describe 'Scenario: MFCM update fails due to conformance validation (ME8)' do
+    let!(:gono) { create :goods_nomenclature, :with_indent,
+                                             goods_nomenclature_sid: 91900,
+                                             goods_nomenclature_item_id: '5607509090',
+                                             producline_suffix: 80,
+                                             validity_start_date: Date.new(2010,1,1),
+                                             validity_end_date: Date.new(2013,02,28) }
+    let!(:measure) { create :measure, :national, measure_sid: -41534,
+                                                 measure_type: 'VTS',
+                                                 goods_nomenclature_item_id: '5607509090',
+                                                 goods_nomenclature_sid: 91900,
+                                                 validity_start_date: DateTime.new(2007,10,1,0,0),
+                                                 validity_end_date: Date.new(2013,2,28),
+                                                 tariff_measure_number: '12110985' }
+
+    let!(:mfcm) { create :mfcm, msrgp_code: 'VT',
+                                msr_type: 'S',
+                                tty_code: 'B00',
+                                fe_tsmp: DateTime.new(2013,5,14,14,14),
+                                le_tsmp: DateTime.new(2013,5,14,14,28),
+                                cmdty_code: '5607509090',
+                                tar_msr_no: nil,
+                                amend_indicator: 'U' }
+
+
+    let!(:measure_type) { create :measure_type, measure_type_id: 'VTS', validity_start_date: Date.today.ago(10.years) }
+
+    it 'will not raise validation exception' do
+      expect { ChiefTransformer.instance.invoke }.not_to raise_error ChiefTransformer::TransformException
+    end
+
+    it 'will update measure validity dates' do
+      ChiefTransformer.instance.invoke
+
+      measure.reload.validity_end_date.should eq mfcm.le_tsmp
+    end
+
+    it 'will mark measure as invalidated'  do
+      ChiefTransformer.instance.invoke
+
+      expect(measure.reload).to be_invalidated
+    end
+  end
 end

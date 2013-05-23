@@ -11,3 +11,52 @@
     <li><%= update_name %></li>
   <% end %>
 </ul>
+
+<% if @conformance_errors.any? %>
+  <table>
+    <thead>
+      <tr>
+        <td>Model</td>
+        <td>Primary Key</td>
+        <td>Details</td>
+        <td>Errors</td>
+      </tr>
+    </thead>
+    <tbody>
+      <% @conformance_errors.each do |record| %>
+        <tr>
+          <td>
+            <strong><%= record.class %></strong>
+          </td>
+          <td>
+            <%= record.pk.inspect %>
+          </td>
+          <td>
+            <%= record.values.inspect %>
+          </td>
+          <td>
+            <%= record.inspect %>
+          </td>
+          <td>
+            <ul>
+              <% record.errors.each do |error_type, error_messages| %>
+                <li>
+                  <strong><%= error_type %></strong><br />
+                </li>
+                <% error_messages.each do |error_message| %>
+                  <li>
+                    <%= error_message %>
+                  </li>
+                <% end %>
+              <% end %>
+            </ul>
+          <td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>
+    <strong>No conformance errors found.</strong>
+  </p>
+<% end %>

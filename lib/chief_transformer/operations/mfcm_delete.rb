@@ -16,7 +16,7 @@ class ChiefTransformer
                        record.fe_tsmp
                      end
 
-          measure.update validity_end_date: end_date
+          update_record(measure, validity_end_date: end_date)
         end
       end
     end

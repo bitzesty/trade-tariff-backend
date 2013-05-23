@@ -189,7 +189,7 @@ class Measure < Sequel::Model
 
   # Soft-deleted
   def invalidated?
-    invalidated_by.present?
+    invalidated_at.present?
   end
 
   def validate
