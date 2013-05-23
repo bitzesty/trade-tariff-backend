@@ -1,6 +1,12 @@
+require 'forwardable'
+
 class ChiefTransformer
   class Processor
     class Operation
+      extend Forwardable
+
+      def_delegator ActiveSupport::Notifications, :instrument
+
       attr_reader :record
 
       def initialize(record)
@@ -8,8 +14,14 @@ class ChiefTransformer
       end
 
       def update_record(record, attributes = {})
-        record.set attributes
-        record.invalidated_at = Time.now unless record.valid?
+        record.set(attributes)
+
+        unless record.valid?
+          record.invalidated_at = Time.now
+
+          instrument("invalidated.tariff_synchronizer", record: record)
+        end
+
         record.save
       end
     end

@@ -496,4 +496,19 @@ describe TariffSynchronizer::Logger do
       email.encoded.should =~ /missing/
     end
   end
+
+  describe "#invalidated" do
+    let(:measure) { create :measure }
+
+    before {
+      ChiefTransformer::Processor::Operation.new(nil)
+      .update_record(measure, validity_start_date: Date.today.in(10.years),
+                              validity_end_date: Date.today.ago(10.years))
+    }
+
+    it 'logs a warn event' do
+      @logger.logged(:warn).size.should eq 1
+      @logger.logged(:warn).to_s.should =~ /Invalid/
+    end
+  end
 end

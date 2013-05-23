@@ -140,6 +140,11 @@ module TariffSynchronizer
 
       Mailer.missing_updates(event.payload[:count], event.payload[:update_type].to_s).deliver
     end
+
+    # Invalidated entry received due to TARIC & CHIEF data mismatch
+    def invalidated(event)
+      warn "Invalid #{event.payload[:record].class} record:\n#{event.payload[:record].inspect}\nErrors:\n#{event.payload[:record].errors}"
+    end
   end
 end
 

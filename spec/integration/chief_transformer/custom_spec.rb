@@ -196,8 +196,7 @@ describe 'CHIEF: Custom scenarions' do
                                 le_tsmp: DateTime.new(2013,5,14,14,28),
                                 cmdty_code: '5607509090',
                                 tar_msr_no: nil,
-                                amend_indicator: 'U'
-    }
+                                amend_indicator: 'U' }
 
 
     let!(:measure_type) { create :measure_type, measure_type_id: 'VTS', validity_start_date: Date.today.ago(10.years) }
