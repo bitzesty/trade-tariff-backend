@@ -2,8 +2,6 @@ require 'spec_helper'
 
 shared_examples_for 'Base Update' do
   describe '.sync' do
-    before { prepare_synchronizer_folders }
-
     context 'when last update is for today' do
       let!(:example_chief_update) { create :chief_update, example_date: Date.today }
       let!(:example_taric_update) { create :taric_update, example_date: Date.today }
@@ -25,8 +23,6 @@ shared_examples_for 'Base Update' do
         described_class.sync
       end
     end
-
-    after  { purge_synchronizer_folders }
   end
 
   describe '.update_type' do

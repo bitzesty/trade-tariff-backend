@@ -81,6 +81,8 @@ describe TariffSynchronizer::Logger do
         TariffSynchronizer.apply
       }
 
+      after  { purge_synchronizer_folders }
+
       it 'logs and info event' do
         @logger.logged(:info).size.should be > 0
         @logger.logged(:info).last.should =~ /Finished applying/
@@ -98,8 +100,6 @@ describe TariffSynchronizer::Logger do
         email = ActionMailer::Base.deliveries.last
         email.encoded.should =~ /No conformance errors found/
       end
-
-      after  { purge_synchronizer_folders }
     end
 
     context 'no pending updates present' do
@@ -127,6 +127,10 @@ describe TariffSynchronizer::Logger do
 
         TariffSynchronizer::Logger.conformance_errors << build(:measure)
         TariffSynchronizer.apply
+      }
+
+      after {
+        purge_synchronizer_folders
       }
 
       it 'logs and info event' do

@@ -74,6 +74,8 @@ describe TariffSynchronizer::TaricUpdate do
                                        .returns(query_response)
       }
 
+      after  { purge_synchronizer_folders }
+
       it 'downloads Taric file for specific date' do
         taric_update_names.each do |name|
           TariffSynchronizer::TaricUpdate.expects(:download_content)
@@ -200,8 +202,6 @@ describe TariffSynchronizer::TaricUpdate do
                                        .present?.should be_true
       end
     end
-
-    after  { purge_synchronizer_folders }
   end
 
   describe '.sync' do
@@ -269,6 +269,8 @@ describe TariffSynchronizer::TaricUpdate do
       create_taric_file :pending, example_date
     }
 
+    after { purge_synchronizer_folders }
+
     context 'entry for the day/update does not exist yet' do
       it 'creates db record from available file name' do
         TariffSynchronizer::BaseUpdate.count.should == 0
@@ -292,7 +294,5 @@ describe TariffSynchronizer::TaricUpdate do
         TariffSynchronizer::BaseUpdate.count.should == 1
       end
     end
-
-    after  { purge_synchronizer_folders }
   end
 end
