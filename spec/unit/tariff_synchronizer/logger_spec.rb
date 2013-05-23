@@ -65,6 +65,11 @@ describe TariffSynchronizer::Logger do
   end
 
   describe '#apply logging' do
+    after {
+      # reset to previous(default) state
+      TariffSynchronizer::Logger.conformance_errors = []
+    }
+
     context 'pending update present' do
       let(:example_date)  { Date.today }
       let!(:taric_update) { create :taric_update, example_date: example_date }
@@ -122,11 +127,6 @@ describe TariffSynchronizer::Logger do
 
         TariffSynchronizer::Logger.conformance_errors << build(:measure)
         TariffSynchronizer.apply
-      }
-
-      after {
-        # reset to previous(default) state
-        TariffSynchronizer::Logger.conformance_errors = []
       }
 
       it 'logs and info event' do
