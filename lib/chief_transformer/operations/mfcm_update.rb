@@ -10,9 +10,7 @@ class ChiefTransformer
                  .with_gono_id(record.cmdty_code)
                  .valid_to(record.le_tsmp)
                  .each do |measure|
-                    measure.validity_end_date = record.le_tsmp
-                    measure.invalidated_at = Time.now unless measure.valid?
-                    measure.save
+                   update_record(measure, validity_end_date: record.le_tsmp)
                  end
         else
           if Measure.with_measure_type(record.measure_type)
