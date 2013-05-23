@@ -16,7 +16,9 @@ class ChiefTransformer
                        record.fe_tsmp
                      end
 
-          measure.update validity_end_date: end_date
+          measure.validity_end_date = end_date
+          measure.invalidated_at = Time.now unless measure.valid?
+          measure.save
         end
       end
     end

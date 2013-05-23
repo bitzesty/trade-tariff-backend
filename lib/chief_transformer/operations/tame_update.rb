@@ -13,7 +13,9 @@ class ChiefTransformer
                  .valid_since(record.fe_tsmp)
                  .valid_to(record.le_tsmp)
                  .each do |measure|
-            measure.update validity_end_date: record.le_tsmp
+            measure.validity_end_date = record.le_tsmp
+            measure.invalidated_at = Time.now unless measure.valid?
+            measure.save
           end
         else
           end_measures_for(record)
