@@ -57,14 +57,11 @@ class Measure < Sequel::Model
     ds.with_actual(AdditionalCode)
   end
 
-<<<<<<< HEAD
   one_to_one :meursing_additional_code, key: :additional_code,
                                         primary_key: :additional_code_id do |ds|
     ds.with_actual(MeursingAdditionalCode)
   end
 
-=======
->>>>>>> Tariff moved to Point in Time DB architecture.
   many_to_one :additional_code_type, class_name: 'AdditionalCodeType',
                           key: :additional_code_type_id,
                           primary_key: :additional_code_type_id
@@ -254,11 +251,7 @@ class Measure < Sequel::Model
   end
 
   def invalidated?
-<<<<<<< HEAD
     invalidated_at.present?
-=======
-    invalidated_by.present?
->>>>>>> Tariff moved to Point in Time DB architecture.
   end
 
   def validity_date_justified?

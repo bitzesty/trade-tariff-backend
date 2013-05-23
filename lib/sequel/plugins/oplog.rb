@@ -2,11 +2,7 @@ module Sequel
   module Plugins
     module Oplog
       def self.configure(model, options = {})
-<<<<<<< HEAD
         primary_key = [:oid, options.fetch(:primary_key, model.primary_key)].flatten
-=======
-        primary_key = options.fetch(:primary_key, [model.primary_key].flatten)
->>>>>>> Tariff moved to Point in Time DB architecture.
         operation_klass = :"#{model}::Operation"
 
         # Define ModelClass::Operation
@@ -25,11 +21,7 @@ module Sequel
                                        class_name: operation_klass
 
         # Delegations
-<<<<<<< HEAD
         model.delegate :conformance_validator, :operation_klass, to: model
-=======
-        model.delegate :validator, :operation_klass, to: model
->>>>>>> Tariff moved to Point in Time DB architecture.
       end
 
       module InstanceMethods

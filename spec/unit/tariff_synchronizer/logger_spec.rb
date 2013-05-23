@@ -136,7 +136,6 @@ describe TariffSynchronizer::Logger do
         Footnote.unrestrict_primary_key
 
         TariffSynchronizer::Logger.conformance_errors << build(:measure, validity_start_date: Date.today, validity_end_date: Date.today.ago(1.year))
-        TariffSynchronizer.apply
       }
 
       after {
