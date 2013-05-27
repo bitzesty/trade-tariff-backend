@@ -196,6 +196,10 @@ class Measure < Sequel::Model
     model.validate(self) unless self.invalidated?
   end
 
+  def validate!
+    model.validate(self)
+  end
+
   ######### Conformance validations 430
   # def validate
     # super

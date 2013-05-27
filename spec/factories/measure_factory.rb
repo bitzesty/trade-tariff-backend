@@ -16,6 +16,10 @@ FactoryGirl.define do
       sequence(:measure_sid) { |n| -1 * n }
     end
 
+    trait :invalidated do
+      invalidated_at { Time.now }
+    end
+
     trait :with_goods_nomenclature do
       after(:create) { |measure, evaluator|
         FactoryGirl.create(:goods_nomenclature, goods_nomenclature_sid: measure.goods_nomenclature_sid,

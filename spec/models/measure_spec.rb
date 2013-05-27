@@ -529,4 +529,44 @@ describe Measure do
       end
     end
   end
+
+  describe "#validate" do
+    context 'marked as invalidated' do
+      let(:measure) { build :measure, :invalidated, validity_start_date: Date.today, validity_end_date: Date.today.ago(1.year) }
+
+      it 'does not perform validation' do
+        measure.validate
+        measure.errors.should be_empty
+      end
+    end
+
+    context 'not marked as invalidated' do
+      let(:measure) { build :measure, validity_start_date: Date.today, validity_end_date: Date.today.ago(1.year) }
+
+      it 'performs validation' do
+        measure.validate
+        measure.errors.should_not be_empty
+      end
+    end
+  end
+
+  describe "#validate!" do
+    context 'marked as invalidated' do
+      let(:measure) { build :measure, :invalidated, validity_start_date: Date.today, validity_end_date: Date.today.ago(1.year) }
+
+      it 'performs validation' do
+        measure.validate!
+        measure.errors.should_not be_empty
+      end
+    end
+
+    context 'not marked as invalidated' do
+      let(:measure) { build :measure, validity_start_date: Date.today, validity_end_date: Date.today.ago(1.year) }
+
+      it 'performs validation' do
+        measure.validate!
+        measure.errors.should_not be_empty
+      end
+    end
+  end
 end
