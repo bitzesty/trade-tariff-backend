@@ -1,43 +1,26 @@
 ---
 :section: '4'
 :chapter: '17'
-:content: ! '
-    	1. This chapter does not cover:
-
-    	(a) sugar confectionery containing cocoa (heading 1806);
-
-    	(b) chemically pure sugars (other than sucrose, lactose, maltose, glucose and fructose) or other products of heading 2940; or
-
-    	(c) medicaments or other products of Chapter 30.
-
-
-      Subheading Notes
-
-
-    	1. For the purposes of subheadings 1701 12, 1701 13 and 1701 14, "raw sugar" means sugar whose content of sucrose by weight, in the dry state, corresponds to a polarimeter reading of less than 99.5°.
-
-    	2. Subheading 1701 13 covers only cane sugar obtained without centrifugation, whose content of sucrose by weight, in the dry state, corresponds to a polarimeter reading of 69° or more but less than 93°. The product contains only natural antiedral microcrystals, of irregular shape, not visible to the naked eye, which are surrounded by residue of molasses and other constituents of sugar cane.
-
-
-      Additional Notes
-
-
-    	1. For the purpose of subheadings 1701 12 10, 1701 12 90, 1701 13 10, 1701 13 90, 1701 14 10 and 1701 14 90 "raw sugar" means sugar, not flavoured or coloured or containing any other added substances, containing, in the dry state, less than 99.5% by weight of sucrose determined by the polarimetric method.
-
-    	2. The duty applicable to raw sugar of subheadings 1701 12 10, 1701 13 10 and 1701 14 10 whose yield established according to part B(III) of Annex IV to Council Regulation (EC) No 1234/2007 differs from 92% is fixed in the following manner:
-    	 the relevant rate is multiplied by a correcting coefficient obtained by dividing the percentage yield established according to the above provisions by 92.
-
-    	3. For the purposes of subheading 1701 99 10, "white sugar" means sugar, not flavoured or coloured or containing any other added substances, containing, in the dry state, 99.5% or more by weight of sucrose, determined by the polarimetric method.
-
-    	4. For the purposes of establishing the duty applicable to products of subheadings 1702 20 10, 1702 60 80, 1702 60 95, 1702 90 71, 1702 90 80 and 1702 90 95, the sucrose content, including other sugars expressed as sucrose, is determined by the methods laid down in Article 42 (2) and (4) of Commission Regulation (EC) No 951/2006.
-
-    	5. For the purposes of subheadings 1702 30 10, 1702 40 10, 1702 60 10 and 1702 90 30, "isoglucose" means the product obtained from glucose or its polymers with a content by weight in the dry state of at least 10% fructose.
-    	 For the purposes of establishing the duty applicable to products of the subheadings referred to in the preceding paragraph, the dry matter content is determined according to Article 42 (3) of Commission Regulation (EC) No 951/2006.
-
-    	6. "Inulin syrup" means:
-
-    	(a) for the purposes of subheading 1702 60 80 the immediate product obtained by hydrolysis of inulin or oligofructoses, containing in the dry state more than 50% fructose in free form or as sucrose;
-
-    	(b) for the purposes of subheading 1702 90 80 the immediate product obtained by hydrolysis of inulin or oligofructoses, containing in the dry state at least 10% but not more than 50% of fructose in free form or as sucrose.
-
-    	7. When imported in the form of an assortment, goods of subheading 1704 90 are subject to an agricultural component (EA) fixed according to the average content in milk fats, milk proteins, sucrose, isoglucose, glucose and starch of the assortment as a whole.'
+:content: |-
+  1. This chapter does not cover:
+      (a) sugar confectionery containing cocoa (heading 1806);
+      (b) chemically pure sugars (other than sucrose, lactose, maltose, glucose and fructose) or other products of heading 2940; or
+      (c) medicaments or other products of Chapter 30.
+  (a) sugar confectionery containing cocoa (heading 1806);
+  (b) chemically pure sugars (other than sucrose, lactose, maltose, glucose and fructose) or other products of heading 2940; or
+  (c) medicaments or other products of Chapter 30.
+  1. For the purposes of subheadings 1701 12, 1701 13 and 1701 14, `raw sugar' means sugar whose content of sucrose by weight, in the dry state, corresponds to a polarimeter reading of less than 99.5°.
+  2. Subheading 1701 13 covers only cane sugar obtained without centrifugation, whose content of sucrose by weight, in the dry state, corresponds to a polarimeter reading of 69° or more but less than 93°. The product contains only natural antiedral microcrystals, of irregular shape, not visible to the naked eye, which are surrounded by residue of molasses and other constituents of sugar cane.
+  1. For the purpose of subheadings 1701 12 10, 1701 12 90, 1701 13 10, 1701 13 90, 1701 14 10 and 1701 14 90 `raw sugar' means sugar, not flavoured or coloured or containing any other added substances, containing, in the dry state, less than 99.5% by weight of sucrose determined by the polarimetric method.
+  2. The duty applicable to raw sugar of subheadings 1701 12 10, 1701 13 10 and 1701 14 10 whose yield established according to part B(III) of Annex IV to Council Regulation (EC) No 1234/2007 differs from 92% is fixed in the following manner:
+  the relevant rate is multiplied by a correcting coefficient obtained by dividing the percentage yield established according to the above provisions by 92.
+  3. For the purposes of subheading 1701 99 10, `white sugar' means sugar, not flavoured or coloured or containing any other added substances, containing, in the dry state, 99.5% or more by weight of sucrose, determined by the polarimetric method.
+  4. For the purposes of establishing the duty applicable to products of subheadings 1702 20 10, 1702 60 80, 1702 60 95, 1702 90 71, 1702 90 80 and 1702 90 95, the sucrose content, including other sugars expressed as sucrose, is determined by the methods laid down in Article 42 (2) and (4) of Commission Regulation (EC) No 951/2006.
+  5. For the purposes of subheadings 1702 30 10, 1702 40 10, 1702 60 10 and 1702 90 30, `isoglucose' means the product obtained from glucose or its polymers with a content by weight in the dry state of at least 10% fructose.
+  For the purposes of establishing the duty applicable to products of the subheadings referred to in the preceding paragraph, the dry matter content is determined according to Article 42 (3) of Commission Regulation (EC) No 951/2006.
+  6. `Inulin syrup' means:
+      (a) for the purposes of subheading 1702 60 80 the immediate product obtained by hydrolysis of inulin or oligofructoses, containing in the dry state more than 50% fructose in free form or as sucrose;
+      (b) for the purposes of subheading 1702 90 80 the immediate product obtained by hydrolysis of inulin or oligofructoses, containing in the dry state at least 10% but not more than 50% of fructose in free form or as sucrose.
+  (a) for the purposes of subheading 1702 60 80 the immediate product obtained by hydrolysis of inulin or oligofructoses, containing in the dry state more than 50% fructose in free form or as sucrose;
+  (b) for the purposes of subheading 1702 90 80 the immediate product obtained by hydrolysis of inulin or oligofructoses, containing in the dry state at least 10% but not more than 50% of fructose in free form or as sucrose.
+  7. When imported in the form of an assortment, goods of subheading 1704 90 are subject to an agricultural component (EA) fixed according to the average content in milk fats, milk proteins, sucrose, isoglucose, glucose and starch of the assortment as a whole.

@@ -69,9 +69,9 @@ namespace :tariff do
         Dir[Rails.root.join('db','notes','sections','*')].each do |file|
           begin
             note = YAML.load(File.read(file))
-            SectionNote.find_or_create(section_id: note[:section]) { |sn|
-              sn.content = note[:content]
-            }
+            section_note = SectionNote.find_or_create(section_id: note[:section])
+            section_note.content = note[:content]
+            section_note.save
           rescue
             puts "Error loading: #{file}"
           end
@@ -83,10 +83,10 @@ namespace :tariff do
         Dir[Rails.root.join('db','notes','chapters','*')].each do |file|
           begin
             note = YAML.load(File.read(file))
-            ChapterNote.find_or_create(section_id: note[:section],
-                                       chapter_id: note[:chapter]) { |cn|
-              cn.content = note[:content]
-            }
+            chapter_note = ChapterNote.find_or_create(section_id: note[:section],
+                                                      chapter_id: note[:chapter])
+            chapter_note.content = note[:content]
+            chapter_note.save
           rescue
             puts "Error loading: #{file}"
           end
