@@ -18,7 +18,7 @@ gem "jquery-rails", "1.0.19"
 gem "plek", "1.0.0"
 gem "railties"
 
-gem "unicorn", "4.3.1"
+gem "unicorn", "~> 4.6.3"
 gem "curb", "0.8.3"
 
 gem "nokogiri", "1.5.4"
