@@ -3,6 +3,7 @@ require 'time_machine'
 class GoodsNomenclature < Sequel::Model
   plugin :time_machine, period_start_column: Sequel.qualify(:goods_nomenclatures, :validity_start_date),
                         period_end_column:   Sequel.qualify(:goods_nomenclatures, :validity_end_date)
+  plugin :tire
 
   plugin :sti, class_determinator: ->(record) {
     gono_id = record[:goods_nomenclature_item_id].to_s
