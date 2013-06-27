@@ -19,7 +19,7 @@ module TradeTariffBackend
       TimeMachine.with_relevant_validity_periods do
         ['Section','Chapter','Heading','Commodity','SearchReference'].each do |klass|
           ENV['CLASS'] = klass
-          Rake::Task['tire:import'].execute
+          Rake::Task['tire:import:model'].execute
         end
       end
     end
