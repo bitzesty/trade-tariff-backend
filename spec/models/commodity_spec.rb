@@ -266,4 +266,33 @@ describe Commodity do
       commodity2.children.map(&:pk).should include commodity3.pk
     end
   end
+
+  describe '#ancestors' do
+    describe 'comparing indent numbers' do
+      let!(:commodity) { create :commodity, :with_indent, :with_description,
+                                            indents: 7,
+                                            goods_nomenclature_item_id: '2204219711',
+                                            producline_suffix: '80',
+                                            validity_start_date: Date.new(2010,1,1) }
+
+      let!(:ancestor_commodity) { create :commodity, :with_description,
+                                    goods_nomenclature_item_id: '2204218900',
+                                    producline_suffix: '80',
+                                    validity_start_date: Date.new(1995,1,1) }
+      let!(:indent1) { create(:goods_nomenclature_indent,
+                                goods_nomenclature_sid: ancestor_commodity.goods_nomenclature_sid,
+                                goods_nomenclature_item_id: ancestor_commodity.goods_nomenclature_item_id,
+                                number_indents: 7,
+                                validity_start_date: Date.new(2010,1,1))  }
+      let!(:indent2) { create(:goods_nomenclature_indent,
+                                number_indents: 5,
+                                goods_nomenclature_sid: ancestor_commodity.goods_nomenclature_sid,
+                                goods_nomenclature_item_id: ancestor_commodity.goods_nomenclature_item_id,
+                                validity_start_date: Date.new(1995,1,1))  }
+
+      it 'does not pick ancestor_commodity as ancestor (indent number is not lower (same level))' do
+        commodity.ancestors.should be_empty
+      end
+    end
+  end
 end
