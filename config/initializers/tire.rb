@@ -1,1 +1,4 @@
-Tire.configure { url "http://localhost:9200" }
+Tire.configure do
+  url "http://localhost:9200"
+  namespace "tariff"
+end

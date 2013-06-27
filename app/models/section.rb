@@ -2,6 +2,7 @@ class Section < Sequel::Model
   include Tire::Model::Search
 
   plugin :json_serializer
+  plugin :tire
 
   many_to_many :chapters, dataset: -> {
     Chapter.join_table(:inner, :chapters_sections, chapters_sections__goods_nomenclature_sid: :goods_nomenclatures__goods_nomenclature_sid)

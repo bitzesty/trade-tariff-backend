@@ -10,7 +10,8 @@ gem "yajl-ruby", require: "yajl"
 gem "rabl", "0.7.6"
 gem "sequel"
 gem "nulogy-sequel-rails", "0.3.9"
-gem "tire"
+gem "tire", "0.6.0"
+gem "tire-contrib", github: "karmi/tire-contrib",  require: 'tire/namespace'
 
 gem "builder"
 gem "jquery-rails", "1.0.19"

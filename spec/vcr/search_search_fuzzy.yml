@@ -2,46 +2,33 @@
 http_interactions:
 - request:
     method: get
-    uri: http://localhost:9200/sections/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=title&payload%5Bsize%5D=1000000
+    uri: http://localhost:9200/sections/_search?size=1000000
     body:
-      encoding: US-ASCII
-      string: ! '{"query":{"constant_score":{"filter":{"and":[{"query":{"query_string":{"query":"horse","fields":["description"],"query_string":{"fields":["title"]}}}},{"or":[{"and":[{"range":{"validity_end_date":{"gte":"<%= Date.today %>"}}}]},{"and":[{"range":{"validity_start_date":{"lte":"<%= Date.today %>"}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}]}}},"size":1000000}'
+      encoding: UTF-8
+      string: ! "{\n  \"query\": {\n    \"constant_score\": {\n      \"filter\": {\n
+        \       \"and\": [\n          {\n            \"query\": {\n              \"query_string\":
+        {\n                \"query\": \"horse\",\n                \"fields\": [\n
+        \                 \"description\"\n                ],\n                \"query_string\":
+        {\n                  \"fields\": [\n                    \"title\"\n                  ]\n
+        \               }\n              }\n            }\n          },\n          {\n
+        \           \"or\": [\n              {\n                \"and\": [\n                  {\n
+        \                   \"range\": {\n                      \"validity_end_date\":
+        {\n                        \"gte\": \"<%= Date.today %>\"\n                      }\n
+        \                   }\n                  }\n                ]\n              },\n
+        \             {\n                \"and\": [\n                  {\n                    \"range\":
+        {\n                      \"validity_start_date\": {\n                        \"lte\":
+        \"<%= Date.today %>\"\n                      }\n                    }\n                  },\n
+        \                 {\n                    \"missing\": {\n                      \"field\":
+        \"validity_end_date\",\n                      \"null_value\": true,\n                      \"existence\":
+        true\n                    }\n                  }\n                ]\n              }\n
+        \           ]\n          }\n        ]\n      }\n    }\n  }\n}"
     headers:
       Accept:
       - ! '*/*; q=0.5, application/xml'
       Accept-Encoding:
       - gzip, deflate
       Content-Length:
-      - '384'
-      User-Agent:
-      - Ruby
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - application/json; charset=UTF-8
-      Content-Length:
-      - '124'
-    body:
-      encoding: US-ASCII
-      string: ! '{"took":110,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
-    http_version:
-  recorded_at: Wed, 20 Mar 2013 11:41:11 GMT
-- request:
-    method: get
-    uri: http://localhost:9200/chapters/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bsize%5D=1000000
-    body:
-      encoding: US-ASCII
-      string: ! '{"query":{"constant_score":{"filter":{"and":[{"query":{"query_string":{"query":"horse","fields":["description"]}}},{"or":[{"and":[{"range":{"validity_end_date":{"gte":"<%= Date.today %>"}}}]},{"and":[{"range":{"validity_start_date":{"lte":"<%= Date.today %>"}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}]}}},"size":1000000}'
-    headers:
-      Accept:
-      - ! '*/*; q=0.5, application/xml'
-      Accept-Encoding:
-      - gzip, deflate
-      Content-Length:
-      - '348'
+      - '1309'
       User-Agent:
       - Ruby
   response:
@@ -55,22 +42,79 @@ http_interactions:
       - '123'
     body:
       encoding: US-ASCII
-      string: ! '{"took":52,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
+      string: ! '{"took":31,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
     http_version:
-  recorded_at: Wed, 20 Mar 2013 11:41:11 GMT
+  recorded_at: Thu, 27 Jun 2013 13:20:06 GMT
 - request:
     method: get
-    uri: http://localhost:9200/headings/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bsize%5D=1000000
+    uri: http://localhost:9200/chapters/_search?size=1000000
     body:
-      encoding: US-ASCII
-      string: ! '{"query":{"constant_score":{"filter":{"and":[{"query":{"query_string":{"query":"horse","fields":["description"]}}},{"or":[{"and":[{"range":{"validity_end_date":{"gte":"<%= Date.today %>"}}}]},{"and":[{"range":{"validity_start_date":{"lte":"<%= Date.today %>"}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}]}}},"size":1000000}'
+      encoding: UTF-8
+      string: ! "{\n  \"query\": {\n    \"constant_score\": {\n      \"filter\": {\n
+        \       \"and\": [\n          {\n            \"query\": {\n              \"query_string\":
+        {\n                \"query\": \"horse\",\n                \"fields\": [\n
+        \                 \"description\"\n                ]\n              }\n            }\n
+        \         },\n          {\n            \"or\": [\n              {\n                \"and\":
+        [\n                  {\n                    \"range\": {\n                      \"validity_end_date\":
+        {\n                        \"gte\": \"<%= Date.today %>\"\n                      }\n
+        \                   }\n                  }\n                ]\n              },\n
+        \             {\n                \"and\": [\n                  {\n                    \"range\":
+        {\n                      \"validity_start_date\": {\n                        \"lte\":
+        \"<%= Date.today %>\"\n                      }\n                    }\n                  },\n
+        \                 {\n                    \"missing\": {\n                      \"field\":
+        \"validity_end_date\",\n                      \"null_value\": true,\n                      \"existence\":
+        true\n                    }\n                  }\n                ]\n              }\n
+        \           ]\n          }\n        ]\n      }\n    }\n  }\n}"
     headers:
       Accept:
       - ! '*/*; q=0.5, application/xml'
       Accept-Encoding:
       - gzip, deflate
       Content-Length:
-      - '348'
+      - '1178'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '123'
+    body:
+      encoding: US-ASCII
+      string: ! '{"took":28,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
+    http_version:
+  recorded_at: Thu, 27 Jun 2013 13:20:06 GMT
+- request:
+    method: get
+    uri: http://localhost:9200/headings/_search?size=1000000
+    body:
+      encoding: UTF-8
+      string: ! "{\n  \"query\": {\n    \"constant_score\": {\n      \"filter\": {\n
+        \       \"and\": [\n          {\n            \"query\": {\n              \"query_string\":
+        {\n                \"query\": \"horse\",\n                \"fields\": [\n
+        \                 \"description\"\n                ]\n              }\n            }\n
+        \         },\n          {\n            \"or\": [\n              {\n                \"and\":
+        [\n                  {\n                    \"range\": {\n                      \"validity_end_date\":
+        {\n                        \"gte\": \"<%= Date.today %>\"\n                      }\n
+        \                   }\n                  }\n                ]\n              },\n
+        \             {\n                \"and\": [\n                  {\n                    \"range\":
+        {\n                      \"validity_start_date\": {\n                        \"lte\":
+        \"<%= Date.today %>\"\n                      }\n                    }\n                  },\n
+        \                 {\n                    \"missing\": {\n                      \"field\":
+        \"validity_end_date\",\n                      \"null_value\": true,\n                      \"existence\":
+        true\n                    }\n                  }\n                ]\n              }\n
+        \           ]\n          }\n        ]\n      }\n    }\n  }\n}"
+    headers:
+      Accept:
+      - ! '*/*; q=0.5, application/xml'
+      Accept-Encoding:
+      - gzip, deflate
+      Content-Length:
+      - '1178'
       User-Agent:
       - Ruby
   response:
@@ -84,7 +128,7 @@ http_interactions:
       - '2107'
     body:
       encoding: US-ASCII
-      string: ! '{"took":93,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":3,"max_score":1.0,"hits":[{"_index":"headings","_type":"heading","_id":"28044","_score":1.0,
+      string: ! '{"took":71,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":3,"max_score":1.0,"hits":[{"_index":"headings","_type":"heading","_id":"28044","_score":1.0,
         "_source" : {"id":28044,"goods_nomenclature_item_id":"0206000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Edible
         offal of bovine animals, swine, sheep, goats, horses, asses, mules or hinnies,
         fresh, chilled or frozen","number_indents":0,"section":{"numeral":"I","title":"Live
@@ -99,20 +143,34 @@ http_interactions:
         animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":27809,"goods_nomenclature_item_id":"0200000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"meat
         and edible meat offal"}}}]}}'
     http_version:
-  recorded_at: Wed, 20 Mar 2013 11:41:11 GMT
+  recorded_at: Thu, 27 Jun 2013 13:20:06 GMT
 - request:
     method: get
-    uri: http://localhost:9200/commodities/_search?payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=validity_end_date&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_end_date%5D%5Bgte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bor%5D%5Band%5D%5Brange%5D%5Bvalidity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=description&payload%5Bquery%5D%5Bconstant_score%5D%5Bfilter%5D%5Band%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bsize%5D=1000000
+    uri: http://localhost:9200/commodities/_search?size=1000000
     body:
-      encoding: US-ASCII
-      string: ! '{"query":{"constant_score":{"filter":{"and":[{"query":{"query_string":{"query":"horse","fields":["description"]}}},{"or":[{"and":[{"range":{"validity_end_date":{"gte":"<%= Date.today %>"}}}]},{"and":[{"range":{"validity_start_date":{"lte":"<%= Date.today %>"}}},{"missing":{"field":"validity_end_date","null_value":true,"existence":true}}]}]}]}}},"size":1000000}'
+      encoding: UTF-8
+      string: ! "{\n  \"query\": {\n    \"constant_score\": {\n      \"filter\": {\n
+        \       \"and\": [\n          {\n            \"query\": {\n              \"query_string\":
+        {\n                \"query\": \"horse\",\n                \"fields\": [\n
+        \                 \"description\"\n                ]\n              }\n            }\n
+        \         },\n          {\n            \"or\": [\n              {\n                \"and\":
+        [\n                  {\n                    \"range\": {\n                      \"validity_end_date\":
+        {\n                        \"gte\": \"<%= Date.today %>\"\n                      }\n
+        \                   }\n                  }\n                ]\n              },\n
+        \             {\n                \"and\": [\n                  {\n                    \"range\":
+        {\n                      \"validity_start_date\": {\n                        \"lte\":
+        \"<%= Date.today %>\"\n                      }\n                    }\n                  },\n
+        \                 {\n                    \"missing\": {\n                      \"field\":
+        \"validity_end_date\",\n                      \"null_value\": true,\n                      \"existence\":
+        true\n                    }\n                  }\n                ]\n              }\n
+        \           ]\n          }\n        ]\n      }\n    }\n  }\n}"
     headers:
       Accept:
       - ! '*/*; q=0.5, application/xml'
       Accept-Encoding:
       - gzip, deflate
       Content-Length:
-      - '348'
+      - '1178'
       User-Agent:
       - Ruby
   response:
@@ -126,12 +184,7 @@ http_interactions:
       - '16902'
     body:
       encoding: US-ASCII
-      string: ! '{"took":589,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":16,"max_score":1.0,"hits":[{"_index":"commodities","_type":"commodity","_id":"95674","_score":1.0,
-        "_source" : {"id":95674,"goods_nomenclature_item_id":"0302459010","producline_suffix":"80","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Horse
-        mackerel (scad) (Caranx trachurus)","number_indents":4,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
-        and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28402,"goods_nomenclature_item_id":"0302000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
-        fresh or chilled, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"74274","_score":1.0,
+      string: ! '{"took":286,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":16,"max_score":1.0,"hits":[{"_index":"commodities","_type":"commodity","_id":"74274","_score":1.0,
         "_source" : {"id":74274,"goods_nomenclature_item_id":"2308004000","producline_suffix":"80","validity_start_date":"2002-01-01T00:00:00+02:00","validity_end_date":null,"description":"Acorns
         and horse-chestnuts; pomace or marc of fruit, other than grapes","number_indents":1,"section":{"numeral":"IV","title":"Prepared
         foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
@@ -139,7 +192,12 @@ http_interactions:
         and waste from the food industries; prepared animal fodder"},"heading":{"goods_nomenclature_sid":35179,"goods_nomenclature_item_id":"2308000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Vegetable
         materials and vegetable waste, vegetable residues and by-products, whether
         or not in the form of pellets, of a kind used in animal feeding, not elsewhere
-        specified or included","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"94153","_score":1.0,
+        specified or included","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"95674","_score":1.0,
+        "_source" : {"id":95674,"goods_nomenclature_item_id":"0302459010","producline_suffix":"80","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Horse
+        mackerel (scad) (Caranx trachurus)","number_indents":4,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
+        and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28402,"goods_nomenclature_item_id":"0302000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
+        fresh or chilled, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"94153","_score":1.0,
         "_source" : {"id":94153,"goods_nomenclature_item_id":"0303510000","producline_suffix":"10","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Herring
         (Clupea harengus, Clupea pallasii), sardines (Sardina pilchardus, Sardinops|spp.),
         sardinella (Sardinella|spp.), brisling or sprats (Sprattus sprattus), mackerel
@@ -168,17 +226,17 @@ http_interactions:
         canadum) and swordfish (Xiphias gladius), excluding livers and roes","number_indents":1,"section":{"numeral":"I","title":"Live
         animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
         and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28402,"goods_nomenclature_item_id":"0302000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
-        fresh or chilled, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"93993","_score":1.0,
-        "_source" : {"id":93993,"goods_nomenclature_item_id":"0302450000","producline_suffix":"80","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Jack
-        and horse mackerel (Trachurus spp.)","number_indents":2,"section":{"numeral":"I","title":"Live
-        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
-        and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28402,"goods_nomenclature_item_id":"0302000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
         fresh or chilled, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"94181","_score":1.0,
         "_source" : {"id":94181,"goods_nomenclature_item_id":"0303551000","producline_suffix":"80","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Atlantic
         horse mackerel (Trachurus trachurus)","number_indents":3,"section":{"numeral":"I","title":"Live
         animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
         and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28590,"goods_nomenclature_item_id":"0303000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
-        frozen, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"91682","_score":1.0,
+        frozen, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"93993","_score":1.0,
+        "_source" : {"id":93993,"goods_nomenclature_item_id":"0302450000","producline_suffix":"80","validity_start_date":"2012-01-01T00:00:00+02:00","validity_end_date":null,"description":"Jack
+        and horse mackerel (Trachurus spp.)","number_indents":2,"section":{"numeral":"I","title":"Live
+        animals; animal products (chapters 1 to 5)","position":1},"chapter":{"goods_nomenclature_sid":28373,"goods_nomenclature_item_id":"0300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"fish
+        and crustaceans, molluscs and other aquatic invertebrates"},"heading":{"goods_nomenclature_sid":28402,"goods_nomenclature_item_id":"0302000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Fish,
+        fresh or chilled, excluding fish fillets and other fish meat of heading|0304","number_indents":0}}},{"_index":"commodities","_type":"commodity","_id":"91682","_score":1.0,
         "_source" : {"id":91682,"goods_nomenclature_item_id":"4412321000","producline_suffix":"80","validity_start_date":"2010-01-01T00:00:00+02:00","validity_end_date":null,"description":"Of
         alder, ash, beech, birch, cherry, chestnut, elm, hickory, hornbeam, horse
         chestnut, lime, maple, oak, plane tree, poplar, robinia, walnut or yellow
@@ -230,20 +288,46 @@ http_interactions:
         vegetables and certain roots and tubers"},"heading":{"goods_nomenclature_sid":30726,"goods_nomenclature_item_id":"0713000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Dried
         leguminous vegetables, shelled, whether or not skinned or split","number_indents":0}}}]}}'
     http_version:
-  recorded_at: Wed, 20 Mar 2013 11:41:12 GMT
+  recorded_at: Thu, 27 Jun 2013 13:20:06 GMT
 - request:
     method: get
-    uri: http://localhost:9200/search_references/_search?payload%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bnested%5D%5Bpath%5D=reference&payload%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bnested%5D%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bexistence%5D=true&payload%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bnested%5D%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bfield%5D=reference.validity_end_date&payload%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bnested%5D%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bor%5D%5Band%5D%5Bmissing%5D%5Bnull_value%5D=true&payload%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bnested%5D%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bor%5D%5Band%5D%5Brange%5D%5Breference.validity_end_date%5D%5Bgte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bnested%5D%5Bquery%5D%5Bfiltered%5D%5Bfilter%5D%5Bor%5D%5Band%5D%5Brange%5D%5Breference.validity_start_date%5D%5Blte%5D=<%= Date.today %>&payload%5Bquery%5D%5Bfiltered%5D%5Bquery%5D%5Bquery_string%5D%5Banalyzer%5D=snowball&payload%5Bquery%5D%5Bfiltered%5D%5Bquery%5D%5Bquery_string%5D%5Bfields%5D%5B0%5D=title&payload%5Bquery%5D%5Bfiltered%5D%5Bquery%5D%5Bquery_string%5D%5Bquery%5D=horse&payload%5Bsize%5D=1000000
+    uri: http://localhost:9200/search_references/_search?size=1000000
     body:
-      encoding: US-ASCII
-      string: ! '{"query":{"filtered":{"query":{"query_string":{"fields":["title"],"analyzer":"snowball","query":"horse"}},"filter":{"nested":{"path":"reference","query":{"filtered":{"query":{"match_all":{}},"filter":{"or":[{"and":[{"range":{"reference.validity_end_date":{"gte":"<%= Date.today %>"}}}]},{"and":[{"range":{"reference.validity_start_date":{"lte":"<%= Date.today %>"}}},{"missing":{"field":"reference.validity_end_date","null_value":true,"existence":true}}]},{"and":[{"missing":{"field":"reference.validity_start_date","null_value":true,"existence":true}},{"missing":{"field":"reference.validity_end_date","null_value":true,"existence":true}}]}]}}}}}}},"size":1000000}'
+      encoding: UTF-8
+      string: ! "{\n  \"query\": {\n    \"filtered\": {\n      \"query\": {\n        \"query_string\":
+        {\n          \"fields\": [\n            \"title\"\n          ],\n          \"analyzer\":
+        \"snowball\",\n          \"query\": \"horse\"\n        }\n      },\n      \"filter\":
+        {\n        \"nested\": {\n          \"path\": \"reference\",\n          \"query\":
+        {\n            \"filtered\": {\n              \"query\": {\n                \"match_all\":
+        {\n\n                }\n              },\n              \"filter\": {\n                \"or\":
+        [\n                  {\n                    \"and\": [\n                      {\n
+        \                       \"range\": {\n                          \"reference.validity_end_date\":
+        {\n                            \"gte\": \"<%= Date.today %>\"\n                          }\n
+        \                       }\n                      }\n                    ]\n
+        \                 },\n                  {\n                    \"and\": [\n
+        \                     {\n                        \"range\": {\n                          \"reference.validity_start_date\":
+        {\n                            \"lte\": \"<%= Date.today %>\"\n                          }\n
+        \                       }\n                      },\n                      {\n
+        \                       \"missing\": {\n                          \"field\":
+        \"reference.validity_end_date\",\n                          \"null_value\":
+        true,\n                          \"existence\": true\n                        }\n
+        \                     }\n                    ]\n                  },\n                  {\n
+        \                   \"and\": [\n                      {\n                        \"missing\":
+        {\n                          \"field\": \"reference.validity_start_date\",\n
+        \                         \"null_value\": true,\n                          \"existence\":
+        true\n                        }\n                      },\n                      {\n
+        \                       \"missing\": {\n                          \"field\":
+        \"reference.validity_end_date\",\n                          \"null_value\":
+        true,\n                          \"existence\": true\n                        }\n
+        \                     }\n                    ]\n                  }\n                ]\n
+        \             }\n            }\n          }\n        }\n      }\n    }\n  }\n}"
     headers:
       Accept:
       - ! '*/*; q=0.5, application/xml'
       Accept-Encoding:
       - gzip, deflate
       Content-Length:
-      - '651'
+      - '2128'
       User-Agent:
       - Ruby
   response:
@@ -254,28 +338,10 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
-      - '3094'
+      - '122'
     body:
       encoding: US-ASCII
-      string: ! '{"took":762,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":4,"max_score":5.159082,"hits":[{"_index":"search_references","_type":"search_reference","_id":"2949","_score":5.159082,
-        "_source" : {"title":"horse beans","reference":{"id":30726,"goods_nomenclature_item_id":"0713000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Dried
-        leguminous vegetables, shelled, whether or not skinned or split","number_indents":0,"section":{"numeral":"II","title":"Vegetable
-        products (chapters 6 to 14)","position":2},"chapter":{"goods_nomenclature_sid":30240,"goods_nomenclature_item_id":"0700000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"edible
-        vegetables and certain roots and tubers"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2948","_score":4.726748,
-        "_source" : {"title":"horse chestnuts","reference":{"id":35179,"goods_nomenclature_item_id":"2308000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Vegetable
-        materials and vegetable waste, vegetable residues and by-products, whether
-        or not in the form of pellets, of a kind used in animal feeding, not elsewhere
-        specified or included","number_indents":0,"section":{"numeral":"IV","title":"Prepared
-        foodstuffs; beverages, spirits and vinegar; tobacco and manufactured tobacco
-        substitutes (chapters 16 to 24)","position":4},"chapter":{"goods_nomenclature_sid":35125,"goods_nomenclature_item_id":"2300000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"residues
-        and waste from the food industries; prepared animal fodder"},"class":"Heading"}}},{"_index":"search_references","_type":"search_reference","_id":"2950","_score":4.726748,
-        "_source" : {"title":"horse-radish","reference":{"id":30240,"goods_nomenclature_item_id":"0700000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"edible
-        vegetables and certain roots and tubers","section":{"numeral":"II","title":"Vegetable
-        products (chapters 6 to 14)","position":2},"class":"Chapter"}}},{"_index":"search_references","_type":"search_reference","_id":"591","_score":3.6107385,
-        "_source" : {"title":"beans - field, including horse and tic","reference":{"id":30726,"goods_nomenclature_item_id":"0713000000","producline_suffix":"80","validity_start_date":"1972-01-01T00:00:00+03:00","validity_end_date":null,"description":"Dried
-        leguminous vegetables, shelled, whether or not skinned or split","number_indents":0,"section":{"numeral":"II","title":"Vegetable
-        products (chapters 6 to 14)","position":2},"chapter":{"goods_nomenclature_sid":30240,"goods_nomenclature_item_id":"0700000000","producline_suffix":"80","validity_start_date":"1971-12-31T00:00:00+03:00","validity_end_date":null,"description":"edible
-        vegetables and certain roots and tubers"},"class":"Heading"}}}]}}'
+      string: ! '{"took":1,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}'
     http_version:
-  recorded_at: Wed, 20 Mar 2013 11:41:13 GMT
+  recorded_at: Thu, 27 Jun 2013 13:20:06 GMT
 recorded_with: VCR 2.2.5

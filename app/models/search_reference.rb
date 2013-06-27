@@ -1,6 +1,8 @@
 class SearchReference < Sequel::Model
   include Tire::Model::Search
 
+  plugin :tire
+
   HEADING_IDENTITY_REGEX = /(\d{1,2}).(\d{1,2})/
   CHAPTER_IDENTITY_REGEX = /Chapter (\d{1,2})|Ch (\d{1,2})|^\s{0,}\d{1,2}\s{0,}$/
   SECTION_IDENTITY_REGEX = /Section\s{1,}(\d{1,2})|section\s{1,}(\d{1,2})/
