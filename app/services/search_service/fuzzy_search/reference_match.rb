@@ -36,7 +36,7 @@ class SearchService
       private
 
       def search_results
-        @search_results ||= Tire.search('search_references', {
+        @search_results ||= Tire.search('tariff-search_references', {
           query: {
             filtered: {
               query: {

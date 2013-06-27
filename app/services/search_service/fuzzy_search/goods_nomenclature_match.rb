@@ -3,10 +3,10 @@ class SearchService
     class GoodsNomenclatureMatch < FuzzyMatch
       def serializable_hash
         {
-          sections:    search_results_for('sections', query_string: { fields: ["title"] }),
-          chapters:    search_results_for('chapters'),
-          headings:    search_results_for('headings'),
-          commodities: search_results_for('commodities')
+          sections:    search_results_for('tariff-sections', query_string: { fields: ["title"] }),
+          chapters:    search_results_for('tariff-chapters'),
+          headings:    search_results_for('tariff-headings'),
+          commodities: search_results_for('tariff-commodities')
         }
       end
 
