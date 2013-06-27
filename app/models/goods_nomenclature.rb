@@ -8,6 +8,7 @@ class GoodsNomenclature < Sequel::Model
                         period_end_column:   Sequel.qualify(:goods_nomenclatures, :validity_end_date)
   plugin :tire
   plugin :oplog, primary_key: :goods_nomenclature_sid
+  plugin :tire
 
   plugin :sti, class_determinator: ->(record) {
     gono_id = record[:goods_nomenclature_item_id].to_s
