@@ -1,3 +1,5 @@
+require 'ansi/progressbar'
+
 module TradeTariffBackend
   class Auditor
     # Save memory - paginate records
@@ -41,9 +43,11 @@ module TradeTariffBackend
                 logger.error "Invalid #{model} (#{record.pk_hash}), errors: #{record.errors}"
               end
 
-              progress_bar.increment
+              progress_bar.inc
             end
           end
+
+          progress_bar.finish
 
           if @since
             puts "Invalid records for %s since %s: %d (%.4f%%)" % [model, @since, model_invalid_record_count, model_invalid_record_count/(model.count+1).to_f]
@@ -66,9 +70,7 @@ module TradeTariffBackend
 
     def with_graphical_progress(model, &block)
       if graphical
-        progress_bar = ProgressBar.create(title: model,
-                                          format: '%e |%B| %p%% %t',
-                                          total: date_filter(model).count)
+        progress_bar = ::ANSI::Progressbar.new(model.to_s, date_filter(model).count )
         yield progress_bar
       else
         yield NullObject.new

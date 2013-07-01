@@ -8,7 +8,7 @@ gem "multi_json", "~> 1.7.7"
 gem "mysql2"
 gem "sequel-rails", "0.4.4"
 gem "rabl", "0.7.6"
-gem "ruby-progressbar"
+gem "ansi"
 gem "sequel", "3.48.0"
 gem "tire", "0.6.0"
 gem "tire-contrib", github: "karmi/tire-contrib",  require: 'tire/namespace'
