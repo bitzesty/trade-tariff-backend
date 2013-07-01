@@ -16,7 +16,7 @@ class Heading < GoodsNomenclature
   one_to_many :commodities, dataset: -> {
     actual_or_relevant(Commodity)
              .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
-             .where(~{goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes })
+             .where(Sequel.~{goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes })
   }
 
   one_to_one :chapter, dataset: -> {
@@ -42,7 +42,7 @@ class Heading < GoodsNomenclature
     end
 
     def non_grouping
-      filter{~{producline_suffix: 10} }
+      filter{Sequel.~{producline_suffix: 10} }
     end
   end
 
