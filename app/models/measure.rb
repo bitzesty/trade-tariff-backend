@@ -254,6 +254,10 @@ class Measure < Sequel::Model
     invalidated_at.present?
   end
 
+  def validate!
+    model.validate(self)
+  end
+
   def validity_date_justified?
     justification_regulation_role.present? && justification_regulation_id.present?
   end

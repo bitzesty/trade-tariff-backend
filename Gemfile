@@ -13,6 +13,8 @@ gem "sequel"
 gem "tire", "0.6.0"
 gem "tire-contrib", github: "karmi/tire-contrib",  require: 'tire/namespace'
 gem "yajl-ruby", require: "yajl"
+gem "tire", "0.6.0"
+gem "tire-contrib", github: "karmi/tire-contrib",  require: 'tire/namespace'
 
 gem "builder"
 gem "jquery-rails", "1.0.19"
