@@ -4,17 +4,15 @@ source "https://BnrJb6FZyzspBboNJzYZ@gem.fury.io/govuk/"
 gem "rails", "3.2.13"
 
 gem "addressable", "2.3.2"
-gem "multi_json"
+gem "multi_json", "~> 1.7.7"
 gem "mysql2"
-gem "sequel-rails", "0.4.2"
+gem "sequel-rails", "0.4.4"
 gem "rabl", "0.7.6"
 gem "ruby-progressbar"
-gem "sequel", "3.42.0"
+gem "sequel", "3.47.0"
 gem "tire", "0.6.0"
 gem "tire-contrib", github: "karmi/tire-contrib",  require: 'tire/namespace'
 gem "yajl-ruby", require: "yajl"
-gem "tire", "0.6.0"
-gem "tire-contrib", github: "karmi/tire-contrib",  require: 'tire/namespace'
 
 gem "builder"
 gem "jquery-rails", "1.0.19"
