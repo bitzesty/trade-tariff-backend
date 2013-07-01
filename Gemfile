@@ -9,7 +9,7 @@ gem "mysql2"
 gem "sequel-rails", "0.4.2"
 gem "rabl", "0.7.6"
 gem "ruby-progressbar"
-gem "sequel"
+gem "sequel", "3.42.0"
 gem "tire", "0.6.0"
 gem "tire-contrib", github: "karmi/tire-contrib",  require: 'tire/namespace'
 gem "yajl-ruby", require: "yajl"
