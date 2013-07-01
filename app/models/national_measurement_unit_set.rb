@@ -15,7 +15,7 @@ class NationalMeasurementUnitSet < Sequel::Model
               join_table(:left, :chief_tbl9, {tbl93__tbl_code: :chief_comm__uoq_code_cdu3,
                                               tbl93__tbl_type: 'UNOQ'}, table_alias: :tbl93).
               filter{~{chief_comm__uoq_code_cdu1: nil} | ~{chief_comm__uoq_code_cdu2: nil} | ~{chief_comm__uoq_code_cdu3: nil}}.
-              order(:chief_comm__audit_tsmp.desc)
+              order(Sequel.desc(:chief_comm__audit_tsmp))
 
   set_primary_key [:tbl_code]
 

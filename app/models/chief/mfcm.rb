@@ -24,7 +24,7 @@ module Chief
                               {:msr_type => msr_type} &
                               {:tty_code => tty_code} &
                               {:tar_msr_no => tar_msr_no}
-                              }.order(:audit_tsmp.desc)
+                              }.order(Sequel.desc(:audit_tsmp))
     }, class_name: 'Chief::Tame'
 
     one_to_many :tames, key: {}, primary_key: {}, dataset: -> {

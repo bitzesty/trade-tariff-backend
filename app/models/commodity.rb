@@ -61,15 +61,15 @@ class Commodity < GoodsNomenclature
                  .join(:goods_nomenclatures, goods_nomenclature_indents__goods_nomenclature_sid: :goods_nomenclatures__goods_nomenclature_sid)
                  .where("goods_nomenclature_indents.goods_nomenclature_item_id LIKE ?", heading_id)
                  .where("goods_nomenclature_indents.goods_nomenclature_item_id <= ?", goods_nomenclature_item_id)
-                 .order(:goods_nomenclature_indents__validity_start_date.desc,
-                        :goods_nomenclature_indents__goods_nomenclature_item_id.desc)
+                 .order(Sequel.desc(:goods_nomenclature_indents__validity_start_date),
+                        Sequel.desc(:goods_nomenclature_indents__goods_nomenclature_item_id))
                  .from_self
                  .group(:goods_nomenclature_sid)
                  .from_self
                  .where("number_indents < ?", goods_nomenclature_indent.number_indents),
         { t1__goods_nomenclature_sid: :goods_nomenclatures__goods_nomenclature_sid,
           t1__goods_nomenclature_item_id: :goods_nomenclatures__goods_nomenclature_item_id })
-      .order(:goods_nomenclatures__goods_nomenclature_item_id.desc)
+      .order(Sequel.desc(:goods_nomenclatures__goods_nomenclature_item_id))
       .all
       .group_by(&:number_indents)
       .map(&:last)

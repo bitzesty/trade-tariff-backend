@@ -12,7 +12,7 @@ class GeographicalAreaDescription < Sequel::Model
 
   dataset_module do
     def latest
-      order(:operation_date.desc)
+      order(Sequel.desc(:operation_date))
     end
   end
 end

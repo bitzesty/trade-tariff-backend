@@ -69,7 +69,7 @@ class Measure < Sequel::Model
   one_to_one :quota_order_number, key: :quota_order_number_id,
                                   primary_key: :ordernumber do |ds|
     ds.with_actual(QuotaOrderNumber)
-      .order(:validity_start_date.desc)
+      .order(Sequel.desc(:validity_start_date))
   end
 
   many_to_many :full_temporary_stop_regulations, join_table: :fts_regulation_actions,

@@ -4,7 +4,7 @@ class QuotaBlockingPeriod < Sequel::Model
 
   dataset_module do
     def last
-      order(:end_date.desc).first
+      order(Sequel.desc(:end_date)).first
     end
   end
 end

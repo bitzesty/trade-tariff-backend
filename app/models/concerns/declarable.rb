@@ -37,7 +37,7 @@ module Model
           )
           .with_actual(Measure)
           .order(:measures__geographical_area_id.asc,
-                 :effective_start_date.desc),
+                 Sequel.desc(:effective_start_date)),
           t1__measure_sid: :measures__measure_sid
         ).group(:measures__measure_type_id,
                 :measures__geographical_area_sid,

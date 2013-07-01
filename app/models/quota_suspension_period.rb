@@ -4,7 +4,7 @@ class QuotaSuspensionPeriod < Sequel::Model
 
   dataset_module do
     def last
-      order(:suspension_end_date.desc).first
+      order(Sequel.desc(:suspension_end_date)).first
     end
   end
 end

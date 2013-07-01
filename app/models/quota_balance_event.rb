@@ -8,7 +8,7 @@ class QuotaBalanceEvent < Sequel::Model
 
   dataset_module do
     def last
-      order(:occurrence_timestamp.desc).first
+      order(Sequel.desc(:occurrence_timestamp)).first
     end
   end
 

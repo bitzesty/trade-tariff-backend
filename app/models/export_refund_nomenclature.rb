@@ -13,7 +13,7 @@ class ExportRefundNomenclature < Sequel::Model
                                                          right_key: [:export_refund_nomenclature_description_period_sid, :export_refund_nomenclature_sid],
                                                          right_primary_key: [:export_refund_nomenclature_description_period_sid, :export_refund_nomenclature_sid] do |ds|
                                                            ds.with_actual(ExportRefundNomenclatureDescriptionPeriod)
-                                                             .order(:export_refund_nomenclature_description_periods__validity_start_date.desc)
+                                                             .order(Sequel.desc(:export_refund_nomenclature_description_periods__validity_start_date))
                                                          end
 
   def export_refund_nomenclature_description
@@ -23,7 +23,7 @@ class ExportRefundNomenclature < Sequel::Model
   one_to_many :export_refund_nomenclature_indents, key: :export_refund_nomenclature_sid,
                                                    primary_key: :export_refund_nomenclature_sid do |ds|
     ds.with_actual(ExportRefundNomenclatureIndent)
-      .order(:export_refund_nomenclature_indents__validity_start_date.desc)
+      .order(Sequel.desc(:export_refund_nomenclature_indents__validity_start_date))
   end
 
   def export_refund_nomenclature_indent
@@ -51,12 +51,12 @@ class ExportRefundNomenclature < Sequel::Model
                  .where("export_refund_nomenclature_indents.goods_nomenclature_item_id LIKE ?", heading_id)
                  .where("export_refund_nomenclature_indents.goods_nomenclature_item_id <= ?", goods_nomenclature_item_id)
                  .where("export_refund_nomenclature_indents.number_export_refund_nomenclature_indents < ?", export_refund_nomenclature_indent.number_export_refund_nomenclature_indents)
-                 .order(:export_refund_nomenclature_indents__validity_start_date.desc,
-                        :export_refund_nomenclature_indents__goods_nomenclature_item_id.desc)
+                 .order(Sequel.desc(:export_refund_nomenclature_indents__validity_start_date),
+                        Sequel.desc(:export_refund_nomenclature_indents__goods_nomenclature_item_id))
                  .group(:export_refund_nomenclature_indents__export_refund_nomenclature_sid),
         { t1__gono_sid: :export_refund_nomenclatures__export_refund_nomenclature_sid,
           t1__max_gono: :export_refund_nomenclatures__goods_nomenclature_item_id })
-      .order(:export_refund_nomenclatures__goods_nomenclature_item_id.desc)
+      .order(Sequel.desc(:export_refund_nomenclatures__goods_nomenclature_item_id))
       .all
       .group_by(&:number_indents)
       .map(&:last)

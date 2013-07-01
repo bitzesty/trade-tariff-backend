@@ -12,7 +12,7 @@ class GeographicalArea < Sequel::Model
                                                 right_primary_key: [:geographical_area_description_period_sid,
                                                                     :geographical_area_sid] do |ds|
     ds.with_actual(GeographicalAreaDescriptionPeriod)
-      .order(:geographical_area_description_periods__validity_start_date.desc)
+      .order(Sequel.desc(:geographical_area_description_periods__validity_start_date))
   end
 
   def geographical_area_description
@@ -46,7 +46,7 @@ class GeographicalArea < Sequel::Model
     end
 
     def latest
-      order(:operation_date.desc)
+      order(Sequel.desc(:operation_date))
     end
 
     def countries
