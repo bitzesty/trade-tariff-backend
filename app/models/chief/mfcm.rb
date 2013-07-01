@@ -6,7 +6,7 @@ module Chief
     VAT_GROUP_CODES = %w[VT]
 
     set_dataset db[:chief_mfcm].
-                order(:audit_tsmp.asc)
+                order(Sequel.asc(:audit_tsmp))
 
 
     set_primary_key [:msrgp_code,
@@ -32,7 +32,7 @@ module Chief
                               {:msr_type => msr_type} &
                               {:tty_code => tty_code} &
                               {:tar_msr_no => tar_msr_no}
-                              }.order(:audit_tsmp.asc)
+                              }.order(Sequel.asc(:audit_tsmp))
     }, class_name: 'Chief::Tame'
 
     one_to_one :measure_type, key: {}, primary_key: {},

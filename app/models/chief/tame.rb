@@ -1,7 +1,7 @@
 module Chief
   class Tame < Sequel::Model
     set_dataset db[:chief_tame].
-                order(:audit_tsmp.asc)
+                order(Sequel.asc(:audit_tsmp))
 
     set_primary_key [:msrgp_code,
                      :msr_type,
@@ -36,7 +36,7 @@ module Chief
                               {:msr_type => msr_type} &
                               {:tty_code => tty_code} &
                               {:tar_msr_no => tar_msr_no}
-                        }.order(:audit_tsmp.asc)
+                        }.order(Sequel.asc(:audit_tsmp))
     }
 
     one_to_one :chief_update, key: :filename,

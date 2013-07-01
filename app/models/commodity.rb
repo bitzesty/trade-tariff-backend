@@ -8,7 +8,7 @@ class Commodity < GoodsNomenclature
   plugin :json_serializer
 
   set_dataset filter("goods_nomenclatures.goods_nomenclature_item_id NOT LIKE ?", '____000000').
-              order(:goods_nomenclatures__goods_nomenclature_item_id.asc)
+              order(Sequel.asc(:goods_nomenclatures__goods_nomenclature_item_id))
 
   set_primary_key [:goods_nomenclature_sid]
 

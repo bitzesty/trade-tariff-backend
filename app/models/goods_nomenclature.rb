@@ -2,7 +2,7 @@ require 'time_machine'
 require 'trackable'
 
 class GoodsNomenclature < Sequel::Model
-  set_dataset order(:goods_nomenclatures__goods_nomenclature_item_id.asc)
+  set_dataset order(Sequel.asc(:goods_nomenclatures__goods_nomenclature_item_id))
   set_primary_key [:goods_nomenclature_sid]
 
   plugin :time_machine, period_start_column: Sequel.qualify(:goods_nomenclatures, :validity_start_date),
@@ -95,7 +95,7 @@ class GoodsNomenclature < Sequel::Model
     end
 
     def non_hidden
-      filter(Sequel.~{goods_nomenclature_item_id: HiddenGoodsNomenclature.codes})
+      filter(Sequel.~(goods_nomenclature_item_id: HiddenGoodsNomenclature.codes))
     end
   end
 

@@ -8,35 +8,35 @@ module Model
            Measure.with_base_regulations
                   .with_actual(BaseRegulation)
                   .where({measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid)})
-                  .where{ Sequel.~{measures__measure_type_id: MeasureType::EXCLUDED_TYPES} }
-                  .order(:measures__measure_sid.asc).tap! { |query|
+                  .where{ Sequel.~(measures__measure_type_id: MeasureType::EXCLUDED_TYPES) }
+                  .order(Sequel.asc(:measures__measure_sid)).tap! { |query|
                    query.union(
                           Measure.with_base_regulations
                                  .with_actual(BaseRegulation)
                                  .where({measures__export_refund_nomenclature_sid: export_refund_uptree.map(&:export_refund_nomenclature_sid)})
-                                 .where{ Sequel.~{measures__measure_type_id: MeasureType::EXCLUDED_TYPES} }
-                                 .order(:measures__measure_sid.asc)
+                                 .where{ Sequel.~(measures__measure_type_id: MeasureType::EXCLUDED_TYPES) }
+                                 .order(Sequel.asc(:measures__measure_sid))
                        ) if export_refund_uptree.present?
                   }
           .union(
            Measure.with_modification_regulations
                   .with_actual(ModificationRegulation)
                   .where({measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid)})
-                  .where{ Sequel.~{measures__measure_type_id: MeasureType::EXCLUDED_TYPES} }
-                  .order(:measures__measure_sid.asc)
+                  .where{ Sequel.~(measures__measure_type_id: MeasureType::EXCLUDED_TYPES) }
+                  .order(Sequel.asc(:measures__measure_sid))
                   .tap! {|query|
                     query.union(
                           Measure.with_modification_regulations
                                  .with_actual(ModificationRegulation)
                                  .where({measures__export_refund_nomenclature_sid: export_refund_uptree.map(&:export_refund_nomenclature_sid)})
-                                 .where{ Sequel.~{measures__measure_type_id: MeasureType::EXCLUDED_TYPES} }
-                                 .order(:measures__measure_sid.asc)
+                                 .where{ Sequel.~(measures__measure_type_id: MeasureType::EXCLUDED_TYPES) }
+                                 .order(Sequel.asc(:measures__measure_sid))
                        ) if export_refund_uptree.present?
                   },
             alias: :measures
           )
           .with_actual(Measure)
-          .order(:measures__geographical_area_id.asc,
+          .order(Sequel.asc(:measures__geographical_area_id),
                  Sequel.desc(:effective_start_date)),
           t1__measure_sid: :measures__measure_sid
         ).group(:measures__measure_type_id,

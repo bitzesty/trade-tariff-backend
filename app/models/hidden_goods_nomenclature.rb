@@ -1,5 +1,5 @@
 class HiddenGoodsNomenclature < Sequel::Model
-  set_dataset order(:goods_nomenclature_item_id.asc)
+  set_dataset order(Sequel.asc(:goods_nomenclature_item_id))
 
   validates do
     presence_of :goods_nomenclature_item_id
