@@ -4,7 +4,7 @@
 
 require 'sequel/extensions/pagination'
 
-Sequel.extension :pagination
+Sequel::Model.db.extension :pagination
 
 module Sequel
   module PaginationExtension

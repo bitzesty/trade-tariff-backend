@@ -22,21 +22,20 @@ module Chief
                                  primary_key: [:adval1_rate, :adval2_rate, :spfc1_rate, :spfc2_rate]
 
     one_to_many :tamfs, key:{}, primary_key: {}, dataset: -> {
-      Chief::Tamf.filter{ |o| {:fe_tsmp => fe_tsmp} &
-                              {:msrgp_code => msrgp_code} &
-                              {:msr_type => msr_type} &
-                              {:tty_code => tty_code} &
-                              {:tar_msr_no => tar_msr_no} &
-                              {:amend_indicator => amend_indicator}
-                              }
+      Chief::Tamf.filter({:fe_tsmp => fe_tsmp})
+                 .filter({:msrgp_code => msrgp_code})
+                 .filter({:msr_type => msr_type})
+                 .filter({:tty_code => tty_code})
+                 .filter({:tar_msr_no => tar_msr_no})
+                 .filter({:amend_indicator => amend_indicator})
     }, class_name: 'Chief::Tamf'
 
     one_to_many :mfcms, key: {}, primary_key: {}, dataset: -> {
-      Chief::Mfcm.filter{ |o| {:msrgp_code => msrgp_code} &
-                              {:msr_type => msr_type} &
-                              {:tty_code => tty_code} &
-                              {:tar_msr_no => tar_msr_no}
-                        }.order(Sequel.asc(:audit_tsmp))
+      Chief::Mfcm.filter({:msrgp_code => msrgp_code})
+                 .filter({:msr_type => msr_type})
+                 .filter({:tty_code => tty_code})
+                 .filter({:tar_msr_no => tar_msr_no})
+                 .order(Sequel.asc(:audit_tsmp))
     }
 
     one_to_one :chief_update, key: :filename,

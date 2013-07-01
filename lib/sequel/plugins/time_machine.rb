@@ -13,6 +13,8 @@ module Sequel
       module ClassMethods
         attr_accessor :period_start_date_column, :period_end_date_column
 
+        Plugins.def_dataset_methods self, [:actual, :with_actual]
+
         # Inheriting classes have the same start/end date columns
         def inherited(subclass)
           super

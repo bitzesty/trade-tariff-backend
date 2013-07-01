@@ -20,19 +20,19 @@ module Chief
                      :amend_indicator]
 
     one_to_one :tame, key: {}, primary_key: {}, dataset: -> {
-      Chief::Tame.filter{ |o| {:msrgp_code => msrgp_code} &
-                              {:msr_type => msr_type} &
-                              {:tty_code => tty_code} &
-                              {:tar_msr_no => tar_msr_no}
-                              }.order(Sequel.desc(:audit_tsmp))
+      Chief::Tame.filter({:msrgp_code => msrgp_code})
+                 .filter({:msr_type => msr_type})
+                 .filter({:tty_code => tty_code})
+                 .filter({:tar_msr_no => tar_msr_no})
+                 .order(Sequel.desc(:audit_tsmp))
     }, class_name: 'Chief::Tame'
 
     one_to_many :tames, key: {}, primary_key: {}, dataset: -> {
-      Chief::Tame.filter{ |o| {:msrgp_code => msrgp_code} &
-                              {:msr_type => msr_type} &
-                              {:tty_code => tty_code} &
-                              {:tar_msr_no => tar_msr_no}
-                              }.order(Sequel.asc(:audit_tsmp))
+      Chief::Tame.filter({:msrgp_code => msrgp_code})
+                 .filter({:msr_type => msr_type})
+                 .filter({:tty_code => tty_code})
+                 .filter({:tar_msr_no => tar_msr_no})
+                 .order(Sequel.asc(:audit_tsmp))
     }, class_name: 'Chief::Tame'
 
     one_to_one :measure_type, key: {}, primary_key: {},

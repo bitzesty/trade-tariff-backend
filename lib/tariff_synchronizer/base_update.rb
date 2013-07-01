@@ -49,7 +49,7 @@ module TariffSynchronizer
       end
 
       def latest_applied_of_both_kinds
-        order(:issue_date.desc).from_self.group(:update_type).applied
+        order(Sequel.desc(:issue_date)).from_self.group(:update_type).applied
       end
     end
 
@@ -97,7 +97,7 @@ module TariffSynchronizer
           end
         end
 
-        notify_about_missing_updates if self.order(:issue_date.desc).last(TariffSynchronizer.warning_day_count).all?(&:missing?)
+        notify_about_missing_updates if self.order(Sequel.desc(:issue_date)).last(TariffSynchronizer.warning_day_count).all?(&:missing?)
       end
 
       def exists_for?(date)
@@ -156,7 +156,7 @@ module TariffSynchronizer
       end
 
       def pending_from
-        if last_download = dataset.order(:issue_date.desc).first
+        if last_download = dataset.order(Sequel.desc(:issue_date)).first
           last_download.issue_date
         else
          TariffSynchronizer.initial_update_for(update_type)

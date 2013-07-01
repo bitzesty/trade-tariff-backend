@@ -38,13 +38,13 @@ class ExportRefundNomenclature < Sequel::Model
   end
 
   def ancestors
-    ExportRefundNomenclature.select(:export_refund_nomenclatures.*)
+    ExportRefundNomenclature.select(Sequel.expr(:export_refund_nomenclatures).*)
       .eager(:export_refund_nomenclature_indents,
              :export_refund_nomenclature_descriptions)
       .join_table(:inner,
         ExportRefundNomenclatureIndent
                  .select(Sequel.as(:export_refund_nomenclatures__export_refund_nomenclature_sid, :gono_sid),
-                         Sequel.as(:max.sql_function(:export_refund_nomenclatures__goods_nomenclature_item_id), :max_gono),
+                         Sequel.as(Sequel.function(:max, :export_refund_nomenclatures__goods_nomenclature_item_id), :max_gono),
                          :export_refund_nomenclature_indents__number_export_refund_nomenclature_indents)
                  .with_actual(ExportRefundNomenclature)
                  .join(:export_refund_nomenclatures, export_refund_nomenclature_indents__export_refund_nomenclature_sid: :export_refund_nomenclatures__export_refund_nomenclature_sid)

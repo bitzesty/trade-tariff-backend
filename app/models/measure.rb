@@ -160,16 +160,16 @@ class Measure < Sequel::Model
 
   dataset_module do
     def with_base_regulations
-      select(:measures.*).
-      select_append(Sequel.as(:if.sql_function('measures.validity_start_date IS NOT NULL'.lit, 'measures.validity_start_date'.lit, 'base_regulations.validity_start_date'.lit), :effective_start_date)).
-      select_append(Sequel.as(:if.sql_function('measures.validity_end_date IS NOT NULL'.lit, 'measures.validity_end_date'.lit, 'base_regulations.effective_end_date'.lit), :effective_end_date)).
+      select(Sequel.expr(:measures).*).
+      select_append(Sequel.as(Sequel.function(:if, Sequel.lit('measures.validity_start_date IS NOT NULL'), Sequel.lit('measures.validity_start_date'), Sequel.lit('base_regulations.validity_start_date')), :effective_start_date)).
+      select_append(Sequel.as(Sequel.function(:if, Sequel.lit('measures.validity_end_date IS NOT NULL'), Sequel.lit('measures.validity_end_date'), Sequel.lit('base_regulations.effective_end_date')), :effective_end_date)).
       join_table(:inner, :base_regulations, base_regulations__base_regulation_id: :measures__measure_generating_regulation_id)
     end
 
     def with_modification_regulations
-      select(:measures.*).
-      select_append(Sequel.as(:if.sql_function('measures.validity_start_date IS NOT NULL'.lit, 'measures.validity_start_date'.lit, 'modification_regulations.validity_start_date'.lit), :effective_start_date)).
-      select_append(Sequel.as(:if.sql_function('measures.validity_end_date IS NOT NULL'.lit, 'measures.validity_end_date'.lit, 'modification_regulations.effective_end_date'.lit), :effective_end_date)).
+      select(Sequel.expr(:measures).*).
+      select_append(Sequel.as(Sequel.function(:if, Sequel.lit('measures.validity_start_date IS NOT NULL'), Sequel.lit('measures.validity_start_date'), Sequel.lit('modification_regulations.validity_start_date')), :effective_start_date)).
+      select_append(Sequel.as(Sequel.function(:if, Sequel.lit('measures.validity_end_date IS NOT NULL'), Sequel.lit('measures.validity_end_date'), Sequel.lit('modification_regulations.effective_end_date')), :effective_end_date)).
       join_table(:inner, :modification_regulations, modification_regulations__modification_regulation_id: :measures__measure_generating_regulation_id)
     end
 

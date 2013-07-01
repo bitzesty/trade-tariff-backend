@@ -13,12 +13,17 @@ module Sequel
       module ClassMethods
         attr_reader :class_determinator
 
+        # Raises deprecation warning if model is not declared
+        # as dataset method
+        Plugins.def_dataset_methods self, [:model]
+
         def inherited(subclass)
           super
 
           cd = class_determinator
           rp = dataset.row_proc
           subclass.instance_eval do
+            dataset.row_proc = rp
             @class_determinator = cd
             dataset.row_proc = lambda{|r| model.sti_load(r) }
           end
