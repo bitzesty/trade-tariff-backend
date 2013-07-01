@@ -9,6 +9,7 @@ class ChiefTransformer
 
     plugin :national
     plugin :timestamps
+    plugin :after_initialize
 
     DEFAULT_REGULATION_ROLE_TYPE_ID = 1
     DEFAULT_REGULATION_ID = "IYY99990"
