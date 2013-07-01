@@ -17,7 +17,7 @@ class NationalMeasurementUnitSet < Sequel::Model
               filter{~{chief_comm__uoq_code_cdu1: nil} | ~{chief_comm__uoq_code_cdu2: nil} | ~{chief_comm__uoq_code_cdu3: nil}}.
               order(:chief_comm__audit_tsmp.desc)
 
-  set_primary_key  :tbl_code
+  set_primary_key [:tbl_code]
 
   def national_measurement_unit_set_units
     [NationalMeasurementUnit.new(measurement_unit_code: first_quantity_code,

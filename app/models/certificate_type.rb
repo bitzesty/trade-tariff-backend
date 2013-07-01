@@ -2,7 +2,7 @@ class CertificateType < Sequel::Model
   plugin :oplog, primary_key: :certificate_type_code
   plugin :time_machine
 
-  set_primary_key :certificate_type_code
+  set_primary_key [:certificate_type_code]
 
   many_to_one :certificate_type_description, key: :certificate_type_code,
                                              primary_key: :certificate_type_code,

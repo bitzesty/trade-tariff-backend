@@ -2,7 +2,7 @@ class AdditionalCode < Sequel::Model
   plugin :time_machine
   plugin :oplog, primary_key: :additional_code_sid
 
-  set_primary_key :additional_code_sid
+  set_primary_key [:additional_code_sid]
 
   many_to_many :additional_code_descriptions, join_table: :additional_code_description_periods,
                                               left_key: :additional_code_sid,

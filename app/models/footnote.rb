@@ -4,7 +4,7 @@ class Footnote < Sequel::Model
   plugin :time_machine
   plugin :oplog, primary_key: [:footnote_id, :footnote_type_id]
 
-  set_primary_key :footnote_id, :footnote_type_id
+  set_primary_key [:footnote_id, :footnote_type_id]
 
 
   many_to_many :footnote_descriptions, join_table: :footnote_description_periods,

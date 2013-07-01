@@ -3,7 +3,7 @@ class MeasurePartialTemporaryStop < Sequel::Model
   plugin :oplog, primary_key: [:measure_sid,
                                :partial_temporary_stop_regulation_id]
 
-  set_primary_key  :measure_sid, :partial_temporary_stop_regulation_id
+  set_primary_key [:measure_sid, :partial_temporary_stop_regulation_id]
 
   def regulation_id
     partial_temporary_stop_regulation_id

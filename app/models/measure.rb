@@ -6,7 +6,7 @@ class Measure < Sequel::Model
     4  # Definitive anti-dumping/countervailing duty
   ]
 
-  set_primary_key :measure_sid
+  set_primary_key [:measure_sid]
   plugin :time_machine, period_start_column: :effective_start_date,
                         period_end_column: :effective_end_date
   plugin :oplog, primary_key: :measure_sid

@@ -8,8 +8,7 @@ class MeasureType < Sequel::Model
                         period_end_column:   :measure_types__validity_end_date
   plugin :oplog, primary_key: :measure_type_id
 
-
-  set_primary_key :measure_type_id
+  set_primary_key [:measure_type_id]
 
   one_to_one :measure_type_description, key: :measure_type_id,
                                         foreign_key: :measure_type_id

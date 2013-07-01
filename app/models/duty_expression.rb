@@ -2,7 +2,7 @@ class DutyExpression < Sequel::Model
   plugin :time_machine
   plugin :oplog, primary_key: :duty_expression_id
 
-  set_primary_key :duty_expression_id
+  set_primary_key [:duty_expression_id]
 
   one_to_one :duty_expression_description
 

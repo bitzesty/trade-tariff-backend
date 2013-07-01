@@ -1,7 +1,7 @@
 class AdditionalCodeType < Sequel::Model
   plugin :oplog, primary_key: :additional_code_type_id
 
-  set_primary_key :additional_code_type_id
+  set_primary_key [:additional_code_type_id]
 
   one_to_many :additional_codes, key: :additional_code_type_id
   one_to_one  :additional_code_type_description, key: :additional_code_type_id

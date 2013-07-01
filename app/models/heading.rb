@@ -11,7 +11,7 @@ class Heading < GoodsNomenclature
               filter("goods_nomenclatures.goods_nomenclature_item_id NOT LIKE ?", '__00______').
               order(:goods_nomenclature_item_id.asc)
 
-  set_primary_key :goods_nomenclature_sid
+  set_primary_key [:goods_nomenclature_sid]
 
   one_to_many :commodities, dataset: -> {
     actual_or_relevant(Commodity)

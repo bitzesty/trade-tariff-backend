@@ -2,7 +2,7 @@ class MonetaryUnit < Sequel::Model
   plugin :oplog, primary_key: :monetary_unit_code
   plugin :time_machine
 
-  set_primary_key  :monetary_unit_code
+  set_primary_key [:monetary_unit_code]
 
   one_to_one :monetary_unit_description, key: :monetary_unit_code,
                                          primary_key: :monetary_unit_code

@@ -5,7 +5,7 @@ class ExportRefundNomenclature < Sequel::Model
 
   set_dataset order(:export_refund_nomenclatures__goods_nomenclature_item_id.asc)
 
-  set_primary_key :export_refund_nomenclature_sid
+  set_primary_key [:export_refund_nomenclature_sid]
 
   many_to_many :export_refund_nomenclature_descriptions, join_table: :export_refund_nomenclature_description_periods,
                                                          left_primary_key: :export_refund_nomenclature_sid,

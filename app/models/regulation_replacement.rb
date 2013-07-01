@@ -3,8 +3,8 @@ class RegulationReplacement < Sequel::Model
                                :replacing_regulation_role,
                                :replaced_regulation_id,
                                :replaced_regulation_role]
-  set_primary_key  :replacing_regulation_id, :replacing_regulation_role,
-                   :replaced_regulation_id, :replaced_regulation_role
+  set_primary_key [:replacing_regulation_id, :replacing_regulation_role,
+                   :replaced_regulation_id, :replaced_regulation_role]
 end
 
 
