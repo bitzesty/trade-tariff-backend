@@ -33,7 +33,7 @@ module TariffSynchronizer
 
       Mailer.applied(event.payload[:update_names],
                      event.payload[:count],
-                     conformance_errors.each(&:validate!)).deliver
+                     conformance_errors.each(&:conformant?)).deliver
     end
 
     # Update failed to be applied

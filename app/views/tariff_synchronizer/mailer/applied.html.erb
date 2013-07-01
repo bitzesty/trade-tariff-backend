@@ -36,7 +36,7 @@
           </td>
           <td>
             <ul>
-              <% record.errors.each do |error_type, error_messages| %>
+              <% record.conformance_errors.each do |error_type, error_messages| %>
                 <li>
                   <strong><%= error_type %></strong><br />
                 </li>

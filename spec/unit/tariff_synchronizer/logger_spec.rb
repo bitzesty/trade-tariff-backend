@@ -135,7 +135,14 @@ describe TariffSynchronizer::Logger do
 
         Footnote.unrestrict_primary_key
 
-        TariffSynchronizer::Logger.conformance_errors << build(:measure, validity_start_date: Date.today, validity_end_date: Date.today.ago(1.year))
+        invalid_measure = build(:measure,
+                                justification_regulation_id: "123",
+                                justification_regulation_role: "123",
+                                validity_start_date: Date.today,
+                                validity_end_date: Date.today.ago(1.year))
+
+        TariffSynchronizer::Logger.conformance_errors <<  invalid_measure
+        TariffSynchronizer.apply
       }
 
       after {
@@ -151,7 +158,7 @@ describe TariffSynchronizer::Logger do
 
         last_email_content = ActionMailer::Base.deliveries.last.encoded
         last_email_content.should_not =~ /No conformance errors found/
-        last_email_content.should =~ /must be less then or equal to end date/
+        last_email_content.should =~ /less than or equal to the end date/
       end
     end
   end
