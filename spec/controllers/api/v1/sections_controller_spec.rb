@@ -36,8 +36,8 @@ describe Api::V1::SectionsController, "GET #index" do
 
   let(:pattern) {
     [
-      {position: Integer, title: String, numeral: String},
-      {position: Integer, title: String, numeral: String}
+      {position: Integer, title: String, numeral: String}.ignore_extra_keys!,
+      {position: Integer, title: String, numeral: String}.ignore_extra_keys!
     ]
   }
 
