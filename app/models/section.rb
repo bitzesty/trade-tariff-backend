@@ -17,7 +17,6 @@ class Section < Sequel::Model
 
     Chapter.join_table(:inner, :chapters_sections, chapters_sections__goods_nomenclature_sid: :goods_nomenclatures__goods_nomenclature_sid)
            .join_table(:inner, :sections, chapters_sections__section_id: :sections__id)
-           .eager(:goods_nomenclature_description)
            .with_actual(Chapter)
            .where(~{goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes })
            .where(sections__id: id_map.keys).all do |chapter|
@@ -44,6 +43,22 @@ class Section < Sequel::Model
 
   def to_param
     position
+  end
+
+  def first_chapter
+    chapters.first || NullObject.new
+  end
+
+  def last_chapter
+    chapters.last || NullObject.new
+  end
+
+  def chapter_from
+    first_chapter.short_code
+  end
+
+  def chapter_to
+    last_chapter.short_code
   end
 
   def serializable_hash
