@@ -22,10 +22,6 @@ namespace :tariff do
   namespace :sync do
     desc 'Download pending Taric and CHIEF updates'
     task apply: [:environment, :class_eager_load] do
-      # We will be fetching updates from Taric and modifying primary keys
-      # so unrestrict it for all models.
-      Sequel::Model.descendants.each(&:unrestrict_primary_key)
-
       TradeTariffBackend.with_locked_database do
         # Download pending updates for CHIEF and Taric
         TariffSynchronizer.download

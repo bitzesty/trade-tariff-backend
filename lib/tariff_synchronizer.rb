@@ -98,6 +98,10 @@ module TariffSynchronizer
   # Applies all updates (from inbox/failbox) by their date starting from the
   # oldest one.
   def apply
+    # We will be fetching updates from Taric and modifying primary keys
+    # so unrestrict it for all models.
+    Sequel::Model.descendants.each(&:unrestrict_primary_key)
+
     if BaseUpdate.failed.any?
       file_names = BaseUpdate.failed.map(&:filename)
 
