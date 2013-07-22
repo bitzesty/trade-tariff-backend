@@ -24,4 +24,4 @@ module Sequel
   end
 end
 
-Sequel::Dataset.send :include, Sequel::PaginationExtension
+Sequel::DatasetPagination.send :include, Sequel::PaginationExtension
