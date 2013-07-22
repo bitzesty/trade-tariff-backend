@@ -45,16 +45,20 @@ class Section < Sequel::Model
     position
   end
 
+  def first_chapter
+    chapters.first || NullObject.new
+  end
+
+  def last_chapter
+    chapters.last || NullObject.new
+  end
+
   def chapter_from
-    if chapter = chapters.first
-      chapter.short_code
-    end
+    first_chapter.short_code
   end
 
   def chapter_to
-    if chapter = chapters.last
-      chapter.short_code
-    end
+    last_chapter.short_code
   end
 
   def serializable_hash
