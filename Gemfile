@@ -11,7 +11,7 @@ gem "rabl", "0.7.6"
 gem "ansi"
 gem "sequel", "4.0.0"
 gem "tire", "0.6.0"
-gem "tire-contrib", github: "karmi/tire-contrib",  require: 'tire/namespace'
+gem "tire-contrib", '~> 0.1.3'
 gem "yajl-ruby", require: "yajl"
 
 gem "builder"
