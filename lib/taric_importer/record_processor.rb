@@ -83,9 +83,7 @@ class TaricImporter < TariffImporter
       case operation
       when :create
         model = klass.new(attributes)
-        model.save(validate: false) # defer validation, as associated
-                                    # records in the same transaction
-                                    # may not been saved yet
+        model.save(validate: false)
         model
       when :destroy
         model = klass.filter(attributes.slice(*primary_key).symbolize_keys).first
