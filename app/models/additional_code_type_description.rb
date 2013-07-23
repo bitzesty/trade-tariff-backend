@@ -1,5 +1,6 @@
 class AdditionalCodeTypeDescription < Sequel::Model
   plugin :oplog, primary_key: :additional_code_type_id
+  plugin :conformance_validator
 
   set_primary_key [:additional_code_type_id]
 

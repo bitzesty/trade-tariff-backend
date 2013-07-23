@@ -3,6 +3,7 @@ class ModificationRegulation < Sequel::Model
                                :modification_regulation_role]
   plugin :time_machine, period_start_column: :modification_regulations__validity_start_date,
                         period_end_column: :effective_end_date
+  plugin :conformance_validator
 
   set_primary_key [:modification_regulation_id, :modification_regulation_role]
 

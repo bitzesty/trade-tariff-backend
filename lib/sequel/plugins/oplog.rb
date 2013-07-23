@@ -21,7 +21,7 @@ module Sequel
                                        class_name: operation_klass
 
         # Delegations
-        model.delegate :conformance_validator, :operation_klass, to: model
+        model.delegate :operation_klass, to: model
       end
 
       module InstanceMethods
@@ -39,22 +39,6 @@ module Sequel
           else
             :create
           end
-        end
-
-        def conformance_errors
-          @conformance_errors ||= Sequel::Model::Errors.new
-        end
-
-        def conformant?
-          conformance_validator.validate(self)
-
-          conformance_errors.none?
-        end
-
-        def conformant_for?(*operations)
-          conformance_validator.validate_for_operations(self, *operations)
-
-          conformant?
         end
 
         def _insert_raw(ds)
@@ -91,18 +75,6 @@ module Sequel
 
         def operation_klass
           @_operation_klass ||= "#{self}::Operation".constantize
-        end
-
-        def conformance_validator
-          @_conformance_validator ||= begin
-                            "#{self}Validator".constantize.new
-                          rescue NameError
-                            NullValidator
-                          end
-        end
-
-        def conformance_validator=(conformance_validator)
-          @_conformance_validator = conformance_validator
         end
       end
 

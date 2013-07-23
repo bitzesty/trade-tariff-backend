@@ -1,6 +1,7 @@
 class Certificate < Sequel::Model
   plugin :oplog, primary_key: [:certificate_code, :certificate_type_code]
   plugin :time_machine
+  plugin :conformance_validator
 
   set_primary_key [:certificate_code, :certificate_type_code]
 

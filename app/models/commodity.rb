@@ -5,6 +5,7 @@ class Commodity < GoodsNomenclature
   include Model::Declarable
 
   plugin :oplog, primary_key: :goods_nomenclature_sid
+  plugin :conformance_validator
   plugin :json_serializer
 
   set_dataset filter("goods_nomenclatures.goods_nomenclature_item_id NOT LIKE ?", '____000000').
