@@ -764,4 +764,44 @@ describe Measure do
       end
     end
   end
+
+  describe "#import" do
+    let(:measure) { create :measure, measure_type: measure_type }
+
+    context 'measure type is import' do
+      let(:measure_type) { create :measure_type, :import }
+
+      it 'returns true' do
+        expect(measure.import).to be_true
+      end
+    end
+
+    context 'measure type is export' do
+      let(:measure_type) { create :measure_type, :export }
+
+      it 'returns false' do
+        expect(measure.import).to be_false
+      end
+    end
+  end
+
+  describe "#export" do
+    let(:measure) { create :measure, measure_type: measure_type }
+
+    context 'measure type is import' do
+      let(:measure_type) { create :measure_type, :import }
+
+      it 'returns false' do
+        expect(measure.export).to be_false
+      end
+    end
+
+    context 'measure type is export' do
+      let(:measure_type) { create :measure_type, :export }
+
+      it 'returns true' do
+        expect(measure.export).to be_true
+      end
+    end
+  end
 end
