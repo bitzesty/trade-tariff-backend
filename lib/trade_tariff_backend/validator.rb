@@ -17,7 +17,17 @@ module TradeTariffBackend
     end
 
     def validate(record)
-      relevant_validations_for(record).each { |validation|
+      relevant_validations_for(record).select { |validation|
+        validation.operations.include?(record.operation)
+      }.each { |validation|
+        record.conformance_errors.add(validation.identifiers, validation.to_s) unless validation.valid?(record)
+      }
+    end
+
+    def validate_for_operations(record, *operations)
+      relevant_validations_for(record).select { |validation|
+        (validation.operations & operations).any?
+      }.each { |validation|
         record.conformance_errors.add(validation.identifiers, validation.to_s) unless validation.valid?(record)
       }
     end
@@ -26,7 +36,6 @@ module TradeTariffBackend
 
     def relevant_validations_for(record)
       validations.select { |validation|
-        validation.operations.include?(record.operation) &&
         validation.relevant_for?(record)
       }
     end

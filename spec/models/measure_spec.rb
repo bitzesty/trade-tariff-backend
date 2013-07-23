@@ -478,7 +478,7 @@ describe Measure do
     describe 'ME9' do
       context 'additional_code blank, goods nomenclature code blank' do
         let(:measure) { create :measure, additional_code_id: nil,
-                                        goods_nomenclature_item_id: nil }
+                                         goods_nomenclature_item_id: nil }
 
         it 'performs validation' do
           measure.should_not be_conformant

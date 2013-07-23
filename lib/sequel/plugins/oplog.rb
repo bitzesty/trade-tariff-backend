@@ -51,8 +51,8 @@ module Sequel
           conformance_errors.none?
         end
 
-        def conformant_for?(operation)
-          self.operation = operation
+        def conformant_for?(*operations)
+          conformance_validator.validate_for_operations(self, *operations)
 
           conformant?
         end

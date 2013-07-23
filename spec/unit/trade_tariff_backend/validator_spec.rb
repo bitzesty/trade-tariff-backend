@@ -70,4 +70,59 @@ describe TradeTariffBackend::Validator do
       end
     end
   end
+
+  describe '#validate_for_operations' do
+    let(:model) {
+      double(operation: :create,
+             conformance_errors: double(add: true))
+    }
+
+    let(:contextual_validator) {
+      Class.new(TradeTariffBackend::Validator) {
+        validation :verify1, 'some validation', on: [:create, :update] do |record|
+          true
+        end
+
+        validation :verify2, 'some validation', on: [:update] do |record|
+          false
+        end
+      }
+    }
+
+    context 'operations match some defined validations' do
+      context 'all validations pass' do
+        before { contextual_validator.new.validate_for_operations(model, :create) }
+
+        it 'adds no error to object errors hash' do
+          model.conformance_errors.should_not have_received(:add)
+        end
+      end
+
+      context 'one of the validations wont pass' do
+        before {
+          contextual_validator.new.validate_for_operations(model, :create, :update)
+        }
+
+        it 'adds an error to object errors hash' do
+          model.conformance_errors.should have_received(:add)
+        end
+      end
+    end
+
+    context 'operatios do not match any validations' do
+      let(:contextual_validator) {
+        Class.new(TradeTariffBackend::Validator) {
+          validation :verify1, 'some validation', on: [:create, :update] do |record|
+            true
+          end
+        }
+      }
+
+      before {  contextual_validator.new.validate_for_operations(model, :destroy) }
+
+      it 'adds no errors to objects hash' do
+        model.conformance_errors.should_not have_received(:add)
+      end
+    end
+  end
 end

@@ -4,6 +4,9 @@ class NullValidator
   def self.validate(record)
   end
 
+  def self.validate_for_operations(*)
+  end
+
   def self.validations
     []
   end
