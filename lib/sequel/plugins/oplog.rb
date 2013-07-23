@@ -51,6 +51,12 @@ module Sequel
           conformance_errors.none?
         end
 
+        def conformant_for?(operation)
+          self.operation = operation
+
+          conformant?
+        end
+
         def _insert_raw(ds)
           self.operation = :create
 
