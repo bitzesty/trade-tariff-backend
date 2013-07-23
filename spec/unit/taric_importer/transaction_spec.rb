@@ -31,8 +31,8 @@ describe TaricImporter::Transaction do
   end
 
   describe '#persist' do
-    let(:record_processor) { stub(process!: true) }
-    let(:record_processor_klass) { stub(new: record_processor) }
+    let(:record_processor) { double(process!: true).as_null_object }
+    let(:record_processor_klass) { double(new: record_processor).as_null_object }
 
     subject { described_class.new(record, transaction_date) }
 

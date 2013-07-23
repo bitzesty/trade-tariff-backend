@@ -249,7 +249,7 @@ describe TariffSynchronizer::TaricUpdate do
     end
 
     it 'does not move file to processed if import fails' do
-      mock_importer = stub
+      mock_importer = double
       mock_importer.should_receive(:import).and_raise(TaricImporter::ImportException)
       TariffImporter.should_receive(:new).and_return(mock_importer)
 

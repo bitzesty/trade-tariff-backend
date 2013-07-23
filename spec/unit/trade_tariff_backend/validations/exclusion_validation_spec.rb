@@ -3,7 +3,7 @@ require 'spec_helper'
 describe TradeTariffBackend::Validations::ExclusionValidation do
   describe '#valid?' do
     context 'argument is an Array' do
-      let(:model) { stub(attr: :c) }
+      let(:model) { double(attr: :c) }
       let(:validation) {
         described_class.new(:vld1, 'valid', validation_options: { of: :attr,
                                                                   from: [:a, :b, :c] } )
@@ -15,7 +15,7 @@ describe TradeTariffBackend::Validations::ExclusionValidation do
     end
 
     context 'argument is a Proc' do
-      let(:model) { stub(attr: :c) }
+      let(:model) { double(attr: :c) }
       let(:validation) {
         described_class.new(:vld1, 'valid', validation_options: { of: :attr,
                                                                  from: ->{[:a, :b, :c] }} )
@@ -27,7 +27,7 @@ describe TradeTariffBackend::Validations::ExclusionValidation do
     end
 
     context 'no valid argument to check for povided' do
-      let(:record) { stub }
+      let(:record) { double }
       let(:validation) {
         described_class.new(:vld1, 'valid', validation_options: { in: :attr} )
       }

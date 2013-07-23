@@ -7,8 +7,8 @@ describe TradeTariffBackend::Validations::UniquenessValidation do
     }
 
     context 'duplicates found' do
-      let(:model)  { stub(filter: [stub]) }
-      let(:record) { stub(values: { a: 'a' },
+      let(:model)  { double(filter: [double]) }
+      let(:record) { double(values: { a: 'a' },
                           model: model,
                           new?: false) }
 
@@ -18,8 +18,8 @@ describe TradeTariffBackend::Validations::UniquenessValidation do
     end
 
     context 'no duplicates found' do
-      let(:model)  { stub(filter: []) }
-      let(:record) { stub(values: { a: 'a' },
+      let(:model)  { double(filter: []) }
+      let(:record) { double(values: { a: 'a' },
                           model: model) }
 
       it 'returns true' do

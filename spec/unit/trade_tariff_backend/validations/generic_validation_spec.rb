@@ -59,7 +59,7 @@ describe TradeTariffBackend::Validations::GenericValidation do
     }
 
     context 'relevant for the record' do
-      let(:record) { stub(criteria: true) }
+      let(:record) { double(criteria: true) }
 
       it 'returns true' do
         validation.relevant_for?(record).should eq true
@@ -67,7 +67,7 @@ describe TradeTariffBackend::Validations::GenericValidation do
     end
 
     context 'irrelevant for the record' do
-      let(:record) { stub(criteria: false) }
+      let(:record) { double(criteria: false) }
 
       it 'returns false' do
         validation.relevant_for?(record).should eq false

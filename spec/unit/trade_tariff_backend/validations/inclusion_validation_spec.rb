@@ -9,7 +9,7 @@ describe TradeTariffBackend::Validations::InclusionValidation do
 
     context 'valid array to check upon provided' do
       context 'array includes records attribute value' do
-        let(:record) { stub(attr: :c) }
+        let(:record) { double(attr: :c) }
 
         it 'returns true' do
           validation.valid?(record).should be_true
@@ -17,7 +17,7 @@ describe TradeTariffBackend::Validations::InclusionValidation do
       end
 
       context 'array does not include records attribute value' do
-        let(:record) { stub(attr: :d) }
+        let(:record) { double(attr: :d) }
 
         it 'returns false' do
           validation.valid?(record).should be_false
@@ -26,7 +26,7 @@ describe TradeTariffBackend::Validations::InclusionValidation do
     end
 
     context 'no valid array to check upon provided' do
-      let(:record) { stub }
+      let(:record) { double }
       let(:validation) {
         described_class.new('valid', validation_options: { of: :attr} )
       }
@@ -37,7 +37,7 @@ describe TradeTariffBackend::Validations::InclusionValidation do
     end
 
     context 'no valid argument to check for povided' do
-      let(:record) { stub }
+      let(:record) { double }
       let(:validation) {
         described_class.new('valid', validation_options: { in: :attr} )
       }

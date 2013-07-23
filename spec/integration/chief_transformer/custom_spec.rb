@@ -127,7 +127,7 @@ describe 'CHIEF: Custom scenarions' do
       end
 
       specify 'deletes goods nomenclature' do
-        expect { goods_nomenclature.reload }.to raise_error Sequel::Error
+        expect { goods_nomenclature.reload }.to raise_error
       end
     end
   end
@@ -195,7 +195,7 @@ describe 'CHIEF: Custom scenarions' do
     let!(:measure_type) { create :measure_type, measure_type_id: 'VTS', validity_start_date: Date.today.ago(10.years) }
 
     it 'will not raise validation exception' do
-      expect { ChiefTransformer.instance.invoke }.not_to raise_error ChiefTransformer::TransformException
+      expect { ChiefTransformer.instance.invoke }.not_to raise_error
     end
 
     it 'will update measure validity dates' do

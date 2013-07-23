@@ -3,7 +3,7 @@ require 'spec_helper'
 describe TradeTariffBackend do
   describe '.reindex' do
     context 'when successful' do
-      let(:stub_indexer) { stub(run: true) }
+      let(:stub_indexer) { double(run: true) }
 
       before { TradeTariffBackend.reindex(stub_indexer) }
 
@@ -13,7 +13,7 @@ describe TradeTariffBackend do
     end
 
     context 'when failed' do
-      let(:mock_indexer) { mock }
+      let(:mock_indexer) { double }
 
       before {
         mock_indexer.should_receive(:run).and_raise(StandardError)

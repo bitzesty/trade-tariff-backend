@@ -44,7 +44,7 @@ describe TariffSynchronizer::Logger do
   end
 
   describe '#failed_updates_present logging' do
-    let(:update_stubs) { stub(any?: true, map: []) }
+    let(:update_stubs) { double(any?: true, map: []).as_null_object }
 
     before {
       TariffSynchronizer::BaseUpdate.stub(:failed).and_return(update_stubs)
@@ -163,9 +163,9 @@ describe TariffSynchronizer::Logger do
   end
 
   describe '#failed_update logging' do
-    let(:mock_pending_update) { mock(file_name: Date.today,
-                                     update_priority: 1,
-                                     file_path: '/') }
+    let(:mock_pending_update) { double(file_name: Date.today,
+                                       update_priority: 1,
+                                       file_path: '/').as_null_object }
 
 
     before {

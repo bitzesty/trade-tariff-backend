@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe TradeTariffBackend::Validations::PresenceValidation do
   describe '#valid?' do
-    let(:record) { stub(a: 'a', b: 'b', c: nil) }
+    let(:record) { double(a: 'a', b: 'b', c: nil).as_null_object }
 
     context 'all arguments are present on record' do
       let(:validation) {

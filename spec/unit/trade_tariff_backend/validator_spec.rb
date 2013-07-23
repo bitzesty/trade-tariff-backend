@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe TradeTariffBackend::Validator do
-  let(:model) { stub(operation: :create, conformance_errors: stub(add: true)) }
+  let(:model) { double(operation: :create, conformance_errors: double(add: true)) }
   let(:generic_validator) {
     Class.new(TradeTariffBackend::Validator) {
       validation :verify1, 'some validation' do |record|

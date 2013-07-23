@@ -115,7 +115,7 @@ describe TariffSynchronizer::ChiefUpdate do
     context 'file not found for nth time in a row' do
       let!(:chief_update1) { create :chief_update, :missing, issue_date: Date.today.ago(2.days) }
       let!(:chief_update2) { create :chief_update, :missing, issue_date: Date.today.ago(3.days) }
-      let!(:stub_logger)   { stub }
+      let!(:stub_logger)   { double.as_null_object }
 
       before {
         TariffSynchronizer::ChiefUpdate.stub(:download_content)
@@ -140,7 +140,7 @@ describe TariffSynchronizer::ChiefUpdate do
     end
 
     it 'executes importer' do
-      mock_importer = stub
+      mock_importer = double
       mock_importer.should_receive(:import).and_return(true)
       TariffImporter.should_receive(:new).and_return(mock_importer)
 
@@ -158,7 +158,7 @@ describe TariffSynchronizer::ChiefUpdate do
     end
 
     it 'does not move file to processed if import fails' do
-      mock_importer = stub
+      mock_importer = double
       mock_importer.should_receive(:import).and_raise(ChiefImporter::ImportException)
       TariffImporter.should_receive(:new).and_return(mock_importer)
 

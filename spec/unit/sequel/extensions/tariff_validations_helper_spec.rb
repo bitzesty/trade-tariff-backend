@@ -85,7 +85,7 @@ describe Sequel::Model do
       context 'associated record spans objects dates' do
         it 'should validate validity date span' do
           @c.validates_validity_date_span_of :associated_record
-          @m.associated_record = stub(validity_start_date: Date.new(2013,1,1),
+          @m.associated_record = double(validity_start_date: Date.new(2013,1,1),
                                       validity_end_date: Date.new(2013,4,1))
           @m.should be_valid
         end
@@ -94,21 +94,21 @@ describe Sequel::Model do
       context 'associated record does not span objects dates' do
         it 'should validate validity date span (wrong start date)' do
           @c.validates_validity_date_span_of :associated_record
-          @m.associated_record = stub(validity_start_date: Date.new(2013,3,1),
+          @m.associated_record = double(validity_start_date: Date.new(2013,3,1),
                                       validity_end_date: Date.new(2013,4,1))
           @m.should_not be_valid
         end
 
         it 'should validate validity date span (wrong end date)' do
           @c.validates_validity_date_span_of :associated_record
-          @m.associated_record = stub(validity_start_date: Date.new(2013,1,1),
+          @m.associated_record = double(validity_start_date: Date.new(2013,1,1),
                                       validity_end_date: Date.new(2013,2,1))
           @m.should_not be_valid
         end
 
         it 'should validate validity date span (wrong both dates)' do
           @c.validates_validity_date_span_of :associated_record
-          @m.associated_record = stub(validity_start_date: Date.new(2013,2,15),
+          @m.associated_record = double(validity_start_date: Date.new(2013,2,15),
                                       validity_end_date: Date.new(2013,2,15))
           @m.should_not be_valid
         end

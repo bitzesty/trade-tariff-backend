@@ -5,7 +5,7 @@ describe TradeTariffBackend::Validations::ValidityDatesValidation do
     let(:validation) { described_class.new(:vld1, 'validity_date') }
 
     context 'no validity start dates present' do
-      let(:record) { stub(validity_start_date: nil,
+      let(:record) { double(validity_start_date: nil,
                           validity_end_date: nil) }
 
       it 'returns true' do
@@ -14,7 +14,7 @@ describe TradeTariffBackend::Validations::ValidityDatesValidation do
     end
 
     context 'only validity start date present' do
-      let(:record) { stub(validity_start_date: Date.today,
+      let(:record) { double(validity_start_date: Date.today,
                           validity_end_date: nil) }
 
       it 'returns true' do
@@ -23,7 +23,7 @@ describe TradeTariffBackend::Validations::ValidityDatesValidation do
     end
 
     context 'validity end date is greater than validity start date' do
-      let(:record) { stub(validity_start_date: Date.yesterday,
+      let(:record) { double(validity_start_date: Date.yesterday,
                           validity_end_date: Date.today) }
 
       it 'returns true' do
@@ -32,7 +32,7 @@ describe TradeTariffBackend::Validations::ValidityDatesValidation do
     end
 
     context 'validity start date is greater than validity end date' do
-      let(:record) { stub(validity_start_date: Date.today,
+      let(:record) { double(validity_start_date: Date.today,
                           validity_end_date: Date.yesterday) }
 
       it 'returns false' do
