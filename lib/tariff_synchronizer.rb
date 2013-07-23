@@ -65,33 +65,35 @@ module TariffSynchronizer
   mattr_accessor :warning_day_count
   self.warning_day_count = 3
 
+  delegate :instrument, :subscribe, to: ActiveSupport::Notifications
+
   # Download pending updates for Taric and National data
   # Gets latest downloaded file present in (inbox/failbox/processed) and tries
   # to download any further updates to current day.
   def download
     if sync_variables_set?
-      ActiveSupport::Notifications.instrument("download.tariff_synchronizer") do
+      instrument("download.tariff_synchronizer") do
         begin
           [TaricUpdate, ChiefUpdate].map(&:sync)
         rescue FileService::DownloadException => exception
-          ActiveSupport::Notifications.instrument("failed_download.tariff_synchronizer", exception: exception.original,
+          instrument("failed_download.tariff_synchronizer", exception: exception.original,
                                                                                          url: exception.url)
 
           raise exception.original
         end
       end
     else
-      ActiveSupport::Notifications.instrument("config_error.tariff_synchronizer")
+      instrument("config_error.tariff_synchronizer")
     end
   end
 
   def download_archive
     if sync_variables_set?
-      ActiveSupport::Notifications.instrument("download.tariff_synchronizer") do
+      instrument("download.tariff_synchronizer") do
         [TaricArchive, ChiefArchive].map(&:sync)
       end
     else
-      ActiveSupport::Notifications.instrument("config_error.tariff_synchronizer")
+      instrument("config_error.tariff_synchronizer")
     end
   end
 
@@ -105,11 +107,14 @@ module TariffSynchronizer
     if BaseUpdate.failed.any?
       file_names = BaseUpdate.failed.map(&:filename)
 
-      ActiveSupport::Notifications.instrument("failed_updates_present.tariff_synchronizer", file_names: file_names)
+      instrument(
+        "failed_updates_present.tariff_synchronizer",
+        file_names: file_names
+      )
     else
       unconformant_records = []
 
-      ActiveSupport::Notifications.subscribe /conformance_error/ do |*args|
+      subscribe /conformance_error/ do |*args|
         event = ActiveSupport::Notifications::Event.new(*args)
         unconformant_records << event.payload[:record]
       end
@@ -126,8 +131,11 @@ module TariffSynchronizer
             rescue TaricImporter::ImportException,
                    ChiefImporter::ImportException,
                    TariffImporter::NotFound => exception
-              ActiveSupport::Notifications.instrument("failed_update.tariff_synchronizer", exception: exception,
-                                                                                           update: pending_update)
+              instrument(
+                "failed_update.tariff_synchronizer",
+                exception: exception,
+                update: pending_update
+              )
 
               pending_update.mark_as_failed
 
@@ -139,7 +147,7 @@ module TariffSynchronizer
         end
 
         if pending_updates.any? && BaseUpdate.pending_or_failed.none?
-          ActiveSupport::Notifications.instrument(
+          instrument(
             "apply.tariff_synchronizer",
             update_names: pending_updates.map(&:file_name),
             count: pending_updates.size,
@@ -186,9 +194,11 @@ module TariffSynchronizer
       end
     end
 
-    ActiveSupport::Notifications.instrument("rollback.tariff_synchronizer",
-                                            date: date,
-                                            redownload: redownload)
+    instrument(
+      "rollback.tariff_synchronizer",
+      date: date,
+      redownload: redownload
+    )
   end
 
   # Builds tariff_update entries from files available in the
@@ -197,7 +207,7 @@ module TariffSynchronizer
   # Warning: rebuilt updates will be marked as pending.
   # missing or failed updates are not restored.
   def rebuild
-    ActiveSupport::Notifications.instrument("rebuild.tariff_synchronizer") do
+    instrument("rebuild.tariff_synchronizer") do
       [TaricUpdate, ChiefUpdate].map(&:rebuild)
     end
   end
