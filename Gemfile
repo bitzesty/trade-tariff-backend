@@ -50,9 +50,8 @@ group :test do
   gem "factory_girl_rails"
   gem "forgery"
   gem "json_expressions"
-  gem "rspec-rails"
-  gem "rspec-spies"
-  gem "shoulda-matchers", '~> 2.0.0'
+  gem "rspec-rails", "~> 2.14.0"
+  gem "shoulda-matchers", "~> 2.0.0"
   gem "simplecov"
   gem "simplecov-rcov"
   gem "webmock"

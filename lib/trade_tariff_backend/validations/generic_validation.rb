@@ -42,7 +42,7 @@ module TradeTariffBackend
       end
 
       def to_s
-        "#{identifiers}: #{description}"
+        description
       end
     end
   end

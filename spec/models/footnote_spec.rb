@@ -196,8 +196,13 @@ describe Footnote do
                                                                                  footnote_type_id: footnote.footnote_type_id,
                                                                                  measure_sid: measure.measure_sid }
 
+      before {
+        footnote.destroy
+        footnote.conformant?
+      }
+
       specify 'When a footnote is used in a measure then the footnote may not be deleted.' do
-        expect { footnote.destroy }.to raise_error Sequel::ValidationFailed
+        expect(footnote.conformance_errors.keys).to include :FO11
       end
     end
 
@@ -208,8 +213,13 @@ describe Footnote do
                                                                                  footnote_type: footnote.footnote_type_id,
                                                                                  goods_nomenclature_sid: gono.goods_nomenclature_sid }
 
+      before {
+        footnote.destroy
+        footnote.conformant?
+      }
+
       specify 'When a footnote is used in a goods nomenclature then the footnote may not be deleted.' do
-        expect { footnote.destroy }.to raise_error Sequel::ValidationFailed
+        expect(footnote.conformance_errors.keys).to include :FO12
       end
     end
 
@@ -220,8 +230,13 @@ describe Footnote do
                                                                           footnote_type: footnote.footnote_type_id,
                                                                           export_refund_nomenclature_sid: ern.export_refund_nomenclature_sid }
 
+      before {
+        footnote.destroy
+        footnote.conformant?
+      }
+
       specify 'When a footnote is used in an Export Refund code then the footnote may not be deleted.' do
-        expect { footnote.destroy }.to raise_error Sequel::ValidationFailed
+        expect(footnote.conformance_errors.keys).to include :FO13
       end
     end
 
@@ -232,8 +247,13 @@ describe Footnote do
                                                                           footnote_type_id: footnote.footnote_type_id,
                                                                           additional_code_sid: adco.additional_code_sid }
 
+      before {
+        footnote.destroy
+        footnote.conformant?
+      }
+
       specify 'When a footnote is used in an additional code then the footnote may not be deleted.' do
-        expect { footnote.destroy }.to raise_error Sequel::ValidationFailed
+        expect(footnote.conformance_errors.keys).to include :FO15
       end
     end
 
@@ -245,8 +265,13 @@ describe Footnote do
                                                                           meursing_table_plan_id: meursing_heading.meursing_table_plan_id,
                                                                           meursing_heading_number: meursing_heading.meursing_heading_number }
 
+      before {
+        footnote.destroy
+        footnote.conformant?
+      }
+
       specify 'When a footnote is used in a Meursing Table heading then the footnote may not be deleted.' do
-        expect { footnote.destroy }.to raise_error Sequel::ValidationFailed
+        expect(footnote.conformance_errors.keys).to include :FO16
       end
     end
   end

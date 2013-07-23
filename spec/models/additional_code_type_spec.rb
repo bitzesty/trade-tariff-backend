@@ -61,8 +61,13 @@ describe AdditionalCodeType do
         let!(:additional_code_type) { create :additional_code_type }
         let!(:additional_code)      { create :additional_code, additional_code_type_id: additional_code_type.additional_code_type_id }
 
+        before {
+          additional_code_type.destroy
+          additional_code_type.conformant?
+        }
+
         specify 'The additional code type cannot be deleted if it is related with a non-Meursing additional code.' do
-          expect { additional_code_type.destroy }.to raise_error Sequel::ValidationFailed
+          expect(additional_code_type.conformance_errors.keys).to include :CT6
         end
       end
 
@@ -71,8 +76,13 @@ describe AdditionalCodeType do
         let!(:additional_code)      { create :additional_code, additional_code_type_id: additional_code_type.additional_code_type_id }
         let!(:meursing_additional_code) { create :meursing_additional_code, additional_code: additional_code.additional_code }
 
+        before {
+          additional_code_type.destroy
+          additional_code_type.conformant?
+        }
+
         specify 'The additional code type cannot be deleted if it is related with a non-Meursing additional code.' do
-          expect { additional_code_type.destroy }.to_not raise_error Sequel::ValidationFailed
+          expect(additional_code_type.conformance_errors.keys).not_to include :CT6
         end
       end
     end
@@ -80,8 +90,13 @@ describe AdditionalCodeType do
     describe 'CT7' do
       let(:additional_code_type) { create :additional_code_type, :with_meursing_table_plan }
 
+      before {
+        additional_code_type.destroy
+        additional_code_type.conformant?
+      }
+
       specify 'The additional code type cannot be deleted if it is related with a Meursing Table plan.' do
-        expect { additional_code_type.destroy }.to raise_error Sequel::ValidationFailed
+        expect(additional_code_type.conformance_errors.keys).to include :CT7
       end
     end
 
@@ -89,8 +104,13 @@ describe AdditionalCodeType do
       let!(:additional_code_type)       { create :additional_code_type, :ern }
       let!(:export_refund_nomenclature) { create :export_refund_nomenclature, additional_code_type: additional_code_type.additional_code_type_id }
 
+      before {
+        additional_code_type.destroy
+        additional_code_type.conformant?
+      }
+
       specify 'The additional code type cannot be deleted if it is related with an Export refund code.' do
-        expect { additional_code_type.destroy }.to raise_error Sequel::ValidationFailed
+        expect(additional_code_type.conformance_errors.keys).to include :CT9
       end
     end
 
@@ -100,8 +120,13 @@ describe AdditionalCodeType do
       let!(:additional_code_type_measure_type) { create :additional_code_type_measure_type, measure_type_id: measure_type.measure_type_id,
                                                                                             additional_code_type_id: additional_code_type.additional_code_type_id }
 
+      before {
+        additional_code_type.destroy
+        additional_code_type.conformant?
+      }
+
       specify 'The additional code type cannot be deleted if it is related with a measure type.' do
-        expect { additional_code_type.destroy }.to raise_error Sequel::ValidationFailed
+        expect(additional_code_type.conformance_errors.keys).to include :CT10
       end
     end
 

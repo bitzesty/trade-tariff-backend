@@ -27,6 +27,9 @@ class TariffImporter
     def taric_unexpected_update_type(event)
       error "Unexpected Taric operation type: #{event.payload[:record].inspect}"
     end
+
+    def conformance_error(event)
+    end
   end
 end
 

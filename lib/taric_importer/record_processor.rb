@@ -1,8 +1,13 @@
+require 'forwardable'
 require 'taric_importer/helpers/string_helper'
 
 class TaricImporter < TariffImporter
   class RecordProcessor
+    extend Forwardable
+
     include TaricImporter::Helpers::StringHelper
+
+    def_delegator ActiveSupport::Notifications, :instrument
 
     # Meta record, containing all information from TARIC record as Hash
     attr_accessor :record
@@ -63,7 +68,7 @@ class TaricImporter < TariffImporter
                    when "2" then :destroy
                    when "3" then :create
                    else
-                     ActiveSupport::Notifications.instrument("taric_unexpected_update_type.tariff_importer", record: record)
+                     instrument("taric_unexpected_update_type.tariff_importer", record: record)
 
                      raise TaricImporter::ImportException.new
                    end
@@ -83,16 +88,19 @@ class TaricImporter < TariffImporter
       case operation
       when :create
         model = klass.new(attributes)
+        instrument("conformance_error.tariff_importer", record: model) unless model.conformant?
         model.save(validate: false)
         model
       when :destroy
         model = klass.filter(attributes.slice(*primary_key).symbolize_keys).first
         model.set(attributes.except(*primary_key).symbolize_keys)
+        instrument("conformance_error.tariff_importer", record: model) unless model.conformant?
         model.destroy
         nil
       when :update
         model = klass.filter(attributes.slice(*primary_key).symbolize_keys).first
         model.set(attributes.except(*primary_key).symbolize_keys)
+        instrument("conformance_error.tariff_importer", record: model) unless model.conformant?
         model.save(validate: false)
         model
       end

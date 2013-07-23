@@ -57,7 +57,7 @@ class FootnoteValidator < TradeTariffBackend::Validator
     validates :validity_date_span, of: :meursing_headings
   end
 
-  validation :F011, 'When a footnote is used in a measure then the footnote may not be deleted.', on: [:destroy] do |record|
+  validation :FO11, 'When a footnote is used in a measure then the footnote may not be deleted.', on: [:destroy] do |record|
     record.measures.none?
   end
 

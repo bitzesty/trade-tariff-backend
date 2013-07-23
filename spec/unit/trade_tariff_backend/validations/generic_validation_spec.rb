@@ -79,7 +79,7 @@ describe TradeTariffBackend::Validations::GenericValidation do
     let(:validation) { described_class.new(:vld1, 'description') { false } }
 
     it 'composes validation identifier and description' do
-      validation.to_s.should eq "#{validation.identifiers}: #{validation.description}"
+      validation.to_s.should eq validation.description
     end
   end
 end

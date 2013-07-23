@@ -60,17 +60,7 @@ module Sequel
         def _destroy_delete
           self.operation = :destroy
 
-          conformance_validator.validate(self)
-
-          # Run destroy validations
-          # In Sequel these are modeled using before_destroy hooks
-          # which is not very pretty. It will raise an exception on #destroy
-          # TODO should we really check for conformance errors here
-          if self.conformance_errors.none?
-           operation_klass.insert(self.values.except(:oid))
-          else
-            raise ValidationFailed.new(self)
-          end
+          operation_klass.insert(self.values.except(:oid))
         end
 
         def _update_columns(columns)
