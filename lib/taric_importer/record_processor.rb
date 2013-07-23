@@ -88,19 +88,19 @@ class TaricImporter < TariffImporter
       case operation
       when :create
         model = klass.new(attributes)
-        instrument("conformance_error.tariff_importer", record: model) unless model.conformant_for?(:create)
+        instrument("conformance_error.taric_importer", record: model) unless model.conformant_for?(:create)
         model.save(validate: false)
         model
       when :destroy
         model = klass.filter(attributes.slice(*primary_key).symbolize_keys).first
         model.set(attributes.except(*primary_key).symbolize_keys)
-        instrument("conformance_error.tariff_importer", record: model) unless model.conformant_for?(:destroy)
+        instrument("conformance_error.taric_importer", record: model) unless model.conformant_for?(:destroy)
         model.destroy
         nil
       when :update
         model = klass.filter(attributes.slice(*primary_key).symbolize_keys).first
         model.set(attributes.except(*primary_key).symbolize_keys)
-        instrument("conformance_error.tariff_importer", record: model) unless model.conformant_for?(:update)
+        instrument("conformance_error.taric_importer", record: model) unless model.conformant_for?(:update)
         model.save(validate: false)
         model
       end

@@ -107,6 +107,13 @@ module TariffSynchronizer
 
       ActiveSupport::Notifications.instrument("failed_updates_present.tariff_synchronizer", file_names: file_names)
     else
+      unconformant_records = []
+
+      ActiveSupport::Notifications.subscribe /conformance_error/ do |*args|
+        event = ActiveSupport::Notifications::Event.new(*args)
+        unconformant_records << event.payload[:record]
+      end
+
       PendingUpdate.all.tap do |pending_updates|
         pending_updates.sort_by(&:file_name)
                        .sort_by(&:update_priority)
@@ -131,8 +138,14 @@ module TariffSynchronizer
           end
         end
 
-        ActiveSupport::Notifications.instrument("apply.tariff_synchronizer", update_names: pending_updates.map(&:file_name),
-                                                                             count: pending_updates.size) if pending_updates.any? && BaseUpdate.pending_or_failed.none?
+        if pending_updates.any? && BaseUpdate.pending_or_failed.none?
+          ActiveSupport::Notifications.instrument(
+            "apply.tariff_synchronizer",
+            update_names: pending_updates.map(&:file_name),
+            count: pending_updates.size,
+            unconformant_records: unconformant_records
+          )
+        end
       end
     end
   end

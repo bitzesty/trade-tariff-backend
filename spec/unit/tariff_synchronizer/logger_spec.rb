@@ -65,11 +65,6 @@ describe TariffSynchronizer::Logger do
   end
 
   describe '#apply logging' do
-    after {
-      # reset to previous(default) state
-      TariffSynchronizer::Logger.conformance_errors = []
-    }
-
     context 'pending update present' do
       let(:example_date)  { Date.today }
       let!(:taric_update) { create :taric_update, example_date: example_date }
@@ -79,13 +74,22 @@ describe TariffSynchronizer::Logger do
         create_taric_file :pending, example_date
 
         Footnote.unrestrict_primary_key
-        # skip validations
-        Footnote.any_instance.stub(:valid?).and_return(true)
+
+        # Do not use default FootnoteValidator validations, we
+        # need a permissive validator here
+        class PermissiveFootnoteValidator < TradeTariffBackend::Validator
+        end
+
+        Footnote.conformance_validator = PermissiveFootnoteValidator.new
 
         TariffSynchronizer.apply
       }
 
-      after  { purge_synchronizer_folders }
+      after  {
+        purge_synchronizer_folders
+
+        Footnote.conformance_validator = nil
+      }
 
       it 'logs and info event' do
         @logger.logged(:info).size.should be > 0
@@ -104,10 +108,6 @@ describe TariffSynchronizer::Logger do
         email = ActionMailer::Base.deliveries.last
         email.encoded.should =~ /No conformance errors found/
       end
-
-      after  {
-        purge_synchronizer_folders
-      }
     end
 
     context 'no pending updates present' do
@@ -141,7 +141,6 @@ describe TariffSynchronizer::Logger do
                                 validity_start_date: Date.today,
                                 validity_end_date: Date.today.ago(1.year))
 
-        TariffSynchronizer::Logger.conformance_errors <<  invalid_measure
         TariffSynchronizer.apply
       }
 
@@ -548,21 +547,6 @@ describe TariffSynchronizer::Logger do
       ActionMailer::Base.deliveries.should_not be_empty
       email = ActionMailer::Base.deliveries.last
       email.encoded.should =~ /missing/
-    end
-  end
-
-  describe "#invalidated" do
-    let(:measure) { create :measure }
-
-    before {
-      ChiefTransformer::Processor::Operation.new(stub(operation_date: Date.today))
-      .update_record(measure, validity_start_date: Date.today.in(10.years),
-                              validity_end_date: Date.today.ago(10.years))
-    }
-
-    it 'logs a warn event' do
-      @logger.logged(:warn).size.should eq 1
-      @logger.logged(:warn).to_s.should =~ /Invalid/
     end
   end
 end

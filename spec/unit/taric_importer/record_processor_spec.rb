@@ -353,7 +353,7 @@ describe TaricImporter::RecordProcessor do
           it 'expects conformance_error event to be emitted' do
             check = false
 
-            ActiveSupport::Notifications.subscribe 'conformance_error.tariff_importer' do
+            ActiveSupport::Notifications.subscribe /conformance_error/ do
               check = true
             end
 
@@ -383,7 +383,7 @@ describe TaricImporter::RecordProcessor do
 
             check = false
 
-            ActiveSupport::Notifications.subscribe 'conformance_error.tariff_importer' do
+            ActiveSupport::Notifications.subscribe /conformance_error/ do
               check = true
             end
 
@@ -413,7 +413,7 @@ describe TaricImporter::RecordProcessor do
           it 'expects conformance_error event to be emitted' do
             check = false
 
-            ActiveSupport::Notifications.subscribe 'conformance_error.tariff_importer' do
+            ActiveSupport::Notifications.subscribe /conformance_error/ do
               check = true
             end
 
