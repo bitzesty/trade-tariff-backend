@@ -2,7 +2,7 @@ module Api
   module V1
     class SectionsController < ApplicationController
       def index
-        @sections = Section.all
+        @sections = Section.eager(:chapters).all
 
         respond_with @sections
       end

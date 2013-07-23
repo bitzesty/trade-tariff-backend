@@ -1,5 +1,5 @@
 object @section
-attributes :position, :title, :numeral
+attributes :position, :title, :numeral, :chapter_from, :chapter_to
 node(:section_note, if: lambda {|section| section.section_note.present? }) do |section|
   section.section_note.content
 end

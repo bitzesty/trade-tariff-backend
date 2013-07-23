@@ -3,14 +3,18 @@ require 'spec_helper'
 describe Api::V1::SectionsController, "GET #show" do
   render_views
 
-  let(:section) { create :section }
+  let(:chapter) { create :chapter, :with_section }
+  let(:section) { chapter.section }
 
   let(:pattern) {
     {
       position: Integer,
       title: String,
-      numeral: String
-    }.ignore_extra_keys!
+      numeral: String,
+      chapter_from: String,
+      chapter_to: String,
+      chapters: Array
+    }
   }
 
   context 'when record is present' do
@@ -31,13 +35,15 @@ end
 describe Api::V1::SectionsController, "GET #index" do
   render_views
 
-  let!(:section1) { create :section }
-  let!(:section2) { create :section }
+  let!(:chapter1) { create :chapter, :with_section }
+  let!(:chapter2) { create :chapter, :with_section }
+  let(:section1)  { chapter1.section }
+  let(:section2)  { chapter2.section }
 
   let(:pattern) {
     [
-      {position: Integer, title: String, numeral: String},
-      {position: Integer, title: String, numeral: String}
+      {position: Integer, title: String, numeral: String, chapter_from: String, chapter_to: String},
+      {position: Integer, title: String, numeral: String, chapter_from: String, chapter_to: String}
     ]
   }
 

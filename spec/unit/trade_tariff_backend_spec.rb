@@ -29,4 +29,31 @@ describe TradeTariffBackend do
       end
     end
   end
+
+  describe '.platform' do
+    context 'running in demo environment' do
+      before { ENV['GOVUK_APP_NAME'] = 'tariff-demo-api' }
+      after  { ENV['GOVUK_APP_NAME']  = nil }
+
+      it 'returns demo' do
+        expect(TradeTariffBackend.platform).to eq 'demo'
+      end
+    end
+
+    context 'FACTER_govuk_platform environment variable available' do
+
+      before { ENV['FACTER_govuk_platform'] = 'production' }
+      after  { ENV['FACTER_govuk_platform'] = nil }
+
+      it 'returns the environment variable value' do
+        expect(TradeTariffBackend.platform).to eq 'production'
+      end
+    end
+
+    context 'FACTER_govuk_platform environment variable unavailable' do
+      it 'defaults to Rails.env' do
+        expect(TradeTariffBackend.platform).to eq 'test'
+      end
+    end
+  end
 end
