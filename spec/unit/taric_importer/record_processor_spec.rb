@@ -4,6 +4,16 @@ require 'taric_importer'
 require 'taric_importer/record_processor'
 
 describe TaricImporter::RecordProcessor do
+  # These specs use LanguageDescription model
+  # we want them to not be dependent on real
+  # LanguageDescriptionValidator so they wont
+  # fail
+  class PermissiveLanguageDescriptionValidator < TradeTariffBackend::Validator
+  end
+
+  before  { LanguageDescription.conformance_validator = PermissiveLanguageDescriptionValidator.new }
+  after   { LanguageDescription.conformance_validator = nil }
+
   let(:record) {
     {"transaction.id"=>"31946",
      "record.code"=>"130",
@@ -208,6 +218,18 @@ describe TaricImporter::RecordProcessor do
       before { LanguageDescription.unrestrict_primary_key }
 
       context 'create' do
+        let(:record) {
+          {"transaction.id"=>"31946",
+           "record.code"=>"130",
+           "subrecord.code"=>"05",
+           "record.sequence.number"=>"1",
+           "update.type"=>"3",
+           "language.description"=>
+            {"language.code.id"=>"FR",
+             "language.id"=>"EN",
+             "description"=>"French"}}
+        }
+
         it 'persists record to db' do
           LanguageDescription.count.should eq 0
           processor.process!
@@ -293,6 +315,112 @@ describe TaricImporter::RecordProcessor do
           LanguageDescription.count.should eq 1
           processor.process!
           LanguageDescription.count.should eq 0
+        end
+      end
+
+      context 'with unconformant record' do
+        # Override default validator, we want it to be failing for these cases
+        class RestrictiveLanguageDescriptionValidator < TradeTariffBackend::Validator
+          validation :CREATE, 'this will fail on create', on: [:create] do |record|
+            false
+          end
+
+          validation :UPDATE, 'this will fail on update', on: [:update] do |record|
+            false
+          end
+
+          validation :DESTROY, 'this will fail on destroy', on: [:destroy] do |record|
+            false
+          end
+        end
+
+        before  { LanguageDescription.conformance_validator = RestrictiveLanguageDescriptionValidator.new }
+        after   { LanguageDescription.conformance_validator = PermissiveLanguageDescriptionValidator.new }
+
+        context 'create' do
+          let(:record) {
+            {"transaction.id"=>"31946",
+             "record.code"=>"130",
+             "subrecord.code"=>"05",
+             "record.sequence.number"=>"1",
+             "update.type"=>"3",
+             "language.description"=>
+              {"language.code.id"=>"FR",
+               "language.id"=>"EN",
+               "description"=>"French"}}
+          }
+
+          it 'expects conformance_error event to be emitted' do
+            check = false
+
+            ActiveSupport::Notifications.subscribe 'conformance_error.tariff_importer' do
+              check = true
+            end
+
+            processor.process!
+
+            expect(check).to be_true
+          end
+        end
+
+        context 'update' do
+          let(:record) {
+            {"transaction.id"=>"31946",
+             "record.code"=>"130",
+             "subrecord.code"=>"05",
+             "record.sequence.number"=>"1",
+             "update.type"=>"1",
+             "language.description"=>
+              {"language.code.id"=>"FR",
+               "language.id"=>"EN",
+               "description"=>"French!"}}
+          }
+
+          it 'expects conformance_error event to be emitted' do
+            create :language_description, language_code_id: 'FR',
+                                          language_id: 'EN',
+                                          description: 'English'
+
+            check = false
+
+            ActiveSupport::Notifications.subscribe 'conformance_error.tariff_importer' do
+              check = true
+            end
+
+            processor.process!
+
+            expect(check).to be_true
+          end
+        end
+
+        context 'destroy' do
+          let(:record) {
+            {"transaction.id"=>"31946",
+             "record.code"=>"130",
+             "subrecord.code"=>"05",
+             "record.sequence.number"=>"1",
+             "update.type"=>"2",
+             "language.description"=>
+              {"language.code.id"=>"FR",
+               "language.id"=>"EN",
+               "description"=>"French"}}
+          }
+
+          let!(:language_desc) { create :language_description, language_code_id: 'FR',
+                                                               language_id: 'EN',
+                                                               description: 'French' }
+
+          it 'expects conformance_error event to be emitted' do
+            check = false
+
+            ActiveSupport::Notifications.subscribe 'conformance_error.tariff_importer' do
+              check = true
+            end
+
+            processor.process!
+
+            expect(check).to be_true
+          end
         end
       end
     end

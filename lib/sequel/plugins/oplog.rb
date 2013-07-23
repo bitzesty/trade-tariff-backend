@@ -100,6 +100,10 @@ module Sequel
                             NullValidator
                           end
         end
+
+        def conformance_validator=(conformance_validator)
+          @_conformance_validator = conformance_validator
+        end
       end
 
       module DatasetMethods
