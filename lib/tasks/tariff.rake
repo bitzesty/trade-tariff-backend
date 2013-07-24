@@ -138,7 +138,7 @@ namespace :tariff do
     namespace :taric do
       desc "Remove Sections and Chapter<->Section association records"
       task sections: :environment do
-        Section.delete
+        Section.dataset.delete
         Sequel::Model.db.run('DELETE FROM chapters_sections');
       end
     end
