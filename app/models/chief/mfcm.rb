@@ -6,7 +6,7 @@ module Chief
     VAT_GROUP_CODES = %w[VT]
 
     set_dataset db[:chief_mfcm].
-                order(Sequel.asc(:audit_tsmp))
+                order(Sequel.asc(:audit_tsmp), Sequel.asc(:fe_tsmp))
 
 
     set_primary_key [:msrgp_code,

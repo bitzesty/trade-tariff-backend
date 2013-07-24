@@ -210,4 +210,65 @@ describe 'CHIEF: Custom scenarions' do
       expect(measure.reload).to be_invalidated
     end
   end
+
+  describe 'Scenario: single CHIEF update contains MFCM Insert and Update operations' do
+    let!(:gono) { create :goods_nomenclature, :declarable, :with_indent,
+                                             goods_nomenclature_sid: 97701,
+                                             goods_nomenclature_item_id: '1104291710',
+                                             producline_suffix: 80,
+                                             validity_start_date: Date.new(2013,7,1),
+                                             validity_end_date: nil}
+    let!(:mfcm_insert) { create :mfcm, msrgp_code: 'VT',
+                                msr_type: 'Z',
+                                tty_code: 'B00',
+                                fe_tsmp: DateTime.new(2013,7,10,10,27,00),
+                                le_tsmp: DateTime.new(2013,7,10,10,28,00),
+                                audit_tsmp: DateTime.new(2013,7,10,10,26,00),
+                                cmdty_code: '1104291710',
+                                tar_msr_no: nil,
+                                origin: "2013-07-11_KBT009(13192).txt",
+                                amend_indicator: 'I' }
+    let!(:mfcm_update) { create :mfcm, msrgp_code: 'VT',
+                                msr_type: 'Z',
+                                tty_code: 'B00',
+                                fe_tsmp: DateTime.new(2013,7,10,10,28,00),
+                                audit_tsmp: DateTime.new(2013,7,10,10,26,00),
+                                le_tsmp: nil,
+                                cmdty_code: '1104291710',
+                                tar_msr_no: nil,
+                                origin: "2013-07-11_KBT009(13192).txt",
+                                amend_indicator: 'U' }
+
+    let!(:geographical_area)  { create :geographical_area, :erga_omnes }
+    let!(:tame) { create :tame,
+                  fe_tsmp: DateTime.new(2010,2,22,12,27),
+                  msrgp_code: 'VT',
+                  msr_type: 'Z',
+                  tty_code: 'B00',
+                  le_tsmp: nil }
+
+    before { ChiefTransformer.instance.invoke }
+
+    it 'creates a short lived VTZ measure for 1104291710' do
+      expect(
+        Measure.national.where(
+          goods_nomenclature_item_id: '1104291710',
+          validity_start_date: DateTime.new(2013,7,10,10,27),
+          validity_end_date: DateTime.new(2013,7,10,10,28),
+          measure_type_id: 'VTZ'
+        ).any?
+      ).to be_true
+    end
+
+    it 'creates an open VTZ measure for 1104291710' do
+      expect(
+        Measure.national.where(
+          goods_nomenclature_item_id: '1104291710',
+          validity_start_date: DateTime.new(2013,7,10,10,28),
+          validity_end_date: nil,
+          measure_type_id: 'VTZ'
+        ).any?
+      ).to be_true
+    end
+  end
 end
