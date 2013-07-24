@@ -1,7 +1,7 @@
 module Chief
   class Tame < Sequel::Model
     set_dataset db[:chief_tame].
-                order(Sequel.asc(:audit_tsmp))
+                order(Sequel.asc(:audit_tsmp), Sequel.asc(:fe_tsmp))
 
     set_primary_key [:msrgp_code,
                      :msr_type,
