@@ -162,6 +162,17 @@ describe Measure do
                  .measure_conditions.should_not include measure_condition2
         end
       end
+
+      describe 'ordering' do
+        let!(:measure)                { create :measure }
+        let!(:measure_condition1)     { create :measure_condition, measure_sid: measure.measure_sid, component_sequence_number: 10 }
+        let!(:measure_condition2)     { create :measure_condition, measure_sid: measure.measure_sid, component_sequence_number: 1 }
+
+        it 'loads conditions ordered by component sequence number ascending' do
+          expect(measure.measure_conditions.first).to eq measure_condition2
+          expect(measure.measure_conditions.last).to eq measure_condition1
+        end
+      end
     end
 
     describe 'geographical area' do

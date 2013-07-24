@@ -25,7 +25,8 @@ class Measure < Sequel::Model
                       ds.with_actual(MeasureType)
                     end
 
-  one_to_many :measure_conditions, key: :measure_sid
+  one_to_many :measure_conditions, key: :measure_sid,
+    order: Sequel.asc(:component_sequence_number)
 
   one_to_one :geographical_area, key: :geographical_area_sid,
                         primary_key: :geographical_area_sid,
