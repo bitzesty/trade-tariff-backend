@@ -9,7 +9,7 @@ namespace :importer do
     task import: :environment do
 
       if ENV["TARGET"] && File.exists?(ENV["TARGET"])
-        TariffImporter.new(ENV["TARGET"], ChiefImporter, ENV["DATE"]).import
+        ChiefImporter.new(ENV["TARGET"], ENV["DATE"]).import
       else
         puts "Please provide TARGET environment variable pointing to CHIEF file to import"
       end
@@ -24,7 +24,7 @@ namespace :importer do
         # so unrestrict it for all models.
         Sequel::Model.descendants.each(&:unrestrict_primary_key)
 
-        TariffImporter.new(ENV["TARGET"], TaricImporter, ENV["DATE"]).import
+        TaricImporter.new(ENV["TARGET"], ENV["DATE"]).import
       else
         puts "Please provide TARGET environment variable pointing to Tariff file to import"
       end
