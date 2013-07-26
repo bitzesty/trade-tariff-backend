@@ -5,15 +5,21 @@ module TradeTariffBackend
 
       module ClassMethods
         def block_accessor(*names)
+          mod = Module.new
+
           names.each do |name|
-            define_method(name) do |&block|
-              if block
-                instance_variable_set(:"@#{name}", block)
-              else
-                instance_variable_get(:"@#{name}").call
+            mod.module_eval(%Q{
+              def #{name}(&block)
+                if block
+                  instance_variable_set(:"@#{name}", block)
+                else
+                  instance_variable_get(:"@#{name}").call
+                end
               end
-            end
+            })
           end
+
+          include mod
         end
       end
     end

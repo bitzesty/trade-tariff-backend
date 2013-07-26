@@ -43,18 +43,22 @@ module TradeTariffBackend
     # Migrates all pending migrations
     def migrate
       migrations.select(&:can_rollup?).each { |migration|
-        migration.up.apply
+        Sequel::Model.db.transaction(savepoint: true) {
+          migration.up.apply
 
-        report_with.applied(migration)
+          report_with.applied(migration)
+        }
       }
     end
 
     # Rollsback last applied migration
     def rollback
       migrations.select(&:can_rolldown?).last.tap { |migration|
-        migration.down.apply
+        Sequel::Model.db.transaction(savepoint: true) {
+          migration.down.apply
 
-        report_with.rollback(migration)
+          report_with.rollback(migration)
+        }
       }
     end
 
@@ -82,4 +86,4 @@ module TradeTariffBackend
   end
 end
 
-TradeTariffBackend::DataMigrator.load_migration_files
+TradeTariffBackend::DataMigrator.load_migration_files unless Rails.env.test?
