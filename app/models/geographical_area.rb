@@ -33,7 +33,7 @@ class GeographicalArea < Sequel::Model
                                               left_key: :geographical_area_group_sid,
                                               right_key: :geographical_area_sid,
                                               class: self do |ds|
-    ds.with_actual(GeographicalAreaMembership)
+    ds.with_actual(GeographicalAreaMembership).order(Sequel.asc(:geographical_area_id))
   end
 
   one_to_many :measures, key: :geographical_area_sid,

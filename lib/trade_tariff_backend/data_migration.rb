@@ -50,11 +50,15 @@ module TradeTariffBackend
     end
 
     def can_rollup?
-      up.applicable?
+      up.applicable? || false
     end
 
     def can_rolldown?
-      down.applicable?
+      down.applicable? || false
+    end
+
+    def inspect
+      "<#{self.class}: #{@name}>"
     end
 
     private
@@ -71,20 +75,4 @@ module TradeTariffBackend
       @down_runner = Runner.new(self, :down, &block)
     end
   end
-
-  # class DataMigrator
-  #   class Presenter
-  #     def self.present(migrations, presenter = ConsolePresenter)
-  #       migrations.sort_by(&:created_at).each {|migration|
-  #         presenter.present(migration)
-  #       }
-  #     end
-  #   end
-
-  #   class ConsolePreseter < Presenter
-  #     def self.present(migration)
-  #       puts "[ #{migration.state} ] #{migration.name}"
-  #     end
-  #   end
-  # end
 end

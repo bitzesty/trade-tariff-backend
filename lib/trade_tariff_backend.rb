@@ -33,6 +33,10 @@ module TradeTariffBackend
       ENV["GOVUK_APP_NAME"]
     end
 
+    def data_migration_path
+      File.join(Rails.root, 'db', 'data_migrations')
+    end
+
     def with_locked_database(&block)
       begin
         if Sequel::Model.db.get_lock(db_lock_key)
