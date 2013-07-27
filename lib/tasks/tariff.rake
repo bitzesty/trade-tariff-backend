@@ -196,7 +196,7 @@ namespace :tariff do
                            .where(msrgp_code: ref_tame.msrgp_code,
                                   msr_type: ref_tame.msr_type,
                                   tty_code: ref_tame.tty_code)
-                           .order(:fe_tsmp.asc)
+                           .order(Sequel.asc(:fe_tsmp))
                            .all
         blank_tames = tames.select{|tame| tame.le_tsmp.blank? }
 
