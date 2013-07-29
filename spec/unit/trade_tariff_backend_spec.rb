@@ -52,7 +52,7 @@ describe TradeTariffBackend do
 
     context 'FACTER_govuk_platform environment variable unavailable' do
       it 'defaults to Rails.env' do
-        expect(TradeTariffBackend.platform).to eq 'test'
+        expect(TradeTariffBackend.platform).to eq Rails.env
       end
     end
   end
