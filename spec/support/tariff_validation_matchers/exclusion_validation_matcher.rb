@@ -2,7 +2,16 @@ class ExclusionValidationMatcher < TariffValidationMatcher
   attr_reader :collection
 
   def matches?(subject)
-    super && matches_collection?
+    @subject = subject.dup
+
+    @validation = subject.conformance_validator
+                         .validations
+                         .detect do |validation|
+      validation.type == validation_type
+      (validation.validation_options[:from].is_a?(Array) && validation.validation_options[:from] == collection) ||
+      (validation.validation_options[:from].is_a?(Proc) && validation.validation_options[:from].call == collection.call) &&
+      validation.validation_options[:of] == attributes
+    end
   end
 
   def from(collection)

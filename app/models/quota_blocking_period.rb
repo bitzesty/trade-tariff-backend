@@ -1,9 +1,12 @@
 class QuotaBlockingPeriod < Sequel::Model
-  set_primary_key  :quota_blocking_period_sid
+  plugin :oplog, primary_key: :quota_definition_sid
+  plugin :conformance_validator
+
+  set_primary_key [:quota_blocking_period_sid]
 
   dataset_module do
     def last
-      order(:end_date.desc).first
+      order(Sequel.desc(:end_date)).first
     end
   end
 end

@@ -8,8 +8,7 @@ namespace :tariff do
                    install:taric:section_notes
                    install:taric:chapter_notes
                    install:chief:static_national_data
-                   install:chief:standing_data
-                   reindex]
+                   install:chief:standing_data]
 
   desc 'Reindex relevant entities on ElasticSearch'
   task reindex: %w[environment
@@ -22,7 +21,7 @@ namespace :tariff do
 
   namespace :sync do
     desc 'Download pending Taric and CHIEF updates'
-    task apply: :environment do
+    task apply: [:environment, :class_eager_load] do
       TradeTariffBackend.with_locked_database do
         # Download pending updates for CHIEF and Taric
         TariffSynchronizer.download
@@ -48,6 +47,17 @@ namespace :tariff do
         ChiefTransformer.instance.invoke(mode)
         # Reindex ElasticSearch to see new/updated commodities
         Rake::Task['tariff:reindex'].execute
+      end
+    end
+
+    desc 'Rollback to specific date in the past'
+    task rollback: %w[environment class_eager_load] do
+      if ENV['DATE'] && date = Date.parse(ENV['DATE'])
+        TradeTariffBackend.with_locked_database do
+          TariffSynchronizer.rollback(date, ENV['REDOWNLOAD'])
+        end
+      else
+        raise ArgumentError.new("Please set the date using environment variable 'DATE'")
       end
     end
   end
@@ -128,7 +138,7 @@ namespace :tariff do
     namespace :taric do
       desc "Remove Sections and Chapter<->Section association records"
       task sections: :environment do
-        Section.delete
+        Section.dataset.delete
         Sequel::Model.db.run('DELETE FROM chapters_sections');
       end
     end
@@ -186,7 +196,7 @@ namespace :tariff do
                            .where(msrgp_code: ref_tame.msrgp_code,
                                   msr_type: ref_tame.msr_type,
                                   tty_code: ref_tame.tty_code)
-                           .order(:fe_tsmp.asc)
+                           .order(Sequel.asc(:fe_tsmp))
                            .all
         blank_tames = tames.select{|tame| tame.le_tsmp.blank? }
 
@@ -196,6 +206,15 @@ namespace :tariff do
           end
         end
       end
+    end
+  end
+
+  namespace :audit do
+    desc "Traverse all TARIC tables and perform conformance validations on all the records"
+    task verify: [:environment, :class_eager_load] do
+      models = (ENV['MODELS']) ? ENV['MODELS'].split(',') : []
+
+      TradeTariffBackend::Auditor.new(models, ENV["SINCE"], ENV["AUDIT_LOG"]).run
     end
   end
 end

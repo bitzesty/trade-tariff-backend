@@ -1,5 +1,7 @@
 class GeographicalArea < Sequel::Model
   plugin :time_machine
+  plugin :oplog, primary_key: :geographical_area_sid
+  plugin :conformance_validator
 
   set_primary_key :geographical_area_sid
 
@@ -11,7 +13,7 @@ class GeographicalArea < Sequel::Model
                                                 right_primary_key: [:geographical_area_description_period_sid,
                                                                     :geographical_area_sid] do |ds|
     ds.with_actual(GeographicalAreaDescriptionPeriod)
-      .order(:geographical_area_description_periods__validity_start_date.desc)
+      .order(Sequel.desc(:geographical_area_description_periods__validity_start_date))
   end
 
   def geographical_area_description
@@ -45,7 +47,7 @@ class GeographicalArea < Sequel::Model
     end
 
     def latest
-      order(:created_at.desc)
+      order(Sequel.desc(:operation_date))
     end
 
     def countries
@@ -54,33 +56,6 @@ class GeographicalArea < Sequel::Model
   end
 
   delegate :description, to: :geographical_area_description
-
-  ######### Conformance validations 250
-  validates do
-    # GA1
-    uniqueness_of [:geographical_area_id, :validity_start_date]
-    # GA2
-    validity_dates
-    # TODO: GA3
-    # TODO: GA4
-    # TODO: GA5
-    # TODO: GA6
-    # TODO: GA7
-    # TODO: GA10
-    # TODO: GA11
-    # TODO: GA12
-    # TODO: GA13
-    # TODO: GA14
-    # TODO: GA15
-    # TODO: GA16
-    # TODO: GA17
-    # TODO: GA18
-    # TODO: GA19
-    # TODO: GA20
-    # TODO: GA21
-    # TODO: GA22
-    # TODO: GA23
-  end
 end
 
 

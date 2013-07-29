@@ -7,6 +7,6 @@ describe MeasureType do
     # MT2 The start date must be less than or equal to the end date.
     it { should validate_validity_dates }
     # MT4 The referenced measure type series must exist.
-    it { should validate_presence.of(:measure_type_series).if(:has_measure_type_series_reference?) }
+    it { should validate_presence.of(:measure_type_series) }
   end
 end

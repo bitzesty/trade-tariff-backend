@@ -47,7 +47,7 @@ module TariffSynchronizer
     def apply
       if super
         ActiveSupport::Notifications.instrument("apply_taric.tariff_synchronizer", filename: filename) do
-          TariffImporter.new(file_path, TaricImporter).import
+          TaricImporter.new(file_path, issue_date).import
 
           mark_as_applied
         end

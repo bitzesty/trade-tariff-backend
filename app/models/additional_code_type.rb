@@ -1,5 +1,8 @@
 class AdditionalCodeType < Sequel::Model
-  set_primary_key :additional_code_type_id
+  plugin :oplog, primary_key: :additional_code_type_id
+  plugin :conformance_validator
+
+  set_primary_key [:additional_code_type_id]
 
   one_to_many :additional_codes, key: :additional_code_type_id
   one_to_one  :additional_code_type_description, key: :additional_code_type_id
@@ -24,44 +27,8 @@ class AdditionalCodeType < Sequel::Model
     4 => "Export refund for processed agricultural goods"
   }
 
-  ######### Conformance validations 120
-  validates do
-    # CT1
-    uniqueness_of :additional_code_type_id
-    # CT2
-    input_of :meursing_table_plan_id, if: :meursing?
-    # CT3
-    associated :meursing_table_plan, ensure: :meursing_table_plan_present?,
-                                     if: :should_validate_meursing_table_plan?
-    # CT4
-    validity_dates
-  end
-
-  def before_destroy
-    # CT6
-    return false if additional_codes.select{|adco| adco.meursing_additional_code.blank? }.any?
-    # CT7
-    return false if meursing_table_plan_id.present?
-    # CT9
-    return false if export_refund? && export_refund_nomenclatures.any?
-    # CT10
-    return false if measure_types.any?
-    # TODO CT11
-    # return false if
-
-    super
-  end
-
-  def should_validate_meursing_table_plan?
-    meursing_table_plan_id.present? && meursing?
-  end
-
-  def related_to_measure_type?
-    measure_types.any?
-  end
-
   def meursing?
-    application_code == "3"
+    application_code.in?("3")
   end
 
   def non_meursing?
@@ -76,5 +43,3 @@ class AdditionalCodeType < Sequel::Model
     application_code == "4"
   end
 end
-
-

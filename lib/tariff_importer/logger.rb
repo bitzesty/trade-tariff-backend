@@ -14,7 +14,8 @@ class TariffImporter
 
     def taric_failed(event)
       "Taric import failed: #{event.payload[:exception]}".tap {|message|
-        message << "\n Failed record: #{event.payload[:xml].to_xml(indent: 2)}" if event.payload.has_key?(:xml)
+        message << "\n Failed transaction: #{event.payload[:xml]}" if event.payload.has_key?(:xml)
+        message << "Backtrace:\n #{event.payload[:exception].backtrace.join("\n")}"
         error message
       }
     end
@@ -24,7 +25,7 @@ class TariffImporter
     end
 
     def taric_unexpected_update_type(event)
-      error "Unexpected Taric operation type: #{event.payload[:xml].to_xml(indent: 2)}"
+      error "Unexpected Taric operation type: #{event.payload[:record].inspect}"
     end
   end
 end

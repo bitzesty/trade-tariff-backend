@@ -1,5 +1,8 @@
 class FootnoteTypeDescription < Sequel::Model
-  set_primary_key :footnote_type_id
+  plugin :oplog, primary_key: :footnote_type_id
+  plugin :conformance_validator
+
+  set_primary_key [:footnote_type_id]
 end
 
 

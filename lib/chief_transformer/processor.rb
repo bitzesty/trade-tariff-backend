@@ -5,7 +5,7 @@ class ChiefTransformer
     attr_reader :operations
 
     def initialize(*operations)
-      @operations = operations.flatten.sort_by(&:audit_tsmp)
+      @operations = operations.flatten.sort_by { |record| [record.audit_tsmp, record.fe_tsmp] }
     end
 
     def process

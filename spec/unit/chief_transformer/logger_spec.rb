@@ -29,8 +29,8 @@ describe ChiefTransformer::Logger do
       let!(:measure) { create :measure }
 
       before {
-        Chief::Tame.any_instance.expects(:mark_as_processed!)
-            .raises(Sequel::ValidationFailed.new(measure))
+        Chief::Tame.any_instance.should_receive(:mark_as_processed!)
+            .and_raise(Sequel::ValidationFailed.new(measure))
 
         rescuing { ChiefTransformer.instance.invoke }
       }

@@ -10,7 +10,11 @@ class ChiefTransformer
                  .with_gono_id(record.cmdty_code)
                  .valid_to(record.le_tsmp)
                  .each do |measure|
-                   update_record(measure, validity_end_date: record.le_tsmp)
+                   update_record(measure,
+                     validity_end_date: record.le_tsmp,
+                     justification_regulation_id: measure.measure_generating_regulation_id,
+                     justification_regulation_role: measure.measure_generating_regulation_role,
+                     operation_date: operation_date)
                  end
         else
           if Measure.with_measure_type(record.measure_type)

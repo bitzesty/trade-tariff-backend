@@ -4,7 +4,8 @@ module TariffSynchronizer
                 :file_name
 
     delegate :apply, :file_path, :issue_date, :update_type,
-             :update_priority, :mark_as_failed, to: :update
+             :update_priority, :mark_as_failed, :affected_datasets,
+             to: :update
 
     def initialize(update)
       @file_name = update.filename

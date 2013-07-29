@@ -7,7 +7,7 @@ class QuotaEvent
   def self.for_quota_definition(quota_sid)
     EVENTS.from(1).inject(for_event(EVENTS.first, quota_sid)) { |memo, event_type|
       memo = memo.union(for_event(event_type, quota_sid), from_self: true)
-    }.order(:occurrence_timestamp.desc)
+    }.order(Sequel.desc(:occurrence_timestamp))
   end
 
   def self.last_for(quota_sid)

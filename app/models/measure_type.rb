@@ -6,9 +6,10 @@ class MeasureType < Sequel::Model
 
   plugin :time_machine, period_start_column: :measure_types__validity_start_date,
                         period_end_column:   :measure_types__validity_end_date
+  plugin :oplog, primary_key: :measure_type_id
+  plugin :conformance_validator
 
-
-  set_primary_key :measure_type_id
+  set_primary_key [:measure_type_id]
 
   one_to_one :measure_type_description, key: :measure_type_id,
                                         foreign_key: :measure_type_id
@@ -24,27 +25,6 @@ class MeasureType < Sequel::Model
     def national
       where(national: true)
     end
-  end
-
-  ######### Conformance validations 235
-  validates do
-    # MT1
-    uniqueness_of :measure_type_id
-    # MT2
-    validity_dates
-    # TODO: MT3
-    # MT4
-    presence_of :measure_type_series, if: :has_measure_type_series_reference?
-    # TODO: MT7
-    # TODO: MT10
-  end
-
-  def order_number_capture_code_permitted?
-    order_number_capture_code == "1"
-  end
-
-  def has_measure_type_series_reference?
-    measure_type_series_id.present?
   end
 end
 

@@ -10,13 +10,17 @@ class ChiefTransformer
                .not_terminated
                .each do |measure|
           end_date = if (measure.associated_to_non_open_ended_gono? &&
-                         record.fe_tsmp > measure.goods_nomenclature_validity_end_date)
-                       measure.goods_nomenclature_validity_end_date
+                         record.fe_tsmp > measure.goods_nomenclature.validity_end_date)
+                       measure.goods_nomenclature.validity_end_date
                      else
                        record.fe_tsmp
                      end
 
-          update_record(measure, validity_end_date: end_date)
+          update_record(measure,
+            validity_end_date: end_date,
+            justification_regulation_id: measure.measure_generating_regulation_id,
+            justification_regulation_role: measure.measure_generating_regulation_role,
+            operation_date: operation_date)
         end
       end
     end

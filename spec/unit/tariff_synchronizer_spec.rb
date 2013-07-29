@@ -13,11 +13,11 @@ describe TariffSynchronizer do
 
   describe '.download' do
     context 'sync variables are set' do
-      before { TariffSynchronizer.expects(:sync_variables_set?).returns(true) }
+      before { TariffSynchronizer.should_receive(:sync_variables_set?).and_return(true) }
 
       it 'invokes update downloading/syncing on all update types' do
-        TariffSynchronizer::TaricUpdate.expects(:sync).returns(true)
-        TariffSynchronizer::ChiefUpdate.expects(:sync).returns(true)
+        TariffSynchronizer::TaricUpdate.should_receive(:sync).and_return(true)
+        TariffSynchronizer::ChiefUpdate.should_receive(:sync).and_return(true)
 
         TariffSynchronizer.download
       end
@@ -31,8 +31,8 @@ describe TariffSynchronizer do
       }
 
       it 'does not start sync process' do
-        TariffSynchronizer::TaricUpdate.expects(:sync).never
-        TariffSynchronizer::ChiefUpdate.expects(:sync).never
+        TariffSynchronizer::TaricUpdate.should_receive(:sync).never
+        TariffSynchronizer::ChiefUpdate.should_receive(:sync).never
 
         TariffSynchronizer.download
       end
@@ -40,11 +40,11 @@ describe TariffSynchronizer do
 
     context 'with download exceptions' do
       before {
-        TariffSynchronizer.expects(:sync_variables_set?).returns(true)
+        TariffSynchronizer.should_receive(:sync_variables_set?).and_return(true)
 
         Curl::Easy.any_instance
-                  .expects(:perform)
-                  .raises(Curl::Err::HostResolutionError) }
+                  .should_receive(:perform)
+                  .and_raise(Curl::Err::HostResolutionError) }
 
       it 'raises original exception ending process' do
         expect { TariffSynchronizer.download }.to raise_error Curl::Err::HostResolutionError
@@ -53,19 +53,19 @@ describe TariffSynchronizer do
   end
 
   describe '.apply' do
-    let(:update_1) { stub_everything(issue_date: Date.yesterday, update_priority: 1) }
-    let(:update_2) { stub_everything(issue_date: Date.today, update_priority: 1) }
+    let(:update_1) { double('update', file_name: Date.yesterday, update_priority: 1).as_null_object }
+    let(:update_2) { double('update', file_name: Date.today, update_priority: 1).as_null_object }
     let(:pending_updates) { [update_1, update_2] }
 
 
     context 'success scenario' do
       before {
-        TariffSynchronizer::PendingUpdate.expects(:all).returns(pending_updates)
+        TariffSynchronizer::PendingUpdate.should_receive(:all).and_return(pending_updates)
       }
 
       it 'all pending updates get applied' do
         pending_updates.each {|update|
-          update.expects(:apply).returns(true)
+          update.should_receive(:apply).and_return(true)
         }
 
         TariffSynchronizer.apply
@@ -74,9 +74,9 @@ describe TariffSynchronizer do
 
     context 'failure scenario' do
       before do
-        TariffSynchronizer::PendingUpdate.expects(:all).returns(pending_updates)
+        TariffSynchronizer::PendingUpdate.should_receive(:all).and_return(pending_updates)
 
-        update_1.expects(:apply).raises(TaricImporter::ImportException)
+        update_1.should_receive(:apply).and_raise(TaricImporter::ImportException)
       end
 
       it 'transaction gets rolled back' do
@@ -84,8 +84,8 @@ describe TariffSynchronizer do
       end
 
       it 'update gets marked as failed' do
-        update_1.expects(:mark_as_failed).returns(true)
-        update_2.expects(:apply).never
+        update_1.should_receive(:mark_as_failed).and_return(true)
+        update_2.should_receive(:apply).never
 
         rescuing { TariffSynchronizer.apply }
       end
@@ -95,7 +95,7 @@ describe TariffSynchronizer do
       let!(:failed_update)  { create :taric_update, :failed }
 
       it 'does not apply pending updates' do
-        TariffSynchronizer::PendingUpdate.expects(:all).never
+        TariffSynchronizer::PendingUpdate.should_receive(:all).never
 
         TariffSynchronizer.apply
       end
@@ -104,8 +104,8 @@ describe TariffSynchronizer do
 
   describe '.rebuild' do
     it 'invokes rebuild on TaricUpdate and ChiefUpdate' do
-      TariffSynchronizer::TaricUpdate.expects(:rebuild)
-      TariffSynchronizer::ChiefUpdate.expects(:rebuild)
+      TariffSynchronizer::TaricUpdate.should_receive(:rebuild)
+      TariffSynchronizer::ChiefUpdate.should_receive(:rebuild)
 
       TariffSynchronizer.rebuild
     end

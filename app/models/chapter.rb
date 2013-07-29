@@ -4,11 +4,13 @@ class Chapter < GoodsNomenclature
   include Tire::Model::Search
 
   plugin :json_serializer
+  plugin :oplog, primary_key: :goods_nomenclature_sid
+  plugin :conformance_validator
 
   set_dataset filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", '__00000000').
-              order(:goods_nomenclature_item_id.asc)
+              order(Sequel.asc(:goods_nomenclature_item_id))
 
-  set_primary_key :goods_nomenclature_sid
+  set_primary_key [:goods_nomenclature_sid]
 
   many_to_many :sections, left_key: :goods_nomenclature_sid,
                           join_table: :chapters_sections
@@ -16,7 +18,7 @@ class Chapter < GoodsNomenclature
   one_to_many :headings, dataset: -> {
     Heading.actual
            .filter("goods_nomenclature_item_id LIKE ? AND goods_nomenclature_item_id NOT LIKE '__00______'", relevant_headings)
-           .where(~{goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes })
+           .where(Sequel.~(goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes))
   }
 
   one_to_one :chapter_note, dataset: -> {

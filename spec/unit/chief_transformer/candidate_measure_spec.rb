@@ -2,16 +2,16 @@ require 'spec_helper'
 require 'chief_transformer'
 
 describe ChiefTransformer::CandidateMeasure do
-  it 'should be a Sequel Model tied to Measures table' do
+  it 'should be a Sequel Model tied to Measures Oplog table' do
     subject.should be_kind_of Sequel::Model
-    subject.class.table_name.should == :measures
+    subject.class.table_name.should == :measures_oplog
   end
 
   describe 'initialization' do
     it 'sets default values for UK measures' do
       subject.measure_generating_regulation_id.should == ChiefTransformer::CandidateMeasure::DEFAULT_REGULATION_ID
       subject.measure_generating_regulation_role.should == ChiefTransformer::CandidateMeasure::DEFAULT_REGULATION_ROLE_TYPE_ID
-      subject.geographical_area.should == ChiefTransformer::CandidateMeasure::DEFAULT_GEOGRAPHICAL_AREA_ID
+      subject.geographical_area_id.should == ChiefTransformer::CandidateMeasure::DEFAULT_GEOGRAPHICAL_AREA_ID
       subject.stopped_flag.should be_false
       subject.national.should be_true
     end
@@ -69,7 +69,7 @@ describe ChiefTransformer::CandidateMeasure do
       end
 
       it 'assigns measure type using chief measure type adco table' do
-        candidate_measure.measure_type.should == mfcm.measure_type_adco.measure_type_id
+        candidate_measure.measure_type_id.should == mfcm.measure_type_adco.measure_type_id
       end
     end
 
@@ -91,8 +91,8 @@ describe ChiefTransformer::CandidateMeasure do
       let(:default_geo_area) { ChiefTransformer::CandidateMeasure::DEFAULT_GEOGRAPHICAL_AREA_ID }
 
       it 'sets the default geographical area code' do
-        candidate_measure = subject.new(geographical_area: default_geo_area)
-        candidate_measure.geographical_area.should == default_geo_area
+        candidate_measure = subject.new(geographical_area_id: default_geo_area)
+        candidate_measure.geographical_area_id.should == default_geo_area
       end
     end
 
@@ -116,7 +116,7 @@ describe ChiefTransformer::CandidateMeasure do
 
       it 'maps Geographical Area Chief code to Taric code' do
         candidate_measure = subject.new(chief_geographical_area: country_code.chief_country_cd)
-        candidate_measure.geographical_area.should == country_code.country_cd # mapped to Taric country code
+        candidate_measure.geographical_area_id.should == country_code.country_cd # mapped to Taric country code
       end
 
       it 'builds country exclusion associations for geographical area if mapping present' do
@@ -197,11 +197,21 @@ describe ChiefTransformer::CandidateMeasure do
           candidate_measure.validity_end_date.should == mfcm.le_tsmp
         end
       end
+
       context 'tame absent with mfcm le_tsmp nil' do
         let(:mfcm) { create :mfcm }
         subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm) }
         it "should be nil" do
           candidate_measure.validity_end_date.should == nil
+        end
+      end
+
+      context 'when validity end date is assigned (any case)' do
+        let(:mfcm) { create :mfcm, :with_le_tsmp }
+        subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm) }
+        it 'sets justifications regulation role id and type (ME33, ME34 confirmance)' do
+          candidate_measure.justification_regulation_role.should_not be_blank
+          candidate_measure.justification_regulation_id.should_not be_blank
         end
       end
     end
@@ -216,7 +226,7 @@ describe ChiefTransformer::CandidateMeasure do
 
         candidate_measure = ChiefTransformer::CandidateMeasure.new(mfcm: mfcm,
                                                                    tame: mfcm.tame)
-        candidate_measure.measure_type.should == "AB"
+        candidate_measure.measure_type_id.should == "AB"
       end
     end
   end

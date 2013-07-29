@@ -1,7 +1,6 @@
 class MeasureExcludedGeographicalArea < Sequel::Model
-  set_primary_key :measure_sid, :geographical_area_sid
+  plugin :oplog, primary_key: [:measure_sid, :geographical_area_sid]
+  plugin :conformance_validator
 
-  plugin :timestamps
+  set_primary_key [:measure_sid, :geographical_area_sid]
 end
-
-

@@ -4,7 +4,7 @@ FactoryGirl.define do
   factory :quota_order_number do
     quota_order_number_sid { generate(:quota_order_number_sid) }
     quota_order_number_id  { 6.times.map{ Random.rand(9) }.join }
-    validity_start_date { Date.today.ago(2.years) }
+    validity_start_date { Date.today.ago(4.years) }
     validity_end_date   { nil }
   end
 

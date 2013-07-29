@@ -70,40 +70,124 @@ describe Footnote do
 
   describe 'validations' do
     # FO1 The referenced footnote type must exist.
-    it { should validate_presence.of(:footnote_type).if(:has_footnote_type_reference?) }
+    it { should validate_presence.of(:footnote_type) }
     # FO2 The combination footnote type and code must be unique.
     it { should validate_uniqueness.of([:footnote_id, :footnote_type_id]) }
     # FO3 The start date must be less than or equal to the end date.
     it { should validate_validity_dates }
-    # FO4 At least one description record is mandatory. The start date of
-    # the first description period must be equal to the start date of the
-    # footnote. No two associated description periods may have the same
-    # start date. The start date must be less than or equal to the end
-    # date of the footnote.
-    it { should validate_length.of(:footnote_description_periods).minimum(1) }
-    it { should validate_associated(:footnote_description_periods).and_ensure(:first_footnote_description_period_is_valid) }
-    # FO5 When a footnote is used in a measure the validity period of the
-    # footnote must span the validity period of the measure.
-    # FO6 When a footnote is used in a goods nomenclature the validity period
-    # of the footnote must span the validity period of the association
-    # with the goods nomenclature.
-    # FO7 When a footnote is used in an Export refund nomenclature code the
-    # validity period of the footnote must span the validity period of the
-    # association with the Export refund code.
-    # FO9 When a footnote is used in an Additional code the validity period
-    # of the footnote must span the validity period of the association with
-    # the Additional code.
-    # FO10 When a footnote is used in a Meursing Table heading the validity
-    # period of the footnote must span the validity period of the association
-    # with the Meursing heading.
-    it { should validate_associated(:measures).and_ensure(:spans_validity_period_of_associations) }
-    it { should validate_associated(:goods_nomenclatures).and_ensure(:spans_validity_period_of_associations) }
-    it { should validate_associated(:export_refund_nomenclatures).and_ensure(:spans_validity_period_of_associations) }
-    it { should validate_associated(:additional_codes).and_ensure(:spans_validity_period_of_associations) }
-    it { should validate_associated(:meursing_headings).and_ensure(:spans_validity_period_of_associations) }
-    # FO17 The validity period of the footnote type must span the validity
-    # period of the footnote.
-    it { should validate_associated(:footnote_type).and_ensure(:footnote_type_validity_period_spans_validity_periods) }
+
+    describe 'FO4' do
+      describe 'At least one description record is mandatory' do
+        let(:footnote) { create :footnote }
+
+        before { footnote.footnote_description_periods.each(&:destroy)  }
+
+        it 'performs validation' do
+          footnote.reload.should_not be_conformant
+        end
+      end
+
+      describe 'The start date of the first description period must be equal to the start date of the footnote.' do
+        let(:footnote) { create :footnote }
+        let(:desc_period) { footnote.footnote_description_periods.first }
+
+        it 'performs validation' do
+          desc_period.update(validity_start_date: footnote.validity_start_date + 1.day)
+          footnote.reload.should_not be_conformant
+        end
+      end
+
+      describe 'No two associated description periods may have the same start date.' do
+        let(:footnote)      { create :footnote }
+        let(:desc_period1)  { footnote.footnote_description_periods.first }
+        let!(:desc_period2) { create :footnote_description_period, footnote_type_id: footnote.footnote_type_id,
+                                                                  footnote_id: footnote.footnote_id,
+                                                                  validity_start_date: footnote.validity_start_date }
+
+        it 'performs validation' do
+          footnote.reload.should_not be_conformant
+        end
+      end
+
+      describe 'The start date must be less than or equal to the end date of the footnote.' do
+        let(:footnote)    { create :footnote, validity_end_date: Date.today }
+        let(:desc_period) { footnote.footnote_description_periods.first }
+
+        before { desc_period.update(validity_start_date: footnote.validity_end_date + 1.day) }
+
+        it 'performs validation' do
+          footnote.reload.should_not be_conformant
+        end
+      end
+    end
+
+    describe 'FO5' do
+      let!(:measure) { create :measure }
+      let!(:footnote) { create :footnote, validity_start_date: Date.new(2009,1,1) }
+      let!(:association) { create :footnote_association_measure, measure_sid: measure.measure_sid,
+                                                                footnote_id: footnote.footnote_id,
+                                                                footnote_type_id: footnote.footnote_type_id }
+
+      it 'performs validation' do
+        footnote.should be_conformant
+
+        footnote.validity_start_date = measure.validity_start_date + 1
+        footnote.should_not be_conformant
+      end
+    end
+
+    describe 'FO6' do
+      let!(:goods_nomenclature) { create :goods_nomenclature }
+      let!(:footnote) { create :footnote, validity_start_date: Date.new(2009,1,1) }
+      let!(:association) { create :footnote_association_goods_nomenclature,  goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
+                                                                            footnote_id: footnote.footnote_id,
+                                                                            footnote_type: footnote.footnote_type_id }
+
+      it 'performs validation' do
+        footnote.should be_conformant
+
+        footnote.validity_start_date = goods_nomenclature.validity_start_date + 1
+        footnote.should_not be_conformant
+      end
+    end
+
+    describe 'FO7' do
+      let!(:export_refund_nomenclature) { create :export_refund_nomenclature }
+      let!(:footnote) { create :footnote, validity_start_date: Date.new(2009,1,1) }
+      let!(:association) { create :footnote_association_ern, export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid,
+                                                             footnote_id: footnote.footnote_id,
+                                                             footnote_type: footnote.footnote_type_id }
+
+      it 'performs validation' do
+        footnote.should be_conformant
+
+        footnote.validity_start_date = export_refund_nomenclature.validity_start_date + 1
+        footnote.should_not be_conformant
+      end
+    end
+
+    describe 'FO9' do
+      let!(:additional_code) { create :additional_code }
+      let!(:footnote) { create :footnote, validity_start_date: Date.new(2009,1,1) }
+      let!(:association) { create :footnote_association_additional_code, additional_code_sid: additional_code.additional_code_sid,
+                                                             footnote_id: footnote.footnote_id,
+                                                             footnote_type_id: footnote.footnote_type_id }
+
+      it 'performs validation' do
+        footnote.should be_conformant
+
+        footnote.validity_start_date = additional_code.validity_start_date + 1
+        footnote.should_not be_conformant
+      end
+    end
+
+    describe 'FO10' do
+      it { should validate_validity_date_span.of(:meursing_headings) }
+    end
+
+    describe 'FO17' do
+      it { should validate_validity_date_span.of(:footnote_type) }
+    end
 
     describe 'FO11' do
       let!(:footnote) { create :footnote }
@@ -112,8 +196,13 @@ describe Footnote do
                                                                                  footnote_type_id: footnote.footnote_type_id,
                                                                                  measure_sid: measure.measure_sid }
 
+      before {
+        footnote.destroy
+        footnote.conformant?
+      }
+
       specify 'When a footnote is used in a measure then the footnote may not be deleted.' do
-        expect { footnote.destroy }.to raise_error Sequel::HookFailed
+        expect(footnote.conformance_errors.keys).to include :FO11
       end
     end
 
@@ -124,8 +213,13 @@ describe Footnote do
                                                                                  footnote_type: footnote.footnote_type_id,
                                                                                  goods_nomenclature_sid: gono.goods_nomenclature_sid }
 
+      before {
+        footnote.destroy
+        footnote.conformant?
+      }
+
       specify 'When a footnote is used in a goods nomenclature then the footnote may not be deleted.' do
-        expect { footnote.destroy }.to raise_error Sequel::HookFailed
+        expect(footnote.conformance_errors.keys).to include :FO12
       end
     end
 
@@ -136,8 +230,13 @@ describe Footnote do
                                                                           footnote_type: footnote.footnote_type_id,
                                                                           export_refund_nomenclature_sid: ern.export_refund_nomenclature_sid }
 
+      before {
+        footnote.destroy
+        footnote.conformant?
+      }
+
       specify 'When a footnote is used in an Export Refund code then the footnote may not be deleted.' do
-        expect { footnote.destroy }.to raise_error Sequel::HookFailed
+        expect(footnote.conformance_errors.keys).to include :FO13
       end
     end
 
@@ -148,8 +247,13 @@ describe Footnote do
                                                                           footnote_type_id: footnote.footnote_type_id,
                                                                           additional_code_sid: adco.additional_code_sid }
 
+      before {
+        footnote.destroy
+        footnote.conformant?
+      }
+
       specify 'When a footnote is used in an additional code then the footnote may not be deleted.' do
-        expect { footnote.destroy }.to raise_error Sequel::HookFailed
+        expect(footnote.conformance_errors.keys).to include :FO15
       end
     end
 
@@ -161,8 +265,13 @@ describe Footnote do
                                                                           meursing_table_plan_id: meursing_heading.meursing_table_plan_id,
                                                                           meursing_heading_number: meursing_heading.meursing_heading_number }
 
+      before {
+        footnote.destroy
+        footnote.conformant?
+      }
+
       specify 'When a footnote is used in a Meursing Table heading then the footnote may not be deleted.' do
-        expect { footnote.destroy }.to raise_error Sequel::HookFailed
+        expect(footnote.conformance_errors.keys).to include :FO16
       end
     end
   end

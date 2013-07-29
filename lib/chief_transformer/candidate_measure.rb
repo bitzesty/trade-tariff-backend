@@ -4,11 +4,12 @@ require 'chief_transformer/time'
 
 class ChiefTransformer
   class CandidateMeasure < Sequel::Model
-    set_dataset db[:measures]
+    set_dataset db[:measures_oplog]
     set_primary_key :measure_sid
 
     plugin :national
     plugin :timestamps
+    plugin :after_initialize
 
     DEFAULT_REGULATION_ROLE_TYPE_ID = 1
     DEFAULT_REGULATION_ID = "IYY99990"
@@ -41,7 +42,7 @@ class ChiefTransformer
            stopped_flag: false,
            national: true })
 
-      set({geographical_area: DEFAULT_GEOGRAPHICAL_AREA_ID}) if geographical_area.blank?
+      set({geographical_area_id: DEFAULT_GEOGRAPHICAL_AREA_ID}) if geographical_area_id.blank?
 
       callbacks
     end
@@ -49,20 +50,20 @@ class ChiefTransformer
     def before_validation
       # set excluded_country geographical area_sid
       # must happen after validity dates are set, depends on start date
-      self.additional_code_sid = AdditionalCode.where(additional_code_type_id: additional_code_type,
-                                                      additional_code: additional_code)
+      self.additional_code_sid = AdditionalCode.where(additional_code_type_id: additional_code_type_id,
+                                                      additional_code: additional_code_id)
                                                .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
                                                .first
                                                .try(:additional_code_sid)
       # needs to throw errors about invalid geographical area
-      self.geographical_area_sid = GeographicalArea.where(geographical_area_id: geographical_area)
+      self.geographical_area_sid = GeographicalArea.where(geographical_area_id: geographical_area_id)
                                                    .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
                                                    .first
                                                    .try(:geographical_area_sid)
       if self.geographical_area_sid.blank?
-        self[:geographical_area] = DEFAULT_GEOGRAPHICAL_AREA_ID
+        self[:geographical_area_id] = DEFAULT_GEOGRAPHICAL_AREA_ID
 
-        self.geographical_area_sid = GeographicalArea.where(geographical_area_id: geographical_area)
+        self.geographical_area_sid = GeographicalArea.where(geographical_area_id: geographical_area_id)
                                                      .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
                                                      .first
                                                      .try(:geographical_area_sid)
@@ -72,7 +73,7 @@ class ChiefTransformer
       self.goods_nomenclature_sid = GoodsNomenclature.where(goods_nomenclature_item_id: goods_nomenclature_item_id)
                                                      .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
                                                      .declarable
-                                                     .order(:validity_start_date.desc)
+                                                     .order(Sequel.desc(:validity_start_date))
                                                      .first
                                                      .try(:goods_nomenclature_sid)
 
@@ -136,26 +137,26 @@ class ChiefTransformer
       errors.add(:mfcm, 'must be set') if mfcm.blank?
       errors.add(:tame_tamf, 'tame or tamf must be set') if tame.blank? && tamf.blank?
       errors.add(:goods_nomenclature_item_id, 'commodity code should have 10 symbol length') if goods_nomenclature_item_id.present? && goods_nomenclature_item_id.size != 10
-      errors.add(:measure_type, 'measure_type must be present') if measure_type.blank?
-      errors.add(:measure_type, 'must have national measure type') if measure_type.present? && !measure_type.in?(NATIONAL_MEASURE_TYPES)
+      errors.add(:measure_type_id, 'measure_type must be present') if measure_type_id.blank?
+      errors.add(:measure_type_id, 'must have national measure type') if measure_type_id.present? && !measure_type_id.in?(NATIONAL_MEASURE_TYPES)
       errors.add(:goods_nomenclature_sid, 'must be present') if goods_nomenclature_sid.blank?
       errors.add(:geographical_area_sid, 'must be present') if geographical_area_sid.blank?
       errors.add(:validity_end_date, 'start date greater than end date') if validity_end_date.present? && validity_start_date >= validity_end_date
-      errors.add(:measure_sid, 'measure must be unique') if Measure.where(measure_type: measure_type,
-                                                                          geographical_area: geographical_area,
+      errors.add(:measure_sid, 'measure must be unique') if Measure.where(measure_type_id: measure_type_id,
+                                                                          geographical_area_id: geographical_area_id,
                                                                           validity_start_date: validity_start_date,
                                                                           validity_end_date: validity_end_date,
                                                                           goods_nomenclature_item_id: goods_nomenclature_item_id,
-                                                                          additional_code_type: additional_code_type,
-                                                                          additional_code: additional_code).national.any?
+                                                                          additional_code_type_id: additional_code_type_id,
+                                                                          additional_code_id: additional_code_id).national.any?
 
     end
 
     def assign_mfcm_attributes
       self.goods_nomenclature_item_id = (mfcm.cmdty_code.size == 8) ? "#{mfcm.cmdty_code}00" : mfcm.cmdty_code
-      self.measure_type = mfcm.measure_type_adco.measure_type_id.presence || mfcm.msr_type
-      self.additional_code = mfcm.measure_type_adco.adtnl_cd
-      self.additional_code_type = mfcm.measure_type_adco.adtnl_cd_type_id
+      self.measure_type_id = mfcm.measure_type_adco.measure_type_id.presence || mfcm.msr_type
+      self.additional_code_id = mfcm.measure_type_adco.adtnl_cd
+      self.additional_code_type_id = mfcm.measure_type_adco.adtnl_cd_type_id
       self.tariff_measure_number = mfcm.tar_msr_no
     end
 
@@ -196,12 +197,17 @@ class ChiefTransformer
                                 else
                                   mfcm.le_tsmp
                                 end
+
+      if self.validity_end_date.present?
+        self.justification_regulation_role = DEFAULT_REGULATION_ROLE_TYPE_ID
+        self.justification_regulation_id = DEFAULT_REGULATION_ID
+      end
     end
 
     def chief_geographical_area=(chief_code)
       @chief_geographical_area = chief_code
 
-      self[:geographical_area] = (chief_code == DEFAULT_GEOGRAPHICAL_AREA_ID) ? chief_code : Chief::CountryCode.to_taric(chief_code)
+      self[:geographical_area_id] = (chief_code == DEFAULT_GEOGRAPHICAL_AREA_ID) ? chief_code : Chief::CountryCode.to_taric(chief_code)
     end
 
     def candidate_associations
@@ -276,7 +282,7 @@ class ChiefTransformer
     end
 
     def build_footnotes
-      footnote = Chief::MeasureTypeFootnote.where(measure_type_id: measure_type).first
+      footnote = Chief::MeasureTypeFootnote.where(measure_type_id: measure_type_id).first
 
       if footnote.present?
         fnasm = FootnoteAssociationMeasure.new do |fam|

@@ -12,7 +12,7 @@ Sequel.migration do
 
       index [:additional_code_type_id], :name=>:code_type_id
       index [:additional_code_description_period_sid], :name=>:description_period_sid
-      index [:additional_code_description_period_sid, :additional_code_sid, :additional_code_type_id], :name=>:primary_key, :unique=>true
+      index [:additional_code_description_period_sid, :additional_code_sid, :additional_code_type_id], :name=>:adco_periods_pk
     end
 
     create_table(:additional_code_descriptions, :ignore_index_errors=>false) do
@@ -27,7 +27,7 @@ Sequel.migration do
 
       index [:language_id], :name=>:language_id
       index [:additional_code_description_period_sid], :name=>:period_sid
-      index [:additional_code_description_period_sid, :additional_code_type_id, :additional_code_sid], :name=>:primary_key, :unique=>true
+      index [:additional_code_description_period_sid, :additional_code_type_id, :additional_code_sid], :name=>:adco_desc_pk
       index [:additional_code_sid], :name=>:sid
       index [:additional_code_type_id], :name=>:type_id
     end
@@ -40,7 +40,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:language_id], :name=>:index_additional_code_type_descriptions_on_language_id
-      index [:additional_code_type_id], :name=>:primary_key, :unique=>true
+      index [:additional_code_type_id], :name=>:adco_type_desc_pk
     end
 
     create_table(:additional_code_type_measure_types, :ignore_index_errors=>false) do
@@ -51,7 +51,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:measure_type_id, :additional_code_type_id], :name=>:primary_key, :unique=>true
+      index [:measure_type_id, :additional_code_type_id], :name=>:adco_type_measure_type_pk
     end
 
     create_table(:additional_code_types, :ignore_index_errors=>false) do
@@ -64,7 +64,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:meursing_table_plan_id], :name=>:index_additional_code_types_on_meursing_table_plan_id
-      index [:additional_code_type_id], :name=>:primary_key, :unique=>true
+      index [:additional_code_type_id], :name=>:adco_types_pk
     end
 
     create_table(:additional_codes, :ignore_index_errors=>false) do
@@ -76,7 +76,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:additional_code_sid], :name=>:primary_key, :unique=>true
+      index [:additional_code_sid], :name=>:adco_pk
       index [:additional_code_type_id], :name=>:type_id
     end
 
@@ -108,7 +108,7 @@ Sequel.migration do
       index [:complete_abrogation_regulation_role, :complete_abrogation_regulation_id], :name=>:complete_abrogation_regulation
       index [:explicit_abrogation_regulation_role, :explicit_abrogation_regulation_id], :name=>:explicit_abrogation_regulation
       index [:regulation_group_id], :name=>:index_base_regulations_on_regulation_group_id
-      index [:base_regulation_id, :base_regulation_role], :name=>:primary_key, :unique=>true
+      index [:base_regulation_id, :base_regulation_role], :name=>:base_regulations_pk
     end
 
     create_table(:certificate_description_periods, :ignore_index_errors=>false) do
@@ -121,7 +121,7 @@ Sequel.migration do
       DateTime :validity_end_date
 
       index [:certificate_code, :certificate_type_code], :name=>:certificate
-      index [:certificate_description_period_sid], :name=>:primary_key, :unique=>true
+      index [:certificate_description_period_sid], :name=>:cert_desc_period_pk
     end
 
     create_table(:certificate_descriptions, :ignore_index_errors=>false) do
@@ -135,7 +135,7 @@ Sequel.migration do
 
       index [:certificate_code, :certificate_type_code], :name=>:certificate
       index [:language_id], :name=>:index_certificate_descriptions_on_language_id
-      index [:certificate_description_period_sid], :name=>:primary_key, :unique=>true
+      index [:certificate_description_period_sid], :name=>:cert_desc_pk
     end
 
     create_table(:certificate_type_descriptions, :ignore_index_errors=>false) do
@@ -147,7 +147,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:language_id], :name=>:index_certificate_type_descriptions_on_language_id
-      index [:certificate_type_code], :name=>:primary_key, :unique=>true
+      index [:certificate_type_code], :name=>:cert_type_code_pk
     end
 
     create_table(:certificate_types, :ignore_index_errors=>false) do
@@ -157,7 +157,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:certificate_type_code], :name=>:primary_key, :unique=>true
+      index [:certificate_type_code], :name=>:cert_types_pk
     end
 
     create_table(:certificates, :ignore_index_errors=>false) do
@@ -168,27 +168,27 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:certificate_code, :certificate_type_code], :name=>:primary_key, :unique=>true
+      index [:certificate_code, :certificate_type_code], :name=>:cert_pk
     end
 
     create_table(:chapters_sections, :ignore_index_errors=>false) do
       Integer :goods_nomenclature_sid
       Integer :section_id
 
-      index [:goods_nomenclature_sid, :section_id], :name=>:index_chapters_sections_on_goods_nomenclature_sid_and_section_id, :unique=>true
+      index [:goods_nomenclature_sid, :section_id], :name=>:index_chapters_sections_on_goods_nomenclature_sid_and_section_id
     end
 
     create_table(:chief_country_code) do
       String :chief_country_cd, :size=>2
       String :country_cd, :size=>2
-      index :chief_country_cd, :name=>:primary_key
+      index :chief_country_cd, :name=>:chief_country_cd_pk
     end
 
     create_table(:chief_country_group) do
       String :chief_country_grp, :size=>4
       String :country_grp_region, :size=>4
       String :country_exclusions, :size=>100
-      index :chief_country_grp, :name=>:primary_key
+      index :chief_country_grp, :name=>:chief_country_grp_pk
     end
 
     create_table(:chief_duty_expression) do
@@ -334,7 +334,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:complete_abrogation_regulation_id, :complete_abrogation_regulation_role], :name=>:primary_key, :unique=>true
+      index [:complete_abrogation_regulation_id, :complete_abrogation_regulation_role], :name=>:cmpl_abrg_reg_pk
     end
 
     create_table(:duty_expression_descriptions, :ignore_index_errors=>false) do
@@ -345,7 +345,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:language_id], :name=>:index_duty_expression_descriptions_on_language_id
-      index [:duty_expression_id], :name=>:primary_key, :unique=>true
+      index [:duty_expression_id], :name=>:duty_exp_desc_pk
     end
 
     create_table(:duty_expressions, :ignore_index_errors=>false) do
@@ -358,7 +358,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:duty_expression_id], :name=>:primary_key, :unique=>true
+      index [:duty_expression_id], :name=>:duty_exp_pk
     end
 
     create_table(:explicit_abrogation_regulations, :ignore_index_errors=>false) do
@@ -374,7 +374,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:explicit_abrogation_regulation_id, :explicit_abrogation_regulation_role], :name=>:primary_key, :unique=>true
+      index [:explicit_abrogation_regulation_id, :explicit_abrogation_regulation_role], :name=>:exp_abrg_reg_pk
     end
 
     create_table(:export_refund_nomenclature_description_periods, :ignore_index_errors=>false) do
@@ -389,7 +389,7 @@ Sequel.migration do
       DateTime :updated_at
       DateTime :validity_end_date
 
-      index [:export_refund_nomenclature_sid, :export_refund_nomenclature_description_period_sid], :name=>:primary_key, :unique=>true
+      index [:export_refund_nomenclature_sid, :export_refund_nomenclature_description_period_sid], :name=>:exp_rfnd_desc_period_pk
     end
 
     create_table(:export_refund_nomenclature_descriptions, :ignore_index_errors=>false) do
@@ -406,7 +406,7 @@ Sequel.migration do
 
       index [:export_refund_nomenclature_sid], :name=>:export_refund_nomenclature
       index [:language_id], :name=>:index_export_refund_nomenclature_descriptions_on_language_id
-      index [:export_refund_nomenclature_description_period_sid], :name=>:primary_key, :unique=>true
+      index [:export_refund_nomenclature_description_period_sid], :name=>:exp_rfnd_desc_pk
     end
 
     create_table(:export_refund_nomenclature_indents, :ignore_index_errors=>false) do
@@ -422,7 +422,7 @@ Sequel.migration do
       DateTime :updated_at
       DateTime :validity_end_date
 
-      index [:export_refund_nomenclature_indents_sid], :name=>:primary_key, :unique=>true
+      index [:export_refund_nomenclature_indents_sid], :name=>:exp_rfnd_indent_pk
     end
 
     create_table(:export_refund_nomenclatures, :ignore_index_errors=>false) do
@@ -438,7 +438,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:goods_nomenclature_sid], :name=>:index_export_refund_nomenclatures_on_goods_nomenclature_sid
-      index [:export_refund_nomenclature_sid], :name=>:primary_key, :unique=>true
+      index [:export_refund_nomenclature_sid], :name=>:exp_rfnd_pk
     end
 
     create_table(:footnote_association_additional_codes, :ignore_index_errors=>false) do
@@ -453,7 +453,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:additional_code_type_id], :name=>:additional_code_type
-      index [:footnote_id, :footnote_type_id, :additional_code_sid], :name=>:primary_key, :unique=>true
+      index [:footnote_id, :footnote_type_id, :additional_code_sid], :name=>:ftn_assoc_adco_pk
     end
 
     create_table(:footnote_association_erns, :ignore_index_errors=>false) do
@@ -469,7 +469,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:export_refund_nomenclature_sid, :footnote_id, :footnote_type, :validity_start_date], :name=>:primary_key, :unique=>true
+      index [:export_refund_nomenclature_sid, :footnote_id, :footnote_type, :validity_start_date], :name=>:ftn_assoc_ern_pk
     end
 
     create_table(:footnote_association_goods_nomenclatures, :ignore_index_errors=>false) do
@@ -483,7 +483,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:footnote_id, :footnote_type, :goods_nomenclature_sid, :validity_start_date], :name=>:primary_key, :unique=>true
+      index [:footnote_id, :footnote_type, :goods_nomenclature_sid, :validity_start_date], :name=>:ftn_assoc_gono_pk
     end
 
     create_table(:footnote_association_measures, :ignore_index_errors=>false) do
@@ -508,7 +508,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:footnote_id, :meursing_table_plan_id], :name=>:primary_key, :unique=>true
+      index [:footnote_id, :meursing_table_plan_id], :name=>:ftn_assoc_meurs_head_pk
     end
 
     create_table(:footnote_description_periods, :ignore_index_errors=>false) do
@@ -520,7 +520,7 @@ Sequel.migration do
       DateTime :updated_at
       DateTime :validity_end_date
 
-      index [:footnote_id, :footnote_type_id, :footnote_description_period_sid], :name=>:primary_key, :unique=>true
+      index [:footnote_id, :footnote_type_id, :footnote_description_period_sid], :name=>:ftn_desc_period
     end
 
     create_table(:footnote_descriptions, :ignore_index_errors=>false) do
@@ -533,7 +533,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:language_id], :name=>:index_footnote_descriptions_on_language_id
-      index [:footnote_id, :footnote_type_id, :footnote_description_period_sid], :name=>:primary_key, :unique=>true
+      index [:footnote_id, :footnote_type_id, :footnote_description_period_sid], :name=>:ftn_desc
     end
 
     create_table(:footnote_type_descriptions, :ignore_index_errors=>false) do
@@ -544,7 +544,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:language_id], :name=>:index_footnote_type_descriptions_on_language_id
-      index [:footnote_type_id], :name=>:primary_key, :unique=>true
+      index [:footnote_type_id], :name=>:ftn_type_desc_pk
     end
 
     create_table(:footnote_types, :ignore_index_errors=>false) do
@@ -555,7 +555,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:footnote_type_id], :name=>:primary_key
+      index [:footnote_type_id], :name=>:ftn_types_pk
     end
 
     create_table(:footnotes, :ignore_index_errors=>false) do
@@ -566,7 +566,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:footnote_id, :footnote_type_id], :name=>:primary_key, :unique=>true
+      index [:footnote_id, :footnote_type_id], :name=>:ftn_pk
     end
 
     create_table(:fts_regulation_actions, :ignore_index_errors=>false) do
@@ -577,7 +577,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:fts_regulation_id, :fts_regulation_role, :stopped_regulation_id, :stopped_regulation_role], :name=>:primary_key, :unique=>true
+      index [:fts_regulation_id, :fts_regulation_role, :stopped_regulation_id, :stopped_regulation_role], :name=>:fts_reg_act_pk
     end
 
     create_table(:full_temporary_stop_regulations, :ignore_index_errors=>false) do
@@ -598,7 +598,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:explicit_abrogation_regulation_role, :explicit_abrogation_regulation_id], :name=>:explicit_abrogation_regulation
-      index [:full_temporary_stop_regulation_id, :full_temporary_stop_regulation_role], :name=>:primary_key, :unique=>true
+      index [:full_temporary_stop_regulation_id, :full_temporary_stop_regulation_role], :name=>:full_temp_stop_reg_pk
     end
 
     create_table(:geographical_area_description_periods, :ignore_index_errors=>false) do
@@ -610,7 +610,7 @@ Sequel.migration do
       DateTime :updated_at
       DateTime :validity_end_date
 
-      index [:geographical_area_description_period_sid, :geographical_area_sid], :name=>:primary_key, :unique=>true
+      index [:geographical_area_description_period_sid, :geographical_area_sid], :name=>:geog_area_desc_period_pk
     end
 
     create_table(:geographical_area_descriptions, :ignore_index_errors=>false) do
@@ -623,7 +623,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:language_id], :name=>:index_geographical_area_descriptions_on_language_id
-      index [:geographical_area_description_period_sid, :geographical_area_sid], :name=>:primary_key, :unique=>true
+      index [:geographical_area_description_period_sid, :geographical_area_sid], :name=>:geog_area_desc_pk
     end
 
     create_table(:geographical_area_memberships, :ignore_index_errors=>false) do
@@ -634,7 +634,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:geographical_area_sid, :geographical_area_group_sid, :validity_start_date], :name=>:primary_key, :unique=>true
+      index [:geographical_area_sid, :geographical_area_group_sid, :validity_start_date], :name=>:geo_area_member_pk
     end
 
     create_table(:geographical_areas, :ignore_index_errors=>false) do
@@ -648,8 +648,8 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:parent_geographical_area_group_sid], :name=>:index_geographical_areas_on_parent_geographical_area_group_sid
-      index [:geographical_area_sid], :name=>:primary_key, :unique=>true
-      index [:geographical_area_id], :name=>:geographical_area_id, :unique=>true
+      index [:geographical_area_sid], :name=>:primary_key
+      index [:geographical_area_id], :name=>:geog_area_pk
     end
 
     create_table(:goods_nomenclature_description_periods, :ignore_index_errors=>false) do
@@ -662,8 +662,8 @@ Sequel.migration do
       DateTime :updated_at
       DateTime :validity_end_date
 
-      index [:goods_nomenclature_description_period_sid], :name=>:primary_key, :unique=>true
-      index [:goods_nomenclature_sid, :validity_start_date, :validity_end_date], :name=>:goods_nomenclature
+      index [:goods_nomenclature_description_period_sid], :name=>:primary_key
+      index [:goods_nomenclature_sid, :validity_start_date, :validity_end_date], :name=>:gono_desc_periods_pk
     end
 
     create_table(:goods_nomenclature_descriptions, :ignore_index_errors=>false) do
@@ -677,7 +677,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:language_id], :name=>:index_goods_nomenclature_descriptions_on_language_id
-      index [:goods_nomenclature_sid, :goods_nomenclature_description_period_sid], :name=>:primary_key, :unique=>true
+      index [:goods_nomenclature_sid, :goods_nomenclature_description_period_sid], :name=>:gono_desc_pk
     end
 
     create_table(:goods_nomenclature_group_descriptions, :ignore_index_errors=>false) do
@@ -689,7 +689,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:language_id], :name=>:index_goods_nomenclature_group_descriptions_on_language_id
-      index [:goods_nomenclature_group_id, :goods_nomenclature_group_type], :name=>:primary_key, :unique=>true
+      index [:goods_nomenclature_group_id, :goods_nomenclature_group_type], :name=>:gono_grp_desc_pk
     end
 
     create_table(:goods_nomenclature_groups, :ignore_index_errors=>false) do
@@ -701,7 +701,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:goods_nomenclature_group_id, :goods_nomenclature_group_type], :name=>:primary_key, :unique=>true
+      index [:goods_nomenclature_group_id, :goods_nomenclature_group_type], :name=>:gono_grp_pk
     end
 
     create_table(:goods_nomenclature_indents, :ignore_index_errors=>false) do
@@ -717,7 +717,7 @@ Sequel.migration do
 
       index [:goods_nomenclature_sid], :name=>:goods_nomenclature_sid
       index [:validity_start_date, :validity_end_date], :name=>:goods_nomenclature_validity_dates
-      index [:goods_nomenclature_indent_sid], :name=>:primary_key, :unique=>true
+      index [:goods_nomenclature_indent_sid], :name=>:gono_indent_pk
     end
 
     create_table(:goods_nomenclature_origins, :ignore_index_errors=>false) do
@@ -729,7 +729,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:goods_nomenclature_sid, :derived_goods_nomenclature_item_id, :derived_productline_suffix, :goods_nomenclature_item_id, :productline_suffix], :name=>:primary_key, :unique=>true
+      index [:goods_nomenclature_sid, :derived_goods_nomenclature_item_id, :derived_productline_suffix, :goods_nomenclature_item_id, :productline_suffix], :name=>:gono_origin_pk
     end
 
     create_table(:goods_nomenclature_successors, :ignore_index_errors=>false) do
@@ -741,7 +741,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:goods_nomenclature_sid, :absorbed_goods_nomenclature_item_id, :absorbed_productline_suffix, :goods_nomenclature_item_id, :productline_suffix], :name=>:primary_key, :unique=>true
+      index [:goods_nomenclature_sid, :absorbed_goods_nomenclature_item_id, :absorbed_productline_suffix, :goods_nomenclature_item_id, :productline_suffix], :name=>:gono_succ_pk
     end
 
     create_table(:goods_nomenclatures, :ignore_index_errors=>false) do
@@ -755,7 +755,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:goods_nomenclature_item_id, :producline_suffix], :name=>:item_id
-      index [:goods_nomenclature_sid], :name=>:primary_key, :unique=>true
+      index [:goods_nomenclature_sid], :name=>:gono_pk
     end
 
     create_table(:language_descriptions, :ignore_index_errors=>false) do
@@ -765,7 +765,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:language_id, :language_code_id], :name=>:primary_key, :unique=>true
+      index [:language_id, :language_code_id], :name=>:lang_desc_pk
     end
 
     create_table(:languages, :ignore_index_errors=>false) do
@@ -783,7 +783,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:action_code], :name=>:primary_key, :unique=>true
+      index [:action_code], :name=>:meas_act_desc_pk
     end
 
     create_table(:measure_actions, :ignore_index_errors=>false) do
@@ -793,7 +793,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:action_code], :name=>:primary_key, :unique=>true
+      index [:action_code], :name=>:meas_act_pk
     end
 
     create_table(:measure_components, :ignore_index_errors=>false) do
@@ -809,7 +809,7 @@ Sequel.migration do
       index [:measurement_unit_code], :name=>:index_measure_components_on_measurement_unit_code
       index [:measurement_unit_qualifier_code], :name=>:index_measure_components_on_measurement_unit_qualifier_code
       index [:monetary_unit_code], :name=>:index_measure_components_on_monetary_unit_code
-      index [:measure_sid, :duty_expression_id], :name=>:primary_key, :unique=>true
+      index [:measure_sid, :duty_expression_id], :name=>:meas_comp_pk
     end
 
     create_table(:measure_condition_code_descriptions, :ignore_index_errors=>false) do
@@ -819,7 +819,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:condition_code], :name=>:primary_key, :unique=>true
+      index [:condition_code], :name=>:meas_cond_cd_desc_pk
     end
 
     create_table(:measure_condition_codes, :ignore_index_errors=>false) do
@@ -829,7 +829,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:condition_code], :name=>:primary_key, :unique=>true
+      index [:condition_code], :name=>:meas_cond_cd_pk
     end
 
     create_table(:measure_condition_components, :ignore_index_errors=>false) do
@@ -846,7 +846,7 @@ Sequel.migration do
       index [:measurement_unit_code], :name=>:index_measure_condition_components_on_measurement_unit_code
       index [:monetary_unit_code], :name=>:index_measure_condition_components_on_monetary_unit_code
       index [:measurement_unit_qualifier_code], :name=>:measurement_unit_qualifier_code
-      index [:measure_condition_sid, :duty_expression_id], :name=>:primary_key, :unique=>true
+      index [:measure_condition_sid, :duty_expression_id], :name=>:meas_cond_comp_cd
     end
 
     create_table(:measure_conditions, :ignore_index_errors=>false) do
@@ -870,7 +870,7 @@ Sequel.migration do
       index [:condition_measurement_unit_code], :name=>:index_measure_conditions_on_condition_measurement_unit_code
       index [:condition_monetary_unit_code], :name=>:index_measure_conditions_on_condition_monetary_unit_code
       index [:measure_sid], :name=>:index_measure_conditions_on_measure_sid
-      index [:measure_condition_sid], :name=>:primary_key, :unique=>true
+      index [:measure_condition_sid], :name=>:meas_cond_pk
     end
 
     create_table(:measure_excluded_geographical_areas, :ignore_index_errors=>false) do
@@ -880,8 +880,8 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:measure_sid, :excluded_geographical_area, :geographical_area_sid], :name=>:primary_key, :unique=>true
-      index :geographical_area_sid, :name=>:geographical_area_sid
+      index [:measure_sid, :excluded_geographical_area, :geographical_area_sid], :name=>:primary_key
+      index :geographical_area_sid, :name=>:meas_excl_geog_area_pk
     end
 
     create_table(:measure_partial_temporary_stops, :ignore_index_errors=>false) do
@@ -898,7 +898,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:abrogation_regulation_id], :name=>:abrogation_regulation_id
-      index [:measure_sid, :partial_temporary_stop_regulation_id], :name=>:primary_key, :unique=>true
+      index [:measure_sid, :partial_temporary_stop_regulation_id], :name=>:meas_part_temp_stop_pk
     end
 
     create_table(:measure_type_descriptions, :ignore_index_errors=>false) do
@@ -909,7 +909,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:language_id], :name=>:index_measure_type_descriptions_on_language_id
-      index [:measure_type_id], :name=>:primary_key, :unique=>true
+      index [:measure_type_id], :name=>:meas_type_desc_pk
     end
 
     create_table(:measure_type_series, :ignore_index_errors=>false) do
@@ -920,7 +920,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:measure_type_series_id], :name=>:primary_key, :unique=>true
+      index [:measure_type_series_id], :name=>:meas_type_series_pk
     end
 
     create_table(:measure_type_series_descriptions, :ignore_index_errors=>false) do
@@ -931,7 +931,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:language_id], :name=>:index_measure_type_series_descriptions_on_language_id
-      index [:measure_type_series_id], :name=>:primary_key, :unique=>true
+      index [:measure_type_series_id], :name=>:meas_type_series_desc
     end
 
     create_table(:measure_types, :ignore_index_errors=>false) do
@@ -949,7 +949,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:measure_type_series_id], :name=>:index_measure_types_on_measure_type_series_id
-      index [:measure_type_id], :name=>:primary_key, :unique=>true
+      index [:measure_type_id], :name=>:meas_type_pk
     end
 
     create_table(:measurement_unit_descriptions, :ignore_index_errors=>false) do
@@ -960,7 +960,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:language_id], :name=>:index_measurement_unit_descriptions_on_language_id
-      index [:measurement_unit_code], :name=>:primary_key, :unique=>true
+      index [:measurement_unit_code], :name=>:meas_unit_desc_pk
     end
 
     create_table(:measurement_unit_qualifier_descriptions, :ignore_index_errors=>false) do
@@ -970,7 +970,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:measurement_unit_qualifier_code], :name=>:primary_key, :unique=>true
+      index [:measurement_unit_qualifier_code], :name=>:meas_unit_qual_desc_pk
     end
 
     create_table(:measurement_unit_qualifiers, :ignore_index_errors=>false) do
@@ -980,7 +980,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:measurement_unit_qualifier_code], :name=>:primary_key, :unique=>true
+      index [:measurement_unit_qualifier_code], :name=>:meas_unit_qual_pk
     end
 
     create_table(:measurement_units, :ignore_index_errors=>false) do
@@ -990,7 +990,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:measurement_unit_code], :name=>:primary_key, :unique=>true
+      index [:measurement_unit_code], :name=>:meas_unit_pk
     end
 
     create_table(:measurements, :ignore_index_errors=>false) do
@@ -1001,13 +1001,13 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:measurement_unit_code, :measurement_unit_qualifier_code], :name=>:primary_key, :unique=>true
+      index [:measurement_unit_code, :measurement_unit_qualifier_code], :name=>:measrm_pk
     end
 
     create_table(:measures, :ignore_index_errors=>false) do
       Integer :measure_sid
-      Integer :measure_type
-      String :geographical_area, :size=>255
+      Integer :measure_type_id
+      String :geographical_area_id, :size=>255
       String :goods_nomenclature_item_id, :size=>10
       DateTime :validity_start_date
       DateTime :validity_end_date
@@ -1019,8 +1019,8 @@ Sequel.migration do
       Integer :geographical_area_sid
       Integer :goods_nomenclature_sid
       String :ordernumber, :size=>255
-      Integer :additional_code_type
-      String :additional_code, :size=>3
+      Integer :additional_code_type_id
+      String :additional_code_id, :size=>3
       Integer :additional_code_sid
       Integer :reduction_indicator
       Integer :export_refund_nomenclature_sid
@@ -1030,10 +1030,10 @@ Sequel.migration do
       index [:additional_code_sid], :name=>:index_measures_on_additional_code_sid
       index [:geographical_area_sid], :name=>:index_measures_on_geographical_area_sid
       index [:goods_nomenclature_sid], :name=>:index_measures_on_goods_nomenclature_sid
-      index [:measure_type], :name=>:index_measures_on_measure_type
+      index [:measure_type_id], :name=>:index_measures_on_measure_type
       index [:justification_regulation_role, :justification_regulation_id], :name=>:justification_regulation
       index :measure_generating_regulation_id, :name=>:measure_generating_regulation
-      index [:measure_sid], :name=>:primary_key, :unique=>true
+      index [:measure_sid], :name=>:meas_pk
     end
 
     create_table(:meursing_additional_codes, :ignore_index_errors=>false) do
@@ -1044,7 +1044,7 @@ Sequel.migration do
       DateTime :updated_at
       DateTime :validity_end_date
 
-      index [:meursing_additional_code_sid], :name=>:primary_key, :unique=>true
+      index [:meursing_additional_code_sid], :name=>:meurs_adco_pk
     end
 
     create_table(:meursing_heading_texts, :ignore_index_errors=>false) do
@@ -1056,7 +1056,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:meursing_table_plan_id, :meursing_heading_number, :row_column_code], :name=>:primary_key, :unique=>true
+      index [:meursing_table_plan_id, :meursing_heading_number, :row_column_code], :name=>:meurs_head_txt_pk
     end
 
     create_table(:meursing_headings, :ignore_index_errors=>false) do
@@ -1068,7 +1068,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:meursing_table_plan_id, :meursing_heading_number, :row_column_code], :name=>:primary_key, :unique=>true
+      index [:meursing_table_plan_id, :meursing_heading_number, :row_column_code], :name=>:meurs_head_pk
     end
 
     create_table(:meursing_subheadings, :ignore_index_errors=>false) do
@@ -1082,7 +1082,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:meursing_table_plan_id, :meursing_heading_number, :row_column_code, :subheading_sequence_number], :name=>:primary_key, :unique=>true
+      index [:meursing_table_plan_id, :meursing_heading_number, :row_column_code, :subheading_sequence_number], :name=>:meurs_subhead_pk
     end
 
     create_table(:meursing_table_cell_components, :ignore_index_errors=>false) do
@@ -1097,7 +1097,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:meursing_table_plan_id, :heading_number, :row_column_code, :meursing_additional_code_sid], :name=>:primary_key, :unique=>true
+      index [:meursing_table_plan_id, :heading_number, :row_column_code, :meursing_additional_code_sid], :name=>:meurs_tbl_cell_comp_pk
     end
 
     create_table(:meursing_table_plans, :ignore_index_errors=>false) do
@@ -1107,7 +1107,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:meursing_table_plan_id], :name=>:primary_key, :unique=>true
+      index [:meursing_table_plan_id], :name=>:meurs_tbl_plan_pk
     end
 
     create_table(:modification_regulations, :ignore_index_errors=>false) do
@@ -1135,7 +1135,7 @@ Sequel.migration do
       index [:base_regulation_id, :base_regulation_role], :name=>:base_regulation
       index [:complete_abrogation_regulation_id, :complete_abrogation_regulation_role], :name=>:complete_abrogation_regulation
       index [:explicit_abrogation_regulation_id, :explicit_abrogation_regulation_role], :name=>:explicit_abrogation_regulation
-      index [:modification_regulation_id, :modification_regulation_role], :name=>:primary_key, :unique=>true
+      index [:modification_regulation_id, :modification_regulation_role], :name=>:mod_reg_pk
     end
 
     create_table(:monetary_exchange_periods, :ignore_index_errors=>false) do
@@ -1146,7 +1146,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:monetary_exchange_period_sid, :parent_monetary_unit_code], :name=>:primary_key, :unique=>true
+      index [:monetary_exchange_period_sid, :parent_monetary_unit_code], :name=>:mon_exch_period_pk
     end
 
     create_table(:monetary_exchange_rates, :ignore_index_errors=>false) do
@@ -1156,7 +1156,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:monetary_exchange_period_sid, :child_monetary_unit_code], :name=>:primary_key, :unique=>true
+      index [:monetary_exchange_period_sid, :child_monetary_unit_code], :name=>:mon_exch_rate_pk
     end
 
     create_table(:monetary_unit_descriptions, :ignore_index_errors=>false) do
@@ -1167,7 +1167,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:language_id], :name=>:index_monetary_unit_descriptions_on_language_id
-      index [:monetary_unit_code], :name=>:primary_key, :unique=>true
+      index [:monetary_unit_code], :name=>:mon_unit_desc_pk
     end
 
     create_table(:monetary_units, :ignore_index_errors=>false) do
@@ -1177,7 +1177,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:monetary_unit_code], :name=>:primary_key, :unique=>true
+      index [:monetary_unit_code], :name=>:mon_unit_pk
     end
 
     create_table(:nomenclature_group_memberships, :ignore_index_errors=>false) do
@@ -1191,7 +1191,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:goods_nomenclature_sid, :goods_nomenclature_group_id, :goods_nomenclature_group_type, :goods_nomenclature_item_id, :validity_start_date], :name=>:primary_key, :unique=>true
+      index [:goods_nomenclature_sid, :goods_nomenclature_group_id, :goods_nomenclature_group_type, :goods_nomenclature_item_id, :validity_start_date], :name=>:nom_grp_member_pk
     end
 
     create_table(:prorogation_regulation_actions, :ignore_index_errors=>false) do
@@ -1203,7 +1203,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:prorogation_regulation_id, :prorogation_regulation_role, :prorogated_regulation_id, :prorogated_regulation_role], :name=>:primary_key, :unique=>true
+      index [:prorogation_regulation_id, :prorogation_regulation_role, :prorogated_regulation_id, :prorogated_regulation_role], :name=>:prorog_reg_act_pk
     end
 
     create_table(:prorogation_regulations, :ignore_index_errors=>false) do
@@ -1218,7 +1218,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:prorogation_regulation_id, :prorogation_regulation_role], :name=>:primary_key, :unique=>true
+      index [:prorogation_regulation_id, :prorogation_regulation_role], :name=>:prorog_reg_pk
     end
 
     create_table(:quota_associations, :ignore_index_errors=>false) do
@@ -1229,7 +1229,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:main_quota_definition_sid, :sub_quota_definition_sid], :name=>:primary_key, :unique=>true
+      index [:main_quota_definition_sid, :sub_quota_definition_sid], :name=>:quota_assoc_pk
     end
 
     create_table(:quota_balance_events, :ignore_index_errors=>false) do
@@ -1242,7 +1242,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:quota_definition_sid, :occurrence_timestamp], :name=>:primary_key, :unique=>true
+      index [:quota_definition_sid, :occurrence_timestamp], :name=>:quota_balance_evt_pk
     end
 
     create_table(:quota_blocking_periods, :ignore_index_errors=>false) do
@@ -1255,7 +1255,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:quota_blocking_period_sid], :name=>:primary_key, :unique=>true
+      index [:quota_blocking_period_sid], :name=>:quota_block_period_pk
     end
 
     create_table(:quota_critical_events, :ignore_index_errors=>false) do
@@ -1266,7 +1266,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:quota_definition_sid, :occurrence_timestamp], :name=>:primary_key, :unique=>true
+      index [:quota_definition_sid, :occurrence_timestamp], :name=>:quota_crit_evt_pk
     end
 
     create_table(:quota_definitions, :ignore_index_errors=>false) do
@@ -1291,7 +1291,7 @@ Sequel.migration do
       index [:measurement_unit_qualifier_code], :name=>:index_quota_definitions_on_measurement_unit_qualifier_code
       index [:monetary_unit_code], :name=>:index_quota_definitions_on_monetary_unit_code
       index [:quota_order_number_id], :name=>:index_quota_definitions_on_quota_order_number_id
-      index [:quota_definition_sid], :name=>:primary_key, :unique=>true
+      index [:quota_definition_sid], :name=>:quota_def_pk
     end
 
     create_table(:quota_exhaustion_events, :ignore_index_errors=>false) do
@@ -1301,7 +1301,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:quota_definition_sid, :occurrence_timestamp], :name=>:primary_key, :unique=>true
+      index [:quota_definition_sid, :occurrence_timestamp], :name=>:quota_exhaus_evt_pk
     end
 
     create_table(:quota_order_number_origin_exclusions, :ignore_index_errors=>false) do
@@ -1310,7 +1310,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:quota_order_number_origin_sid, :excluded_geographical_area_sid], :name=>:primary_key, :unique=>true
+      index [:quota_order_number_origin_sid, :excluded_geographical_area_sid], :name=>:quota_ord_num_excl_pk
     end
 
     create_table(:quota_order_number_origins, :ignore_index_errors=>false) do
@@ -1324,7 +1324,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:geographical_area_sid], :name=>:index_quota_order_number_origins_on_geographical_area_sid
-      index [:quota_order_number_origin_sid], :name=>:primary_key, :unique=>true
+      index [:quota_order_number_origin_sid], :name=>:quota_ord_num_orig_pk
     end
 
     create_table(:quota_order_numbers, :ignore_index_errors=>false) do
@@ -1335,7 +1335,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:quota_order_number_sid], :name=>:primary_key, :unique=>true
+      index [:quota_order_number_sid], :name=>:quota_ord_num_pk
     end
 
     create_table(:quota_reopening_events, :ignore_index_errors=>false) do
@@ -1345,7 +1345,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:quota_definition_sid, :occurrence_timestamp], :name=>:primary_key, :unique=>true
+      index [:quota_definition_sid, :occurrence_timestamp], :name=>:quota_reopen_evt_pk
     end
 
     create_table(:quota_suspension_periods, :ignore_index_errors=>false) do
@@ -1358,7 +1358,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:quota_definition_sid], :name=>:index_quota_suspension_periods_on_quota_definition_sid
-      index [:quota_suspension_period_sid], :name=>:primary_key, :unique=>true
+      index [:quota_suspension_period_sid], :name=>:quota_susp_period_pk
     end
 
     create_table(:quota_unblocking_events, :ignore_index_errors=>false) do
@@ -1368,7 +1368,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:quota_definition_sid, :occurrence_timestamp], :name=>:primary_key, :unique=>true
+      index [:quota_definition_sid, :occurrence_timestamp], :name=>:quota_unblock_evt_pk
     end
 
     create_table(:quota_unsuspension_events, :ignore_index_errors=>false) do
@@ -1378,7 +1378,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:quota_definition_sid, :occurrence_timestamp], :name=>:primary_key, :unique=>true
+      index [:quota_definition_sid, :occurrence_timestamp], :name=>:quota_unsusp_evt_pk
     end
 
     create_table(:regulation_group_descriptions, :ignore_index_errors=>false) do
@@ -1389,7 +1389,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:language_id], :name=>:index_regulation_group_descriptions_on_language_id
-      index [:regulation_group_id], :name=>:primary_key, :unique=>true
+      index [:regulation_group_id], :name=>:reg_grp_desc_pk
     end
 
     create_table(:regulation_groups, :ignore_index_errors=>false) do
@@ -1399,7 +1399,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:regulation_group_id], :name=>:primary_key, :unique=>true
+      index [:regulation_group_id], :name=>:reg_grp_pk
     end
 
     create_table(:regulation_replacements, :ignore_index_errors=>false) do
@@ -1422,7 +1422,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:language_id], :name=>:index_regulation_role_type_descriptions_on_language_id
-      index [:regulation_role_type_id], :name=>:primary_key, :unique=>true
+      index [:regulation_role_type_id], :name=>:reg_role_type_desc_pk
     end
 
     create_table(:regulation_role_types, :ignore_index_errors=>false) do
@@ -1432,7 +1432,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:regulation_role_type_id], :name=>:primary_key, :unique=>true
+      index [:regulation_role_type_id], :name=>:reg_role_type_pk
     end
 
     create_table(:sections) do
@@ -1451,7 +1451,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:comment_sid, :language_id], :name=>:primary_key
+      index [:comment_sid, :language_id], :name=>:trans_comm_pk
     end
   end
 end

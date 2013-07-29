@@ -8,7 +8,7 @@ class Section < Sequel::Model
     Chapter.join_table(:inner, :chapters_sections, chapters_sections__goods_nomenclature_sid: :goods_nomenclatures__goods_nomenclature_sid)
            .join_table(:inner, :sections, chapters_sections__section_id: :sections__id)
            .with_actual(Chapter)
-           .where(~{goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes })
+           .where(Sequel.~(goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes ))
            .where(sections__id: id)
   }, eager_loader: (proc do |eo|
     eo[:rows].each{|section| section.associations[:chapters] = []}
@@ -18,7 +18,7 @@ class Section < Sequel::Model
     Chapter.join_table(:inner, :chapters_sections, chapters_sections__goods_nomenclature_sid: :goods_nomenclatures__goods_nomenclature_sid)
            .join_table(:inner, :sections, chapters_sections__section_id: :sections__id)
            .with_actual(Chapter)
-           .where(~{goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes })
+           .where(Sequel.~(goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes ))
            .where(sections__id: id_map.keys).all do |chapter|
       if sections = id_map[chapter[:section_id]]
         sections.each do |section|

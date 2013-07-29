@@ -14,8 +14,8 @@ class ChiefTransformer
       def uniq
         # Remove duplicates
         @measures = @measures.uniq {|m|
-          [m.measure_type, m.geographical_area, m.goods_nomenclature_item_id,
-           m.additional_code_type, m.additional_code, m.validity_start_date,
+          [m.measure_type_id, m.geographical_area_id, m.goods_nomenclature_item_id,
+           m.additional_code_type_id, m.additional_code_id, m.validity_start_date,
            m.validity_end_date].join
         }
       end

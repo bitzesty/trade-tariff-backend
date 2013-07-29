@@ -1,5 +1,5 @@
 class TariffValidationMatcher
-  attr_reader :subject, :attributes, :validation_type, :condition
+  attr_reader :subject, :attributes, :validation_type, :condition, :validation
 
   def initialize(validation_type)
     @validation_type = validation_type
@@ -9,13 +9,13 @@ class TariffValidationMatcher
   def matches?(subject)
     @subject = subject.dup
 
-    [@attributes].flatten.all? {|arg|
-      validate(subject.class.validation_reflections[arg])
-    } || validate(subject.class.validation_reflections[@attributes])
+    @validation = subject.conformance_validator
+                         .validations
+                         .detect{|validation| validation.type == validation_type }
   end
 
-  def of(*args)
-    @attributes = [args].flatten
+  def of(arg)
+    @attributes = arg
 
     self
   end
@@ -32,22 +32,5 @@ class TariffValidationMatcher
 
   def failure_message
     "expected #{subject.class.name} to validate #{validation_type} of #{attributes}"
-  end
-
-  private
-
-  def reflection_for(attribute, type = validation_type)
-    subject.class.validation_reflections[attribute]
-                 .detect{|validation_type, options|
-                   validation_type == type &&
-                   ((condition.present?) ? options[:if] == condition : true)
-                 }.try(:last)
-  end
-
-  def validate(reflections)
-    reflections.detect{|validation, options|
-      validation == validation_type &&
-      ((condition.present?) ? options[:if] == condition : true)
-    } if reflections.present?
   end
 end

@@ -1,6 +1,6 @@
 Sequel.migration do
   up do
-    Measure.national.where(measure_type: 'SPL').destroy
+    Measure.national.where(measure_type_id: 'SPL').destroy
   end
 
   down do

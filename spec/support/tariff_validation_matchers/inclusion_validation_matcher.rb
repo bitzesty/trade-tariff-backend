@@ -2,7 +2,13 @@ class InclusionValidationMatcher < TariffValidationMatcher
   attr_reader :collection
 
   def matches?(subject)
-    super && matches_collection?
+    @subject = subject.dup
+
+    @validation = subject.conformance_validator
+                         .validations
+                         .detect{|validation| validation.type == validation_type &&
+                                              validation.validation_options[:of] == @attributes &&
+                                              validation.validation_options[:in] == @collection  }
   end
 
   def in(collection)

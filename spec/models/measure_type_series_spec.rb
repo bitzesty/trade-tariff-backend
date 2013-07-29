@@ -11,8 +11,13 @@ describe MeasureTypeSeries do
       let!(:measure_type_series) { create :measure_type_series }
       let!(:measure_type) { create :measure_type, measure_type_series_id: measure_type_series.measure_type_series_id }
 
+      before {
+        measure_type_series.destroy
+        measure_type_series.conformant?
+      }
+
       specify 'The measure type series cannot be deleted if it is associated with a measure type.' do
-        expect { measure_type_series.destroy }.to raise_error Sequel::HookFailed
+        expect(measure_type_series.conformance_errors.keys).to include :MTS2
       end
     end
   end

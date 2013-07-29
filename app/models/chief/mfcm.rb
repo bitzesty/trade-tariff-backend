@@ -6,7 +6,7 @@ module Chief
     VAT_GROUP_CODES = %w[VT]
 
     set_dataset db[:chief_mfcm].
-                order(:audit_tsmp.asc)
+                order(Sequel.asc(:audit_tsmp), Sequel.asc(:fe_tsmp))
 
 
     set_primary_key [:msrgp_code,
@@ -20,31 +20,32 @@ module Chief
                      :amend_indicator]
 
     one_to_one :tame, key: {}, primary_key: {}, dataset: -> {
-      Chief::Tame.filter{ |o| {:msrgp_code => msrgp_code} &
-                              {:msr_type => msr_type} &
-                              {:tty_code => tty_code} &
-                              {:tar_msr_no => tar_msr_no}
-                              }.order(:audit_tsmp.desc)
+      Chief::Tame.filter({:msrgp_code => msrgp_code})
+                 .filter({:msr_type => msr_type})
+                 .filter({:tty_code => tty_code})
+                 .filter({:tar_msr_no => tar_msr_no})
+                 .order(Sequel.desc(:audit_tsmp))
     }, class_name: 'Chief::Tame'
 
     one_to_many :tames, key: {}, primary_key: {}, dataset: -> {
-      Chief::Tame.filter{ |o| {:msrgp_code => msrgp_code} &
-                              {:msr_type => msr_type} &
-                              {:tty_code => tty_code} &
-                              {:tar_msr_no => tar_msr_no}
-                              }.order(:audit_tsmp.asc)
+      Chief::Tame.filter({:msrgp_code => msrgp_code})
+                 .filter({:msr_type => msr_type})
+                 .filter({:tty_code => tty_code})
+                 .filter({:tar_msr_no => tar_msr_no})
+                 .order(Sequel.asc(:audit_tsmp))
     }, class_name: 'Chief::Tame'
-
-    one_to_one :measure_type_adco, key: {}, primary_key: {},
-      dataset: -> { Chief::MeasureTypeAdco.where(chief_measure_type_adco__measure_group_code: msrgp_code,
-                                                 chief_measure_type_adco__measure_type: msr_type,
-                                                 chief_measure_type_adco__tax_type_code: tty_code) }
 
     one_to_one :measure_type, key: {}, primary_key: {},
       dataset: -> { Chief::MeasureTypeAdco.where(chief_measure_type_adco__measure_group_code: msrgp_code,
                                                  chief_measure_type_adco__measure_type: msr_type,
                                                  chief_measure_type_adco__tax_type_code: tty_code) },
                                                  class_name: 'Chief::MeasureTypeAdco'
+
+    one_to_one :chief_update, key: :filename,
+                              primary_key: :origin,
+                              class_name: TariffSynchronizer::ChiefUpdate
+
+    delegate :issue_date, to: :chief_update, allow_nil: true
 
     dataset_module do
       def unprocessed
@@ -72,11 +73,18 @@ module Chief
     end
 
     def measure_type_adco
-      _measure_type_adco_dataset.first.presence || ::NullObject.new
+      Chief::MeasureTypeAdco.where(chief_measure_type_adco__measure_group_code: msrgp_code,
+                                   chief_measure_type_adco__measure_type: msr_type,
+                                   chief_measure_type_adco__tax_type_code: tty_code)
+                            .first.presence || ::NullObject.new
     end
 
     def audit_tsmp
       self[:audit_tsmp].presence || Time.now
+    end
+
+    def operation_date
+      issue_date
     end
   end
 end

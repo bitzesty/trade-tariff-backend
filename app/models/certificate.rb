@@ -1,5 +1,7 @@
 class Certificate < Sequel::Model
+  plugin :oplog, primary_key: [:certificate_code, :certificate_type_code]
   plugin :time_machine
+  plugin :conformance_validator
 
   set_primary_key [:certificate_code, :certificate_type_code]
 
@@ -7,7 +9,7 @@ class Certificate < Sequel::Model
                                           left_key: [:certificate_code, :certificate_type_code],
                                           right_key: :certificate_description_period_sid do |ds|
     ds.with_actual(CertificateDescriptionPeriod)
-      .order(:certificate_description_periods__validity_start_date.desc)
+      .order(Sequel.desc(:certificate_description_periods__validity_start_date))
   end
 
   def certificate_description

@@ -9,7 +9,7 @@ describe Sequel::PaginationExtension do
     it 'supports regular Sequel pagination API' do
       Commodity.dataset
                .paginate(2, 1)
-               .order(:goods_nomenclature_sid.asc)
+               .order(Sequel.asc(:goods_nomenclature_sid))
                .first
                .should == commodity2
     end
@@ -17,7 +17,7 @@ describe Sequel::PaginationExtension do
     it 'supports Kaminari style pagination API' do
       Commodity.dataset
                .paginate(page: 2, per_page: 1)
-               .order(:goods_nomenclature_sid.asc)
+               .order(Sequel.asc(:goods_nomenclature_sid))
                .first
                .should == commodity2
     end

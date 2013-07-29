@@ -4,7 +4,7 @@
 
 require 'sequel/extensions/pagination'
 
-Sequel.extension :pagination
+Sequel::Model.db.extension :pagination
 
 module Sequel
   module PaginationExtension
@@ -24,4 +24,4 @@ module Sequel
   end
 end
 
-Sequel::Dataset.send :include, Sequel::PaginationExtension
+Sequel::DatasetPagination.send :include, Sequel::PaginationExtension

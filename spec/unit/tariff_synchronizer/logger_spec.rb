@@ -17,9 +17,9 @@ describe TariffSynchronizer::Logger do
 
   describe '#download logging' do
     before {
-      TariffSynchronizer::TaricUpdate.expects(:sync).returns(true)
-      TariffSynchronizer::ChiefUpdate.expects(:sync).returns(true)
-      TariffSynchronizer.expects(:sync_variables_set?).returns(true)
+      TariffSynchronizer::TaricUpdate.should_receive(:sync).and_return(true)
+      TariffSynchronizer::ChiefUpdate.should_receive(:sync).and_return(true)
+      TariffSynchronizer.should_receive(:sync_variables_set?).and_return(true)
 
       TariffSynchronizer.download
     }
@@ -32,7 +32,7 @@ describe TariffSynchronizer::Logger do
 
   describe '#config_error logging' do
     before {
-      TariffSynchronizer.expects(:sync_variables_set?).returns(false)
+      TariffSynchronizer.should_receive(:sync_variables_set?).and_return(false)
 
       TariffSynchronizer.download
     }
@@ -44,10 +44,10 @@ describe TariffSynchronizer::Logger do
   end
 
   describe '#failed_updates_present logging' do
-    let(:update_stubs) { stub(any?: true, map: []) }
+    let(:update_stubs) { double(any?: true, map: []).as_null_object }
 
     before {
-      TariffSynchronizer::BaseUpdate.stubs(:failed).returns(update_stubs)
+      TariffSynchronizer::BaseUpdate.stub(:failed).and_return(update_stubs)
 
       TariffSynchronizer.apply
     }
@@ -65,11 +65,6 @@ describe TariffSynchronizer::Logger do
   end
 
   describe '#apply logging' do
-    after {
-      # reset to previous(default) state
-      TariffSynchronizer::Logger.conformance_errors = []
-    }
-
     context 'pending update present' do
       let(:example_date)  { Date.today }
       let!(:taric_update) { create :taric_update, example_date: example_date }
@@ -78,10 +73,23 @@ describe TariffSynchronizer::Logger do
         prepare_synchronizer_folders
         create_taric_file :pending, example_date
 
+        Footnote.unrestrict_primary_key
+
+        # Do not use default FootnoteValidator validations, we
+        # need a permissive validator here
+        class PermissiveFootnoteValidator < TradeTariffBackend::Validator
+        end
+
+        Footnote.conformance_validator = PermissiveFootnoteValidator.new
+
         TariffSynchronizer.apply
       }
 
-      after  { purge_synchronizer_folders }
+      after  {
+        purge_synchronizer_folders
+
+        Footnote.conformance_validator = nil
+      }
 
       it 'logs and info event' do
         @logger.logged(:info).size.should be > 0
@@ -117,7 +125,7 @@ describe TariffSynchronizer::Logger do
       end
     end
 
-    context 'with conformance errors present' do
+    context 'update contains entries with conformance errors' do
       let(:example_date)  { Date.today }
       let!(:taric_update) { create :taric_update, example_date: example_date }
 
@@ -125,7 +133,14 @@ describe TariffSynchronizer::Logger do
         prepare_synchronizer_folders
         create_taric_file :pending, example_date
 
-        TariffSynchronizer::Logger.conformance_errors << build(:measure, validity_start_date: Date.today, validity_end_date: Date.today.ago(1.year))
+        Footnote.unrestrict_primary_key
+
+        invalid_measure = build(:measure,
+                                justification_regulation_id: "123",
+                                justification_regulation_role: "123",
+                                validity_start_date: Date.today,
+                                validity_end_date: Date.today.ago(1.year))
+
         TariffSynchronizer.apply
       }
 
@@ -142,15 +157,15 @@ describe TariffSynchronizer::Logger do
 
         last_email_content = ActionMailer::Base.deliveries.last.encoded
         last_email_content.should_not =~ /No conformance errors found/
-        last_email_content.should =~ /must be less then or equal to end date/
+        last_email_content.should =~ /less than or equal to the end date/
       end
     end
   end
 
   describe '#failed_update logging' do
-    let(:mock_pending_update) { mock(issue_date: Date.today,
-                                     update_priority: 1,
-                                     file_path: '/') }
+    let(:mock_pending_update) { double(file_name: Date.today,
+                                       update_priority: 1,
+                                       file_path: '/').as_null_object }
 
 
     before {
@@ -160,9 +175,9 @@ describe TariffSynchronizer::Logger do
         end
       end
 
-      mock_pending_update.expects(:apply).raises(TaricImporter::ImportException.new("", MockException.new))
+      mock_pending_update.should_receive(:apply).and_raise(TaricImporter::ImportException.new("", MockException.new))
 
-      TariffSynchronizer::PendingUpdate.expects(:all).returns([mock_pending_update])
+      TariffSynchronizer::PendingUpdate.should_receive(:all).and_return([mock_pending_update])
       rescuing {
         TariffSynchronizer.apply
       }
@@ -189,11 +204,11 @@ describe TariffSynchronizer::Logger do
   describe '#failed_download logging' do
     before {
        TariffSynchronizer.retry_count = 0
-       TariffSynchronizer.stubs(:sync_variables_set?).returns(true)
+       TariffSynchronizer.stub(:sync_variables_set?).and_return(true)
 
        Curl::Easy.any_instance
-                 .expects(:perform)
-                 .raises(Curl::Err::HostResolutionError)
+                 .should_receive(:perform)
+                 .and_raise(Curl::Err::HostResolutionError)
 
       rescuing { TariffSynchronizer.download }
     }
@@ -217,8 +232,8 @@ describe TariffSynchronizer::Logger do
 
   describe '#rebuild logging' do
     before {
-      TariffSynchronizer::TaricUpdate.expects(:rebuild).returns(true)
-      TariffSynchronizer::ChiefUpdate.expects(:rebuild).returns(true)
+      TariffSynchronizer::TaricUpdate.should_receive(:rebuild).and_return(true)
+      TariffSynchronizer::ChiefUpdate.should_receive(:rebuild).and_return(true)
 
       TariffSynchronizer.rebuild
     }
@@ -233,7 +248,7 @@ describe TariffSynchronizer::Logger do
     let(:failed_response) { build :response, :retry_exceeded }
 
     before {
-      TariffSynchronizer::ChiefUpdate.expects(:download_content).returns(failed_response)
+      TariffSynchronizer::ChiefUpdate.should_receive(:download_content).and_return(failed_response)
 
       TariffSynchronizer::ChiefUpdate.download(Date.today)
     }
@@ -254,7 +269,7 @@ describe TariffSynchronizer::Logger do
     let(:not_found_response) { build :response, :not_found }
 
     before {
-      TariffSynchronizer::ChiefUpdate.expects(:download_content).returns(not_found_response)
+      TariffSynchronizer::ChiefUpdate.should_receive(:download_content).and_return(not_found_response)
 
       TariffSynchronizer::ChiefUpdate.download(Date.yesterday)
     }
@@ -287,9 +302,9 @@ describe TariffSynchronizer::Logger do
 
     before {
       # Download mock response
-      TariffSynchronizer::ChiefUpdate.expects(:download_content).returns(success_response)
+      TariffSynchronizer::ChiefUpdate.should_receive(:download_content).and_return(success_response)
       # Do not write file to file system
-      TariffSynchronizer::ChiefUpdate.expects(:create_entry).returns(true)
+      TariffSynchronizer::ChiefUpdate.should_receive(:create_entry).and_return(true)
       # Actual Download
       TariffSynchronizer::ChiefUpdate.download(Date.today)
     }
@@ -306,10 +321,10 @@ describe TariffSynchronizer::Logger do
     before {
       # Test in isolation, file is not actually in the file system
       # so bypass the check
-      File.expects(:exists?)
+      File.should_receive(:exists?)
           .with(chief_update.file_path)
           .twice
-          .returns(true)
+          .and_return(true)
 
       rescuing {
         chief_update.apply
@@ -327,11 +342,11 @@ describe TariffSynchronizer::Logger do
 
     before {
       # Skip Taric update file name fetching
-      TariffSynchronizer::TaricUpdate.expects(:taric_update_urls_for).returns(['abc'])
+      TariffSynchronizer::TaricUpdate.should_receive(:taric_update_urls_for).and_return(['abc'])
       # Download mock response
-      TariffSynchronizer::TaricUpdate.expects(:download_content).returns(success_response)
+      TariffSynchronizer::TaricUpdate.should_receive(:download_content).and_return(success_response)
       # Do not write file to file system
-      TariffSynchronizer::TaricUpdate.expects(:create_entry).returns(true)
+      TariffSynchronizer::TaricUpdate.should_receive(:create_entry).and_return(true)
       # Actual Download
       TariffSynchronizer::TaricUpdate.download(Date.today)
     }
@@ -348,10 +363,10 @@ describe TariffSynchronizer::Logger do
     before {
       # Test in isolation, file is not actually in the file system
       # so bypass the check
-      File.expects(:exists?)
+      File.should_receive(:exists?)
           .with(taric_update.file_path)
           .twice
-          .returns(true)
+          .and_return(true)
 
       rescuing {
         taric_update.apply
@@ -368,7 +383,7 @@ describe TariffSynchronizer::Logger do
     let(:not_found_response) { build :response, :not_found }
 
     before {
-      TariffSynchronizer::TaricUpdate.expects(:download_content).returns(not_found_response)
+      TariffSynchronizer::TaricUpdate.should_receive(:download_content).and_return(not_found_response)
       TariffSynchronizer::TaricUpdate.download(Date.today)
     }
 
@@ -383,9 +398,9 @@ describe TariffSynchronizer::Logger do
 
     before {
       # Download mock response
-      TariffSynchronizer::ChiefUpdate.expects(:download_content).returns(success_response)
+      TariffSynchronizer::ChiefUpdate.should_receive(:download_content).and_return(success_response)
       # Do not write file to file system
-      TariffSynchronizer::ChiefUpdate.expects(:write_file).returns(true)
+      TariffSynchronizer::ChiefUpdate.should_receive(:write_file).and_return(true)
       # Actual Download
       TariffSynchronizer::ChiefUpdate.download(Date.today)
     }
@@ -401,8 +416,8 @@ describe TariffSynchronizer::Logger do
 
     before {
       # Download mock response
-      TariffSynchronizer::ChiefUpdate.expects(:download_content)
-                                     .returns(blank_response)
+      TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
+                                     .and_return(blank_response)
       # Actual Download
       TariffSynchronizer::ChiefUpdate.download(Date.today)
     }
@@ -424,10 +439,10 @@ describe TariffSynchronizer::Logger do
 
     before {
       # Download mock response
-      TariffSynchronizer::ChiefUpdate.expects(:download_content)
-                                     .returns(success_response)
+      TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
+                                     .and_return(success_response)
       # Simulate I/O exception
-      File.expects(:open).raises(Errno::ENOENT)
+      File.should_receive(:open).and_raise(Errno::ENOENT)
       # Actual Download
       TariffSynchronizer::ChiefUpdate.download(Date.today)
     }
@@ -449,10 +464,10 @@ describe TariffSynchronizer::Logger do
 
     before {
       # Download mock response
-      TariffSynchronizer::ChiefUpdate.expects(:download_content)
-                                     .returns(success_response)
+      TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
+                                     .and_return(success_response)
       # Simulate I/O exception
-      File.expects(:open).raises(IOError)
+      File.should_receive(:open).and_raise(IOError)
       # Actual Download
       TariffSynchronizer::ChiefUpdate.download(Date.today)
     }
@@ -474,10 +489,10 @@ describe TariffSynchronizer::Logger do
 
     before {
       # Download mock response
-      TariffSynchronizer::ChiefUpdate.expects(:download_content)
-                                     .returns(success_response)
+      TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
+                                     .and_return(success_response)
       # Simulate I/O exception
-      File.expects(:open).raises(Errno::EACCES)
+      File.should_receive(:open).and_raise(Errno::EACCES)
       # Actual Download
       TariffSynchronizer::ChiefUpdate.download(Date.today)
     }
@@ -500,11 +515,9 @@ describe TariffSynchronizer::Logger do
 
     before {
       TariffSynchronizer.retry_count = 10
-      TariffSynchronizer::ChiefUpdate.expects(:send_request)
-                                     .twice
-                                     .returns(failed_response)
-                                     .then
-                                     .returns(success_response)
+      TariffSynchronizer::ChiefUpdate.should_receive(:send_request)
+                                     .exactly(3).times
+                                     .and_return(failed_response, failed_response, success_response)
       TariffSynchronizer::ChiefUpdate.download(Date.today)
     }
 
@@ -520,8 +533,8 @@ describe TariffSynchronizer::Logger do
     let!(:chief_update2) { create :chief_update, :missing, issue_date: Date.today.ago(3.days) }
 
     before {
-      TariffSynchronizer::ChiefUpdate.stubs(:download_content)
-                                     .returns(not_found_response)
+      TariffSynchronizer::ChiefUpdate.stub(:download_content)
+                                     .and_return(not_found_response)
       TariffSynchronizer::ChiefUpdate.sync
     }
 
@@ -534,21 +547,6 @@ describe TariffSynchronizer::Logger do
       ActionMailer::Base.deliveries.should_not be_empty
       email = ActionMailer::Base.deliveries.last
       email.encoded.should =~ /missing/
-    end
-  end
-
-  describe "#invalidated" do
-    let(:measure) { create :measure }
-
-    before {
-      ChiefTransformer::Processor::Operation.new(nil)
-      .update_record(measure, validity_start_date: Date.today.in(10.years),
-                              validity_end_date: Date.today.ago(10.years))
-    }
-
-    it 'logs a warn event' do
-      @logger.logged(:warn).size.should eq 1
-      @logger.logged(:warn).to_s.should =~ /Invalid/
     end
   end
 end

@@ -9,7 +9,7 @@ namespace :importer do
     task import: :environment do
 
       if ENV["TARGET"] && File.exists?(ENV["TARGET"])
-        TariffImporter.new(ENV["TARGET"], ChiefImporter).import
+        ChiefImporter.new(ENV["TARGET"], ENV["DATE"]).import
       else
         puts "Please provide TARGET environment variable pointing to CHIEF file to import"
       end
@@ -18,9 +18,13 @@ namespace :importer do
 
   namespace :taric do
     desc "Import Tariff file"
-    task import: :environment do
+    task import: [:environment, :class_eager_load] do
       if ENV["TARGET"] && File.exists?(ENV["TARGET"])
-        TariffImporter.new(ENV["TARGET"], TaricImporter).import
+        # We will be fetching updates from Taric and modifying primary keys
+        # so unrestrict it for all models.
+        Sequel::Model.descendants.each(&:unrestrict_primary_key)
+
+        TaricImporter.new(ENV["TARGET"], ENV["DATE"]).import
       else
         puts "Please provide TARGET environment variable pointing to Tariff file to import"
       end

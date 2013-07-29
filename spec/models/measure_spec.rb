@@ -1,30 +1,108 @@
 require 'spec_helper'
 
 describe Measure do
+  describe '#generating_regulation' do
+    let(:measure_of_base_regulation) { create :measure }
+    let(:measure_of_modification_regulation) { create :measure, :with_modification_regulation }
+
+    it 'returns relevant regulation that is generating the measure' do
+      measure_of_base_regulation.generating_regulation.should eq measure_of_base_regulation.base_regulation
+      measure_of_modification_regulation.generating_regulation.should eq measure_of_modification_regulation.modification_regulation
+    end
+  end
+
+  # According to Taric guide
+  describe '#validity_end_date' do
+    let(:base_regulation) { create :base_regulation, effective_end_date: Date.yesterday }
+    let(:measure) { create :measure, measure_generating_regulation_role: 1,
+                                     base_regulation: base_regulation,
+                                     validity_end_date: Date.today }
+
+    context 'measure end date greater than generating regulation end date' do
+      it 'returns validity end date of' do
+        measure.validity_end_date.to_date.should eq base_regulation.effective_end_date.to_date
+      end
+    end
+
+    context 'measure end date lesser than generating regulation end date' do
+      let(:base_regulation) { create :base_regulation, effective_end_date: Date.today }
+      let(:measure) { create :measure, measure_generating_regulation_role: 1,
+                                       base_regulation: base_regulation,
+                                       validity_end_date: Date.yesterday }
+
+      it 'returns validity end date of the measure' do
+        measure.validity_end_date.to_date.should eq measure.validity_end_date.to_date
+      end
+    end
+
+    context 'generating regulation effective end date blank, measure end date blank' do
+      let(:base_regulation) { create :base_regulation, effective_end_date: nil }
+      let(:measure) { create :measure, measure_generating_regulation_role: 1,
+                                       base_regulation: base_regulation,
+                                       validity_end_date: nil }
+
+      it 'returns validity end date of the measure' do
+        measure.validity_end_date.should be_blank
+      end
+    end
+
+    context 'generating regulation effective end date blank, measure end date present' do
+      let(:base_regulation) { create :base_regulation, effective_end_date: nil }
+      let(:measure) { create :measure, measure_generating_regulation_role: 1,
+                                       base_regulation: base_regulation,
+                                       validity_end_date: Date.today }
+
+      it 'returns validity end date of the measure' do
+        measure.validity_end_date.should be_blank
+      end
+    end
+
+    context 'generating regulation effective end date present, measure end date blank' do
+      let(:base_regulation) { create :base_regulation, effective_end_date: Date.today}
+      let(:measure) { create :measure, measure_generating_regulation_role: 1,
+                                       base_regulation: base_regulation,
+                                       validity_end_date: nil }
+
+      it 'returns validity end date of the measure' do
+        measure.validity_end_date.to_date.should eq Date.today
+      end
+    end
+
+    context 'measure is national' do
+      let(:base_regulation) { create :base_regulation, effective_end_date: Date.yesterday }
+      let(:measure) { create :measure, measure_generating_regulation_role: 1,
+                                       base_regulation: base_regulation,
+                                       validity_end_date: Date.today,
+                                       national:true }
+
+      it 'returns validity end date of the measure' do
+        measure.validity_end_date.to_date.should eq Date.today
+      end
+    end
+  end
+
   describe 'associations' do
     describe 'measure type' do
-      let!(:measure)                { create :measure }
+      let!(:measure)         { create :measure }
       let!(:measure_type1)   { create :measure_type, measure_type_id: measure.measure_type_id,
+                                                     validity_start_date: 5.years.ago,
+                                                     validity_end_date: 3.years.ago,
+                                                     operation_date: Date.yesterday }
+      let!(:measure_type2)   { create :measure_type, measure_type_id: measure.measure_type_id,
                                                      validity_start_date: 2.years.ago,
-                                                     validity_end_date: nil }
-      let!(:measure_type2) { create :measure_type, measure_type_id: measure.measure_type_id,
-                                                   validity_start_date: 5.years.ago,
-                                                   validity_end_date: 3.years.ago }
+                                                     validity_end_date: nil,
+                                                     operation: :update }
 
       context 'direct loading' do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
-            measure.type.pk.should == measure_type1.pk
+            measure.measure_type.pk.should == measure_type1.pk
           end
         end
 
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
-            measure.type.pk.should == measure_type1.pk
-          end
-
-          TimeMachine.at(4.years.ago) do
-            measure.reload.type.pk.should == measure_type2.pk
+            measure.measure_type.pk.should == measure_type1.pk
           end
         end
       end
@@ -33,28 +111,20 @@ describe Measure do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
             Measure.where(measure_sid: measure.measure_sid)
-                          .eager(:type)
+                          .eager(:measure_type)
                           .all
                           .first
-                          .type.pk.should == measure_type1.pk
+                          .measure_type.pk.should == measure_type1.pk
           end
         end
 
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
             Measure.where(measure_sid: measure.measure_sid)
-                          .eager(:type)
+                          .eager(:measure_type)
                           .all
                           .first
-                          .type.pk.should == measure_type1.pk
-          end
-
-          TimeMachine.at(4.years.ago) do
-            Measure.where(measure_sid: measure.measure_sid)
-                          .eager(:type)
-                          .all
-                          .first
-                          .type.pk.should == measure_type2.pk
+                          .measure_type.pk.should == measure_type1.pk
           end
         end
       end
@@ -92,6 +162,17 @@ describe Measure do
                  .measure_conditions.should_not include measure_condition2
         end
       end
+
+      describe 'ordering' do
+        let!(:measure)                { create :measure }
+        let!(:measure_condition1)     { create :measure_condition, measure_sid: measure.measure_sid, component_sequence_number: 10 }
+        let!(:measure_condition2)     { create :measure_condition, measure_sid: measure.measure_sid, component_sequence_number: 1 }
+
+        it 'loads conditions ordered by component sequence number ascending' do
+          expect(measure.measure_conditions.first).to eq measure_condition2
+          expect(measure.measure_conditions.last).to eq measure_condition1
+        end
+      end
     end
 
     describe 'geographical area' do
@@ -101,11 +182,11 @@ describe Measure do
 
       context 'direct loading' do
         it 'loads associated measure conditions' do
-          measure.geographical_area.should eq geographical_area1
+          measure.geographical_area.pk.should eq geographical_area1.pk
         end
 
         it 'does not load associated measure condition' do
-          measure.geographical_area.should_not eq geographical_area2
+          measure.geographical_area.pk.should_not eq geographical_area2.pk
         end
       end
 
@@ -115,7 +196,7 @@ describe Measure do
                  .eager(:geographical_area)
                  .all
                  .first
-                 .geographical_area.should eq geographical_area1
+                 .geographical_area.pk.should eq geographical_area1.pk
         end
 
         it 'does not load associated measure condition' do
@@ -123,7 +204,7 @@ describe Measure do
                  .eager(:geographical_area)
                  .all
                  .first
-                 .geographical_area.should_not eq geographical_area2
+                 .geographical_area.pk.should_not eq geographical_area2.pk
         end
       end
     end
@@ -365,120 +446,285 @@ describe Measure do
 
   describe 'validations' do
     # ME2 ME4 ME6 ME24 The <field name> must exist.
-    it { should validate_presence.of(:measure_type, :geographical_area_sid,
-                                     :goods_nomenclature_sid,
-                                     :measure_generating_regulation_id,
-                                     :measure_generating_regulation_role) }
+    it { should validate_presence.of(:measure_type) }
+    # ME4
+    it { should validate_presence.of(:geographical_area) }
+    # ME6
+    it { should validate_presence.of(:goods_nomenclature) }
+    # ME24
+    it { should validate_presence.of(:measure_generating_role_id) }
+    it { should validate_presence.of(:measure_generating_role_type) }
     # ME1 The combination of measure type + geographical area +
     #     goods nomenclature item id + additional code type + additional code +
     #     order number + reduction indicator + start date must be unique
-    it { should validate_uniqueness.of([:measure_type, :geographical_area_sid,
+    it { should validate_uniqueness.of([:measure_type_id,
+                                        :geographical_area_sid,
                                         :goods_nomenclature_sid,
-                                        :additional_code_type,
-                                        :additional_code, :ordernumber,
+                                        :export_refund_nomenclature_sid,
+                                        :additional_code_type_id,
+                                        :additional_code_id, :ordernumber,
                                         :reduction_indicator,
                                         :validity_start_date]) }
-    # ME3 ME115 ME8 ME5 ME18 ME114 ME15  The validity period of the <associated record>
-    # must span the validity period of the measure
-    it { should validate_validity_date_span.of(:geographical_area, :type,
-                                               :goods_nomenclature,
-                                               :additional_code) }
+    # ME4 ME5
+    it { should validate_validity_date_span.of(:geographical_area) }
+    # ME2 ME3
+    it { should validate_validity_date_span.of(:measure_type) }
+    # ME6 ME8
+    it { should validate_validity_date_span.of(:goods_nomenclature) }
     # ME25 If the measures end date is specified (implicitly or explicitly)
     # then the start date of the measure must be less than
     # or equal to the end date
     it { should validate_validity_dates }
-    # ME7 The goods nomenclature code must be a product code; that is,
-    # it may not be an intermediate line
-    # ME88 The level of the goods code, if present, cannot exceed the
-    # explosion level of the measure type.
-    it { should validate_associated(:goods_nomenclature).and_ensure(:qualified_goods_nomenclature?) }
-    # ME10 The order number must be specified if the "order number flag"
-    # (specified in the measure type record) has the value "mandatory".
-    # If the flag is set to "not permitted" then the field cannot be entered.
-    it { should validate_associated(:quota_order_number).and_ensure(:quota_order_number_present?) }
-    # ME12 If the additional code is specified then the additional code
-    # type must have a relationship with the measure type.
-    it { should validate_associated(:additional_code_type).and_ensure(:adco_type_related_to_measure_type?)
-                                                          .if(:additional_code_present?) }
-    # ME86 The role of the entered regulation must be a Base, a
-    # Modification, a Provisional Anti-Dumping, a Definitive Anti-Dumping.
-    it { should validate_inclusion.of(:measure_generating_regulation_role).in(Measure::VALID_ROLE_TYPE_IDS) }
-    # ME26 The entered regulation may not be completely abrogated.
-    it { should validate_exclusion.of([:measure_generating_regulation_id,
-                                       :measure_generating_regulation_role])
-                                  .from(CompleteAbrogationRegulation.map([:complete_abrogation_regulation_id,
-                                                                          :complete_abrogation_regulation_role])) }
-    # ME27 The entered regulation may not be fully replaced.
-    it { should validate_exclusion.of([:measure_generating_regulation_id,
-                                       :measure_generating_regulation_role])
-                                  .from(RegulationReplacement.map([:replaced_regulation_id,
-                                                                   :replaced_regulation_role])) }
-    # ME33 TODO A justification regulation may not be entered if the measure
-    # end date is not filled in.
-    # it { should validate_input.of(:justification_regulation_id,
-    #                               :justification_regulation_role).requires(:is_ended?) }
-    # ME34 TODO A justification regulation must be entered if the measure
-    # end date is filled in.
-    # it { should validate_presence.of(:justification_regulation_id,
-    #                                  :justification_regulation_role)
-    #                              .if(:is_ended?) }
-    # ME29 If the entered regulation is a modification regulation then its
-    # base regulation may not be completely abrogated.
-    it { should validate_associated(:modification_regulation).and_ensure(:modification_regulation_base_regulation_not_completely_abrogated?) }
-    # ME9 If no additional code is specified then the goods code is mandatory.
-    it { should validate_presence.of(:goods_nomenclature_item_id).if(:additional_code_blank?) }
-    # ME13 If the additional code type is related to a Meursing table
-    # plan then only the additional code can be specified: no goods code,
-    # order number or reduction indicator.
-    # ME14 If the additional code type is related to a Meursing table plan
-    # then the additional code must exist as a Meursing additional code.
-    it { should validate_associated(:additional_code).and_ensure(:additional_code_exists_as_meursing_code?)
-                                                     .if(:adco_type_meursing?) }
-    # ME17 If the additional code type has as application "non-Meursing"
-    # then the additional code must exist as a non-Meursing additional code.
-    it { should validate_associated(:additional_code).and_ensure(:additional_code_does_not_exist_as_meursing_code?)
-                                                     .if(:adco_type_non_meursing?) }
-    # ME116 ME118 ME119  When a quota order number is used in a measure then the validity
-    # period of the quota order number must span the validity period of the measure.
-    # This rule is only applicable for measures with start date after 31/12/2007.
-    # Only quota order numbers managed by the first come first served principle
-    # are in scope; these order number are starting with '09';
-    # except order numbers starting with '094'
-    it { should validate_validity_date_span.of(:quota_order_number).if(:should_validate_order_number_date_span?) }
-    # ME117 When a measure has a quota measure type then the origin must
-    # exist as a quota order number origin.  This rule is only applicable
-    # for measures with start date after 31/12/2007. Only origins for quota
-    # order numbers managed by the first come first served principle are
-    # in scope; these order number are starting with '09'; except order
-    # numbers starting with '094'
-    it { should validate_associated(:quota_order_number).and_ensure(:quota_order_number_quota_order_number_origin_present?)
-                                                        .if(:should_validate_order_number_date_span?)}
-    # ME112 If the additional code type has as application "Export Refund
-    # for Processed Agricultural Goods" then the measure does not require
-    # a goods code.
-    # ME113 If the additional code type has as application "Export Refund
-    # for Processed Agricultural Goods" then the additional code must exist
-    # as an Export Refund for Processed Agricultural Goods additional code.
-    it { should validate_associated(:additional_code).and_ensure(:additional_code_exists_as_export_refund_code?)
-                                                     .if(:adco_type_export_refund_agricultural?) }
-    # ME19 If the additional code type has as application "ERN" then the goods
-    # code must be specified but the order number is blocked for input.
-    it { should validate_presence.of(:goods_nomenclature_item_id).if(:adco_type_export_refund?)}
-    it { should validate_associated(:adco_type).and_ensure(:quota_order_number_blank?)
-                                               .if(:adco_type_export_refund?)}
-    # ME21 If the additional code type has as application "ERN" then the
-    # combination of goods code + additional code must exist as an ERN
-    # product code and its validity period must span the validity
-    # period of the measure.
-    it { should validate_associated(:additional_code).and_ensure(:ern_adco_exists?)
-                                                     .if(:adco_type_export_refund?) }
-    it { should validate_validity_date_span.of(:export_refund_nomenclature)
-                                           .if(:ern_adco_exists?) }
-    # ME28 The entered regulation may not be partially replaced for the measure
-    # type, geographical area or chapter (first two digits of the goods code)
-    # of the measure.
-    it { should validate_input.of(:measure_generating_regulation_id)
-                              .requires(:regulation_is_not_replaced?) }
+
+    describe 'ME7' do
+      let(:measure1) { create :measure, gono_producline_suffix: "80" }
+      let(:measure2) { create :measure, gono_producline_suffix: "20" }
+
+      it 'performs validation' do
+        measure1.should be_conformant
+        measure2.should_not be_conformant
+      end
+    end
+
+    describe 'ME9' do
+      context 'additional_code blank, goods nomenclature code blank' do
+        let(:measure) { create :measure, additional_code_id: nil,
+                                         goods_nomenclature_item_id: nil }
+
+        it 'performs validation' do
+          measure.should_not be_conformant
+        end
+      end
+
+      context 'additional_code present' do
+        let(:measure) { create :measure, additional_code_id: '123' }
+
+        it 'performs validation' do
+          measure.should be_conformant
+        end
+      end
+    end
+
+    describe 'ME10' do
+      let(:measure1) { create :measure, :with_quota_order_number, order_number_capture_code: 1, ordernumber: nil }
+      let(:measure2) { create :measure, :with_quota_order_number, order_number_capture_code: 2, ordernumber: '123' }
+      let(:measure3) { create :measure, :with_quota_order_number, order_number_capture_code: 1, ordernumber: '123' }
+
+      it 'performs validation' do
+        measure1.should_not be_conformant
+        measure2.should_not be_conformant
+        measure3.should     be_conformant
+      end
+    end
+
+    describe 'ME12' do
+      let(:measure1) { create :measure, :with_additional_code_type }
+      let(:measure2) { create :measure, :with_related_additional_code_type }
+
+      it 'performs validation' do
+        measure1.should_not be_conformant
+        measure2.should be_conformant
+      end
+    end
+
+    describe 'ME13' do
+      context 'additional code type meursing and attributes missing' do
+        let(:measure) { create :measure, :with_related_additional_code_type,
+                                        additional_code_type_id: 3,
+                                        additional_code_id: '1234',
+                                        goods_nomenclature_item_id: nil,
+                                        ordernumber: nil,
+                                        reduction_indicator: nil }
+
+        it 'should be valid' do
+          measure.should be_conformant
+        end
+      end
+
+      context 'additional code type meursing and attributes present' do
+        let(:measure) { create :measure, :with_related_additional_code_type,
+                                         :with_quota_order_number,
+                                        additional_code_type_id: 3,
+                                        additional_code_id: '1234',
+                                        goods_nomenclature_item_id: '1234567890',
+                                        ordernumber: '12345',
+                                        reduction_indicator: 1 }
+
+        it 'should no be valid' do
+          measure.should_not be_conformant
+        end
+      end
+
+      context 'additional code type non meursing' do
+        let(:measure) { create :measure, :with_related_additional_code_type,
+                                        additional_code_type_id: 3 }
+
+        it 'should be valid' do
+          measure.should be_conformant
+        end
+      end
+    end
+
+    describe 'ME14' do
+      context 'additional code type meursing, additional code is associated to export refund nomenclature' do
+        let(:additional_code) { create :additional_code, :with_export_refund_nomenclature }
+        let(:measure) { create :measure, :with_related_additional_code_type,
+                                         :with_quota_order_number,
+                                        additional_code_type_id: 3,
+                                        additional_code_id: additional_code.additional_code,
+                                        goods_nomenclature_item_id: '1234567890',
+                                        ordernumber: '12345',
+                                        reduction_indicator: 1,
+                                        order_number_capture_code: 1 }
+
+        it 'should be valid' do
+          measure.should be_conformant
+        end
+      end
+
+      context 'additional code type meursing, additional code is not associated to export refund nomenclature' do
+        let(:additional_code) { create :additional_code }
+        let(:measure) { create :measure, :with_related_additional_code_type,
+                                         :with_quota_order_number,
+                                        additional_code_type_id: 3,
+                                        additional_code_id: additional_code.additional_code,
+                                        goods_nomenclature_item_id: '1234567890',
+                                        ordernumber: '12345',
+                                        reduction_indicator: 1 }
+
+        it 'should not be valid' do
+          measure.should_not be_conformant
+        end
+      end
+
+      context 'additional code type non meursing' do
+        let(:measure) { create :measure, :with_related_additional_code_type,
+                                        additional_code_type_id: 3 }
+
+        it 'should be valid' do
+          measure.should be_conformant
+        end
+      end
+    end
+
+    describe 'ME26' do
+      it { should validate_exclusion.of([:measure_generating_regulation_id, :measure_generating_regulation_role])
+                                    .from(->{ CompleteAbrogationRegulation.select(:complete_abrogation_regulation_id, :complete_abrogation_regulation_role) }) }
+    end
+
+    describe 'ME27' do
+      let(:measure) { create :measure }
+
+      context 'regulation fully replaced' do
+        before { measure.generating_regulation.update(replacement_indicator: 1)}
+
+        it 'should not be valid' do
+          measure.conformant?.should be_false
+        end
+      end
+
+      context 'regulation partially replaced' do
+        before { measure.generating_regulation.update(replacement_indicator: 2)}
+
+        it 'should be valid' do
+          measure.conformant?.should be_true
+        end
+      end
+
+      context 'regulation not replaced' do
+        before { measure.generating_regulation.update(replacement_indicator: 0)}
+
+        it 'should be valid' do
+          measure.conformant?.should be_true
+        end
+      end
+    end
+
+    describe 'ME33' do
+      let(:measure) { create :measure, justification_regulation_id: nil,
+                                      justification_regulation_role: nil }
+
+      context 'measure validity end date is set' do
+        before { measure.validity_end_date = Date.today }
+
+        it 'performs validation' do
+          measure.should_not be_conformant
+        end
+      end
+
+      context 'measure validity end date is not set' do
+        before { measure.validity_end_date = nil }
+
+        it 'performs validation' do
+          measure.should be_conformant
+        end
+      end
+    end
+
+    describe 'ME29' do
+      context 'generating modification regulation abrogated' do
+        let(:measure) { create :measure, :with_abrogated_modification_regulation }
+
+        it 'performs validation' do
+          measure.should_not be_conformant
+        end
+      end
+
+      context 'generating regulation is not modification regulation' do
+        let(:measure) { create :measure }
+
+        it 'performs validation' do
+          measure.should be_conformant
+        end
+      end
+    end
+
+    describe 'ME34' do
+      let(:measure) { create :measure, justification_regulation_id: 'abc',
+                                      justification_regulation_role: 1 }
+
+      context 'measure validity end date is set' do
+        before {
+          measure.geographical_area.update(validity_end_date: Date.today.in(1.year))
+          measure.measure_type.update(validity_end_date: Date.today.in(1.year))
+          measure.goods_nomenclature.update(validity_end_date: Date.today.in(1.year))
+
+          measure.validity_end_date = Date.today
+        }
+
+        it 'performs validation' do
+          measure.should be_conformant
+        end
+      end
+
+      context 'measure validity end date is not set' do
+        before { measure.validity_end_date = nil }
+
+        it 'performs validation' do
+          measure.should_not be_conformant
+        end
+      end
+    end
+
+    describe 'ME86' do
+      it { should validate_inclusion.of(:measure_generating_regulation_role).in(Measure::VALID_ROLE_TYPE_IDS) }
+    end
+
+    describe 'ME88' do
+      let(:measure1) { create :measure, type_explosion_level: 10,
+                                        gono_number_indents: 1 }
+      let(:measure2) { create :measure, type_explosion_level: 1,
+                                        gono_number_indents: 10 }
+
+      it 'preforms validation' do
+        measure1.should be_conformant
+        measure2.should_not be_conformant
+      end
+    end
+
+    describe 'ME116' do
+      it { should validate_validity_date_span.of(:order_number) }
+    end
   end
 
   describe '#origin' do
@@ -530,42 +776,42 @@ describe Measure do
     end
   end
 
-  describe "#validate" do
-    context 'marked as invalidated' do
-      let(:measure) { build :measure, :invalidated, validity_start_date: Date.today, validity_end_date: Date.today.ago(1.year) }
+  describe "#import" do
+    let(:measure) { create :measure, measure_type: measure_type }
 
-      it 'does not perform validation' do
-        measure.validate
-        measure.errors.should be_empty
+    context 'measure type is import' do
+      let(:measure_type) { create :measure_type, :import }
+
+      it 'returns true' do
+        expect(measure.import).to be_true
       end
     end
 
-    context 'not marked as invalidated' do
-      let(:measure) { build :measure, validity_start_date: Date.today, validity_end_date: Date.today.ago(1.year) }
+    context 'measure type is export' do
+      let(:measure_type) { create :measure_type, :export }
 
-      it 'performs validation' do
-        measure.validate
-        measure.errors.should_not be_empty
+      it 'returns false' do
+        expect(measure.import).to be_false
       end
     end
   end
 
-  describe "#validate!" do
-    context 'marked as invalidated' do
-      let(:measure) { build :measure, :invalidated, validity_start_date: Date.today, validity_end_date: Date.today.ago(1.year) }
+  describe "#export" do
+    let(:measure) { create :measure, measure_type: measure_type }
 
-      it 'performs validation' do
-        measure.validate!
-        measure.errors.should_not be_empty
+    context 'measure type is import' do
+      let(:measure_type) { create :measure_type, :import }
+
+      it 'returns false' do
+        expect(measure.export).to be_false
       end
     end
 
-    context 'not marked as invalidated' do
-      let(:measure) { build :measure, validity_start_date: Date.today, validity_end_date: Date.today.ago(1.year) }
+    context 'measure type is export' do
+      let(:measure_type) { create :measure_type, :export }
 
-      it 'performs validation' do
-        measure.validate!
-        measure.errors.should_not be_empty
+      it 'returns true' do
+        expect(measure.export).to be_true
       end
     end
   end

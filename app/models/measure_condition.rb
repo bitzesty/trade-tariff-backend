@@ -1,9 +1,10 @@
 class MeasureCondition < Sequel::Model
   plugin :time_machine
   plugin :national
-  plugin :timestamps
+  plugin :oplog, primary_key: :measure_condition_sid
+  plugin :conformance_validator
 
-  set_primary_key :measure_condition_sid
+  set_primary_key [:measure_condition_sid]
 
   one_to_one :measure, key: :measure_sid,
                        primary_key: :measure_sid

@@ -1,10 +1,3 @@
-GIT
-  remote: git://github.com/karmi/tire-contrib.git
-  revision: 6ba9ebeaec40e2cb18919da7b6763ff5c2050fba
-  specs:
-    tire-contrib (0.1.2)
-      tire
-
 GEM
   remote: https://rubygems.org/
   remote: https://BnrJb6FZyzspBboNJzYZ@gem.fury.io/govuk/
@@ -45,8 +38,6 @@ GEM
       mime-types
       xml-simple
     bootstrap-sass (2.1.0.0)
-    bourne (1.4.0)
-      mocha (~> 0.13.2)
     brakeman (1.7.0)
       activesupport
       erubis (~> 2.6)
@@ -69,10 +60,10 @@ GEM
     chronic (0.6.7)
     ci_reporter (1.7.2)
       builder (>= 2.1.2)
-    coderay (1.0.7)
+    coderay (1.0.9)
     crack (0.3.2)
     curb (0.8.3)
-    diff-lcs (1.2.1)
+    diff-lcs (1.2.4)
     erubis (2.7.0)
     exception_notification (2.6.1)
       actionmailer (>= 3.0.4)
@@ -93,13 +84,13 @@ GEM
     haml (3.1.7)
     hashr (0.0.22)
     highline (1.6.15)
-    hike (1.2.1)
+    hike (1.2.3)
     i18n (0.6.1)
     journey (1.0.4)
     jquery-rails (1.0.19)
       railties (~> 3.0)
       thor (~> 0.14)
-    json (1.7.7)
+    json (1.8.0)
     json_expressions (0.8.2)
     json_pure (1.7.7)
     kgio (2.8.0)
@@ -109,11 +100,8 @@ GEM
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-    metaclass (0.0.1)
-    method_source (0.8)
+    method_source (0.8.1)
     mime-types (1.23)
-    mocha (0.13.3)
-      metaclass (~> 0.0.1)
     multi_json (1.7.7)
     mysql2 (0.3.11)
     net-scp (1.0.4)
@@ -125,16 +113,14 @@ GEM
       net-ssh (>= 1.99.1)
     nokogiri (1.5.4)
     null_logger (0.0.1)
-    nulogy-sequel-rails (0.3.9)
-      sequel (~> 3.28)
     plek (1.0.0)
       builder
     polyglot (0.3.3)
-    pry (0.9.10)
+    pry (0.9.12)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
-      slop (~> 3.3.1)
-    pry-rails (0.2.1)
+      slop (~> 3.4)
+    pry-rails (0.2.2)
       pry (>= 0.9.10)
     rabl (0.7.6)
       activesupport (>= 2.3.14)
@@ -171,17 +157,17 @@ GEM
       activesupport
       builder
       null_logger
-    rspec-core (2.13.1)
-    rspec-expectations (2.13.0)
+    rspec-core (2.14.4)
+    rspec-expectations (2.14.0)
       diff-lcs (>= 1.1.3, < 2.0)
-    rspec-mocks (2.13.0)
-    rspec-rails (2.13.0)
+    rspec-mocks (2.14.1)
+    rspec-rails (2.14.0)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       railties (>= 3.0)
-      rspec-core (~> 2.13.0)
-      rspec-expectations (~> 2.13.0)
-      rspec-mocks (~> 2.13.0)
+      rspec-core (~> 2.14.0)
+      rspec-expectations (~> 2.14.0)
+      rspec-mocks (~> 2.14.0)
     ruby2ruby (1.3.1)
       ruby_parser (~> 2.0)
       sexp_processor (~> 3.0)
@@ -192,18 +178,20 @@ GEM
       railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
-    sequel (3.39.0)
+    sequel (4.0.0)
+    sequel-rails (0.5.0)
+      railties (>= 3.2.0)
+      sequel (>= 3.28, < 4.1.0)
     sexp_processor (3.2.0)
-    shoulda-matchers (1.5.1)
+    shoulda-matchers (2.0.0)
       activesupport (>= 3.0.0)
-      bourne (~> 1.3)
     simplecov (0.6.4)
       multi_json (~> 1.0)
       simplecov-html (~> 0.5.3)
     simplecov-html (0.5.3)
     simplecov-rcov (0.2.3)
       simplecov (>= 0.4.1)
-    slop (3.3.3)
+    slop (3.4.4)
     sprockets (2.2.2)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -212,8 +200,8 @@ GEM
     terminal-table (1.4.5)
     therubyracer (0.10.2)
       libv8 (~> 3.3.10)
-    thor (0.17.0)
-    tilt (1.3.6)
+    thor (0.18.1)
+    tilt (1.4.1)
     tire (0.6.0)
       activemodel (>= 3.0)
       activesupport
@@ -222,6 +210,8 @@ GEM
       multi_json (~> 1.3)
       rake
       rest-client (~> 1.6)
+    tire-contrib (0.1.3)
+      tire
     treetop (1.4.12)
       polyglot
       polyglot (>= 0.3.1)
@@ -248,6 +238,7 @@ PLATFORMS
 
 DEPENDENCIES
   addressable (= 2.3.2)
+  ansi
   aws-ses
   bootstrap-sass
   brakeman (= 1.7.0)
@@ -261,26 +252,25 @@ DEPENDENCIES
   guard-rspec
   jquery-rails (= 1.0.19)
   json_expressions
-  mocha (>= 0.13.3)
-  multi_json
+  multi_json (~> 1.7.7)
   mysql2
   nokogiri (= 1.5.4)
-  nulogy-sequel-rails (= 0.3.9)
   plek (= 1.0.0)
   pry-rails
   rabl (= 0.7.6)
   rails (= 3.2.13)
   railties
   router-client (= 3.0.1)
-  rspec-rails
+  rspec-rails (~> 2.14.0)
   sass-rails
-  sequel
-  shoulda-matchers (>= 1.5.1)
+  sequel (= 4.0.0)
+  sequel-rails (~> 0.5.0)
+  shoulda-matchers (~> 2.0.0)
   simplecov
   simplecov-rcov
   therubyracer
   tire (= 0.6.0)
-  tire-contrib!
+  tire-contrib (~> 0.1.3)
   uglifier
   unicorn (~> 4.6.3)
   vcr

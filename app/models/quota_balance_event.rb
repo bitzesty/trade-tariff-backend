@@ -1,4 +1,8 @@
 class QuotaBalanceEvent < Sequel::Model
+  plugin :oplog, primary_key: [:quota_definition_sid,
+                               :occurrence_timestamp]
+  plugin :conformance_validator
+
   set_primary_key  [:quota_definition_sid, :occurrence_timestamp]
 
   many_to_one :quota_definition, key: :quota_definition_sid,
@@ -6,7 +10,7 @@ class QuotaBalanceEvent < Sequel::Model
 
   dataset_module do
     def last
-      order(:occurrence_timestamp.desc).first
+      order(Sequel.desc(:occurrence_timestamp)).first
     end
   end
 

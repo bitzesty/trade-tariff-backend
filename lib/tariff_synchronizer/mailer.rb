@@ -56,6 +56,7 @@ module TariffSynchronizer
 
     def applied(update_names, count, conformance_errors = [])
       @update_names = update_names
+      @conformance_errors = conformance_errors
       @count = count
       @conformance_errors = conformance_errors
 

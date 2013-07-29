@@ -5,17 +5,19 @@ class Heading < GoodsNomenclature
   include Model::Declarable
 
   plugin :json_serializer
+  plugin :oplog, primary_key: :goods_nomenclature_sid
+  plugin :conformance_validator
 
   set_dataset filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", '____000000').
               filter("goods_nomenclatures.goods_nomenclature_item_id NOT LIKE ?", '__00______').
-              order(:goods_nomenclature_item_id.asc)
+              order(Sequel.asc(:goods_nomenclature_item_id))
 
-  set_primary_key :goods_nomenclature_sid
+  set_primary_key [:goods_nomenclature_sid]
 
   one_to_many :commodities, dataset: -> {
     actual_or_relevant(Commodity)
              .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
-             .where(~{goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes })
+             .where(Sequel.~(goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes ))
   }
 
   one_to_one :chapter, dataset: -> {
@@ -23,7 +25,7 @@ class Heading < GoodsNomenclature
   }
 
   one_to_many :third_country_duty, dataset: -> {
-    MeasureComponent.where(measure: import_measures_dataset.where(measures__measure_type: MeasureType::THIRD_COUNTRY).all)
+    MeasureComponent.where(measure: import_measures_dataset.where(measures__measure_type_id: MeasureType::THIRD_COUNTRY).all)
   }, class_name: 'MeasureComponent'
 
 
@@ -41,7 +43,7 @@ class Heading < GoodsNomenclature
     end
 
     def non_grouping
-      filter{~{producline_suffix: 10} }
+      filter{Sequel.~(producline_suffix: 10) }
     end
   end
 

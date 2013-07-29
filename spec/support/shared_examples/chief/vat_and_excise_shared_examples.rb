@@ -162,7 +162,7 @@ shared_examples_for "VAT and Excise TAMF Daily Scenario 1: Added max amount outc
   it 'adds additional measure component to 0303030300' do
     m = Measure.where(goods_nomenclature_item_id: "0303030300",
                       validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
-                      measure_type: 'EGJ').take
+                      measure_type_id: 'EGJ').take
     m.measure_components.first.duty_amount.should == 10
     m.measure_components.last.duty_amount.should == 2
   end
@@ -170,7 +170,7 @@ shared_examples_for "VAT and Excise TAMF Daily Scenario 1: Added max amount outc
   it 'creates new measure  for 0101010100 with measure components for duty amount 10% and 2kg' do
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
-                      measure_type: 'EGJ').take
+                      measure_type_id: 'EGJ').take
     m.measure_components.first.duty_amount.should == 10
     m.measure_components.last.duty_amount.should == 2
   end
@@ -178,7 +178,7 @@ shared_examples_for "VAT and Excise TAMF Daily Scenario 1: Added max amount outc
   it 'creates new measure  for 0202020200 with measure components for duty amount 10% and 2kg' do
     m = Measure.where(goods_nomenclature_item_id: "0202020200",
                       validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
-                      measure_type: 'EGJ').take
+                      measure_type_id: 'EGJ').take
     m.measure_components.first.duty_amount.should == 10
     m.measure_components.last.duty_amount.should == 2
   end
@@ -194,7 +194,7 @@ shared_examples_for "VAT and Excise TAMF Daily Scenario 2: Missing max amount ou
   it 'adds additional duty amount of 2kg to 0101010100' do
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
-                      measure_type: 'EGJ').take
+                      measure_type_id: 'EGJ').take
     m.measure_components.first.duty_amount.should == 10
     m.measure_components.last.duty_amount.should == 2
   end
@@ -202,7 +202,7 @@ shared_examples_for "VAT and Excise TAMF Daily Scenario 2: Missing max amount ou
   it 'adds additional duty amount of 2kg to 0202020200' do
     m = Measure.where(goods_nomenclature_item_id: "0202020200",
                       validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
-                      measure_type: 'EGJ').take
+                      measure_type_id: 'EGJ').take
     m.measure_components.first.duty_amount.should == 10
     m.measure_components.last.duty_amount.should == 2
   end
@@ -210,7 +210,7 @@ shared_examples_for "VAT and Excise TAMF Daily Scenario 2: Missing max amount ou
   it 'adds additional duty amount of 2kg to 0303030300' do
     m = Measure.where(goods_nomenclature_item_id: "0303030300",
                       validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
-                      measure_type: 'EGJ').take
+                      measure_type_id: 'EGJ').take
     m.measure_components.first.duty_amount.should == 10
     m.measure_components.last.duty_amount.should == 2
   end
@@ -227,7 +227,7 @@ shared_examples_for "VAT and Excise TAMF Daily Scenario 3: Removed max amount ou
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
                       validity_end_date: DateTime.parse("2008-04-01 00:00:00"),
-                      measure_type: 'DAA').take
+                      measure_type_id: 'DAA').take
     m.measure_components.first.duty_amount.should == 20
     m.measure_components.last.duty_amount.should == 1
   end
@@ -236,7 +236,7 @@ shared_examples_for "VAT and Excise TAMF Daily Scenario 3: Removed max amount ou
     m = Measure.where(goods_nomenclature_item_id: "0202020200",
                       validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
                       validity_end_date: DateTime.parse("2008-04-01 00:00:00"),
-                      measure_type: 'DAA').take
+                      measure_type_id: 'DAA').take
     m.measure_components.first.duty_amount.should == 20
     m.measure_components.last.duty_amount.should == 1
   end
@@ -244,7 +244,7 @@ shared_examples_for "VAT and Excise TAMF Daily Scenario 3: Removed max amount ou
   it 'removes measure component (1kg) from 0303030300' do
     m = Measure.where(goods_nomenclature_item_id: "0303030300",
                       validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
-                      measure_type: 'DAA').take
+                      measure_type_id: 'DAA').take
     m.measure_components.first.duty_amount.should == 20
     m.measure_components.size.should == 1
   end
@@ -252,14 +252,14 @@ shared_examples_for "VAT and Excise TAMF Daily Scenario 3: Removed max amount ou
   it 'creates new measure for 0101010100 with duty amount of 20%' do
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
-                      measure_type: 'DAA').take
+                      measure_type_id: 'DAA').take
     m.measure_components.first.duty_amount.should == 20
   end
 
   it 'creates new measure for 0202020200 with duty amount of 20%' do
     m = Measure.where(goods_nomenclature_item_id: "0202020200",
                       validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
-                      measure_type: 'DAA').take
+                      measure_type_id: 'DAA').take
     m.measure_components.first.duty_amount.should == 20
   end
 end

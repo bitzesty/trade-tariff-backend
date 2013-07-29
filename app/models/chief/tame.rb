@@ -1,7 +1,7 @@
 module Chief
   class Tame < Sequel::Model
     set_dataset db[:chief_tame].
-                order(:audit_tsmp.asc)
+                order(Sequel.asc(:audit_tsmp), Sequel.asc(:fe_tsmp))
 
     set_primary_key [:msrgp_code,
                      :msr_type,
@@ -22,22 +22,27 @@ module Chief
                                  primary_key: [:adval1_rate, :adval2_rate, :spfc1_rate, :spfc2_rate]
 
     one_to_many :tamfs, key:{}, primary_key: {}, dataset: -> {
-      Chief::Tamf.filter{ |o| {:fe_tsmp => fe_tsmp} &
-                              {:msrgp_code => msrgp_code} &
-                              {:msr_type => msr_type} &
-                              {:tty_code => tty_code} &
-                              {:tar_msr_no => tar_msr_no} &
-                              {:amend_indicator => amend_indicator}
-                              }
+      Chief::Tamf.filter({:fe_tsmp => fe_tsmp})
+                 .filter({:msrgp_code => msrgp_code})
+                 .filter({:msr_type => msr_type})
+                 .filter({:tty_code => tty_code})
+                 .filter({:tar_msr_no => tar_msr_no})
+                 .filter({:amend_indicator => amend_indicator})
     }, class_name: 'Chief::Tamf'
 
     one_to_many :mfcms, key: {}, primary_key: {}, dataset: -> {
-      Chief::Mfcm.filter{ |o| {:msrgp_code => msrgp_code} &
-                              {:msr_type => msr_type} &
-                              {:tty_code => tty_code} &
-                              {:tar_msr_no => tar_msr_no}
-                        }.order(:audit_tsmp.asc)
+      Chief::Mfcm.filter({:msrgp_code => msrgp_code})
+                 .filter({:msr_type => msr_type})
+                 .filter({:tty_code => tty_code})
+                 .filter({:tar_msr_no => tar_msr_no})
+                 .order(Sequel.asc(:audit_tsmp))
     }
+
+    one_to_one :chief_update, key: :filename,
+                              primary_key: :origin,
+                              class_name: TariffSynchronizer::ChiefUpdate
+
+    delegate :issue_date, to: :chief_update, allow_nil: true
 
     dataset_module do
       def unprocessed
@@ -62,6 +67,10 @@ module Chief
 
     def audit_tsmp
       self[:audit_tsmp].presence || Time.now
+    end
+
+    def operation_date
+      issue_date
     end
   end
 end

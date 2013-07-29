@@ -65,24 +65,6 @@ describe GoodsNomenclature do
           end
         end
       end
-
-      context 'fetching with relevant date' do
-        let!(:goods_nomenclature)                { create :goods_nomenclature, validity_start_date: 1.year.ago,
-                                                                               validity_end_date: nil }
-        let!(:goods_nomenclature_indent1)        { create :goods_nomenclature_indent,
-                                                                    goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
-                                                                    validity_start_date: 2.years.ago,
-                                                                    validity_end_date: nil }
-        let!(:goods_nomenclature_indent2)        { create :goods_nomenclature_indent,
-                                                              goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
-                                                              validity_start_date: 6.years.ago,
-                                                              validity_end_date: 3.years.ago }
-        it 'fetches correct gono indent' do
-          TimeMachine.with_relevant_validity_periods {
-            goods_nomenclature.goods_nomenclature_indent.pk.should eq goods_nomenclature_indent1.pk
-          }
-        end
-      end
     end
 
     describe 'goods nomenclature description' do

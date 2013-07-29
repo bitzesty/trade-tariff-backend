@@ -5,20 +5,15 @@ require 'active_support/log_subscriber'
 
 require 'tariff_importer/logger'
 
-require 'tariff_importer/importers/chief_importer'
-require 'tariff_importer/importers/taric_importer'
-
 class TariffImporter
-  class NotFound < StandardError; end
+  NotFound = Class.new(StandardError)
 
-  attr_reader :path, :importer, :processor
+  attr_reader :path, :issue_date
 
-  delegate :import, to: :importer
-
-  def initialize(path, importer)
+  def initialize(path, issue_date = nil)
     if File.exists?(path)
       @path = path
-      @importer = importer.to_s.constantize.new(path)
+      @issue_date = issue_date
     else
       raise NotFound.new("#{path} was not found.")
     end

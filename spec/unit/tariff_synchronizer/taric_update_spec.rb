@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'tariff_synchronizer'
-require 'mocha/standalone'
 
 describe TariffSynchronizer::TaricUpdate do
   it_behaves_like 'Base Update'
@@ -26,23 +25,23 @@ describe TariffSynchronizer::TaricUpdate do
       let(:query_response)     { build :response, :success, url: taric_query_url,
                                                          content: taric_update_name }
       before {
-        TariffSynchronizer::TaricUpdate.expects(:download_content)
+        TariffSynchronizer::TaricUpdate.should_receive(:download_content)
                                        .with(taric_query_url)
-                                       .returns(query_response)
+                                       .and_return(query_response)
       }
 
       it 'downloads Taric file for specific date' do
-        TariffSynchronizer::TaricUpdate.expects(:download_content)
+        TariffSynchronizer::TaricUpdate.should_receive(:download_content)
                                        .with(update_url)
-                                       .returns(blank_response)
+                                       .and_return(blank_response)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
       end
 
       it 'writes Taric file contents to file if they are not blank' do
-        TariffSynchronizer::TaricUpdate.expects(:download_content)
+        TariffSynchronizer::TaricUpdate.should_receive(:download_content)
                                        .with(update_url)
-                                       .returns(success_response)
+                                       .and_return(success_response)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
 
@@ -51,9 +50,9 @@ describe TariffSynchronizer::TaricUpdate do
       end
 
       it 'does not write Taric file contents to file if they are blank' do
-        TariffSynchronizer::TaricUpdate.expects(:download_content)
+        TariffSynchronizer::TaricUpdate.should_receive(:download_content)
                                        .with(update_url)
-                                       .returns(blank_response)
+                                       .and_return(blank_response)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
         File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_false
@@ -69,30 +68,30 @@ describe TariffSynchronizer::TaricUpdate do
       let(:success_response_2)  { build :response, :success, content: 'def' }
 
       before {
-        TariffSynchronizer::TaricUpdate.expects(:download_content)
+        TariffSynchronizer::TaricUpdate.should_receive(:download_content)
                                        .with(taric_query_url)
-                                       .returns(query_response)
+                                       .and_return(query_response)
       }
 
       after  { purge_synchronizer_folders }
 
       it 'downloads Taric file for specific date' do
         taric_update_names.each do |name|
-          TariffSynchronizer::TaricUpdate.expects(:download_content)
+          TariffSynchronizer::TaricUpdate.should_receive(:download_content)
                                          .with(taric_update_url % { name: name })
-                                         .returns(blank_response)
+                                         .and_return(blank_response)
         end
 
         TariffSynchronizer::TaricUpdate.download(example_date)
       end
 
       it 'writes Taric file contents to file if they are not blank' do
-        TariffSynchronizer::TaricUpdate.expects(:download_content)
+        TariffSynchronizer::TaricUpdate.should_receive(:download_content)
                                        .with(taric_update_url % { name: taric_update_names.first })
-                                       .returns(success_response_1)
-        TariffSynchronizer::TaricUpdate.expects(:download_content)
+                                       .and_return(success_response_1)
+        TariffSynchronizer::TaricUpdate.should_receive(:download_content)
                                        .with(taric_update_url % { name: taric_update_names.last })
-                                       .returns(success_response_2)
+                                       .and_return(success_response_2)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
 
@@ -103,12 +102,12 @@ describe TariffSynchronizer::TaricUpdate do
       end
 
       it 'does not write Taric file contents to file if they are blank' do
-        TariffSynchronizer::TaricUpdate.expects(:download_content)
+        TariffSynchronizer::TaricUpdate.should_receive(:download_content)
                                        .with(taric_update_url % { name: taric_update_names.first })
-                                       .returns(blank_response)
-        TariffSynchronizer::TaricUpdate.expects(:download_content)
+                                       .and_return(blank_response)
+        TariffSynchronizer::TaricUpdate.should_receive(:download_content)
                                        .with(taric_update_url % { name: taric_update_names.last })
-                                       .returns(blank_response)
+                                       .and_return(blank_response)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
 
@@ -119,8 +118,8 @@ describe TariffSynchronizer::TaricUpdate do
 
     context 'when file for the day is not found' do
       before {
-        TariffSynchronizer::TaricUpdate.expects(:download_content)
-                                       .returns(not_found_response)
+        TariffSynchronizer::TaricUpdate.should_receive(:download_content)
+                                       .and_return(not_found_response)
       }
 
       it 'does not write Taric file contents to file' do
@@ -153,14 +152,14 @@ describe TariffSynchronizer::TaricUpdate do
       before {
         TariffSynchronizer.retry_count = 1
 
-        TariffSynchronizer::TaricUpdate.expects(:send_request)
+        TariffSynchronizer::TaricUpdate.should_receive(:send_request)
                                        .with(taric_query_url)
-                                       .returns(success_response)
+                                       .and_return(success_response)
 
-        TariffSynchronizer::TaricUpdate.expects(:send_request)
+        TariffSynchronizer::TaricUpdate.should_receive(:send_request)
                                        .with(update_url)
                                        .twice
-                                       .returns(failed_response)
+                                       .and_return(failed_response)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
       }
@@ -181,13 +180,13 @@ describe TariffSynchronizer::TaricUpdate do
       let(:blank_success_response)   { build :response, :success, content: '' }
 
       before {
-        TariffSynchronizer::TaricUpdate.expects(:send_request)
+        TariffSynchronizer::TaricUpdate.should_receive(:send_request)
                                        .with(taric_query_url)
-                                       .returns(success_response)
+                                       .and_return(success_response)
 
-        TariffSynchronizer::TaricUpdate.expects(:send_request)
+        TariffSynchronizer::TaricUpdate.should_receive(:send_request)
                                        .with(update_url)
-                                       .returns(blank_success_response)
+                                       .and_return(blank_success_response)
 
         TariffSynchronizer::TaricUpdate.download(example_date)
       }
@@ -212,12 +211,12 @@ describe TariffSynchronizer::TaricUpdate do
       let!(:taric_update2) { create :taric_update, :missing, issue_date: Date.today.ago(3.days) }
 
       before {
-        TariffSynchronizer::TaricUpdate.stubs(:download_content)
-                                       .returns(not_found_response)
+        TariffSynchronizer::TaricUpdate.stub(:download_content)
+                                       .and_return(not_found_response)
       }
 
       it 'notifies about several missing updates in a row' do
-        TariffSynchronizer::TaricUpdate.expects(:notify_about_missing_updates).returns(true)
+        TariffSynchronizer::TaricUpdate.should_receive(:notify_about_missing_updates).and_return(true)
         TariffSynchronizer::TaricUpdate.sync
       end
     end
@@ -233,15 +232,15 @@ describe TariffSynchronizer::TaricUpdate do
     }
 
     it 'executes Taric importer' do
-      mock_importer = stub_everything
-      TariffImporter.expects(:new).with(example_taric_update.file_path, TaricImporter).returns(mock_importer)
+      mock_importer = double('importer').as_null_object
+      TariffImporter.should_receive(:new).and_return(mock_importer)
 
       TariffSynchronizer::TaricUpdate.first.apply
     end
 
     it 'updates file entry state to processed' do
-      mock_importer = stub_everything
-      TariffImporter.expects(:new).with(example_taric_update.file_path, TaricImporter).returns(mock_importer)
+      mock_importer = double('importer').as_null_object
+      TariffImporter.should_receive(:new).and_return(mock_importer)
 
       TariffSynchronizer::TaricUpdate.pending.count.should == 1
       TariffSynchronizer::TaricUpdate.first.apply
@@ -250,9 +249,9 @@ describe TariffSynchronizer::TaricUpdate do
     end
 
     it 'does not move file to processed if import fails' do
-      mock_importer = stub
-      mock_importer.expects(:import).raises(TaricImporter::ImportException)
-      TariffImporter.expects(:new).with(example_taric_update.file_path, TaricImporter).returns(mock_importer)
+      mock_importer = double
+      mock_importer.should_receive(:import).and_raise(TaricImporter::ImportException)
+      TariffImporter.should_receive(:new).and_return(mock_importer)
 
       TariffSynchronizer::TaricUpdate.pending.count.should == 1
       rescuing { TariffSynchronizer::TaricUpdate.first.apply }

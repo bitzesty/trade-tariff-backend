@@ -4,14 +4,15 @@ source "https://BnrJb6FZyzspBboNJzYZ@gem.fury.io/govuk/"
 gem "rails", "3.2.13"
 
 gem "addressable", "2.3.2"
+gem "multi_json", "~> 1.7.7"
 gem "mysql2"
-gem "multi_json"
-gem "yajl-ruby", require: "yajl"
+gem "sequel-rails", "~> 0.5.0"
 gem "rabl", "0.7.6"
-gem "sequel"
-gem "nulogy-sequel-rails", "0.3.9"
+gem "ansi"
+gem "sequel", "4.0.0"
 gem "tire", "0.6.0"
-gem "tire-contrib", github: "karmi/tire-contrib",  require: 'tire/namespace'
+gem "tire-contrib", '~> 0.1.3'
+gem "yajl-ruby", require: "yajl"
 
 gem "builder"
 gem "jquery-rails", "1.0.19"
@@ -49,9 +50,8 @@ group :test do
   gem "factory_girl_rails"
   gem "forgery"
   gem "json_expressions"
-  gem "rspec-rails"
-  gem "shoulda-matchers", '>= 1.5.1'
-  gem "mocha", ">= 0.13.3"
+  gem "rspec-rails", "~> 2.14.0"
+  gem "shoulda-matchers", "~> 2.0.0"
   gem "simplecov"
   gem "simplecov-rcov"
   gem "webmock"

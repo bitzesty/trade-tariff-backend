@@ -4,12 +4,6 @@ module TariffSynchronizer
     self.logger = ::Logger.new('log/tariff_synchronizer.log')
     self.logger.formatter = Proc.new {|severity, time, progname, msg| "#{time.strftime('%Y-%m-%dT%H:%M:%S.%L %z')} #{sprintf('%5s', severity)} #{msg}\n" }
 
-    # Array of errors that break conformance validations
-    # It is a class variable since synchronizer runs on one basis via Cron
-    # so resets on every run
-    cattr_accessor :conformance_errors
-    self.conformance_errors = []
-
     # Download all pending Taric and Chief updates
     def download(event)
       info "Finished downloading updates"
@@ -33,7 +27,7 @@ module TariffSynchronizer
 
       Mailer.applied(event.payload[:update_names],
                      event.payload[:count],
-                     conformance_errors.each(&:validate!)).deliver
+                     event.payload.fetch(:unconformant_records, [])).deliver
     end
 
     # Update failed to be applied
@@ -42,6 +36,10 @@ module TariffSynchronizer
 
       Mailer.exception(event.payload[:exception], event.payload[:update])
             .deliver
+    end
+
+    def rollback(event)
+      info "Rolled back to #{event.payload[:date]}. Forced redownload: #{!!event.payload[:redownload]}"
     end
 
     # Update download failed
@@ -146,13 +144,6 @@ module TariffSynchronizer
       warn "Missing #{event.payload[:count]} updates in a row for #{event.payload[:update_type].to_s.upcase}"
 
       Mailer.missing_updates(event.payload[:count], event.payload[:update_type].to_s).deliver
-    end
-
-    # Invalidated entry received due to TARIC & CHIEF data mismatch
-    def invalidated(event)
-      conformance_errors << event.payload[:record]
-
-      warn "Invalid #{event.payload[:record].class} record:\n#{event.payload[:record].inspect}\nErrors:\n#{event.payload[:record].errors}"
     end
   end
 end

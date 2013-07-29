@@ -22,17 +22,17 @@ describe TariffSynchronizer::ChiefUpdate do
         end
 
         it 'downloads CHIEF file for specific date' do
-          TariffSynchronizer::ChiefUpdate.expects(:download_content)
+          TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
                                          .with(url)
-                                         .returns(blank_response)
+                                         .and_return(blank_response)
 
           TariffSynchronizer::ChiefUpdate.download(example_date)
         end
 
         it 'writes CHIEF file contents to file if they are not blank' do
-          TariffSynchronizer::ChiefUpdate.expects(:download_content)
+          TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
                                          .with(url)
-                                         .returns(success_response)
+                                         .and_return(success_response)
 
           TariffSynchronizer::ChiefUpdate.download(example_date)
 
@@ -41,9 +41,9 @@ describe TariffSynchronizer::ChiefUpdate do
         end
 
         it 'creates pending ChiefUpdate entry in the table' do
-          TariffSynchronizer::ChiefUpdate.expects(:download_content)
+          TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
                                          .with(url)
-                                         .returns(success_response)
+                                         .and_return(success_response)
           TariffSynchronizer::ChiefUpdate.download(example_date)
           TariffSynchronizer::ChiefUpdate.count.should == 1
           TariffSynchronizer::ChiefUpdate.first.issue_date.should == example_date
@@ -54,8 +54,8 @@ describe TariffSynchronizer::ChiefUpdate do
         let(:not_found_response) { build :response, :not_found }
 
         before {
-          TariffSynchronizer::ChiefUpdate.expects(:download_content)
-                                         .returns(not_found_response)
+          TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
+                                         .and_return(not_found_response)
         }
 
         it 'does not write CHIEF file contents to file' do
@@ -93,9 +93,9 @@ describe TariffSynchronizer::ChiefUpdate do
       end
 
       it 'logs error about permissions' do
-        TariffSynchronizer::ChiefUpdate.expects(:download_content)
+        TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
                                        .with(url)
-                                       .returns(success_response)
+                                       .and_return(success_response)
 
         TariffSynchronizer::ChiefUpdate.download(example_date)
 
@@ -115,15 +115,15 @@ describe TariffSynchronizer::ChiefUpdate do
     context 'file not found for nth time in a row' do
       let!(:chief_update1) { create :chief_update, :missing, issue_date: Date.today.ago(2.days) }
       let!(:chief_update2) { create :chief_update, :missing, issue_date: Date.today.ago(3.days) }
-      let!(:stub_logger)   { stub }
+      let!(:stub_logger)   { double.as_null_object }
 
       before {
-        TariffSynchronizer::ChiefUpdate.stubs(:download_content)
-                                       .returns(not_found_response)
+        TariffSynchronizer::ChiefUpdate.stub(:download_content)
+                                       .and_return(not_found_response)
       }
 
       it 'notifies about several missing updates in a row' do
-        TariffSynchronizer::ChiefUpdate.expects(:notify_about_missing_updates).returns(true)
+        TariffSynchronizer::ChiefUpdate.should_receive(:notify_about_missing_updates).and_return(true)
         TariffSynchronizer::ChiefUpdate.sync
       end
     end
@@ -140,16 +140,16 @@ describe TariffSynchronizer::ChiefUpdate do
     end
 
     it 'executes importer' do
-      mock_importer = stub
-      mock_importer.expects(:import).returns(true)
-      TariffImporter.expects(:new).with(example_chief_update.file_path, ChiefImporter).returns(mock_importer)
+      mock_importer = double
+      mock_importer.should_receive(:import).and_return(true)
+      TariffImporter.should_receive(:new).and_return(mock_importer)
 
       TariffSynchronizer::ChiefUpdate.first.apply
     end
 
     it 'updates file entry state to processed' do
-      mock_importer = stub_everything
-      TariffImporter.expects(:new).with(example_chief_update.file_path, ChiefImporter).returns(mock_importer)
+      mock_importer = double('importer').as_null_object
+      TariffImporter.should_receive(:new).and_return(mock_importer)
 
       TariffSynchronizer::ChiefUpdate.pending.count.should == 1
       TariffSynchronizer::ChiefUpdate.first.apply
@@ -158,9 +158,9 @@ describe TariffSynchronizer::ChiefUpdate do
     end
 
     it 'does not move file to processed if import fails' do
-      mock_importer = stub
-      mock_importer.expects(:import).raises(ChiefImporter::ImportException)
-      TariffImporter.expects(:new).with(example_chief_update.file_path, ChiefImporter).returns(mock_importer)
+      mock_importer = double
+      mock_importer.should_receive(:import).and_raise(ChiefImporter::ImportException)
+      TariffImporter.should_receive(:new).and_return(mock_importer)
 
       TariffSynchronizer::ChiefUpdate.pending.count.should == 1
       rescuing { TariffSynchronizer::ChiefUpdate.first.apply }

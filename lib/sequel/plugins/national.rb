@@ -8,6 +8,8 @@ module Sequel
       end
 
       module ClassMethods
+        Plugins.def_dataset_methods self, [:national]
+
         def next_national_sid
           x_model = self.national.last
           if x_model

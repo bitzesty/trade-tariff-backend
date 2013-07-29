@@ -2,7 +2,11 @@ require 'spec_helper'
 require 'chief_transformer'
 
 describe "CHIEF: VAT and Excises" do
-  before(:all) { preload_standing_data }
+  before(:all) {
+    preload_standing_data
+    create :base_regulation, base_regulation_id: 'IYY99990',
+                             validity_start_date: Date.new(1971,12,31)
+  }
   after(:all)  { clear_standing_data }
 
   # VAT/EXCISE measure types
@@ -154,7 +158,7 @@ describe "CHIEF: VAT and Excises" do
     # If there are several TAMF records with values in CNTRYORIG or CNGPCODE this will result in that a Taric measure is created for each country/country group.
     it "should create measures for US" do
       m = Measure.where(goods_nomenclature_item_id: "0101010100",
-                        geographical_area: "US",
+                        geographical_area_id: "US",
                         validity_start_date: DateTime.parse("2005-01-01 11:00:00")).take
 
       m.geographical_area_sid.should == 103
@@ -164,7 +168,7 @@ describe "CHIEF: VAT and Excises" do
 
     it "should create measures for CN" do
       m = Measure.where(goods_nomenclature_item_id: "0101010100",
-                        geographical_area: "CN",
+                        geographical_area_id: "CN",
                         validity_start_date: DateTime.parse("2005-01-01 11:00:00")).take
       m.geographical_area_sid.should == 439
       m.measure_components.first.duty_amount.should == 2.300
@@ -173,7 +177,7 @@ describe "CHIEF: VAT and Excises" do
 
     it "should create measures for IN" do
       m = Measure.where(goods_nomenclature_item_id: "0101010100",
-                        geographical_area: "IN",
+                        geographical_area_id: "IN",
                         validity_start_date: DateTime.parse("2005-01-01 11:00:00")).take
       m.geographical_area_sid.should == 154
       m.measure_components.first.duty_amount.should == 2.000
@@ -545,7 +549,7 @@ describe "CHIEF: VAT and Excises" do
     it 'creates measure for 0101010100 with two measure components for duty amount of 20% and max 1kg' do
       m = Measure.where(goods_nomenclature_item_id: "0101010100",
                         validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
-                        measure_type: 'DAA').take
+                        measure_type_id: 'DAA').take
       m.measure_components.first.duty_amount.should == 20
       m.measure_components.last.duty_amount.should == 1
     end
@@ -553,7 +557,7 @@ describe "CHIEF: VAT and Excises" do
     it 'creates measure for 0202020200 with two measure components for duty amount of 20% and max 1kg' do
       m = Measure.where(goods_nomenclature_item_id: "0202020200",
                         validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
-                        measure_type: 'DAA').take
+                        measure_type_id: 'DAA').take
       m.measure_components.first.duty_amount.should == 20
       m.measure_components.last.duty_amount.should == 1
     end
@@ -561,7 +565,7 @@ describe "CHIEF: VAT and Excises" do
     it 'creates measure for 0303030300 with two measure components for duty amount of 20% and max 1kg' do
       m = Measure.where(goods_nomenclature_item_id: "0303030300",
                         validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
-                        measure_type: 'DAA').take
+                        measure_type_id: 'DAA').take
       m.measure_components.first.duty_amount.should == 20
       m.measure_components.last.duty_amount.should == 1
     end
@@ -569,21 +573,21 @@ describe "CHIEF: VAT and Excises" do
     it 'create measure for 0101010100 with one measure component, duty amount of 10%' do
       m = Measure.where(goods_nomenclature_item_id: "0101010100",
                         validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
-                        measure_type: 'EGJ').take
+                        measure_type_id: 'EGJ').take
       m.measure_components.first.duty_amount.should == 10
     end
 
     it 'create measure for 0202020200 with one measure component, duty amount of 10%' do
       m = Measure.where(goods_nomenclature_item_id: "0202020200",
                         validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
-                        measure_type: 'EGJ').take
+                        measure_type_id: 'EGJ').take
       m.measure_components.first.duty_amount.should == 10
     end
 
     it 'create measure for 0303030300 with one measure component, duty amount of 10%' do
       m = Measure.where(goods_nomenclature_item_id: "0303030300",
                         validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
-                        measure_type: 'EGJ').take
+                        measure_type_id: 'EGJ').take
       m.measure_components.first.duty_amount.should == 10
     end
 

@@ -7,19 +7,20 @@ class ChiefTransformer
 
       def_delegator ActiveSupport::Notifications, :instrument
 
-      attr_reader :record
+      attr_reader :record, :operation_date
 
       def initialize(record)
         @record = record
+        @operation_date = record.operation_date
       end
 
       def update_record(record, attributes = {})
         record.set(attributes)
 
-        unless record.valid?
+        unless record.conformant?
           record.invalidated_at = Time.now
 
-          instrument("invalidated.tariff_synchronizer", record: record)
+          instrument("conformance_error.chief_transformer", record: record)
         end
 
         record.save

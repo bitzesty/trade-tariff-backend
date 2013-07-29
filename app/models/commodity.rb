@@ -4,12 +4,14 @@ class Commodity < GoodsNomenclature
   include Tire::Model::Search
   include Model::Declarable
 
+  plugin :oplog, primary_key: :goods_nomenclature_sid
+  plugin :conformance_validator
   plugin :json_serializer
 
   set_dataset filter("goods_nomenclatures.goods_nomenclature_item_id NOT LIKE ?", '____000000').
-              order(:goods_nomenclatures__goods_nomenclature_item_id.asc)
+              order(Sequel.asc(:goods_nomenclatures__goods_nomenclature_item_id))
 
-  set_primary_key :goods_nomenclature_sid
+  set_primary_key [:goods_nomenclature_sid]
 
   one_to_one :heading, dataset: -> {
     actual_or_relevant(Heading)
@@ -22,7 +24,7 @@ class Commodity < GoodsNomenclature
   }
 
   one_to_many :third_country_duty, dataset: -> {
-    MeasureComponent.where(measure: import_measures_dataset.where(measures__measure_type: MeasureType::THIRD_COUNTRY).all)
+    MeasureComponent.where(measure: import_measures_dataset.where(measures__measure_type_id: MeasureType::THIRD_COUNTRY).all)
   }, class_name: 'MeasureComponent'
 
   delegate :section, to: :chapter
@@ -48,7 +50,7 @@ class Commodity < GoodsNomenclature
   end
 
   def ancestors
-    Commodity.select(:goods_nomenclatures.*)
+    Commodity.select(Sequel.expr(:goods_nomenclatures).*)
       .eager(:goods_nomenclature_indents,
              :goods_nomenclature_descriptions)
       .join_table(:inner,
@@ -60,15 +62,15 @@ class Commodity < GoodsNomenclature
                  .join(:goods_nomenclatures, goods_nomenclature_indents__goods_nomenclature_sid: :goods_nomenclatures__goods_nomenclature_sid)
                  .where("goods_nomenclature_indents.goods_nomenclature_item_id LIKE ?", heading_id)
                  .where("goods_nomenclature_indents.goods_nomenclature_item_id <= ?", goods_nomenclature_item_id)
-                 .order(:goods_nomenclature_indents__validity_start_date.desc,
-                        :goods_nomenclature_indents__goods_nomenclature_item_id.desc)
+                 .order(Sequel.desc(:goods_nomenclature_indents__validity_start_date),
+                        Sequel.desc(:goods_nomenclature_indents__goods_nomenclature_item_id))
                  .from_self
                  .group(:goods_nomenclature_sid)
                  .from_self
                  .where("number_indents < ?", goods_nomenclature_indent.number_indents),
         { t1__goods_nomenclature_sid: :goods_nomenclatures__goods_nomenclature_sid,
           t1__goods_nomenclature_item_id: :goods_nomenclatures__goods_nomenclature_item_id })
-      .order(:goods_nomenclatures__goods_nomenclature_item_id.desc)
+      .order(Sequel.desc(:goods_nomenclatures__goods_nomenclature_item_id))
       .all
       .group_by(&:number_indents)
       .map(&:last)
@@ -91,7 +93,7 @@ class Commodity < GoodsNomenclature
                      .where("goods_nomenclature_indents.number_indents = ?", goods_nomenclature_indent.number_indents)
                      .where("goods_nomenclatures.goods_nomenclature_sid != ?", goods_nomenclature_sid)
                      .where("goods_nomenclatures.goods_nomenclature_item_id > ?", goods_nomenclature_item_id)
-                     .where("goods_nomenclature_indents.validity_start_date <= ? AND (goods_nomenclature_indents.validity_end_date >= ? OR goods_nomenclature_indents.validity_end_date IS NULL)", point_in_time, point_in_time, point_in_time)
+                     .where("goods_nomenclature_indents.validity_start_date <= ? AND (goods_nomenclature_indents.validity_end_date >= ? OR goods_nomenclature_indents.validity_end_date IS NULL)", point_in_time, point_in_time)
                      .order(nil)
                      .first
 
@@ -101,7 +103,7 @@ class Commodity < GoodsNomenclature
              .where("goods_nomenclature_indents.number_indents > ?", goods_nomenclature_indent.number_indents)
              .where("goods_nomenclatures.goods_nomenclature_sid != ?", goods_nomenclature_sid)
              .where("goods_nomenclatures.producline_suffix >= ?", producline_suffix)
-             .where("goods_nomenclature_indents.validity_start_date <= ? AND (goods_nomenclature_indents.validity_end_date >= ? OR goods_nomenclature_indents.validity_end_date IS NULL)", point_in_time, point_in_time, point_in_time)
+             .where("goods_nomenclature_indents.validity_start_date <= ? AND (goods_nomenclature_indents.validity_end_date >= ? OR goods_nomenclature_indents.validity_end_date IS NULL)", point_in_time, point_in_time)
              .where("goods_nomenclatures.goods_nomenclature_item_id >= ? AND goods_nomenclatures.goods_nomenclature_item_id < ?", goods_nomenclature_item_id, sibling.goods_nomenclature_item_id)
              .order(nil)
              .all
@@ -113,7 +115,7 @@ class Commodity < GoodsNomenclature
              .join(:goods_nomenclature_indents, goods_nomenclature_sid: :goods_nomenclature_sid)
              .where("goods_nomenclature_indents.number_indents >= ?", goods_nomenclature_indent.number_indents + 1)
              .where("goods_nomenclatures.goods_nomenclature_sid != ?", goods_nomenclature_sid)
-             .where("goods_nomenclature_indents.validity_start_date <= ? AND (goods_nomenclature_indents.validity_end_date >= ? OR goods_nomenclature_indents.validity_end_date IS NULL)", point_in_time, point_in_time, point_in_time)
+             .where("goods_nomenclature_indents.validity_start_date <= ? AND (goods_nomenclature_indents.validity_end_date >= ? OR goods_nomenclature_indents.validity_end_date IS NULL)", point_in_time, point_in_time)
              .where("goods_nomenclatures.goods_nomenclature_item_id >= ?", goods_nomenclature_item_id)
              .order(nil)
              .all
