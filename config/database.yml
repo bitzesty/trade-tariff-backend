@@ -2,7 +2,7 @@ development:
   adapter: mysql2
   encoding: utf8
   reconnect: true
-  database: tariff_development_pit
+  database: tariff_development
   single_threaded: true
   username: tariff
   password: tariff
