@@ -24,19 +24,11 @@ module TradeTariffBackend
     end
 
     def platform
-      if demo_environment?
-        'demo'
-      else
-        ENV["FACTER_govuk_platform"] || Rails.env
-      end
+      ENV["FACTER_govuk_platform"] || Rails.env
     end
 
     def govuk_app_name
       ENV["GOVUK_APP_NAME"]
-    end
-
-    def demo_environment?
-      govuk_app_name =~ /demo/
     end
 
     def with_locked_database(&block)
