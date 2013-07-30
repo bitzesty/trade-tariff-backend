@@ -16,5 +16,10 @@ namespace :db do
     task status: :environment do
       TradeTariffBackend::DataMigrator.status
     end
+
+    desc "Rollsback last data migration and reapplies it"
+    task redo: :environment do
+      TradeTariffBackend::DataMigrator.redo
+    end
   end
 end

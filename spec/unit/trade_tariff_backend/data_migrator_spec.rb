@@ -93,4 +93,26 @@ describe TradeTariffBackend::DataMigrator do
       expect(migration).to have_received :apply
     end
   end
+
+  describe '#redo' do
+    it 'rolls back last applied migration' do
+      applied_migration = double("Applied Migration", can_rollup?: false).as_null_object
+      TradeTariffBackend::DataMigrator.migrations = [applied_migration]
+
+      TradeTariffBackend::DataMigrator.redo
+
+      expect(applied_migration).to have_received :down
+      expect(applied_migration).to have_received :apply
+    end
+
+    it 'migrates rolled back migration' do
+      applied_migration = double("Applied Migration", can_rollup?: true).as_null_object
+      TradeTariffBackend::DataMigrator.migrations = [applied_migration]
+
+      TradeTariffBackend::DataMigrator.redo
+
+      expect(applied_migration).to have_received :up
+      expect(applied_migration).to have_received(:apply).twice
+    end
+  end
 end

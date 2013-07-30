@@ -13,7 +13,7 @@ module TradeTariffBackend
 
     def_delegators :instance, :migrations, :migrations=,
                               :migrate, :migration, :rollback,
-                              :status, :reporter=
+                              :status, :reporter=, :redo
 
     attr_writer :migrations
     attr_writer :reporter
@@ -60,6 +60,11 @@ module TradeTariffBackend
           report_with.rollback(migration)
         }
       }
+    end
+
+    def redo
+      rollback
+      migrate
     end
 
     # Display data migration status
