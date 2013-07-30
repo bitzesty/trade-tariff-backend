@@ -3,8 +3,8 @@ require 'forwardable'
 
 module TradeTariffBackend
   class DataMigrator
-    autoload :ConsoleReporter, 'trade_Tariff_backend/data_migrator/console_reporter'
-    autoload :NullReporter,    'trade_Tariff_backend/data_migrator/null_reporter'
+    autoload :ConsoleReporter, 'trade_tariff_backend/data_migrator/console_reporter'
+    autoload :NullReporter,    'trade_tariff_backend/data_migrator/null_reporter'
 
     MIGRATION_FILE_PATTERN = /\A(\d+)_.+\.rb\z/i.freeze
 

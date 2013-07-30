@@ -16,7 +16,9 @@ Sequel.migration do
 
   up do
     CODES.each do |code|
-      HiddenGoodsNomenclature.create(goods_nomenclature_item_id: code)
+      hid_gono = HiddenGoodsNomenclature.new
+      hid_gono.goods_nomenclature_item_id = code
+      hid_gono.save
     end
   end
 
