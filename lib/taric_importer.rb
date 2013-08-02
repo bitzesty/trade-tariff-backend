@@ -1,7 +1,6 @@
 require 'nokogiri'
 
 require 'taric_importer/transaction'
-require 'taric_importer/processor_overrides'
 require 'taric_importer/record_processor'
 require 'taric_importer/helpers/string_helper'
 
@@ -13,6 +12,9 @@ class TaricImporter < TariffImporter
       super(msg)
       @original = original
     end
+  end
+
+  class UnknownOperationError < ImportException
   end
 
   cattr_accessor :opening_element
@@ -33,6 +35,7 @@ class TaricImporter < TariffImporter
             xml = Nokogiri::XML(node.outer_xml).remove_namespaces!
             transaction = Transaction.new(Hash.from_xml(xml.to_s), issue_date)
             transaction.persist
+            transaction.validate
           end
         end
       rescue StandardError => exception

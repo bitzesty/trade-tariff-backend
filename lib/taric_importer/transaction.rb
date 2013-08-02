@@ -1,20 +1,35 @@
+require 'forwardable'
+
 class TaricImporter < TariffImporter
   class Transaction
+    extend Forwardable
+
     include TaricImporter::Helpers::StringHelper
 
-    attr_reader :record_stack
+    def_delegator ActiveSupport::Notifications, :instrument
 
     def initialize(transaction, issue_date)
       @issue_date = issue_date
       @transaction = transaction
+      @record_stack = []
 
       verify_transaction
     end
 
     def persist(processor = RecordProcessor)
       [@transaction['transaction']['app.message']].flatten.each do |message|
-         processor.new(message['transmission']['record'], @issue_date)
-                  .process!
+         @record_stack.push(
+           processor.new(message['transmission']['record'], @issue_date)
+                    .process!
+         )
+      end
+    end
+
+    def validate
+      while (record = @record_stack.pop)
+        unless record.conformant_for?(record.operation)
+          instrument("conformance_error.taric_importer", record: record)
+        end
       end
     end
 

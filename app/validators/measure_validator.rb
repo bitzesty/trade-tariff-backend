@@ -59,8 +59,9 @@ class MeasureValidator < TradeTariffBackend::Validator
   end
 
   validation :ME10, 'The order number must be specified if the "order number flag" (specified in the measure type record) has the value "mandatory". If the flag is set to "not permitted" then the field cannot be entered.', on: [:create, :update] do |record|
-    (record.ordernumber.present? && record.measure_type.order_number_capture_code == 1) ||
-    (record.ordernumber.blank? && record.measure_type.order_number_capture_code != 1)
+    record.measure_type.present? &&
+    ((record.ordernumber.present? && record.measure_type.order_number_capture_code == 1) ||
+    (record.ordernumber.blank? && record.measure_type.order_number_capture_code != 1))
   end
 
   validation :ME12, 'If the additional code is specified then the additional code type must have a relationship with the measure type.', on: [:create, :update] do |record|
@@ -111,7 +112,7 @@ class MeasureValidator < TradeTariffBackend::Validator
   end
 
   validation :ME27, 'The entered regulation may not be fully replaced.', on: [:create, :update] do |record|
-    !record.generating_regulation.fully_replaced?
+    record.generating_regulation.present? && !record.generating_regulation.fully_replaced?
   end
 
   validation :ME29, 'If the entered regulation is a modification regulation then its base regulation may not be completely abrogated.', on: [:create, :update] do |record|
