@@ -1,10 +1,12 @@
 require 'ostruct'
 
 module TradeTariffBackend
-  autoload :Auditor,   'trade_tariff_backend/auditor'
-  autoload :Indexer,   'trade_tariff_backend/indexer'
-  autoload :Mailer,    'trade_tariff_backend/mailer'
-  autoload :Validator, 'trade_tariff_backend/validator'
+  autoload :Auditor,       'trade_tariff_backend/auditor'
+  autoload :DataMigration, 'trade_tariff_backend/data_migration'
+  autoload :DataMigrator,  'trade_tariff_backend/data_migrator'
+  autoload :Indexer,       'trade_tariff_backend/indexer'
+  autoload :Mailer,        'trade_tariff_backend/mailer'
+  autoload :Validator,     'trade_tariff_backend/validator'
 
   class << self
 
@@ -29,6 +31,10 @@ module TradeTariffBackend
 
     def govuk_app_name
       ENV["GOVUK_APP_NAME"]
+    end
+
+    def data_migration_path
+      File.join(Rails.root, 'db', 'data_migrations')
     end
 
     def with_locked_database(&block)
