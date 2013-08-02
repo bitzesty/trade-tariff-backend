@@ -12,7 +12,11 @@ module SynchronizerHelper
 
     date = Date.parse(date.to_s)
 
-    content = %Q{<?xml version="1.0" encoding="UTF-8"?>
+    content =  if block_given?
+                 yield
+               else
+    # default content
+    %Q{<?xml version="1.0" encoding="UTF-8"?>
       <env:envelope xmlns="urn:publicid:-:DGTAXUD:TARIC:MESSAGE:1.0" xmlns:env="urn:publicid:-:DGTAXUD:GENERAL:ENVELOPE:1.0" id="1">
         <env:transaction id="1">
           <app.message id="8">
@@ -34,6 +38,7 @@ module SynchronizerHelper
           </app.message>
         </env:transaction>
       </env:envelope>}
+    end
 
     taric_file_path = File.join(TariffSynchronizer.root_path, 'taric', "#{date}_TGB#{date.strftime("%y")}#{date.yday}.xml")
     create_file taric_file_path, content
@@ -46,12 +51,16 @@ module SynchronizerHelper
 
     date = Date.parse(date.to_s)
 
-    content = %Q{
-      "AAAAAAAAAAA","01/01/1900:00:00:00"," ","20120312",
+    content =  if block_given?
+                 yield
+               else
+    # default content
+    %Q{"AAAAAAAAAAA","01/01/1900:00:00:00"," ","20120312",
       "TAME       ","01/03/2012:00:00:00","U","PR","TFC",null,"03038931",null,null,null,null,"20/02/2012:09:34:00",null,null,"Y",null,"N",null,null,null,null,null,null,"Y",null,"N",null,null,null,"ITP BATCH INTERFACE",null,null,null,null,null,null,"N",
       "TAME       ","01/03/2012:00:00:00","U","DS","G","A10","16052190 45",null,null,null,null,"20/02/2012:09:40:00",null,null,"N",null,"N",null,null,null,null,null,null,"N",null,"N",null,null,null,"ITP BATCH INTERFACE",null,null,null,null,null,null,"N",
       "ZZZZZZZZZZZ","31/12/9999:23:59:59"," ",434,
     }
+               end
 
     day = sprintf('%03d', date.yday)
     chief_file_path = File.join(TariffSynchronizer.root_path, 'chief', "#{date}_KBT009(#{date.strftime("%y")}#{day}).txt")

@@ -58,7 +58,7 @@ describe TaricImporter::RecordProcessor::Record do
         end
 
         stub_const(
-          "TaricImporter::RecordProcessor::Record::LanguageDescriptionAttributeMutator",
+          "TaricImporter::RecordProcessor::LanguageDescriptionAttributeMutator",
           MockMutator
         )
       }

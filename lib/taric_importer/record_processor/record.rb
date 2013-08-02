@@ -1,4 +1,4 @@
-require 'taric_importer/record_processor/record/attribute_mutator'
+require 'taric_importer/record_processor/attribute_mutator'
 
 # Can also mutate attributes for all record operations, e.g.:
 #
@@ -9,7 +9,7 @@ require 'taric_importer/record_processor/record/attribute_mutator'
 #    end
 #  end
 
-Dir['taric_importer/record_processor/record/attribute_mutator_overrides/*.rb'].each {|file|
+Dir[File.join(Rails.root, 'lib', 'taric_importer', 'record_processor', 'attribute_mutator_overrides', '*.rb')].each {|file|
   require file
 }
 
@@ -54,9 +54,9 @@ class TaricImporter < TariffImporter
 
       def mutate_attributes(attributes)
         mutator_class = begin
-                          "TaricImporter::RecordProcessor::Record::#{klass}AttributeMutator".constantize
+                          "TaricImporter::RecordProcessor::#{klass}AttributeMutator".constantize
                         rescue NameError
-                          AttributeMutator
+                          TaricImporter::RecordProcessor::AttributeMutator
                         end
 
         mutator_class.mutate(attributes)
