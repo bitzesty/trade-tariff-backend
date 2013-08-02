@@ -22,6 +22,10 @@ TradeTariffBackend::DataMigrator.migration do
     }
 
     apply {
+      # for idempotency
+      HiddenGoodsNomenclature.where(goods_nomenclature_item_id: CODES)
+                             .delete
+
       CODES.each do |code|
         unless HiddenGoodsNomenclature.where(goods_nomenclature_item_id: code).present?
           HiddenGoodsNomenclature.new { |hidden_gono|
