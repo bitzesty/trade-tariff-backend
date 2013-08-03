@@ -29,6 +29,10 @@ module TradeTariffBackend
       ENV["FACTER_govuk_platform"] || Rails.env
     end
 
+    def deployed_environment
+      MAILER_ENV
+    end
+
     def govuk_app_name
       ENV["GOVUK_APP_NAME"]
     end
