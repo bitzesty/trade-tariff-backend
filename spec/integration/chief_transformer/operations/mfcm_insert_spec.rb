@@ -3,10 +3,7 @@ require 'spec_helper'
 describe ChiefTransformer::Processor::MfcmInsert do
   let(:sample_operation_date) { Date.new(2013,8,5) }
 
-  before(:all) {
-    preload_standing_data
-  }
-
+  before(:all) { preload_standing_data }
   after(:all)  { clear_standing_data }
 
   describe '#process' do
