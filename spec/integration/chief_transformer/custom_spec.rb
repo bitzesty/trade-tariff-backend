@@ -34,6 +34,7 @@ describe 'CHIEF: Custom scenarions' do
 
     context 'Taric update occurs' do
       let(:transaction_id) { 13565498 }
+      let(:operation_date) { Date.new(2013,8,5) }
 
       # Update goods nomenclature effectively leaving national measure invalid!
       # As goods_nomenclature now does not span the validity period of national_measure (ME8)
@@ -55,7 +56,7 @@ describe 'CHIEF: Custom scenarions' do
 
         }
 
-        TaricImporter::RecordProcessor.new(transaction_record).process!
+        TaricImporter::RecordProcessor.new(transaction_record, operation_date).process!
       end
 
       specify 'sets national measures invalidate_by to Taric transaction number' do
@@ -65,6 +66,19 @@ describe 'CHIEF: Custom scenarions' do
 
         national_measure.reload.invalidated_by.should eq transaction_id
         national_measure.valid?.should be_true
+      end
+
+      specify 'sets goods nomenclature update date to operation date' do
+        national_measure
+
+        perform_transaction
+
+        expect(
+          GoodsNomenclature::Operation.where(
+            goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
+            operation: 'U'
+          ).first.operation_date
+        ).to eq operation_date
       end
     end
   end
@@ -94,6 +108,7 @@ describe 'CHIEF: Custom scenarions' do
 
     context 'Taric update occurs' do
       let(:transaction_id) { 13590603 }
+      let(:operation_date) { Date.new(2013,8,5) }
 
       # Goods Nomenclature deletion Makes national measures invalid.
       def perform_transaction()
@@ -112,7 +127,7 @@ describe 'CHIEF: Custom scenarions' do
           }
         }
 
-        TaricImporter::RecordProcessor.new(transaction_record).process!
+        TaricImporter::RecordProcessor.new(transaction_record, operation_date).process!
       end
 
       before {
@@ -128,6 +143,15 @@ describe 'CHIEF: Custom scenarions' do
 
       specify 'deletes goods nomenclature' do
         expect { goods_nomenclature.reload }.to raise_error
+      end
+
+      specify 'sets goods nomenclature destroy date to operation date' do
+        expect(
+          GoodsNomenclature::Operation.where(
+            goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
+            operation: 'D'
+          ).first.operation_date
+        ).to eq operation_date
       end
     end
   end

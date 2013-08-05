@@ -531,7 +531,7 @@ describe Measure do
       context 'additional code type meursing and attributes missing' do
         let(:measure) { create :measure, :with_related_additional_code_type,
                                         additional_code_type_id: 3,
-                                        additional_code_id: '1234',
+                                        additional_code_id: '123',
                                         goods_nomenclature_item_id: nil,
                                         ordernumber: nil,
                                         reduction_indicator: nil }
@@ -545,7 +545,7 @@ describe Measure do
         let(:measure) { create :measure, :with_related_additional_code_type,
                                          :with_quota_order_number,
                                         additional_code_type_id: 3,
-                                        additional_code_id: '1234',
+                                        additional_code_id: '123',
                                         goods_nomenclature_item_id: '1234567890',
                                         ordernumber: '12345',
                                         reduction_indicator: 1 }

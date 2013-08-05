@@ -108,7 +108,7 @@ FactoryGirl.define do
                                                measure_type: "EXF",
                                                tax_type_code: "591",
                                                measure_type_id: "",
-                                               adtnl_cd_type_id: 'EIA')
+                                               adtnl_cd_type_id: 'V')
          FactoryGirl.create(:chief_duty_expression, duty_expression_id_adval1: Forgery(:basic).number,
                                                     adval1_rate: tame.adval1_rate,
                                                     adval2_rate: tame.adval2_rate,
@@ -135,7 +135,7 @@ FactoryGirl.define do
         FactoryGirl.create(:measure_type_adco, measure_group_code: "EX",
                                                measure_type: "EXF",
                                                tax_type_code: "591",
-                                               adtnl_cd_type_id: 'EIA')
+                                               adtnl_cd_type_id: 'V')
       }
     end
 

@@ -23,6 +23,11 @@ class ChiefImporter < TariffImporter
         (value == "null") ? nil : value.to_f
       end
     end
+    class ChiefBoolean
+      def self.format(value)
+        (value == "N") ? 0 : 1
+      end
+    end
   end
 
   module Strategies
