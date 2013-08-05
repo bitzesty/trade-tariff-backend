@@ -2,9 +2,10 @@ class TaricImporter < TariffImporter
   class RecordProcessor
     class GoodsNomenclatureDestroyOperation < DestroyOperation
       def call
-        goods_nomenclature = record.klass.filter(record.attributes.slice(*record.primary_key).symbolize_keys).first
-        goods_nomenclature.set(record.attributes.except(*record.primary_key).symbolize_keys)
+        goods_nomenclature = record.klass.filter(attributes.slice(*record.primary_key).symbolize_keys).first
+        goods_nomenclature.set(attributes.except(*record.primary_key).symbolize_keys)
         goods_nomenclature.destroy
+
         ::Measure.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                .national
                .non_invalidated.each do |measure|

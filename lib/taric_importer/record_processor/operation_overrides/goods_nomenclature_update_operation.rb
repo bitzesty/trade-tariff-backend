@@ -2,8 +2,8 @@ class TaricImporter < TariffImporter
   class RecordProcessor
     class GoodsNomenclatureUpdateOperation < UpdateOperation
       def call
-        goods_nomenclature = record.klass.filter(record.attributes.slice(*record.primary_key).symbolize_keys).first
-        goods_nomenclature.set(record.attributes.except(*record.primary_key).symbolize_keys)
+        goods_nomenclature = record.klass.filter(attributes.slice(*record.primary_key).symbolize_keys).first
+        goods_nomenclature.set(attributes.except(*record.primary_key).symbolize_keys)
         goods_nomenclature.save
 
         ::Measure.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)

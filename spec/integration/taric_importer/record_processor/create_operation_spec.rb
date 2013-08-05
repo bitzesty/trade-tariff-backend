@@ -14,12 +14,13 @@ describe TaricImporter::RecordProcessor::CreateOperation do
   }
 
   describe '#call' do
+    let(:operation_date) { Date.new(2013,8,1) }
     let(:record) {
       TaricImporter::RecordProcessor::Record.new(record_hash)
     }
 
     let(:operation) {
-      TaricImporter::RecordProcessor::CreateOperation.new(record, Date.new(2013,8,1))
+      TaricImporter::RecordProcessor::CreateOperation.new(record, operation_date)
     }
 
     before {
@@ -34,6 +35,14 @@ describe TaricImporter::RecordProcessor::CreateOperation do
 
     it 'returns model instance' do
       expect(operation.call).to be_kind_of LanguageDescription
+    end
+
+    it 'sets create operation date to operation_date' do
+      operation.call
+
+      expect(
+        LanguageDescription::Operation.where(operation: 'C').first.operation_date
+      ).to eq operation_date
     end
   end
 end
