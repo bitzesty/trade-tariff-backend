@@ -40,9 +40,11 @@ class ChiefTransformer
           if records.is_a?(Array)
             records.each do |record|
               record.measure_sid = measure.measure_sid if record.respond_to?(:measure_sid=)
+              record.operation_date = measure.operation_date
             end
           else
             records.measure_sid = measure.measure_sid if records.respond_to?(:measure_sid=)
+            record.operation_date = measure.operation_date
           end
         end
       end
