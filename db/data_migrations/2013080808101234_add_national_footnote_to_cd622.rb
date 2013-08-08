@@ -16,15 +16,22 @@ TradeTariffBackend::DataMigrator.migration do
     8541409039
   ]
 
+  def delete_footnote_and_associations
+    Footnote::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).delete
+    FootnoteDescription::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).delete
+    FootnoteDescriptionPeriod::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).delete
+    FootnoteAssociationMeasure::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).delete
+  end
+
   up do
     applicable {
-      taric_footnote_count = FootnoteAssociationGoodsNomenclature.where(
-        footnote_type: TARIC_FOOTNOTE_TYPE_ID,
+      taric_footnote_count = FootnoteAssociationMeasure.where(
+        footnote_type_id: TARIC_FOOTNOTE_TYPE_ID,
         footnote_id: TARIC_FOOTNOTE_ID
       ).count
 
-      chief_footnote_count = FootnoteAssociationGoodsNomenclature.where(
-        footnote_type: FOOTNOTE_TYPE_ID,
+      chief_footnote_count = FootnoteAssociationMeasure.where(
+        footnote_type_id: FOOTNOTE_TYPE_ID,
         footnote_id: FOOTNOTE_ID
       ).count
 
@@ -36,10 +43,7 @@ TradeTariffBackend::DataMigrator.migration do
 
     apply {
       # make the run idempotent, delete records first if they exist
-      Footnote::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).delete
-      FootnoteDescription::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).delete
-      FootnoteDescriptionPeriod::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).delete
-      FootnoteAssociationGoodsNomenclature::Operation.where(footnote_type: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).delete
+      delete_footnote_and_associations
 
       Footnote.new { |f|
         f.footnote_type_id = FOOTNOTE_TYPE_ID
@@ -93,14 +97,11 @@ TradeTariffBackend::DataMigrator.migration do
       Footnote::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).any? ||
       FootnoteDescription::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).any? ||
       FootnoteDescriptionPeriod::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).any? ||
-      FootnoteAssociationGoodsNomenclature::Operation.where(footnote_type: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).any?
+      FootnoteAssociationMeasure::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).any?
     }
 
     apply {
-      Footnote::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).delete
-      FootnoteDescription::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).delete
-      FootnoteDescriptionPeriod::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).delete
-      FootnoteAssociationGoodsNomenclature::Operation.where(footnote_type: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).delete
+      delete_footnote_and_associations
     }
   end
 end
