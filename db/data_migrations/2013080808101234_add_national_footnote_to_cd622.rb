@@ -7,6 +7,8 @@ TradeTariffBackend::DataMigrator.migration do
   TARIC_FOOTNOTE_TYPE_ID = 'CD'
   TARIC_FOOTNOTE_ID = '662'
 
+  VALIDITY_START_DATE = Date.new(2013,8,6)
+
   ASSOCIATED_GOODS_CODES = %w[
     3818001011
     3818001019
@@ -49,7 +51,7 @@ TradeTariffBackend::DataMigrator.migration do
         f.footnote_type_id = FOOTNOTE_TYPE_ID
         f.footnote_id = FOOTNOTE_ID
         f.national = true
-        f.validity_start_date = Date.new(2013,8,6)
+        f.validity_start_date = VALIDITY_START_DATE
         f.operation_date = nil # as it came from initial import
       }.save
 
@@ -57,7 +59,7 @@ TradeTariffBackend::DataMigrator.migration do
         fdp.footnote_description_period_sid = -217
         fdp.footnote_type_id = FOOTNOTE_TYPE_ID
         fdp.footnote_id = FOOTNOTE_ID
-        fdp.validity_start_date = Date.new(2013,8,6)
+        fdp.validity_start_date = VALIDITY_START_DATE
         fdp.national = true
         fdp.operation_date = nil # as it came from initial import
       }.save
