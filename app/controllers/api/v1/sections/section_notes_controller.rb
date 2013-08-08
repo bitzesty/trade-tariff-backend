@@ -19,7 +19,7 @@ module Api
 
         def create
           section_note = SectionNote.new(section_note_params.merge(section_id: section.id))
-          section_note.save(raise_on_save_failure: false, raise_on_failure: false)
+          section_note.save(raise_on_failure: false)
 
           respond_with section_note,
             location: api_section_section_note_url(section.id)
@@ -28,7 +28,7 @@ module Api
         def update
           section_note = section.section_note
           section_note.set(section_note_params)
-          section_note.save
+          section_note.save(raise_on_failure: false)
 
           respond_with section_note
         end

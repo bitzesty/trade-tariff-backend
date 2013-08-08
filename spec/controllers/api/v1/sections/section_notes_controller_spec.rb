@@ -41,7 +41,7 @@ describe Api::V1::Sections::SectionNotesController, "POST to #create" do
 
   context 'save succeeded' do
     before {
-      post :create, section_id: section.id, section_note: { content: 'lolwat' }, format: :json
+      post :create, section_id: section.id, section_note: { content: 'test string' }, format: :json
     }
 
     it 'responds with success' do
@@ -87,7 +87,47 @@ describe Api::V1::Sections::SectionNotesController, "POST to #create" do
 end
 
 describe Api::V1::Sections::SectionNotesController, "PUT to #update" do
-  pending
+  let(:section) { create :section, :with_note }
+
+  before { login_as_api_user }
+
+  context 'save succeeded' do
+    it 'responds with success (204 no content)' do
+      put :update, section_id: section.id, section_note: { content: 'test string' }, format: :json
+
+      expect(response.status).to eq 204
+    end
+
+    it 'changes section_note content' do
+      expect {
+        put :update, section_id: section.id, section_note: { content: 'test string' }, format: :json
+      }.to change{ section.reload.section_note.content }
+    end
+  end
+
+  context 'save failed' do
+    it 'responds with 422 not acceptable' do
+      put :update, section_id: section.id, section_note: { content: '' }, format: :json
+
+      expect(response.status).to eq 422
+    end
+
+    it 'returns section_note validation errors' do
+      put :update, section_id: section.id, section_note: { content: '' }, format: :json
+
+      pattern = {
+        errors: Hash,
+      }
+
+      expect(response.body).to match_json_expression(pattern)
+    end
+
+    it 'does not change section_note content' do
+      expect {
+        put :update, section_id: section.id, section_note: { content: '' }, format: :json
+      }.not_to change{ section.reload.section_note.content }
+    end
+  end
 end
 
 describe Api::V1::Sections::SectionNotesController, "DELETE to #destroy" do
