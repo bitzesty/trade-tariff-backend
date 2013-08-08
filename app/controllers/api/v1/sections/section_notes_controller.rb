@@ -5,7 +5,7 @@ module Api
         before_filter :authenticate_user!
 
         rescue_from Sequel::RecordNotFound do |exception|
-          render json: {}, status: :not_found
+          render json: {}, status: 404
         end
 
         def show
@@ -47,7 +47,7 @@ module Api
         end
 
         def section
-          @section ||= Section.find(position: params[:section_id])
+          @section ||= Section.find(id: params[:section_id])
         end
       end
     end

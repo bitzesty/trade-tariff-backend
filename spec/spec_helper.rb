@@ -29,6 +29,7 @@ RSpec.configure do |config|
   config.alias_it_should_behave_like_to :it_is_associated, "it is associated"
   config.include RSpec::Rails::RequestExampleGroup, type: :request,
                                                     example_group: { file_path: /spec\/api/ }
+  config.include ControllerSpecHelper, type: :controller
   config.include SynchronizerHelper
   config.include RescueHelper
   config.include ChiefDataHelper

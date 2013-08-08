@@ -159,10 +159,4 @@ FactoryGirl.define do
                                                               validity_end_date: evaluator.valid_to)
     }
   end
-
-  factory :section do
-    position      { Forgery(:basic).number }
-    numeral       { ["I", "II", "III"].sample }
-    title         { Forgery(:lorem_ipsum).sentence }
-  end
 end
