@@ -7,8 +7,12 @@ TradeTariffBackend::Application.routes.draw do
     # How (or even if) API versioning will be implemented is still an open question. We can defer
     # the choice until we need to expose the API to clients which we don't control.
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
-      resources :sections, only: [:index, :show], constraints: { id: /\d{1,2}/ }
-      resources :chapters, only: [:show], constraints: { id: /\d{2}/ }
+      resources :sections, only: [:index, :show], constraints: { id: /\d{1,2}/ } do
+        resource :section_note, module: 'sections'
+      end
+      resources :chapters, only: [:index, :show], constraints: { id: /\d{2}/ } do
+        resource :chapter_note, module: 'chapters'
+      end
       resources :headings, only: [:show], constraints: { id: /\d{4}/ }
       resources :commodities, only: [:show], constraints: { id: /\d{10}/ }
       resources :geographical_areas, only: [:countries] do

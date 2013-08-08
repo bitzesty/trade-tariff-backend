@@ -2,7 +2,7 @@ require 'goods_nomenclature_mapper'
 
 module Api
   module V1
-    class HeadingsController < ApplicationController
+    class HeadingsController < ApiController
       before_filter :find_heading, only: [:show]
 
       def show

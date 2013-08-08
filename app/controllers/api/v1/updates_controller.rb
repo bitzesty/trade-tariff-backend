@@ -1,6 +1,6 @@
 module Api
   module V1
-    class UpdatesController < ApplicationController
+    class UpdatesController < ApiController
       def index
         @updates = TariffSynchronizer::BaseUpdate.latest_applied_of_both_kinds
 
