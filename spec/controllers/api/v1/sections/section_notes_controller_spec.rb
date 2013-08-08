@@ -131,5 +131,31 @@ describe Api::V1::Sections::SectionNotesController, "PUT to #update" do
 end
 
 describe Api::V1::Sections::SectionNotesController, "DELETE to #destroy" do
-  pending
+  before { login_as_api_user }
+
+  context 'deletiong succeeded' do
+    let(:section) { create :section, :with_note }
+
+    it 'responds with success (204 no content)' do
+      delete :destroy, section_id: section.id, format: :json
+
+      expect(response.status).to eq 204
+    end
+
+    it 'deletes section note' do
+      expect {
+        delete :destroy, section_id: section.id, format: :json
+      }.to change { section.reload.section_note }
+    end
+  end
+
+  context 'deletion failed' do
+    let(:section) { create :section }
+
+    it 'responds with 404 not found' do
+      delete :destroy, section_id: section.id, format: :json
+
+      expect(response.status).to eq 404
+    end
+  end
 end

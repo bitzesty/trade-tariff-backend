@@ -35,6 +35,9 @@ module Api
 
         def destroy
           section_note = section.section_note
+
+          raise Sequel::RecordNotFound if section_note.blank?
+
           section_note.destroy
 
           respond_with section_note
