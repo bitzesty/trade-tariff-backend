@@ -35,7 +35,55 @@ describe Api::V1::Sections::SectionNotesController, "GET #show" do
 end
 
 describe Api::V1::Sections::SectionNotesController, "POST to #create" do
-  pending
+  let(:section) { create :section }
+
+  before { login_as_api_user }
+
+  context 'save succeeded' do
+    before {
+      post :create, section_id: section.id, section_note: { content: 'lolwat' }, format: :json
+    }
+
+    it 'responds with success' do
+      expect(response.status).to eq 201
+    end
+
+    it 'returns section_note attributes' do
+      pattern = {
+        id: Integer,
+        section_id: Integer,
+        content: String
+      }
+
+      expect(response.body).to match_json_expression(pattern)
+    end
+
+    it 'persists section note' do
+      expect(section.reload.section_note).to be_present
+    end
+  end
+
+  context 'save failed' do
+    before {
+      post :create, section_id: section.id, section_note: { content: '' }, format: :json
+    }
+
+    it 'responds with 406 unacceptable' do
+      expect(response.status).to eq 422
+    end
+
+    it 'returns section_note validation errors' do
+      pattern = {
+        errors: Hash,
+      }
+
+      expect(response.body).to match_json_expression(pattern)
+    end
+
+    it 'does not persist section note' do
+      expect(section.reload.section_note).to be_blank
+    end
+  end
 end
 
 describe Api::V1::Sections::SectionNotesController, "PUT to #update" do
