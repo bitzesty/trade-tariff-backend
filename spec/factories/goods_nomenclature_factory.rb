@@ -76,24 +76,6 @@ FactoryGirl.define do
     end
   end
 
-  factory :chapter, parent: :goods_nomenclature, class: Chapter do
-    goods_nomenclature_item_id { "#{2.times.map{ Random.rand(9) }.join}00000000" }
-
-    trait :with_section do
-      after(:create) { |chapter, evaluator|
-        section = FactoryGirl.create(:section)
-        chapter.add_section section
-        chapter.save
-      }
-    end
-
-    trait :with_note do
-      after(:create) { |chapter, evaluator|
-        FactoryGirl.create(:chapter_note, chapter_id: chapter.goods_nomenclature_sid)
-      }
-    end
-  end
-
   factory :heading, parent: :goods_nomenclature, class: Heading do
     # +1 is needed to avoid creating heading with gono id in form of
     # xx00xxxxxx which is a Chapter

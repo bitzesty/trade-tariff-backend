@@ -22,7 +22,7 @@ class Chapter < GoodsNomenclature
   }
 
   one_to_one :chapter_note, dataset: -> {
-    ChapterNote.where(chapter_id: to_param, section_id: section.id)
+    ChapterNote.where(chapter_id: to_param)
   }
 
   # Tire configuration
