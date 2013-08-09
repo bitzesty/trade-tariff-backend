@@ -3,6 +3,7 @@ TradeTariffBackend::DataMigrator.migration do
 
   FOOTNOTE_TYPE_ID = '06'
   FOOTNOTE_ID = '013'
+  FOOTNOTE_DESCRIPTION = "Due to CHIEF being unable to process an additional code with two different duty rates, imports should be declared under the same numeric additional codes but replacing the 'B' with an 'X', to obtain exemption from the anti-dumping duty where the conditions under footnote CD662 are met."
 
   TARIC_FOOTNOTE_TYPE_ID = 'CD'
   TARIC_FOOTNOTE_ID = '662'
@@ -38,7 +39,7 @@ TradeTariffBackend::DataMigrator.migration do
       ).count
 
       Footnote::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).none? ||
-      FootnoteDescription::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).none? ||
+      FootnoteDescription::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID, description: FOOTNOTE_DESCRIPTION).none? ||
       FootnoteDescriptionPeriod::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).none? ||
       taric_footnote_count != chief_footnote_count
     }
@@ -70,7 +71,7 @@ TradeTariffBackend::DataMigrator.migration do
         fd.footnote_type_id = FOOTNOTE_TYPE_ID
         fd.footnote_id = FOOTNOTE_ID
         fd.national = true
-        fd.description = "Due to CHIEF being unable to process an additional code with two different duty rates, imports should be declared under the same numeric additional codes but replacing the 'A' with an 'X', to obtain exemption from the anti-dumping duty where the conditions under footnote CD662 are met."
+        fd.description = FOOTNOTE_DESCRIPTION
         fd.operation_date = nil # as it came from initial import
       }.save
 
