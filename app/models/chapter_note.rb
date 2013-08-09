@@ -14,6 +14,6 @@ class ChapterNote < Sequel::Model
   end
 
   def chapter_goods_id
-    sprintf("%02d00000000", chapter_id)
+    chapter_id.ljust('0', 10)
   end
 end

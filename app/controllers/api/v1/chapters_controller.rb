@@ -6,7 +6,7 @@ module Api
       before_filter :find_chapter, only: [:show]
 
       def index
-        @chapters = Chapter.all
+        @chapters = Chapter.eager(:chapter_note).all
 
         respond_with @chapters
       end

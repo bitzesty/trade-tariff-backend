@@ -7,7 +7,7 @@ describe Api::V1::Chapters::ChapterNotesController, "GET #show" do
     {
       id: Integer,
       section_id: nil,
-      chapter_id: Integer,
+      chapter_id: String,
       content: String
     }
   }
@@ -52,7 +52,7 @@ describe Api::V1::Chapters::ChapterNotesController, "POST to #create" do
     it 'returns chapter_note attributes' do
       pattern = {
         id: Integer,
-        chapter_id: Integer,
+        chapter_id: String,
         section_id: nil,
         content: String
       }

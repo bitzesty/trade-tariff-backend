@@ -36,3 +36,23 @@ describe Api::V1::ChaptersController, "GET #show" do
     end
   end
 end
+
+describe Api::V1::ChaptersController, "GET #index" do
+  render_views
+
+  let!(:chapter1) { create :chapter, :with_section, :with_note }
+  let!(:chapter2) { create :chapter, :with_section, :with_note }
+
+  let(:pattern) {
+    [
+      {goods_nomenclature_item_id: String, chapter_note_id: Integer },
+      {goods_nomenclature_item_id: String, chapter_note_id: Integer }
+    ]
+  }
+
+  it 'returns rendered records' do
+    get :index, format: :json
+
+    response.body.should match_json_expression pattern
+  end
+end
