@@ -79,11 +79,11 @@ namespace :tariff do
         Dir[Rails.root.join('db','notes','sections','*')].each do |file|
           begin
             note = YAML.load(File.read(file))
-            section_note = SectionNote.find_or_create(section_id: note[:section])
+            section_note = SectionNote.find(section_id: note[:section]) || SectionNote.new(section_id: note[:section])
             section_note.content = note[:content]
             section_note.save
-          rescue
-            puts "Error loading: #{file}"
+          rescue StandardError => e
+            puts "Error loading: #{file}, #{e}"
           end
         end
       end
@@ -93,12 +93,12 @@ namespace :tariff do
         Dir[Rails.root.join('db','notes','chapters','*')].each do |file|
           begin
             note = YAML.load(File.read(file))
-            chapter_note = ChapterNote.find_or_create(section_id: note[:section],
-                                                      chapter_id: note[:chapter])
+            chapter_note = ChapterNote.find(section_id: note[:section],
+                                            chapter_id: note[:chapter]) || ChapterNote.new(section_id: note[:section], chapter_id: note[:chapter])
             chapter_note.content = note[:content]
             chapter_note.save
-          rescue
-            puts "Error loading: #{file}"
+          rescue StandardError => e
+            puts "Error loading: #{file}, #{e}"
           end
         end
       end

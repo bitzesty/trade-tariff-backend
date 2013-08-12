@@ -2,8 +2,15 @@ require 'goods_nomenclature_mapper'
 
 module Api
   module V1
-    class ChaptersController < ApplicationController
+    class ChaptersController < ApiController
       before_filter :find_chapter, only: [:show]
+
+      def index
+        @chapters = Chapter.eager(:chapter_note).all
+
+        respond_with @chapters
+      end
+
       def show
         @headings = GoodsNomenclatureMapper.new(@chapter.headings_dataset
                                                         .eager(:goods_nomenclature_descriptions,

@@ -1,6 +1,6 @@
 module Api
   module V1
-    class CommoditiesController < ApplicationController
+    class CommoditiesController < ApiController
       before_filter :find_commodity, only: [:show]
 
       def show

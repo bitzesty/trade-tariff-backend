@@ -13,10 +13,12 @@ gem "sequel", "4.0.0"
 gem "tire", "0.6.0"
 gem "tire-contrib", '~> 0.1.3'
 gem "yajl-ruby", require: "yajl"
+gem "strong_parameters"
 
 gem "builder"
 gem "jquery-rails", "1.0.19"
 gem "plek", "1.0.0"
+gem 'gds-sso', '3.0.0'
 gem "railties"
 
 gem "unicorn", "~> 4.6.3"

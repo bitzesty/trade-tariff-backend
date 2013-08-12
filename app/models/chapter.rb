@@ -21,9 +21,7 @@ class Chapter < GoodsNomenclature
            .where(Sequel.~(goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes))
   }
 
-  one_to_one :chapter_note, dataset: -> {
-    ChapterNote.where(chapter_id: to_param, section_id: section.id)
-  }
+  one_to_one :chapter_note, primary_key: :to_param
 
   # Tire configuration
   tire do
