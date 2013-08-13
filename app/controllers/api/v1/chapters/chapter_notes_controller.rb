@@ -54,7 +54,9 @@ module Api
         end
 
         def chapter_id
-          sprintf("%02d00000000", params[:chapter_id] || "")
+          # Converts 8 to 0800000000, 18 to 1800000000
+          # May result in 0000000000 but there is no such chapter
+          params[:chapter_id].to_s.rjust(2, '0').ljust(10, '0')
         end
       end
     end
