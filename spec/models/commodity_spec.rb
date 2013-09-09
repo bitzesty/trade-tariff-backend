@@ -39,6 +39,31 @@ describe Commodity do
           }
         end
       end
+
+      context 'heading with sub-headings' do
+        # Example from real world scenario
+        # https://www.pivotaltracker.com/story/show/55703384
+
+        let!(:sub_heading) { create :heading, goods_nomenclature_item_id: '6308000000',
+                                              goods_nomenclature_sid: 43837,
+                                              producline_suffix: '10',
+                                              validity_start_date: Date.new(1972,1,1) }
+        let!(:heading) { create :heading, goods_nomenclature_item_id: '6308000000',
+                                              goods_nomenclature_sid: 43838,
+                                              producline_suffix: '80',
+                                              validity_start_date: Date.new(1972,1,1) }
+        let!(:commodity) { create :commodity, :with_indent,
+                                              :with_description,
+                                              indents: 1,
+                                              goods_nomenclature_sid: 91335,
+                                              goods_nomenclature_item_id: '6308000015',
+                                              producline_suffix: '80',
+                                              validity_start_date: Date.new(2009,7,1) }
+
+        it 'correctly identifies heading' do
+          expect(commodity.heading).to eq heading
+        end
+      end
     end
 
     describe 'chapter' do
