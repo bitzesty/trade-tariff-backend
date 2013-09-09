@@ -295,4 +295,49 @@ describe 'CHIEF: Custom scenarions' do
       ).to be_true
     end
   end
+
+  describe 'Scenario: measure associated to CHIEF country group' do
+    let!(:tamf) { create :tamf, fe_tsmp: DateTime.new(2011,4,1),
+                                msrgp_code: 'DP',
+                                msr_type: 'DPO',
+                                tty_code: nil,
+                                tar_msr_no: '61113010',
+                                cngp_code: 'B110',
+                                amend_indicator: 'I' }
+    let!(:tame) { create :tame, fe_tsmp: DateTime.new(2011,4,1),
+                                le_tsmp: DateTime.new(2011,7,1),
+                                msrgp_code: 'DP',
+                                msr_type: 'DPO',
+                                tty_code: nil,
+                                tar_msr_no: '61113010',
+                                amend_indicator: 'I' }
+    let!(:mfcm) { create :mfcm, fe_tsmp: DateTime.new(1997,7,1),
+                                msrgp_code: 'DP',
+                                msr_type: 'DPO',
+                                tty_code: nil,
+                                le_tsmp: DateTime.new(2011,10,25),
+                                cmdty_code: '6111301000',
+                                tar_msr_no: '61113010',
+                                amend_indicator: 'I' }
+    let!(:gono) { create :goods_nomenclature, :declarable, :with_indent,
+                                             goods_nomenclature_sid: 97701,
+                                             goods_nomenclature_item_id: '6111301000',
+                                             producline_suffix: 80,
+                                             validity_start_date: Date.new(1999,7,1),
+                                             validity_end_date: nil}
+    let!(:national_geographical_area)  { create :geographical_area, geographical_area_id: 'B110' }
+    let!(:geographical_area)           { create :geographical_area, :erga_omnes }
+
+    specify 'CHIEF country group gets coverted to TARIC country group' do
+      ChiefTransformer.instance.invoke(:initial_load)
+
+      expect(
+        Measure.national.where(
+          goods_nomenclature_item_id: '6111301000',
+          measure_type_id: 'DPO',
+          geographical_area_id: '1011' # erga omnes
+        ).any?
+      ).to be_true
+    end
+  end
 end
