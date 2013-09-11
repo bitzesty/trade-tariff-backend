@@ -116,4 +116,38 @@ class Heading < GoodsNomenclature
   def to_indexed_json
     serializable_hash.to_json
   end
+
+  def changes(depth = 1)
+    operation_klass.select(
+      Sequel.as('Heading', :model),
+      :oid,
+      :operation_date,
+      :operation,
+      Sequel.as(depth, :depth)
+    ).where(pk_hash)
+     .union(Commodity.changes_for(depth + 1, ["goods_nomenclature_item_id LIKE ?", relevant_commodities]))
+     .union(Measure.changes_for(depth +1, ["goods_nomenclature_item_id LIKE ?", relevant_commodities]))
+     .from_self
+     .where(Sequel.~(operation_date: nil))
+     .limit(depth * 10)
+     .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date), Sequel.desc(:depth))
+  end
+
+  def self.changes_for(depth = 0, conditions = {})
+    operation_klass.select(
+      Sequel.as('Heading', :model),
+      :oid,
+      :operation_date,
+      :operation,
+      Sequel.as(depth, :depth)
+    ).where(conditions)
+     .limit(depth * 10)
+     .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date))
+  end
+
+  private
+
+  def relevant_commodities
+    "#{short_code}______"
+  end
 end

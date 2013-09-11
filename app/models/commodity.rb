@@ -164,4 +164,32 @@ class Commodity < GoodsNomenclature
       }
     }.to_json
   end
+
+  def self.changes_for(depth = 0, conditions = {})
+    operation_klass.select(
+      Sequel.as('Commodity', :model),
+      :oid,
+      :operation_date,
+      :operation,
+      Sequel.as(depth, :depth)
+    ).where(conditions)
+     .where(Sequel.~(operation_date: nil))
+     .limit(depth * 10)
+     .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date))
+  end
+
+  def changes(depth = 1)
+    operation_klass.select(
+      Sequel.as('GoodsNomenclature', :model),
+      :oid,
+      :operation_date,
+      :operation,
+      Sequel.as(depth, :depth)
+    ).where(pk_hash)
+     .union(Measure.changes_for(depth + 1, measures_oplog__measure_sid: measures.map(&:measure_sid)))
+     .from_self
+     .where(Sequel.~(operation_date: nil))
+     .limit(depth * 10)
+     .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date), Sequel.desc(:depth))
+  end
 end
