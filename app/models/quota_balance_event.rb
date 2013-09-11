@@ -17,18 +17,4 @@ class QuotaBalanceEvent < Sequel::Model
   def self.status
     'open'
   end
-
-  def self.changes_for(conditions = {})
-    operation_klass.select(
-      Sequel.as('QuotaBalanceEvent', :model),
-      :oid,
-      :operation_date,
-      :operation,
-      Sequel.as(3, :depth)
-    ).where(conditions)
-     .limit(3)
-     .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date))
-  end
 end
-
-

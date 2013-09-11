@@ -117,6 +117,19 @@ class GoodsNomenclature < Sequel::Model
   def bti_url
     "http://ec.europa.eu/taxation_customs/dds2/ebti/ebti_consultation.jsp?Lang=en&nomenc=#{code}&Expand=true"
   end
+
+  def changes(depth = 1)
+    operation_klass.select(
+      Sequel.as('GoodsNomenclature', :model),
+      :oid,
+      :operation_date,
+      :operation,
+      Sequel.as(depth, :depth)
+    ).where(pk_hash)
+     .union(Measure.changes_for(depth + 1, measures_oplog__measure_sid: measures.map(&:measure_sid)))
+     .limit(depth * 10)
+     .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date), Sequel.desc(:depth))
+  end
 end
 
 require 'heading'

@@ -9,18 +9,4 @@ class QuotaBlockingPeriod < Sequel::Model
       order(Sequel.desc(:end_date)).first
     end
   end
-
-  def self.changes_for(conditions = {})
-    operation_klass.select(
-      Sequel.as('QuotaBlockingPeriod', :model),
-      :oid,
-      :operation_date,
-      :operation,
-      Sequel.as(3, :depth)
-    ).where(conditions)
-     .limit(3)
-     .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date))
-  end
 end
-
-

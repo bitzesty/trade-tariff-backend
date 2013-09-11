@@ -26,20 +26,6 @@ class MeasureType < Sequel::Model
       where(national: true)
     end
   end
-
-  def changes(conditions = {})
-    operation_klass.select(
-      Sequel.as('MeasureType', :model),
-      :oid,
-      :operation_date,
-      :operation,
-      Sequel.as(1, :depth)
-    ).where(pk_hash)
-     .where(conditions)
-     .limit(3)
-     .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date))
-     .union(measure_type_description.changes)
-  end
 end
 
 
