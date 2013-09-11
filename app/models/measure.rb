@@ -335,6 +335,30 @@ class Measure < Sequel::Model
       qon
     end
   end
+
+  def changes
+    operation_klass.select(
+      Sequel.as('Measure', :model),
+      :oid,
+      :operation_date,
+      :operation,
+      Sequel.as(0, :depth)
+    ).where(pk_hash)
+     .limit(3)
+     .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date))
+  end
+
+  def change_log
+    changes.union(
+      measure_type.changes
+    ).union(
+      quota_order_number.changes
+    ).order(Sequel.desc(:operation_date), Sequel.asc(:depth))
+    .from_self
+    .where{ |o| o.>=(:operation_date, operation_date) }
+    .group(:operation_date, :operation) # TODO should not group by model!
+    .order(Sequel.desc(:depth), Sequel.desc(:operation_date))
+  end
 end
 
 

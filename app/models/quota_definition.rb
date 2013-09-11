@@ -35,6 +35,23 @@ class QuotaDefinition < Sequel::Model
     @_last_blocking_period ||= quota_blocking_periods.last
   end
 
+  def changes(conditions = {})
+    operation_klass.select(
+      Sequel.as('QuotaDefinition', :model),
+      :oid,
+      :operation_date,
+      :operation,
+      Sequel.as(2, :depth)
+    ).where(pk_hash)
+     .where(conditions)
+     .limit(3)
+     .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date))
+     .union(QuotaExhaustionEvent.changes_for(quota_exhaustion_events_oplog__quota_definition_sid: quota_definition_sid))
+     .union(QuotaBalanceEvent.changes_for(quota_balance_events_oplog__quota_definition_sid: quota_definition_sid))
+     .union(QuotaSuspensionPeriod.changes_for(quota_suspension_periods_oplog__quota_definition_sid: quota_definition_sid))
+     .union(QuotaBlockingPeriod.changes_for(quota_blocking_periods_oplog__quota_definition_sid: quota_definition_sid))
+  end
+
   private
 
   def critical_state?
