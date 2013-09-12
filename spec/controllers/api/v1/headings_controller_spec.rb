@@ -98,6 +98,7 @@ describe Api::V1::HeadingsController, "GET #changes" do
   let(:pattern) {
     [
       {
+        oid: Integer,
         model_name: "Heading",
         operation: String,
         operation_date: String,

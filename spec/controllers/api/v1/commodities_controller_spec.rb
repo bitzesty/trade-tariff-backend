@@ -76,6 +76,7 @@ describe Api::V1::CommoditiesController, "GET #changes" do
   let(:pattern) {
     [
       {
+        oid: Integer,
         model_name: "GoodsNomenclature",
         operation: String,
         operation_date: String,

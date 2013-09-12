@@ -67,6 +67,7 @@ describe Api::V1::ChaptersController, "GET #changes" do
   let(:pattern) {
     [
       {
+        oid: Integer,
         model_name: "Chapter",
         operation: String,
         operation_date: String,
