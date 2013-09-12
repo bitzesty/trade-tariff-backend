@@ -10,8 +10,8 @@ module Sequel
         operation_class = Class.new(Sequel::Model(:"#{model.table_name}_oplog"))
         operation_class.one_to_one(
           :record,
-          key: primary_key,
-          primary_key: primary_key,
+          key: model.primary_key,
+          primary_key: model.primary_key,
           class_name: model
         )
         operation_class.set_primary_key(primary_key)

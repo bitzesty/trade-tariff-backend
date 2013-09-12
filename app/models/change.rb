@@ -7,6 +7,10 @@ class Change
     end
   end
 
+  def model=(model)
+    @model = model.constantize
+  end
+
   def operation_record
     @operation_record ||= operation_class.find(oid: oid)
   end

@@ -147,4 +147,67 @@ describe Heading do
       end
     end
   end
+
+  describe '#changes' do
+    let(:heading) { create :heading }
+
+    it 'returns instance of ChangeLog' do
+      expect(heading.changes).to be_kind_of ChangeLog
+    end
+
+    context 'with Heading changes' do
+      let!(:heading) { create :heading, operation_date: Date.today }
+
+      it 'includes Heading changes' do
+        expect(
+          heading.changes.select { |change|
+            change.oid == heading.oid &&
+            change.model == Heading
+          }
+        ).to be_present
+      end
+    end
+
+    context 'with associated Commodity changes' do
+      let!(:heading)   { create :heading, operation_date: Date.yesterday }
+      let!(:commodity) {
+        create :commodity,
+               operation_date: Date.yesterday,
+               goods_nomenclature_item_id: "#{heading.short_code}000001"
+      }
+
+      it 'includes Commodity changes' do
+        expect(
+          heading.changes.select { |change|
+            change.oid == commodity.oid &&
+            change.model == Commodity
+          }
+        ).to be_present
+      end
+
+      context 'with associated Measure (through Commodity) changes' do
+        let!(:heading)   { create :heading, operation_date: Date.yesterday }
+        let!(:commodity) {
+          create :commodity,
+                 operation_date: Date.yesterday,
+                 goods_nomenclature_item_id: "#{heading.short_code}000001"
+        }
+        let!(:measure)   {
+          create :measure,
+                 goods_nomenclature: commodity,
+                 goods_nomenclature_item_id: commodity.goods_nomenclature_item_id,
+                 operation_date: Date.yesterday
+        }
+
+        it 'includes Measure changes' do
+          expect(
+            heading.changes.select { |change|
+              change.oid == measure.oid &&
+              change.model == Measure
+            }
+          ).to be_present
+        end
+      end
+    end
+  end
 end

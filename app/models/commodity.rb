@@ -190,6 +190,11 @@ class Commodity < GoodsNomenclature
        .union(Measure.changes_for(depth + 1, measures_oplog__measure_sid: measures.map(&:measure_sid)))
        .from_self
        .where(Sequel.~(operation_date: nil))
+       .tap! { |criteria|
+         # if Commodity did not come from initial seed, filter by its
+         # create/update date
+         criteria.where{ |o| o.>=(:operation_date, operation_date) } unless operation_date.blank?
+        }
        .limit(depth * 10)
        .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date), Sequel.desc(:depth))
        .all
