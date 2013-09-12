@@ -19,6 +19,14 @@ class Change
     operation_record.record
   end
 
+  def model_name
+    @model.name
+  end
+
+  def to_partial_path
+    "changes/#{model_name.underscore}"
+  end
+
   private
 
   def operation_class
