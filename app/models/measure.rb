@@ -344,7 +344,7 @@ class Measure < Sequel::Model
       :operation,
       Sequel.as(depth, :depth)
     ).where(conditions)
-     .limit(depth * 10)
+     .limit(TradeTariffBackend.change_count)
      .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date))
   end
 end

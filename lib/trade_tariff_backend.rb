@@ -63,6 +63,11 @@ module TradeTariffBackend
       @secrets ||= OpenStruct.new(load_secrets)
     end
 
+    # Number of changes to fetch for Commodity/Heading/Chapter
+    def change_count
+      10
+    end
+
     private
 
     def load_secrets

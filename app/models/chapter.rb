@@ -95,7 +95,7 @@ class Chapter < GoodsNomenclature
          # create/update date
          criteria.where{ |o| o.>=(:operation_date, operation_date) } unless operation_date.blank?
         }
-       .limit(depth * 10)
+       .limit(TradeTariffBackend.change_count)
        .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date), Sequel.desc(:depth))
        .all
     )

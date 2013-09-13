@@ -174,7 +174,7 @@ class Commodity < GoodsNomenclature
       Sequel.as(depth, :depth)
     ).where(conditions)
      .where(Sequel.~(operation_date: nil))
-     .limit(depth * 10)
+     .limit(TradeTariffBackend.change_count)
      .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date))
   end
 
@@ -195,7 +195,7 @@ class Commodity < GoodsNomenclature
          # create/update date
          criteria.where{ |o| o.>=(:operation_date, operation_date) } unless operation_date.blank?
         }
-       .limit(depth * 10)
+       .limit(TradeTariffBackend.change_count)
        .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date), Sequel.desc(:depth))
        .all
      )
