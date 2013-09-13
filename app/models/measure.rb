@@ -335,6 +335,18 @@ class Measure < Sequel::Model
       qon
     end
   end
+
+  def self.changes_for(depth = 1, conditions = {})
+    operation_klass.select(
+      Sequel.as('Measure', :model),
+      :oid,
+      :operation_date,
+      :operation,
+      Sequel.as(depth, :depth)
+    ).where(conditions)
+     .limit(TradeTariffBackend.change_count)
+     .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date))
+  end
 end
 
 

@@ -85,3 +85,31 @@ describe Api::V1::HeadingsController, "GET #show" do
     end
   end
 end
+
+describe Api::V1::HeadingsController, "GET #changes" do
+  render_views
+
+  let(:heading) { create :heading, :non_grouping,
+                                   :non_declarable,
+                                   :with_description,
+                                   :with_chapter,
+                                   operation_date: Date.today }
+
+  let(:pattern) {
+    [
+      {
+        oid: Integer,
+        model_name: "Heading",
+        operation: String,
+        operation_date: String,
+        record: Hash
+      }
+    ].ignore_extra_values!
+  }
+
+  it 'returns heading changes' do
+    get :changes, id: heading, format: :json
+
+    response.body.should match_json_expression pattern
+  end
+end

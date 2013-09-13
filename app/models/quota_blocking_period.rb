@@ -10,5 +10,3 @@ class QuotaBlockingPeriod < Sequel::Model
     end
   end
 end
-
-

@@ -18,5 +18,3 @@ class QuotaBalanceEvent < Sequel::Model
     'open'
   end
 end
-
-

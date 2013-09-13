@@ -2,23 +2,33 @@ module Sequel
   module Plugins
     module Oplog
       def self.configure(model, options = {})
-        primary_key = [:oid, options.fetch(:primary_key, model.primary_key)].flatten
-        operation_klass = :"#{model}::Operation"
+        model_primary_key = options.fetch(:primary_key, model.primary_key)
+        primary_key = [:oid, model_primary_key].flatten
+        operation_class_name = :"#{model}::Operation"
 
         # Define ModelClass::Operation
         # e.g. Measure::Operation for measure oplog table
-        model.const_set(:Operation, Sequel::Model(:"#{model.table_name}_oplog"))
-             .set_primary_key(primary_key)
+        operation_class = Class.new(Sequel::Model(:"#{model.table_name}_oplog"))
+        operation_class.one_to_one(
+          :record,
+          key: model_primary_key,
+          primary_key: model_primary_key,
+          foreign_key: model_primary_key,
+          class_name: model
+        )
+        operation_class.set_primary_key(primary_key)
+
+        model.const_set(:Operation, operation_class)
         model.const_get(:Operation).unrestrict_primary_key
 
         # Associations
         model.one_to_one :source, key: :oid,
                                   primary_key: :oid,
-                                  class_name: operation_klass
+                                  class_name: operation_class_name
         model.one_to_many :operations, key: primary_key,
                                        foreign_key: primary_key,
                                        primary_key: primary_key,
-                                       class_name: operation_klass
+                                       class_name: operation_class_name
 
         # Delegations
         model.delegate :operation_klass, to: model

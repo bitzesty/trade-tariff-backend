@@ -318,4 +318,44 @@ describe Commodity do
       end
     end
   end
+
+  describe '#changes' do
+    let(:commodity) { create :commodity }
+
+    it 'returns instance of ChangeLog' do
+      expect(commodity.changes).to be_kind_of ChangeLog
+    end
+
+    context 'with commodity changes' do
+      let!(:commodity) { create :commodity, operation_date: Date.today }
+
+      it 'includes commodity changes' do
+        expect(
+          commodity.changes.select { |change|
+            change.oid == commodity.oid &&
+            change.model == GoodsNomenclature
+          }
+        ).to be_present
+      end
+    end
+
+    context 'with associated measure changes' do
+      let!(:commodity) { create :commodity, operation_date: Date.yesterday }
+      let!(:measure)   {
+        create :measure,
+               goods_nomenclature: commodity,
+               goods_nomenclature_item_id: commodity.goods_nomenclature_item_id,
+               operation_date: Date.today
+      }
+
+      it 'includes measure changes' do
+        expect(
+          commodity.changes.select { |change|
+            change.oid == measure.oid &&
+            change.model == Measure
+          }
+        ).to be_present
+      end
+    end
+  end
 end

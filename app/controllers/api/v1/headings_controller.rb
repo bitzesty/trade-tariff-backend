@@ -3,7 +3,7 @@ require 'goods_nomenclature_mapper'
 module Api
   module V1
     class HeadingsController < ApiController
-      before_filter :find_heading, only: [:show]
+      before_filter :find_heading, only: [:show, :changes]
 
       def show
         if @heading.declarable?
@@ -41,6 +41,12 @@ module Api
         end
 
         respond_with @heading
+      end
+
+      def changes
+        @changes = @heading.changes
+
+        render 'api/v1/changes/changes'
       end
 
       private

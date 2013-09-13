@@ -12,9 +12,21 @@ TradeTariffBackend::Application.routes.draw do
       end
       resources :chapters, only: [:index, :show], constraints: { id: /\d{2}/ } do
         resource :chapter_note, module: 'chapters'
+
+        member {
+          get :changes
+        }
       end
-      resources :headings, only: [:show], constraints: { id: /\d{4}/ }
-      resources :commodities, only: [:show], constraints: { id: /\d{10}/ }
+      resources :headings, only: [:show], constraints: { id: /\d{4}/ } do
+        member {
+          get :changes
+        }
+      end
+      resources :commodities, only: [:show], constraints: { id: /\d{10}/ } do
+        member {
+          get :changes
+        }
+      end
       resources :geographical_areas, only: [:countries] do
         collection { get :countries }
       end

@@ -10,5 +10,3 @@ class QuotaSuspensionPeriod < Sequel::Model
     end
   end
 end
-
-

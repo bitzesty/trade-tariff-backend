@@ -62,3 +62,32 @@ describe Api::V1::CommoditiesController, "GET #show" do
     end
   end
 end
+
+describe Api::V1::CommoditiesController, "GET #changes" do
+  render_views
+
+  let!(:commodity) { create :commodity, :with_indent,
+                                        :with_chapter,
+                                        :with_heading,
+                                        :with_description,
+                                        :declarable,
+                                        operation_date: Date.today }
+
+  let(:pattern) {
+    [
+      {
+        oid: Integer,
+        model_name: "GoodsNomenclature",
+        operation: String,
+        operation_date: String,
+        record: Hash
+      }
+    ].ignore_extra_values!
+  }
+
+  it 'returns commodity changes' do
+    get :changes, id: commodity, format: :json
+
+    response.body.should match_json_expression pattern
+  end
+end

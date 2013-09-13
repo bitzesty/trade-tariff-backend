@@ -1,7 +1,7 @@
 module Api
   module V1
     class CommoditiesController < ApiController
-      before_filter :find_commodity, only: [:show]
+      before_filter :find_commodity, only: [:show, :changes]
 
       def show
         @measures = MeasurePresenter.new(@commodity.measures_dataset.eager({geographical_area: [:geographical_area_descriptions,
@@ -32,6 +32,12 @@ module Api
                                                       :measure_partial_temporary_stops).all, @commodity).validate!
 
         respond_with @commodity
+      end
+
+      def changes
+        @changes = @commodity.changes
+
+        render 'api/v1/changes/changes'
       end
 
       private

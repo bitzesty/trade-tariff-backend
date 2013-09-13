@@ -15,5 +15,3 @@ class QuotaOrderNumber < Sequel::Model
 
   delegate :present?, to: :quota_order_number_origin, prefix: true, allow_nil: true
 end
-
-

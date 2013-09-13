@@ -56,3 +56,29 @@ describe Api::V1::ChaptersController, "GET #index" do
     response.body.should match_json_expression pattern
   end
 end
+
+
+describe Api::V1::ChaptersController, "GET #changes" do
+  render_views
+
+  let(:chapter) { create :chapter, :with_section, :with_note,
+                                   operation_date: Date.today }
+
+  let(:pattern) {
+    [
+      {
+        oid: Integer,
+        model_name: "Chapter",
+        operation: String,
+        operation_date: String,
+        record: Hash
+      }
+    ].ignore_extra_values!
+  }
+
+  it 'returns chapter changes' do
+    get :changes, id: chapter, format: :json
+
+    response.body.should match_json_expression pattern
+  end
+end

@@ -11,5 +11,3 @@ class QuotaExhaustionEvent < Sequel::Model
     'exhausted'
   end
 end
-
-

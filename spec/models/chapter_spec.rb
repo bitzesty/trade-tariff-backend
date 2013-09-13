@@ -72,4 +72,77 @@ describe Chapter do
       chapter.to_param.should == chapter.goods_nomenclature_item_id.first(2)
     end
   end
+
+  describe '#changes' do
+    let(:chapter) { create :chapter }
+
+    it 'returns instance of ChangeLog' do
+      expect(chapter.changes).to be_kind_of ChangeLog
+    end
+
+    context 'with Chapter changes' do
+      let!(:chapter) { create :chapter, operation_date: Date.today }
+
+      it 'includes Chapter changes' do
+        expect(
+          chapter.changes.select { |change|
+            change.oid == chapter.oid &&
+            change.model == Chapter
+          }
+        ).to be_present
+      end
+
+      context 'with Heading changes' do
+        let!(:heading) {
+          create :heading,
+                 operation_date: Date.today,
+                 goods_nomenclature_item_id: "#{chapter.short_code}01000000"
+        }
+
+        it 'includes Heading changes' do
+          expect(
+            chapter.changes.select { |change|
+              change.oid == heading.oid &&
+              change.model == Heading
+            }
+          ).to be_present
+        end
+
+        context 'with associated Commodity changes' do
+          let!(:commodity) {
+            create :commodity,
+                   operation_date: Date.today,
+                   goods_nomenclature_item_id: "#{heading.short_code}000001"
+          }
+
+          it 'includes Commodity changes' do
+            expect(
+              chapter.changes.select { |change|
+                change.oid == commodity.oid &&
+                change.model == Commodity
+              }
+            ).to be_present
+          end
+
+          context 'with associated Measure (through Commodity) changes' do
+            let!(:measure)   {
+              create :measure,
+                     goods_nomenclature: commodity,
+                     goods_nomenclature_item_id: commodity.goods_nomenclature_item_id,
+                     operation_date: Date.today
+            }
+
+            it 'includes Measure changes' do
+              expect(
+                heading.changes.select { |change|
+                  change.oid == measure.oid &&
+                  change.model == Measure
+                }
+              ).to be_present
+            end
+          end
+        end
+      end
+    end
+  end
 end
