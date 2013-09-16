@@ -1,6 +1,8 @@
 class ChapterNote < Sequel::Model
   plugin :json_serializer
   plugin :active_model
+  plugin :time_machine, period_start_column: Sequel.qualify(:chapter_notes, :validity_start_date),
+                        period_end_column:   Sequel.qualify(:chapter_notes, :validity_end_date)
 
   many_to_one :chapter, dataset: -> {
     Chapter.where(goods_nomenclature_item_id: chapter_goods_id)
