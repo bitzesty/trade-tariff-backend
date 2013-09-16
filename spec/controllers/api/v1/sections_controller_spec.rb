@@ -28,7 +28,9 @@ describe Api::V1::SectionsController, "GET #show" do
 
   context 'when record is not present' do
     it 'returns not found if record was not found' do
-      expect { get :show, id: "5", format: :json }.to raise_error Sequel::RecordNotFound
+      get :show, id: "5", format: :json
+
+      expect(response.status).to eq 404
     end
   end
 end

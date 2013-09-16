@@ -74,6 +74,7 @@ GEM
     factory_girl_rails (4.0.0)
       factory_girl (~> 4.0.0)
       railties (>= 3.0.0)
+    fakefs (0.4.3)
     faraday (0.8.8)
       multipart-post (~> 1.2.0)
     fastercsv (1.5.5)
@@ -282,6 +283,7 @@ DEPENDENCIES
   curb (= 0.8.3)
   exception_notification
   factory_girl_rails
+  fakefs
   forgery
   gds-sso (= 3.0.0)
   guard-rspec

@@ -22,6 +22,7 @@ class Chapter < GoodsNomenclature
   }
 
   one_to_one :chapter_note, primary_key: :to_param
+  one_to_many :search_references, primary_key: :short_code
 
   # Tire configuration
   tire do
@@ -57,19 +58,26 @@ class Chapter < GoodsNomenclature
   end
 
   def serializable_hash
-    {
+    chapter_attributes = {
       id: goods_nomenclature_sid,
       goods_nomenclature_item_id: goods_nomenclature_item_id,
       producline_suffix: producline_suffix,
       validity_start_date: validity_start_date,
       validity_end_date: validity_end_date,
-      description: description.downcase,
-      section: {
-        numeral: section.numeral,
-        title: section.title,
-        position: section.position
-      }
+      description: description.downcase
     }
+
+    if section.present?
+      chapter_attributes.merge!({
+        section: {
+          numeral: section.numeral,
+          title: section.title,
+          position: section.position
+        }
+      })
+    end
+
+    chapter_attributes
   end
 
   def to_indexed_json

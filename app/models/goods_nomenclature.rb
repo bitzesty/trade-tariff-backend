@@ -1,5 +1,4 @@
 require 'time_machine'
-require 'trackable'
 
 class GoodsNomenclature < Sequel::Model
   set_dataset order(Sequel.asc(:goods_nomenclatures__goods_nomenclature_item_id))
@@ -7,9 +6,10 @@ class GoodsNomenclature < Sequel::Model
 
   plugin :time_machine, period_start_column: Sequel.qualify(:goods_nomenclatures, :validity_start_date),
                         period_end_column:   Sequel.qualify(:goods_nomenclatures, :validity_end_date)
-  plugin :tire
   plugin :oplog, primary_key: :goods_nomenclature_sid
+  plugin :nullable
   plugin :conformance_validator
+  plugin :tire
 
   plugin :sti, class_determinator: ->(record) {
     gono_id = record[:goods_nomenclature_item_id].to_s
@@ -45,7 +45,7 @@ class GoodsNomenclature < Sequel::Model
   end
 
   def goods_nomenclature_description
-    goods_nomenclature_descriptions.first
+    goods_nomenclature_descriptions.first || NullGoodsNomenclature.new
   end
 
   many_to_many :footnotes, join_table: :footnote_association_goods_nomenclatures,

@@ -14,6 +14,7 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/autorun'
 require 'rspec/rails'
 require 'json_expressions/rspec'
+require 'fakefs/spec_helpers'
 
 require Rails.root.join("spec/support/tariff_validation_matcher.rb")
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
