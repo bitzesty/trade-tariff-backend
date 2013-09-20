@@ -207,7 +207,12 @@ class ChiefTransformer
     def chief_geographical_area=(chief_code)
       @chief_geographical_area = chief_code
 
-      self[:geographical_area_id] = (chief_code == DEFAULT_GEOGRAPHICAL_AREA_ID) ? chief_code : Chief::CountryCode.to_taric(chief_code)
+      # chief country code converted to taric country code OR
+      # chief country group code converted to taric country code OR
+      # chief country code as is
+      self[:geographical_area_id] = Chief::CountryCode.to_taric(chief_code) ||
+        Chief::CountryGroup.to_taric(chief_code) ||
+        chief_code
     end
 
     def candidate_associations
