@@ -2,7 +2,7 @@ module Api
   module V1
     class UpdatesController < ApiController
       def index
-        @updates = TariffSynchronizer::BaseUpdate.all
+        @updates = TariffSynchronizer::BaseUpdate.descending
 
         respond_with @updates
       end
