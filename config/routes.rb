@@ -45,7 +45,9 @@ TradeTariffBackend::Application.routes.draw do
         collection { get :countries }
       end
 
-      resources :updates, only: [:index]
+      resources :updates, only: [:index] do
+        collection { get :latest }
+      end
 
       post "search" => "search#search", via: :post, as: :search
     end

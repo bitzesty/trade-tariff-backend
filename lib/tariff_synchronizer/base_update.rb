@@ -48,8 +48,12 @@ module TariffSynchronizer
         where(state: [PENDING_STATE, FAILED_STATE])
       end
 
+      def descending
+        order(Sequel.desc(:issue_date))
+      end
+
       def latest_applied_of_both_kinds
-        order(Sequel.desc(:issue_date)).from_self.group(:update_type).applied
+        descending.from_self.group(:update_type).applied
       end
     end
 
