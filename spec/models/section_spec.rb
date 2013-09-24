@@ -8,12 +8,4 @@ describe Section do
       end
     end
   end
-
-  describe '.to_param' do
-    let(:section) { create :section }
-
-    it 'uses position as param' do
-      section.to_param.should == section.position
-    end
-  end
 end

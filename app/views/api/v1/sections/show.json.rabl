@@ -4,5 +4,5 @@ node(:section_note, if: lambda {|section| section.section_note.present? }) do |s
   section.section_note.content
 end
 child(chapters: :chapters) do
-  attributes :description, :goods_nomenclature_item_id
+  attributes :description, :goods_nomenclature_item_id, :goods_nomenclature_sid
 end

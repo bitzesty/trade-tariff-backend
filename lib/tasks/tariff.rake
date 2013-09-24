@@ -1,5 +1,4 @@
 require 'tariff_synchronizer'
-require 'green_pages'
 
 namespace :tariff do
   desc 'Installs Trade Tariff, creates relevant records, imports national data'
@@ -11,8 +10,7 @@ namespace :tariff do
                    install:chief:standing_data]
 
   desc 'Reindex relevant entities on ElasticSearch'
-  task reindex: %w[environment
-                   install:green_pages] do
+  task reindex: %w[environment] do
     TradeTariffBackend.reindex
   end
 

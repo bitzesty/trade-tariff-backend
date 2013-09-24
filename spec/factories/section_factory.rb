@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :section do
     position      { Forgery(:basic).number }
     numeral       { ["I", "II", "III"].sample }
-    title         { Forgery(:lorem_ipsum).sentence }
+    title         { Forgery(:basic).text }
 
     trait :with_note do
       after(:create) { |section, evaluator|

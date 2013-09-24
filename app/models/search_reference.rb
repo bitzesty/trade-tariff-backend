@@ -1,11 +1,26 @@
 class SearchReference < Sequel::Model
-  include Tire::Model::Search
-
+  plugin :active_model
   plugin :tire
 
-  HEADING_IDENTITY_REGEX = /(\d{1,2}).(\d{1,2})/
-  CHAPTER_IDENTITY_REGEX = /Chapter (\d{1,2})|Ch (\d{1,2})|^\s{0,}\d{1,2}\s{0,}$/
-  SECTION_IDENTITY_REGEX = /Section\s{1,}(\d{1,2})|section\s{1,}(\d{1,2})/
+  many_to_one :section
+  many_to_one :chapter, dataset: -> {
+    Chapter.by_code(chapter_id)
+  }
+  many_to_one :heading, dataset: -> {
+    Heading.by_code(heading_id)
+  }
+
+  self.raise_on_save_failure = false
+
+  dataset_module do
+    def heading_id
+      1
+    end
+
+    def by_title
+      order(Sequel.asc(:title))
+    end
+  end
 
   tire do
     index_name    'search_references'
@@ -17,17 +32,21 @@ class SearchReference < Sequel::Model
     end
   end
 
+  def validate
+    super
+
+    if heading_id.blank? && chapter_id.blank? && section_id.blank?
+      errors.add(:reference, 'has to be associated to Section/Chapter/Heading')
+    end
+    errors.add(:title, 'missing title') if title.blank?
+  end
+
   def referenced_entity
-    @referenced_entity ||= case reference
-                           when HEADING_IDENTITY_REGEX
-                             Heading.by_code("#{$1}#{$2}").first
-                           when CHAPTER_IDENTITY_REGEX
-                             Chapter.by_code($1).first
-                           when SECTION_IDENTITY_REGEX
-                             Section.where(position: $1).first
-                           else
-                             # unprocessable
-                           end
+    heading || chapter || section || NullObject.new
+  end
+
+  def reference_class
+    referenced_entity.class.name
   end
 
   def to_indexed_json
@@ -38,6 +57,7 @@ class SearchReference < Sequel::Model
              else
                {
                  title: title,
+                 reference_class: reference_class,
                  reference: referenced_entity.serializable_hash.merge({class: referenced_entity.class.name})
                }
              end

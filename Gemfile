@@ -50,6 +50,7 @@ group :test do
   gem "brakeman", "1.7.0"
   gem "ci_reporter"
   gem "factory_girl_rails"
+  gem "fakefs", require: "fakefs/safe"
   gem "forgery"
   gem "json_expressions"
   gem "rspec-rails", "~> 2.14.0"

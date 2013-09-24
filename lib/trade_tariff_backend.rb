@@ -1,12 +1,13 @@
 require 'ostruct'
 
 module TradeTariffBackend
-  autoload :Auditor,       'trade_tariff_backend/auditor'
-  autoload :DataMigration, 'trade_tariff_backend/data_migration'
-  autoload :DataMigrator,  'trade_tariff_backend/data_migrator'
-  autoload :Indexer,       'trade_tariff_backend/indexer'
-  autoload :Mailer,        'trade_tariff_backend/mailer'
-  autoload :Validator,     'trade_tariff_backend/validator'
+  autoload :Auditor,         'trade_tariff_backend/auditor'
+  autoload :DataMigration,   'trade_tariff_backend/data_migration'
+  autoload :DataMigrator,    'trade_tariff_backend/data_migrator'
+  autoload :Indexer,         'trade_tariff_backend/indexer'
+  autoload :Mailer,          'trade_tariff_backend/mailer'
+  autoload :SearchIndex,     'trade_tariff_backend/search_index'
+  autoload :Validator,        'trade_tariff_backend/validator'
 
   class << self
 
@@ -66,6 +67,10 @@ module TradeTariffBackend
     # Number of changes to fetch for Commodity/Heading/Chapter
     def change_count
       10
+    end
+
+    def search_index
+      SearchIndex
     end
 
     private

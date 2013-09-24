@@ -42,7 +42,9 @@ describe Api::V1::HeadingsController, "GET #show" do
 
     context 'when record is not present' do
       it 'returns not found if record was not found' do
-        expect { get :show, id: "5555", format: :json }.to raise_error Sequel::RecordNotFound
+        get :show, id: "5555", format: :json
+
+        expect(response.status).to eq 404
       end
     end
   end
@@ -72,7 +74,9 @@ describe Api::V1::HeadingsController, "GET #show" do
 
     context 'when record is not present' do
       it 'returns not found if record was not found' do
-        expect { get :show, id: "1234", format: :json }.to raise_error Sequel::RecordNotFound
+        get :show, id: "1234", format: :json
+
+        expect(response.status).to eq 404
       end
     end
 
@@ -80,7 +84,9 @@ describe Api::V1::HeadingsController, "GET #show" do
       let!(:hidden_goods_nomenclature) { create :hidden_goods_nomenclature, goods_nomenclature_item_id: heading.goods_nomenclature_item_id }
 
       it 'returns not found' do
-        expect { get :show, id: heading.goods_nomenclature_item_id.first(4), format: :json }.to raise_error Sequel::RecordNotFound
+        get :show, id: heading.goods_nomenclature_item_id.first(4), format: :json
+
+        expect(response.status).to eq 404
       end
     end
   end

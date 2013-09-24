@@ -29,7 +29,9 @@ describe Api::V1::CommoditiesController, "GET #show" do
 
   context 'when record is not present' do
     it 'returns not found if record was not found' do
-      expect { get :show, id: "1234567890", format: :json }.to raise_error Sequel::RecordNotFound
+      get :show, id: "1234567890", format: :json
+
+      expect(response.status).to eq 404
     end
   end
 
@@ -37,7 +39,9 @@ describe Api::V1::CommoditiesController, "GET #show" do
     let!(:hidden_goods_nomenclature) { create :hidden_goods_nomenclature, goods_nomenclature_item_id: commodity.goods_nomenclature_item_id }
 
     it 'returns not found' do
-      expect { get :show, id: commodity.goods_nomenclature_item_id, format: :json }.to raise_error Sequel::RecordNotFound
+      get :show, id: commodity.goods_nomenclature_item_id, format: :json
+
+      expect(response.status).to eq 404
     end
   end
 
@@ -58,7 +62,9 @@ describe Api::V1::CommoditiesController, "GET #show" do
                                                 producline_suffix: '80'}
 
     it 'returns not found (is not declarable)' do
-      expect { get :show, id: parent_commodity.goods_nomenclature_item_id, format: :json }.to raise_error Sequel::RecordNotFound
+      get :show, id: parent_commodity.goods_nomenclature_item_id, format: :json
+
+      expect(response.status).to eq 404
     end
   end
 end

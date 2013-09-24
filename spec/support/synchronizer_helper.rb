@@ -79,9 +79,7 @@ module SynchronizerHelper
     FileUtils.rm_rf File.join(Rails.root, TariffSynchronizer.root_path)
   end
 
-  private
-
-  def create_file(path, content)
+  def create_file(path, content = '')
     data_file = File.new(path, "w")
     data_file.write(content)
     data_file.close

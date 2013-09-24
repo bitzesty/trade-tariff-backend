@@ -89,7 +89,7 @@ describe Heading do
     end
 
     describe 'chapter' do
-      let!(:heading)    { create :heading }
+      let!(:heading)  { create :heading }
       let!(:chapter1) { create :chapter, goods_nomenclature_item_id: "#{heading.goods_nomenclature_item_id.first(2)}00000000",
                                          validity_start_date: 10.years.ago,
                                          validity_end_date: nil }
@@ -105,11 +105,11 @@ describe Heading do
       end
 
       it 'returns chapter matched by part of own goods nomenclature item id' do
-        heading.chapter.should eq chapter1
+        expect(heading.chapter(true)).to eq chapter1
       end
 
       it 'does not return commodity that is irrelevant to given time' do
-        heading.chapter.should_not eq chapter2
+        expect(heading.chapter(true)).not_to eq chapter2
       end
     end
   end

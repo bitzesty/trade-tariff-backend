@@ -1,0 +1,1 @@
+attributes :goods_nomenclature_sid

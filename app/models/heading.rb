@@ -29,6 +29,8 @@ class Heading < GoodsNomenclature
   }, class_name: 'MeasureComponent'
 
 
+  one_to_many :search_references, primary_key: :short_code
+
   dataset_module do
     def by_code(code = "")
       filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", "#{code.to_s.first(4)}000000")
@@ -89,7 +91,7 @@ class Heading < GoodsNomenclature
   alias :declarable? :declarable
 
   def serializable_hash
-    {
+    heading_attributes = {
       id: goods_nomenclature_sid,
       goods_nomenclature_item_id: goods_nomenclature_item_id,
       producline_suffix: producline_suffix,
@@ -97,20 +99,32 @@ class Heading < GoodsNomenclature
       validity_end_date: validity_end_date,
       description: description,
       number_indents: number_indents,
-      section: {
-        numeral: section.numeral,
-        title: section.title,
-        position: section.position
-      },
-      chapter: {
-        goods_nomenclature_sid: chapter.goods_nomenclature_sid,
-        goods_nomenclature_item_id: chapter.goods_nomenclature_item_id,
-        producline_suffix: chapter.producline_suffix,
-        validity_start_date: chapter.validity_start_date,
-        validity_end_date: chapter.validity_end_date,
-        description: chapter.description.downcase
-      }
     }
+
+    if chapter.present?
+      heading_attributes.merge!({
+        chapter: {
+          goods_nomenclature_sid: chapter.goods_nomenclature_sid,
+          goods_nomenclature_item_id: chapter.goods_nomenclature_item_id,
+          producline_suffix: chapter.producline_suffix,
+          validity_start_date: chapter.validity_start_date,
+          validity_end_date: chapter.validity_end_date,
+          description: chapter.description.downcase
+        }
+      })
+
+      if section.present?
+        heading_attributes.merge!({
+          section: {
+            numeral: section.numeral,
+            title: section.title,
+            position: section.position
+          }
+        })
+      end
+    end
+
+    heading_attributes
   end
 
   def to_indexed_json

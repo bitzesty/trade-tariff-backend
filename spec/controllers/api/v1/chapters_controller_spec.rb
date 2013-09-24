@@ -24,7 +24,9 @@ describe Api::V1::ChaptersController, "GET #show" do
 
   context 'when record is not present' do
     it 'returns not found if record was not found' do
-      expect { get :show, id: "55", format: :json }.to raise_error Sequel::RecordNotFound
+      get :show, id: "55", format: :json
+
+      expect(response.status).to eq 404
     end
   end
 
@@ -32,7 +34,9 @@ describe Api::V1::ChaptersController, "GET #show" do
     let!(:hidden_goods_nomenclature) { create :hidden_goods_nomenclature, goods_nomenclature_item_id: chapter.goods_nomenclature_item_id }
 
     it 'returns not found' do
-      expect { get :show, id: chapter.goods_nomenclature_item_id.first(2), format: :json }.to raise_error Sequel::RecordNotFound
+      get :show, id: chapter.goods_nomenclature_item_id.first(2), format: :json
+
+      expect(response.status).to eq 404
     end
   end
 end

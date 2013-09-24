@@ -1,6 +1,6 @@
 object @chapter
 
-attributes :goods_nomenclature_item_id, :description
+attributes :goods_nomenclature_sid, :goods_nomenclature_item_id, :description
 
 node(:chapter_note_id) { |chapter| chapter.chapter_note.try(:id) }
 

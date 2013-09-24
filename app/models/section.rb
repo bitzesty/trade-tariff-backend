@@ -1,9 +1,10 @@
 class Section < Sequel::Model
   include Tire::Model::Search
 
-  plugin :json_serializer
-  plugin :tire
   plugin :active_model
+  plugin :json_serializer
+  plugin :nullable
+  plugin :tire
 
   many_to_many :chapters, dataset: -> {
     Chapter.join_table(:inner, :chapters_sections, chapters_sections__goods_nomenclature_sid: :goods_nomenclatures__goods_nomenclature_sid)
@@ -29,8 +30,8 @@ class Section < Sequel::Model
     end
   end)
 
-
   one_to_one :section_note
+  one_to_many :search_references
 
   # Tire configuration
   tire do
@@ -40,10 +41,6 @@ class Section < Sequel::Model
     mapping do
       indexes :title,        analyzer: 'snowball'
     end
-  end
-
-  def to_param
-    position
   end
 
   def first_chapter
