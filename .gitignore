@@ -24,3 +24,4 @@ data/*/*.txt
 db/schema.rb
 spec/coverage
 .rbenv-version
+/spec/reports
