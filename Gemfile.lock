@@ -79,8 +79,8 @@ GEM
       multipart-post (~> 1.2.0)
     fastercsv (1.5.5)
     forgery (0.5.0)
-    gds-sso (3.0.0)
-      omniauth-gds (= 0.0.3)
+    gds-sso (3.1.0)
+      omniauth-gds (~> 0.0.3)
       rack-accept (~> 0.4.4)
       rails (>= 3.0.0)
       warden (~> 1.2)
@@ -135,7 +135,7 @@ GEM
     omniauth (1.1.4)
       hashie (>= 1.2, < 3)
       rack
-    omniauth-gds (0.0.3)
+    omniauth-gds (0.0.4)
       omniauth-oauth2 (~> 1.0)
     omniauth-oauth2 (1.1.1)
       oauth2 (~> 0.8.0)
@@ -285,7 +285,7 @@ DEPENDENCIES
   factory_girl_rails
   fakefs
   forgery
-  gds-sso (= 3.0.0)
+  gds-sso (= 3.1.0)
   guard-rspec
   jquery-rails (= 1.0.19)
   json_expressions

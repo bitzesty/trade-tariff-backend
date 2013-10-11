@@ -18,7 +18,7 @@ gem "strong_parameters"
 gem "builder"
 gem "jquery-rails", "1.0.19"
 gem "plek", "1.0.0"
-gem 'gds-sso', '3.0.0'
+gem 'gds-sso', '3.1.0'
 gem "railties"
 
 gem "unicorn", "~> 4.6.3"
