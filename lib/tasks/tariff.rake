@@ -63,7 +63,7 @@ namespace :tariff do
   namespace :install do
     desc "Load Green Page (SearchReference) entities from reference file"
     task green_pages: :environment do
-      GreenPages.reload
+      ImportSearchReferences.reload
     end
 
     namespace :taric do
