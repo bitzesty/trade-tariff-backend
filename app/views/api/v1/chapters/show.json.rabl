@@ -3,9 +3,10 @@ object @chapter
 attributes :goods_nomenclature_sid, :goods_nomenclature_item_id, :description
 
 node(:chapter_note_id) { |chapter| chapter.chapter_note.try(:id) }
+node(:section_id) { |chapter| chapter.section.id }
 
 child :section do
-  attributes :title, :position, :numeral
+  attributes :id, :title, :position, :numeral
 end
 
 node(:chapter_note, if: lambda {|chapter| chapter.chapter_note.present? }) do |chapter|

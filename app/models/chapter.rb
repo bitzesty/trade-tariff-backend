@@ -57,6 +57,22 @@ class Chapter < GoodsNomenclature
     sections.first
   end
 
+  def first_heading
+    headings.sort_by(&:goods_nomenclature_item_id).first || NullObject.new
+  end
+
+  def last_heading
+    headings.sort_by(&:goods_nomenclature_item_id).last || NullObject.new
+  end
+
+  def headings_from
+    first_heading.short_code
+  end
+
+  def headings_to
+    last_heading.short_code
+  end
+
   def serializable_hash
     chapter_attributes = {
       id: goods_nomenclature_sid,
