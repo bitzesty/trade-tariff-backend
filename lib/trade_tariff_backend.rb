@@ -43,12 +43,17 @@ module TradeTariffBackend
     end
 
     def with_locked_database(&block)
-      begin
-        if Sequel::Model.db.get_lock(db_lock_key)
-          yield
+      Sequel::Model.DB.extension :server_block
+
+      # We should use the master database for this
+      Sequel::Model.DB.with_server(:default) do
+        begin
+          if Sequel::Model.db.get_lock(db_lock_key)
+            yield
+          end
+        ensure
+          Sequel::Model.db.release_lock(db_lock_key)
         end
-      ensure
-        Sequel::Model.db.release_lock(db_lock_key)
       end
     end
 
