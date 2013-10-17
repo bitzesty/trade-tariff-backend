@@ -2,6 +2,8 @@ module TariffSynchronizer
   class BaseUpdate < Sequel::Model(:tariff_updates)
     include FileService
 
+    delegate :instrument, to: ActiveSupport::Notifications
+
     set_dataset db[:tariff_updates]
 
     plugin :timestamps
@@ -90,10 +92,12 @@ module TariffSynchronizer
     end
 
     def apply
-      File.exists?(file_path) || ActiveSupport::Notifications.instrument("not_found_on_file_system.tariff_synchronizer", path: file_path)
+      File.exists?(file_path) || instrument("not_found_on_file_system.tariff_synchronizer", path: file_path)
     end
 
     class << self
+      delegate :instrument, to: ActiveSupport::Notifications
+
       def sync
         unless pending_from == Date.today
           (pending_from..Date.today).each do |date|
@@ -120,17 +124,14 @@ module TariffSynchronizer
           write_update_file(date, response, file_name)
         elsif response.success? && !response.content_present?
           create_update_entry(date, FAILED_STATE, file_name)
-          ActiveSupport::Notifications.instrument("blank_update.tariff_synchronizer", date: date,
-                                                                                      url: response.url)
+          instrument("blank_update.tariff_synchronizer", date: date, url: response.url)
         elsif response.retry_count_exceeded?
           create_update_entry(date, FAILED_STATE, file_name)
-          ActiveSupport::Notifications.instrument("retry_exceeded.tariff_synchronizer", date: date,
-                                                                                        url: response.url)
+          instrument("retry_exceeded.tariff_synchronizer", date: date, url: response.url)
         elsif response.not_found?
           if date < Date.today
             create_update_entry(date, MISSING_STATE, missing_update_name_for(date))
-            ActiveSupport::Notifications.instrument("not_found.tariff_synchronizer", date: date,
-                                                                                     url: response.url)
+            instrument("not_found.tariff_synchronizer", date: date, url: response.url)
           end
         end
       end
@@ -138,9 +139,10 @@ module TariffSynchronizer
       def write_update_file(date, response, file_name)
         update_path = update_path(date, file_name)
 
-        ActiveSupport::Notifications.instrument("update_written.tariff_synchronizer", date: date,
-                                                                                      path: update_path,
-                                                                                      size: response.content.size) do
+        instrument("update_written.tariff_synchronizer",
+                   date: date,
+                   path: update_path,
+                   size: response.content.size) do
           write_file(update_path, response.content)
         end
       end
@@ -173,8 +175,9 @@ module TariffSynchronizer
       end
 
       def notify_about_missing_updates
-        ActiveSupport::Notifications.instrument("missing_updates.tariff_synchronizer", update_type: update_type,
-                                                                                       count: TariffSynchronizer.warning_day_count)
+        instrument("missing_updates.tariff_synchronizer",
+                   update_type: update_type,
+                   count: TariffSynchronizer.warning_day_count)
       end
     end
   end

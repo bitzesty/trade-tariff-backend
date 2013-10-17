@@ -10,8 +10,9 @@ module TariffSynchronizer
         taric_update_urls_for(date).tap do |taric_update_urls|
           if taric_update_urls.present?
             taric_update_urls.each do |taric_update_url|
-              ActiveSupport::Notifications.instrument("download_taric.tariff_synchronizer", date: date,
-                                                                                            url: taric_update_url) do
+              instrument("download_taric.tariff_synchronizer",
+                         date: date,
+                         url: taric_update_url) do
                 download_content(taric_update_url).tap { |response|
                   create_entry(date, response, "#{date}_#{response.file_name}")
                 }
@@ -21,8 +22,9 @@ module TariffSynchronizer
           # missing record until we are sure
           elsif date < Date.today
             create_update_entry(date, BaseUpdate::MISSING_STATE, missing_update_name_for(date))
-            ActiveSupport::Notifications.instrument("not_found.tariff_synchronizer", date: date,
-                                                                                     url: taric_query_url_for(date))
+            instrument("not_found.tariff_synchronizer",
+                       date: date,
+                       url: taric_query_url_for(date))
           end
         end
       end
@@ -46,7 +48,7 @@ module TariffSynchronizer
 
     def apply
       if super
-        ActiveSupport::Notifications.instrument("apply_taric.tariff_synchronizer", filename: filename) do
+        instrument("apply_taric.tariff_synchronizer", filename: filename) do
           TaricImporter.new(file_path, issue_date).import
 
           mark_as_applied
@@ -59,8 +61,9 @@ module TariffSynchronizer
     def self.taric_update_name_for(date)
       taric_query_url = taric_query_url_for(date)
 
-      ActiveSupport::Notifications.instrument("get_taric_update_name.tariff_synchronizer", date: date,
-                                                                                           url: taric_query_url) do
+      instrument("get_taric_update_name.tariff_synchronizer",
+                 date: date,
+                 url: taric_query_url) do
         response = download_content(taric_query_url)
         response.content.split("\n").map{|name| name.gsub(/[^0-9a-zA-Z\.]/i, '') } if response.success? && response.content_present?
       end
