@@ -12,6 +12,17 @@
   <strong><%= @exception %></strong>
 </p>
 
+<% if @database_queries.present? %>
+<p>
+  <strong>Latest database queries</strong>
+  <code>
+    <% @database_queries.reverse.each do |database_query| %>
+      <%= database_query %>
+    <% end %>
+  </code>
+</p>
+<% end %>
+
 <p>
   <strong>Backtrace:</strong>
 </p>

@@ -2,7 +2,7 @@ class TaricImporter < TariffImporter
   class RecordProcessor
     class UpdateOperation < Operation
       def call
-        model = klass.filter(attributes.slice(*primary_key).symbolize_keys).first
+        model = klass.filter(attributes.slice(*primary_key).symbolize_keys).take
         model.update(attributes.except(*primary_key).symbolize_keys)
       end
 

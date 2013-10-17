@@ -7,9 +7,10 @@ module TariffSynchronizer
     default from: "DO NOT REPLY <trade-tariff-alerts@digital.cabinet-office.gov.uk>",
             to: TradeTariffBackend.admin_email
 
-    def exception(exception, update)
+    def exception(exception, update, database_queries)
       @failed_file_path = update.file_path
       @exception = exception.original.presence || exception
+      @database_queries = database_queries
 
       mail subject: "#{subject_prefix(:error)} Failed Trade Tariff update"
     end

@@ -1,5 +1,6 @@
 require 'tariff_synchronizer/base_update'
 require 'tariff_synchronizer/file_service'
+require 'ostruct'
 
 module TariffSynchronizer
   class TaricUpdate < BaseUpdate
@@ -7,28 +8,34 @@ module TariffSynchronizer
 
     class << self
       def download(date)
-        taric_update_urls_for(date).tap do |taric_update_urls|
-          if taric_update_urls.present?
-            taric_update_urls.each do |taric_update_url|
-              ActiveSupport::Notifications.instrument("download_taric.tariff_synchronizer", date: date,
-                                                                                            url: taric_update_url) do
-                download_content(taric_update_url).tap { |response|
-                  create_entry(date, response, "#{date}_#{response.file_name}")
-                }
+        taric_updates_for(date).tap do |taric_updates|
+          if taric_updates.any?
+            taric_updates.each do |taric_update|
+              instrument("download_taric.tariff_synchronizer",
+                         date: date,
+                         url: taric_update.url) do
+                file_name_for(date, taric_update.file_name).tap do |local_file_name|
+                  unless update_file_exists?(local_file_name)
+                    download_content(taric_update.url).tap { |response|
+                      create_entry(date, response, local_file_name)
+                    }
+                  end
+                end
               end
             end
           # We will be retrying a few more times today, so do not create
           # missing record until we are sure
           elsif date < Date.today
             create_update_entry(date, BaseUpdate::MISSING_STATE, missing_update_name_for(date))
-            ActiveSupport::Notifications.instrument("not_found.tariff_synchronizer", date: date,
-                                                                                     url: taric_query_url_for(date))
+            instrument("not_found.tariff_synchronizer",
+                       date: date,
+                       url: taric_query_url_for(date))
           end
         end
       end
 
-      def file_name_for(date)
-        "#{date}_TGB#{date.strftime("%y")}#{date.yday}.xml"
+      def file_name_for(date, update_name)
+        "#{date}_#{update_name}"
       end
 
       def update_type
@@ -46,7 +53,7 @@ module TariffSynchronizer
 
     def apply
       if super
-        ActiveSupport::Notifications.instrument("apply_taric.tariff_synchronizer", filename: filename) do
+        instrument("apply_taric.tariff_synchronizer", filename: filename) do
           TaricImporter.new(file_path, issue_date).import
 
           mark_as_applied
@@ -59,22 +66,22 @@ module TariffSynchronizer
     def self.taric_update_name_for(date)
       taric_query_url = taric_query_url_for(date)
 
-      ActiveSupport::Notifications.instrument("get_taric_update_name.tariff_synchronizer", date: date,
-                                                                                           url: taric_query_url) do
+      instrument("get_taric_update_name.tariff_synchronizer",
+                 date: date,
+                 url: taric_query_url) do
         response = download_content(taric_query_url)
         response.content.split("\n").map{|name| name.gsub(/[^0-9a-zA-Z\.]/i, '') } if response.success? && response.content_present?
       end
     end
 
-    def self.taric_update_urls_for(date)
-      update_names = taric_update_name_for(date)
-
-      if update_names.present?
-        update_names.map {|name|
-          TariffSynchronizer.taric_update_url_template % { host: TariffSynchronizer.host,
-                                                           file_name: name }
-        }
-      end
+    def self.taric_updates_for(date)
+      (taric_update_name_for(date) || []).map { |name|
+        OpenStruct.new(
+          file_name: name,
+          url: TariffSynchronizer.taric_update_url_template % { host: TariffSynchronizer.host,
+                                                                file_name: name }
+        )
+      }
     end
 
     def self.taric_query_url_for(date)

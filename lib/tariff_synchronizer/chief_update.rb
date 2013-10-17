@@ -7,10 +7,14 @@ module TariffSynchronizer
 
     class << self
       def download(date)
-        ActiveSupport::Notifications.instrument("download_chief.tariff_synchronizer", date: date) do
-          download_content(chief_update_url_for(date)).tap { |response|
-            create_entry(date, response, "#{date}_#{response.file_name}")
-          }
+        instrument("download_chief.tariff_synchronizer", date: date) do
+          file_name_for(date).tap do |update_file_name|
+            unless update_file_exists?(update_file_name)
+              download_content(chief_update_url_for(date)).tap { |response|
+                create_entry(date, response, update_file_name)
+              }
+            end
+          end
         end
       end
 
@@ -33,7 +37,7 @@ module TariffSynchronizer
 
     def apply
       if super
-        ActiveSupport::Notifications.instrument("apply_chief.tariff_synchronizer", filename: filename) do
+        instrument("apply_chief.tariff_synchronizer", filename: filename) do
           ChiefImporter.new(file_path, issue_date).import
 
           mark_as_applied

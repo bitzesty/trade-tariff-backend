@@ -167,6 +167,9 @@ describe TariffSynchronizer::Logger do
                                        update_priority: 1,
                                        file_path: '/').as_null_object }
 
+    let(:last_email_body) {
+      ActionMailer::Base.deliveries.last.encoded
+    }
 
     before {
       class MockException < StandardError
@@ -175,7 +178,10 @@ describe TariffSynchronizer::Logger do
         end
       end
 
-      mock_pending_update.should_receive(:apply).and_raise(TaricImporter::ImportException.new("", MockException.new))
+      mock_pending_update.should_receive(:apply) {
+        Measure.first # execute dummy query to check if it was logged and presented in email
+        raise TaricImporter::ImportException.new("", MockException.new)
+      }
 
       TariffSynchronizer::PendingUpdate.should_receive(:all).and_return([mock_pending_update])
       rescuing {
@@ -190,14 +196,15 @@ describe TariffSynchronizer::Logger do
 
     it 'sends email error email' do
       ActionMailer::Base.deliveries.should_not be_empty
-      email = ActionMailer::Base.deliveries.last
-      email.encoded.should =~ /Backtrace/
+      last_email_body.should =~ /Backtrace/
     end
 
     it 'email includes information about original exception' do
-      ActionMailer::Base.deliveries.should_not be_empty
-      email = ActionMailer::Base.deliveries.last
-      email.encoded.should =~ /MockException/
+      last_email_body.should =~ /MockException/
+    end
+
+    it 'email include executed SQL queries' do
+      last_email_body.should =~ /SELECT \* FROM/
     end
   end
 
@@ -342,7 +349,9 @@ describe TariffSynchronizer::Logger do
 
     before {
       # Skip Taric update file name fetching
-      TariffSynchronizer::TaricUpdate.should_receive(:taric_update_urls_for).and_return(['abc'])
+      TariffSynchronizer::TaricUpdate.should_receive(:taric_updates_for).and_return(
+        [OpenStruct.new(url: 'url', file_name: 'file_name')]
+      )
       # Download mock response
       TariffSynchronizer::TaricUpdate.should_receive(:download_content).and_return(success_response)
       # Do not write file to file system

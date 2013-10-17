@@ -112,11 +112,37 @@ module TariffSynchronizer
         file_names: file_names
       )
     else
+      # Inner record processor emit conformance error message
+      # and we keep track of them here to present later by email
       unconformant_records = []
 
       subscribe /conformance_error/ do |*args|
         event = ActiveSupport::Notifications::Event.new(*args)
+
         unconformant_records << event.payload[:record]
+      end
+
+      # Track latest SQL queries in a ring buffer and with error
+      # email in case it happens
+      # Based on http://goo.gl/vpTFyT (SequelRails LogSubscriber)
+      database_queries = RingBuffer.new(10)
+
+      subscribe /sql\.sequel/ do |*args|
+        event = ActiveSupport::Notifications::Event.new(*args)
+
+        binds = unless event.payload.fetch(:binds, []).blank?
+          event.payload[:binds].map { |column, value|
+            [column.name, value]
+          }.inspect
+        end
+
+        database_queries.push(
+          "(%{class_name}) %{sql} %{binds}" % {
+            class_name: event.payload[:name],
+            sql: event.payload[:sql].squeeze(' '),
+            binds: binds
+          }
+        )
       end
 
       PendingUpdate.all.tap do |pending_updates|
@@ -134,7 +160,8 @@ module TariffSynchronizer
               instrument(
                 "failed_update.tariff_synchronizer",
                 exception: exception,
-                update: pending_update
+                update: pending_update,
+                database_queries: database_queries
               )
 
               pending_update.mark_as_failed
