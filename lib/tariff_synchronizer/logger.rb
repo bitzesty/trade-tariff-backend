@@ -34,7 +34,7 @@ module TariffSynchronizer
     def failed_update(event)
       error "Update failed: #{event.payload[:update]}"
 
-      Mailer.exception(event.payload[:exception], event.payload[:update])
+      Mailer.exception(event.payload[:exception], event.payload[:update], event.payload[:database_queries])
             .deliver
     end
 
