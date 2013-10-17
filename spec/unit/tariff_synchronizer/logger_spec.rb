@@ -200,12 +200,10 @@ describe TariffSynchronizer::Logger do
     end
 
     it 'email includes information about original exception' do
-      ActionMailer::Base.deliveries.should_not be_empty
       last_email_body.should =~ /MockException/
     end
 
     it 'email include executed SQL queries' do
-      ActionMailer::Base.deliveries.should_not be_empty
       last_email_body.should =~ /SELECT \* FROM/
     end
   end

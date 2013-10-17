@@ -23,31 +23,39 @@ describe TaricImporter::RecordProcessor::UpdateOperation do
       TaricImporter::RecordProcessor::UpdateOperation.new(record, operation_date)
     }
 
-    before {
-      create :language_description, language_code_id: 'FR',
-                                    language_id: 'EN',
-                                    description: 'French'
+    context 'record for update present' do
+      before {
+        create :language_description, language_code_id: 'FR',
+                                      language_id: 'EN',
+                                      description: 'French'
 
-      LanguageDescription.unrestrict_primary_key
-    }
+        LanguageDescription.unrestrict_primary_key
+      }
 
-    it 'identifies as create operation' do
-      operation.call
+      it 'identifies as create operation' do
+        operation.call
 
-      expect(LanguageDescription.count).to eq 1
-      expect(LanguageDescription.first.description).to eq 'French!'
+        expect(LanguageDescription.count).to eq 1
+        expect(LanguageDescription.first.description).to eq 'French!'
+      end
+
+      it 'returns model instance' do
+        expect(operation.call).to be_kind_of LanguageDescription
+      end
+
+      it 'sets update operation date to operation_date' do
+        operation.call
+
+        expect(
+          LanguageDescription::Operation.where(operation: 'U').first.operation_date
+        ).to eq operation_date
+      end
     end
 
-    it 'returns model instance' do
-      expect(operation.call).to be_kind_of LanguageDescription
-    end
-
-    it 'sets update operation date to operation_date' do
-      operation.call
-
-      expect(
-        LanguageDescription::Operation.where(operation: 'U').first.operation_date
-      ).to eq operation_date
+    context 'record for update missing' do
+      it 'raises Sequel::RecordNotFound exception' do
+        expect { operation.call }.to raise_error(Sequel::RecordNotFound)
+      end
     end
   end
 end

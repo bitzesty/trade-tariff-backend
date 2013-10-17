@@ -23,30 +23,38 @@ describe TaricImporter::RecordProcessor::DestroyOperation do
       TaricImporter::RecordProcessor::DestroyOperation.new(record, operation_date)
     }
 
-    before {
-      create :language_description, language_code_id: 'FR',
-                                    language_id: 'EN',
-                                    description: 'French'
+    context 'record present for destroy' do
+      before {
+        create :language_description, language_code_id: 'FR',
+                                      language_id: 'EN',
+                                      description: 'French'
 
-      LanguageDescription.unrestrict_primary_key
-    }
+        LanguageDescription.unrestrict_primary_key
+      }
 
-    it 'identifies as create operation' do
-      operation.call
+      it 'identifies as create operation' do
+        operation.call
 
-      expect(LanguageDescription.count).to eq 0
+        expect(LanguageDescription.count).to eq 0
+      end
+
+      it 'sets destroy operation date to operation_date' do
+        operation.call
+
+        expect(
+          LanguageDescription::Operation.where(operation: 'D').first.operation_date
+        ).to eq operation_date
+      end
+
+      it 'returns model instance' do
+        expect(operation.call).to be_kind_of LanguageDescription
+      end
     end
 
-    it 'sets destroy operation date to operation_date' do
-      operation.call
-
-      expect(
-        LanguageDescription::Operation.where(operation: 'D').first.operation_date
-      ).to eq operation_date
-    end
-
-    it 'returns model instance' do
-      expect(operation.call).to be_kind_of LanguageDescription
+    context 'record missing for destroy' do
+      it 'raises Sequel::RecordNotFound exception' do
+        expect { operation.call }.to raise_error(Sequel::RecordNotFound)
+      end
     end
   end
 end

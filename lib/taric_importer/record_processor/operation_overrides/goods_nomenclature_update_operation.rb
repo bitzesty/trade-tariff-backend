@@ -2,7 +2,7 @@ class TaricImporter < TariffImporter
   class RecordProcessor
     class GoodsNomenclatureUpdateOperation < UpdateOperation
       def call
-        goods_nomenclature = record.klass.filter(attributes.slice(*record.primary_key).symbolize_keys).first
+        goods_nomenclature = record.klass.filter(attributes.slice(*record.primary_key).symbolize_keys).take
         goods_nomenclature.set(attributes.except(*record.primary_key).symbolize_keys)
         goods_nomenclature.save
 
