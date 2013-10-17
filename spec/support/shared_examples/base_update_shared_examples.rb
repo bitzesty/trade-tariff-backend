@@ -2,17 +2,6 @@ require 'spec_helper'
 
 shared_examples_for 'Base Update' do
   describe '.sync' do
-    context 'when last update is for today' do
-      let!(:example_chief_update) { create :chief_update, example_date: Date.today }
-      let!(:example_taric_update) { create :taric_update, example_date: Date.today }
-
-      it 'does not perform download' do
-        described_class.should_receive(:download).never
-
-        described_class.sync
-      end
-    end
-
     context 'when last update is out of date' do
       let!(:example_chief_update) { create :chief_update, example_date: Date.yesterday }
       let!(:example_taric_update) { create :taric_update, example_date: Date.yesterday }

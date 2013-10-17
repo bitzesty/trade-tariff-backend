@@ -21,41 +21,69 @@ describe TariffSynchronizer::TaricUpdate do
       prepare_synchronizer_folders
     end
 
+    after  { purge_synchronizer_folders }
+
     context "when single file for the day is found" do
       let(:query_response)     { build :response, :success, url: taric_query_url,
                                                          content: taric_update_name }
+
       before {
         TariffSynchronizer::TaricUpdate.should_receive(:download_content)
                                        .with(taric_query_url)
                                        .and_return(query_response)
       }
 
-      it 'downloads Taric file for specific date' do
-        TariffSynchronizer::TaricUpdate.should_receive(:download_content)
-                                       .with(update_url)
-                                       .and_return(blank_response)
+      context 'update not downloaded yet' do
 
-        TariffSynchronizer::TaricUpdate.download(example_date)
+        it 'downloads Taric file for specific date' do
+          TariffSynchronizer::TaricUpdate.should_receive(:download_content)
+                                         .with(update_url)
+                                         .and_return(blank_response)
+
+          TariffSynchronizer::TaricUpdate.download(example_date)
+        end
+
+        it 'writes Taric file contents to file if they are not blank' do
+          TariffSynchronizer::TaricUpdate.should_receive(:download_content)
+                                         .with(update_url)
+                                         .and_return(success_response)
+
+          TariffSynchronizer::TaricUpdate.download(example_date)
+
+          File.exists?("#{TariffSynchronizer.root_path}/taric/#{TariffSynchronizer::TaricUpdate.file_name_for(example_date, taric_update_name)}").should be_true
+          File.read("#{TariffSynchronizer.root_path}/taric/#{TariffSynchronizer::TaricUpdate.file_name_for(example_date, taric_update_name)}").should == 'abc'
+        end
+
+        it 'does not write Taric file contents to file if they are blank' do
+          TariffSynchronizer::TaricUpdate.should_receive(:download_content)
+                                         .with(update_url)
+                                         .and_return(blank_response)
+
+          TariffSynchronizer::TaricUpdate.download(example_date)
+          File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_false
+        end
       end
 
-      it 'writes Taric file contents to file if they are not blank' do
-        TariffSynchronizer::TaricUpdate.should_receive(:download_content)
-                                       .with(update_url)
-                                       .and_return(success_response)
+      context 'update already downloaded' do
+        let!(:present_taric_update) {
+          create :taric_update,
+            :applied,
+            issue_date: example_date,
+            filename: TariffSynchronizer::TaricUpdate.file_name_for(example_date, taric_update_name)
+        }
 
-        TariffSynchronizer::TaricUpdate.download(example_date)
+        it 'does not download TARIC file for date' do
+          TariffSynchronizer::TaricUpdate.should_receive(:download_content)
+                                         .with(update_url)
+                                         .never
 
-        File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{success_response.file_name}").should be_true
-        File.read("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{success_response.file_name}").should == 'abc'
-      end
+          TariffSynchronizer::TaricUpdate.download(example_date)
+        end
 
-      it 'does not write Taric file contents to file if they are blank' do
-        TariffSynchronizer::TaricUpdate.should_receive(:download_content)
-                                       .with(update_url)
-                                       .and_return(blank_response)
-
-        TariffSynchronizer::TaricUpdate.download(example_date)
-        File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_false
+        it 'does not create additional TaricUpdate entries' do
+          TariffSynchronizer::TaricUpdate.download(example_date)
+          TariffSynchronizer::TaricUpdate.where(issue_date: example_date).count.should == 1
+        end
       end
     end
 
@@ -95,10 +123,10 @@ describe TariffSynchronizer::TaricUpdate do
 
         TariffSynchronizer::TaricUpdate.download(example_date)
 
-        File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{success_response_1.file_name}").should be_true
-        File.read("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{success_response_1.file_name}").should == 'abc'
-        File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{success_response_2.file_name}").should be_true
-        File.read("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{success_response_2.file_name}").should == 'def'
+        File.exists?("#{TariffSynchronizer.root_path}/taric/#{TariffSynchronizer::TaricUpdate.file_name_for(example_date, taric_update_names.first)}").should be_true
+        File.read("#{TariffSynchronizer.root_path}/taric/#{TariffSynchronizer::TaricUpdate.file_name_for(example_date, taric_update_names.first)}").should == 'abc'
+        File.exists?("#{TariffSynchronizer.root_path}/taric/#{TariffSynchronizer::TaricUpdate.file_name_for(example_date, taric_update_names.last)}").should be_true
+        File.read("#{TariffSynchronizer.root_path}/taric/#{TariffSynchronizer::TaricUpdate.file_name_for(example_date, taric_update_names.last)}").should == 'def'
       end
 
       it 'does not write Taric file contents to file if they are blank' do

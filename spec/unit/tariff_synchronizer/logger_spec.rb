@@ -349,7 +349,9 @@ describe TariffSynchronizer::Logger do
 
     before {
       # Skip Taric update file name fetching
-      TariffSynchronizer::TaricUpdate.should_receive(:taric_update_urls_for).and_return(['abc'])
+      TariffSynchronizer::TaricUpdate.should_receive(:taric_updates_for).and_return(
+        [OpenStruct.new(url: 'url', file_name: 'file_name')]
+      )
       # Download mock response
       TariffSynchronizer::TaricUpdate.should_receive(:download_content).and_return(success_response)
       # Do not write file to file system

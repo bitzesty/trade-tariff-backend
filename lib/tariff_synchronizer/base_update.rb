@@ -99,17 +99,13 @@ module TariffSynchronizer
       delegate :instrument, to: ActiveSupport::Notifications
 
       def sync
-        unless pending_from == Date.today
-          (pending_from..Date.today).each do |date|
-            download(date) unless exists_for?(date)
-          end
-        end
+        (pending_from..Date.today).each { |date| download(date) }
 
         notify_about_missing_updates if self.order(Sequel.desc(:issue_date)).last(TariffSynchronizer.warning_day_count).all?(&:missing?)
       end
 
-      def exists_for?(date)
-        dataset.where(issue_date: date).any?
+      def update_file_exists?(filename)
+        dataset.where(filename: filename).present?
       end
 
       def update_type
@@ -151,7 +147,7 @@ module TariffSynchronizer
         "#{date}_#{update_type}"
       end
 
-      def create_update_entry(date, state, file_name = file_name_for(date))
+      def create_update_entry(date, state, file_name)
         find_or_create(filename: file_name,
                        update_type: self.name,
                        issue_date: date).update(state: state)

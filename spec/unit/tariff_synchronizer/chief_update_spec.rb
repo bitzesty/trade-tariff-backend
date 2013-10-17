@@ -21,32 +21,55 @@ describe TariffSynchronizer::ChiefUpdate do
           prepare_synchronizer_folders
         end
 
-        it 'downloads CHIEF file for specific date' do
-          TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
-                                         .with(url)
-                                         .and_return(blank_response)
+        context 'file for the day not downloaded yet' do
+          it 'downloads CHIEF file for specific date' do
+            TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
+                                           .with(url)
+                                           .and_return(blank_response)
 
-          TariffSynchronizer::ChiefUpdate.download(example_date)
+            TariffSynchronizer::ChiefUpdate.download(example_date)
+          end
+
+          it 'writes CHIEF file contents to file if they are not blank' do
+            TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
+                                           .with(url)
+                                           .and_return(success_response)
+
+            TariffSynchronizer::ChiefUpdate.download(example_date)
+
+            File.exists?("#{TariffSynchronizer.root_path}/chief/#{TariffSynchronizer::ChiefUpdate.file_name_for(example_date)}").should be_true
+            File.read("#{TariffSynchronizer.root_path}/chief/#{TariffSynchronizer::ChiefUpdate.file_name_for(example_date)}").should == 'abc'
+          end
+
+          it 'creates pending ChiefUpdate entry in the table' do
+            TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
+                                           .with(url)
+                                           .and_return(success_response)
+            TariffSynchronizer::ChiefUpdate.download(example_date)
+            TariffSynchronizer::ChiefUpdate.count.should == 1
+            TariffSynchronizer::ChiefUpdate.first.issue_date.should == example_date
+          end
         end
 
-        it 'writes CHIEF file contents to file if they are not blank' do
-          TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
-                                         .with(url)
-                                         .and_return(success_response)
+        context 'file for the day already downloaded' do
+          let!(:present_chief_update) {
+            create :chief_update,
+              :applied,
+              issue_date: example_date,
+              filename: TariffSynchronizer::ChiefUpdate.file_name_for(example_date)
+          }
 
-          TariffSynchronizer::ChiefUpdate.download(example_date)
+          it 'does not download CHIEF file for date' do
+            TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
+                                           .never
 
-          File.exists?("#{TariffSynchronizer.root_path}/chief/#{example_date}_#{success_response.file_name}").should be_true
-          File.read("#{TariffSynchronizer.root_path}/chief/#{example_date}_#{success_response.file_name}").should == 'abc'
-        end
+            TariffSynchronizer::ChiefUpdate.download(example_date)
+          end
 
-        it 'creates pending ChiefUpdate entry in the table' do
-          TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
-                                         .with(url)
-                                         .and_return(success_response)
-          TariffSynchronizer::ChiefUpdate.download(example_date)
-          TariffSynchronizer::ChiefUpdate.count.should == 1
-          TariffSynchronizer::ChiefUpdate.first.issue_date.should == example_date
+          it 'does not create additional ChiefUpdate entries' do
+            TariffSynchronizer::ChiefUpdate.download(example_date)
+            TariffSynchronizer::ChiefUpdate.where(issue_date: example_date).count.should == 1
+          end
         end
       end
 

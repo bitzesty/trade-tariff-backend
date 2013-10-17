@@ -1,5 +1,6 @@
 require 'tariff_synchronizer/base_update'
 require 'tariff_synchronizer/file_service'
+require 'ostruct'
 
 module TariffSynchronizer
   class TaricUpdate < BaseUpdate
@@ -7,15 +8,19 @@ module TariffSynchronizer
 
     class << self
       def download(date)
-        taric_update_urls_for(date).tap do |taric_update_urls|
-          if taric_update_urls.present?
-            taric_update_urls.each do |taric_update_url|
+        taric_updates_for(date).tap do |taric_updates|
+          if taric_updates.any?
+            taric_updates.each do |taric_update|
               instrument("download_taric.tariff_synchronizer",
                          date: date,
-                         url: taric_update_url) do
-                download_content(taric_update_url).tap { |response|
-                  create_entry(date, response, "#{date}_#{response.file_name}")
-                }
+                         url: taric_update.url) do
+                file_name_for(date, taric_update.file_name).tap do |local_file_name|
+                  unless update_file_exists?(local_file_name)
+                    download_content(taric_update.url).tap { |response|
+                      create_entry(date, response, local_file_name)
+                    }
+                  end
+                end
               end
             end
           # We will be retrying a few more times today, so do not create
@@ -29,8 +34,8 @@ module TariffSynchronizer
         end
       end
 
-      def file_name_for(date)
-        "#{date}_TGB#{date.strftime("%y")}#{date.yday}.xml"
+      def file_name_for(date, update_name)
+        "#{date}_#{update_name}"
       end
 
       def update_type
@@ -69,15 +74,14 @@ module TariffSynchronizer
       end
     end
 
-    def self.taric_update_urls_for(date)
-      update_names = taric_update_name_for(date)
-
-      if update_names.present?
-        update_names.map {|name|
-          TariffSynchronizer.taric_update_url_template % { host: TariffSynchronizer.host,
-                                                           file_name: name }
-        }
-      end
+    def self.taric_updates_for(date)
+      (taric_update_name_for(date) || []).map { |name|
+        OpenStruct.new(
+          file_name: name,
+          url: TariffSynchronizer.taric_update_url_template % { host: TariffSynchronizer.host,
+                                                                file_name: name }
+        )
+      }
     end
 
     def self.taric_query_url_for(date)
