@@ -15,11 +15,11 @@
 <% if @database_queries.present? %>
 <p>
   <strong>Latest database queries</strong>
-  <ul>
+  <code>
     <% @database_queries.reverse.each do |database_query| %>
-      <li><%= database_query %></li>
+      <%= database_query %>
     <% end %>
-  </ul>
+  </code>
 </p>
 <% end %>
 
