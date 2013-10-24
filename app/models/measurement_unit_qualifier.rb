@@ -8,7 +8,5 @@ class MeasurementUnitQualifier < Sequel::Model
   one_to_one :measurement_unit_qualifier_description, key: :measurement_unit_qualifier_code,
                                                       primary_key: :measurement_unit_qualifier_code
 
-  delegate :description, to: :measurement_unit_qualifier_description
+  delegate :formatted_measurement_unit_qualifier, :description, to: :measurement_unit_qualifier_description, allow_nil: true
 end
-
-

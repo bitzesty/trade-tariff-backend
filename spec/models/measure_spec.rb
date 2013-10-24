@@ -1,6 +1,14 @@
 require 'spec_helper'
 
 describe Measure do
+  describe '#id' do
+    let(:measure) { build :measure }
+
+    it 'is an alias to #measure_sid' do
+      expect(measure.id).to eq measure.measure_sid
+    end
+  end
+
   describe '#generating_regulation' do
     let(:measure_of_base_regulation) { create :measure }
     let(:measure_of_modification_regulation) { create :measure, :with_modification_regulation }
@@ -812,6 +820,119 @@ describe Measure do
 
       it 'returns true' do
         expect(measure.export).to be_true
+      end
+    end
+  end
+
+  describe '#generating_regulation_code' do
+    let(:measure) {
+      build :measure,
+      measure_generating_regulation_id: '1234567'
+    }
+
+    it 'returns generating regulation code in TARIC format' do
+      expect(measure.generating_regulation_code).to eq '14567/23'
+    end
+  end
+
+  describe '#generating_regulation_url' do
+    context 'when regulation was created between year 1970 and 2000' do
+      let(:measure) {
+        build :measure,
+        measure_generating_regulation_id: '7734567'
+      }
+
+      it 'returns link to eur-lex with relevant year' do
+        expect(measure.generating_regulation_url).to include '3197374567'
+      end
+    end
+
+    context 'when regulation was created after year 2000' do
+      let(:measure) {
+        build :measure,
+        measure_generating_regulation_id: '7014567'
+      }
+
+      it 'returns link to eur-lex with relevant year' do
+        expect(measure.generating_regulation_url).to include '3200174567'
+      end
+    end
+  end
+
+  describe '#meursing?' do
+    let(:measure) { create :measure }
+
+    context 'any measure components are meursing' do
+      let!(:measure_component) {
+        create :measure_component,
+          measure_sid: measure.measure_sid,
+          duty_expression_id: DutyExpression::MEURSING_DUTY_EXPRESSION_IDS.sample
+      }
+
+      it 'returns true' do
+        expect(measure).to be_meursing
+      end
+    end
+
+    context 'no measure components are meursing' do
+      let!(:measure_component) {
+        create :measure_component,
+          measure_sid: measure.measure_sid,
+          duty_expression_id: 'aaa'
+      }
+
+      it 'returns false' do
+        expect(measure).not_to be_meursing
+      end
+    end
+  end
+
+  describe '#national_measurement_units_for' do
+    let(:measure_type) { create :measure_type, measure_type_id: measure_type_description.measure_type_id, measure_type_description: measure_type_description }
+    let(:measure)   { create :measure, measure_type_id: measure_type.measure_type_id }
+
+    context 'measure is excise' do
+      let(:measure_type_description) { create :measure_type_description, description: 'EXCISE 111' }
+
+      context 'declarable is passed in' do
+        let(:commodity) { create :commodity }
+
+        context 'declarable has national measurement unit set associated' do
+          let(:tbl1) { create :tbl9, :unoq, tbl_code: 'aa1' }
+          let(:tbl2) { create :tbl9, :unoq, tbl_code: 'aa2' }
+          let!(:comm1) { create :comm, cmdty_code: commodity.goods_nomenclature_item_id,
+                                      fe_tsmp: Date.today.ago(2.years),
+                                      le_tsmp: nil,
+                                      uoq_code_cdu2: tbl1.tbl_code,
+                                      uoq_code_cdu3: tbl2.tbl_code }
+
+          it 'returns national measurement unit names as a string array' do
+            expect(measure.national_measurement_units_for(commodity).join).to match /#{Regexp.escape(tbl1.tbl_txt)}/i
+            expect(measure.national_measurement_units_for(commodity).join).to match /#{Regexp.escape(tbl2.tbl_txt)}/i
+          end
+        end
+
+        context 'declarable does not have national measurement unit set associated' do
+          it 'returns blank result' do
+            expect(measure.national_measurement_units_for(commodity)).to be_blank
+          end
+        end
+      end
+
+      context 'declarable is blank' do
+        it 'returns blank result' do
+          expect(measure.national_measurement_units_for(nil)).to be_blank
+        end
+      end
+    end
+
+    context 'measure is not excise' do
+      let(:measure_type_description) { create :measure_type_description, description: 'not really e_x_c_i_s_e' }
+      let(:measure_type) { create :measure_type, measure_type_id: measure_type_description.measure_type_id, measure_type_description: measure_type_description }
+      let(:measure)   { create :measure, measure_type_id: measure_type.measure_type_id }
+
+      it 'returns blank result' do
+        expect(measure.national_measurement_units_for(nil)).to be_blank
       end
     end
   end

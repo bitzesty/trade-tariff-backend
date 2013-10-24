@@ -53,7 +53,7 @@ class Footnote < Sequel::Model
                                   right_key: [:meursing_table_plan_id, :meursing_heading_number]
 
 
-  delegate :description, to: :footnote_description
+  delegate :description, :formatted_description, to: :footnote_description
 
     # FO4
     # length_of :footnote_description_periods, minimum: 1
@@ -67,32 +67,6 @@ class Footnote < Sequel::Model
     #             :meursing_headings], ensure: :spans_validity_period_of_associations
     # # FO17
     # associated :footnote_type, ensure: :footnote_type_validity_period_spans_validity_periods
-
-  def first_footnote_description_period_is_valid
-    period = footnote_description_periods.first
-
-    period.validity_start_date == validity_start_date &&
-    footnote_description_periods_dataset.where(validity_start_date: period.validity_start_date).count == 1 &&
-    ((validity_end_date.present?) ? period.validity_start_date <= validity_end_date : true)
-  end
-
-  def spans_validity_period_of_associations
-    # No need to repeat this check when validating, so cache in variable
-    @spans_validity_periods ||= [:measures, :goods_nomenclatures,
-                                 :export_refund_nomenclatures,
-                                 :additional_codes,
-                                 :meursing_headings].all? { |association|
-      send(association).all? { |associated_record|
-        validity_start_date <= associated_record.validity_start_date &&
-        ((validity_end_date.present?) ? validity_end_date >= associated_record.validity_end_date : true)
-      }
-    }
-  end
-
-  def footnote_type_validity_period_spans_validity_periods
-    validity_start_date >= footnote_type.validity_start_date &&
-    ((validity_end_date.present?) ? validity_end_date <= footnote_type.validity_end_date : true)
-  end
 
   def code
     "#{footnote_type_id}#{footnote_id}"

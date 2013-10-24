@@ -8,8 +8,8 @@ describe Api::V1::GeographicalAreasController, "GET #countries" do
 
   let(:pattern) {
     [
-      {geographical_area_id: String, description: String},
-      {geographical_area_id: String, description: String}
+      {id: String, description: String},
+      {id: String, description: String}
     ]
   }
 

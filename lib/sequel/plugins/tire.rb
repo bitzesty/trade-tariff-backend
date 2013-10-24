@@ -19,6 +19,12 @@ module Sequel
         end
       end
 
+      module ClassMethods
+        def paginate(*args)
+          dataset.paginate(*args)
+        end
+      end
+
       module InstanceMethods
         def destroyed?
           @destroyed || false
@@ -27,4 +33,3 @@ module Sequel
     end
   end
 end
-

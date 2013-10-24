@@ -56,6 +56,8 @@ class GeographicalArea < Sequel::Model
   end
 
   delegate :description, to: :geographical_area_description
+
+  def id
+    geographical_area_id
+  end
 end
-
-

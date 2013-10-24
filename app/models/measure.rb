@@ -82,6 +82,8 @@ class Measure < Sequel::Model
                                                    ds.with_actual(FullTemporaryStopRegulation)
                                                  end
 
+  delegate :third_country?, :excise?, to: :measure_type, allow_nil: true
+
   def full_temporary_stop_regulation
     full_temporary_stop_regulations.first
   end
@@ -132,27 +134,6 @@ class Measure < Sequel::Model
                                else
                                  base_regulation
                                end
-  end
-
-  def regulation_is_not_replaced?
-    RegulationReplacement.where(replaced_regulation_id: measure_generating_regulation_id,
-                                replaced_regulation_role: measure_generating_regulation_role,
-                                geographical_area_id: geographical_area_id).none? &&
-    RegulationReplacement.where(replaced_regulation_id: measure_generating_regulation_id,
-                                replaced_regulation_role: measure_generating_regulation_role,
-                                chapter_heading: goods_nomenclature_item_id.to_s.first(2)).none?
-  end
-
-  def should_validate_order_number_date_span?
-    ordernumber.present? && validity_start_date > Date.new(2007,12,31) && ordernumber =~ /^09[^4]/
-  end
-
-  def ern_adco_exists?
-    export_refund_nomenclature.present?
-  end
-
-  def is_ended?
-    validity_end_date.present?
   end
 
   # Soft-deleted
@@ -280,6 +261,10 @@ class Measure < Sequel::Model
     end
   end
 
+  def id
+    measure_sid
+  end
+
   def generating_regulation_code(regulation_code = measure_generating_regulation_id)
     "#{regulation_code.first}#{regulation_code[3..6]}/#{regulation_code[1..2]}"
   end
@@ -325,6 +310,24 @@ class Measure < Sequel::Model
     goods_nomenclature.present? && goods_nomenclature.validity_end_date.present?
   end
 
+  def duty_expression
+    measure_components.map(&:formatted_duty_expression).join(" ")
+  end
+
+  def national_measurement_units_for(declarable)
+    if excise? && declarable && declarable.national_measurement_unit_set.present?
+      declarable.national_measurement_unit_set
+                .national_measurement_unit_set_units
+                .select(&:present?)
+                .select{ |nmu| nmu.level > 1 }
+                .map(&:to_s)
+    end
+  end
+
+  def meursing?
+    measure_components.any?(&:meursing?)
+  end
+
   def order_number
     if quota_order_number.present?
       quota_order_number
@@ -348,5 +351,3 @@ class Measure < Sequel::Model
      .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date))
   end
 end
-
-

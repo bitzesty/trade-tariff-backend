@@ -1,26 +1,15 @@
 object @heading
 
-attributes :goods_nomenclature_item_id, :description, :bti_url
+attributes :goods_nomenclature_item_id, :description, :bti_url,
+           :formatted_description
 
 if @heading.declarable?
-  extends "api/v1/declarables/declarable", object: @heading
+  attributes :basic_duty_rate
 
-  child(third_country_duty: :basic_duty_rate_components) do
-    attributes :duty_amount, :duty_expression_id
-
-    node(:monetary_unit) { |component|
-      component.monetary_unit_code
-    }
-    node(:measurement_unit) { |component|
-      component.measurement_unit.try(:description)
-    }
-    node(:measurement_unit_qualifier) { |component|
-      component.measurement_unit_qualifier.try(:description)
-    }
-  end
+  extends "api/v1/declarables/declarable", object: @heading, locals: { measures: @measures }
 else
   child :chapter do
-    attributes :goods_nomenclature_item_id, :description
+    attributes :goods_nomenclature_item_id, :description, :formatted_description
   end
 
   child :section do
@@ -28,12 +17,13 @@ else
   end
 
   child(@commodities) {
-    attributes :producline_suffix,
-               :description,
+    attributes :description,
                :number_indents,
                :goods_nomenclature_item_id,
                :leaf,
-               :goods_nomenclature_sid
+               :goods_nomenclature_sid,
+               :formatted_description,
+               :description_plain
 
     node(:parent_sid) { |commodity| commodity.parent.try(:goods_nomenclature_sid) }
   }

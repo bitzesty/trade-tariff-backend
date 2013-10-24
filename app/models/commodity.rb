@@ -1,3 +1,4 @@
+require 'formatter'
 require 'declarable'
 
 class Commodity < GoodsNomenclature
@@ -23,10 +24,6 @@ class Commodity < GoodsNomenclature
     actual_or_relevant(Chapter)
            .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
   }
-
-  one_to_many :third_country_duty, dataset: -> {
-    MeasureComponent.where(measure: import_measures_dataset.where(measures__measure_type_id: MeasureType::THIRD_COUNTRY).all)
-  }, class_name: 'MeasureComponent'
 
   delegate :section, to: :chapter
 
@@ -138,7 +135,7 @@ class Commodity < GoodsNomenclature
       producline_suffix: producline_suffix,
       validity_start_date: validity_start_date,
       validity_end_date: validity_end_date,
-      description: description,
+      description: formatted_description,
       number_indents: number_indents,
     }
 
@@ -150,7 +147,7 @@ class Commodity < GoodsNomenclature
           producline_suffix: heading.producline_suffix,
           validity_start_date: heading.validity_start_date,
           validity_end_date: heading.validity_end_date,
-          description: heading.description,
+          description: heading.formatted_description,
           number_indents: heading.number_indents
         }
       })
@@ -163,7 +160,7 @@ class Commodity < GoodsNomenclature
             producline_suffix: chapter.producline_suffix,
             validity_start_date: chapter.validity_start_date,
             validity_end_date: chapter.validity_end_date,
-            description: chapter.description.downcase
+            description: chapter.formatted_description.downcase
           }
         })
 
