@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe SearchReference do
+  it_behaves_like 'Tire indexable model'
+
   describe '#referenced_entity' do
     context "matching heading regexp" do
       let(:heading) { create :heading, goods_nomenclature_item_id: "1212000000" }
