@@ -1,4 +1,8 @@
+require 'formatter'
+
 class MeasureCondition < Sequel::Model
+  include Models::Formatter
+
   plugin :time_machine
   plugin :national
   plugin :oplog, primary_key: :measure_condition_sid
@@ -48,8 +52,21 @@ class MeasureCondition < Sequel::Model
   one_to_many :measure_condition_components, key: :measure_condition_sid,
                                              primary_key: :measure_condition_sid
 
+  one_to_one :previous_measure_condition, key: :measure_sid,
+                                          primary_key: :measure_sid,
+                                          class: MeasureCondition do |ds|
+    ds.filter { |o| o.component_sequence_number < component_sequence_number }
+      .order(Sequel.desc(Sequel.qualify(:measure_conditions, :component_sequence_number)))
+  end
 
   delegate :abbreviation, to: :monetary_unit, prefix: true, allow_nil: true
+  delegate :description, to: :measurement_unit, prefix: true, allow_nil: true
+  delegate :description, to: :measurement_unit_qualifier, prefix: true, allow_nil: true
+  delegate :formatted_measurement_unit_qualifier, to: :measurement_unit_qualifier, prefix: false, allow_nil: true
+  delegate :description, to: :certificate, prefix: true, allow_nil: true
+  delegate :description, to: :certificate_type, prefix: true, allow_nil: true
+  delegate :description, to: :measure_action, prefix: true, allow_nil: true
+  delegate :description, to: :measure_condition_code, prefix: true, allow_nil: true
 
   def before_create
     self.measure_condition_sid ||= self.class.next_national_sid
@@ -61,31 +78,52 @@ class MeasureCondition < Sequel::Model
     "#{certificate_type_code}#{certificate_code}"
   end
 
+  # TODO presenter?
   def requirement
     case requirement_type
     when :document
-      {
-        certificate: certificate.try(:description),
-        certificate_type: certificate_type.try(:description)
-      }
+      "#{certificate_type_description}: #{certificate_description}"
     when :duty_expression
-      {
-        sequence_number: component_sequence_number,
-        duty_amount: condition_duty_amount,
-        monetary_unit: condition_monetary_unit_code,
-        monetary_unit_abbreviation: monetary_unit_abbreviation,
-        measurement_unit: measurement_unit.try(:description),
-        measurement_unit_qualifier: measurement_unit_qualifier.try(:description)
-      }
+      requirement_expression
     end
   end
 
+  def first_component?
+    measure.measure_conditions.first == self
+  end
+
+  def last_component?
+    measure.measure_conditions.last == self
+  end
+
+  # TODO extract to object(Requirement)?
+  def requirement_expression
+    if first_component?
+      "greater than or equal to #{requirement_duty_expression}"
+    elsif last_component?
+      "less than #{previous_measure_condition.requirement_duty_expression}"
+    else
+      "greater than or equal to #{requirement_duty_expression} and less than #{previous_measure_condition.requirement_duty_expression}"
+    end
+    # end
+  end
+
+  def requirement_duty_expression
+    RequirementDutyExpressionFormatter.format({
+      duty_amount: condition_duty_amount,
+      monetary_unit: condition_monetary_unit_code,
+      monetary_unit_abbreviation: monetary_unit_abbreviation,
+      measurement_unit: measurement_unit_description,
+      formatted_measurement_unit_qualifier: formatted_measurement_unit_qualifier
+    })
+  end
+
   def action
-    measure_action.try(:description)
+    measure_action_description
   end
 
   def condition
-    measure_condition_code.try(:description)
+    measure_condition_code_description
   end
 
   def requirement_type
@@ -94,5 +132,9 @@ class MeasureCondition < Sequel::Model
     elsif condition_duty_amount.present?
       :duty_expression
     end
+  end
+
+  def duty_expression
+    measure_condition_components.map(&:formatted_duty_expression).join(" ")
   end
 end

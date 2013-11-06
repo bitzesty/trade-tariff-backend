@@ -1,4 +1,8 @@
+require 'formatter'
+
 class MeasureComponent < Sequel::Model
+  include Models::Formatter
+
   plugin :time_machine
   plugin :oplog, primary_key: [:measure_sid, :duty_expression_id]
   plugin :conformance_validator
@@ -30,6 +34,24 @@ class MeasureComponent < Sequel::Model
 
   delegate :description, :abbreviation, to: :duty_expression, prefix: true
   delegate :abbreviation, to: :monetary_unit, prefix: true, allow_nil: true
+  delegate :formatted_measurement_unit_qualifier, to: :measurement_unit_qualifier, prefix: false, allow_nil: true
+  delegate :description, to: :measurement_unit, prefix: true, allow_nil: true
+  delegate :description, to: :monetary_unit, prefix: true, allow_nil: true
+
+  def formatted_duty_expression
+    DutyExpressionFormatter.format({
+      duty_expression_id: duty_expression_id,
+      duty_expression_description: duty_expression_description,
+      duty_expression_abbreviation: duty_expression_abbreviation,
+      duty_amount: duty_amount,
+      monetary_unit: monetary_unit_code,
+      monetary_unit_abbreviation: monetary_unit_abbreviation,
+      measurement_unit: measurement_unit_description,
+      formatted_measurement_unit_qualifier: formatted_measurement_unit_qualifier
+    })
+  end
+
+  def meursing?
+    duty_expression_id.in?(DutyExpression::MEURSING_DUTY_EXPRESSION_IDS)
+  end
 end
-
-

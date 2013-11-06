@@ -80,7 +80,7 @@ class Chapter < GoodsNomenclature
       producline_suffix: producline_suffix,
       validity_start_date: validity_start_date,
       validity_end_date: validity_end_date,
-      description: description.downcase
+      description: formatted_description
     }
 
     if section.present?

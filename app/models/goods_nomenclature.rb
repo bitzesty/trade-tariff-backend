@@ -68,7 +68,7 @@ class GoodsNomenclature < Sequel::Model
   delegate :national_measurement_unit_set_units, to: :national_measurement_unit_set, allow_nil: true
 
   delegate :number_indents, to: :goods_nomenclature_indent, allow_nil: true
-  delegate :description, to: :goods_nomenclature_description, allow_nil: true
+  delegate :description, :formatted_description, to: :goods_nomenclature_description, allow_nil: true
 
   one_to_one :goods_nomenclature_origin, key: [:goods_nomenclature_item_id,
                                                :productline_suffix],

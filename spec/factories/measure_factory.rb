@@ -127,6 +127,11 @@ FactoryGirl.define do
     }
   end
 
+  factory :measure_type_description do
+    measure_type_id        { generate(:measure_type_id) }
+    description { Forgery(:basic).text }
+  end
+
   factory :measure_condition do
     measure_condition_sid { generate(:measure_condition_sid) }
     measure_sid { generate(:measure_sid) }

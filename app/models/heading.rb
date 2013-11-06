@@ -1,3 +1,4 @@
+require 'formatter'
 require 'declarable'
 
 class Heading < GoodsNomenclature
@@ -23,11 +24,6 @@ class Heading < GoodsNomenclature
   one_to_one :chapter, dataset: -> {
     actual_or_relevant(Chapter).filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
   }
-
-  one_to_many :third_country_duty, dataset: -> {
-    MeasureComponent.where(measure: import_measures_dataset.where(measures__measure_type_id: MeasureType::THIRD_COUNTRY).all)
-  }, class_name: 'MeasureComponent'
-
 
   one_to_many :search_references, primary_key: :short_code
 
@@ -97,7 +93,7 @@ class Heading < GoodsNomenclature
       producline_suffix: producline_suffix,
       validity_start_date: validity_start_date,
       validity_end_date: validity_end_date,
-      description: description,
+      description: formatted_description,
       number_indents: number_indents,
     }
 
@@ -109,7 +105,7 @@ class Heading < GoodsNomenclature
           producline_suffix: chapter.producline_suffix,
           validity_start_date: chapter.validity_start_date,
           validity_end_date: chapter.validity_end_date,
-          description: chapter.description.downcase
+          description: chapter.formatted_description.downcase
         }
       })
 

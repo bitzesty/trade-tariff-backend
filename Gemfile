@@ -7,7 +7,7 @@ gem "addressable", "2.3.2"
 gem "multi_json", "~> 1.7.7"
 gem "mysql2", "0.3.13"
 gem "sequel-rails", "0.7.0"
-gem "rabl", "0.7.6"
+gem "rabl", "0.9.0"
 gem "ansi"
 gem "sequel", "4.3.0"
 gem "tire", "0.6.0"
@@ -33,7 +33,7 @@ gem "exception_notification"
 group :assets do
   gem "bootstrap-sass"
   gem "sass-rails"
-  gem "therubyracer"
+  gem "therubyracer", "0.12.0"
   gem "uglifier"
 end
 

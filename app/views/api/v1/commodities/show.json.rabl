@@ -1,25 +1,14 @@
 object @commodity
 
-attributes :producline_suffix, :description, :number_indents, :goods_nomenclature_item_id, :bti_url
+attributes :producline_suffix, :description, :number_indents,
+           :goods_nomenclature_item_id, :bti_url, :formatted_description,
+           :description_plain, :consigned, :consigned_from, :basic_duty_rate
 
-extends "api/v1/declarables/declarable", object: @commodity
+extends "api/v1/declarables/declarable", object: @commodity, locals: { measures: @measures }
 
 child @commodity.heading do
-  attributes :goods_nomenclature_item_id, :description
-end
-
-child(third_country_duty: :basic_duty_rate_components) do
-  attributes :duty_amount, :duty_expression_id
-
-  node(:monetary_unit) { |component|
-    component.monetary_unit_code
-  }
-  node(:measurement_unit) { |component|
-    component.measurement_unit.try(:description)
-  }
-  node(:measurement_unit_qualifier) { |component|
-    component.measurement_unit_qualifier.try(:description)
-  }
+  attributes :goods_nomenclature_item_id, :description, :formatted_description,
+             :description_plain
 end
 
 child(@commodity.ancestors => :ancestors) {
@@ -28,5 +17,7 @@ child(@commodity.ancestors => :ancestors) {
                :number_indents,
                :goods_nomenclature_item_id,
                :leaf,
-               :uk_vat_rate
+               :uk_vat_rate,
+               :formatted_description,
+               :description_plain
 }

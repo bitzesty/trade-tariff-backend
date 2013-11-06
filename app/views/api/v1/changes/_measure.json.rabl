@@ -1,10 +1,10 @@
-attributes :measure_sid,
+attributes :id,
            :origin,
            :import,
            :goods_nomenclature_item_id
 
 child(geographical_area: :geographical_area) do
-  attributes :geographical_area_id
+  attributes :id
 
   node(:description) { |ga|
     ga.geographical_area_description.description
@@ -12,5 +12,9 @@ child(geographical_area: :geographical_area) do
 end
 
 node(:measure_type_description) { |obj|
-  obj.measure_type.try(:description)
+  {
+    id: measure.measure_type.id,
+    description: measure.measure_type.description
+
+  }
 }

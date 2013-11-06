@@ -12,32 +12,35 @@ describe NationalMeasurementUnitSet do
     let(:nmus) { NationalMeasurementUnitSet.where(cmdty_code: comm.cmdty_code).first }
 
     it 'builds array of national measurement units' do
-      nmus.national_measurement_unit_set_units.should be_kind_of Array
+      expect(nmus.national_measurement_unit_set_units).to be_kind_of Array
     end
 
     it 'should include national measurement units' do
-      nmus.national_measurement_unit_set_units.all?{ |nmusu| nmusu.is_a?(NationalMeasurementUnit) }
+      expect(nmus.national_measurement_unit_set_units.all?{ |nmusu| nmusu.is_a?(NationalMeasurementUnit) }).to be_true
     end
 
     it 'should set first national measurement unit code/description to comm uoq_code_cdu1' do
       nmusu = nmus.national_measurement_unit_set_units.first
-      nmusu.measurement_unit_code.should eq tbl1.tbl_code
-      nmusu.description.should eq tbl1.tbl_txt
-      nmusu.level.should eq 1
+
+      expect(nmusu.measurement_unit_code).to eq tbl1.tbl_code
+      expect(nmusu.description).to match /#{Regexp.escape(tbl1.tbl_txt)}/i
+      expect(nmusu.level).to eq 1
     end
 
     it 'should set second national measurement unit code/description to comm uoq_code_cdu2' do
       nmusu = nmus.national_measurement_unit_set_units.second
-      nmusu.measurement_unit_code.should eq tbl2.tbl_code
-      nmusu.description.should eq tbl2.tbl_txt
-      nmusu.level.should eq 2
+
+      expect(nmusu.measurement_unit_code).to eq tbl2.tbl_code
+      expect(nmusu.description).to match /#{Regexp.escape(tbl2.tbl_txt)}/i
+      expect(nmusu.level).to eq 2
     end
 
     it 'should set second national measurement unit code/description to comm uoq_code_cdu3' do
       nmusu = nmus.national_measurement_unit_set_units.last
-      nmusu.measurement_unit_code.should eq tbl3.tbl_code
-      nmusu.description.should eq tbl3.tbl_txt
-      nmusu.level.should eq 3
+
+      expect(nmusu.measurement_unit_code).to eq tbl3.tbl_code
+      expect(nmusu.description).to match /#{Regexp.escape(tbl3.tbl_txt)}/i
+      expect(nmusu.level).to eq 3
     end
   end
 end

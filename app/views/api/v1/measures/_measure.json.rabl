@@ -1,12 +1,23 @@
-attributes :measure_sid,
+attributes :id,
            :origin,
            :effective_start_date,
            :effective_end_date,
-           :measure_type_id,
            :import
 
-node(:measure_type_description) { |obj|
-  obj.measure_type.try(:description)
+node(:excise) { |measure| measure.excise? }
+node(:vat)    { |measure| measure.vat? }
+
+node(:measure_type) { |measure|
+  {
+    id: measure.measure_type_id,
+    description: measure.measure_type.description
+  }
+}
+node(:duty_expression) { |measure|
+  {
+    base: measure.duty_expression,
+    national_measurement_units: measure.national_measurement_units_for(locals[:declarable])
+  }
 }
 
 node(:legal_act, if: ->(measure) { !measure.national && measure.generating_regulation_present? }) do |measure|
@@ -26,59 +37,25 @@ node(:suspension_legal_act, if: ->(measure) { !measure.national && measure.suspe
   }
 end
 
-child(measure_components: :measure_components) do
-  attributes :duty_amount, :duty_expression_id, :duty_expression_description,
-             :duty_expression_abbreviation
-
-  node(:monetary_unit) { |component|
-    component.monetary_unit_code
-  }
-  node(:monetary_unit_abbreviation) { |component|
-    component.monetary_unit_abbreviation
-  }
-  node(:measurement_unit) { |component|
-    component.measurement_unit.try(:description)
-  }
-  node(:measurement_unit_qualifier) { |component|
-    component.measurement_unit_qualifier.try(:description)
-  }
-end
-
 child(measure_conditions: :measure_conditions) do
-  attributes :document_code, :requirement_type, :requirement, :action, :condition
-
-  child(measure_condition_components: :components) do
-    attributes :duty_amount, :duty_expression_id, :duty_expression_description,
-               :duty_expression_abbreviation
-
-    node(:monetary_unit) { |component|
-      component.monetary_unit_code
-    }
-    node(:monetary_unit_abbreviation) { |component|
-      component.monetary_unit_abbreviation
-    }
-    node(:measurement_unit) { |component|
-      component.measurement_unit.try(:description)
-    }
-    node(:measurement_unit_qualifier) { |component|
-      component.measurement_unit_qualifier.try(:description)
-    }
-  end
+  attributes :condition, :document_code, :requirement, :action, :duty_expression
 end
 
-child(geographical_area: :geographical_area) do
-  attributes :geographical_area_id
+child(geographical_area: :geographical_area) do |geographical_area|
+  attributes :id
 
   node(:description) { |ga|
     ga.geographical_area_description.description
   }
 
-  child(contained_geographical_areas: :children_geographical_areas) do
-    attributes :geographical_area_id
+  unless locals[:object].third_country?
+    child(contained_geographical_areas: :children_geographical_areas) do
+      attributes :id
 
-    node(:description) { |ga|
-      ga.geographical_area_description.description
-    }
+      node(:description) { |ga|
+        ga.geographical_area_description.description
+      }
+    end
   end
 end
 
@@ -92,16 +69,14 @@ child(excluded_geographical_areas: :excluded_countries) do
 end
 
 child(footnotes: :footnotes) do
-  attributes :code
-  node(:description) { |footnote|
-   footnote.footnote_description.description
-  }
+  attributes :code, :description, :formatted_description
 end
 
-node(:additional_code, if: ->(measure) { measure.additional_code.present? }) do |obj|
+node(:additional_code, if: ->(measure) { measure.additional_code.present? }) do |measure|
   {
-    code: obj.additional_code.code,
-    description: obj.additional_code.description
+    code: measure.additional_code.code,
+    description: measure.additional_code.description,
+    formatted_description: measure.additional_code.formatted_description
   }
 end
 
