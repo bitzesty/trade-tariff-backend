@@ -4,6 +4,9 @@ attributes :id,
            :effective_end_date,
            :import
 
+node(:excise) { |measure| measure.excise? }
+node(:vat)    { |measure| measure.vat? }
+
 node(:measure_type) { |measure|
   {
     id: measure.measure_type_id,

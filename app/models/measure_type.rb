@@ -32,6 +32,10 @@ class MeasureType < Sequel::Model
   end
 
   def excise?
-    description =~ /EXCISE/
+    !!(description =~ /EXCISE/)
+  end
+
+  def vat?
+    !!(description =~ /^VAT/)
   end
 end
