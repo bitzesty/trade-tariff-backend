@@ -6,8 +6,9 @@ module TradeTariffBackend
   autoload :DataMigrator,    'trade_tariff_backend/data_migrator'
   autoload :Indexer,         'trade_tariff_backend/indexer'
   autoload :Mailer,          'trade_tariff_backend/mailer'
+  autoload :NumberFormatter, 'trade_tariff_backend/number_formatter'
   autoload :SearchIndex,     'trade_tariff_backend/search_index'
-  autoload :Validator,        'trade_tariff_backend/validator'
+  autoload :Validator,       'trade_tariff_backend/validator'
 
   class << self
 
@@ -74,6 +75,10 @@ module TradeTariffBackend
 
     def search_index
       SearchIndex
+    end
+
+    def number_formatter
+      @number_formatter ||= TradeTariffBackend::NumberFormatter.new
     end
 
     private

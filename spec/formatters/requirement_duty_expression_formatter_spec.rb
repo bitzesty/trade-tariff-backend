@@ -42,4 +42,18 @@ describe RequirementDutyExpressionFormatter do
       end
     end
   end
+
+  describe '.prettify' do
+    context 'has less than 4 decimal places' do
+      it 'returns number with insignificant zeros stripped up to 2 decimal points' do
+        expect(RequirementDutyExpressionFormatter.prettify(1.2)).to eq '1.20'
+      end
+    end
+
+    context 'has 4 or more decimal places' do
+      it 'returns formatted number with 4 decimal places' do
+        expect(RequirementDutyExpressionFormatter.prettify(1.23456)).to eq '1.2346'
+      end
+    end
+  end
 end
