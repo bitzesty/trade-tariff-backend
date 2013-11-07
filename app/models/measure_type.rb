@@ -27,6 +27,10 @@ class MeasureType < Sequel::Model
     end
   end
 
+  def id
+    measure_type_id
+  end
+
   def third_country?
     measure_type_id == THIRD_COUNTRY
   end

@@ -11,10 +11,9 @@ child(geographical_area: :geographical_area) do
   }
 end
 
-node(:measure_type_description) { |obj|
+node(:measure_type) { |measure|
   {
     id: measure.measure_type.id,
     description: measure.measure_type.description
-
   }
 }

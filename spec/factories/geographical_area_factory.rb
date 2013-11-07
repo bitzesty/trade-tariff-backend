@@ -20,14 +20,16 @@ FactoryGirl.define do
       geographical_code { "0" }
     end
 
+    after(:build) { |geographical_area, evaluator|
+      FactoryGirl.create(:geographical_area_description, :with_period,
+                                                         geographical_area_id: geographical_area.geographical_area_id,
+                                                         geographical_area_sid: geographical_area.geographical_area_sid,
+                                                         valid_at: geographical_area.validity_start_date,
+                                                         valid_to: geographical_area.validity_end_date)
+    }
+
     trait :with_description do
-      after(:create) { |geographical_area, evaluator|
-        FactoryGirl.create(:geographical_area_description, :with_period,
-                                                           geographical_area_id: geographical_area.geographical_area_id,
-                                                           geographical_area_sid: geographical_area.geographical_area_sid,
-                                                           valid_at: geographical_area.validity_start_date,
-                                                           valid_to: geographical_area.validity_end_date)
-      }
+      # noop
     end
   end
 

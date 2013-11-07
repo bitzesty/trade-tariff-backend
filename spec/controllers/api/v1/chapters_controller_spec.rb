@@ -67,9 +67,27 @@ describe Api::V1::ChaptersController, "GET #changes" do
 
   let(:chapter) { create :chapter, :with_section, :with_note,
                                    operation_date: Date.today }
+  let(:heading) { create :heading, goods_nomenclature_item_id: "#{chapter.goods_nomenclature_item_id.first(2)}20000000" }
+  let!(:measure) {
+    create :measure,
+      :with_measure_type,
+      goods_nomenclature: heading,
+      goods_nomenclature_sid: heading.goods_nomenclature_sid,
+      goods_nomenclature_item_id: heading.goods_nomenclature_item_id,
+      operation_date: Date.today
+  }
 
   let(:pattern) {
     [
+      {
+        oid: Integer,
+        model_name: "Measure",
+        record: {
+          measure_type: {
+            description: measure.measure_type.description
+          }.ignore_extra_keys!
+        }.ignore_extra_keys!
+      }.ignore_extra_keys!,
       {
         oid: Integer,
         model_name: "Chapter",
