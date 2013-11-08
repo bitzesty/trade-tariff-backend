@@ -4,13 +4,16 @@ describe Api::V1::ChaptersController, "GET #show" do
   render_views
 
   let!(:chapter) { create :chapter, :with_description, :with_section, goods_nomenclature_item_id: "1100000000" }
+  let!(:section_note) { create :section_note, section: chapter.section }
 
   let(:pattern) {
     {
       goods_nomenclature_item_id: chapter.code,
       description: String,
       headings: Array,
-      section: Hash
+      section: {
+        section_note: String
+      }.ignore_extra_keys!
     }.ignore_extra_keys!
   }
 
