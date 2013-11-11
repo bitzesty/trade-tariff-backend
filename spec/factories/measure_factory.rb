@@ -107,6 +107,10 @@ FactoryGirl.define do
   end
 
   factory :measure_type do
+    ignore do
+      measure_type_description { Forgery(:basic).text }
+    end
+
     measure_type_id        { generate(:measure_type_id) }
     measure_type_series_id { Forgery(:basic).text(exactly: 1) }
     validity_start_date    { Date.today.ago(3.years) }
@@ -124,6 +128,14 @@ FactoryGirl.define do
 
     after(:build) { |measure_type, evaluator|
       FactoryGirl.create(:measure_type_series, measure_type_series_id: measure_type.measure_type_series_id)
+    }
+
+    after(:build) { |measure_type, evaluator|
+      FactoryGirl.create(
+        :measure_type_description,
+        measure_type_id: measure_type.measure_type_id,
+        description: evaluator.measure_type_description
+      )
     }
   end
 

@@ -888,11 +888,11 @@ describe Measure do
   end
 
   describe '#national_measurement_units_for' do
-    let(:measure_type) { create :measure_type, measure_type_id: measure_type_description.measure_type_id, measure_type_description: measure_type_description }
+    let(:measure_type) { create :measure_type, measure_type_description: measure_type_description }
     let(:measure)   { create :measure, measure_type_id: measure_type.measure_type_id }
 
     context 'measure is excise' do
-      let(:measure_type_description) { create :measure_type_description, description: 'EXCISE 111' }
+      let(:measure_type_description) { 'EXCISE 111' }
 
       context 'declarable is passed in' do
         let(:commodity) { create :commodity }
