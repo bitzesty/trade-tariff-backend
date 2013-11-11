@@ -340,4 +340,78 @@ describe 'CHIEF: Custom scenarions' do
       ).to be_true
     end
   end
+
+  describe 'Scenario: Excise Measure with duty type 30 and tty code 570, 571, created measure' do
+    let!(:geographical_area)           { create :geographical_area, :erga_omnes }
+    let!(:gono) { create :goods_nomenclature, :declarable, :with_indent,
+                                             goods_nomenclature_sid: 79289,
+                                             goods_nomenclature_item_id: "3902200010",
+                                             producline_suffix: 80,
+                                             validity_start_date: Date.new(1999,7,1),
+                                             validity_end_date: nil}
+    let!(:mfcm) { create :mfcm, msrgp_code: 'EX',
+                                msr_type: 'EXL',
+                                tty_code: '551',
+                                fe_tsmp: DateTime.new(2013,10,1),
+                                le_tsmp: nil,
+                                cmdty_code: "3902200010",
+                                amend_indicator: 'I' }
+    let!(:tame) { create :tame, fe_tsmp: DateTime.new(1994,4,7),
+                                le_tsmp: nil,
+                                msrgp_code: 'EX',
+                                msr_type: 'EXL',
+                                tty_code: '551',
+                                amend_indicator: 'I' }
+    let!(:tamf) { create :tamf, fe_tsmp: DateTime.new(1994,4,7),
+                                msrgp_code: 'EX',
+                                msr_type: 'EXL',
+                                tty_code: '551',
+                                duty_type: '30',
+                                spfc1_uoq: '070',
+                                amend_indicator: 'I' }
+
+    let(:measure) {
+      Measure.where(
+        measure_type_id: 'LEA',
+        goods_nomenclature_item_id: '3902200010'
+      ).take
+    }
+
+    before {
+      ChiefTransformer.instance.invoke
+    }
+
+    specify 'measure gets created' do
+      expect(
+        Measure.where(
+          measure_type_id: 'LEA',
+          goods_nomenclature_item_id: '3902200010'
+        )
+      ).to be_present
+    end
+
+    specify 'has zero rate' do
+      expect(
+        MeasureComponent.where(
+          measure_sid: measure.measure_sid
+        ).take.duty_amount
+      ).to eq 0
+    end
+
+    specify 'has GBP as monetary unit' do
+      expect(
+        MeasureComponent.where(
+          measure_sid: measure.measure_sid
+        ).take.monetary_unit_code
+      ).to eq 'GBP'
+    end
+
+    specify 'has LTR as measurement unit' do
+      expect(
+        MeasureComponent.where(
+          measure_sid: measure.measure_sid
+        ).take.measurement_unit_code
+      ).to eq 'LTR'
+    end
+  end
 end

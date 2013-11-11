@@ -54,8 +54,36 @@ module Chief
     end
 
     def measure_components
-      return [] if duty_expression(true).blank?
+      if duty_expression(true).present?
+        duty_expression_components
+      else
+        duty_type_components
+      end
+    end
 
+    # From CHIEF manual:
+    #
+    # DUTY-TYPE: Identifies the type of calculation used to arrive
+    # at the duty for a Tariff measure. The duty type also determines
+    # the number and type of duty rate components.
+    #
+    # More info https://www.pivotaltracker.com/story/show/59551288
+    def duty_type_components
+      if duty_type == '30' && tty_code.to_s.in?('570', '551')
+        [
+          MeasureComponent.new do |mc|
+            mc.duty_amount = 0.0
+            mc.duty_expression_id = '01'
+            mc.monetary_unit_code = 'GBP'
+            mc.measurement_unit_code = 'LTR'
+          end
+        ]
+      else
+        []
+      end
+    end
+
+    def duty_expression_components
       components = []
 
       if duty_expression.duty_expression_id_spfc1.present?
