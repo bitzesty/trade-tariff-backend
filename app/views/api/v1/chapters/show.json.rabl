@@ -7,6 +7,10 @@ node(:section_id) { |chapter| chapter.section.id }
 
 child :section do
   attributes :id, :title, :position, :numeral
+
+  node(:section_note, if: lambda { |section| section.section_note.present? }) do |section|
+    section.section_note.content
+  end
 end
 
 node(:chapter_note, if: lambda {|chapter| chapter.chapter_note.present? }) do |chapter|
