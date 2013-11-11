@@ -49,6 +49,8 @@ TradeTariffBackend::Application.routes.draw do
         collection { get :latest }
       end
 
+      resources :search_references, only: [:index]
+
       post "search" => "search#search", via: :post, as: :search
     end
   end

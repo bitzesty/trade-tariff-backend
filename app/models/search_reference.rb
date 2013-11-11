@@ -20,6 +20,10 @@ class SearchReference < Sequel::Model
     def by_title
       order(Sequel.asc(:title))
     end
+
+    def for_letter(letter)
+      where(Sequel.ilike(:title, "#{letter}%"))
+    end
   end
 
   tire do
