@@ -31,7 +31,11 @@ class Section < Sequel::Model
   end)
 
   one_to_one :section_note
-  one_to_many :search_references
+
+  one_to_many :search_references, key: :referenced_id, reciprocal: :referenced, conditions: { referenced_class: 'Section' },
+    adder: proc{ |search_reference| search_reference.update(referenced_id: id, referenced_class: 'Section') },
+    remover: proc{ |search_reference| search_reference.update(referenced_id: nil, referenced_class: nil)},
+    clearer: proc{ search_references_dataset.update(referenced_id: nil, referenced_class: nil) }
 
   # Tire configuration
   tire do

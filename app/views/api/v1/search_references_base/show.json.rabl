@@ -1,3 +1,3 @@
 object @search_reference
 
-attributes :id, :title, :referenced_entity, :reference_class, :section_id, :chapter_id, :heading_id
+attributes :id, :title, :referenced_id, :referenced_class, :referenced

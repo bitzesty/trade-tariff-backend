@@ -5,8 +5,7 @@ FactoryGirl.define do
   sequence(:sid) { |n| n}
 
   factory :search_reference do
-    association :heading
-
     title { Forgery(:basic).text }
+    association :heading
   end
 end

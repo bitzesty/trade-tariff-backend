@@ -10,7 +10,7 @@ shared_examples_for 'search references controller' do
   describe "GET #index" do
     let(:pattern) {
       [
-        {id: Integer, title: String, referenced_entity: Hash, reference_class: String }
+        {id: Integer, title: String, referenced: Hash, referenced_class: String, referenced_id: String }
       ]
     }
 
@@ -54,7 +54,7 @@ shared_examples_for 'search references controller' do
 
   describe "GET to #show" do
     let(:pattern) {
-      {id: Integer, title: String, referenced_entity: Hash, reference_class: String }.ignore_extra_keys!
+      {id: Integer, title: String, referenced: Hash, referenced_class: String, referenced_id: String }.ignore_extra_keys!
     }
 
     it 'returns rendered search reference record' do
@@ -71,7 +71,7 @@ shared_examples_for 'search references controller' do
 
     context 'valid params provided' do
       let(:pattern) {
-        { id: Integer, title: String, referenced_entity: Hash }
+        { id: Integer, title: String, referenced: Hash, referenced_id: String, referenced_class: String }
       }
 
       before {
