@@ -33,7 +33,7 @@ describe ImportSearchReferences, :with_fakefs do
         it 'creates SearchReference entries for Chapters' do
           task.run
 
-          expect(SearchReference.where(chapter_id: chapter.short_code).any?).to be_true
+          expect(SearchReference.for_chapter(chapter).any?).to be_true
         end
       end
 
@@ -41,7 +41,7 @@ describe ImportSearchReferences, :with_fakefs do
         it 'does not create SearchReference entries for Chapters' do
           task.run
 
-          expect(SearchReference.any?).to be_blank
+          expect(SearchReference.for_chapters.any?).to be_blank
         end
       end
     end
@@ -57,7 +57,7 @@ describe ImportSearchReferences, :with_fakefs do
         it 'creates SearchReference entries for Headings' do
           task.run
 
-          expect(SearchReference.where(heading_id: heading.short_code).any?).to be_true
+          expect(SearchReference.for_heading(heading).any?).to be_true
         end
       end
 
@@ -65,7 +65,7 @@ describe ImportSearchReferences, :with_fakefs do
         it 'does not create SearchReference entries for Headings' do
           task.run
 
-          expect(SearchReference.any?).to be_blank
+          expect(SearchReference.for_headings.any?).to be_blank
         end
       end
     end
@@ -81,7 +81,7 @@ describe ImportSearchReferences, :with_fakefs do
         it 'creates SearchReference entries for Sections' do
           task.run
 
-          expect(SearchReference.where(section_id: section.id).any?).to be_true
+          expect(SearchReference.for_section(section).any?).to be_true
         end
       end
 
@@ -89,7 +89,7 @@ describe ImportSearchReferences, :with_fakefs do
         it 'does not create SearchReference entries for Sections' do
           task.run
 
-          expect(SearchReference.any?).to be_blank
+          expect(SearchReference.for_sections.any?).to be_blank
         end
       end
     end
@@ -105,11 +105,11 @@ describe ImportSearchReferences, :with_fakefs do
       }
 
       it 'creates SearchReference entry for Chapter' do
-        expect(SearchReference.where(chapter_id: chapter.short_code).any?).to be_true
+        expect(SearchReference.for_chapter(chapter).any?).to be_true
       end
 
       it 'creates SearchReference entry for Heading' do
-        expect(SearchReference.where(heading_id: heading.short_code).any?).to be_true
+        expect(SearchReference.for_heading(heading).any?).to be_true
       end
     end
 
