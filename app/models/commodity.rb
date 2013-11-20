@@ -25,6 +25,11 @@ class Commodity < GoodsNomenclature
            .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
   }
 
+  one_to_many :search_references, key: :referenced_id, primary_key: :code, reciprocal: :referenced, conditions: { referenced_class: 'Commodity' },
+    adder: proc{ |search_reference| search_reference.update(referenced_id: code, referenced_class: 'Commodity') },
+    remover: proc{ |search_reference| search_reference.update(referenced_id: nil, referenced_class: nil)},
+    clearer: proc{ search_references_dataset.update(referenced_id: nil, referenced_class: nil) }
+
   delegate :section, to: :chapter
 
   # Tire configuration
@@ -128,7 +133,7 @@ class Commodity < GoodsNomenclature
     goods_nomenclature_item_id
   end
 
-  def to_indexed_json
+  def serializable_hash
     commodity_attributes = {
       id: goods_nomenclature_sid,
       goods_nomenclature_item_id: goods_nomenclature_item_id,
@@ -176,7 +181,11 @@ class Commodity < GoodsNomenclature
       end
     end
 
-    commodity_attributes.to_json
+    commodity_attributes
+  end
+
+  def to_indexed_json
+    serializable_hash.to_json
   end
 
   def self.changes_for(depth = 0, conditions = {})
