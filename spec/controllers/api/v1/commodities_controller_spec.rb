@@ -86,7 +86,12 @@ describe Api::V1::CommoditiesController, "GET #changes" do
         model_name: "GoodsNomenclature",
         operation: String,
         operation_date: String,
-        record: Hash
+        record: {
+          description: String,
+          goods_nomenclature_item_id: String,
+          validity_start_date: String,
+          validity_end_date: nil
+        }
       }
     ].ignore_extra_values!
   }
