@@ -21,7 +21,9 @@ module Api
       end
 
       def changes
-        @changes = @chapter.changes
+        @changes = ChangeLog.new(@chapter.changes.where { |o|
+          o.operation_date <= actual_date
+        })
 
         render 'api/v1/changes/changes'
       end

@@ -15,8 +15,14 @@ class Change
     @operation_record ||= operation_class.find(oid: oid)
   end
 
+  # Initialize with call to bypass restricted column check
+  # we have no intention of modying these records therefore
+  # they are frozen after initialization
+  #
+  # records for modification should be fetched directly from
+  # Model classes, not through Model::Operation#record
   def record
-    operation_record.record
+    operation_record.record_class.call(operation_record.values).freeze
   end
 
   def model_name

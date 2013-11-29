@@ -193,25 +193,22 @@ class Commodity < GoodsNomenclature
   end
 
   def changes(depth = 1)
-    ChangeLog.new(
-      operation_klass.select(
-        Sequel.as('GoodsNomenclature', :model),
-        :oid,
-        :operation_date,
-        :operation,
-        Sequel.as(depth, :depth)
-      ).where(pk_hash)
-       .union(Measure.changes_for(depth + 1, measures_oplog__measure_sid: measures.map(&:measure_sid)))
-       .from_self
-       .where(Sequel.~(operation_date: nil))
-       .tap! { |criteria|
-         # if Commodity did not come from initial seed, filter by its
-         # create/update date
-         criteria.where{ |o| o.>=(:operation_date, operation_date) } unless operation_date.blank?
-        }
-       .limit(TradeTariffBackend.change_count)
-       .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date), Sequel.desc(:depth))
-       .all
-     )
+    operation_klass.select(
+      Sequel.as('GoodsNomenclature', :model),
+      :oid,
+      :operation_date,
+      :operation,
+      Sequel.as(depth, :depth)
+    ).where(pk_hash)
+     .union(Measure.changes_for(depth + 1, Sequel.qualify(:measures_oplog, :goods_nomenclature_item_id) => goods_nomenclature_item_id))
+     .from_self
+     .where(Sequel.~(operation_date: nil))
+     .tap! { |criteria|
+       # if Commodity did not come from initial seed, filter by its
+       # create/update date
+       criteria.where{ |o| o.>=(:operation_date, operation_date) } unless operation_date.blank?
+      }
+     .limit(TradeTariffBackend.change_count)
+     .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date), Sequel.desc(:depth))
   end
 end

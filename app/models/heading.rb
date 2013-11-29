@@ -128,27 +128,24 @@ class Heading < GoodsNomenclature
   end
 
   def changes(depth = 1)
-    ChangeLog.new(
-      operation_klass.select(
-        Sequel.as('Heading', :model),
-        :oid,
-        :operation_date,
-        :operation,
-        Sequel.as(depth, :depth)
-      ).where(pk_hash)
-       .union(Commodity.changes_for(depth + 1, ["goods_nomenclature_item_id LIKE ? AND goods_nomenclature_item_id NOT LIKE ?", relevant_commodities, '____000000']))
-       .union(Measure.changes_for(depth +1, ["goods_nomenclature_item_id LIKE ?", relevant_commodities]))
-       .from_self
-       .where(Sequel.~(operation_date: nil))
-       .tap! { |criteria|
-         # if Heading did not come from initial seed, filter by its
-         # create/update date
-         criteria.where{ |o| o.>=(:operation_date, operation_date) } unless operation_date.blank?
-        }
-       .limit(TradeTariffBackend.change_count)
-       .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date), Sequel.desc(:depth))
-       .all
-    )
+    operation_klass.select(
+      Sequel.as('Heading', :model),
+      :oid,
+      :operation_date,
+      :operation,
+      Sequel.as(depth, :depth)
+    ).where(pk_hash)
+     .union(Commodity.changes_for(depth + 1, ["goods_nomenclature_item_id LIKE ? AND goods_nomenclature_item_id NOT LIKE ?", relevant_commodities, '____000000']))
+     .union(Measure.changes_for(depth +1, ["goods_nomenclature_item_id LIKE ?", relevant_commodities]))
+     .from_self
+     .where(Sequel.~(operation_date: nil))
+     .tap! { |criteria|
+       # if Heading did not come from initial seed, filter by its
+       # create/update date
+       criteria.where { |o| o.>=(:operation_date, operation_date) } unless operation_date.blank?
+      }
+     .limit(TradeTariffBackend.change_count)
+     .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date), Sequel.desc(:depth))
   end
 
   def self.changes_for(depth = 0, conditions = {})

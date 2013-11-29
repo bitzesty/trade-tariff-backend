@@ -44,7 +44,9 @@ module Api
       end
 
       def changes
-        @changes = @heading.changes
+        @changes = ChangeLog.new(@heading.changes.where { |o|
+          o.operation_date <= actual_date
+        })
 
         render 'api/v1/changes/changes'
       end

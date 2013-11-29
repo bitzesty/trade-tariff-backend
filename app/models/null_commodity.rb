@@ -1,0 +1,2 @@
+class NullCommodity < NullGoodsNomenclature
+end
