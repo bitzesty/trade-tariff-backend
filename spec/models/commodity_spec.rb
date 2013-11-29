@@ -322,8 +322,8 @@ describe Commodity do
   describe '#changes' do
     let(:commodity) { create :commodity }
 
-    it 'returns instance of ChangeLog' do
-      expect(commodity.changes).to be_kind_of ChangeLog
+    it 'returns Sequel Dataset' do
+      expect(commodity.changes).to be_kind_of Sequel::Dataset
     end
 
     context 'with commodity changes' do

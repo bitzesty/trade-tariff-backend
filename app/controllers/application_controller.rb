@@ -40,8 +40,15 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def actual_date
+    Date.parse(params[:as_of].to_s)
+
+    rescue ArgumentError # empty as_of param means today
+      Date.today
+  end
+
   def configure_time_machine
-    TimeMachine.at(params[:as_of]) do
+    TimeMachine.at(actual_date) do
       yield
     end
   end

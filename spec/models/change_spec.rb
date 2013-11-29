@@ -19,7 +19,7 @@ describe Change do
 
   describe '#record' do
     it 'returns model associated with change operation' do
-      expect(change.record).to eq measure
+      expect(change.record.pk).to eq measure.pk
     end
   end
 end

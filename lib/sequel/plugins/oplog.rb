@@ -8,7 +8,12 @@ module Sequel
 
         # Define ModelClass::Operation
         # e.g. Measure::Operation for measure oplog table
-        operation_class = Class.new(Sequel::Model(:"#{model.table_name}_oplog"))
+        operation_class = Class.new(Sequel::Model(:"#{model.table_name}_oplog")) do
+          def record_class
+            self.class.to_s.chomp("::Operation").constantize
+          end
+        end
+
         operation_class.one_to_one(
           :record,
           key: model_primary_key,

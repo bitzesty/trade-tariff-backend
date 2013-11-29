@@ -151,8 +151,8 @@ describe Heading do
   describe '#changes' do
     let(:heading) { create :heading }
 
-    it 'returns instance of ChangeLog' do
-      expect(heading.changes).to be_kind_of ChangeLog
+    it 'returns Sequel Dataset' do
+      expect(heading.changes).to be_kind_of Sequel::Dataset
     end
 
     context 'with Heading changes' do
