@@ -52,13 +52,6 @@ class MeasureCondition < Sequel::Model
   one_to_many :measure_condition_components, key: :measure_condition_sid,
                                              primary_key: :measure_condition_sid
 
-  one_to_one :previous_measure_condition, key: :measure_sid,
-                                          primary_key: :measure_sid,
-                                          class: MeasureCondition do |ds|
-    ds.filter { |o| o.component_sequence_number < component_sequence_number }
-      .order(Sequel.desc(Sequel.qualify(:measure_conditions, :component_sequence_number)))
-  end
-
   delegate :abbreviation, to: :monetary_unit, prefix: true, allow_nil: true
   delegate :description, to: :measurement_unit, prefix: true, allow_nil: true
   delegate :description, to: :measurement_unit_qualifier, prefix: true, allow_nil: true
@@ -84,28 +77,8 @@ class MeasureCondition < Sequel::Model
     when :document
       "#{certificate_type_description}: #{certificate_description}"
     when :duty_expression
-      requirement_expression
+      requirement_duty_expression
     end
-  end
-
-  def first_component?
-    measure.measure_conditions.first == self
-  end
-
-  def last_component?
-    measure.measure_conditions.last == self
-  end
-
-  # TODO extract to object(Requirement)?
-  def requirement_expression
-    if first_component?
-      "greater than or equal to #{requirement_duty_expression}"
-    elsif last_component?
-      "less than #{previous_measure_condition.requirement_duty_expression}"
-    else
-      "greater than or equal to #{requirement_duty_expression} and less than #{previous_measure_condition.requirement_duty_expression}"
-    end
-    # end
   end
 
   def requirement_duty_expression
@@ -123,7 +96,7 @@ class MeasureCondition < Sequel::Model
   end
 
   def condition
-    measure_condition_code_description
+    "#{condition_code}#{component_sequence_number}: #{measure_condition_code_description}"
   end
 
   def requirement_type
