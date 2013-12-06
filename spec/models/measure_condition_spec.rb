@@ -85,4 +85,65 @@ describe MeasureCondition do
       end
     end
   end
+
+  describe '#requirement' do
+    context 'with document requirement' do
+      let(:certificate_type) {
+        create :certificate_type, :with_description,
+          description: 'FOO'
+      }
+      let(:certificate_description) {
+        create :certificate_description, :with_period,
+          certificate_type_code: certificate_type.certificate_type_code,
+          description: 'BAR'
+      }
+      let(:certificate) {
+        create :certificate,
+          certificate_code: certificate_description.certificate_code,
+          certificate_type_code: certificate_description.certificate_type_code
+      }
+      let(:measure_condition) {
+        create :measure_condition,
+          condition_code: 'L',
+          component_sequence_number: 3,
+          condition_duty_amount: nil,
+          condition_monetary_unit_code: nil,
+          condition_measurement_unit_code: nil,
+          condition_measurement_unit_qualifier_code: nil,
+          certificate_code: certificate.certificate_code,
+          certificate_type_code: certificate.certificate_type_code
+      }
+
+      it 'returns requirement certificate type and description' do
+        expect(measure_condition.requirement).to eq "FOO: BAR"
+      end
+    end
+
+    context 'with duty expression requirement' do
+      let(:monetary_unit) {
+        create :monetary_unit, :with_description,
+          monetary_unit_code: 'FOO'
+      }
+      let(:measurement_unit) {
+        create :measurement_unit, :with_description,
+          description: 'BAR'
+      }
+
+      let(:measure_condition) {
+        create :measure_condition,
+          condition_code: 'L',
+          component_sequence_number: 3,
+          condition_duty_amount: 108.56,
+          condition_monetary_unit_code: monetary_unit.monetary_unit_code,
+          condition_measurement_unit_code: measurement_unit.measurement_unit_code,
+          condition_measurement_unit_qualifier_code: nil,
+          certificate_code: nil,
+          certificate_type_code: nil
+      }
+
+      it 'returns rendered requirement duty expression' do
+        expect(measure_condition.requirement).to eq "108.56 FOO/BAR"
+      end
+    end
+  end
 end

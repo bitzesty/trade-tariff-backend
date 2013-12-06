@@ -173,8 +173,8 @@ describe Measure do
 
       describe 'ordering' do
         let!(:measure)                { create :measure }
-        let!(:measure_condition1)     { create :measure_condition, measure_sid: measure.measure_sid, component_sequence_number: 10 }
-        let!(:measure_condition2)     { create :measure_condition, measure_sid: measure.measure_sid, component_sequence_number: 1 }
+        let!(:measure_condition1)     { create :measure_condition, measure_sid: measure.measure_sid, condition_code: 'L', component_sequence_number: 10 }
+        let!(:measure_condition2)     { create :measure_condition, measure_sid: measure.measure_sid, condition_code: 'A', component_sequence_number: 1 }
 
         it 'loads conditions ordered by component sequence number ascending' do
           expect(measure.measure_conditions.first).to eq measure_condition2
