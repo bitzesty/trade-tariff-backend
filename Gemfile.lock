@@ -108,6 +108,9 @@ GEM
     kgio (2.8.0)
     libv8 (3.16.14.3)
     listen (0.5.0)
+    logstash-event (1.1.5)
+    logstasher (0.4.0)
+      logstash-event (~> 1.1.0)
     mail (2.5.3)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -290,6 +293,7 @@ DEPENDENCIES
   guard-rspec
   jquery-rails (= 1.0.19)
   json_expressions
+  logstasher (= 0.4.0)
   multi_json (~> 1.7.7)
   mysql2 (= 0.3.13)
   nokogiri (= 1.5.4)
