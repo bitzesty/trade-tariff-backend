@@ -12,3 +12,12 @@ child(chapters: :chapters) do
 
   node(:chapter_note_id) { |chapter| chapter.chapter_note.try(:id) }
 end
+
+node(:_response_info) do
+  {
+    links: [
+      { rel: 'self', href: api_link(request.fullpath) },
+      { rel: 'sections', href: api_link(api_sections_path) },
+    ]
+  }
+end

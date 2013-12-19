@@ -22,3 +22,12 @@ node(:headings) do
     partial("api/v1/headings/heading", object: heading)
   end
 end
+
+node(:_response_info) do
+  {
+    links: [
+      { rel: 'self', href: api_link(request.fullpath) },
+      { rel: 'section', href: api_link(api_section_path(@chapter.section)) },
+    ]
+  }
+end

@@ -13,7 +13,8 @@ describe Api::V1::ChaptersController, "GET #show" do
       headings: Array,
       section: {
         section_note: String
-      }.ignore_extra_keys!
+      }.ignore_extra_keys!,
+      _response_info: Hash
     }.ignore_extra_keys!
   }
 

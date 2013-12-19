@@ -16,6 +16,7 @@ describe Api::V1::CommoditiesController, "GET #show" do
       section: Hash,
       import_measures: Array,
       export_measures: Array,
+      _response_info: Hash,
     }.ignore_extra_keys!
   }
 
