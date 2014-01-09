@@ -5,11 +5,11 @@ module Api
         private
 
         def search_reference_collection
-          chapter.search_references_dataset.eager(:chapter)
+          chapter.search_references_dataset
         end
 
         def search_reference_resource_association_hash
-          { chapter_id: chapter.short_code }
+          { chapter: chapter }
         end
 
         def collection_url

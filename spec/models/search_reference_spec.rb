@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SearchReference do
   it_behaves_like 'Tire indexable model'
 
-  describe '#referenced_entity' do
+  describe '#referenced' do
     context "matching heading regexp" do
       let(:heading) { create :heading, goods_nomenclature_item_id: "1212000000" }
       let(:search_reference) { create :search_reference, heading_id: heading.short_code }
@@ -11,7 +11,7 @@ describe SearchReference do
       it 'returns referenced Heading object' do
         heading
 
-        expect(search_reference.referenced_entity).to eq heading
+        expect(search_reference.referenced).to eq heading
       end
     end
 
@@ -22,7 +22,7 @@ describe SearchReference do
       it 'returns Chapter object' do
         chapter
 
-        expect(search_reference.referenced_entity).to eq chapter
+        expect(search_reference.referenced).to eq chapter
       end
     end
 
@@ -33,7 +33,7 @@ describe SearchReference do
       it 'returns Section object' do
         section
 
-        expect(search_reference.referenced_entity).to eq section
+        expect(search_reference.referenced).to eq section
       end
     end
   end

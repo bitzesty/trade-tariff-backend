@@ -5,11 +5,11 @@ module Api
         private
 
         def search_reference_collection
-          heading.search_references_dataset.eager(:heading)
+          heading.search_references_dataset
         end
 
         def search_reference_resource_association_hash
-          { heading_id: heading.short_code }
+          { heading: heading }
         end
 
         def collection_url

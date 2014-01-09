@@ -25,7 +25,10 @@ class Heading < GoodsNomenclature
     actual_or_relevant(Chapter).filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
   }
 
-  one_to_many :search_references, primary_key: :short_code
+  one_to_many :search_references, key: :referenced_id, primary_key: :short_code, reciprocal: :referenced, conditions: { referenced_class: 'Heading' },
+    adder: proc{ |search_reference| search_reference.update(referenced_id: short_code, referenced_class: 'Heading') },
+    remover: proc{ |search_reference| search_reference.update(referenced_id: nil, referenced_class: nil)},
+    clearer: proc{ search_references_dataset.update(referenced_id: nil, referenced_class: nil) }
 
   dataset_module do
     def by_code(code = "")

@@ -22,7 +22,10 @@ class Chapter < GoodsNomenclature
   }
 
   one_to_one :chapter_note, primary_key: :to_param
-  one_to_many :search_references, primary_key: :short_code
+  one_to_many :search_references, key: :referenced_id, primary_key: :short_code, reciprocal: :referenced, conditions: { referenced_class: 'Chapter' },
+    adder: proc{ |search_reference| search_reference.update(referenced_id: short_code, referenced_class: 'Chapter') },
+    remover: proc{ |search_reference| search_reference.update(referenced_id: nil, referenced_class: nil)},
+    clearer: proc{ search_references_dataset.update(referenced_id: nil, referenced_class: nil) }
 
   # Tire configuration
   tire do

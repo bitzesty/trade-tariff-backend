@@ -46,13 +46,21 @@ class ImportSearchReferences
   def associated_entity(reference)
     case reference
     when HEADING_IDENTITY_REGEX
-      { heading_id: Heading.by_code("#{$1}#{$2}").first_or_null.short_code }
+      {
+        referenced_id: Heading.by_code("#{$1}#{$2}").first_or_null.short_code,
+        referenced_class: 'Heading'
+      }
     when CHAPTER_IDENTITY_REGEX
-      { chapter_id: Chapter.by_code($1).first_or_null.short_code }
+      {
+        referenced_id: Chapter.by_code($1).first_or_null.short_code,
+        referenced_class: 'Chapter'
+      }
     when SECTION_IDENTITY_REGEX
-      { section_id: Section.where(position: $1).first_or_null.id }
+      {
+        referenced_id: Section.where(position: $1).first_or_null.id,
+        referenced_class: 'Section'
+      }
     else
-      # unprocessable
       {}
     end
   end
