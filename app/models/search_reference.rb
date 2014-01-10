@@ -2,8 +2,6 @@ class SearchReference < Sequel::Model
   plugin :active_model
   plugin :tire
 
-  one_to_many :goods_nomenclatures_search_references
-
   many_to_one :referenced, reciprocal: :referenced,
     setter: (proc do |referenced|
       self.set(
@@ -24,6 +22,10 @@ class SearchReference < Sequel::Model
       when 'Heading'
         klass.where(
           Sequel.qualify(:goods_nomenclatures, :goods_nomenclature_item_id) => heading_id
+        )
+      when 'Commodity'
+        klass.where(
+          Sequel.qualify(:goods_nomenclatures, :goods_nomenclature_item_id) => commodity_id
         )
       end
     end),
@@ -85,6 +87,14 @@ class SearchReference < Sequel::Model
     def for_section(section)
       for_sections.where(referenced_id: section.to_param)
     end
+
+    def for_commodities
+      where(referenced_class: 'Commodity')
+    end
+
+    def for_commodity(commodity)
+      for_commodities.where(referenced_id: commodity.to_param)
+    end
   end
 
   tire do
@@ -100,9 +110,11 @@ class SearchReference < Sequel::Model
   alias :section= :referenced=
   alias :chapter= :referenced=
   alias :heading= :referenced=
+  alias :commodity= :referenced=
   alias :heading :referenced
   alias :chapter :referenced
   alias :section :referenced
+  alias :commodity :referenced
 
   def chapter_id=(chapter_id)
     self.referenced = Chapter.by_code(chapter_id).take if chapter_id.present?
@@ -114,6 +126,10 @@ class SearchReference < Sequel::Model
 
   def section_id=(section_id)
     self.referenced = Section.with_pk(section_id) if section_id.present?
+  end
+
+  def commodity_id=(commodity_id)
+    self.referenced = Commodity.by_code(commodity_id).declarable.take if commodity_id.present?
   end
 
   def validate
@@ -134,6 +150,10 @@ class SearchReference < Sequel::Model
 
   def chapter_id
     "#{referenced_id}00000000"
+  end
+
+  def commodity_id
+    referenced_id
   end
 
   def to_indexed_json

@@ -24,12 +24,19 @@ class SearchService
                                                      .all
       end
 
+      def commodities
+        @commodities ||= ResultQuery.new(search_results).for('Commodity')
+                                                        .uniq_by('goods_nomenclature_item_id')
+                                                        .sort_by('goods_nomenclature_item_id')
+                                                        .all
+      end
+
       def serializable_hash
         {
           sections: sections,
           chapters: chapters,
           headings: headings,
-          commodities: []
+          commodities: commodities
         }
       end
 

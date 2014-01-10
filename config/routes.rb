@@ -39,6 +39,10 @@ TradeTariffBackend::Application.routes.draw do
         member {
           get :changes
         }
+
+        scope module: 'commodities', constraints: { commodity_id: /\d{10}/, id: /\d+/ } do
+          resources :search_references
+        end
       end
 
       resources :geographical_areas, only: [:countries] do
