@@ -52,7 +52,7 @@ TradeTariffBackend::Application.routes.draw do
       resources :search_references, only: [:index]
 
       post "search" => "search#search", via: :post, as: :search
-      resource :rollback, only: [:create, :show]
+      resources :rollbacks, only: [:create, :index]
     end
   end
 

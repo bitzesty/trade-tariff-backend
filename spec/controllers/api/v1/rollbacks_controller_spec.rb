@@ -17,7 +17,7 @@ describe Api::V1::RollbacksController, "POST to #create", sidekiq: :inline do
       post :create, rollback: { date: rollback_date }
 
       expect(response.status).to eq 201
-      expect(response.location).to eq api_rollback_url
+      expect(response.location).to eq api_rollbacks_url
     end
 
     it 'performs a rollback' do
@@ -46,7 +46,7 @@ describe Api::V1::RollbacksController, "POST to #create", sidekiq: :inline do
 end
 
 
-describe Api::V1::RollbacksController, "GET to #show", sidekiq: :fake do
+describe Api::V1::RollbacksController, "GET to #index", sidekiq: :fake do
   render_views
 
   before {
@@ -65,7 +65,7 @@ describe Api::V1::RollbacksController, "GET to #show", sidekiq: :fake do
   }
 
   it 'returns scheduled rollbacks' do
-    get :show, format: :json
+    get :index, format: :json
 
     expect(response.status).to eq 200
     expect(response.body).to match_json_expression response_pattern
