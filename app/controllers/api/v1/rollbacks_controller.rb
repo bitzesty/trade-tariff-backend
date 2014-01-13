@@ -13,9 +13,9 @@ module Api
         if rollback.valid?
           RollbackWorker.perform_async(rollback.date, rollback.redownload)
 
-          head :created, location: api_rollbacks_url
+          render json: rollback, status: :created, location: api_rollbacks_url
         else
-          render json: rollback, status: :unprocessable_entity
+          render json: { errors: rollback.errors }, status: :unprocessable_entity
         end
       end
 
