@@ -58,7 +58,7 @@ describe Api::V1::RollbacksController, "GET to #index", sidekiq: :fake do
       {
         jid: String,
         enqueued_at: String,
-        rollback_to: String,
+        date: String,
         redownload: false
       }.ignore_extra_keys!
     ].ignore_extra_values!

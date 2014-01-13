@@ -2,7 +2,7 @@ collection @rollback_jobs
 
 attributes :jid, :enqueued_at
 
-node(:rollback_to) { |rollback_job|
+node(:date) { |rollback_job|
   rollback_job.args.first
 }
 
