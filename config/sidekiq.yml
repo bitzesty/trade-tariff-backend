@@ -1,0 +1,5 @@
+:verbose: false
+:concurrency:  1
+:queues:
+  - [rollbacks, 2]
+  - [default, 5]
