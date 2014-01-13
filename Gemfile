@@ -10,6 +10,7 @@ gem "sequel-rails", "0.7.0"
 gem "rabl", "0.9.0"
 gem "ansi"
 gem "sequel", "4.3.0"
+gem "sidekiq", "2.17.2"
 gem "tire", "0.6.0"
 gem "tire-contrib", '~> 0.1.3'
 gem "yajl-ruby", require: "yajl"
