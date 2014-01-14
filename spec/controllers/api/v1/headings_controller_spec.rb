@@ -6,15 +6,19 @@ describe Api::V1::HeadingsController, "GET #show" do
   context 'non-declarable heading' do
     let(:heading) { create :heading, :non_grouping,
                                      :non_declarable,
-                                     :with_description,
-                                     :with_chapter }
+                                     :with_description }
+    let!(:chapter) { create :chapter,
+                     :with_section, :with_description,
+                     goods_nomenclature_item_id: heading.chapter_id
+    }
 
     let(:pattern) {
       {
         goods_nomenclature_item_id: heading.code,
         description: String,
         commodities: Array,
-        chapter: Hash
+        chapter: Hash,
+        _response_info: Hash
       }.ignore_extra_keys!
     }
 
@@ -51,16 +55,20 @@ describe Api::V1::HeadingsController, "GET #show" do
 
   context 'declarable heading' do
     let!(:heading) { create :heading, :with_indent,
-                                      :with_chapter,
                                       :with_description,
                                       :declarable }
+    let!(:chapter) { create :chapter,
+                     :with_section, :with_description,
+                     goods_nomenclature_item_id: heading.chapter_id }
+
     let(:pattern) {
       {
         goods_nomenclature_item_id: heading.goods_nomenclature_item_id,
         description: String,
         chapter: Hash,
         import_measures: Array,
-        export_measures: Array
+        export_measures: Array,
+        _response_info: Hash
       }.ignore_extra_keys!
     }
 

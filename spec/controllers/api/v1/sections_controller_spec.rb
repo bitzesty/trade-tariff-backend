@@ -14,7 +14,8 @@ describe Api::V1::SectionsController, "GET #show" do
       numeral: String,
       chapter_from: String,
       chapter_to: String,
-      chapters: Array
+      chapters: Array,
+      _response_info: Hash
     }
   }
 
