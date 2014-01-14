@@ -50,9 +50,9 @@ namespace :tariff do
 
     desc 'Rollback to specific date in the past'
     task rollback: %w[environment class_eager_load] do
-      if ENV['DATE'] && date = Date.parse(ENV['DATE'])
+      if ENV['DATE']
         TradeTariffBackend.with_locked_database do
-          TariffSynchronizer.rollback(date, ENV['REDOWNLOAD'])
+          TariffSynchronizer.rollback(ENV['DATE'], ENV['REDOWNLOAD'])
         end
       else
         raise ArgumentError.new("Please set the date using environment variable 'DATE'")

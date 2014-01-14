@@ -189,7 +189,9 @@ module TariffSynchronizer
   # Usually you will want to run apply operation after rolling back
   #
   # NOTE: this does not remove records from initial seed
-  def rollback(date, redownload = false)
+  def rollback(rollback_date, redownload = false)
+    date = Date.parse(rollback_date.to_s)
+
     Sequel::Model.db.transaction do
       # Delete all entries in oplog tables with operation > DATE
       oplog_based_models.each do |model|
