@@ -3,7 +3,7 @@ class DestroySearchReference
     new(search_reference).call
   end
 
-  attr_writer :search_index
+  attr_writer :search_client
 
   def initialize(search_reference = {})
     @search_reference = search_reference
@@ -11,14 +11,14 @@ class DestroySearchReference
 
   def call
     @search_reference.destroy
-    search_index.for(@search_reference).remove
+    search_client.delete(@search_reference)
 
     @search_reference
   end
 
   private
 
-  def search_index
-    @search_index || TradeTariffBackend::SearchIndex
+  def search_client
+    @search_client || TradeTariffBackend.search_client
   end
 end

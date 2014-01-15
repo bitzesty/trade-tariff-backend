@@ -8,7 +8,6 @@ module TradeTariffBackend
   autoload :Mailer,          'trade_tariff_backend/mailer'
   autoload :NumberFormatter, 'trade_tariff_backend/number_formatter'
   autoload :SearchClient,    'trade_tariff_backend/search_client'
-  autoload :SearchIndex,     'trade_tariff_backend/search_index'
   autoload :Validator,       'trade_tariff_backend/validator'
 
   class << self
@@ -91,7 +90,7 @@ module TradeTariffBackend
     end
 
     def search_client
-      @search_client = SearchClient.new(
+      @search_client ||= SearchClient.new(
         Elasticsearch::Client.new(
           host: search_host,
           log: true

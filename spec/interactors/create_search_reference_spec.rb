@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe CreateSearchReference do
-  let(:search_index_double) { double('search_index').as_null_object }
+  let(:search_client_double) { double('search_client').as_null_object }
 
   describe '#call' do
     context 'search reference valid' do
@@ -9,18 +9,21 @@ describe CreateSearchReference do
       let(:search_reference_params) { attributes_for(:search_reference, section_id: section.id) }
 
       it 'persists search reference to the database' do
-        CreateSearchReference.create(search_reference_params)
+        interactor = CreateSearchReference.new(search_reference_params)
+        interactor.search_client = search_client_double
+
+        interactor.call
 
         expect(SearchReference.count).to eq 1
       end
 
       it 'indexes search reference in the search index' do
         interactor = CreateSearchReference.new(search_reference_params)
-        interactor.search_index = search_index_double
+        interactor.search_client = search_client_double
 
         interactor.call
 
-        expect(search_index_double).to have_received :for
+        expect(search_client_double).to have_received :index
       end
     end
 
@@ -35,11 +38,11 @@ describe CreateSearchReference do
 
       it 'does not index search referecen in the search index' do
         interactor = CreateSearchReference.new(search_reference_params)
-        interactor.search_index = search_index_double
+        interactor.search_client = search_client_double
 
         interactor.call
 
-        expect(search_index_double).not_to have_received :for
+        expect(search_client_double).not_to have_received :index
       end
     end
   end

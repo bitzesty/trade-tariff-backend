@@ -42,6 +42,27 @@ module TradeTariffBackend
       end
     end
 
+    def index(model)
+      search_index_for(model.class).tap do |model_index|
+        super(
+          index: model_index.name,
+          type: model_index.type,
+          id: model.id,
+          body: TradeTariffBackend.model_serializer_for(model_index.model).new(model).as_json
+        )
+      end
+    end
+
+    def delete(model)
+      search_index_for(model.class).tap do |model_index|
+        super(
+          index: model_index.name,
+          type: model_index.type,
+          id: model.id
+        )
+      end
+    end
+
     private
 
     def search_index_for(model)

@@ -3,7 +3,7 @@ class CreateSearchReference
     new(search_reference_params).call
   end
 
-  attr_writer :search_index
+  attr_writer :search_client
 
   def initialize(search_reference_params = {})
     @search_reference = SearchReference.new(search_reference_params)
@@ -11,7 +11,7 @@ class CreateSearchReference
 
   def call
     if @search_reference.save
-      search_index.for(@search_reference).store
+      search_client.index(@search_reference)
     end
 
     @search_reference
@@ -19,7 +19,7 @@ class CreateSearchReference
 
   private
 
-  def search_index
-    @search_index || TradeTariffBackend::SearchIndex
+  def search_client
+    @search_client || TradeTariffBackend.search_client
   end
 end

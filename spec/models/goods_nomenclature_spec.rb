@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe GoodsNomenclature do
-  it_behaves_like 'Tire indexable model'
-
   describe 'associations' do
     describe 'goods nomenclature indent' do
       context 'fetching with absolute date' do
