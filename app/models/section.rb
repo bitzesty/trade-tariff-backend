@@ -1,7 +1,6 @@
 class Section < Sequel::Model
   plugin :active_model
   plugin :nullable
-  plugin :tire
 
   many_to_many :chapters, dataset: -> {
     Chapter.join_table(:inner, :chapters_sections, chapters_sections__goods_nomenclature_sid: :goods_nomenclatures__goods_nomenclature_sid)
@@ -33,16 +32,6 @@ class Section < Sequel::Model
     adder: proc{ |search_reference| search_reference.update(referenced_id: id, referenced_class: 'Section') },
     remover: proc{ |search_reference| search_reference.update(referenced_id: nil, referenced_class: nil)},
     clearer: proc{ search_references_dataset.update(referenced_id: nil, referenced_class: nil) }
-
-  # Tire configuration
-  # tire do
-  #   index_name    'sections'
-  #   document_type 'section'
-
-  #   mapping do
-  #     indexes :title,        analyzer: 'snowball'
-  #   end
-  # end
 
   def first_chapter
     chapters.first || NullObject.new

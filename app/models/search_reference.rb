@@ -1,6 +1,5 @@
 class SearchReference < Sequel::Model
   plugin :active_model
-  plugin :tire
 
   many_to_one :referenced, reciprocal: :referenced,
     setter: (proc do |referenced|
@@ -96,16 +95,6 @@ class SearchReference < Sequel::Model
       for_commodities.where(referenced_id: commodity.to_param)
     end
   end
-
-  # tire do
-  #   index_name    'search_references'
-  #   document_type 'search_reference'
-
-  #   mapping do
-  #     indexes :title,     type: :string, analyzer: :snowball
-  #     indexes :reference, type: :nested
-  #   end
-  # end
 
   alias :section= :referenced=
   alias :chapter= :referenced=

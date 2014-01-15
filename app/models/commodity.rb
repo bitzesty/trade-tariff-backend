@@ -30,16 +30,6 @@ class Commodity < GoodsNomenclature
 
   delegate :section, to: :chapter
 
-  # Tire configuration
-  # tire do
-  #   index_name    'commodities'
-  #   document_type 'commodity'
-
-  #   mapping do
-  #     indexes :description,        analyzer: 'snowball'
-  #   end
-  # end
-
   dataset_module do
     def by_code(code = "")
       filter(goods_nomenclature_item_id: code.to_s.first(10))

@@ -46,16 +46,6 @@ class Heading < GoodsNomenclature
     end
   end
 
-  # Tire configuration
-  # tire do
-  #   index_name    'headings'
-  #   document_type 'heading'
-
-  #   mapping do
-  #     indexes :description,        analyzer: 'snowball'
-  #   end
-  # end
-
   delegate :section, to: :chapter
 
   def short_code
