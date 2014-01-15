@@ -113,6 +113,10 @@ module TradeTariffBackend
       [Chapter, Commodity, Heading, SearchReference, Section]
     end
 
+    def model_serializer_for(model)
+      "#{model}Serializer".constantize
+    end
+
     private
 
     def load_secrets

@@ -1,7 +1,6 @@
 require_relative 'goods_nomenclature'
 
 class Chapter < GoodsNomenclature
-  plugin :json_serializer
   plugin :oplog, primary_key: :goods_nomenclature_sid
   plugin :conformance_validator
 
@@ -72,33 +71,6 @@ class Chapter < GoodsNomenclature
 
   def headings_to
     last_heading.short_code
-  end
-
-  def serializable_hash
-    chapter_attributes = {
-      id: goods_nomenclature_sid,
-      goods_nomenclature_item_id: goods_nomenclature_item_id,
-      producline_suffix: producline_suffix,
-      validity_start_date: validity_start_date,
-      validity_end_date: validity_end_date,
-      description: formatted_description
-    }
-
-    if section.present?
-      chapter_attributes.merge!({
-        section: {
-          numeral: section.numeral,
-          title: section.title,
-          position: section.position
-        }
-      })
-    end
-
-    chapter_attributes
-  end
-
-  def to_indexed_json
-    serializable_hash.to_json
   end
 
   def changes(depth = 1)

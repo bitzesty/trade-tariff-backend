@@ -1,6 +1,5 @@
 class Section < Sequel::Model
   plugin :active_model
-  plugin :json_serializer
   plugin :nullable
   plugin :tire
 
@@ -59,18 +58,5 @@ class Section < Sequel::Model
 
   def chapter_to
     last_chapter.short_code
-  end
-
-  def serializable_hash
-    {
-      id: id,
-      numeral: numeral,
-      title: title,
-      position: position
-    }
-  end
-
-  def to_indexed_json
-    serializable_hash.to_json
   end
 end

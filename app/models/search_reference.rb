@@ -151,26 +151,4 @@ class SearchReference < Sequel::Model
   def chapter_id
     "#{referenced_id}00000000"
   end
-
-  def commodity_id
-    referenced_id
-  end
-
-  def to_indexed_json
-    # Cannot return nil from #to_indexed_json because ElasticSearch does not like that.
-    # It will eat all memory and timeout indexing requests.
-    result = if referenced.blank?
-               {}
-             else
-               {
-                 title: title,
-                 reference_class: referenced_class,
-                 reference: referenced.serializable_hash.merge({
-                   class: referenced_class
-                 })
-               }
-             end
-
-    result.to_json
-  end
 end

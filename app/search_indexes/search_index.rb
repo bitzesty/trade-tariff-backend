@@ -4,6 +4,14 @@ class SearchIndex
   end
 
   def name
-    [@namespace, self.class.name.chomp("Index").underscore.pluralize].join("-")
+    [@namespace, type].join("-")
+  end
+
+  def type
+    model.to_s.underscore.pluralize
+  end
+
+  def model
+    self.class.name.chomp("Index").constantize
   end
 end
