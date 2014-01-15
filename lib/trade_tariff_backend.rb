@@ -7,6 +7,7 @@ module TradeTariffBackend
   autoload :Indexer,         'trade_tariff_backend/indexer'
   autoload :Mailer,          'trade_tariff_backend/mailer'
   autoload :NumberFormatter, 'trade_tariff_backend/number_formatter'
+  autoload :SearchClient,    'trade_tariff_backend/search_client'
   autoload :SearchIndex,     'trade_tariff_backend/search_index'
   autoload :Validator,       'trade_tariff_backend/validator'
 
@@ -87,6 +88,29 @@ module TradeTariffBackend
 
     def number_formatter
       @number_formatter ||= TradeTariffBackend::NumberFormatter.new
+    end
+
+    def search_client
+      @search_client = SearchClient.new(
+        Elasticsearch::Client.new(
+          host: search_host,
+          log: true
+        ),
+        namespace: search_namespace,
+        indexed_models: indexed_models
+      )
+    end
+
+    def search_host
+      'http://localhost:9200'
+    end
+
+    def search_namespace
+      'tariff'
+    end
+
+    def indexed_models
+      [Chapter, Commodity, Heading, SearchReference, Section]
     end
 
     private

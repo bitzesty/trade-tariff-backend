@@ -2,7 +2,6 @@ require 'formatter'
 require 'declarable'
 
 class Heading < GoodsNomenclature
-  include Tire::Model::Search
   include Model::Declarable
 
   plugin :json_serializer
@@ -49,14 +48,14 @@ class Heading < GoodsNomenclature
   end
 
   # Tire configuration
-  tire do
-    index_name    'headings'
-    document_type 'heading'
+  # tire do
+  #   index_name    'headings'
+  #   document_type 'heading'
 
-    mapping do
-      indexes :description,        analyzer: 'snowball'
-    end
-  end
+  #   mapping do
+  #     indexes :description,        analyzer: 'snowball'
+  #   end
+  # end
 
   delegate :section, to: :chapter
 

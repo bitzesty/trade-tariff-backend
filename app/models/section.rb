@@ -1,6 +1,4 @@
 class Section < Sequel::Model
-  include Tire::Model::Search
-
   plugin :active_model
   plugin :json_serializer
   plugin :nullable
@@ -38,14 +36,14 @@ class Section < Sequel::Model
     clearer: proc{ search_references_dataset.update(referenced_id: nil, referenced_class: nil) }
 
   # Tire configuration
-  tire do
-    index_name    'sections'
-    document_type 'section'
+  # tire do
+  #   index_name    'sections'
+  #   document_type 'section'
 
-    mapping do
-      indexes :title,        analyzer: 'snowball'
-    end
-  end
+  #   mapping do
+  #     indexes :title,        analyzer: 'snowball'
+  #   end
+  # end
 
   def first_chapter
     chapters.first || NullObject.new

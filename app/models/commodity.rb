@@ -2,7 +2,6 @@ require 'formatter'
 require 'declarable'
 
 class Commodity < GoodsNomenclature
-  include Tire::Model::Search
   include Model::Declarable
 
   plugin :oplog, primary_key: :goods_nomenclature_sid
@@ -33,14 +32,14 @@ class Commodity < GoodsNomenclature
   delegate :section, to: :chapter
 
   # Tire configuration
-  tire do
-    index_name    'commodities'
-    document_type 'commodity'
+  # tire do
+  #   index_name    'commodities'
+  #   document_type 'commodity'
 
-    mapping do
-      indexes :description,        analyzer: 'snowball'
-    end
-  end
+  #   mapping do
+  #     indexes :description,        analyzer: 'snowball'
+  #   end
+  # end
 
   dataset_module do
     def by_code(code = "")

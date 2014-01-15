@@ -97,15 +97,15 @@ class SearchReference < Sequel::Model
     end
   end
 
-  tire do
-    index_name    'search_references'
-    document_type 'search_reference'
+  # tire do
+  #   index_name    'search_references'
+  #   document_type 'search_reference'
 
-    mapping do
-      indexes :title,     type: :string, analyzer: :snowball
-      indexes :reference, type: :nested
-    end
-  end
+  #   mapping do
+  #     indexes :title,     type: :string, analyzer: :snowball
+  #     indexes :reference, type: :nested
+  #   end
+  # end
 
   alias :section= :referenced=
   alias :chapter= :referenced=

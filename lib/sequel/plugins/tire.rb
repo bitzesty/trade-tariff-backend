@@ -4,10 +4,10 @@ module Sequel
   module Plugins
     module Tire
       def self.apply(model, opts=OPTS)
-        # Tire model has to comply to ActiveModel
-        model.plugin(:active_model)
-        # Tire search methods
-        model.include(::Tire::Model::Search)
+        # # Tire model has to comply to ActiveModel
+        # model.plugin(:active_model)
+        # # Tire search methods
+        # model.include(::Tire::Model::Search)
       end
 
       module DatasetMethods

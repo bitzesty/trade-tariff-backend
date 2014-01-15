@@ -1,8 +1,6 @@
 require_relative 'goods_nomenclature'
 
 class Chapter < GoodsNomenclature
-  include Tire::Model::Search
-
   plugin :json_serializer
   plugin :oplog, primary_key: :goods_nomenclature_sid
   plugin :conformance_validator
@@ -28,14 +26,14 @@ class Chapter < GoodsNomenclature
     clearer: proc{ search_references_dataset.update(referenced_id: nil, referenced_class: nil) }
 
   # Tire configuration
-  tire do
-    index_name    'chapters'
-    document_type 'chapter'
+  # tire do
+  #   index_name    'chapters'
+  #   document_type 'chapter'
 
-    mapping do
-      indexes :description,        analyzer: 'snowball'
-    end
-  end
+  #   mapping do
+  #     indexes :description,        analyzer: 'snowball'
+  #   end
+  # end
 
   dataset_module do
     def by_code(code = "")

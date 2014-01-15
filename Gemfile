@@ -4,6 +4,7 @@ source "https://BnrJb6FZyzspBboNJzYZ@gem.fury.io/govuk/"
 gem "rails", "3.2.16"
 
 gem "addressable", "2.3.2"
+gem "hashie", "2.0.5"
 gem "multi_json", "~> 1.7.7"
 gem "mysql2", "0.3.13"
 gem "sequel-rails", "0.7.0"
@@ -12,8 +13,7 @@ gem "mlanett-redis-lock", "0.2.5", require: 'redis-lock'
 gem "ansi"
 gem "sequel", "4.3.0"
 gem "sidekiq", "2.17.2"
-gem "tire", "0.6.0"
-gem "tire-contrib", '~> 0.1.3'
+gem "elasticsearch", "0.4.7"
 gem "yajl-ruby", require: "yajl"
 gem "strong_parameters"
 
