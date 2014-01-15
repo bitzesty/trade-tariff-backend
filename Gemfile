@@ -14,6 +14,7 @@ gem "ansi"
 gem "sequel", "4.3.0"
 gem "sidekiq", "2.17.2"
 gem "elasticsearch", "0.4.7"
+gem "elasticsearch-extensions", "0.0.12"
 gem "yajl-ruby", require: "yajl"
 gem "strong_parameters"
 
