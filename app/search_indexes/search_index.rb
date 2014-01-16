@@ -4,11 +4,11 @@ class SearchIndex
   end
 
   def name
-    [@namespace, type].join("-")
+    [@namespace, type.pluralize].join("-")
   end
 
   def type
-    model.to_s.underscore.pluralize
+    model.to_s.underscore
   end
 
   def model

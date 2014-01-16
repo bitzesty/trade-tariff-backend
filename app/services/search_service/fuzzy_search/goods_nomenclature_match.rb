@@ -13,59 +13,61 @@ class SearchService
       private
 
       def search_results_for(index, query_opts = {})
-        Tire.search(index, { query: {
-                                constant_score: {
-                                  filter: {
-                                    and: [
-                                      {
-                                        # match the search phrase
-                                        query: {
-                                          query_string: {
-                                            query: query_string,
-                                            fields: ["description"]
-                                          }.merge(query_opts)
-                                        }
-                                      },
-                                      {
-                                        or: [
-                                          # actual date is either between item's (validity_start_date..validity_end_date)
-                                          {
-                                            and: [
-                                              range: {
-                                                validity_start_date: { lte: date }
-                                              },
-                                              range: {
-                                                validity_end_date: { gte: date }
-                                              }
-                                            ]
-                                          },
-                                          # or is greater than item's validity_start_date
-                                          # and item has blank validity_end_date (is unbounded)
-                                          {
-                                            and: [
-                                              {
+        TradeTariffBackend.search_client.search(index: index,
+                                body:
+                                  { query: {
+                                  constant_score: {
+                                    filter: {
+                                      and: [
+                                        {
+                                          # match the search phrase
+                                          query: {
+                                            query_string: {
+                                              query: query_string,
+                                              fields: ["description"]
+                                            }.merge(query_opts)
+                                          }
+                                        },
+                                        {
+                                          or: [
+                                            # actual date is either between item's (validity_start_date..validity_end_date)
+                                            {
+                                              and: [
                                                 range: {
                                                   validity_start_date: { lte: date }
+                                                },
+                                                range: {
+                                                  validity_end_date: { gte: date }
                                                 }
-                                              },
-                                              {
-                                                missing: {
-                                                  field: "validity_end_date",
-                                                  null_value: true,
-                                                  existence: true
+                                              ]
+                                            },
+                                            # or is greater than item's validity_start_date
+                                            # and item has blank validity_end_date (is unbounded)
+                                            {
+                                              and: [
+                                                {
+                                                  range: {
+                                                    validity_start_date: { lte: date }
+                                                  }
+                                                },
+                                                {
+                                                  missing: {
+                                                    field: "validity_end_date",
+                                                    null_value: true,
+                                                    existence: true
+                                                  }
                                                 }
-                                              }
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  }
-                               }
-                             },
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                 }
+                               },
                              size: INDEX_SIZE_MAX
                            }
-                   ).results
+                   ).hits.hits
       end
     end
   end

@@ -10,7 +10,7 @@ class SearchService
 
         def for(entity_name)
           @results = @results.select { |result|
-            result.reference['class'] == entity_name
+            result._source.reference['class'] == entity_name
           }
 
           self
@@ -18,7 +18,7 @@ class SearchService
 
         def uniq_by(uniq_key)
           @results = @results.uniq { |result|
-            result.reference[uniq_key]
+            result._source.reference[uniq_key]
           }
 
           self
@@ -26,7 +26,7 @@ class SearchService
 
         def sort_by(sort_key)
           @results = @results.sort_by { |result|
-            result.reference[sort_key]
+            result._source.reference[sort_key]
           }
 
           self

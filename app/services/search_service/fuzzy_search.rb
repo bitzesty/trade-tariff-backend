@@ -8,7 +8,7 @@ class SearchService
       begin
         @results = { goods_nomenclature_match: GoodsNomenclatureMatch.for(query_string, date),
                      reference_match:          ReferenceMatch.for(query_string, date) }
-      rescue Tire::Search::SearchRequestFailed
+      rescue Elasticsearch::Transport::Transport::Error
         # rescue from malformed queries, return empty resultset in that case
         BLANK_RESULT
       end

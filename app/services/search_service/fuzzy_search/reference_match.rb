@@ -43,7 +43,8 @@ class SearchService
       private
 
       def search_results
-        @search_results ||= Tire.search('tariff-search_references', {
+        @search_results ||= TradeTariffBackend.search_client.search(
+          index: 'tariff-search_references', body: {
           query: {
             filtered: {
               query: {
@@ -119,7 +120,7 @@ class SearchService
            },
            size: INDEX_SIZE_MAX
          }
-        ).results
+        ).hits.hits
       end
     end
   end

@@ -82,10 +82,6 @@ module TradeTariffBackend
       10
     end
 
-    def search_index
-      SearchIndex
-    end
-
     def number_formatter
       @number_formatter ||= TradeTariffBackend::NumberFormatter.new
     end
