@@ -95,6 +95,10 @@ class GoodsNomenclature < Sequel::Model
     def non_hidden
       filter(Sequel.~(goods_nomenclature_item_id: HiddenGoodsNomenclature.codes))
     end
+
+    def indexable
+      where(Sequel.~(goods_nomenclature_item_id: HiddenGoodsNomenclature.codes))
+    end
   end
 
   def id

@@ -94,6 +94,10 @@ class SearchReference < Sequel::Model
     def for_commodity(commodity)
       for_commodities.where(referenced_id: commodity.to_param)
     end
+
+    def indexable
+      self
+    end
   end
 
   alias :section= :referenced=

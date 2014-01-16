@@ -4,7 +4,6 @@ module TradeTariffBackend
   autoload :Auditor,         'trade_tariff_backend/auditor'
   autoload :DataMigration,   'trade_tariff_backend/data_migration'
   autoload :DataMigrator,    'trade_tariff_backend/data_migrator'
-  autoload :Indexer,         'trade_tariff_backend/indexer'
   autoload :Mailer,          'trade_tariff_backend/mailer'
   autoload :NumberFormatter, 'trade_tariff_backend/number_formatter'
   autoload :SearchClient,    'trade_tariff_backend/search_client'
@@ -64,11 +63,13 @@ module TradeTariffBackend
       end
     end
 
-    def reindex(indexer = Indexer)
-      begin
-        indexer.run
-      rescue StandardError => e
-        Mailer.reindex_exception(e).deliver
+    def reindex(indexer = search_client)
+      TimeMachine.with_relevant_validity_periods do
+        begin
+          indexer.reindex
+        rescue StandardError => e
+          Mailer.reindex_exception(e).deliver
+        end
       end
     end
 

@@ -1,4 +1,4 @@
-Rspec.configure do |config|
+RSpec.configure do |config|
   config.before(:suite) do
     unless config.exclusion_filter[:elasticsearch]
       Elasticsearch::Extensions::Test::Cluster.start \
