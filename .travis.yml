@@ -9,6 +9,7 @@ before_install:
    - cp config/database.travis.yml config/database.yml
 services:
  - elasticsearch
+ - redis-server
 script:
  - RAILS_ENV=test bundle exec rake db:create
  - RAILS_ENV=test bundle exec rake db:migrate
