@@ -45,8 +45,7 @@ describe Api::V1::RollbacksController, "POST to #create", sidekiq: :inline do
   end
 end
 
-
-describe Api::V1::RollbacksController, "GET to #index", sidekiq: :fake do
+describe Api::V1::RollbacksController, "GET to #index", sidekiq: :integration do
   render_views
 
   before {
@@ -62,6 +61,10 @@ describe Api::V1::RollbacksController, "GET to #index", sidekiq: :fake do
         redownload: false
       }.ignore_extra_keys!
     ].ignore_extra_values!
+  }
+
+  before {
+    RollbackWorker.perform_async(Date.today.to_s, false)
   }
 
   it 'returns scheduled rollbacks' do

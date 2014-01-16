@@ -13,8 +13,8 @@ RSpec.configure do |config|
       Sidekiq::Testing.fake!
     elsif example.metadata[:sidekiq] == :inline
       Sidekiq::Testing.inline!
-    elsif example.metadata[:type] == :acceptance
-      Sidekiq::Testing.inline!
+    elsif example.metadata[:type] == :acceptance || example.metadata[:sidekiq] == :integration
+      Sidekiq::Testing.disable!
     else
       Sidekiq::Testing.fake!
     end
