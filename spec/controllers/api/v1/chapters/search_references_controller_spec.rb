@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Api::V1::Chapters::SearchReferencesController, "GET #index" do
+describe Api::V1::Chapters::SearchReferencesController, elasticsearch: true do
   it_behaves_like 'search references controller' do
     let(:search_reference_parent)  { create :chapter }
     let(:search_reference)         { create :search_reference, chapter_id: search_reference_parent.short_code }

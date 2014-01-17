@@ -3,6 +3,11 @@ class SearchService
     class FuzzySearchResult
       include Enumerable
 
+      # We craft Elasticsearch queries in streamlined way, but
+      # certain queries need additional query details to be provided.
+      # These details can be specified in QUERY_OPTIONS
+      #
+      # See #each_query for more details
       QUERY_OPTIONS = {
         goods_nomenclature_match: {
           'tariff-sections' => { fields: ["title"] }

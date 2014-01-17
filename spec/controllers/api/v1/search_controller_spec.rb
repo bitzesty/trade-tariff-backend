@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Api::V1::SearchController, "POST #search" do
+describe Api::V1::SearchController, "POST #search", elasticsearch: true do
   describe 'exact matching' do
     let(:chapter) { create :chapter }
     let(:pattern) {

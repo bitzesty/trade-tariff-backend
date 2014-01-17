@@ -9,6 +9,7 @@ class GoodsNomenclature < Sequel::Model
   plugin :oplog, primary_key: :goods_nomenclature_sid
   plugin :nullable
   plugin :conformance_validator
+  plugin :active_model
 
   plugin :sti, class_determinator: ->(record) {
     gono_id = record[:goods_nomenclature_item_id].to_s

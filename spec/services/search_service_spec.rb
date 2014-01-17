@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SearchService do
+describe SearchService, elasticsearch: true do
   describe 'initialization' do
     let(:query) { Forgery(:basic).text }
 

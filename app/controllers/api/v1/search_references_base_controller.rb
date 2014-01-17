@@ -15,10 +15,10 @@ module Api
       def index
         @search_references = begin
           search_reference_collection.by_title
-                                 .paginate(per_page: per_page, page: page)
+                                 .paginate(page, per_page)
         rescue Sequel::Error
          search_reference_collection.by_title
-                                .paginate(per_page: default_limit, page: default_page)
+                                .paginate(page, per_page)
         end
       end
 

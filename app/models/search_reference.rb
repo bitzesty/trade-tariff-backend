@@ -144,4 +144,8 @@ class SearchReference < Sequel::Model
   def chapter_id
     "#{referenced_id}00000000"
   end
+
+  def commodity_id
+    referenced_id
+  end
 end

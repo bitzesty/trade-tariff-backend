@@ -46,5 +46,7 @@ class CommoditySerializer < Serializer
         end
       end
     end
+
+    commodity_attributes
   end
 end
