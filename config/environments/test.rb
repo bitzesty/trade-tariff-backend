@@ -47,7 +47,10 @@ TradeTariffBackend::Application.configure do
       # Run on different port then default 9200 in order to avoid
       # conflicts with other environments
       tariff.search_port = 9350
-      tariff.search_options = { log: false }
+      tariff.search_options = {
+        log: false,
+        command: `which elasticsearch`.strip
+      }
       # We need search index to be refreshed after each operation
       # in order to assert record presence in the index (in integration specs)
       # Elasticsearch has a 1 second interval between index refreshes
