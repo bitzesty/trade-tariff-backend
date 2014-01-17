@@ -3,6 +3,7 @@ require_relative 'goods_nomenclature'
 class Chapter < GoodsNomenclature
   plugin :oplog, primary_key: :goods_nomenclature_sid
   plugin :conformance_validator
+  plugin :elasticsearch
 
   set_dataset filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", '__00000000').
               order(Sequel.asc(:goods_nomenclature_item_id))

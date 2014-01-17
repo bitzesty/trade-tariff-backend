@@ -1,6 +1,7 @@
 class Section < Sequel::Model
   plugin :active_model
   plugin :nullable
+  plugin :elasticsearch
 
   many_to_many :chapters, dataset: -> {
     Chapter.join_table(:inner, :chapters_sections, chapters_sections__goods_nomenclature_sid: :goods_nomenclatures__goods_nomenclature_sid)

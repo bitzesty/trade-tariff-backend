@@ -1,5 +1,6 @@
 class SearchReference < Sequel::Model
   plugin :active_model
+  plugin :elasticsearch
 
   many_to_one :referenced, reciprocal: :referenced,
     setter: (proc do |referenced|

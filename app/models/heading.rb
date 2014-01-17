@@ -6,6 +6,7 @@ class Heading < GoodsNomenclature
 
   plugin :oplog, primary_key: :goods_nomenclature_sid
   plugin :conformance_validator
+  plugin :elasticsearch
 
   set_dataset filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", '____000000').
               filter("goods_nomenclatures.goods_nomenclature_item_id NOT LIKE ?", '__00______').
