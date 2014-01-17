@@ -14,4 +14,8 @@ class SearchIndex
   def model
     self.class.name.chomp("Index").constantize
   end
+
+  def goods_nomenclature?
+    false
+  end
 end

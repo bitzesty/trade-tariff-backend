@@ -109,6 +109,12 @@ module TradeTariffBackend
       [Chapter, Commodity, Heading, SearchReference, Section]
     end
 
+    def search_indexes
+      indexed_models.map { |model|
+        "#{model}Index".constantize.new(search_namespace)
+      }
+    end
+
     def model_serializer_for(model)
       "#{model}Serializer".constantize
     end

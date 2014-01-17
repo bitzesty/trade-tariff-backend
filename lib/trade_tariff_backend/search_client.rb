@@ -18,6 +18,10 @@ module TradeTariffBackend
       Hashie::Mash.new(super)
     end
 
+    def msearch(*)
+      Hashie::Mash.new(super)
+    end
+
     def reindex
       indexed_models.each do |model|
         search_index_for(model).tap do |index|

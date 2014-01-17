@@ -1,4 +1,8 @@
 class CommodityIndex < SearchIndex
+  def goods_nomenclature?
+    true
+  end
+
   def definition
     {
       mappings: {
