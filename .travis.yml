@@ -21,7 +21,7 @@ matrix:
   allow_failures:
     - rvm: 2.0.0
 branches:
- only:
-   - master
+  except:
+    - release
 notifications:
   email: false
