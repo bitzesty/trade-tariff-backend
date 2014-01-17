@@ -10,6 +10,9 @@ module TradeTariffBackend
   autoload :Validator,       'trade_tariff_backend/validator'
 
   class << self
+    def configure
+      yield self
+    end
 
     # Lock key used for DB locks to keep just one instance of synchronizer
     # running in cluster environment
@@ -88,22 +91,41 @@ module TradeTariffBackend
 
     def search_client
       @search_client ||= SearchClient.new(
-        Elasticsearch::Client.new(
-          host: search_host,
-          log: true
-        ),
+        Elasticsearch::Client.new(search_options),
         namespace: search_namespace,
-        indexed_models: indexed_models
+        indexed_models: indexed_models,
+        search_operation_options: search_operation_options
       )
     end
 
     def search_host
-      'http://localhost:9200'
+      @search_host ||= "http://localhost:#{search_port}"
     end
+    attr_writer :search_host
 
     def search_namespace
-      'tariff'
+      @search_namespace ||= 'tariff'
     end
+    attr_writer :search_namespace
+
+    def search_port
+      @search_port ||= 9200
+    end
+    attr_writer :search_port
+
+    def default_search_options
+      { host: search_host, log: true }
+    end
+
+    def search_options
+      default_search_options.merge(@search_options || {})
+    end
+    attr_writer :search_options
+
+    def search_operation_options
+      @search_operation_options || {}
+    end
+    attr_writer :search_operation_options
 
     def indexed_models
       [Chapter, Commodity, Heading, SearchReference, Section]

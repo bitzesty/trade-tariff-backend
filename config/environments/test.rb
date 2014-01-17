@@ -41,4 +41,18 @@ TradeTariffBackend::Application.configure do
     ENV['GOVUK_APP_DOMAIN'] = 'test.gov.uk'
   end
 
+  config.after_initialize do
+    TradeTariffBackend.configure do |tariff|
+      tariff.search_namespace = 'tariff-test'
+      # Run on different port then default 9200 in order to avoid
+      # conflicts with other environments
+      tariff.search_port = 9350
+      tariff.search_options = { log: false }
+      # We need search index to be refreshed after each operation
+      # in order to assert record presence in the index (in integration specs)
+      # Elasticsearch has a 1 second interval between index refreshes
+      # by default.
+      tariff.search_operation_options = { refresh: true }
+    end
+  end
 end

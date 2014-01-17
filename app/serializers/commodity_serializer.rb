@@ -31,7 +31,7 @@ class CommoditySerializer < Serializer
             producline_suffix: chapter.producline_suffix,
             validity_start_date: chapter.validity_start_date,
             validity_end_date: chapter.validity_end_date,
-            description: chapter.formatted_description.downcase
+            description: chapter.formatted_description
           }
         })
 

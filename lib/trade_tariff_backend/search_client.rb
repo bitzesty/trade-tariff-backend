@@ -5,11 +5,13 @@ module TradeTariffBackend
     attr_reader :indexed_models
     attr_reader :namespace
     attr_reader :index_page_size
+    attr_reader :search_operation_options
 
     def initialize(search_client, options = {})
       @indexed_models = options.fetch(:indexed_models, [])
       @namespace = options.fetch(:namespace, '')
       @index_page_size = options.fetch(:index_page_size, 1000)
+      @search_operation_options = options.fetch(:search_operation_options, {})
 
       super(search_client)
     end
@@ -25,19 +27,19 @@ module TradeTariffBackend
     def reindex
       indexed_models.each do |model|
         search_index_for(model).tap do |index|
-          drop_index(index.name)
-          create_index(index.name, index.definition)
+          drop_index(index)
+          create_index(index)
           build_index(index, model)
         end
       end
     end
 
-    def create_index(index_name, index_definition)
-      indices.create(index: index_name, body: index_definition)
+    def create_index(index)
+      indices.create(index: index.name, body: index.definition)
     end
 
-    def drop_index(index_name)
-      indices.delete(index: index_name) if indices.exists(index: index_name)
+    def drop_index(index)
+      indices.delete(index: index.name) if indices.exists(index: index.name)
     end
 
     def build_index(index, model)
@@ -48,22 +50,22 @@ module TradeTariffBackend
 
     def index(model)
       search_index_for(model.class).tap do |model_index|
-        super(
+        super({
           index: model_index.name,
           type: model_index.type,
           id: model.id,
           body: TradeTariffBackend.model_serializer_for(model_index.model).new(model).as_json
-        )
+        }.merge(search_operation_options))
       end
     end
 
     def delete(model)
       search_index_for(model.class).tap do |model_index|
-        super(
+        super({
           index: model_index.name,
           type: model_index.type,
           id: model.id
-        )
+        }.merge(search_operation_options))
       end
     end
 
