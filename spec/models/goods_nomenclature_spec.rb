@@ -73,12 +73,12 @@ describe GoodsNomenclature do
           let!(:goods_nomenclature)                { create :goods_nomenclature }
           let!(:goods_nomenclature_description1)   { create :goods_nomenclature_description,
                                                                 goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
-                                                                valid_at: 2.years.ago,
-                                                                valid_to: nil }
+                                                                validity_start_date: 2.years.ago,
+                                                                validity_end_date: nil }
           let!(:goods_nomenclature_description2) { create :goods_nomenclature_description,
                                                                 goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
-                                                                valid_at: 5.years.ago,
-                                                                valid_to: 3.years.ago }
+                                                                validity_start_date: 5.years.ago,
+                                                                validity_end_date: 3.years.ago }
 
           context 'direct loading' do
             it 'loads correct description respecting given actual time' do
@@ -133,12 +133,12 @@ describe GoodsNomenclature do
           let!(:goods_nomenclature)                { create :goods_nomenclature }
           let!(:goods_nomenclature_description1)   { create :goods_nomenclature_description,
                                                                 goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
-                                                                valid_at: 3.years.ago,
-                                                                valid_to: nil }
+                                                                validity_start_date: 3.years.ago,
+                                                                validity_end_date: nil }
           let!(:goods_nomenclature_description2) { create :goods_nomenclature_description,
                                                                 goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
-                                                                valid_at: 5.years.ago,
-                                                                valid_to: nil }
+                                                                validity_start_date: 5.years.ago,
+                                                                validity_end_date: nil }
 
           context 'direct loading' do
             it 'loads correct description respecting given actual time' do
@@ -195,12 +195,12 @@ describe GoodsNomenclature do
                                                                                validity_end_date: nil }
         let!(:goods_nomenclature_description1)   { create :goods_nomenclature_description,
                                                               goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
-                                                              valid_at: 2.years.ago,
-                                                              valid_to: nil }
+                                                              validity_start_date: 2.years.ago,
+                                                              validity_end_date: nil }
         let!(:goods_nomenclature_description2) { create :goods_nomenclature_description,
                                                               goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
-                                                              valid_at: 5.years.ago,
-                                                              valid_to: 3.years.ago }
+                                                              validity_start_date: 5.years.ago,
+                                                              validity_end_date: 3.years.ago }
         it 'fetches correct description' do
           TimeMachine.with_relevant_validity_periods {
             goods_nomenclature.goods_nomenclature_description.pk.should eq goods_nomenclature_description1.pk

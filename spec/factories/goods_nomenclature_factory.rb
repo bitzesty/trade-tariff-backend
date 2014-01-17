@@ -126,8 +126,6 @@ FactoryGirl.define do
     ignore do
       validity_start_date { Date.today.ago(3.years) }
       validity_end_date { nil }
-      valid_at Time.now.ago(2.years)
-      valid_to nil
     end
 
     goods_nomenclature_sid { generate(:sid) }
