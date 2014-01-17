@@ -4,7 +4,7 @@ describe SearchReference do
   describe '#referenced' do
     context "matching heading regexp" do
       let(:heading) { create :heading, goods_nomenclature_item_id: "1212000000" }
-      let(:search_reference) { create :search_reference, heading_id: heading.short_code }
+      let(:search_reference) { create :search_reference, referenced: heading }
 
       it 'returns referenced Heading object' do
         heading
@@ -15,7 +15,7 @@ describe SearchReference do
 
     context 'matching Chapter regexp' do
       let(:chapter) { create :chapter, goods_nomenclature_item_id: "1200000000" }
-      let(:search_reference) { create :search_reference, chapter_id: chapter.short_code, heading: nil }
+      let(:search_reference) { create :search_reference, referenced: chapter }
 
       it 'returns Chapter object' do
         chapter
@@ -26,7 +26,7 @@ describe SearchReference do
 
     context 'matching Seciont regexp' do
       let(:section)          { create :section, position: 12 }
-      let(:search_reference) { create :search_reference, section: section, heading: nil }
+      let(:search_reference) { create :search_reference, referenced: section }
 
       it 'returns Section object' do
         section

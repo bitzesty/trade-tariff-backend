@@ -6,6 +6,6 @@ FactoryGirl.define do
 
   factory :search_reference do
     title { Forgery(:basic).text }
-    association :heading
+    referenced { create :heading }
   end
 end

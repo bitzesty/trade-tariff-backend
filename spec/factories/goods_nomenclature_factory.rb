@@ -45,8 +45,9 @@ FactoryGirl.define do
     end
 
     trait :with_description do
-      after(:create) { |gono, evaluator|
+      before(:create) { |gono, evaluator|
         FactoryGirl.create(:goods_nomenclature_description, goods_nomenclature_sid: gono.goods_nomenclature_sid,
+                                                            goods_nomenclature_item_id: gono.goods_nomenclature_item_id,
                                                             validity_start_date: gono.validity_start_date,
                                                             validity_end_date: gono.validity_end_date,
                                                             description: evaluator.description)
@@ -133,12 +134,12 @@ FactoryGirl.define do
     description { Forgery(:basic).text }
     goods_nomenclature_description_period_sid { generate(:sid) }
 
-    after(:create) { |gono_description, evaluator|
+    before(:create) { |gono_description, evaluator|
       FactoryGirl.create(:goods_nomenclature_description_period, goods_nomenclature_description_period_sid: gono_description.goods_nomenclature_description_period_sid,
                                                               goods_nomenclature_sid: gono_description.goods_nomenclature_sid,
                                                               goods_nomenclature_item_id: gono_description.goods_nomenclature_item_id,
-                                                              validity_start_date: evaluator.valid_at,
-                                                              validity_end_date: evaluator.valid_to)
+                                                              validity_start_date: evaluator.validity_start_date,
+                                                              validity_end_date: evaluator.validity_end_date)
     }
   end
 end

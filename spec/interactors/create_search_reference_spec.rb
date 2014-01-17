@@ -6,7 +6,7 @@ describe CreateSearchReference do
   describe '#call' do
     context 'search reference valid' do
       let(:section)                 { create :section }
-      let(:search_reference_params) { attributes_for(:search_reference, section_id: section.id) }
+      let(:search_reference_params) { attributes_for(:search_reference, referenced: section) }
 
       it 'persists search reference to the database' do
         interactor = CreateSearchReference.new(search_reference_params)
@@ -28,7 +28,7 @@ describe CreateSearchReference do
     end
 
     context 'search reference is not valid' do
-      let(:search_reference_params) { attributes_for(:search_reference, section_id: nil) }
+      let(:search_reference_params) { attributes_for(:search_reference, referenced: nil) }
 
       it 'does not persist search reference to the database' do
         CreateSearchReference.create(search_reference_params)

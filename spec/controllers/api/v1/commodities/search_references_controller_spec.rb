@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Api::V1::Commodities::SearchReferencesController, elasticsearch: true do
+describe Api::V1::Commodities::SearchReferencesController do
   it_behaves_like 'search references controller' do
     let(:search_reference_parent)  { create :commodity, :declarable }
     let(:search_reference)         { create :search_reference, commodity_id: search_reference_parent.code }

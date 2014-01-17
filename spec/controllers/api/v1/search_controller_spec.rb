@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Api::V1::SearchController, "POST #search", elasticsearch: true do
+describe Api::V1::SearchController, "POST #search" do
   describe 'exact matching' do
     let(:chapter) { create :chapter }
     let(:pattern) {
@@ -23,7 +23,7 @@ describe Api::V1::SearchController, "POST #search", elasticsearch: true do
     end
   end
 
-  describe 'fuzzy matching', vcr: { cassette_name: "search#search_fuzzy", match_requests_on: [:uri], erb: true } do
+  describe 'fuzzy matching' do
     let(:chapter) { create :chapter, :with_description, description: "horse", validity_start_date: Date.today }
     let(:pattern) {
       {
