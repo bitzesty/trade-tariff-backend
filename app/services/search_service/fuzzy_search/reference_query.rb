@@ -9,10 +9,9 @@ class SearchService
             query: {
               filtered: {
                 query: {
-                  query_string: {
-                    fields: ['title'],
-                    analyzer: 'snowball',
-                    query: query_string
+                  multi_match: {
+                    query: query_string,
+                    fields: ['title']
                   }
                 },
                 filter: {

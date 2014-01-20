@@ -339,6 +339,54 @@ describe SearchService do
         end
       end
     end
+
+    describe 'querying with ambiguous characters' do
+      # Ensure we use match (not query_string query)
+      # query string interprets queries according to Lucene syntax
+      # and we don't need these advanced features
+
+      let(:result) {
+        SearchService.new(t: "!!! [t_e_s_t][",
+                          as_of: "1970-01-01")
+      }
+
+      specify 'search does not raise an exception' do
+        expect { result.to_json }.not_to raise_error
+      end
+
+      specify 'search returns empty resilt' do
+        expect(result.to_json).to match_json_expression SearchService::BaseSearch::BLANK_RESULT.merge(type: 'fuzzy_match')
+      end
+    end
+
+    context 'searching for sections' do
+      # Sections do not have validity periods
+      # We have to ensure there is special clause in Elasticsearch
+      # query that takes that into account and they get found
+      let(:title) { "example title" }
+      let!(:section) { create :section, title: title }
+      let(:result) {
+        SearchService.new(t: title,
+                          as_of: "1970-01-01")
+      }
+      let(:response_pattern) {
+        {
+          type: 'fuzzy_match',
+          goods_nomenclature_match: {
+            sections: [
+              { "_source" => {
+                  "title" => title
+                }.ignore_extra_keys!
+              }.ignore_extra_keys!
+            ].ignore_extra_values!
+          }.ignore_extra_keys!
+        }.ignore_extra_keys!
+      }
+
+      it 'finds relevant sections' do
+        expect(result.to_json).to match_json_expression response_pattern
+      end
+    end
   end
 
   context 'reference search' do

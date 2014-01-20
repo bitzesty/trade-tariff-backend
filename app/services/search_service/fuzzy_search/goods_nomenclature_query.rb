@@ -13,9 +13,9 @@ class SearchService
                     {
                       # match the search phrase
                       query: {
-                        query_string: {
+                        multi_match: {
                           query: query_string,
-                          fields: ["description"]
+                          fields: ['description']
                         }.merge(query_opts)
                       }
                     },
@@ -39,6 +39,24 @@ class SearchService
                             {
                               range: {
                                 validity_start_date: { lte: date }
+                              }
+                            },
+                            {
+                              missing: {
+                                field: "validity_end_date",
+                                null_value: true,
+                                existence: true
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          and: [
+                            {
+                              missing: {
+                                field: "validity_start_date",
+                                null_value: true,
+                                existence: true
                               }
                             },
                             {
