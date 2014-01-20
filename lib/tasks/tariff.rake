@@ -20,11 +20,9 @@ namespace :tariff do
   namespace :sync do
     desc 'Download pending Taric and CHIEF updates'
     task apply: [:environment, :class_eager_load] do
-      TradeTariffBackend.with_locked_database do
-        # Download pending updates for CHIEF and Taric
-        TariffSynchronizer.download
-        TariffSynchronizer.apply
-      end
+      # Download pending updates for CHIEF and Taric
+      TariffSynchronizer.download
+      TariffSynchronizer.apply
     end
 
     desc "Download all Taric and CHIEF updates"
@@ -36,24 +34,20 @@ namespace :tariff do
     task transform: %w[environment] do
       require 'chief_transformer'
 
-      TradeTariffBackend.with_locked_database do
-        # Apply pending updates (use TariffImporter to import record to database)
-        # Transform imported intermediate Chief records to insert/change national measures
+      # Apply pending updates (use TariffImporter to import record to database)
+      # Transform imported intermediate Chief records to insert/change national measures
 
-        mode = ENV["MODE"].try(:to_sym).presence || :update
+      mode = ENV["MODE"].try(:to_sym).presence || :update
 
-        ChiefTransformer.instance.invoke(mode)
-        # Reindex ElasticSearch to see new/updated commodities
-        Rake::Task['tariff:reindex'].execute
-      end
+      ChiefTransformer.instance.invoke(mode)
+      # Reindex ElasticSearch to see new/updated commodities
+      Rake::Task['tariff:reindex'].execute
     end
 
     desc 'Rollback to specific date in the past'
     task rollback: %w[environment class_eager_load] do
-      if ENV['DATE'] && date = Date.parse(ENV['DATE'])
-        TradeTariffBackend.with_locked_database do
-          TariffSynchronizer.rollback(date, ENV['REDOWNLOAD'])
-        end
+      if ENV['DATE']
+        TariffSynchronizer.rollback(ENV['DATE'], ENV['REDOWNLOAD'])
       else
         raise ArgumentError.new("Please set the date using environment variable 'DATE'")
       end

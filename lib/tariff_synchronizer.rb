@@ -100,130 +100,145 @@ module TariffSynchronizer
   # Applies all updates (from inbox/failbox) by their date starting from the
   # oldest one.
   def apply
-    # We will be fetching updates from Taric and modifying primary keys
-    # so unrestrict it for all models.
-    Sequel::Model.descendants.each(&:unrestrict_primary_key)
+    TradeTariffBackend.with_redis_lock do
+      # We will be fetching updates from Taric and modifying primary keys
+      # so unrestrict it for all models.
+      Sequel::Model.descendants.each(&:unrestrict_primary_key)
 
-    if BaseUpdate.failed.any?
-      file_names = BaseUpdate.failed.map(&:filename)
+      if BaseUpdate.failed.any?
+        file_names = BaseUpdate.failed.map(&:filename)
 
-      instrument(
-        "failed_updates_present.tariff_synchronizer",
-        file_names: file_names
-      )
-    else
-      # Inner record processor emit conformance error message
-      # and we keep track of them here to present later by email
-      unconformant_records = []
+        instrument(
+          "failed_updates_present.tariff_synchronizer",
+          file_names: file_names
+        )
+      else
+        # Inner record processor emit conformance error message
+        # and we keep track of them here to present later by email
+        unconformant_records = []
 
-      subscribe /conformance_error/ do |*args|
-        event = ActiveSupport::Notifications::Event.new(*args)
+        subscribe /conformance_error/ do |*args|
+          event = ActiveSupport::Notifications::Event.new(*args)
 
-        unconformant_records << event.payload[:record]
-      end
-
-      # Track latest SQL queries in a ring buffer and with error
-      # email in case it happens
-      # Based on http://goo.gl/vpTFyT (SequelRails LogSubscriber)
-      database_queries = RingBuffer.new(10)
-
-      subscribe /sql\.sequel/ do |*args|
-        event = ActiveSupport::Notifications::Event.new(*args)
-
-        binds = unless event.payload.fetch(:binds, []).blank?
-          event.payload[:binds].map { |column, value|
-            [column.name, value]
-          }.inspect
+          unconformant_records << event.payload[:record]
         end
 
-        database_queries.push(
-          "(%{class_name}) %{sql} %{binds}" % {
-            class_name: event.payload[:name],
-            sql: event.payload[:sql].squeeze(' '),
-            binds: binds
-          }
-        )
-      end
+        # Track latest SQL queries in a ring buffer and with error
+        # email in case it happens
+        # Based on http://goo.gl/vpTFyT (SequelRails LogSubscriber)
+        database_queries = RingBuffer.new(10)
 
-      PendingUpdate.all.tap do |pending_updates|
-        pending_updates.sort_by(&:file_name)
-                       .sort_by(&:update_priority)
-                       .each do |pending_update|
-          Sequel::Model.db.transaction do
-            begin
-              pending_update.apply
+        subscribe /sql\.sequel/ do |*args|
+          event = ActiveSupport::Notifications::Event.new(*args)
 
-              ::ChiefTransformer.instance.invoke(:update) if pending_update.update_type == "TariffSynchronizer::ChiefUpdate"
-            rescue TaricImporter::ImportException,
-                   ChiefImporter::ImportException,
-                   TariffImporter::NotFound => exception
-              instrument(
-                "failed_update.tariff_synchronizer",
-                exception: exception,
-                update: pending_update,
-                database_queries: database_queries
-              )
+          binds = unless event.payload.fetch(:binds, []).blank?
+            event.payload[:binds].map { |column, value|
+              [column.name, value]
+            }.inspect
+          end
 
-              pending_update.mark_as_failed
+          database_queries.push(
+            "(%{class_name}) %{sql} %{binds}" % {
+              class_name: event.payload[:name],
+              sql: event.payload[:sql].squeeze(' '),
+              binds: binds
+            }
+          )
+        end
 
-              # re-raise to end application process here
-              # Sequel transaction gets rolled back too
-              raise exception
+        PendingUpdate.all.tap do |pending_updates|
+          pending_updates.sort_by(&:file_name)
+                         .sort_by(&:update_priority)
+                         .each do |pending_update|
+            Sequel::Model.db.transaction do
+              begin
+                pending_update.apply
+
+                ::ChiefTransformer.instance.invoke(:update) if pending_update.update_type == "TariffSynchronizer::ChiefUpdate"
+              rescue TaricImporter::ImportException,
+                     ChiefImporter::ImportException,
+                     TariffImporter::NotFound => exception
+                instrument(
+                  "failed_update.tariff_synchronizer",
+                  exception: exception,
+                  update: pending_update,
+                  database_queries: database_queries
+                )
+
+                pending_update.mark_as_failed
+
+                # re-raise to end application process here
+                # Sequel transaction gets rolled back too
+                raise exception
+              end
             end
           end
-        end
 
-        if pending_updates.any? && BaseUpdate.pending_or_failed.none?
-          instrument(
-            "apply.tariff_synchronizer",
-            update_names: pending_updates.map(&:file_name),
-            count: pending_updates.size,
-            unconformant_records: unconformant_records
-          )
+          if pending_updates.any? && BaseUpdate.pending_or_failed.none?
+            instrument(
+              "apply.tariff_synchronizer",
+              update_names: pending_updates.map(&:file_name),
+              count: pending_updates.size,
+              unconformant_records: unconformant_records
+            )
+          end
         end
       end
     end
+
+    rescue Redis::Lock::LockNotAcquired
+      instrument "apply_lock_error.tariff_synchronizer"
   end
 
   # Restore database to specific date in the past
   # Usually you will want to run apply operation after rolling back
   #
   # NOTE: this does not remove records from initial seed
-  def rollback(date, redownload = false)
-    Sequel::Model.db.transaction do
-      # Delete all entries in oplog tables with operation > DATE
-      oplog_based_models.each do |model|
-        model.operation_klass.where { operation_date > date }.delete
+  def rollback(rollback_date, redownload = false)
+    TradeTariffBackend.with_redis_lock do
+      date = Date.parse(rollback_date.to_s)
+
+      Sequel::Model.db.transaction do
+        # Delete all entries in oplog tables with operation > DATE
+        oplog_based_models.each do |model|
+          model.operation_klass.where { operation_date > date }.delete
+        end
+
+        if redownload
+          # Delete all Tariff updates if issue_date > DATE (includes missing)
+          TariffSynchronizer::TaricUpdate.where { issue_date > date }.delete
+          TariffSynchronizer::ChiefUpdate.where { issue_date > date }.each do |chief_update|
+            # Remove CHIEF records for specific update
+            [Chief::Comm, Chief::Mfcm, Chief::Tame, Chief::Tamf, Chief::Tbl9].each do |chief_model|
+              chief_model.where(origin: chief_update.filename).delete
+            end
+
+            chief_update.delete
+          end
+        else
+          # Set all applied Tariff updates to pending if issue_date > DATE
+          TariffSynchronizer::TaricUpdate.applied.where { issue_date > date }.each(&:mark_as_pending)
+          TariffSynchronizer::ChiefUpdate.applied.where { issue_date > date }.each do |chief_update|
+            # Remove CHIEF records for specific update
+            [Chief::Comm, Chief::Mfcm, Chief::Tame, Chief::Tamf, Chief::Tbl9].each do |chief_model|
+              chief_model.where(origin: chief_update.filename).delete
+            end
+
+            chief_update.mark_as_pending
+          end
+        end
       end
 
-      if redownload
-        # Delete all Tariff updates if issue_date > DATE (includes missing)
-        TariffSynchronizer::TaricUpdate.where { issue_date > date }.delete
-        TariffSynchronizer::ChiefUpdate.where { issue_date > date }.each do |chief_update|
-          # Remove CHIEF records for specific update
-          [Chief::Comm, Chief::Mfcm, Chief::Tame, Chief::Tamf, Chief::Tbl9].each do |chief_model|
-            chief_model.where(origin: chief_update.filename).delete
-          end
-
-          chief_update.delete
-        end
-      else
-        # Set all applied Tariff updates to pending if issue_date > DATE
-        TariffSynchronizer::TaricUpdate.applied.where { issue_date > date }.each(&:mark_as_pending)
-        TariffSynchronizer::ChiefUpdate.applied.where { issue_date > date }.each do |chief_update|
-          # Remove CHIEF records for specific update
-          [Chief::Comm, Chief::Mfcm, Chief::Tame, Chief::Tamf, Chief::Tbl9].each do |chief_model|
-            chief_model.where(origin: chief_update.filename).delete
-          end
-
-          chief_update.mark_as_pending
-        end
-      end
+      instrument(
+        "rollback.tariff_synchronizer",
+        date: date,
+        redownload: redownload
+      )
     end
-
+  rescue Redis::Lock::LockNotAcquired
     instrument(
-      "rollback.tariff_synchronizer",
-      date: date,
+      "rollback_lock_error.tariff_synchronizer",
+      date: rollback_date,
       redownload: redownload
     )
   end

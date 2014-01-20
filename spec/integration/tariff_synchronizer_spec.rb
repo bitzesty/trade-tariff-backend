@@ -85,5 +85,31 @@ describe TariffSynchronizer do
         expect { Chief::Mfcm.none? }.to be_true
       end
     end
+
+    context 'with date passed as string' do
+      let!(:older_update)  {
+        create :taric_update, :applied, issue_date: Date.new(2009,10,10)
+      }
+
+      before {
+        TariffSynchronizer.rollback("1/1/2010", true)
+      }
+
+      it 'removes entries from oplog derived tables' do
+        expect { Measure.none? }.to be_true
+      end
+
+      it 'deletes Chief and Taric updates' do
+        expect { update.reload }.to raise_error Sequel::Error
+      end
+
+      it 'removes imported Chief records entries' do
+        expect { Chief::Mfcm.none? }.to be_true
+      end
+
+      it 'does not remove earlier updates (casts date as string to date)' do
+        expect { older_update.reload }.not_to raise_error
+      end
+    end
   end
 end
