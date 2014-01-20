@@ -2,6 +2,10 @@ require 'hashie'
 
 module TradeTariffBackend
   class SearchClient < SimpleDelegator
+
+    # Raised if Elasticsearch returns an error from query
+    QueryError = Class.new(StandardError)
+
     attr_reader :indexed_models
     attr_reader :namespace
     attr_reader :index_page_size
