@@ -63,7 +63,6 @@ group :test do
   gem "simplecov"
   gem "simplecov-rcov"
   gem "webmock"
-  gem "vcr"
 end
 
 group :router do
