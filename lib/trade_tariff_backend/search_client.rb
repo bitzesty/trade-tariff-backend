@@ -7,13 +7,13 @@ module TradeTariffBackend
     QueryError = Class.new(StandardError)
 
     attr_reader :indexed_models
-    attr_reader :namespace
     attr_reader :index_page_size
     attr_reader :search_operation_options
 
+    delegate :search_index_for, to: TradeTariffBackend
+
     def initialize(search_client, options = {})
       @indexed_models = options.fetch(:indexed_models, [])
-      @namespace = options.fetch(:namespace, '')
       @index_page_size = options.fetch(:index_page_size, 1000)
       @search_operation_options = options.fetch(:search_operation_options, {})
 
@@ -48,7 +48,7 @@ module TradeTariffBackend
 
     def build_index(index, model)
       model.dataset.each_page(index_page_size) do |entries|
-        bulk(body: serialize_for(:index, index, entries))
+        bulk({ body: serialize_for(:index, index, entries) }.merge(search_operation_options))
       end
     end
 
@@ -74,10 +74,6 @@ module TradeTariffBackend
     end
 
     private
-
-    def search_index_for(model)
-      "#{model}Index".constantize.new(namespace)
-    end
 
     def serialize_for(operation, index, entries)
       entries.each_with_object([]) do |model, memo|

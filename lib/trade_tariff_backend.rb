@@ -108,6 +108,14 @@ module TradeTariffBackend
     end
     attr_writer :search_namespace
 
+    # Returns search index instance for given model instance or
+    # model class instance
+    def search_index_for(model)
+      index_name = model.is_a?(Class) ? model : model.class
+
+      "#{index_name}Index".constantize.new(search_namespace)
+    end
+
     def search_port
       @search_port ||= 9200
     end
