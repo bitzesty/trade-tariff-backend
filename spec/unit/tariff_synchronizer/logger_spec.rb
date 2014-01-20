@@ -558,4 +558,32 @@ describe TariffSynchronizer::Logger do
       email.encoded.should =~ /missing/
     end
   end
+
+  describe "#rollback_lock_error" do
+    before {
+       TradeTariffBackend.should_receive(:with_redis_lock)
+                         .and_raise(Redis::Lock::LockNotAcquired)
+
+       TariffSynchronizer.rollback(Date.today, true)
+    }
+
+    it 'logs a warn event' do
+      @logger.logged(:warn).size.should be >= 1
+      @logger.logged(:warn).first.to_s.should =~ /acquire Redis lock/
+    end
+  end
+
+  describe "#apply_lock_error" do
+    before {
+       TradeTariffBackend.should_receive(:with_redis_lock)
+                         .and_raise(Redis::Lock::LockNotAcquired)
+
+       TariffSynchronizer.apply
+    }
+
+    it 'logs a warn event' do
+      @logger.logged(:warn).size.should be >= 1
+      @logger.logged(:warn).first.to_s.should =~ /acquire Redis lock/
+    end
+  end
 end

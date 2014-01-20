@@ -120,6 +120,8 @@ GEM
       treetop (~> 1.4.8)
     method_source (0.8.1)
     mime-types (1.23)
+    mlanett-redis-lock (0.2.5)
+      redis
     multi_json (1.7.9)
     multipart-post (1.2.0)
     mysql2 (0.3.13)
@@ -307,6 +309,7 @@ DEPENDENCIES
   jquery-rails (= 1.0.19)
   json_expressions
   logstasher (= 0.4.1)
+  mlanett-redis-lock (= 0.2.5)
   multi_json (~> 1.7.7)
   mysql2 (= 0.3.13)
   nokogiri (= 1.5.4)

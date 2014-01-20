@@ -42,6 +42,14 @@ module TariffSynchronizer
       info "Rolled back to #{event.payload[:date]}. Forced redownload: #{!!event.payload[:redownload]}"
     end
 
+    def rollback_lock_error(event)
+      warn "Failed to acquire Redis lock for rollback to #{event.payload[:date]}. Redownload: #{event.payload[:download]}"
+    end
+
+    def apply_lock_error(event)
+      warn "Failed to acquire Redis lock for update application"
+    end
+
     # Update download failed
     def failed_download(event)
       error "Download failed: #{event.payload[:exception].to_s}, url: #{event.payload[:url]}"

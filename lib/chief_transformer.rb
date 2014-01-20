@@ -24,6 +24,8 @@ class ChiefTransformer
     end
   end
 
+  delegate :instrument, :subscribe, to: ActiveSupport::Notifications
+
   # Use update mode (the default) to process daily updates. Does not perform
   # pagination, processes MFCMs, TAMEs and TAMFs, merges them and persists.
   #
@@ -42,16 +44,24 @@ class ChiefTransformer
 
     ActiveSupport::Notifications.instrument("start_transform.chief_transformer", mode: work_mode)
 
-    case work_mode
-    when :initial_load
-      processor = InitialLoadProcessor.new(Chief::Mfcm.initial_load
-                                                      .unprocessed,
-                                           per_page)
-    when :update
-      processor = Processor.new(Chief::Mfcm.unprocessed.all,
-                                Chief::Tame.unprocessed.all)
+    TradeTariffBackend.with_redis_lock do
+      case work_mode
+      when :initial_load
+        processor = InitialLoadProcessor.new(Chief::Mfcm.initial_load
+                                                        .unprocessed,
+                                             per_page)
+      when :update
+        processor = Processor.new(Chief::Mfcm.unprocessed.all,
+                                  Chief::Tame.unprocessed.all)
+      end
+
+      processor.process
     end
 
-    processor.process
+  rescue Redis::Lock::LockNotAcquired
+    instrument(
+      "transform_lock_error.chief_transformer",
+      work_mode: work_mode
+    )
   end
 end
