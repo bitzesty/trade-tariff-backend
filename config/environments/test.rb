@@ -43,13 +43,9 @@ TradeTariffBackend::Application.configure do
 
   config.after_initialize do
     TradeTariffBackend.configure do |tariff|
-      tariff.search_namespace = 'tariff-test'
-      # Run on different port then default 9200 in order to avoid
-      # conflicts with other environments
-      tariff.search_port = 9350
+      tariff.search_namespace = 'tariff-test' # default is just tariff
       tariff.search_options = {
-        log: false,
-        command: `which elasticsearch`.strip
+        log: false
       }
       # We need search index to be refreshed after each operation
       # in order to assert record presence in the index (in integration specs)
