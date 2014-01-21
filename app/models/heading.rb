@@ -2,12 +2,11 @@ require 'formatter'
 require 'declarable'
 
 class Heading < GoodsNomenclature
-  include Tire::Model::Search
   include Model::Declarable
 
-  plugin :json_serializer
   plugin :oplog, primary_key: :goods_nomenclature_sid
   plugin :conformance_validator
+  plugin :elasticsearch
 
   set_dataset filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", '____000000').
               filter("goods_nomenclatures.goods_nomenclature_item_id NOT LIKE ?", '__00______').
@@ -48,16 +47,6 @@ class Heading < GoodsNomenclature
     end
   end
 
-  # Tire configuration
-  tire do
-    index_name    'headings'
-    document_type 'heading'
-
-    mapping do
-      indexes :description,        analyzer: 'snowball'
-    end
-  end
-
   delegate :section, to: :chapter
 
   def short_code
@@ -88,47 +77,6 @@ class Heading < GoodsNomenclature
                                       .none?
   end
   alias :declarable? :declarable
-
-  def serializable_hash
-    heading_attributes = {
-      id: goods_nomenclature_sid,
-      goods_nomenclature_item_id: goods_nomenclature_item_id,
-      producline_suffix: producline_suffix,
-      validity_start_date: validity_start_date,
-      validity_end_date: validity_end_date,
-      description: formatted_description,
-      number_indents: number_indents,
-    }
-
-    if chapter.present?
-      heading_attributes.merge!({
-        chapter: {
-          goods_nomenclature_sid: chapter.goods_nomenclature_sid,
-          goods_nomenclature_item_id: chapter.goods_nomenclature_item_id,
-          producline_suffix: chapter.producline_suffix,
-          validity_start_date: chapter.validity_start_date,
-          validity_end_date: chapter.validity_end_date,
-          description: chapter.formatted_description.downcase
-        }
-      })
-
-      if section.present?
-        heading_attributes.merge!({
-          section: {
-            numeral: section.numeral,
-            title: section.title,
-            position: section.position
-          }
-        })
-      end
-    end
-
-    heading_attributes
-  end
-
-  def to_indexed_json
-    serializable_hash.to_json
-  end
 
   def changes(depth = 1)
     operation_klass.select(

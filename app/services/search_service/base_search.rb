@@ -5,7 +5,7 @@ class SearchService
         sections: [], chapters: [], headings: [], commodities: []
       },
       reference_match: {
-        sections: [], chapters: [], headings: []
+        sections: [], chapters: [], headings: [], commodities: []
       }
     }
 

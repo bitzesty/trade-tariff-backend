@@ -4,13 +4,15 @@ module TradeTariffBackend
   autoload :Auditor,         'trade_tariff_backend/auditor'
   autoload :DataMigration,   'trade_tariff_backend/data_migration'
   autoload :DataMigrator,    'trade_tariff_backend/data_migrator'
-  autoload :Indexer,         'trade_tariff_backend/indexer'
   autoload :Mailer,          'trade_tariff_backend/mailer'
   autoload :NumberFormatter, 'trade_tariff_backend/number_formatter'
-  autoload :SearchIndex,     'trade_tariff_backend/search_index'
+  autoload :SearchClient,    'trade_tariff_backend/search_client'
   autoload :Validator,       'trade_tariff_backend/validator'
 
   class << self
+    def configure
+      yield self
+    end
 
     # Lock key used for DB locks to keep just one instance of synchronizer
     # running in cluster environment
@@ -64,11 +66,13 @@ module TradeTariffBackend
       end
     end
 
-    def reindex(indexer = Indexer)
-      begin
-        indexer.run
-      rescue StandardError => e
-        Mailer.reindex_exception(e).deliver
+    def reindex(indexer = search_client)
+      TimeMachine.with_relevant_validity_periods do
+        begin
+          indexer.reindex
+        rescue StandardError => e
+          Mailer.reindex_exception(e).deliver
+        end
       end
     end
 
@@ -81,12 +85,68 @@ module TradeTariffBackend
       10
     end
 
-    def search_index
-      SearchIndex
-    end
-
     def number_formatter
       @number_formatter ||= TradeTariffBackend::NumberFormatter.new
+    end
+
+    def search_client
+      @search_client ||= SearchClient.new(
+        Elasticsearch::Client.new(search_options),
+        namespace: search_namespace,
+        indexed_models: indexed_models,
+        search_operation_options: search_operation_options
+      )
+    end
+
+    def search_host
+      @search_host ||= "http://localhost:#{search_port}"
+    end
+    attr_writer :search_host
+
+    def search_namespace
+      @search_namespace ||= 'tariff'
+    end
+    attr_writer :search_namespace
+
+    # Returns search index instance for given model instance or
+    # model class instance
+    def search_index_for(model)
+      index_name = model.is_a?(Class) ? model : model.class
+
+      "#{index_name}Index".constantize.new(search_namespace)
+    end
+
+    def search_port
+      @search_port ||= 9200
+    end
+    attr_writer :search_port
+
+    def default_search_options
+      { host: search_host, log: true }
+    end
+
+    def search_options
+      default_search_options.merge(@search_options || {})
+    end
+    attr_writer :search_options
+
+    def search_operation_options
+      @search_operation_options || {}
+    end
+    attr_writer :search_operation_options
+
+    def indexed_models
+      [Chapter, Commodity, Heading, SearchReference, Section]
+    end
+
+    def search_indexes
+      indexed_models.map { |model|
+        "#{model}Index".constantize.new(search_namespace)
+      }
+    end
+
+    def model_serializer_for(model)
+      "#{model}Serializer".constantize
     end
 
     private

@@ -9,7 +9,7 @@ class GoodsNomenclature < Sequel::Model
   plugin :oplog, primary_key: :goods_nomenclature_sid
   plugin :nullable
   plugin :conformance_validator
-  plugin :tire
+  plugin :active_model
 
   plugin :sti, class_determinator: ->(record) {
     gono_id = record[:goods_nomenclature_item_id].to_s
@@ -95,6 +95,10 @@ class GoodsNomenclature < Sequel::Model
 
     def non_hidden
       filter(Sequel.~(goods_nomenclature_item_id: HiddenGoodsNomenclature.codes))
+    end
+
+    def indexable
+      where(Sequel.~(goods_nomenclature_item_id: HiddenGoodsNomenclature.codes))
     end
   end
 

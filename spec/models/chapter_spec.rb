@@ -42,21 +42,6 @@ describe Chapter do
     end
   end
 
-  describe '#to_indexed_json' do
-    let!(:chapter) { create :chapter, :with_section, :with_description }
-    let(:pattern)  {
-                     {
-                       id: chapter.goods_nomenclature_sid,
-                       goods_nomenclature_item_id: chapter.goods_nomenclature_item_id,
-                       section: Hash,
-                     }.ignore_extra_keys!
-                   }
-
-    it 'returns json representation for ElasticSearch' do
-      chapter.to_indexed_json.should match_json_expression pattern
-    end
-  end
-
   describe "#number_indents" do
     let(:chapter) { build :chapter }
 

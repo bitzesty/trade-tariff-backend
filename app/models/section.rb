@@ -1,10 +1,7 @@
 class Section < Sequel::Model
-  include Tire::Model::Search
-
   plugin :active_model
-  plugin :json_serializer
   plugin :nullable
-  plugin :tire
+  plugin :elasticsearch
 
   many_to_many :chapters, dataset: -> {
     Chapter.join_table(:inner, :chapters_sections, chapters_sections__goods_nomenclature_sid: :goods_nomenclatures__goods_nomenclature_sid)
@@ -37,16 +34,6 @@ class Section < Sequel::Model
     remover: proc{ |search_reference| search_reference.update(referenced_id: nil, referenced_class: nil)},
     clearer: proc{ search_references_dataset.update(referenced_id: nil, referenced_class: nil) }
 
-  # Tire configuration
-  tire do
-    index_name    'sections'
-    document_type 'section'
-
-    mapping do
-      indexes :title,        analyzer: 'snowball'
-    end
-  end
-
   def first_chapter
     chapters.first || NullObject.new
   end
@@ -61,18 +48,5 @@ class Section < Sequel::Model
 
   def chapter_to
     last_chapter.short_code
-  end
-
-  def serializable_hash
-    {
-      id: id,
-      numeral: numeral,
-      title: title,
-      position: position
-    }
-  end
-
-  def to_indexed_json
-    serializable_hash.to_json
   end
 end

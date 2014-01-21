@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Api::V1::Headings::SearchReferencesController, "GET #index" do
+describe Api::V1::Headings::SearchReferencesController do
   it_behaves_like 'search references controller' do
     let(:search_reference_parent)  { create :heading }
     let(:search_reference)         { create :search_reference, heading_id: search_reference_parent.short_code }

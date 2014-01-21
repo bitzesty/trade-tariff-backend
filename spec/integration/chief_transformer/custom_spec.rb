@@ -86,7 +86,7 @@ describe 'CHIEF: Custom scenarions' do
   describe 'Scenario: TARIC deletion invalidates CHIEF measures' do
     let!(:measure_type)       { create :measure_type, measure_type_id: 'CVD' }
     let!(:geographical_area)  { build :geographical_area, :erga_omnes }
-    let!(:goods_nomenclature) { create :goods_nomenclature, :declarable,
+    let!(:goods_nomenclature) { create :commodity, :declarable,
                                                             :with_indent,
                                                             goods_nomenclature_item_id: "0305720040",
                                                             goods_nomenclature_sid: 96196,

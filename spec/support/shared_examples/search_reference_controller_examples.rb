@@ -116,6 +116,9 @@ shared_examples_for 'search references controller' do
 
   describe "DELETE #destroy" do
     context 'search reference exists' do
+
+      before { search_reference  }
+
       it 'destroys SearchReference entry' do
         expect {
           delete :destroy, {

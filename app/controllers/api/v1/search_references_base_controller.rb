@@ -15,10 +15,10 @@ module Api
       def index
         @search_references = begin
           search_reference_collection.by_title
-                                 .paginate(per_page: per_page, page: page)
+                                 .paginate(page, per_page)
         rescue Sequel::Error
          search_reference_collection.by_title
-                                .paginate(per_page: default_limit, page: default_page)
+                                .paginate(page, per_page)
         end
       end
 
@@ -31,26 +31,28 @@ module Api
       end
 
       def create
-        @search_reference = CreateSearchReference.create(
+        @search_reference = SearchReference.new(
           search_reference_params.merge(search_reference_resource_association_hash)
         )
+
+        @search_reference.save
 
         respond_with @search_reference, location: collection_url
       end
 
       def update
         @search_reference = search_reference_resource
-        @search_reference = UpdateSearchReference.update(
-          @search_reference,
+        @search_reference.set(
           search_reference_params
         )
+        @search_reference.save
 
         respond_with @search_reference
       end
 
       def destroy
         @search_reference = search_reference_resource
-        @search_reference = DestroySearchReference.destroy(@search_reference)
+        @search_reference.destroy
 
         respond_with @search_reference
       end

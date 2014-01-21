@@ -1,11 +1,9 @@
 require_relative 'goods_nomenclature'
 
 class Chapter < GoodsNomenclature
-  include Tire::Model::Search
-
-  plugin :json_serializer
   plugin :oplog, primary_key: :goods_nomenclature_sid
   plugin :conformance_validator
+  plugin :elasticsearch
 
   set_dataset filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", '__00000000').
               order(Sequel.asc(:goods_nomenclature_item_id))
@@ -26,16 +24,6 @@ class Chapter < GoodsNomenclature
     adder: proc{ |search_reference| search_reference.update(referenced_id: short_code, referenced_class: 'Chapter') },
     remover: proc{ |search_reference| search_reference.update(referenced_id: nil, referenced_class: nil)},
     clearer: proc{ search_references_dataset.update(referenced_id: nil, referenced_class: nil) }
-
-  # Tire configuration
-  tire do
-    index_name    'chapters'
-    document_type 'chapter'
-
-    mapping do
-      indexes :description,        analyzer: 'snowball'
-    end
-  end
 
   dataset_module do
     def by_code(code = "")
@@ -74,33 +62,6 @@ class Chapter < GoodsNomenclature
 
   def headings_to
     last_heading.short_code
-  end
-
-  def serializable_hash
-    chapter_attributes = {
-      id: goods_nomenclature_sid,
-      goods_nomenclature_item_id: goods_nomenclature_item_id,
-      producline_suffix: producline_suffix,
-      validity_start_date: validity_start_date,
-      validity_end_date: validity_end_date,
-      description: formatted_description
-    }
-
-    if section.present?
-      chapter_attributes.merge!({
-        section: {
-          numeral: section.numeral,
-          title: section.title,
-          position: section.position
-        }
-      })
-    end
-
-    chapter_attributes
-  end
-
-  def to_indexed_json
-    serializable_hash.to_json
   end
 
   def changes(depth = 1)

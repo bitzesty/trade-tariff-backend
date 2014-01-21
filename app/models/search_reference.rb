@@ -1,6 +1,6 @@
 class SearchReference < Sequel::Model
   plugin :active_model
-  plugin :tire
+  plugin :elasticsearch
 
   many_to_one :referenced, reciprocal: :referenced,
     setter: (proc do |referenced|
@@ -95,15 +95,9 @@ class SearchReference < Sequel::Model
     def for_commodity(commodity)
       for_commodities.where(referenced_id: commodity.to_param)
     end
-  end
 
-  tire do
-    index_name    'search_references'
-    document_type 'search_reference'
-
-    mapping do
-      indexes :title,     type: :string, analyzer: :snowball
-      indexes :reference, type: :nested
+    def indexable
+      self
     end
   end
 
@@ -154,23 +148,5 @@ class SearchReference < Sequel::Model
 
   def commodity_id
     referenced_id
-  end
-
-  def to_indexed_json
-    # Cannot return nil from #to_indexed_json because ElasticSearch does not like that.
-    # It will eat all memory and timeout indexing requests.
-    result = if referenced.blank?
-               {}
-             else
-               {
-                 title: title,
-                 reference_class: referenced_class,
-                 reference: referenced.serializable_hash.merge({
-                   class: referenced_class
-                 })
-               }
-             end
-
-    result.to_json
   end
 end

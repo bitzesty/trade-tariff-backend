@@ -267,6 +267,11 @@ describe SearchService do
   describe 'fuzzy search' do
     context 'filtering by date' do
       context 'with goods codes that have bounded validity period' do
+        let!(:heading) { create :heading, :with_description,
+                                goods_nomenclature_item_id: "2851000000",
+                                validity_start_date: Date.new(1972,1,1),
+                                validity_end_date: Date.new(2006,12,31),
+                                description: 'Other inorganic compounds (including distilled or conductivity water and water of similar purity);' }
 
         # heading that has validity period of 1972-01-01 to 2006-12-31
         let(:heading_pattern) {
@@ -274,73 +279,135 @@ describe SearchService do
             type: 'fuzzy_match',
             goods_nomenclature_match: {
               headings: [
-                { "goods_nomenclature_item_id"=>"2851000000" }.ignore_extra_keys!
+                { "_source" => {
+                  "goods_nomenclature_item_id" => "2851000000"
+                }.ignore_extra_keys! }.ignore_extra_keys!
               ].ignore_extra_values!
             }.ignore_extra_keys!
           }.ignore_extra_keys!
         }
 
         it 'returns goods code if search date falls within validity period' do
-          VCR.use_cassette("search#fuzzy_date_filter_for_2851000000_2005") do
-            @result = SearchService.new(t: "water",
-                                        as_of: "2005-01-01").to_json
+          @result = SearchService.new(t: "water",
+                                      as_of: "2005-01-01").to_json
 
-            @result.should match_json_expression heading_pattern
-          end
+          @result.should match_json_expression heading_pattern
         end
 
         it 'does not return goods code if search date does not fall within validity period' do
-          VCR.use_cassette("search#fuzzy_date_filter_for_2851000000_2007") do
-            @result = SearchService.new(t: "water",
-                                        as_of: "2007-01-01").to_json
+          @result = SearchService.new(t: "water",
+                                      as_of: "2007-01-01").to_json
 
-            @result.should_not match_json_expression heading_pattern
-          end
+          @result.should_not match_json_expression heading_pattern
         end
       end
 
       context 'with goods codes that have unbounded validity period' do
+        let!(:heading) { create :heading, :with_description,
+                                goods_nomenclature_item_id: "0102000000",
+                                validity_start_date: Date.new(1972,1,1),
+                                validity_end_date: nil,
+                                description: 'Live bovine animals' }
+
         # heading that has validity period starting from 1972-01-01
         let(:heading_pattern) {
           {
             type: 'fuzzy_match',
             goods_nomenclature_match: {
               headings: [
-                { "goods_nomenclature_item_id"=>"0102000000" }.ignore_extra_keys!
+                { "_source" => {
+                    "goods_nomenclature_item_id" => "0102000000"
+                  }.ignore_extra_keys!
+                }.ignore_extra_keys!
               ].ignore_extra_values!
             }.ignore_extra_keys!
           }.ignore_extra_keys!
         }
 
         it 'returns goods code if search date is greater than start of validity period' do
-          VCR.use_cassette("search#fuzzy_date_filter_for_0102000000_2007") do
-            @result = SearchService.new(t: "animal products",
-                                        as_of: "2007-01-01").to_json
+          @result = SearchService.new(t: "animal products",
+                                      as_of: "2007-01-01").to_json
 
-            @result.should match_json_expression heading_pattern
-          end
+          @result.should match_json_expression heading_pattern
         end
 
         it 'does not return goods code if search date is less than start of validity period' do
-          VCR.use_cassette("search#fuzzy_date_filter_for_0102000000_1970") do
-            @result = SearchService.new(t: "animal products",
-                                        as_of: "1970-01-01").to_json
+          @result = SearchService.new(t: "animal products",
+                                      as_of: "1970-01-01").to_json
 
-            @result.should_not match_json_expression heading_pattern
-          end
+          @result.should_not match_json_expression heading_pattern
         end
+      end
+    end
+
+    describe 'querying with ambiguous characters' do
+      # Ensure we use match (not query_string query)
+      # query string interprets queries according to Lucene syntax
+      # and we don't need these advanced features
+
+      let(:result) {
+        SearchService.new(t: "!!! [t_e_s_t][",
+                          as_of: "1970-01-01")
+      }
+
+      specify 'search does not raise an exception' do
+        expect { result.to_json }.not_to raise_error
+      end
+
+      specify 'search returns empty resilt' do
+        expect(result.to_json).to match_json_expression SearchService::BaseSearch::BLANK_RESULT.merge(type: 'fuzzy_match')
+      end
+    end
+
+    context 'searching for sections' do
+      # Sections do not have validity periods
+      # We have to ensure there is special clause in Elasticsearch
+      # query that takes that into account and they get found
+      let(:title) { "example title" }
+      let!(:section) { create :section, title: title }
+      let(:result) {
+        SearchService.new(t: title,
+                          as_of: "1970-01-01")
+      }
+      let(:response_pattern) {
+        {
+          type: 'fuzzy_match',
+          goods_nomenclature_match: {
+            sections: [
+              { "_source" => {
+                  "title" => title
+                }.ignore_extra_keys!
+              }.ignore_extra_keys!
+            ].ignore_extra_values!
+          }.ignore_extra_keys!
+        }.ignore_extra_keys!
+      }
+
+      it 'finds relevant sections' do
+        expect(result.to_json).to match_json_expression response_pattern
       end
     end
   end
 
   context 'reference search' do
+    let!(:heading) { create :heading, :with_description,
+                            goods_nomenclature_item_id: "2851000000",
+                            validity_start_date: Date.new(1972,1,1),
+                            validity_end_date: Date.new(2006,12,31),
+                            description: 'Test' }
+    let!(:search_reference) { create :search_reference,
+                                     referenced: heading,
+                                     title: 'water'  }
+
     let(:heading_pattern) {
       {
         type: 'fuzzy_match',
         reference_match: {
           headings: [
             {
-             reference: { "goods_nomenclature_item_id"=>"2851000000" }.ignore_extra_keys!
+              "_source" => {
+                 reference: { "goods_nomenclature_item_id"=>"2851000000" }.ignore_extra_keys!
+              }.ignore_extra_keys!
             }.ignore_extra_keys!
           ].ignore_extra_values!
         }.ignore_extra_keys!
@@ -348,21 +415,17 @@ describe SearchService do
     }
 
     it 'returns goods code if search date falls within validity period' do
-      VCR.use_cassette("search#fuzzy_date_filter_for_2851000000_2005") do
-        @result = SearchService.new(t: "water",
-                                    as_of: "2005-01-01").to_json
+      @result = SearchService.new(t: "water",
+                                  as_of: "2005-01-01").to_json
 
-        @result.should match_json_expression heading_pattern
-      end
+      @result.should match_json_expression heading_pattern
     end
 
     it 'does not return goods code if search date does not fall within validity period' do
-      VCR.use_cassette("search#fuzzy_date_filter_for_2851000000_2007") do
-        @result = SearchService.new(t: "water",
-                                    as_of: "2007-01-01").to_json
+      @result = SearchService.new(t: "water",
+                                  as_of: "2007-01-01").to_json
 
-        @result.should_not match_json_expression heading_pattern
-      end
+      @result.should_not match_json_expression heading_pattern
     end
   end
 end
