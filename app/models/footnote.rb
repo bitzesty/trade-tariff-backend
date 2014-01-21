@@ -3,7 +3,7 @@ class Footnote < Sequel::Model
   plugin :oplog, primary_key: [:footnote_id, :footnote_type_id]
   plugin :conformance_validator
 
-  set_primary_key [:footnote_id, :footnote_type_id]
+  set_primary_key [:footnote_type_id, :footnote_id]
 
 
   many_to_many :footnote_descriptions, join_table: :footnote_description_periods,
@@ -54,6 +54,12 @@ class Footnote < Sequel::Model
 
 
   delegate :description, :formatted_description, to: :footnote_description
+
+  dataset_module do
+    def national
+      where(national: true)
+    end
+  end
 
     # FO4
     # length_of :footnote_description_periods, minimum: 1
