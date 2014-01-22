@@ -5,7 +5,7 @@ class FootnoteValidator < TradeTariffBackend::Validator
   end
 
   validation :FO2, 'The combination footnote type and code must be unique.', on: [:create, :update] do
-    validates :uniqueness, of: [:footnote_id, :footnote_type_id]
+    validates :uniqueness, of: [:footnote_type_id, :footnote_id]
   end
 
   validation :FO3, 'The start date must be less than or equal to the end date.', on: [:create, :update] do
