@@ -33,6 +33,14 @@ FactoryGirl.define do
                                                                      validity_end_date: evaluator.valid_to)
       }
     end
+
+    trait :national do
+      national { true }
+    end
+
+    trait :non_national do
+      national { false }
+    end
   end
 
   factory :footnote_description_period do

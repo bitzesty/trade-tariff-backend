@@ -4,25 +4,29 @@ module Api
       before_filter :authenticate_user!
 
       def index
-        @footnotes = Footnote.national
+        @footnotes = Footnote.eager(:footnote_descriptions).national.all
 
         respond_with @footnotes
       end
 
       def show
-        @footnote = Footnote.with_pk(footnote_pk)
+        @footnote = Footnote.national.with_pk!(footnote_pk)
       end
 
       def update
-        @footnote = Footnote.with_pk(footnote_pk)
+        @footnote = Footnote.national.with_pk!(footnote_pk)
+        @footnote.footnote_description.tap do |footnote_description|
+          footnote_description.set(footnote_params)
+          footnote_description.save
+        end
 
         respond_with @footnote
       end
 
       private
 
-      def rollback_params
-        params.require(:rollback).permit(:date, :redownload)
+      def footnote_params
+        params.require(:footnote).permit(:description)
       end
 
       def footnote_pk
