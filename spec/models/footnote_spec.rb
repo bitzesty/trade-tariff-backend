@@ -72,7 +72,7 @@ describe Footnote do
     # FO1 The referenced footnote type must exist.
     it { should validate_presence.of(:footnote_type) }
     # FO2 The combination footnote type and code must be unique.
-    it { should validate_uniqueness.of([:footnote_id, :footnote_type_id]) }
+    it { should validate_uniqueness.of([:footnote_type_id, :footnote_id]) }
     # FO3 The start date must be less than or equal to the end date.
     it { should validate_validity_dates }
 

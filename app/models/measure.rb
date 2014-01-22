@@ -46,7 +46,7 @@ class Measure < Sequel::Model
 
   many_to_many :footnotes, join_table: :footnote_association_measures,
                            left_key: :measure_sid,
-                           right_key: [:footnote_id, :footnote_type_id] do |ds|
+                           right_key: [:footnote_type_id, :footnote_id] do |ds|
                              ds.with_actual(Footnote)
                            end
 
