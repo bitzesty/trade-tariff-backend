@@ -59,6 +59,7 @@ TradeTariffBackend::Application.routes.draw do
 
       resources :rollbacks, only: [:create, :index]
       resources :footnotes, only: [:index, :show, :update]
+      resources :measure_types, only: [:index, :show, :update]
     end
   end
 

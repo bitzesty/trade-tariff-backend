@@ -126,6 +126,14 @@ FactoryGirl.define do
       trade_movement_code { 0 }
     end
 
+    trait :national do
+      national { true }
+    end
+
+    trait :non_national do
+      national { false }
+    end
+
     after(:build) { |measure_type, evaluator|
       FactoryGirl.create(:measure_type_series, measure_type_series_id: measure_type.measure_type_series_id)
     }
