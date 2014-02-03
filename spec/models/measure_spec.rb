@@ -936,4 +936,27 @@ describe Measure do
       end
     end
   end
+
+  describe '.changes_for' do
+    context 'measure validity start date lower than requested date' do
+      let!(:measure) { create :measure, validity_start_date: Date.new(2014,2,1) }
+
+      it 'incudes measure' do
+        TimeMachine.at(Date.new(2014,1,30)) do
+          expect(Measure.changes_for).to be_empty
+        end
+      end
+    end
+
+    context 'measure validity start date higher than requested date' do
+      let!(:measure) { create :measure, validity_start_date: Date.new(2014,2,1) }
+
+      it 'does not include measure' do
+        TimeMachine.at(Date.new(2014,2,1)) do
+          expect(Measure.changes_for).not_to be_empty
+          expect(Measure.changes_for.first.oid).to eq measure.source.oid
+        end
+      end
+    end
+  end
 end
