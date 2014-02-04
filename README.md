@@ -3,14 +3,20 @@
 
 # TradeTariffBackend
 
-The API backend for TradeTariffFrontend application
+The API back-end for:
 
-## If using gov.uk development puppet repo
+* TradeTariffFrontend application
+* TradeTariffAdmin application
 
-Ensure that you have pulled the latest version of the development repo.
-Run the bootstrap command.
+## Setup
 
-## Dependencies (OS X using Homebrew)
+### If using the GOV.UK development Vagrant VM
+
+Ensure that you have pulled the latest version of the puppet repo.
+
+Run the bootstrap command `govuk_puppet`.
+
+### Dependencies (OS X using Homebrew)
 
 1. ElasticSearch & MySQL
 
@@ -42,13 +48,19 @@ Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff
 
 2. Apply updates
 
-    ```
-    bundle exec rake tariff:sync:apply
-    ```
+  ```
+  govuk_setenv tariff-api bundle exec rake tariff:sync:apply
+  ```
+
+## Manual Rollback
+
+  ```
+  DATE='2014-01-30' REDOWNLOAD=1 govuk_setenv tariff-api bundle exec rake tariff:sync:rollback
+  ```
 
 ## Notes
 
-* Project does not contain schema.rb, do not use rake db:schema:load. Sequel
+* Project does __not__ contain schema.rb, do not use rake db:schema:load. Sequel
 does not yet support view creation via schema file.
 
 ## TODO
