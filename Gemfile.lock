@@ -123,7 +123,7 @@ GEM
     libv8 (3.16.14.3)
     listen (0.5.0)
     logstash-event (1.1.5)
-    logstasher (0.4.1)
+    logstasher (0.4.8)
       logstash-event (~> 1.1.0)
     mail (2.5.3)
       i18n (>= 0.4.0)
@@ -310,7 +310,7 @@ DEPENDENCIES
   hashie (= 2.0.5)
   jquery-rails (= 1.0.19)
   json_expressions
-  logstasher (= 0.4.1)
+  logstasher (= 0.4.8)
   mlanett-redis-lock (= 0.2.5)
   multi_json (~> 1.7.7)
   mysql2 (= 0.3.13)
