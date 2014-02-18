@@ -33,7 +33,7 @@ gem "whenever", "0.7.3"
 gem "aws-ses", require: "aws/ses" # Needed by exception_notification
 gem "exception_notification"
 
-gem 'logstasher', '0.4.1'
+gem 'logstasher', '0.4.8'
 
 group :assets do
   gem "bootstrap-sass"
