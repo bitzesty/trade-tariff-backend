@@ -11,7 +11,8 @@ class SearchService
                 query: {
                   multi_match: {
                     query: query_string,
-                    fields: ['title']
+                    fields: ['title'],
+                    operator: 'and' # all terms must be present
                   }
                 },
                 filter: {
