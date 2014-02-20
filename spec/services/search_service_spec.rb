@@ -390,42 +390,81 @@ describe SearchService do
   end
 
   context 'reference search' do
-    let!(:heading) { create :heading, :with_description,
-                            goods_nomenclature_item_id: "2851000000",
-                            validity_start_date: Date.new(1972,1,1),
-                            validity_end_date: Date.new(2006,12,31),
-                            description: 'Test' }
-    let!(:search_reference) { create :search_reference,
-                                     referenced: heading,
-                                     title: 'water'  }
+    describe 'validity period function' do
+      let!(:heading) { create :heading, :with_description,
+                              goods_nomenclature_item_id: "2851000000",
+                              validity_start_date: Date.new(1972,1,1),
+                              validity_end_date: Date.new(2006,12,31),
+                              description: 'Test' }
+      let!(:search_reference) { create :search_reference,
+                                       referenced: heading,
+                                       title: 'water'  }
 
-    let(:heading_pattern) {
-      {
-        type: 'fuzzy_match',
-        reference_match: {
-          headings: [
-            {
-              "_source" => {
-                 reference: { "goods_nomenclature_item_id"=>"2851000000" }.ignore_extra_keys!
+      let(:heading_pattern) {
+        {
+          type: 'fuzzy_match',
+          reference_match: {
+            headings: [
+              {
+                "_source" => {
+                   reference: { "goods_nomenclature_item_id"=>"2851000000" }.ignore_extra_keys!
+                }.ignore_extra_keys!
               }.ignore_extra_keys!
-            }.ignore_extra_keys!
-          ].ignore_extra_values!
+            ].ignore_extra_values!
+          }.ignore_extra_keys!
         }.ignore_extra_keys!
-      }.ignore_extra_keys!
-    }
+      }
 
-    it 'returns goods code if search date falls within validity period' do
-      @result = SearchService.new(t: "water",
-                                  as_of: "2005-01-01").to_json
+      it 'returns goods code if search date falls within validity period' do
+        @result = SearchService.new(t: "water",
+                                    as_of: "2005-01-01").to_json
 
-      @result.should match_json_expression heading_pattern
+        @result.should match_json_expression heading_pattern
+      end
+
+      it 'does not return goods code if search date does not fall within validity period' do
+        @result = SearchService.new(t: "water",
+                                    as_of: "2007-01-01").to_json
+
+        @result.should_not match_json_expression heading_pattern
+      end
     end
 
-    it 'does not return goods code if search date does not fall within validity period' do
-      @result = SearchService.new(t: "water",
-                                  as_of: "2007-01-01").to_json
+    describe 'reference matching for multi term searches' do
+      let!(:heading1) { create :heading, :with_description,
+                              goods_nomenclature_item_id: "2851000000",
+                              description: 'Test 1' }
+      let!(:search_reference1) { create :search_reference,
+                                        referenced: heading1,
+                                        title: 'acid oil' }
+      let!(:heading2) { create :heading, :with_description,
+                              goods_nomenclature_item_id: "2920000000",
+                              description: 'Test 2' }
+      let!(:search_reference2) { create :search_reference,
+                                        referenced: heading2,
+                                        title: 'other kind of oil' } # not 'acid oil'
 
-      @result.should_not match_json_expression heading_pattern
+      let(:heading_pattern) {
+        {
+          type: 'fuzzy_match',
+          reference_match: {
+            headings: [
+              {
+                "_source" => {
+                   reference: { "goods_nomenclature_item_id"=> heading1.goods_nomenclature_item_id }.ignore_extra_keys!
+                }.ignore_extra_keys!
+              }.ignore_extra_keys!
+            ]
+          }.ignore_extra_keys!
+        }.ignore_extra_keys!
+      }
+
+      it 'only matches exact phrases' do
+        @result = SearchService.new(t: 'acid oil',
+                                    as_of: Date.today).to_json
+
+        @result.should match_json_expression heading_pattern
+      end
     end
   end
 end
