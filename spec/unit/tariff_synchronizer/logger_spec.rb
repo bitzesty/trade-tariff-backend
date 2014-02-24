@@ -284,8 +284,15 @@ describe TariffSynchronizer::Logger do
 
   describe '#not_found_on_file_system logging' do
     let(:taric_update) { create :taric_update }
+    let(:importer)     { double('importer', import: true).as_null_object }
 
-    before { taric_update.apply }
+    before do
+      TariffSynchronizer::TaricUpdate.should_receive(:download)
+                                     .with(taric_update.issue_date)
+                                     .and_return(true)
+
+      taric_update.apply(importer)
+    end
 
     it 'logs an error event' do
       @logger.logged(:error).size.should eq 1
@@ -296,6 +303,10 @@ describe TariffSynchronizer::Logger do
       ActionMailer::Base.deliveries.should_not be_empty
       email = ActionMailer::Base.deliveries.last
       email.encoded.should =~ /was not found/
+    end
+
+    it 'applies the update' do
+      expect(importer).to have_received :new
     end
   end
 
