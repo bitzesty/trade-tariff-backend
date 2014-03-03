@@ -26,10 +26,6 @@ module Api
         @search_reference = search_reference_resource
       end
 
-      def destroy
-        @search_reference = search_reference_resource
-      end
-
       def create
         @search_reference = SearchReference.new(
           search_reference_params.merge(search_reference_resource_association_hash)
