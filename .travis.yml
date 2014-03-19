@@ -16,7 +16,6 @@ script:
  - RAILS_ENV=test bundle exec rake spec
 rvm:
   - 2.0.0
-  - 1.9.3
 matrix:
   allow_failures:
     - rvm: 2.1.0
