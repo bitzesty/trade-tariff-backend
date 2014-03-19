@@ -69,6 +69,7 @@ GEM
     connection_pool (1.2.0)
     crack (0.3.2)
     curb (0.8.3)
+    dalli (2.7.2)
     database_cleaner (1.2.0)
     diff-lcs (1.2.4)
     elasticsearch (0.4.7)
@@ -170,7 +171,7 @@ GEM
       pry (~> 0.9.10)
     pry-rails (0.2.2)
       pry (>= 0.9.10)
-    rabl (0.9.0)
+    rabl (0.10.0)
       activesupport (>= 2.3.14)
     rack (1.4.5)
     rack-accept (0.4.5)
@@ -306,6 +307,7 @@ DEPENDENCIES
   capistrano
   ci_reporter
   curb (= 0.8.3)
+  dalli (= 2.7.2)
   database_cleaner
   elasticsearch (= 0.4.7)
   elasticsearch-extensions (= 0.0.12)
@@ -325,7 +327,7 @@ DEPENDENCIES
   plek (= 1.0.0)
   pry-nav
   pry-rails
-  rabl (= 0.9.0)
+  rabl (= 0.10.0)
   rails (= 3.2.17)
   railties
   redis-mutex (= 2.1.1)
