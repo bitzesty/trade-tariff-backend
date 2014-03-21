@@ -15,7 +15,7 @@ gem "sequel", "4.3.0"
 gem "sidekiq", "2.17.2"
 gem "elasticsearch", "0.4.7"
 gem "elasticsearch-extensions", "0.0.12"
-gem "yajl-ruby", require: "yajl"
+gem "yajl-ruby", "1.2.0", require: "yajl"
 gem "strong_parameters"
 
 gem "builder"
@@ -45,6 +45,7 @@ end
 group :development do
   gem "capistrano"
   gem "guard-rspec"
+  gem "newrelic_rpm"
 end
 
 group :development, :test do

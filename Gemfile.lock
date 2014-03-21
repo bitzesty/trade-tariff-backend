@@ -142,6 +142,7 @@ GEM
     net-ssh (2.6.1)
     net-ssh-gateway (1.1.0)
       net-ssh (>= 1.99.1)
+    newrelic_rpm (3.7.3.204)
     nokogiri (1.5.4)
     null_logger (0.0.1)
     oauth2 (0.8.1)
@@ -283,7 +284,7 @@ GEM
       activesupport (>= 2.3.4)
       chronic (~> 0.6.3)
     xml-simple (1.1.1)
-    yajl-ruby (1.1.0)
+    yajl-ruby (1.2.0)
 
 PLATFORMS
   ruby
@@ -313,6 +314,7 @@ DEPENDENCIES
   mlanett-redis-lock (= 0.2.5)
   multi_json (~> 1.7.7)
   mysql2 (= 0.3.13)
+  newrelic_rpm
   nokogiri (= 1.5.4)
   plek (= 1.0.0)
   pry-rails
@@ -334,4 +336,4 @@ DEPENDENCIES
   unicorn (~> 4.6.3)
   webmock
   whenever (= 0.7.3)
-  yajl-ruby
+  yajl-ruby (= 1.2.0)
