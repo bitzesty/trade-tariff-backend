@@ -122,7 +122,7 @@ module TradeTariffBackend
     attr_writer :search_port
 
     def default_search_options
-      { host: search_host, log: true }
+      { host: search_host, logger: Rails.logger }
     end
 
     def search_options
