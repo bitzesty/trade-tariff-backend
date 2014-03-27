@@ -30,8 +30,7 @@ gem "curb", "0.8.3"
 gem "nokogiri", "1.5.4"
 
 gem "whenever", "0.7.3"
-gem "aws-ses", require: "aws/ses" # Needed by exception_notification
-gem "exception_notification"
+gem "airbrake", "3.1.15"
 
 gem 'logstasher', '0.4.8'
 
