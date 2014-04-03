@@ -3,7 +3,7 @@ require 'goods_nomenclature'
 require 'chief_transformer'
 require 'tariff_importer'
 
-describe 'CHIEF: Custom scenarions' do
+describe 'CHIEF: Custom scenarios' do
   before(:all) { preload_standing_data }
   after(:all)  { clear_standing_data }
 
@@ -325,12 +325,13 @@ describe 'CHIEF: Custom scenarions' do
                                              producline_suffix: 80,
                                              validity_start_date: Date.new(1999,7,1),
                                              validity_end_date: nil}
-    let!(:national_geographical_area)  { create :geographical_area, geographical_area_id: 'B110' }
-    let!(:geographical_area)           { create :geographical_area, :erga_omnes }
+    let!(:national_geographical_area)  { create :geographical_area, geographical_area_id: 'B110', validity_start_date: Date.new(1999,7,1),
+                                             validity_end_date: nil }
+    let!(:geographical_area)           { create :geographical_area, :erga_omnes, validity_start_date: Date.new(1999,7,1),
+                                             validity_end_date: nil }
 
-    specify 'CHIEF country group gets coverted to TARIC country group' do
+    specify 'CHIEF country group gets converted to TARIC country group' do
       ChiefTransformer.instance.invoke(:initial_load)
-
       expect(
         Measure.national.where(
           goods_nomenclature_item_id: '6111301000',
