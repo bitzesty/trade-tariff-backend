@@ -279,7 +279,7 @@ class Measure < Sequel::Model
       full_year = "20#{year}"
     end
     code = "3#{full_year}#{regulation_code.first}#{regulation_code[3..6]}"
-    "http://eur-lex.europa.eu/Result.do?code=#{code}&RechType=RECH_celex"
+    "http://eur-lex.europa.eu/search.html?instInvStatus=ALL&or0=DN%3D#{code}*,DN-old%3D#{code}*&DTC=false&type=advanced"
   end
 
   def origin
