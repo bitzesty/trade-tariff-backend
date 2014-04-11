@@ -4,15 +4,14 @@ module Api
       before_filter :authenticate_user!
 
       def index
-        @rollback_jobs = Sidekiq::Queue.new("rollbacks")
+        @rollback_jobs = Rollback.all
       end
 
       def create
         rollback = Rollback.new(rollback_params)
 
         if rollback.valid?
-          RollbackWorker.perform_async(rollback.date, rollback.redownload)
-
+          rollback.save
           render json: rollback, status: :created, location: api_rollbacks_url
         else
           render json: { errors: rollback.errors }, status: :unprocessable_entity
@@ -22,7 +21,7 @@ module Api
       private
 
       def rollback_params
-        params.require(:rollback).permit(:date, :redownload)
+        params.require(:rollback).permit(:date, :redownload, :reason, :user_id)
       end
     end
   end
