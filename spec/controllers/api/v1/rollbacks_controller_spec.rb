@@ -5,7 +5,7 @@ describe Api::V1::RollbacksController, "POST to #create", sidekiq: :inline do
 
   before { login_as_api_user }
 
-  let(:rollback_date) { Date.today.ago(1.month).to_date }
+  let(:rollback_attributes) { attributes_for :rollback }
   let(:record)        {
     create :measure, operation_date: Date.yesterday.to_date
   }
@@ -14,7 +14,7 @@ describe Api::V1::RollbacksController, "POST to #create", sidekiq: :inline do
     before { record }
 
     it 'responds with success + redirect' do
-      post :create, rollback: { date: rollback_date }
+      post :create, rollback: rollback_attributes
 
       expect(response.status).to eq 201
       expect(response.location).to eq api_rollbacks_url
@@ -23,7 +23,7 @@ describe Api::V1::RollbacksController, "POST to #create", sidekiq: :inline do
     it 'performs a rollback' do
       Sidekiq::Testing.inline! do
         expect {
-          post :create, rollback: { date: rollback_date }
+          create(:rollback, date: Date.today.ago(1.month).to_date)
         }.to change { Measure.count }.from(1).to(0)
       end
     end
@@ -45,26 +45,26 @@ describe Api::V1::RollbacksController, "POST to #create", sidekiq: :inline do
   end
 end
 
-describe Api::V1::RollbacksController, "GET to #index", sidekiq: :integration do
+describe Api::V1::RollbacksController, "GET to #index" do
   render_views
 
   before {
     login_as_api_user
   }
 
+  let!(:rollback) { create :rollback }
+
   let(:response_pattern) {
     [
       {
-        jid: String,
-        enqueued_at: String,
-        date: String,
-        redownload: false
+        id: rollback.id,
+        user_id: rollback.user_id,
+        reason: rollback.reason,
+        enqueued_at: rollback.enqueued_at,
+        date: rollback.date.to_s,
+        redownload: rollback.redownload
       }.ignore_extra_keys!
     ].ignore_extra_values!
-  }
-
-  before {
-    RollbackWorker.perform_async(Date.today.to_s, false)
   }
 
   it 'returns scheduled rollbacks' do
