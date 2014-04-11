@@ -30,7 +30,7 @@ GEM
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
     addressable (2.3.2)
-    airbrake (3.1.15)
+    airbrake (3.1.16)
       builder
       multi_json
     ansi (1.4.3)
@@ -292,7 +292,7 @@ PLATFORMS
 
 DEPENDENCIES
   addressable (= 2.3.2)
-  airbrake (= 3.1.15)
+  airbrake (= 3.1.16)
   ansi
   aws-ses
   bootstrap-sass
