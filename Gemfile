@@ -63,6 +63,7 @@ group :test do
   gem "simplecov"
   gem "simplecov-rcov"
   gem "webmock"
+  gem "database_cleaner"
 end
 
 group :router do
