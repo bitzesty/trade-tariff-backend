@@ -6,6 +6,12 @@ module TariffSynchronizer
   class TaricUpdate < BaseUpdate
     self.update_priority = 2
 
+    dataset_module do
+      def pending
+        where(state: PENDING_STATE).order('filename')
+      end
+    end
+
     class << self
       def download(date)
         taric_updates_for(date).tap do |taric_updates|
@@ -52,13 +58,25 @@ module TariffSynchronizer
     end
 
     def apply
-      if super
+      super
+      if file_exists?
         instrument("apply_taric.tariff_synchronizer", filename: filename) do
           TaricImporter.new(file_path, issue_date).import
 
           mark_as_applied
         end
       end
+    rescue TaricImporter::ImportException, TariffImporter::NotFound => e
+      instrument(
+        "failed_update.tariff_synchronizer",
+        exception: e,
+        update: self,
+        database_queries: @database_queries
+      )
+
+      mark_as_failed
+
+      raise Sequel::Rollback
     end
 
     private

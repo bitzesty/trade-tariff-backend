@@ -91,8 +91,33 @@ module TariffSynchronizer
       File.join(TariffSynchronizer.root_path, self.class.update_type.to_s, filename)
     end
 
-    def apply
+    def file_exists?
       File.exists?(file_path) || instrument("not_found_on_file_system.tariff_synchronizer", path: file_path)
+    end
+
+    def apply
+      # Track latest SQL queries in a ring buffer and with error
+      # email in case it happens
+      # Based on http://goo.gl/vpTFyT (SequelRails LogSubscriber)
+      @database_queries = RingBuffer.new(10)
+
+      ActiveSupport::Notifications.subscribe /sql\.sequel/ do |*args|
+        event = ActiveSupport::Notifications::Event.new(*args)
+
+        binds = unless event.payload.fetch(:binds, []).blank?
+          event.payload[:binds].map { |column, value|
+            [column.name, value]
+          }.inspect
+        end
+
+        @database_queries.push(
+          "(%{class_name}) %{sql} %{binds}" % {
+            class_name: event.payload[:name],
+            sql: event.payload[:sql].squeeze(' '),
+            binds: binds
+          }
+        )
+      end
     end
 
     class << self

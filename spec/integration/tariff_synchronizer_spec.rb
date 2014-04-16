@@ -4,25 +4,52 @@ require 'tariff_synchronizer'
 describe TariffSynchronizer do
   let!(:update_1) { create :chief_update, :pending, issue_date: Date.yesterday, filename: "#{Date.yesterday}" }
   let!(:update_2) { create :chief_update, :pending, issue_date: Date.today, filename: "#{Date.today}" }
+  let!(:taric_update) { create :taric_update, :pending, issue_date: 2.days.ago, filename: "#{2.days.ago}" }
+
 
   describe '.apply' do
-    context 'failure scenario' do
+    context 'when chief import fails' do
       before do
-        TariffSynchronizer::PendingUpdate.any_instance
-                                         .should_receive(:apply)
-                                         .once # subsequent updates are not applied
-                                         .and_raise(ChiefImporter::ImportException)
+        ChiefImporter.any_instance.should_receive(:import).and_raise(ChiefImporter::ImportException)
+        TariffImporter.any_instance.should_receive(:file_exists?).and_return true
+        TariffSynchronizer::BaseUpdate.any_instance.should_receive(:file_exists?).and_return true
+        TariffSynchronizer::TaricUpdate.any_instance.should_receive(:apply).and_return true
       end
 
       it 'transaction gets rolled back' do
-        expect { TariffSynchronizer.apply }.to raise_error ChiefImporter::ImportException
+        expect { TariffSynchronizer.apply }.to raise_error Sequel::Rollback
       end
 
       it 'update gets marked as failed' do
         rescuing { TariffSynchronizer.apply }
         update_1.reload.should be_failed
+        update_2.reload.should be_pending
       end
     end
+
+    context 'when taric import fails' do
+      before do
+        TaricImporter.any_instance.should_receive(:import).and_raise(TaricImporter::ImportException)
+        TariffImporter.any_instance.should_receive(:file_exists?).and_return true
+        TariffSynchronizer::BaseUpdate.any_instance.should_receive(:file_exists?).and_return true
+      end
+
+      it 'transaction gets rolled back' do
+        expect { TariffSynchronizer.apply }.to raise_error Sequel::Rollback
+      end
+
+      it 'update gets marked as failed' do
+        rescuing { TariffSynchronizer.apply }
+        update_1.reload.should be_pending
+        update_2.reload.should be_pending
+        taric_update.reload.should be_failed
+      end
+    end
+
+    context 'when imports go correct' do
+
+    end
+
   end
 
   describe '.rollback' do

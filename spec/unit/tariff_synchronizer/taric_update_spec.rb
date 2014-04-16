@@ -283,7 +283,8 @@ describe TariffSynchronizer::TaricUpdate do
 
       TariffSynchronizer::TaricUpdate.pending.count.should == 1
       rescuing { TariffSynchronizer::TaricUpdate.first.apply }
-      TariffSynchronizer::TaricUpdate.pending.count.should == 1
+      TariffSynchronizer::TaricUpdate.pending.count.should == 0
+      TariffSynchronizer::TaricUpdate.failed.count.should == 1
       TariffSynchronizer::TaricUpdate.applied.count.should == 0
     end
 

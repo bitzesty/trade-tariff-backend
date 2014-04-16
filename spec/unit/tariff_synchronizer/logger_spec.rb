@@ -49,7 +49,7 @@ describe TariffSynchronizer::Logger do
     before {
       TariffSynchronizer::BaseUpdate.stub(:failed).and_return(update_stubs)
 
-      TariffSynchronizer.apply
+      expect { TariffSynchronizer.apply }.to raise_error TariffSynchronizer::FailedUpdatesError
     }
 
     it 'logs and error event' do
@@ -163,27 +163,21 @@ describe TariffSynchronizer::Logger do
   end
 
   describe '#failed_update logging' do
-    let(:mock_pending_update) { double(file_name: Date.today,
-                                       update_priority: 1,
-                                       file_path: '/').as_null_object }
+    let(:example_date)  { Date.today }
+    let!(:taric_update) { create :taric_update, example_date: example_date }
 
     let(:last_email_body) {
       ActionMailer::Base.deliveries.last.encoded
     }
 
     before {
-      class MockException < StandardError
-        def backtrace
-          []
-        end
-      end
-
-      mock_pending_update.should_receive(:apply) {
-        Measure.first # execute dummy query to check if it was logged and presented in email
-        raise TaricImporter::ImportException.new("", MockException.new)
+      TariffImporter.any_instance.should_receive(:file_exists?).and_return true
+      TariffSynchronizer::BaseUpdate.any_instance.should_receive(:file_exists?).and_return true
+      TaricImporter.any_instance.should_receive(:import) {
+        Measure.first
+        raise TaricImporter::ImportException
       }
 
-      TariffSynchronizer::PendingUpdate.should_receive(:all).and_return([mock_pending_update])
       rescuing {
         TariffSynchronizer.apply
       }
@@ -200,7 +194,7 @@ describe TariffSynchronizer::Logger do
     end
 
     it 'email includes information about original exception' do
-      last_email_body.should =~ /MockException/
+      last_email_body.should =~ /TaricImporter::ImportException/
     end
 
     it 'email include executed SQL queries' do

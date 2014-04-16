@@ -187,8 +187,9 @@ describe TariffSynchronizer::ChiefUpdate do
 
       TariffSynchronizer::ChiefUpdate.pending.count.should == 1
       rescuing { TariffSynchronizer::ChiefUpdate.first.apply }
-      TariffSynchronizer::ChiefUpdate.pending.count.should == 1
+      TariffSynchronizer::ChiefUpdate.pending.count.should == 0
       TariffSynchronizer::ChiefUpdate.applied.count.should == 0
+      TariffSynchronizer::ChiefUpdate.failed.count.should
     end
 
     after  { purge_synchronizer_folders }

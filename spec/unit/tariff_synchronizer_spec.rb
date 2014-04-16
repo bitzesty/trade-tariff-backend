@@ -60,7 +60,7 @@ describe TariffSynchronizer do
 
     context 'success scenario' do
       before {
-        TariffSynchronizer::PendingUpdate.should_receive(:all).and_return(pending_updates)
+        TariffSynchronizer::TaricUpdate.should_receive(:pending).and_return(pending_updates)
       }
 
       it 'all pending updates get applied' do
@@ -74,17 +74,16 @@ describe TariffSynchronizer do
 
     context 'failure scenario' do
       before do
-        TariffSynchronizer::PendingUpdate.should_receive(:all).and_return(pending_updates)
+        TariffSynchronizer::TaricUpdate.should_receive(:pending).and_return(pending_updates)
 
-        update_1.should_receive(:apply).and_raise(TaricImporter::ImportException)
+        update_1.should_receive(:apply).and_raise(Sequel::Rollback)
       end
 
       it 'transaction gets rolled back' do
-        expect { TariffSynchronizer.apply }.to raise_error TaricImporter::ImportException
+        expect { TariffSynchronizer.apply }.to raise_error Sequel::Rollback
       end
 
       it 'update gets marked as failed' do
-        update_1.should_receive(:mark_as_failed).and_return(true)
         update_2.should_receive(:apply).never
 
         rescuing { TariffSynchronizer.apply }
@@ -95,9 +94,9 @@ describe TariffSynchronizer do
       let!(:failed_update)  { create :taric_update, :failed }
 
       it 'does not apply pending updates' do
-        TariffSynchronizer::PendingUpdate.should_receive(:all).never
-
-        TariffSynchronizer.apply
+        TariffSynchronizer::TaricUpdate.should_receive(:pending).never
+        TariffSynchronizer::ChiefUpdate.should_receive(:pending).never
+        expect { TariffSynchronizer.apply }.to raise_error TariffSynchronizer::FailedUpdatesError
       end
     end
   end

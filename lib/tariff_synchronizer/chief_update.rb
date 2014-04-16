@@ -5,6 +5,12 @@ module TariffSynchronizer
   class ChiefUpdate < BaseUpdate
     self.update_priority = 1
 
+    dataset_module do
+      def pending
+        where(state: PENDING_STATE).order('filename')
+      end
+    end
+
     class << self
       def download(date)
         instrument("download_chief.tariff_synchronizer", date: date) do
@@ -36,13 +42,28 @@ module TariffSynchronizer
     end
 
     def apply
-      if super
+      super
+      if file_exists?
         instrument("apply_chief.tariff_synchronizer", filename: filename) do
           ChiefImporter.new(file_path, issue_date).import
 
           mark_as_applied
         end
       end
+
+      ::ChiefTransformer.instance.invoke(:update)
+
+    rescue ChiefImporter::ImportException, TariffImporter::NotFound => e
+      instrument(
+        "failed_update.tariff_synchronizer",
+        exception: e,
+        update: self,
+        database_queries: @database_queries
+      )
+
+      mark_as_failed
+
+      raise Sequel::Rollback
     end
 
     private
