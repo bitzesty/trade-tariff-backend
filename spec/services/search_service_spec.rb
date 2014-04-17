@@ -387,6 +387,34 @@ describe SearchService do
         expect(result.to_json).to match_json_expression response_pattern
       end
     end
+
+    context "searching with synonyms" do
+      include SynonymsHelper
+
+      let(:synonym) { "synonym 1" }
+      let(:resources) { %w(section chapter heading commodity) }
+      let(:reference_match) {
+        SearchService.new(t: synonym, as_of: Date.today).send(:perform).results[:reference_match]
+      }
+
+      before {
+        # create resources with synonyms
+        resources.each do |resource|
+          create(resource).tap{ |r|
+            2.times do
+              create_synonym_for(r, synonym)
+            end
+          }
+        end
+      }
+
+      # there shouldn't be duplicates
+      it "shouldn't have duplicates" do
+        resources.each do |r|
+          expect(reference_match[r.pluralize].count).to eq(1)
+        end
+      end
+    end
   end
 
   context 'reference search' do
