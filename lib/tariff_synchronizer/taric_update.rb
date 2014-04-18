@@ -30,6 +30,7 @@ module TariffSynchronizer
             instrument("not_found.tariff_synchronizer",
                        date: date,
                        url: taric_query_url_for(date))
+            false
           end
         end
       end

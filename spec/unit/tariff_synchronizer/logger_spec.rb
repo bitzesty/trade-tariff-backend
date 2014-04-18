@@ -284,29 +284,34 @@ describe TariffSynchronizer::Logger do
 
   describe '#not_found_on_file_system logging' do
     let(:taric_update) { create :taric_update }
-    let(:importer)     { double('importer', import: true).as_null_object }
 
-    before do
+    before {
       TariffSynchronizer::TaricUpdate.should_receive(:download)
                                      .with(taric_update.issue_date)
                                      .and_return(true)
+    }
 
-      taric_update.apply(importer)
+    context "errors" do
+      before { taric_update.file_exists? }
+
+      it 'logs an error event' do
+        @logger.logged(:error).size.should eq 1
+        @logger.logged(:error).last.should =~ /Update not found on file system/
+      end
+
+      it 'sends error email' do
+        ActionMailer::Base.deliveries.should_not be_empty
+        email = ActionMailer::Base.deliveries.last
+        email.encoded.should =~ /was not found/
+      end
     end
 
-    it 'logs an error event' do
-      @logger.logged(:error).size.should eq 1
-      @logger.logged(:error).last.should =~ /Update not found on file system/
-    end
-
-    it 'sends error email' do
-      ActionMailer::Base.deliveries.should_not be_empty
-      email = ActionMailer::Base.deliveries.last
-      email.encoded.should =~ /was not found/
-    end
-
-    it 'applies the update' do
-      expect(importer).to have_received :new
+    context "applies the update" do
+      it {
+        expect {
+          taric_update.apply
+        }.to raise_error(Sequel::Rollback)
+      }
     end
   end
 
