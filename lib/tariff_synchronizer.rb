@@ -19,7 +19,6 @@ module TariffSynchronizer
   autoload :ChiefArchive,  'tariff_synchronizer/chief_archive'
   autoload :ChiefUpdate,   'tariff_synchronizer/chief_update'
   autoload :Mailer,        'tariff_synchronizer/mailer'
-  autoload :PendingUpdate, 'tariff_synchronizer/pending_update'
   autoload :TaricArchive,  'tariff_synchronizer/taric_archive'
   autoload :TaricUpdate,   'tariff_synchronizer/taric_update'
 
@@ -226,8 +225,10 @@ module TariffSynchronizer
 
   def update_range_in_days
     last_pending_update = BaseUpdate.last_pending.first
+    update_to = ENV['DATE'] ? Date.parse(ENV['DATE']) : Date.today
+
     if last_pending_update
-      (last_pending_update.issue_date..Date.today)
+      (last_pending_update.issue_date..update_to)
     else
       []
     end

@@ -55,8 +55,8 @@ describe TariffSynchronizer do
   end
 
   describe '.apply' do
-    let(:update_1) { double('update', issue_date: Date.yesterday, filename: Date.yesterday, update_priority: 1) }
-    let(:update_2) { double('update', issue_date: Date.today, filename: Date.today, update_priority: 1) }
+    let(:update_1) { double('update', issue_date: Date.yesterday, filename: Date.yesterday) }
+    let(:update_2) { double('update', issue_date: Date.today, filename: Date.today) }
     let(:pending_updates) { [update_1, update_2] }
 
 

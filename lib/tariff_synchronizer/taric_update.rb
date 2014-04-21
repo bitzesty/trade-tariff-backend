@@ -4,8 +4,6 @@ require 'ostruct'
 
 module TariffSynchronizer
   class TaricUpdate < BaseUpdate
-    self.update_priority = 2
-
     class << self
       def download(date)
         taric_updates_for(date).tap do |taric_updates|

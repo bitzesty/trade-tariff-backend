@@ -2,18 +2,28 @@ require 'spec_helper'
 require 'tariff_synchronizer'
 
 describe TariffSynchronizer do
-  let!(:update_1) { create :chief_update, :pending, issue_date: Date.yesterday, filename: "#{Date.yesterday}" }
-  let!(:update_2) { create :chief_update, :pending, issue_date: Date.today, filename: "#{Date.today}" }
-  let!(:taric_update) { create :taric_update, :pending, issue_date: 2.days.ago, filename: "#{2.days.ago}" }
-
-
   describe '.apply' do
+    let!(:update_1) { create :chief_update, :pending, issue_date: Date.yesterday, filename: "#{Date.yesterday}" }
+    let!(:update_2) { create :chief_update, :pending, issue_date: Date.today, filename: "#{Date.today}" }
+    let!(:taric_update) { create :taric_update, :pending, issue_date: 2.days.ago, filename: "#{2.days.ago}" }
+
     context 'when chief import fails' do
       before do
-        ChiefImporter.any_instance.should_receive(:import).and_raise(ChiefImporter::ImportException)
-        TariffImporter.any_instance.should_receive(:file_exists?).and_return true
-        TariffSynchronizer::BaseUpdate.any_instance.should_receive(:file_exists?).and_return true
-        TariffSynchronizer::TaricUpdate.any_instance.should_receive(:apply).and_return true
+        ChiefImporter.any_instance.should_receive(
+          :import
+        ).and_raise ChiefImporter::ImportException
+
+        TariffImporter.any_instance.should_receive(
+          :file_exists?
+        ).and_return true
+
+        TariffSynchronizer::BaseUpdate.any_instance.should_receive(
+          :file_exists?
+        ).and_return true
+
+        TariffSynchronizer::TaricUpdate.any_instance.should_receive(
+          :apply
+        ).and_return true
       end
 
       it 'transaction gets rolled back' do
@@ -29,9 +39,13 @@ describe TariffSynchronizer do
 
     context 'when taric import fails' do
       before do
-        TaricImporter.any_instance.should_receive(:import).and_raise(TaricImporter::ImportException)
+        TaricImporter.any_instance.should_receive(
+          :import
+        ).and_raise(TaricImporter::ImportException)
         TariffImporter.any_instance.should_receive(:file_exists?).and_return true
-        TariffSynchronizer::BaseUpdate.any_instance.should_receive(:file_exists?).and_return true
+        TariffSynchronizer::BaseUpdate.any_instance.should_receive(
+          :file_exists?
+        ).and_return true
       end
 
       it 'transaction gets rolled back' do
@@ -45,16 +59,57 @@ describe TariffSynchronizer do
         taric_update.reload.should be_failed
       end
     end
+  end
 
-    context 'when imports go correct' do
-      it 'applies missing updates' do
-        # TariffSynchronizer.apply
-        # update_1.reload.should be_applied
-        # update_2.reload.should be_applied
-        # taric_update.reload.should be_applied
+  describe '.apply with files' do
+    let(:example_date)  { Date.today }
+    let!(:taric_update) { create :taric_update, example_date: example_date }
+    let!(:chief_update) { create :chief_update, example_date: example_date }
+
+
+    before {
+      prepare_synchronizer_folders
+      create_taric_file :pending, example_date
+      create_chief_file :pending, example_date
+    }
+
+    after  {
+      purge_synchronizer_folders
+    }
+
+    it 'applies missing updates' do
+      TariffSynchronizer.apply
+      taric_update.reload.should be_applied
+      chief_update.reload.should be_applied
+    end
+
+    context 'but elasticsearch is buggy' do
+      before do
+        TaricImporter::Transaction.any_instance.should_receive(
+          :persist
+        ).and_raise Elasticsearch::Transport::Transport::SnifferTimeoutError
+      end
+
+      it 'stops syncing' do
+        expect { TariffSynchronizer.apply }.to raise_error Sequel::Rollback
+        taric_update.reload.should_not be_applied
+        chief_update.reload.should_not be_applied
       end
     end
 
+    context 'but we have a timeout' do
+      before do
+        TaricImporter::Transaction.any_instance.should_receive(
+          :persist
+        ).and_raise Timeout::Error
+      end
+
+      it 'stops syncing' do
+        expect { TariffSynchronizer.apply }.to raise_error Sequel::Rollback
+        taric_update.reload.should_not be_applied
+        chief_update.reload.should_not be_applied
+      end
+    end
   end
 
   describe '.rollback' do

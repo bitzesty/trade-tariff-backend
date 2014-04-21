@@ -41,30 +41,32 @@ class ChiefImporter < TariffImporter
   end
 
   def import
-    begin
-      CSV.foreach(path, encoding: 'ISO-8859-1') do |line|
-        entry = Entry.build(line)
+    CSV.foreach(path, encoding: 'ISO-8859-1') do |line|
+      entry = Entry.build(line)
 
-        if entry.is_a?(StartEntry)
-          @start_entry = entry
-        elsif entry.is_a?(EndEntry)
-          @end_entry = entry
-        else # means it's ChangeEntry
-          next unless entry.relevant?
-
-          entry.origin = file_name
-          entry.process!
-        end
+      if entry.is_a?(StartEntry)
+        @start_entry = entry
+      elsif entry.is_a?(EndEntry)
+        @end_entry = entry
+      else # means it's ChangeEntry
+        next unless entry.relevant?
+        entry.origin = file_name
+        entry.process!
       end
-
-      ActiveSupport::Notifications.instrument("chief_imported.tariff_importer", path: path,
-                                                                                date: extraction_date,
-                                                                                count: record_count)
-    rescue Exception => exception
-      ActiveSupport::Notifications.instrument("chief_failed.tariff_importer", path: path,
-                                                                              exception: exception)
-
-      raise ImportException.new(exception.message, exception)
     end
+
+    ActiveSupport::Notifications.instrument("chief_imported.tariff_importer",
+      path: path,
+      date: extraction_date,
+      count: record_count
+    )
+
+  rescue Exception => exception
+    ActiveSupport::Notifications.instrument("chief_failed.tariff_importer",
+      path: path,
+      exception: exception
+    )
+
+    raise ImportException.new(exception.message, exception)
   end
 end
