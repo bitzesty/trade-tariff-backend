@@ -34,6 +34,10 @@ module TariffSynchronizer
         where(state: PENDING_STATE)
       end
 
+      def pending_at(day)
+        where(issue_date: day, state: PENDING_STATE)
+      end
+
       def missing
         where(state: MISSING_STATE)
       end
@@ -48,6 +52,10 @@ module TariffSynchronizer
 
       def pending_or_failed
         where(state: [PENDING_STATE, FAILED_STATE])
+      end
+
+      def last_pending
+        pending.order(:issue_date).limit(1)
       end
 
       def descending

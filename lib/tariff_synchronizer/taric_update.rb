@@ -6,12 +6,6 @@ module TariffSynchronizer
   class TaricUpdate < BaseUpdate
     self.update_priority = 2
 
-    dataset_module do
-      def pending
-        where(state: PENDING_STATE).order('filename')
-      end
-    end
-
     class << self
       def download(date)
         taric_updates_for(date).tap do |taric_updates|

@@ -47,7 +47,12 @@ describe TariffSynchronizer do
     end
 
     context 'when imports go correct' do
-
+      it 'applies missing updates' do
+        # TariffSynchronizer.apply
+        # update_1.reload.should be_applied
+        # update_2.reload.should be_applied
+        # taric_update.reload.should be_applied
+      end
     end
 
   end

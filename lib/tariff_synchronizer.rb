@@ -79,8 +79,10 @@ module TariffSynchronizer
         begin
           [TaricUpdate, ChiefUpdate].map(&:sync)
         rescue FileService::DownloadException => exception
-          instrument("failed_download.tariff_synchronizer", exception: exception.original,
-                                                                                         url: exception.url)
+          instrument("failed_download.tariff_synchronizer",
+            exception: exception.original,
+            url: exception.url
+          )
 
           raise exception.original
         end
@@ -111,10 +113,10 @@ module TariffSynchronizer
     end
   end
 
-
-  # Applies all updates (from inbox/failbox) by their date starting from the
-  # oldest one.
   def apply
+    applied_updates = []
+    unconformant_records = []
+
     TradeTariffBackend.with_redis_lock do
       # We will be fetching updates from Taric and modifying primary keys
       # so unrestrict it for all models.
@@ -122,37 +124,22 @@ module TariffSynchronizer
 
       check_failures
 
-      unconformant_records = []
       subscribe /conformance_error/ do |*args|
         event = ActiveSupport::Notifications::Event.new(*args)
-
         unconformant_records << event.payload[:record]
       end
 
-      taric_updates = TaricUpdate.pending.to_a
-      taric_updates.each do |update|
-        Sequel::Model.db.transaction do
-          update.apply
-        end
+      update_range_in_days.each do |day|
+        applied_updates << perform_update(TaricUpdate, day)
+        applied_updates << perform_update(ChiefUpdate, day)
       end
 
-      chief_updates = ChiefUpdate.pending.to_a
-      chief_updates.each do |update|
-        Sequel::Model.db.transaction do
-          update.apply
-        end
-      end
+      applied_updates.flatten!
 
-      if taric_updates.any? || chief_updates.any?
-        updates = taric_updates + chief_updates
-
-        instrument(
-          "apply.tariff_synchronizer",
-          update_names: updates.map(&:filename),
-          count: updates.size,
-          unconformant_records: unconformant_records
-        ) if BaseUpdate.pending_or_failed.none?
-      end
+      instrument("apply.tariff_synchronizer",
+        update_names: applied_updates.map(&:filename),
+        unconformant_records: unconformant_records
+      ) if applied_updates.any? && BaseUpdate.pending_or_failed.none?
     end
 
     rescue Redis::Lock::LockNotAcquired
@@ -229,6 +216,25 @@ module TariffSynchronizer
   end
 
   private
+
+  def perform_update(update_type, day)
+    updates = update_type.pending_at(day).to_a
+    updates.each do |update|
+      Sequel::Model.db.transaction do
+        update.apply
+      end
+    end
+    updates
+  end
+
+  def update_range_in_days
+    last_pending_update = BaseUpdate.last_pending.first
+    if last_pending_update
+      (last_pending_update.issue_date..Date.today)
+    else
+      []
+    end
+  end
 
   def sync_variables_set?
     username.present? &&

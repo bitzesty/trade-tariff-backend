@@ -5,12 +5,6 @@ module TariffSynchronizer
   class ChiefUpdate < BaseUpdate
     self.update_priority = 1
 
-    dataset_module do
-      def pending
-        where(state: PENDING_STATE).order('filename')
-      end
-    end
-
     class << self
       def download(date)
         instrument("download_chief.tariff_synchronizer", date: date) do
