@@ -25,17 +25,21 @@ module TariffSynchronizer
     def apply(event)
       info "Finished applying updates"
 
-      Mailer.applied(event.payload[:update_names],
-                     event.payload[:count],
-                     event.payload.fetch(:unconformant_records, [])).deliver
+      Mailer.applied(
+        event.payload[:update_names],
+        event.payload.fetch(:unconformant_records, [])
+      ).deliver
     end
 
     # Update failed to be applied
     def failed_update(event)
       error "Update failed: #{event.payload[:update]}"
 
-      Mailer.exception(event.payload[:exception], event.payload[:update], event.payload[:database_queries])
-            .deliver
+      Mailer.exception(
+        event.payload[:exception],
+        event.payload[:update],
+        event.payload[:database_queries]
+      ).deliver
     end
 
     def rollback(event)

@@ -11,11 +11,14 @@ class TariffImporter
   attr_reader :path, :issue_date
 
   def initialize(path, issue_date = nil)
-    if File.exists?(path)
+    if file_exists?(path)
       @path = path
       @issue_date = issue_date
-    else
-      raise NotFound.new("#{path} was not found.")
     end
+  end
+
+  def file_exists?(path)
+    raise NotFound.new("#{path} was not found.") unless File.exists?(path)
+    true
   end
 end

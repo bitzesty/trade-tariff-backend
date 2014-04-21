@@ -39,8 +39,10 @@ class TaricImporter < TariffImporter
           end
         end
       rescue StandardError => exception
-        ActiveSupport::Notifications.instrument("taric_failed.tariff_importer", exception: exception,
-                                                                                xml: xml)
+        ActiveSupport::Notifications.instrument("taric_failed.tariff_importer",
+          exception: exception,
+          xml: xml
+        )
         raise ImportException.new
       end
     end

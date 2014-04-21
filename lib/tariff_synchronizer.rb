@@ -13,6 +13,9 @@ require 'tariff_synchronizer/logger'
 #
 
 module TariffSynchronizer
+
+  class FailedUpdatesError < StandardError; end
+
   autoload :ChiefArchive,  'tariff_synchronizer/chief_archive'
   autoload :ChiefUpdate,   'tariff_synchronizer/chief_update'
   autoload :Mailer,        'tariff_synchronizer/mailer'
@@ -76,8 +79,10 @@ module TariffSynchronizer
         begin
           [TaricUpdate, ChiefUpdate].map(&:sync)
         rescue FileService::DownloadException => exception
-          instrument("failed_download.tariff_synchronizer", exception: exception.original,
-                                                                                         url: exception.url)
+          instrument("failed_download.tariff_synchronizer",
+            exception: exception.original,
+            url: exception.url
+          )
 
           raise exception.original
         end
@@ -97,93 +102,44 @@ module TariffSynchronizer
     end
   end
 
-  # Applies all updates (from inbox/failbox) by their date starting from the
-  # oldest one.
+  def check_failures
+    if BaseUpdate.failed.any?
+      instrument(
+        "failed_updates_present.tariff_synchronizer",
+        file_names: BaseUpdate.failed.map(&:filename)
+      )
+
+      raise FailedUpdatesError
+    end
+  end
+
   def apply
+    applied_updates = []
+    unconformant_records = []
+
     TradeTariffBackend.with_redis_lock do
       # We will be fetching updates from Taric and modifying primary keys
       # so unrestrict it for all models.
       Sequel::Model.descendants.each(&:unrestrict_primary_key)
 
-      if BaseUpdate.failed.any?
-        file_names = BaseUpdate.failed.map(&:filename)
+      check_failures
 
-        instrument(
-          "failed_updates_present.tariff_synchronizer",
-          file_names: file_names
-        )
-      else
-        # Inner record processor emit conformance error message
-        # and we keep track of them here to present later by email
-        unconformant_records = []
-
-        subscribe /conformance_error/ do |*args|
-          event = ActiveSupport::Notifications::Event.new(*args)
-
-          unconformant_records << event.payload[:record]
-        end
-
-        # Track latest SQL queries in a ring buffer and with error
-        # email in case it happens
-        # Based on http://goo.gl/vpTFyT (SequelRails LogSubscriber)
-        database_queries = RingBuffer.new(10)
-
-        subscribe /sql\.sequel/ do |*args|
-          event = ActiveSupport::Notifications::Event.new(*args)
-
-          binds = unless event.payload.fetch(:binds, []).blank?
-            event.payload[:binds].map { |column, value|
-              [column.name, value]
-            }.inspect
-          end
-
-          database_queries.push(
-            "(%{class_name}) %{sql} %{binds}" % {
-              class_name: event.payload[:name],
-              sql: event.payload[:sql].squeeze(' '),
-              binds: binds
-            }
-          )
-        end
-
-        PendingUpdate.all.tap do |pending_updates|
-          pending_updates.sort_by(&:file_name)
-                         .sort_by(&:update_priority)
-                         .each do |pending_update|
-            Sequel::Model.db.transaction do
-              begin
-                pending_update.apply
-
-                ::ChiefTransformer.instance.invoke(:update) if pending_update.update_type == "TariffSynchronizer::ChiefUpdate"
-              rescue TaricImporter::ImportException,
-                     ChiefImporter::ImportException,
-                     TariffImporter::NotFound => exception
-                instrument(
-                  "failed_update.tariff_synchronizer",
-                  exception: exception,
-                  update: pending_update,
-                  database_queries: database_queries
-                )
-
-                pending_update.mark_as_failed
-
-                # re-raise to end application process here
-                # Sequel transaction gets rolled back too
-                raise exception
-              end
-            end
-          end
-
-          if pending_updates.any? && BaseUpdate.pending_or_failed.none?
-            instrument(
-              "apply.tariff_synchronizer",
-              update_names: pending_updates.map(&:file_name),
-              count: pending_updates.size,
-              unconformant_records: unconformant_records
-            )
-          end
-        end
+      subscribe /conformance_error/ do |*args|
+        event = ActiveSupport::Notifications::Event.new(*args)
+        unconformant_records << event.payload[:record]
       end
+
+      update_range_in_days.each do |day|
+        applied_updates << perform_update(TaricUpdate, day)
+        applied_updates << perform_update(ChiefUpdate, day)
+      end
+
+      applied_updates.flatten!
+
+      instrument("apply.tariff_synchronizer",
+        update_names: applied_updates.map(&:filename),
+        unconformant_records: unconformant_records
+      ) if applied_updates.any? && BaseUpdate.pending_or_failed.none?
     end
 
     rescue Redis::Lock::LockNotAcquired
@@ -260,6 +216,25 @@ module TariffSynchronizer
   end
 
   private
+
+  def perform_update(update_type, day)
+    updates = update_type.pending_at(day).to_a
+    updates.each do |update|
+      Sequel::Model.db.transaction do
+        update.apply
+      end
+    end
+    updates
+  end
+
+  def update_range_in_days
+    last_pending_update = BaseUpdate.last_pending.first
+    if last_pending_update
+      (last_pending_update.issue_date..Date.today)
+    else
+      []
+    end
+  end
 
   def sync_variables_set?
     username.present? &&

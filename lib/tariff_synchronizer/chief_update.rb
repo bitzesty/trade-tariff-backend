@@ -36,13 +36,28 @@ module TariffSynchronizer
     end
 
     def apply
-      if super
+      super
+      if file_exists?
         instrument("apply_chief.tariff_synchronizer", filename: filename) do
           ChiefImporter.new(file_path, issue_date).import
 
           mark_as_applied
         end
       end
+
+      ::ChiefTransformer.instance.invoke(:update)
+
+    rescue ChiefImporter::ImportException, TariffImporter::NotFound => e
+      instrument(
+        "failed_update.tariff_synchronizer",
+        exception: e,
+        update: self,
+        database_queries: @database_queries
+      )
+
+      mark_as_failed
+
+      raise Sequel::Rollback
     end
 
     private

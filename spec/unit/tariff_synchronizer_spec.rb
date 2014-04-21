@@ -53,17 +53,20 @@ describe TariffSynchronizer do
   end
 
   describe '.apply' do
-    let(:update_1) { double('update', file_name: Date.yesterday, update_priority: 1).as_null_object }
-    let(:update_2) { double('update', file_name: Date.today, update_priority: 1).as_null_object }
+    let(:update_1) { double('update', issue_date: Date.yesterday, filename: Date.yesterday, update_priority: 1) }
+    let(:update_2) { double('update', issue_date: Date.today, filename: Date.today, update_priority: 1) }
     let(:pending_updates) { [update_1, update_2] }
 
 
     context 'success scenario' do
       before {
-        TariffSynchronizer::PendingUpdate.should_receive(:all).and_return(pending_updates)
+        TariffSynchronizer.stub(:update_range_in_days).and_return([Date.yesterday, Date.today])
+        TariffSynchronizer::TaricUpdate.should_receive(:pending_at).with(update_1.issue_date).and_return([update_1])
+        TariffSynchronizer::TaricUpdate.should_receive(:pending_at).with(update_2.issue_date).and_return([update_2])
       }
 
       it 'all pending updates get applied' do
+
         pending_updates.each {|update|
           update.should_receive(:apply).and_return(true)
         }
@@ -74,17 +77,17 @@ describe TariffSynchronizer do
 
     context 'failure scenario' do
       before do
-        TariffSynchronizer::PendingUpdate.should_receive(:all).and_return(pending_updates)
+        TariffSynchronizer.stub(:update_range_in_days).and_return([Date.yesterday, Date.today])
+        TariffSynchronizer::TaricUpdate.should_receive(:pending_at).with(update_1.issue_date).and_return([update_1])
 
-        update_1.should_receive(:apply).and_raise(TaricImporter::ImportException)
+        update_1.should_receive(:apply).and_raise(Sequel::Rollback)
       end
 
       it 'transaction gets rolled back' do
-        expect { TariffSynchronizer.apply }.to raise_error TaricImporter::ImportException
+        expect { TariffSynchronizer.apply }.to raise_error Sequel::Rollback
       end
 
       it 'update gets marked as failed' do
-        update_1.should_receive(:mark_as_failed).and_return(true)
         update_2.should_receive(:apply).never
 
         rescuing { TariffSynchronizer.apply }
@@ -95,9 +98,9 @@ describe TariffSynchronizer do
       let!(:failed_update)  { create :taric_update, :failed }
 
       it 'does not apply pending updates' do
-        TariffSynchronizer::PendingUpdate.should_receive(:all).never
-
-        TariffSynchronizer.apply
+        TariffSynchronizer::TaricUpdate.should_receive(:pending_at).never
+        TariffSynchronizer::ChiefUpdate.should_receive(:pending_at).never
+        expect { TariffSynchronizer.apply }.to raise_error TariffSynchronizer::FailedUpdatesError
       end
     end
   end
