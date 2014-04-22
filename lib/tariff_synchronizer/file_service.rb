@@ -58,25 +58,18 @@ module TariffSynchronizer
 
       def send_request(url)
         begin
-          crawler = Curl::Easy.new(url)
-          crawler.use_ssl = 3
-          crawler.ssl_version = 3
-          crawler.ssl_verify_peer = false
-          crawler.ssl_verify_host = false
-          crawler.http_auth_types = :basic
-          crawler.username = TariffSynchronizer.username
-          crawler.password = TariffSynchronizer.password
-          crawler.perform
-        rescue Curl::Err::HostResolutionError,
-               Curl::Err::ConnectionFailedError,
-               Curl::Err::SSLConnectError,
-               Curl::Err::PartialFileError => exception
-          # NOTE could be a glitch in curb because it throws HostResolutionError
-          # occasionally without any reason.
+          crawler = Faraday::Connection.new(url) do |crawler|
+            crawler.adapter Faraday.default_adapter
+            crawler.request :basic_auth,
+                            TariffSynchronizer.username,
+                            TariffSynchronizer.password
+          end
+          response = crawler.get
+        rescue Faraday::Error::ClientError => exception
           raise DownloadException.new(url, exception)
         end
 
-        Response.new(url, crawler.response_code, crawler.body_str)
+        Response.new(url, response.status, response.body)
       end
     end
   end
