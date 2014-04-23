@@ -58,12 +58,13 @@ module TradeTariffBackend
       end
     end
 
+    def redis
+      Sidekiq.redis { |conn| conn }
+    end
+
     def with_redis_lock(lock_name = db_lock_key, &block)
-      Sidekiq.redis do |redis_namespace|
-        redis_namespace.redis.lock(lock_name, life: 30.minutes) do
-          yield
-        end
-      end
+      semaphore = Redis::Semaphore.new(lock_name, redis: redis)
+      semaphore.lock { yield }
     end
 
     def reindex(indexer = search_client)

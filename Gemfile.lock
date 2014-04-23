@@ -131,8 +131,6 @@ GEM
       treetop (~> 1.4.8)
     method_source (0.8.1)
     mime-types (1.25.1)
-    mlanett-redis-lock (0.2.5)
-      redis
     multi_json (1.7.9)
     multipart-post (1.2.0)
     mysql2 (0.3.13)
@@ -202,6 +200,8 @@ GEM
     redis (3.0.6)
     redis-namespace (1.4.1)
       redis (~> 3.0.4)
+    redis-semaphore (0.2.1)
+      redis
     ref (1.0.5)
     router-client (3.0.1)
       activesupport
@@ -313,7 +313,6 @@ DEPENDENCIES
   jquery-rails (= 1.0.19)
   json_expressions
   logstasher (= 0.4.8)
-  mlanett-redis-lock (= 0.2.5)
   multi_json (~> 1.7.7)
   mysql2 (= 0.3.13)
   newrelic_rpm
@@ -323,6 +322,7 @@ DEPENDENCIES
   rabl (= 0.9.0)
   rails (= 3.2.17)
   railties
+  redis-semaphore
   router-client (= 3.0.1)
   rspec-rails (~> 2.14.0)
   sass-rails
