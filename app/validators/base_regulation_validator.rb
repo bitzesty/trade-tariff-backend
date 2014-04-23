@@ -8,7 +8,12 @@ class BaseRegulationValidator < TradeTariffBackend::Validator
     validates :validity_dates
   end
 
-  # TODO: ROIMB4
+  validation :ROIMB4, 'The referenced regulation group must exist', on: [:create, :update] do |record|
+    if record.regulation_group_id.present?
+      RegulationGroup.where(oid: record.regulation_group_id).any?
+    end
+  end
+
   # TODO: ROIMB5
   # TODO: ROIMB6
   # TODO: ROIMB7
