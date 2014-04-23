@@ -1,12 +1,16 @@
-
 [![Build Status](https://travis-ci.org/alphagov/trade-tariff-backend.png?branch=master)](https://travis-ci.org/alphagov/trade-tariff-backend)
 
-# TradeTariffBackend
+# Trade Tariff Backend
 
 The API back-end for:
 
-* TradeTariffFrontend application
-* TradeTariffAdmin application
+* [Trade Tariff Frontend](https://github.com/alphagov/trade-tariff-frontend)
+* [Trade Tariff Admin](https://github.com/alphagov/trade-tariff-admin)
+
+Also uses:
+
+* [Trade Tariff Suite](https://github.com/alphagov/trade-tariff-suite)
+* [Trade Tariff Oracle](https://github.com/alphagov/trade-tariff-oracle)
 
 ## Setup
 
@@ -25,13 +29,13 @@ Run the bootstrap command `govuk_puppet`.
     brew install mysql
     ```
 
-2. Ruby 1.9.3
+2. Ruby 2.0.0
 
-## Setup TradeTariffBackend
+## Load database
 
-Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff-backend/wiki/System-rebuild-procedure).
+Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff-backend/wiki/System-rebuild-procedure), or get a recent database snapshot.
 
-## Run TradeTariffBackend
+## Run Backend
 
     ./startup.sh
 
@@ -46,13 +50,13 @@ Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff
   sync_email:
   ```
 
-2. Apply updates
+2. Run the sync rake task
 
   ```
   govuk_setenv tariff-api bundle exec rake tariff:sync:apply
   ```
 
-## Manual Rollback
+### Manual Rollback
 
   ```
   DATE='2014-01-30' REDOWNLOAD=1 govuk_setenv tariff-api bundle exec rake tariff:sync:rollback
@@ -63,6 +67,10 @@ Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff
 * Project does __not__ contain schema.rb, do not use rake db:schema:load. Sequel
 does not yet support view creation via schema file.
 
-## TODO
+## Contributing
 
-* Timezone config
+Please check out the [Contributing guide](https://github.com/alphagov/trade-tariff-backend/blob/master/CONTRIBUTING.md)
+
+## Licence
+
+Trade Tariff is licenced under the [MIT licence](https://github.com/alphagov/trade-tariff-backend/blob/master/LICENCE.txt)
