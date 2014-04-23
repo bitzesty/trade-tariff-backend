@@ -141,9 +141,6 @@ module TariffSynchronizer
         unconformant_records: unconformant_records
       ) if applied_updates.any? && BaseUpdate.pending_or_failed.none?
     end
-
-    rescue Redis::Lock::LockNotAcquired
-      instrument "apply_lock_error.tariff_synchronizer"
   end
 
   # Restore database to specific date in the past

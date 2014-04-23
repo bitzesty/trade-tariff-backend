@@ -60,18 +60,4 @@ describe ChiefTransformer::Logger do
       end
     end
   end
-
-  describe '#transform_lock_error' do
-    before {
-       TradeTariffBackend.should_receive(:with_redis_lock)
-                         .and_raise(Redis::Lock::LockNotAcquired)
-
-       ChiefTransformer.instance.invoke
-    }
-
-    it 'logs a warn event' do
-      @logger.logged(:warn).size.should be >= 1
-      @logger.logged(:warn).first.to_s.should =~ /acquire Redis lock/
-    end
-  end
 end
