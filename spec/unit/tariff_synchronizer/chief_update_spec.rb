@@ -48,6 +48,7 @@ describe TariffSynchronizer::ChiefUpdate do
             TariffSynchronizer::ChiefUpdate.download(example_date)
             TariffSynchronizer::ChiefUpdate.count.should == 1
             TariffSynchronizer::ChiefUpdate.first.issue_date.should == example_date
+            TariffSynchronizer::ChiefUpdate.first.filesize.should == success_response.content.size
           end
         end
 
@@ -160,6 +161,11 @@ describe TariffSynchronizer::ChiefUpdate do
     before do
       prepare_synchronizer_folders
       create_chief_file state, example_date
+    end
+
+    it 'sets applied_at' do
+      TariffSynchronizer::ChiefUpdate.first.apply
+      example_chief_update.reload.applied_at.should_not be_nil
     end
 
     it 'executes importer' do
