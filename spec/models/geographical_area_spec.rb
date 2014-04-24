@@ -168,5 +168,62 @@ describe GeographicalArea do
         it { expect(geographical_area.conformance_errors).to be_empty }
       end
     end
+
+    describe "GA5" do
+      let(:geographical_area) {
+        build(:geographical_area,
+              validity_end_date: Date.today,
+              validity_start_date: Date.today.ago(3.years),
+              parent_geographical_area: parent)
+      }
+
+      before { geographical_area.conformant? }
+
+      context "invalid parent period" do
+        context "start date" do
+          let(:parent) {
+            create(:geographical_area, validity_start_date: Date.yesterday)
+          }
+          it {
+            expect(geographical_area.conformance_errors).to have_key(:GA5)
+          }
+        end
+
+        context "end date" do
+          let(:parent) {
+            create(:geographical_area, validity_end_date: Date.yesterday )
+          }
+
+          it {
+            expect(geographical_area.conformance_errors).to have_key(:GA5)
+          }
+        end
+
+      end
+
+      context "valid" do
+        context "with dates" do
+          let(:parent) {
+            create(:geographical_area,
+                   validity_end_date: Date.today,
+                   validity_start_date: Date.today.ago(3.years))
+          }
+
+          it {
+            expect(geographical_area.conformance_errors).to be_empty
+          }
+        end
+
+        context "without dates" do
+          # It won't complain if start or end dates aren't present
+          let(:parent) {
+            create(:geographical_area, validity_start_date: nil, validity_end_date: nil)
+          }
+          it {
+            expect(geographical_area.conformance_errors).to be_empty
+          }
+        end
+      end
+    end
   end
 end

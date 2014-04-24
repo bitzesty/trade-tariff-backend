@@ -15,10 +15,23 @@ class GeographicalAreaValidator < TradeTariffBackend::Validator
       parent.try(:geographical_code).to_s == "1"
     end
   end
+
+  validation :GA5, 'If a geographical area has a parent geographical area group then the validity period of the parent geographical area group must span the validity period of the geographical area', on: [:create, :update] do |record|
+    if record.parent_geographical_area.present?
+      parent = record.parent_geographical_area
+      # It's not complaining if start or end dates aren't present
+      @has_error = if record.validity_start_date and parent.validity_start_date
+        parent.validity_start_date > record.validity_start_date
+      end
+      @has_error ||= if record.validity_end_date and parent.validity_end_date
+        parent.validity_end_date < record.validity_end_date
+      end
+      !@has_error
+    end
+  end
 end
 
 # TODO: GA3
-# TODO: GA5
 # TODO: GA6
 # TODO: GA7
 # TODO: GA10
