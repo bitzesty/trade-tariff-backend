@@ -3,8 +3,6 @@ require 'tariff_synchronizer/file_service'
 
 module TariffSynchronizer
   class ChiefUpdate < BaseUpdate
-    self.update_priority = 1
-
     class << self
       def download(date)
         instrument("download_chief.tariff_synchronizer", date: date) do
@@ -45,7 +43,7 @@ module TariffSynchronizer
         end
       end
 
-      ::ChiefTransformer.instance.invoke(:update)
+      ::ChiefTransformer.instance.invoke(:update, self)
 
     rescue ChiefImporter::ImportException, TariffImporter::NotFound => e
       instrument(

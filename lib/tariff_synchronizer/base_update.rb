@@ -17,8 +17,6 @@ module TariffSynchronizer
     FAILED_STATE  = 'F'
     MISSING_STATE = 'M'
 
-    cattr_accessor :update_priority
-
     self.unrestrict_primary_key
 
     validates do

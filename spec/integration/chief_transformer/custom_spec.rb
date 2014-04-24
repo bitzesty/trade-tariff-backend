@@ -264,14 +264,22 @@ describe 'CHIEF: Custom scenarios' do
                                 amend_indicator: 'U' }
 
     let!(:geographical_area)  { create :geographical_area, :erga_omnes }
-    let!(:tame) { create :tame,
-                  fe_tsmp: DateTime.new(2010,2,22,12,27),
-                  msrgp_code: 'VT',
-                  msr_type: 'Z',
-                  tty_code: 'B00',
-                  le_tsmp: nil }
+    let!(:tame) {
+      create :tame,
+        fe_tsmp: DateTime.new(2010,2,22,12,27),
+        msrgp_code: 'VT',
+        msr_type: 'Z',
+        tty_code: 'B00',
+        le_tsmp: nil
+    }
 
-    before { ChiefTransformer.instance.invoke }
+
+    before {
+      ChiefTransformer.instance.invoke(
+        :update,
+        double("chief_update", filename: '2013-07-11_KBT009(13192).txt')
+      )
+    }
 
     it 'creates a short lived VTZ measure for 1104291710' do
       expect(

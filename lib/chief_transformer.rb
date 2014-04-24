@@ -39,29 +39,26 @@ class ChiefTransformer
   mattr_accessor :per_page
   self.per_page = 1000
 
-  def invoke(work_mode = :update)
-    raise TransformException.new("Invalid work mode, options: #{work_modes}") unless work_mode.in? work_modes
+  def invoke(work_mode = :update, chief = nil)
+    instrument("start_transform.chief_transformer", mode: work_mode)
 
-    ActiveSupport::Notifications.instrument("start_transform.chief_transformer", mode: work_mode)
-
-    TradeTariffBackend.with_redis_lock do
-      case work_mode
-      when :initial_load
-        processor = InitialLoadProcessor.new(Chief::Mfcm.initial_load
-                                                        .unprocessed,
-                                             per_page)
-      when :update
-        processor = Processor.new(Chief::Mfcm.unprocessed.all,
-                                  Chief::Tame.unprocessed.all)
-      end
-
-      processor.process
+    unless work_mode.in? work_modes
+      raise TransformException.new("Invalid work mode, options: #{work_modes}")
     end
 
-  rescue Redis::Lock::LockNotAcquired
-    instrument(
-      "transform_lock_error.chief_transformer",
-      work_mode: work_mode
-    )
+    case work_mode
+    when :initial_load
+      processor = InitialLoadProcessor.new(
+        Chief::Mfcm.initial_load.unprocessed, per_page
+      )
+    when :update
+      processor = Processor.new(
+        Chief::Mfcm.unprocessed.where(origin: chief.try(:filename)).all,
+        Chief::Tame.unprocessed.where(origin: chief.try(:filename)).all
+      )
+    end
+
+    processor.process
+
   end
 end
