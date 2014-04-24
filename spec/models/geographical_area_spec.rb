@@ -168,5 +168,73 @@ describe GeographicalArea do
         it { expect(geographical_area.conformance_errors).to be_empty }
       end
     end
+
+    describe "GA5" do
+      let(:geographical_area) {
+        build(:geographical_area,
+              validity_end_date: Date.today,
+              validity_start_date: Date.today.ago(3.years),
+              parent_geographical_area: parent)
+      }
+
+      before { geographical_area.conformant? }
+
+      context "invalid parent period" do
+        context "start date" do
+          let(:parent) {
+            create(:geographical_area, validity_start_date: Date.yesterday)
+          }
+          it {
+            expect(geographical_area.conformance_errors).to have_key(:GA5)
+          }
+        end
+
+        context "end date" do
+          let(:parent) {
+            create(:geographical_area, validity_end_date: Date.yesterday )
+          }
+
+          it {
+            expect(geographical_area.conformance_errors).to have_key(:GA5)
+          }
+        end
+
+        context "without end date" do
+          let(:parent) { create(:geographical_area, validity_end_date: Date.today) }
+
+          before {
+            geographical_area.validity_end_date = nil
+            geographical_area.conformant?
+          }
+
+          it {
+            expect(geographical_area.conformance_errors).to have_key(:GA5)
+          }
+        end
+      end
+
+      context "valid" do
+        context "with end date" do
+          let(:parent) {
+            create(:geographical_area,
+                   validity_end_date: Date.today,
+                   validity_start_date: Date.today.ago(3.years))
+          }
+
+          it {
+            expect(geographical_area.conformance_errors).to be_empty
+          }
+        end
+
+        context "parent without end date" do
+          let(:parent) {
+            create(:geographical_area, validity_end_date: nil)
+          }
+          it {
+            expect(geographical_area.conformance_errors).to be_empty
+          }
+        end
+      end
+    end
   end
 end
