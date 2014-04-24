@@ -145,17 +145,27 @@ describe GeographicalArea do
 
       before { geographical_area.conformant? }
 
+      context "invalid parent id" do
+        let(:parent_id) { "435" }
+        it {
+          expect(geographical_area.conformance_errors).to have_key(:GA4)
+        }
+      end
+
+      context "invalid area code" do
+        let(:parent_id) {
+          create(:geographical_area, :country).geographical_area_sid
+        }
+        it {
+          expect(geographical_area.conformance_errors).to have_key(:GA4)
+        }
+      end
+
       context "valid" do
         let(:parent_id) {
           create(:geographical_area, geographical_code: "1").geographical_area_sid
         }
         it { expect(geographical_area.conformance_errors).to be_empty }
-      end
-      context "invalid" do
-        let(:parent_id) { "435" }
-        it {
-          expect(geographical_area.conformance_errors).to have_key(:GA4)
-        }
       end
     end
   end
