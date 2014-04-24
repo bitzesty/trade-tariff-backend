@@ -236,5 +236,33 @@ describe GeographicalArea do
         end
       end
     end
+
+    describe "GA6" do
+      let(:geographical_area) { create(:geographical_area) }
+
+      before {
+        geographical_area.parent_geographical_area_group_sid = parent.geographical_area_sid
+        geographical_area.conformant?
+      }
+
+      context "direct loop between parent-children" do
+        let!(:parent) {
+          create(:geographical_area, parent_geographical_area_group_sid: geographical_area.geographical_area_sid)
+        }
+        it {
+          expect(geographical_area.conformance_errors).to have_key(:GA6)
+        }
+      end
+
+      context "two-level loop between parent-children" do
+        let!(:parent) {
+          child = create(:geographical_area, parent_geographical_area_group_sid: geographical_area.geographical_area_sid)
+          create(:geographical_area, parent_geographical_area_group_sid: child.geographical_area_sid)
+        }
+        it {
+          expect(geographical_area.conformance_errors).to have_key(:GA6)
+        }
+      end
+    end
   end
 end
