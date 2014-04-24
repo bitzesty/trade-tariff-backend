@@ -7,10 +7,17 @@ class GeographicalAreaValidator < TradeTariffBackend::Validator
   validation :GA2, 'The start date must be less than or equal to the end date.' do
     validates :validity_dates
   end
+
+  validation :GA4, 'The referenced parent geographical area group must be an existing geographical area with area code = 1 (geographical area group)', on: [:create, :update] do |record|
+    parent_sid = record.parent_geographical_area_group_sid
+    if parent_sid.present?
+      parent = record.class[geographical_area_sid: parent_sid]
+      parent.try(:geographical_code).to_s == "1"
+    end
+  end
 end
 
 # TODO: GA3
-# TODO: GA4
 # TODO: GA5
 # TODO: GA6
 # TODO: GA7

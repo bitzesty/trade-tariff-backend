@@ -137,5 +137,36 @@ describe GeographicalArea do
     it { should validate_uniqueness.of([:geographical_area_id, :validity_start_date])}
     # GA2 The start date must be less than or equal to the end date.
     it { should validate_validity_dates }
+
+    describe "GA4" do
+      let(:geographical_area) {
+        build(:geographical_area, parent_geographical_area_group_sid: parent_id)
+      }
+
+      before { geographical_area.conformant? }
+
+      context "invalid parent id" do
+        let(:parent_id) { "435" }
+        it {
+          expect(geographical_area.conformance_errors).to have_key(:GA4)
+        }
+      end
+
+      context "invalid area code" do
+        let(:parent_id) {
+          create(:geographical_area, :country).geographical_area_sid
+        }
+        it {
+          expect(geographical_area.conformance_errors).to have_key(:GA4)
+        }
+      end
+
+      context "valid" do
+        let(:parent_id) {
+          create(:geographical_area, geographical_code: "1").geographical_area_sid
+        }
+        it { expect(geographical_area.conformance_errors).to be_empty }
+      end
+    end
   end
 end
