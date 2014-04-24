@@ -82,7 +82,7 @@ module TariffSynchronizer
     end
 
     def mark_as_applied
-      update(state: APPLIED_STATE)
+      update(state: APPLIED_STATE, applied_at: Time.now )
     end
 
     def mark_as_failed
@@ -153,7 +153,7 @@ module TariffSynchronizer
 
       def create_entry(date, response, file_name)
         if response.success? && response.content_present?
-          create_update_entry(date, PENDING_STATE, file_name)
+          create_update_entry(date, PENDING_STATE, file_name, response.content.size)
           write_update_file(date, response, file_name)
         elsif response.success? && !response.content_present?
           create_update_entry(date, FAILED_STATE, file_name)
@@ -172,22 +172,23 @@ module TariffSynchronizer
       def write_update_file(date, response, file_name)
         update_path = update_path(date, file_name)
 
-        instrument("update_written.tariff_synchronizer",
-                   date: date,
-                   path: update_path,
-                   size: response.content.size) do
-          write_file(update_path, response.content)
-        end
+        instrument("update_written.tariff_synchronizer", date: date,
+          path: update_path, size: response.content.size) do
+            write_file(update_path, response.content)
+          end
       end
 
       def missing_update_name_for(date)
         "#{date}_#{update_type}"
       end
 
-      def create_update_entry(date, state, file_name)
-        find_or_create(filename: file_name,
-                       update_type: self.name,
-                       issue_date: date).update(state: state)
+      def create_update_entry(date, state, file_name, filesize = nil)
+        find_or_create(
+          filename: file_name,
+          filesize: filesize,
+          update_type: self.name,
+          issue_date: date
+        ).update(state: state)
       end
 
       def update_path(date, file_name)
