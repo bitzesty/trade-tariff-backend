@@ -9,7 +9,7 @@ gem "multi_json", "~> 1.7.7"
 gem "mysql2", "0.3.13"
 gem "sequel-rails", "0.7.0"
 gem "rabl", "0.9.0"
-gem "redis-semaphore"
+gem "redis-mutex", "2.1.1"
 gem "ansi"
 gem "sequel", "4.3.0"
 gem "sidekiq", "2.17.2"
@@ -49,6 +49,7 @@ end
 
 group :development, :test do
   gem "pry-rails"
+  gem "pry-nav"
 end
 
 group :test do

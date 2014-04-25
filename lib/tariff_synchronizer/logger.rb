@@ -31,6 +31,10 @@ module TariffSynchronizer
       ).deliver
     end
 
+    def apply_lock_error(event)
+     warn "Failed to acquire Redis lock for update application"
+    end
+
     # Update failed to be applied
     def failed_update(event)
       error "Update failed: #{event.payload[:update]}"

@@ -50,26 +50,13 @@ module TariffSynchronizer
       end
     end
 
-    def apply
-      super
-      if file_exists?
-        instrument("apply_taric.tariff_synchronizer", filename: filename) do
-          TaricImporter.new(file_path, issue_date).import
+    def import!
 
-          mark_as_applied
-        end
+      instrument("apply_taric.tariff_synchronizer", filename: filename) do
+        TaricImporter.new(file_path, issue_date).import
+
+        mark_as_applied
       end
-    rescue TaricImporter::ImportException, TariffImporter::NotFound => e
-      instrument(
-        "failed_update.tariff_synchronizer",
-        exception: e,
-        update: self,
-        database_queries: @database_queries
-      )
-
-      mark_as_failed
-
-      raise Sequel::Rollback
     end
 
     private

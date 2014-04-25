@@ -250,7 +250,7 @@ describe TariffSynchronizer::TaricUpdate do
     end
   end
 
-  describe "#apply" do
+  describe "#apply", truncation: true do
     let(:state) { :pending }
     let!(:example_taric_update) { create :taric_update, example_date: example_date }
 
@@ -282,7 +282,9 @@ describe TariffSynchronizer::TaricUpdate do
       TariffImporter.should_receive(:new).and_return(mock_importer)
 
       TariffSynchronizer::TaricUpdate.pending.count.should == 1
-      rescuing { TariffSynchronizer::TaricUpdate.first.apply }
+
+      expect { TariffSynchronizer::TaricUpdate.first.apply }.to raise_error Sequel::Rollback
+
       TariffSynchronizer::TaricUpdate.pending.count.should == 0
       TariffSynchronizer::TaricUpdate.failed.count.should == 1
       TariffSynchronizer::TaricUpdate.applied.count.should == 0

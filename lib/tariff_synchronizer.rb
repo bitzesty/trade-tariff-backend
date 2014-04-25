@@ -140,6 +140,10 @@ module TariffSynchronizer
         unconformant_records: unconformant_records
       ) if applied_updates.any? && BaseUpdate.pending_or_failed.none?
     end
+
+  rescue Redis::Mutex::LockError
+    instrument "apply_lock_error.tariff_synchronizer"
+
   end
 
   # Restore database to specific date in the past
@@ -187,7 +191,7 @@ module TariffSynchronizer
         redownload: redownload
       )
     end
-  rescue Redis::Lock::LockNotAcquired
+  rescue Redis::Mutex::LockError
     instrument(
       "rollback_lock_error.tariff_synchronizer",
       date: rollback_date,
@@ -215,11 +219,7 @@ module TariffSynchronizer
 
   def perform_update(update_type, day)
     updates = update_type.pending_at(day).to_a
-    updates.each do |update|
-      Sequel::Model.db.transaction do
-        update.apply
-      end
-    end
+    updates.each { |update| update.apply }
     updates
   end
 

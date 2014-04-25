@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'tariff_synchronizer'
 require 'active_support/log_subscriber/test_helper'
 
-describe TariffSynchronizer::Logger do
+describe TariffSynchronizer::Logger, truncation: true do
   include ActiveSupport::LogSubscriber::TestHelper
 
   before(:all) { WebMock.disable_net_connect! }
@@ -567,6 +567,33 @@ describe TariffSynchronizer::Logger do
       ActionMailer::Base.deliveries.should_not be_empty
       email = ActionMailer::Base.deliveries.last
       email.encoded.should =~ /missing/
+    end
+  end
+  describe "#rollback_lock_error" do
+    before {
+       TradeTariffBackend.should_receive(
+        :with_redis_lock).and_raise(Redis::Mutex::LockError)
+
+       TariffSynchronizer.rollback(Date.today, true)
+    }
+
+    it 'logs a warn event' do
+      @logger.logged(:warn).size.should be >= 1
+      @logger.logged(:warn).first.to_s.should =~ /acquire Redis lock/
+    end
+  end
+
+  describe "#apply_lock_error" do
+    before {
+       TradeTariffBackend.should_receive(
+        :with_redis_lock).and_raise(Redis::Mutex::LockError)
+
+       TariffSynchronizer.apply
+    }
+
+    it 'logs a warn event' do
+      @logger.logged(:warn).size.should be >= 1
+      @logger.logged(:warn).first.to_s.should =~ /acquire Redis lock/
     end
   end
 end
