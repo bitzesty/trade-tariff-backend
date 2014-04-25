@@ -200,10 +200,12 @@ GEM
     rdoc (3.12.2)
       json (~> 1.4)
     redis (3.0.6)
+    redis-classy (1.2.0)
+      redis-namespace (~> 1.0)
+    redis-mutex (2.1.1)
+      redis-classy (~> 1.2)
     redis-namespace (1.4.1)
       redis (~> 3.0.4)
-    redis-semaphore (0.2.1)
-      redis
     ref (1.0.5)
     router-client (3.0.1)
       activesupport
@@ -325,7 +327,7 @@ DEPENDENCIES
   rabl (= 0.9.0)
   rails (= 3.2.17)
   railties
-  redis-semaphore
+  redis-mutex (= 2.1.1)
   router-client (= 3.0.1)
   rspec-rails (~> 2.14.0)
   sass-rails

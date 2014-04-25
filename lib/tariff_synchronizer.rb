@@ -140,6 +140,10 @@ module TariffSynchronizer
         unconformant_records: unconformant_records
       ) if applied_updates.any? && BaseUpdate.pending_or_failed.none?
     end
+
+  rescue Redis::Mutex::LockError
+    instrument "apply_lock_error.tariff_synchronizer"
+
   end
 
   # Restore database to specific date in the past
@@ -187,7 +191,7 @@ module TariffSynchronizer
         redownload: redownload
       )
     end
-  rescue Redis::Lock::LockNotAcquired
+  rescue Redis::Mutex::LockError
     instrument(
       "rollback_lock_error.tariff_synchronizer",
       date: rollback_date,
