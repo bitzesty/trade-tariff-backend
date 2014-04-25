@@ -153,7 +153,7 @@ describe TariffSynchronizer::ChiefUpdate do
     end
   end
 
-  describe "#apply" do
+  describe "#apply", truncation: true do
     let(:example_date) { Forgery(:date).date }
     let(:state) { :pending }
     let!(:example_chief_update) { create :chief_update, example_date: example_date }

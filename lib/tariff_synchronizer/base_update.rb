@@ -107,6 +107,10 @@ module TariffSynchronizer
       )
     end
 
+    def import!
+      raise NotImplementedError
+    end
+
     def apply
       # Track latest SQL queries in a ring buffer and with error
       # email in case it happens
@@ -130,6 +134,19 @@ module TariffSynchronizer
           }
         )
       end
+
+      if file_exists?
+        Sequel::Model.db.transaction(reraise: true) do
+          Sequel::Model.db.after_rollback { mark_as_failed }
+          import!
+        end
+      end
+    rescue ChiefImporter::ImportException, TaricImporter::ImportException, TariffImporter::NotFound => e
+      instrument(
+        "failed_update.tariff_synchronizer",
+        exception: e, update: self, database_queries: @database_queries
+      )
+      raise Sequel::Rollback
     end
 
     class << self

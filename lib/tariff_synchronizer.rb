@@ -215,11 +215,7 @@ module TariffSynchronizer
 
   def perform_update(update_type, day)
     updates = update_type.pending_at(day).to_a
-    updates.each do |update|
-      Sequel::Model.db.transaction do
-        update.apply
-      end
-    end
+    updates.each { |update| update.apply }
     updates
   end
 

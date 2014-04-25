@@ -49,6 +49,7 @@ end
 
 group :development, :test do
   gem "pry-rails"
+  gem "pry-nav"
 end
 
 group :test do

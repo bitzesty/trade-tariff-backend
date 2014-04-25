@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'tariff_synchronizer'
 require 'active_support/log_subscriber/test_helper'
 
-describe TariffSynchronizer::Logger do
+describe TariffSynchronizer::Logger, truncation: true do
   include ActiveSupport::LogSubscriber::TestHelper
 
   before(:all) { WebMock.disable_net_connect! }

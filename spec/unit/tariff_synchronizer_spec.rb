@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'tariff_synchronizer'
 
-describe TariffSynchronizer do
+describe TariffSynchronizer, truncation: true do
   describe '.initial_update_for' do
     # helper method where update type is a param
     it 'returns initial update day for specific update type' do
