@@ -15,11 +15,38 @@ class GeographicalAreaValidator < TradeTariffBackend::Validator
       parent.try(:geographical_code).to_s == "1"
     end
   end
+
+  validation :GA5, 'If a geographical area has a parent geographical area group then the validity period of the parent geographical area group must span the validity period of the geographical area', on: [:create, :update] do |record|
+    if record.parent_geographical_area.present?
+      parent = record.parent_geographical_area
+      conditions = []
+      conditions << ->{ parent.validity_start_date <= record.validity_start_date }
+      if parent.validity_end_date
+        conditions << ->{ record.validity_end_date.present? }
+        conditions << ->{ parent.validity_end_date >= record.validity_end_date }
+      end
+      conditions.inject(true) do |valid, condition|
+        break valid unless valid
+        valid && condition.call
+      end
+    end
+  end
+
+  validation :GA6, 'Loops in the parent relation between geographical areas and parent geographical area groups are not allowed. If a geographical area A is a parent geographical area group of B then B cannot be a parent geographical area group of A (loops can also exist on more than two levels, e.g. level 3; If A is a parent of B and B is a parent of C then C cannot be a parent of A).', on: [:create, :update] do |record|
+    children_chain = [record.geographical_area_sid]
+    if parent = record.parent_geographical_area
+      while parent && !@has_error
+        sid = parent.geographical_area_sid
+        @has_error ||= children_chain.include?(sid)
+        children_chain << sid
+        parent = parent.parent_geographical_area
+      end
+    end
+    !@has_error
+  end
 end
 
 # TODO: GA3
-# TODO: GA5
-# TODO: GA6
 # TODO: GA7
 # TODO: GA10
 # TODO: GA11

@@ -147,6 +147,7 @@ describe GeographicalArea do
 
       context "invalid parent id" do
         let(:parent_id) { "435" }
+
         it {
           expect(geographical_area.conformance_errors).to have_key(:GA4)
         }
@@ -156,6 +157,7 @@ describe GeographicalArea do
         let(:parent_id) {
           create(:geographical_area, :country).geographical_area_sid
         }
+
         it {
           expect(geographical_area.conformance_errors).to have_key(:GA4)
         }
@@ -165,7 +167,149 @@ describe GeographicalArea do
         let(:parent_id) {
           create(:geographical_area, geographical_code: "1").geographical_area_sid
         }
+
         it { expect(geographical_area.conformance_errors).to be_empty }
+      end
+    end
+
+    describe "GA5" do
+      let(:geographical_area) {
+        build(:geographical_area,
+              validity_end_date: Date.today,
+              validity_start_date: Date.today.ago(3.years),
+              parent_geographical_area: parent)
+      }
+
+      before { geographical_area.conformant? }
+
+      context "invalid parent period" do
+        context "start date" do
+          let(:parent) {
+            create(:geographical_area, validity_start_date: Date.yesterday)
+          }
+
+          it {
+            expect(geographical_area.conformance_errors).to have_key(:GA5)
+          }
+        end
+
+        context "end date" do
+          let(:parent) {
+            create(:geographical_area,
+                   validity_end_date: Date.yesterday,
+                   validity_start_date: Date.today.ago(3.years))
+          }
+
+          it {
+            expect(geographical_area.conformance_errors).to have_key(:GA5)
+          }
+        end
+
+        context "without end date" do
+          let(:parent) { create(:geographical_area,
+                                validity_end_date: Date.today,
+                                validity_start_date: Date.today.ago(3.years))
+          }
+
+          before {
+            geographical_area.validity_end_date = nil
+            geographical_area.conformant?
+          }
+
+          it {
+            expect(geographical_area.conformance_errors).to have_key(:GA5)
+          }
+        end
+
+        context "with start_date after parent and no end date" do
+          let(:parent) { create(:geographical_area,
+                                validity_end_date: Date.today,
+                                validity_start_date: Date.today.ago(3.years))
+          }
+
+          before {
+            geographical_area.validity_start_date = Date.today.ago(2.years)
+            geographical_area.validity_end_date = nil
+            geographical_area.conformant?
+          }
+
+          it {
+            expect(geographical_area.conformance_errors).to have_key(:GA5)
+          }
+        end
+      end
+
+      context "valid" do
+        context "with end date" do
+          let(:parent) {
+            create(:geographical_area,
+                   validity_end_date: Date.today,
+                   validity_start_date: Date.today.ago(3.years))
+          }
+
+          it {
+            expect(geographical_area.conformance_errors).to be_empty
+          }
+        end
+
+        context "parent without end date" do
+          let(:parent) {
+            create(:geographical_area,
+                   validity_end_date: nil,
+                   validity_start_date: Date.today.ago(3.years))
+          }
+
+          it {
+            expect(geographical_area.conformance_errors).to be_empty
+          }
+        end
+
+        context "both without end dates" do
+          let(:parent) {
+            create(:geographical_area,
+                   validity_end_date: nil,
+                   validity_start_date: Date.today.ago(3.years))
+          }
+
+          before {
+            geographical_area.validity_end_date = nil
+            geographical_area.conformant?
+          }
+
+          it {
+            expect(geographical_area.conformance_errors).to be_empty
+          }
+        end
+      end
+    end
+
+    describe "GA6" do
+      let(:geographical_area) { create(:geographical_area) }
+
+      before {
+        geographical_area.parent_geographical_area_group_sid = parent.geographical_area_sid
+        geographical_area.conformant?
+      }
+
+      context "direct loop between parent-children" do
+        let!(:parent) {
+          create(:geographical_area, parent_geographical_area_group_sid: geographical_area.geographical_area_sid)
+        }
+
+        it {
+          expect(geographical_area.conformance_errors).to have_key(:GA6)
+        }
+      end
+
+      context "two-level loop between parent-children" do
+        let!(:parent) {
+          child = create(:geographical_area, parent_geographical_area_group_sid: geographical_area.geographical_area_sid)
+          create(:geographical_area, parent_geographical_area_group_sid: child.geographical_area_sid)
+        }
+
+        it {
+          expect(geographical_area.conformance_errors).to have_key(:GA6)
+        }
       end
     end
   end
