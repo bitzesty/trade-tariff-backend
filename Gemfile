@@ -25,7 +25,7 @@ gem 'gds-sso', '3.1.0'
 gem "railties"
 
 gem "unicorn", "~> 4.6.3"
-gem "faraday", "~> 0.8.8"
+gem "curb", "0.8.3"
 
 gem "nokogiri", "1.5.4"
 

@@ -204,13 +204,13 @@ describe TariffSynchronizer::Logger, truncation: true do
   end
 
   describe '#failed_download logging' do
-    let(:error) { Faraday::Error::ClientError.new(nil) }
-
     before {
-      TariffSynchronizer.retry_count = 0
-      TariffSynchronizer.stub(:sync_variables_set?).and_return(true)
+       TariffSynchronizer.retry_count = 0
+       TariffSynchronizer.stub(:sync_variables_set?).and_return(true)
 
-      Faraday::Connection.any_instance.should_receive(:get).and_raise(error)
+       Curl::Easy.any_instance
+                 .should_receive(:perform)
+                 .and_raise(Curl::Err::HostResolutionError)
 
       rescuing { TariffSynchronizer.download }
     }
@@ -228,7 +228,7 @@ describe TariffSynchronizer::Logger, truncation: true do
 
     it 'email includes information about exception' do
       email = ActionMailer::Base.deliveries.last
-      email.encoded.should =~ /Faraday::Error::ClientError/
+      email.encoded.should =~ /Curl::Err::HostResolutionError/
     end
   end
 

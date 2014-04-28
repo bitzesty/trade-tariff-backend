@@ -39,17 +39,15 @@ describe TariffSynchronizer, truncation: true do
     end
 
     context 'with download exceptions' do
-      let(:error) { Faraday::Error::ClientError.new(nil) }
-
       before {
         TariffSynchronizer.should_receive(:sync_variables_set?).and_return(true)
 
-        Faraday::Connection.any_instance
-                           .should_receive(:get)
-                           .and_raise(error) }
+        Curl::Easy.any_instance
+                  .should_receive(:perform)
+                  .and_raise(Curl::Err::HostResolutionError) }
 
       it 'raises original exception ending process' do
-        expect { TariffSynchronizer.download }.to raise_error error.class
+        expect { TariffSynchronizer.download }.to raise_error Curl::Err::HostResolutionError
       end
     end
   end

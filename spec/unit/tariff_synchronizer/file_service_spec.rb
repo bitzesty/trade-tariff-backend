@@ -9,12 +9,8 @@ describe TariffSynchronizer::FileService do
   }
 
   describe '.download_content' do
-    before {
-      Faraday::Connection.any_instance.should_receive(:get).and_raise(error)
-    }
-
-    context 'client error' do
-      let(:error) { Faraday::Error::ClientError.new(nil) }
+    context 'partial content received' do
+      before { Curl::Easy.any_instance.should_receive(:perform).and_raise(Curl::Err::PartialFileError) }
 
       it 'raises DownloadException' do
         expect { klass.download_content("http://localhost:9999/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
@@ -22,15 +18,15 @@ describe TariffSynchronizer::FileService do
     end
 
     context 'unable to connect' do
-      let(:error) { Faraday::Error::ConnectionFailed.new(nil) }
+      before { Curl::Easy.any_instance.should_receive(:perform).and_raise(Curl::Err::ConnectionFailedError) }
 
       it 'raises DownloadException' do
         expect { klass.download_content("http://localhost:9999/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
       end
     end
 
-    context 'resource not found' do
-      let(:error) { Faraday::Error::ResourceNotFound.new(nil) }
+    context 'host resultion error' do
+      before { Curl::Easy.any_instance.should_receive(:perform).and_raise(Curl::Err::HostResolutionError) }
 
       it 'raises DownloadException' do
         expect { klass.download_content("http://localhost:9999/test") }.to raise_error TariffSynchronizer::FileService::DownloadException

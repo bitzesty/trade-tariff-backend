@@ -68,6 +68,7 @@ GEM
     coderay (1.0.9)
     connection_pool (1.2.0)
     crack (0.3.2)
+    curb (0.8.3)
     database_cleaner (1.2.0)
     diff-lcs (1.2.4)
     elasticsearch (0.4.7)
@@ -304,12 +305,12 @@ DEPENDENCIES
   builder
   capistrano
   ci_reporter
+  curb (= 0.8.3)
   database_cleaner
   elasticsearch (= 0.4.7)
   elasticsearch-extensions (= 0.0.12)
   factory_girl_rails
   fakefs
-  faraday (~> 0.8.8)
   forgery
   gds-sso (= 3.1.0)
   guard-rspec
