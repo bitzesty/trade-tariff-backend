@@ -31,6 +31,11 @@ Run the bootstrap command `govuk_puppet`.
 
 2. Ruby 2.0.0
 
+    ```
+    brew install chruby
+    brew install ruby-install
+    ```
+
 ## Load database
 
 Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff-backend/wiki/System-rebuild-procedure), or get a recent database snapshot.
