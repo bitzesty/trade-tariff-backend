@@ -248,7 +248,7 @@ describe GeographicalArea do
           }
 
           it {
-            expect(geographical_area.conformance_errors).to be_empty
+            expect(geographical_area.conformance_errors).to_not have_key(:GA5)
           }
         end
 
@@ -260,7 +260,7 @@ describe GeographicalArea do
           }
 
           it {
-            expect(geographical_area.conformance_errors).to be_empty
+            expect(geographical_area.conformance_errors).to_not have_key(:GA5)
           }
         end
 
@@ -277,7 +277,7 @@ describe GeographicalArea do
           }
 
           it {
-            expect(geographical_area.conformance_errors).to be_empty
+            expect(geographical_area.conformance_errors).to_not have_key(:GA5)
           }
         end
       end
