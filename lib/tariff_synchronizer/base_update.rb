@@ -85,6 +85,10 @@ module TariffSynchronizer
       update(state: APPLIED_STATE, applied_at: Time.now )
     end
 
+    def update_file_size(file_path)
+      update(filesize: File.size(file_path))
+    end
+
     def mark_as_failed
       update(state: FAILED_STATE)
     end
@@ -202,10 +206,9 @@ module TariffSynchronizer
       def create_update_entry(date, state, file_name, filesize = nil)
         find_or_create(
           filename: file_name,
-          filesize: filesize,
           update_type: self.name,
           issue_date: date
-        ).update(state: state)
+        ).update(state: state, filesize: filesize)
       end
 
       def update_path(date, file_name)
@@ -213,7 +216,7 @@ module TariffSynchronizer
       end
 
       def pending_from
-        if last_download = dataset.order(Sequel.desc(:issue_date)).first
+        if last_download = last_pending.first
           last_download.issue_date
         else
          TariffSynchronizer.initial_update_for(update_type)

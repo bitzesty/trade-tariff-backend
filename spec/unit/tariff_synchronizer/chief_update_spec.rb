@@ -60,7 +60,17 @@ describe TariffSynchronizer::ChiefUpdate do
               filename: TariffSynchronizer::ChiefUpdate.file_name_for(example_date)
           }
 
-          it 'does not download CHIEF file for date' do
+          before {
+            TariffSynchronizer::ChiefUpdate.should_receive(
+              :download_content
+            ).with(url).and_return(success_response)
+
+            TariffSynchronizer::ChiefUpdate.download(example_date)
+
+            File.exists?("#{TariffSynchronizer.root_path}/chief/#{TariffSynchronizer::ChiefUpdate.file_name_for(example_date)}").should be_true
+          }
+
+          it 'does not download CHIEF file for date when it exists' do
             TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
                                            .never
 
@@ -68,8 +78,9 @@ describe TariffSynchronizer::ChiefUpdate do
           end
 
           it 'does not create additional ChiefUpdate entries' do
-            TariffSynchronizer::ChiefUpdate.download(example_date)
-            TariffSynchronizer::ChiefUpdate.where(issue_date: example_date).count.should == 1
+            expect {
+              TariffSynchronizer::ChiefUpdate.download(example_date)
+            }.to_not change { TariffSynchronizer::ChiefUpdate.count }
           end
         end
       end

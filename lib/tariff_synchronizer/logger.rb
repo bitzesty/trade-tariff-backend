@@ -88,7 +88,7 @@ module TariffSynchronizer
 
     # Download chief update
     def download_chief(event)
-      info "Downloaded CHIEF update for #{event.payload[:date]}"
+      info "Downloaded CHIEF update for #{event.payload[:date]} at #{event.payload[:url]}, looking for file #{event.payload[:filename]}"
     end
 
     # Apply CHIEF update
