@@ -168,7 +168,9 @@ describe GeographicalArea do
           create(:geographical_area, geographical_code: "1").geographical_area_sid
         }
 
-        it { expect(geographical_area.conformance_errors).to be_empty }
+        it {
+          expect(geographical_area.conformance_errors).to_not have_key(:GA4)
+        }
       end
     end
 
