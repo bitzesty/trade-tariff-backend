@@ -42,7 +42,7 @@ Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff
 
 ## Run Backend
 
-    ./startup.sh
+  govuk_setenv tariff-api bundle exec ./startup.sh
 
 ## Performing daily updates
 
