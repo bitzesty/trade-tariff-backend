@@ -9,17 +9,8 @@ module TariffSynchronizer
         taric_updates_for(date).tap do |taric_updates|
           if taric_updates.any?
             taric_updates.each do |taric_update|
-              instrument("download_taric.tariff_synchronizer",
-                         date: date,
-                         url: taric_update.url) do
-                file_name_for(date, taric_update.file_name).tap do |local_file_name|
-                  unless update_file_exists?(local_file_name)
-                    download_content(taric_update.url).tap { |response|
-                      create_entry(date, response, local_file_name)
-                    }
-                  end
-                end
-              end
+              local_file_name = file_name_for(date, taric_update.file_name)
+              perform_download(local_file_name, taric_update.url, date)
             end
           # We will be retrying a few more times today, so do not create
           # missing record until we are sure

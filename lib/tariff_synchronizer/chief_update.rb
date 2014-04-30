@@ -5,13 +5,8 @@ module TariffSynchronizer
   class ChiefUpdate < BaseUpdate
     class << self
       def download(date)
-        file_name_for(date).tap do |update_file_name|
-          instrument("download_chief.tariff_synchronizer", date: date, filename: update_file_name, url: chief_update_url_for(date)) do
-            download_content(chief_update_url_for(date)).tap { |response|
-              create_entry(date, response, update_file_name)
-            } unless File.exists?(File.join(TariffSynchronizer.root_path, 'chief', update_file_name))
-          end
-        end
+        update_file_name = file_name_for(date)
+        perform_download(update_file_name, chief_update_url_for(date), date)
       end
 
       def update_type

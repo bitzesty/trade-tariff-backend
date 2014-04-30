@@ -63,27 +63,39 @@ describe TariffSynchronizer::TaricUpdate do
           File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_false
         end
       end
+    end
 
-      context 'update already downloaded' do
-        let!(:present_taric_update) {
-          create :taric_update,
-            :applied,
-            issue_date: example_date,
-            filename: TariffSynchronizer::TaricUpdate.file_name_for(example_date, taric_update_name)
-        }
 
-        it 'does not download TARIC file for date' do
-          TariffSynchronizer::TaricUpdate.should_receive(:download_content)
-                                         .with(update_url)
-                                         .never
+    context 'update already downloaded' do
+      let(:query_response)  {
+        build :response, :success, url: taric_query_url, content: taric_update_name
+      }
 
-          TariffSynchronizer::TaricUpdate.download(example_date)
-        end
+      let!(:present_taric_update) {
+        create :taric_update,
+          :applied,
+          issue_date: example_date,
+          filename: TariffSynchronizer::TaricUpdate.file_name_for(example_date, taric_update_name)
+      }
 
-        it 'does not create additional TaricUpdate entries' do
-          TariffSynchronizer::TaricUpdate.download(example_date)
-          TariffSynchronizer::TaricUpdate.where(issue_date: example_date).count.should == 1
-        end
+      before {
+        TariffSynchronizer::TaricUpdate.should_receive(
+          :download_content).with(taric_query_url).and_return(query_response)
+
+        File.new("#{TariffSynchronizer.root_path}/taric/#{TariffSynchronizer::TaricUpdate.file_name_for(example_date, taric_update_name)}", "w").write('abc')
+      }
+
+      it 'does not download TARIC file for date' do
+        TariffSynchronizer::TaricUpdate.should_receive(:download_content)
+                                       .with(update_url)
+                                       .never
+
+        TariffSynchronizer::TaricUpdate.download(example_date)
+      end
+
+      it 'does not create additional TaricUpdate entries' do
+        TariffSynchronizer::TaricUpdate.download(example_date)
+        TariffSynchronizer::TaricUpdate.where(issue_date: example_date).count.should == 1
       end
     end
 
