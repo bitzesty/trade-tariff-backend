@@ -20,6 +20,7 @@ module Sequel
           super
 
           TradeTariffBackend.search_client.delete(self)
+        rescue ::Elasticsearch::Transport::Transport::Errors::NotFound
         end
       end
     end
