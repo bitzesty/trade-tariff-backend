@@ -162,9 +162,26 @@ module TariffSynchronizer
         notify_about_missing_updates if self.order(Sequel.desc(:issue_date)).last(TariffSynchronizer.warning_day_count).all?(&:missing?)
       end
 
+      def find_update(local_file_name, date)
+        find(
+          filename: local_file_name,
+          update_type: self.name,
+          issue_date: date
+        )
+      end
+
       def perform_download(local_file_name, tariff_url, date)
         if File.exists?(update_file_path(local_file_name))
-          create_update_entry(date, BaseUpdate::PENDING_STATE, local_file_name, File.read(update_file_path(local_file_name)).size)
+          if update = find_update(local_file_name, date)
+            update.update(filesize: File.read(update_file_path(local_file_name)).size)
+          else
+            create_update_entry(
+              date,
+              BaseUpdate::PENDING_STATE,
+              local_file_name,
+              File.read(update_file_path(local_file_name)).size
+            )
+          end
           instrument("created_tariff.tariff_synchronizer", date: date, filename: local_file_name, type: update_type)
         else
           instrument("download_tariff.tariff_synchronizer",
