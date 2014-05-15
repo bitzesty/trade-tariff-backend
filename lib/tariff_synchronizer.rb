@@ -175,8 +175,8 @@ module TariffSynchronizer
           end
         else
           # Set all applied Tariff updates to pending if issue_date > DATE
-          TariffSynchronizer::TaricUpdate.applied.where { issue_date > date }.each(&:mark_as_pending)
-          TariffSynchronizer::ChiefUpdate.applied.where { issue_date > date }.each do |chief_update|
+          TariffSynchronizer::TaricUpdate.applied_or_failed.where { issue_date > date }.each(&:mark_as_pending)
+          TariffSynchronizer::ChiefUpdate.applied_or_failed.where { issue_date > date }.each do |chief_update|
             # Remove CHIEF records for specific update
             [Chief::Comm, Chief::Mfcm, Chief::Tame, Chief::Tamf, Chief::Tbl9].each do |chief_model|
               chief_model.where(origin: chief_update.filename).delete
