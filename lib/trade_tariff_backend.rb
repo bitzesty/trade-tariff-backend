@@ -30,7 +30,7 @@ module TradeTariffBackend
     end
 
     def platform
-      ENV["FACTER_govuk_platform"] || Rails.env
+      Rails.env
     end
 
     def deployed_environment

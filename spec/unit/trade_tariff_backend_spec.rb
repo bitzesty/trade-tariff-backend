@@ -31,19 +31,7 @@ describe TradeTariffBackend do
   end
 
   describe '.platform' do
-    context 'FACTER_govuk_platform environment variable available' do
-
-      before { ENV['FACTER_govuk_platform'] = 'production' }
-      after  { ENV['FACTER_govuk_platform'] = nil }
-
-      it 'returns the environment variable value' do
-        expect(TradeTariffBackend.platform).to eq 'production'
-      end
-    end
-
-    context 'FACTER_govuk_platform environment variable unavailable' do
-      before { ENV['FACTER_govuk_platform'] = nil }
-
+    context 'platform should be Rails.env' do
       it 'defaults to Rails.env' do
         expect(TradeTariffBackend.platform).to eq Rails.env
       end
