@@ -59,7 +59,7 @@ module TradeTariffBackend
     end
 
     def with_redis_lock(lock_name = db_lock_key, &block)
-      Redis::Mutex.with_lock(lock_name, expire: 24.hours) { yield }
+      Redis::Mutex.with_lock(lock_name, expire: 1.hour) { yield }
     end
 
     def reindex(indexer = search_client)
