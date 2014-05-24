@@ -156,7 +156,7 @@ module TariffSynchronizer
     TradeTariffBackend.with_redis_lock do
       date = Date.parse(rollback_date.to_s)
       
-      (date..Date.today).each do |date_for_rollback|
+      (date..Date.today).to_a.reverse.each do |date_for_rollback|
         Sequel::Model.db.transaction do
           # Delete all entries in oplog tables with operation > DATE
           oplog_based_models.each do |model|
