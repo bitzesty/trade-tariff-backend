@@ -152,54 +152,53 @@ module TariffSynchronizer
   # Usually you will want to run apply operation after rolling back
   #
   # NOTE: this does not remove records from initial seed
-  def rollback(rollback_date, redownload = false)
+  def rollback(rollback_date, keep = false)
     TradeTariffBackend.with_redis_lock do
       date = Date.parse(rollback_date.to_s)
-      
+
       (date..Date.today).to_a.reverse.each do |date_for_rollback|
         Sequel::Model.db.transaction do
-          # Delete all entries in oplog tables with operation > DATE
           oplog_based_models.each do |model|
-            model.operation_klass.where { operation_date > date_for_rollback }.delete
+            model.operation_klass.where { operation_date > date }.delete
           end
 
-          if redownload
-            # Delete all Tariff updates if issue_date > DATE (includes missing)
-            TariffSynchronizer::TaricUpdate.where { issue_date > date_for_rollback }.delete
-            TariffSynchronizer::ChiefUpdate.where { issue_date > date_for_rollback }.each do |chief_update|
-              # Remove CHIEF records for specific update
+          if keep
+            TariffSynchronizer::TaricUpdate.applied_or_failed.where { issue_date > date }.each do |taric_update|
+              taric_update.mark_as_pending
+              taric_update.clear_applied_at
+            end
+            TariffSynchronizer::ChiefUpdate.applied_or_failed.where { issue_date > date }.each do |chief_update|
+              [Chief::Comm, Chief::Mfcm, Chief::Tame, Chief::Tamf, Chief::Tbl9].each do |chief_model|
+                chief_model.where(origin: chief_update.filename).delete
+              end
+
+              chief_update.mark_as_pending
+              chief_update.clear_applied_at
+            end
+          else
+            TariffSynchronizer::TaricUpdate.where { issue_date > date }.delete
+            TariffSynchronizer::ChiefUpdate.where { issue_date > date }.each do |chief_update|
               [Chief::Comm, Chief::Mfcm, Chief::Tame, Chief::Tamf, Chief::Tbl9].each do |chief_model|
                 chief_model.where(origin: chief_update.filename).delete
               end
 
               chief_update.delete
             end
-          else
-            # Set all applied Tariff updates to pending if issue_date > DATE
-            TariffSynchronizer::TaricUpdate.applied_or_failed.where { issue_date > date_for_rollback }.each(&:mark_as_pending)
-            TariffSynchronizer::ChiefUpdate.applied_or_failed.where { issue_date > date_for_rollback }.each do |chief_update|
-              # Remove CHIEF records for specific update
-              [Chief::Comm, Chief::Mfcm, Chief::Tame, Chief::Tamf, Chief::Tbl9].each do |chief_model|
-                chief_model.where(origin: chief_update.filename).delete
-              end
-
-              chief_update.mark_as_pending
-            end
           end
         end
       end
-
+      
       instrument(
         "rollback.tariff_synchronizer",
         date: date,
-        redownload: redownload
+        keep: keep
       )
     end
   rescue Redis::Mutex::LockError
     instrument(
       "rollback_lock_error.tariff_synchronizer",
       date: rollback_date,
-      redownload: redownload
+      keep: keep
     )
   end
 
