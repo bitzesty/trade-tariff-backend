@@ -64,7 +64,7 @@ Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff
 ### Manual Rollback
 
   ```
-  DATE='2014-01-30' REDOWNLOAD=1 govuk_setenv tariff-api bundle exec rake tariff:sync:rollback
+  DATE='2014-01-30' govuk_setenv tariff-api bundle exec rake tariff:sync:rollback
   ```
 
 ## Notes
