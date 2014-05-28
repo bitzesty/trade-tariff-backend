@@ -310,7 +310,7 @@ describe TariffSynchronizer::Logger, truncation: true do
       it {
         expect {
           taric_update.apply
-        }.to raise_error(Sequel::Rollback)
+        }.to raise_error(TariffImporter::NotFound)
       }
     end
   end

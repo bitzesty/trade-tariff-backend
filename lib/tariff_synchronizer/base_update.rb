@@ -146,12 +146,14 @@ module TariffSynchronizer
       if file_exists?
         import!
       end
-    rescue ChiefImporter::ImportException, TaricImporter::ImportException, TariffImporter::NotFound => e
+    rescue => e
       instrument(
         "failed_update.tariff_synchronizer",
         exception: e, update: self, database_queries: @database_queries
       )
       mark_as_failed
+
+      raise e
     end
 
     class << self
