@@ -95,7 +95,7 @@ describe TariffSynchronizer do
 
     context 'successful run' do
       before {
-        TariffSynchronizer.rollback(Date.new(2010,1,1))
+        TariffSynchronizer.rollback(Date.yesterday)
       }
 
       it 'removes entries from oplog tables' do
@@ -115,7 +115,7 @@ describe TariffSynchronizer do
       before {
         Measure.should_receive(:operation_klass).and_raise(StandardError)
 
-        rescuing { TariffSynchronizer.rollback(Date.new(2010,1,1)) }
+        rescuing { TariffSynchronizer.rollback(Date.yesterday) }
       }
 
       it 'does not remove entries from oplog derived tables' do
@@ -133,7 +133,7 @@ describe TariffSynchronizer do
 
     context 'when forced to redownload' do
       before {
-        TariffSynchronizer.rollback(Date.new(2010,1,1), true)
+        TariffSynchronizer.rollback(Date.yesterday, true)
       }
 
       it 'removes entries from oplog derived tables' do
@@ -151,11 +151,11 @@ describe TariffSynchronizer do
 
     context 'with date passed as string' do
       let!(:older_update)  {
-        create :taric_update, :applied, issue_date: Date.new(2009,10,10)
+        create :taric_update, :applied, issue_date: 2.days.ago
       }
 
       before {
-        TariffSynchronizer.rollback("1/1/2010", true)
+        TariffSynchronizer.rollback(Date.yesterday, true)
       }
 
       it 'removes entries from oplog derived tables' do
