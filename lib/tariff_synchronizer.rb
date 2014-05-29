@@ -159,15 +159,15 @@ module TariffSynchronizer
       (date..Date.today).to_a.reverse.each do |date_for_rollback|
         Sequel::Model.db.transaction do
           oplog_based_models.each do |model|
-            model.operation_klass.where { operation_date > date }.delete
+            model.operation_klass.where { operation_date > date_for_rollback }.delete
           end
 
           if keep
-            TariffSynchronizer::TaricUpdate.applied_or_failed.where { issue_date > date }.each do |taric_update|
+            TariffSynchronizer::TaricUpdate.applied_or_failed.where { issue_date > date_for_rollback }.each do |taric_update|
               taric_update.mark_as_pending
               taric_update.clear_applied_at
             end
-            TariffSynchronizer::ChiefUpdate.applied_or_failed.where { issue_date > date }.each do |chief_update|
+            TariffSynchronizer::ChiefUpdate.applied_or_failed.where { issue_date > date_for_rollback }.each do |chief_update|
               [Chief::Comm, Chief::Mfcm, Chief::Tame, Chief::Tamf, Chief::Tbl9].each do |chief_model|
                 chief_model.where(origin: chief_update.filename).delete
               end
@@ -187,7 +187,7 @@ module TariffSynchronizer
           end
         end
       end
-      
+
       instrument(
         "rollback.tariff_synchronizer",
         date: date,
