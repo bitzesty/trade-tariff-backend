@@ -21,6 +21,7 @@ namespace :tariff do
     desc 'Download pending Taric and CHIEF updates'
     task apply: [:environment, :class_eager_load] do
       # Download pending updates for CHIEF and Taric
+      TariffSynchronizer.check_failures
       TariffSynchronizer.download
       TariffSynchronizer.apply
     end
