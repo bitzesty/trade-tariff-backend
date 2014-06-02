@@ -144,16 +144,17 @@ module TariffSynchronizer
       end
 
       if file_exists?
-        import!
+        Sequel::Model.db.transaction(reraise: true) do
+          Sequel::Model.db.after_rollback { mark_as_failed }
+          import!
+        end
       end
-    rescue => e
+    rescue ChiefImporter::ImportException, TaricImporter::ImportException, TariffImporter::NotFound => e
       instrument(
         "failed_update.tariff_synchronizer",
         exception: e, update: self, database_queries: @database_queries
       )
-      mark_as_failed
-
-      raise e
+      raise Sequel::Rollback
     end
 
     class << self

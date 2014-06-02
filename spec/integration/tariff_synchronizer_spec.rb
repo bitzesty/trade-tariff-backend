@@ -67,9 +67,9 @@ describe TariffSynchronizer do
       end
 
       it 'stops syncing' do
-        expect { TariffSynchronizer.apply }.to raise_error TaricImporter::ImportException
-        taric_update.reload.should be_failed
-        chief_update.reload.should be_pending
+        expect { TariffSynchronizer.apply }.to raise_error Sequel::Rollback
+        taric_update.reload.should_not be_applied
+        chief_update.reload.should_not be_applied
       end
     end
 
@@ -81,9 +81,9 @@ describe TariffSynchronizer do
       end
 
       it 'stops syncing' do
-        expect { TariffSynchronizer.apply }.to raise_error TaricImporter::ImportException
-        taric_update.reload.should be_failed
-        chief_update.reload.should be_pending
+        expect { TariffSynchronizer.apply }.to raise_error Sequel::Rollback
+        taric_update.reload.should_not be_applied
+        chief_update.reload.should_not be_applied
       end
     end
   end
@@ -95,7 +95,7 @@ describe TariffSynchronizer do
 
     context 'successful run' do
       before {
-        TariffSynchronizer.rollback(Date.yesterday)
+        TariffSynchronizer.rollback(Date.new(2010,1,1))
       }
 
       it 'removes entries from oplog tables' do
@@ -115,7 +115,7 @@ describe TariffSynchronizer do
       before {
         Measure.should_receive(:operation_klass).and_raise(StandardError)
 
-        rescuing { TariffSynchronizer.rollback(Date.yesterday) }
+        rescuing { TariffSynchronizer.rollback(Date.new(2010,1,1)) }
       }
 
       it 'does not remove entries from oplog derived tables' do
@@ -133,7 +133,7 @@ describe TariffSynchronizer do
 
     context 'when forced to redownload' do
       before {
-        TariffSynchronizer.rollback(Date.yesterday, true)
+        TariffSynchronizer.rollback(Date.new(2010,1,1), true)
       }
 
       it 'removes entries from oplog derived tables' do
@@ -151,11 +151,11 @@ describe TariffSynchronizer do
 
     context 'with date passed as string' do
       let!(:older_update)  {
-        create :taric_update, :applied, issue_date: 2.days.ago
+        create :taric_update, :applied, issue_date: Date.new(2009,10,10)
       }
 
       before {
-        TariffSynchronizer.rollback(Date.yesterday, true)
+        TariffSynchronizer.rollback("1/1/2010", true)
       }
 
       it 'removes entries from oplog derived tables' do

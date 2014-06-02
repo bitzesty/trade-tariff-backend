@@ -36,8 +36,10 @@ class ChiefTransformer
       end
 
       def persist
-        @measures.each do |candidate_measure|
-          candidate_measure.save if candidate_measure.valid?
+        Sequel::Model.db.transaction do
+          @measures.each do |candidate_measure|
+            candidate_measure.save if candidate_measure.valid?
+          end
         end
       end
     end
