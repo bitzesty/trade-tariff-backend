@@ -46,6 +46,7 @@ class ApplicationController < ActionController::Base
     rescue ArgumentError # empty as_of param means today
       Date.today
   end
+  helper_method :actual_date
 
   def configure_time_machine
     TimeMachine.at(actual_date) do

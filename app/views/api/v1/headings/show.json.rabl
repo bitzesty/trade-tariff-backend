@@ -1,4 +1,5 @@
 object @heading
+cache [ actual_date, @heading ], expires_in: 1.day
 
 attributes :goods_nomenclature_item_id, :description, :bti_url,
            :formatted_description
