@@ -26,8 +26,10 @@ class ChiefTransformer
       def persist
         assign_measure_sid
 
-        @map.each do |association, records|
-          [records].flatten.each(&:save)
+        Sequel::Model.db.transaction do
+          @map.each do |association, records|
+            [records].flatten.each(&:save)
+          end
         end
       end
 

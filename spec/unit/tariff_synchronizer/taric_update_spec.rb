@@ -295,7 +295,7 @@ describe TariffSynchronizer::TaricUpdate do
 
       TariffSynchronizer::TaricUpdate.pending.count.should == 1
 
-      expect { TariffSynchronizer::TaricUpdate.first.apply }.to raise_error TaricImporter::ImportException
+      expect { TariffSynchronizer::TaricUpdate.first.apply }.to raise_error Sequel::Rollback
 
       TariffSynchronizer::TaricUpdate.pending.count.should == 0
       TariffSynchronizer::TaricUpdate.failed.count.should == 1

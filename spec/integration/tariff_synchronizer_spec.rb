@@ -67,9 +67,9 @@ describe TariffSynchronizer do
       end
 
       it 'stops syncing' do
-        expect { TariffSynchronizer.apply }.to raise_error TaricImporter::ImportException
-        taric_update.reload.should be_failed
-        chief_update.reload.should be_pending
+        expect { TariffSynchronizer.apply }.to raise_error Sequel::Rollback
+        taric_update.reload.should_not be_applied
+        chief_update.reload.should_not be_applied
       end
     end
 
@@ -81,9 +81,9 @@ describe TariffSynchronizer do
       end
 
       it 'stops syncing' do
-        expect { TariffSynchronizer.apply }.to raise_error TaricImporter::ImportException
-        taric_update.reload.should be_failed
-        chief_update.reload.should be_pending
+        expect { TariffSynchronizer.apply }.to raise_error Sequel::Rollback
+        taric_update.reload.should_not be_applied
+        chief_update.reload.should_not be_applied
       end
     end
   end
