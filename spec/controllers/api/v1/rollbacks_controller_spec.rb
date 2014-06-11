@@ -37,7 +37,7 @@ describe Api::V1::RollbacksController, "POST to #create", sidekiq: :inline do
     }
 
     it 'returns errors for rollback' do
-      post :create, rollback: { date: '', redownload: '' }
+      post :create, rollback: { date: '', keep: '' }
 
       expect(response.status).to eq 422
       expect(response.body).to match_json_expression response_pattern
@@ -62,7 +62,7 @@ describe Api::V1::RollbacksController, "GET to #index" do
         reason: rollback.reason,
         enqueued_at: rollback.enqueued_at,
         date: rollback.date.to_s,
-        redownload: rollback.redownload
+        keep: rollback.keep
       }.ignore_extra_keys!
     ].ignore_extra_values!
   }

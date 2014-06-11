@@ -47,11 +47,11 @@ module TariffSynchronizer
     end
 
     def rollback(event)
-      info "Rolled back to #{event.payload[:date]}. Forced redownload: #{!!event.payload[:redownload]}"
+      info "Rolled back to #{event.payload[:date]}. Forced keeping records: #{!!event.payload[:keep]}"
     end
 
     def rollback_lock_error(event)
-      warn "Failed to acquire Redis lock for rollback to #{event.payload[:date]}. Redownload: #{event.payload[:download]}"
+      warn "Failed to acquire Redis lock for rollback to #{event.payload[:date]}. Keep records: #{event.payload[:keep]}"
     end
 
     # Update download failed

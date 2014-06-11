@@ -20,7 +20,7 @@ class Rollback < Sequel::Model
   end
 
   def after_create
-    RollbackWorker.perform_async(date, redownload)
+    RollbackWorker.perform_async(date, keep)
   end
 
   def before_create

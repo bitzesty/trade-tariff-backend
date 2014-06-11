@@ -86,7 +86,7 @@ module TariffSynchronizer
     end
 
     def mark_as_applied
-      update(state: APPLIED_STATE, applied_at: Time.now )
+      update(state: APPLIED_STATE, applied_at: Time.now, last_error: nil, last_error_at: nil)
     end
 
     def update_file_size(file_path)
@@ -99,6 +99,10 @@ module TariffSynchronizer
 
     def mark_as_pending
       update(state: PENDING_STATE)
+    end
+
+    def clear_applied_at
+      update(applied_at: nil)
     end
 
     def file_path

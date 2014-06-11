@@ -55,9 +55,9 @@ module TariffSynchronizer
     def self.taric_update_name_for(date)
       taric_query_url = taric_query_url_for(date)
 
-      instrument("get_taric_update_name.tariff_synchronizer",
-                 date: date,
-                 url: taric_query_url) do
+      instrument(
+        "get_taric_update_name.tariff_synchronizer", date: date, url: taric_query_url
+      ) do
         response = download_content(taric_query_url)
         response.content.split("\n").map{|name| name.gsub(/[^0-9a-zA-Z\.]/i, '') } if response.success? && response.content_present?
       end

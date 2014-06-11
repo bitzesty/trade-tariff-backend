@@ -95,7 +95,7 @@ describe TariffSynchronizer do
 
     context 'successful run' do
       before {
-        TariffSynchronizer.rollback(Date.yesterday)
+        TariffSynchronizer.rollback(Date.yesterday, true)
       }
 
       it 'removes entries from oplog tables' do
@@ -115,7 +115,7 @@ describe TariffSynchronizer do
       before {
         Measure.should_receive(:operation_klass).and_raise(StandardError)
 
-        rescuing { TariffSynchronizer.rollback(Date.yesterday) }
+        rescuing { TariffSynchronizer.rollback(Date.yesterday, true) }
       }
 
       it 'does not remove entries from oplog derived tables' do
@@ -131,9 +131,9 @@ describe TariffSynchronizer do
       end
     end
 
-    context 'when forced to redownload' do
+    context 'forced to redownload by default' do
       before {
-        TariffSynchronizer.rollback(Date.yesterday, true)
+        TariffSynchronizer.rollback(Date.yesterday)
       }
 
       it 'removes entries from oplog derived tables' do
@@ -155,7 +155,7 @@ describe TariffSynchronizer do
       }
 
       before {
-        TariffSynchronizer.rollback(Date.yesterday, true)
+        TariffSynchronizer.rollback(Date.yesterday)
       }
 
       it 'removes entries from oplog derived tables' do
