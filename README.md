@@ -22,10 +22,11 @@ Run the bootstrap command `govuk_puppet`.
 
 ### Dependencies (OS X using Homebrew)
 
-1. ElasticSearch & MySQL
+1. ElasticSearch & MySQL & Redis
 
     ```
     brew install elasticsearch
+    brew install redis
     brew install mysql
     ```
 
