@@ -3,10 +3,38 @@ require 'duty_expression_formatter'
 
 describe DutyExpressionFormatter do
   describe '.format' do
+    let(:measurement_unit) {
+      measurement_unit_abbreviation.measurement_unit
+    }
+    let(:unit) {
+      measurement_unit.abbreviation(measurement_unit_qualifier: measurement_unit_qualifier)
+    }
+    let!(:measurement_unit_abbreviation) {
+      create(:measurement_unit_abbreviation, :with_measurement_unit, :include_qualifier)
+    }
+    let!(:measurement_unit_qualifier) {
+      create(:measurement_unit_qualifier, measurement_unit_qualifier_code: measurement_unit_abbreviation.measurement_unit_qualifier)
+    }
+
     context 'for duty expression 99' do
-      it 'return the measurement unit' do
-        DutyExpressionFormatter.format(duty_expression_id: '99',
-                                       measurement_unit: 'abc').should eq 'abc'
+      describe "with qualifier" do
+        it 'return the measurement unit' do
+          DutyExpressionFormatter.format(duty_expression_id: '99',
+                                         measurement_unit: measurement_unit,
+                                         measurement_unit_qualifier: measurement_unit_qualifier).should eq unit
+        end
+      end
+
+      describe "without qualifier" do
+        let!(:measurement_unit_abbreviation) {
+          create(:measurement_unit_abbreviation, :with_measurement_unit)
+        }
+        let(:measurement_unit_qualifier) { nil }
+
+        it "returns unit" do
+          DutyExpressionFormatter.format(duty_expression_id: "99",
+                                         measurement_unit: measurement_unit).should eq unit
+        end
       end
     end
 
@@ -60,17 +88,22 @@ describe DutyExpressionFormatter do
       context 'measurement unit and measurement unit qualifier present' do
         it 'result includes measurement unit and measurement unit qualifier' do
           DutyExpressionFormatter.format(duty_expression_id: '15',
-                                         measurement_unit: 'KG',
-                                         formatted_measurement_unit_qualifier: 'L',
-                                         duty_expression_description: 'abc').should =~ /\/ \(KG\/L\)/
+                                         measurement_unit: measurement_unit,
+                                         measurement_unit_qualifier: measurement_unit_qualifier,
+                                         duty_expression_description: 'abc').should =~ Regexp.new(unit)
         end
       end
 
       context 'just measurement unit present' do
+        let!(:measurement_unit_abbreviation) {
+          create(:measurement_unit_abbreviation, :with_measurement_unit)
+        }
+        let(:measurement_unit_qualifier) { nil }
+
         it 'result includes measurement unit' do
           DutyExpressionFormatter.format(duty_expression_id: '15',
-                                         measurement_unit: 'KG',
-                                         duty_expression_description: 'abc').should =~ /\/ KG/
+                                         measurement_unit: measurement_unit,
+                                         duty_expression_description: 'abc').should =~ Regexp.new(unit)
         end
       end
     end
@@ -118,17 +151,22 @@ describe DutyExpressionFormatter do
       context 'measurement unit and measurement unit qualifier present' do
         it 'result includes measurement unit and measurement unit qualifier' do
           DutyExpressionFormatter.format(duty_expression_id: '66',
-                                         measurement_unit: 'KG',
-                                         formatted_measurement_unit_qualifier: 'L',
-                                         duty_expression_description: 'abc').should =~ /\/ \(KG\/L\)/
+                                         measurement_unit: measurement_unit,
+                                         measurement_unit_qualifier: measurement_unit_qualifier,
+                                         duty_expression_description: 'abc').should =~ Regexp.new(unit)
         end
       end
 
       context 'measurement unit present' do
+        let!(:measurement_unit_abbreviation) {
+          create(:measurement_unit_abbreviation, :with_measurement_unit)
+        }
+        let(:measurement_unit_qualifier) { nil }
+
         it 'result includes measurement unit' do
           DutyExpressionFormatter.format(duty_expression_id: '66',
-                                         measurement_unit: 'KG',
-                                         duty_expression_description: 'abc').should =~ /\/ KG/
+                                         measurement_unit: measurement_unit,
+                                         duty_expression_description: 'abc').should =~ Regexp.new(unit)
         end
       end
     end

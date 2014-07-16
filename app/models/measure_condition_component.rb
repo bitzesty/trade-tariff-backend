@@ -33,8 +33,6 @@ class MeasureConditionComponent < Sequel::Model
 
   delegate :description, :abbreviation, to: :duty_expression, prefix: true
   delegate :abbreviation, to: :monetary_unit, prefix: true, allow_nil: true
-  delegate :formatted_measurement_unit_qualifier, to: :measurement_unit_qualifier, allow_nil: true
-  delegate :description, to: :measurement_unit, prefix: true, allow_nil: true
   delegate :description, to: :monetary_unit, prefix: true, allow_nil: true
 
   def formatted_duty_expression
@@ -45,8 +43,8 @@ class MeasureConditionComponent < Sequel::Model
       duty_amount: duty_amount,
       monetary_unit: monetary_unit_code,
       monetary_unit_abbreviation: monetary_unit_abbreviation,
-      measurement_unit: measurement_unit_description,
-      formatted_measurement_unit_qualifier: formatted_measurement_unit_qualifier
+      measurement_unit: measurement_unit,
+      measurement_unit_qualifier: measurement_unit_qualifier
     })
   end
 end

@@ -13,4 +13,18 @@ class MeasurementUnit < Sequel::Model
   def to_s
     description
   end
+
+  def abbreviation(options={})
+    measurement_unit_abbreviation(options).abbreviation
+  rescue Sequel::RecordNotFound
+    description
+  end
+
+  def measurement_unit_abbreviation(options={})
+    measurement_unit_qualifier = options[:measurement_unit_qualifier]
+    MeasurementUnitAbbreviation.where(
+      measurement_unit_code: measurement_unit_code,
+      measurement_unit_qualifier: measurement_unit_qualifier.try(:measurement_unit_qualifier_code)
+    ).take
+  end
 end

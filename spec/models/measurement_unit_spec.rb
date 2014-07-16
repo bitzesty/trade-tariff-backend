@@ -15,4 +15,32 @@ describe MeasurementUnit do
     # MU2 The start date must be less than or equal to the end date.
     it { should validate_validity_dates }
   end
+
+  describe "#abbreviation" do
+    before {
+      measurement_unit.stub(:measurement_unit_abbreviation) { raise Sequel::RecordNotFound }
+    }
+    it {
+      expect(measurement_unit.abbreviation).to eq(measurement_unit.description)
+    }
+  end
+
+  describe "#measurement_unit_abbreviation" do
+    context "without measurement_unit_abbreviation" do
+      it {
+        expect {
+          measurement_unit.measurement_unit_abbreviation
+        }.to raise_error(Sequel::RecordNotFound)
+      }
+    end
+
+    context "with measurement_unit_abbreviation" do
+      let!(:measurement_unit_abbreviation) {
+        create(:measurement_unit_abbreviation, measurement_unit_code: measurement_unit.measurement_unit_code)
+      }
+      it {
+        expect(measurement_unit.measurement_unit_abbreviation).to eq(measurement_unit_abbreviation)
+      }
+    end
+  end
 end
