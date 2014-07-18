@@ -16,13 +16,14 @@ class DutyExpressionFormatter
       duty_amount = opts[:duty_amount]
       monetary_unit = opts[:monetary_unit_abbreviation].presence || opts[:monetary_unit]
       measurement_unit = opts[:measurement_unit]
-      measurement_unit_qualifier = opts[:formatted_measurement_unit_qualifier]
+      measurement_unit_qualifier = opts[:measurement_unit_qualifier]
+      measurement_unit_abbreviation = measurement_unit.try :abbreviation,
+                                                           measurement_unit_qualifier: measurement_unit_qualifier
 
       output = []
-
       case duty_expression_id
       when "99"
-        output << measurement_unit
+        output << measurement_unit_abbreviation
       when "12", "14", "37", "40", "41", "42", "43", "44", "21", "25", "27", "29"
         if duty_expression_abbreviation.present?
           output << duty_expression_abbreviation
@@ -43,10 +44,12 @@ class DutyExpressionFormatter
         else
           output << "%"
         end
-        if measurement_unit.present? && measurement_unit_qualifier.present?
-          output << "/ (#{measurement_unit}/#{measurement_unit_qualifier})"
-        elsif measurement_unit.present?
-          output << "/ #{measurement_unit}"
+        if measurement_unit_abbreviation.present?
+          if opts[:formatted]
+            output << "/ <abbr title='#{measurement_unit.description}'>#{measurement_unit_abbreviation}</abbr>"
+          else
+            output << "/ #{measurement_unit_abbreviation}"
+          end
         end
       else
         if duty_amount.present?
@@ -62,10 +65,12 @@ class DutyExpressionFormatter
         if monetary_unit.present?
           output << monetary_unit
         end
-        if measurement_unit.present? && measurement_unit_qualifier.present?
-          output << "/ (#{measurement_unit}/#{measurement_unit_qualifier})"
-        elsif measurement_unit.present?
-          output << "/ #{measurement_unit}"
+        if measurement_unit_abbreviation.present?
+          if opts[:formatted]
+            output << "/ <abbr title='#{measurement_unit.description}'>#{measurement_unit_abbreviation}</abbr>"
+          else
+            output << "/ #{measurement_unit_abbreviation}"
+          end
         end
       end
       output.join(" ").html_safe

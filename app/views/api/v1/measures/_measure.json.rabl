@@ -16,6 +16,7 @@ node(:measure_type) { |measure|
 node(:duty_expression) { |measure|
   {
     base: measure.duty_expression,
+    formatted_base: measure.formatted_duty_expression,
     national_measurement_units: measure.national_measurement_units_for(locals[:declarable])
   }
 }

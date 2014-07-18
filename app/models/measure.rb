@@ -311,6 +311,10 @@ class Measure < Sequel::Model
   end
 
   def duty_expression
+    measure_components.map(&:duty_expression_str).join(" ")
+  end
+
+  def formatted_duty_expression
     measure_components.map(&:formatted_duty_expression).join(" ")
   end
 
