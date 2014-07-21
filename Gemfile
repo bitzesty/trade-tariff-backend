@@ -4,7 +4,7 @@ gem "rails", "3.2.17"
 
 gem "addressable", "2.3.2"
 gem "hashie", "2.0.5"
-gem "multi_json", "~> 1.7.7"
+gem "multi_json", "~> 1.7"
 gem "mysql2", "0.3.13"
 gem "sequel-rails", "0.7.0"
 gem "rabl", "0.10.0"
@@ -19,8 +19,8 @@ gem "strong_parameters"
 gem "dalli", "2.7.2"
 gem "builder"
 gem "jquery-rails", "1.0.19"
-gem "plek", "1.0.0"
-gem 'gds-sso', '3.1.0'
+gem "plek", "~> 1.8"
+gem 'gds-sso', '9.3.0'
 gem "railties"
 
 gem "unicorn", "~> 4.6.3"
