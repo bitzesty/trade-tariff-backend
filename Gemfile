@@ -1,5 +1,4 @@
 source "https://rubygems.org"
-source "https://BnrJb6FZyzspBboNJzYZ@gem.fury.io/govuk/"
 
 gem "rails", "3.2.17"
 
@@ -65,8 +64,4 @@ group :test do
   gem "simplecov-rcov"
   gem "webmock"
   gem "database_cleaner"
-end
-
-group :router do
-  gem "router-client", "3.0.1", :require => "router"
 end
