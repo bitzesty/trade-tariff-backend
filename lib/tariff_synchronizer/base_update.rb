@@ -86,7 +86,7 @@ module TariffSynchronizer
     end
 
     def mark_as_applied
-      update(state: APPLIED_STATE, applied_at: Time.now, last_error: nil, last_error_at: nil)
+      update(state: APPLIED_STATE, applied_at: Time.now, last_error: nil, last_error_at: nil, exception_backtrace: nil, exception_class: nil)
     end
 
     def update_file_size(file_path)
@@ -154,6 +154,10 @@ module TariffSynchronizer
         end
       end
     rescue ChiefImporter::ImportException, TaricImporter::ImportException, TariffImporter::NotFound => e
+      update(exception_class: e.class.to_s,
+             exception_backtrace: e.backtrace.join("\n"),
+             exception_queries: @database_queries.join("\n"))
+
       instrument(
         "failed_update.tariff_synchronizer",
         exception: e, update: self, database_queries: @database_queries
