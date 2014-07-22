@@ -201,6 +201,12 @@ describe TariffSynchronizer::Logger, truncation: true do
     it 'email include executed SQL queries' do
       last_email_body.should =~ /SELECT \* FROM/
     end
+
+    it "stores exception" do
+      taric_update.reload.exception_backtrace.should_not be_nil
+      taric_update.reload.exception_class.should_not be_nil
+      taric_update.reload.exception_queries.should_not be_nil
+    end
   end
 
   describe '#failed_download logging' do
