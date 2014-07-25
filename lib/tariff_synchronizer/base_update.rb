@@ -154,6 +154,7 @@ module TariffSynchronizer
         end
       end
     rescue ChiefImporter::ImportException, TaricImporter::ImportException, TariffImporter::NotFound => e
+      e = e.original if e.respond_to?(:original) && e.original
       update(exception_class: e.class.to_s,
              exception_backtrace: e.backtrace.join("\n"),
              exception_queries: @database_queries.join("\n"))
