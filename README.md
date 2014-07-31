@@ -43,7 +43,9 @@ Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff
 
 ## Run Backend
 
-  govuk_setenv tariff-api bundle exec ./startup.sh
+  ```
+  bundle exec ./startup.sh
+  ```
 
 ## Performing daily updates
 
@@ -59,13 +61,13 @@ Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff
 2. Run the sync rake task
 
   ```
-  govuk_setenv tariff-api bundle exec rake tariff:sync:apply
+  bundle exec rake tariff:sync:apply
   ```
 
 ### Manual Rollback
 
   ```
-  DATE='2014-01-30' govuk_setenv tariff-api bundle exec rake tariff:sync:rollback
+  DATE='2014-01-30' bundle exec rake tariff:sync:rollback
   ```
 
 ## Notes
