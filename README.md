@@ -73,6 +73,9 @@ Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff
 * Project does __not__ contain schema.rb, do not use rake db:schema:load. Sequel
 does not yet support view creation via schema file.
 
+* When writing validators in `app/validators` please run the rake task 
+`audit:verify` which runs the validator against existing data.
+
 ## Contributing
 
 Please check out the [Contributing guide](https://github.com/alphagov/trade-tariff-backend/blob/master/CONTRIBUTING.md)
