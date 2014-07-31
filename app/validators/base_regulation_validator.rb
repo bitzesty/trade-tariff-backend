@@ -10,7 +10,7 @@ class BaseRegulationValidator < TradeTariffBackend::Validator
 
   validation :ROIMB4, 'The referenced regulation group must exist', on: [:create, :update] do |record|
     if record.regulation_group_id.present?
-      RegulationGroup.where(oid: record.regulation_group_id).any?
+      RegulationGroup.where(regulation_group_id: record.regulation_group_id).any?
     end
   end
 
