@@ -15,12 +15,12 @@ describe BaseRegulation do
       before { base_regulation.conformant? }
 
       describe "valid" do
-        let(:regulation_group_id) { create(:regulation_group).oid }
+        let(:regulation_group_id) { create(:regulation_group).regulation_group_id }
         it { expect(base_regulation.conformance_errors).to be_empty }
       end
 
       describe "invalid" do
-        let(:regulation_group_id) { 487 }
+        let(:regulation_group_id) { "ACC" }
         it {
           expect(base_regulation.conformance_errors).to have_key(:ROIMB4)
         }
