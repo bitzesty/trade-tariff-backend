@@ -41,6 +41,12 @@ Run the bootstrap command `govuk_puppet`.
 
 Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff-backend/wiki/System-rebuild-procedure), or get a recent database snapshot.
 
+### Load database seeds for development API user
+
+  ```
+  bundle exec rake db:seed
+  ```
+
 ## Run Backend
 
   ```
