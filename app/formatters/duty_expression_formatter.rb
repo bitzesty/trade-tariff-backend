@@ -23,7 +23,11 @@ class DutyExpressionFormatter
       output = []
       case duty_expression_id
       when "99"
-        output << measurement_unit_abbreviation
+        if opts[:formatted]
+          output << "<abbr title='#{measurement_unit.description}'>#{measurement_unit_abbreviation}</abbr>"
+        else
+          output << "#{measurement_unit_abbreviation}"
+        end
       when "12", "14", "37", "40", "41", "42", "43", "44", "21", "25", "27", "29"
         if duty_expression_abbreviation.present?
           output << duty_expression_abbreviation
