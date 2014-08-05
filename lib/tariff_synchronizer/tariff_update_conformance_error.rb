@@ -9,5 +9,13 @@ module TariffSynchronizer
     plugin :serialization, :json, :model_primary_key,
                                   :model_values,
                                   :model_conformance_errors
+
+    def model_primary_key
+      # In some models primary key will be a single value and JSON deserialization
+      # will fail. Return serialized primary key if deserialization fails
+      super
+    rescue JSON::ParserError
+      values[:model_primary_key]
+    end
   end
 end
