@@ -959,4 +959,65 @@ describe Measure do
       end
     end
   end
+
+  describe "#duty_expression_with_national_measurement_units_for ^ #formatted_duty_expression_with_national_measurement_units_for" do
+    let(:commodity) {
+      create :commodity
+    }
+    let(:base) {
+      measure.duty_expression_with_national_measurement_units_for(commodity)
+    }
+    let(:formatted_base) {
+      measure.formatted_duty_expression_with_national_measurement_units_for(commodity)
+    }
+    let(:measure_type) {
+      create :measure_type, :excise
+    }
+    let(:measure) {
+      create :measure, measure_type_id: measure_type.measure_type_id
+    }
+    let(:duty_expression) {
+      create(:duty_expression, :with_description)
+    }
+    let!(:measure_component) {
+      create :measure_component, measure_sid: measure.measure_sid,
+                                 duty_expression_id: duty_expression.duty_expression_id
+    }
+
+    context "without national_measurement_unit" do
+      it {
+        base.should =~ Regexp.new(measure_component.duty_expression_str)
+      }
+      it {
+        formatted_base.should =~ Regexp.new(measure_component.formatted_duty_expression)
+      }
+    end
+
+    context "with national_measurement_unit" do
+      let!(:comm1) { create :comm, cmdty_code: commodity.goods_nomenclature_item_id,
+                                   fe_tsmp: Date.today.ago(2.years),
+                                   le_tsmp: nil,
+                                   uoq_code_cdu2: tbl1.tbl_code,
+                                   uoq_code_cdu3: tbl2.tbl_code }
+      let(:tbl1) { create :tbl9, :unoq, tbl_code: 'aa1' }
+      let(:tbl2) { create :tbl9, :unoq, tbl_code: 'aa2' }
+
+      let(:national_measurement_units) {
+        measure.national_measurement_units_for(commodity)
+      }
+
+      it {
+        base.should =~ Regexp.new(measure_component.duty_expression_str)
+        national_measurement_units.each do |unit|
+          base.should =~ Regexp.new(unit)
+        end
+      }
+      it {
+        formatted_base.should =~ Regexp.new(measure_component.formatted_duty_expression)
+        national_measurement_units.each do |unit|
+          formatted_base.should =~ Regexp.new(unit)
+        end
+      }
+    end
+  end
 end
