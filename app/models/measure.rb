@@ -317,7 +317,7 @@ class Measure < Sequel::Model
   def duty_expression_with_national_measurement_units_for(declarable)
     national_measurement_units = national_measurement_units_for(declarable)
     if national_measurement_units.present?
-      "#{duty_expression} [#{national_measurement_units.join(" - ")}]"
+      "#{duty_expression} (#{national_measurement_units.join(" - ")})"
     else
       duty_expression
     end
@@ -340,7 +340,7 @@ class Measure < Sequel::Model
   def formatted_duty_expression_with_national_measurement_units_for(declarable)
     national_measurement_units = national_measurement_units_for(declarable)
     if national_measurement_units.present?
-      "#{formatted_duty_expression} [#{national_measurement_units.join(" - ")}]"
+      "#{formatted_duty_expression} (#{national_measurement_units.join(" - ")})"
     else
       formatted_duty_expression
     end
