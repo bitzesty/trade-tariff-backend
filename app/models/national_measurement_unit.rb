@@ -8,7 +8,7 @@ class NationalMeasurementUnit
   end
 
   def description
-    description_map.fetch(measurement_unit_code, @description.to_s.downcase.titlecase)
+    self.class.description_map.fetch(measurement_unit_code, nil)
   end
 
   def present?
@@ -19,9 +19,7 @@ class NationalMeasurementUnit
     description
   end
 
-  private
-
-  def description_map
+  def self.description_map
     {
      '048' => 'Hectokilogram Net Dry Matter (100kg/net mas)',
      '066' => 'Litre of Alcohol',

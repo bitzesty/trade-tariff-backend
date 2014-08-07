@@ -898,8 +898,8 @@ describe Measure do
         let(:commodity) { create :commodity }
 
         context 'declarable has national measurement unit set associated' do
-          let(:tbl1) { create :tbl9, :unoq, tbl_code: 'aa1' }
-          let(:tbl2) { create :tbl9, :unoq, tbl_code: 'aa2' }
+          let(:tbl1) { create :tbl9, :unoq }
+          let(:tbl2) { create :tbl9, :unoq }
           let!(:comm1) { create :comm, cmdty_code: commodity.goods_nomenclature_item_id,
                                       fe_tsmp: Date.today.ago(2.years),
                                       le_tsmp: nil,

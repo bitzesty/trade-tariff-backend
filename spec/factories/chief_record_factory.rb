@@ -410,9 +410,13 @@ FactoryGirl.define do
   end
 
   factory :tbl9, class: Chief::Tbl9 do
-    tbl_code { 3.times.map{ Random.rand(9) }.join }
     txtlnno  { 1 }
-    tbl_txt  { Forgery(:basic).text }
+    tbl_code { NationalMeasurementUnit.description_map.keys.sample }
+    tbl_txt  {
+      NationalMeasurementUnit.description_map.fetch(tbl_code) {
+        Forgery(:basic).text # random if not found on map
+      }
+    }
 
     trait :unoq do
       tbl_type { 'UNOQ' }
