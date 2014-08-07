@@ -16,9 +16,6 @@ script:
  - RAILS_ENV=test bundle exec rake spec
 rvm:
   - 2.1.2
-matrix:
-  allow_failures:
-    - rvm: 2.0.0
 branches:
   except:
     - release
