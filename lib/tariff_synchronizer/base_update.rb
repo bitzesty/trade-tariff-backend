@@ -6,6 +6,8 @@ module TariffSynchronizer
 
     set_dataset db[:tariff_updates]
 
+    one_to_many :conformance_errors, class: TariffUpdateConformanceError, key: :tariff_update_filename
+
     plugin :timestamps
     plugin :single_table_inheritance, :update_type
     plugin :validation_class_methods
@@ -129,7 +131,7 @@ module TariffSynchronizer
       # Based on http://goo.gl/vpTFyT (SequelRails LogSubscriber)
       @database_queries = RingBuffer.new(10)
 
-      ActiveSupport::Notifications.subscribe /sql\.sequel/ do |*args|
+      sql_subscriber = ActiveSupport::Notifications.subscribe /sql\.sequel/ do |*args|
         event = ActiveSupport::Notifications::Event.new(*args)
 
         binds = unless event.payload.fetch(:binds, []).blank?
@@ -147,6 +149,19 @@ module TariffSynchronizer
         )
       end
 
+      # Subscribe to conformance errors and save them to DB
+      conformance_errors_subscriber = ActiveSupport::Notifications.subscribe /conformance_error/ do |*args|
+        event = ActiveSupport::Notifications::Event.new(*args)
+        record = event.payload[:record]
+        TariffUpdateConformanceError.create(
+          base_update: self,
+          model_name: record.class.to_s,
+          model_primary_key: record.pk,
+          model_values: record.values,
+          model_conformance_errors: record.conformance_errors
+        )
+      end
+
       if file_exists?
         Sequel::Model.db.transaction(reraise: true) do
           Sequel::Model.db.after_rollback { mark_as_failed }
@@ -155,7 +170,7 @@ module TariffSynchronizer
       end
     rescue ChiefImporter::ImportException, TaricImporter::ImportException, TariffImporter::NotFound => e
       e = e.original if e.respond_to?(:original) && e.original
-      update(exception_class: e.class.to_s,
+      update(exception_class: e.class.to_s + " " + e.message.to_s,
              exception_backtrace: e.backtrace.join("\n"),
              exception_queries: @database_queries.join("\n"))
 
@@ -164,6 +179,9 @@ module TariffSynchronizer
         exception: e, update: self, database_queries: @database_queries
       )
       raise Sequel::Rollback
+    ensure
+      ActiveSupport::Notifications.unsubscribe(sql_subscriber)
+      ActiveSupport::Notifications.unsubscribe(conformance_errors_subscriber)
     end
 
     class << self
