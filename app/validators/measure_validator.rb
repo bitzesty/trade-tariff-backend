@@ -1,6 +1,6 @@
 class MeasureValidator < TradeTariffBackend::Validator
   validation :ME1, 'The combination of measure type + geographical area + goods nomenclature item id + additional code type + additional code + order number + reduction indicator + start date must be unique.', on: [:create, :update] do
-    validates :uniqueness, of: [:measure_type_id, :geographical_area_sid, :goods_nomenclature_sid, :export_refund_nomenclature_sid, :additional_code_type_id, :additional_code_id, :ordernumber, :reduction_indicator, :validity_start_date]
+    validates :uniqueness, of: [:measure_type_id, :geographical_area_sid, :goods_nomenclature_sid, :additional_code_type_id, :additional_code_id, :ordernumber, :reduction_indicator, :validity_start_date]
   end
 
   validation :ME2, 'The measure type must exist.', on: [:create, :update] do
