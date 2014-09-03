@@ -468,9 +468,9 @@ describe Measure do
     it { should validate_uniqueness.of([:measure_type_id,
                                         :geographical_area_sid,
                                         :goods_nomenclature_sid,
-                                        :export_refund_nomenclature_sid,
                                         :additional_code_type_id,
-                                        :additional_code_id, :ordernumber,
+                                        :additional_code_id, 
+                                        :ordernumber,
                                         :reduction_indicator,
                                         :validity_start_date]) }
     # ME4 ME5
