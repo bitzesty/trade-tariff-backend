@@ -1,0 +1,31 @@
+db:
+  image: "orchardup/mysql"
+  ports:
+    - "3306"
+  environment:
+    MYSQL_DATABASE: "tariff_development"
+    MYSQL_USER: "tariff"
+    MYSQL_PASSWORD: "tariff"
+redis:
+  image: "dockerfile/redis"
+  ports:
+    - "6379"
+elasticsearch:
+  image: "dockerfile/elasticsearch"
+  ports:
+    - "9200"
+api:
+  build: .
+  command: "bash ./fig.sh"
+  volumes:
+    - ".:/trade-tariff-backend"
+  ports:
+    - "3018:3018"
+  links:
+    - "db"
+    - "redis"
+    - "elasticsearch"
+  hostname: "tariff-api.dev.gov.uk"
+  domainname: "tariff-api.dev.gov.uk"
+  environment:
+    RAILS_ENV: "development"
