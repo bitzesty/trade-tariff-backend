@@ -76,6 +76,90 @@ Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff
   DATE='2014-01-30' bundle exec rake tariff:sync:rollback
   ```
 
+## Development with Docker and Fig
+
+### Fig / Docker setup
+
+#### 1. Install docker and fig
+   Check out [Install Guide](http://www.fig.sh/install.html)
+
+#### 2. Build fig in app root.
+   ##### NOTE: you also need to setup frontend and admin apps with docker before.
+   * [Trade Tariff Frontend](https://github.com/alphagov/trade-tariff-frontend)
+   * [Trade Tariff Admin](https://github.com/alphagov/trade-tariff-admin)
+
+   ##### NOTE: can take some time to download and build some docker images
+
+   ```
+   fig build && fig up -d && chmod -x docker_ips.sh && sudo bash docker_ips.sh
+
+   # NOTE: it's important to run 'sudo bash docker_ips.sh', because IPs of docker containers are dynamic
+   # and will be changed anytime you run 'fig start' or 'fig up'
+   ```
+
+#### 3. Prepare database in api docker containers:
+   ```
+   fig run api bundle exec db:create db:migrate db:seed
+   ```
+
+#### 4. Now you can open in browser:
+   ##### [API Root](http://tariff-api.dev.gov.uk:3018)
+   ##### [FRONTEND Root](http://tariff.dev.gov.uk:3017)
+   ##### [ADMIN Root](http://tariff-admin.dev.gov.uk:3046)
+
+### Development via Docker / Fig
+
+#### Deploy latest version of app to docker / fig container
+
+   NOTE: it's important to pass '--no-recreate' option for 'fig up' command.
+         By default 'fig up' will recreate all environment (including database)
+
+   ```
+   fig stop && fig up -d --no-recreate && sudo bash docker_ips.sh
+   ```
+
+#### Start / stop server
+
+   ```
+   fig stop
+   fig start && sudo bash docker_ips.sh
+   ```
+
+#### Run db migrations / rake tasks
+
+   ```
+   fig run api bundle exec rake db:migrate
+   ```
+
+#### Rails console
+
+   ```
+   fig run api bundle exec rails console
+   ```
+
+#### View app logs
+
+   ```
+   fig logs api
+   ```
+
+#### Run Rspec tests
+
+   ```
+   fig run api bundle exec rake spec
+   ```
+
+#### SSH to docker app
+ 
+   ```
+   $ fig run api /bin/sh
+   root@af8bae53bdd3:/#
+
+   # when you're done you can use the exit command to finish.
+   # root@af8bae53bdd3:/# exit
+   ```
+
+
 ## Notes
 
 * Project does __not__ contain schema.rb, do not use rake db:schema:load. Sequel
