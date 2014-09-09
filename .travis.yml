@@ -1,11 +1,10 @@
 language: ruby
+cache: bundler
 env: GOVUK_APP_DOMAIN=test
 bundler_args: --without development
 before_script:
    - mysql -e 'CREATE DATABASE tariff_test;'
 before_install:
-   - sudo apt-get update -qq
-   - sudo apt-get install -qq wbritish
    - cp config/database.travis.yml config/database.yml
 services:
  - elasticsearch
