@@ -1,7 +1,7 @@
 db:
   image: "orchardup/mysql"
   ports:
-    - "3306"
+    - "127.0.0.1:3306:3306"
   environment:
     MYSQL_DATABASE: "tariff_development"
     MYSQL_USER: "tariff"
@@ -9,11 +9,11 @@ db:
 redis:
   image: "dockerfile/redis"
   ports:
-    - "6379"
+    - "6379:6379"
 elasticsearch:
   image: "dockerfile/elasticsearch"
   ports:
-    - "9200"
+    - "9200:9200"
 api:
   build: .
   command: "bash ./fig.sh"
