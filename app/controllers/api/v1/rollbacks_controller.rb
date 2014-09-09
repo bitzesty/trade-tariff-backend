@@ -4,7 +4,7 @@ module Api
       before_filter :authenticate_user!
 
       def index
-        @rollback_jobs = Rollback.all
+        @rollback_jobs = Rollback.descending
       end
 
       def create
