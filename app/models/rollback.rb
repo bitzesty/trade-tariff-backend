@@ -1,5 +1,11 @@
 class Rollback < Sequel::Model
 
+  dataset_module do
+    def descending
+      order(Sequel.desc(:date))
+    end
+  end
+  
   private
 
   def validate
