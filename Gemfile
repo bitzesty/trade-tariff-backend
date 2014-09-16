@@ -27,7 +27,7 @@ gem "curb", "0.8.3"
 gem "nokogiri", "1.5.4"
 
 gem "whenever", "~> 0.9.2"
-gem "airbrake", "3.1.16"
+gem "sentry-raven", git: "https://github.com/getsentry/raven-ruby.git"
 gem "aws-ses", require: "aws/ses" #used for sync emails
 gem "logstasher", "0.4.8"
 gem "foreman"
