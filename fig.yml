@@ -16,7 +16,7 @@ elasticsearch:
     - "9200:9200"
 api:
   build: .
-  command: "bash ./fig.sh"
+  command: "/sbin/my_init -- bash -l ./fig.sh"
   volumes:
     - ".:/trade-tariff-backend"
   ports:
