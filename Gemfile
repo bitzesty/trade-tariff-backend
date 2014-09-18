@@ -32,6 +32,7 @@ gem "whenever", "~> 0.9.2"
 gem "airbrake", "3.1.16"
 gem "aws-ses", require: "aws/ses" #used for sync emails
 gem "logstasher", "0.4.8"
+gem "foreman"
 
 group :assets do
   gem "bootstrap-sass"
