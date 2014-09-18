@@ -30,6 +30,7 @@ gem "whenever", "~> 0.9.2"
 gem "airbrake", "3.1.16"
 gem "aws-ses", require: "aws/ses" #used for sync emails
 gem "logstasher", "0.4.8"
+gem "foreman"
 
 gem "sass-rails", "~> 4.0.3"
 gem "therubyracer", "0.12.0"
