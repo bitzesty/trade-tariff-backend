@@ -118,11 +118,13 @@ module TariffSynchronizer
     applied_updates = []
     unconformant_records = []
 
+    #We are using redis locking to avoid running this task for many workers simultanously
     TradeTariffBackend.with_redis_lock do
       # We will be fetching updates from Taric and modifying primary keys
       # so unrestrict it for all models.
       Sequel::Model.descendants.each(&:unrestrict_primary_key)
 
+      #If any failure is raised, sync process is stopped (should be manually fixed)
       check_failures
 
       subscribe /conformance_error/ do |*args|
@@ -130,7 +132,9 @@ module TariffSynchronizer
         unconformant_records << event.payload[:record]
       end
 
+      #Updating day-by-day since last pending update up to today or the date given in env var
       update_range_in_days.each do |day|
+        #Should be in this specific order, Taric first, then Chief
         applied_updates << perform_update(TaricUpdate, day)
         applied_updates << perform_update(ChiefUpdate, day)
       end
