@@ -74,7 +74,7 @@ Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff
 
 - checking failures (check tariff_synchronizer.rb) - if any of updates failed in the past, sync process will not proceed
 - downloading missing files up to Date.today (check base_update.rb and download methods in taric_update.rb and chief_update.rb)
-- applying downloaded files (applying measures, etc. taric first, then chef)
+- applying downloaded files (applying measures, etc. TARIC first, then CHIEF)
 
 Applying downloaded CSV files is the most confusing and buggy part.
 Updates are performed in portions and protected by redis lock (see TariffSynchronizer#apply).
@@ -83,15 +83,15 @@ BaseUpdate#apply is responsible for most of the logging/checking job and running
 #import! methods located in Taric/ChiefUpdate classes. Then it runs TaricImporter
 and ChiefImporter to parse and store xml/csv files.
 
-Whole process is quite similar for both taric and chief, but Chief updates also does
+Whole process is quite similar for both TARIC and CHIEF, but CHIEF updates also does
 transformation process at the end. Check ChiefTransformer class for more info (and ChiefUpdate#import!).
 
-In case of any errors, changes (per single update) are rollbacked and record itself is marked as failed.
+In case of any errors, changes (per single update) are roll-backed and record itself is marked as failed.
 
 ### Manual Rollback
 
-  Keep in mind that there are two ways of rollbacking, one with keeping updates stored in db, and another one without.
-  The default one is to remove taric/chief updates and transformations.
+  Keep in mind that there are two ways of rolling-back, one with keeping the intermediary updates stored in db, and another one without.
+  The default option is to remove TARIC/CHIEF updates and data transformations. 
 
   ```
   DATE='2014-01-30' bundle exec rake tariff:sync:rollback
