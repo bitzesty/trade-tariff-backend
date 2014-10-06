@@ -55,11 +55,11 @@ module TariffSynchronizer
   mattr_accessor :chief_update_url_template
   self.chief_update_url_template = "%{host}/taric/%{file_name}"
 
-  # Taric query url template
+  # TARIC query url template
   mattr_accessor :taric_query_url_template
   self.taric_query_url_template = "%{host}/taric/TARIC3%{date}"
 
-  # Taric update url template
+  # TARIC update url template
   mattr_accessor :taric_update_url_template
   self.taric_update_url_template = "%{host}/taric/%{file_name}"
 
@@ -69,7 +69,7 @@ module TariffSynchronizer
 
   delegate :instrument, :subscribe, to: ActiveSupport::Notifications
 
-  # Download pending updates for Taric and National data
+  # Download pending updates for TARIC and CHIEF data
   # Gets latest downloaded file present in (inbox/failbox/processed) and tries
   # to download any further updates to current day.
   def download
@@ -118,11 +118,15 @@ module TariffSynchronizer
     applied_updates = []
     unconformant_records = []
 
+    # The sync task is run on multiple machines to avoid more than on process
+    # running the apply task it is wrapped with a redis lock
     TradeTariffBackend.with_redis_lock do
-      # We will be fetching updates from Taric and modifying primary keys
-      # so unrestrict it for all models.
+
+      # Updates could be modifying primary keys so unrestricted it for all models.
       Sequel::Model.descendants.each(&:unrestrict_primary_key)
 
+      # If there is an existing failed update and error is raised
+      # There needs to be as manual rollback to clear the error
       check_failures
 
       subscribe /conformance_error/ do |*args|
@@ -130,7 +134,9 @@ module TariffSynchronizer
         unconformant_records << event.payload[:record]
       end
 
+      # Updates are run since the last pending update, to today or to ENV['DATE']
       update_range_in_days.each do |day|
+        # TARIC updates should be applied before CHIEF
         applied_updates << perform_update(TaricUpdate, day)
         applied_updates << perform_update(ChiefUpdate, day)
       end
@@ -149,7 +155,6 @@ module TariffSynchronizer
   end
 
   # Restore database to specific date in the past
-  # Usually you will want to run apply operation after rolling back
   #
   # NOTE: this does not remove records from initial seed
   def rollback(rollback_date, keep = false)

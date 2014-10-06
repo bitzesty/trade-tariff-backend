@@ -163,8 +163,12 @@ module TariffSynchronizer
       end
 
       if file_exists?
+
         Sequel::Model.db.transaction(reraise: true) do
-          Sequel::Model.db.after_rollback { mark_as_failed }
+          # If a error is raised during import, the transaction is roll-backed
+          # we then run this block afterwards to mark the update as failed
+          Sequel::Model.db.after_rollback { mark_as_failed } 
+
           import!
         end
       end
