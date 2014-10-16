@@ -2,8 +2,8 @@
 
 debug_redis = false
 
-url = if ENV['TARIFFDOCKER_REDIS_1_PORT_6379_TCP'].present?
-    ENV['TARIFFDOCKER_REDIS_1_PORT_6379_TCP']
+url = if ENV['REDIS_1_PORT_6379_TCP'].present?
+    ENV['REDIS_1_PORT_6379_TCP']
   else
     "redis://localhost:6379"
   end
