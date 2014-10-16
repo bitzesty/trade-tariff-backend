@@ -6,11 +6,11 @@ development: &default
   single_threaded: true
   username: tariff
   password: tariff
-  <% if ENV['TARIFFDOCKER_DB_1_PORT_3306_TCP_ADDR'].present? %>
-  host: <%= ENV['TARIFFDOCKER_DB_1_PORT_3306_TCP_ADDR'] %>
+  <% if ENV['DB_1_PORT_3306_TCP_ADDR'].present? %>
+  host: <%= ENV['DB_1_PORT_3306_TCP_ADDR'] %>
   <% end %>
-  <% if ENV['TARIFFDOCKER_DB_1_PORT_3306_TCP_PORT'].present? %>
-  port: <%= ENV['TARIFFDOCKER_DB_1_PORT_3306_TCP_PORT'] %>
+  <% if ENV['DB_1_PORT_3306_TCP_PORT'].present? %>
+  port: <%= ENV['DB_1_PORT_3306_TCP_PORT'] %>
   <% end %>
 
 test:
