@@ -95,7 +95,11 @@ module TradeTariffBackend
     end
 
     def search_host
-      @search_host ||= "http://localhost:#{search_port}"
+      @search_host ||= if ENV["ELASTICSEARCH_1_PORT_9200_TCP"].present?
+        "http://#{ENV["ELASTICSEARCH_1_PORT_9200_TCP_ADDR"]}:#{ENV["ELASTICSEARCH_1_PORT_9200_TCP_PORT"]}"
+      else
+        "http://localhost:#{search_port}"
+      end
     end
     attr_writer :search_host
 
