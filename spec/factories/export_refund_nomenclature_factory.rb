@@ -2,7 +2,7 @@ FactoryGirl.define do
   sequence(:export_refund_nomenclature_sid) { |n| n }
 
   factory :export_refund_nomenclature do
-    ignore do
+    transient do
       indents { 1 }
     end
 
@@ -38,7 +38,7 @@ FactoryGirl.define do
   end
 
   factory :export_refund_nomenclature_description do
-    ignore do
+    transient do
       validity_start_date { Date.today.ago(3.years) }
       validity_end_date { nil }
       valid_at Time.now.ago(2.years)

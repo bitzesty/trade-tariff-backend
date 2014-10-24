@@ -65,5 +65,5 @@ TradeTariffBackend::Application.routes.draw do
 
   root to: 'home#show'
 
-  match '*path', to: 'home#not_found'
+  get '*path', to: 'home#not_found'
 end

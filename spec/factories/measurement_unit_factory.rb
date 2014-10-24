@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :measurement_unit do
-    ignore do
+    transient do
       description { Forgery(:basic).text }
     end
 

@@ -2,7 +2,7 @@ FactoryGirl.define do
   sequence(:footnote_sid) { |n| n}
 
   factory :footnote do
-    ignore do
+    transient do
       valid_at Date.today.ago(2.years)
       valid_to nil
       goods_nomenclature_sid { generate(:goods_nomenclature_sid) }
@@ -52,7 +52,7 @@ FactoryGirl.define do
   end
 
   factory :footnote_description do
-    ignore do
+    transient do
       valid_at Date.today.ago(2.years)
       valid_to nil
     end

@@ -2,7 +2,7 @@ FactoryGirl.define do
   sequence(:certificate_sid) { |n| n}
 
   factory :certificate do
-    ignore do
+    transient do
       description { Forgery(:basic).text }
     end
 
@@ -21,7 +21,7 @@ FactoryGirl.define do
   end
 
   factory :certificate_description do
-    ignore do
+    transient do
       valid_at Time.now.ago(2.years)
       valid_to nil
     end
@@ -43,7 +43,7 @@ FactoryGirl.define do
   end
 
   factory :certificate_type do
-    ignore do
+    transient do
       description { Forgery(:basic).text }
     end
 

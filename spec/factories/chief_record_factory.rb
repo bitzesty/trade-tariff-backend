@@ -9,7 +9,7 @@ FactoryGirl.define do
     audit_tsmp { nil }
     cmdty_code { 10.times.map{ Random.rand(9) }.join }
 
-    ignore do
+    transient do
       measure_type_id { ChiefTransformer::CandidateMeasure::NATIONAL_MEASURE_TYPES.sample }
     end
 
@@ -329,7 +329,7 @@ FactoryGirl.define do
   end
 
   factory :base_update, class: TariffSynchronizer::BaseUpdate do
-    ignore do
+    transient do
       example_date { Forgery(:date).date }
     end
 

@@ -42,7 +42,7 @@ FactoryGirl.define do
   end
 
   factory :geographical_area_description do
-    ignore do
+    transient do
       valid_at Time.now.ago(2.years)
       valid_to nil
     end
@@ -70,4 +70,3 @@ FactoryGirl.define do
     validity_end_date                        { nil }
   end
 end
-
