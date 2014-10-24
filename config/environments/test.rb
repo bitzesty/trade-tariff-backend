@@ -35,6 +35,8 @@ TradeTariffBackend::Application.configure do
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
 
+  config.eager_load = false
+
   # This is required for Plek 1.x, but we don't want to have to set it
   # when running the tests.
   if ENV['GOVUK_APP_DOMAIN'].blank?
