@@ -43,7 +43,6 @@ GEM
       mail (> 2.2.5)
       mime-types
       xml-simple
-    bootstrap-sass (2.1.0.0)
     brakeman (1.7.0)
       activesupport
       erubis (~> 2.6)
@@ -135,9 +134,6 @@ GEM
     hike (1.2.3)
     hitimes (1.2.2)
     i18n (0.6.11)
-    jquery-rails (3.1.2)
-      railties (>= 3.0, < 5.0)
-      thor (>= 0.14, < 2.0)
     json (1.8.1)
     json_expressions (0.8.3)
     json_pure (1.8.1)
@@ -328,7 +324,6 @@ DEPENDENCIES
   addressable (= 2.3.2)
   ansi
   aws-ses
-  bootstrap-sass
   brakeman (= 1.7.0)
   builder
   capistrano
@@ -344,7 +339,6 @@ DEPENDENCIES
   gds-sso (= 9.3.0)
   guard-rspec
   hashie (= 2.0.5)
-  jquery-rails
   json_expressions
   logstasher (= 0.4.8)
   minitest (~> 5.4.2)
