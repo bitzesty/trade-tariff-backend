@@ -18,6 +18,7 @@ gem "elasticsearch-extensions", "0.0.12"
 gem "yajl-ruby", "1.2.0", require: "yajl"
 gem "dalli", "2.7.2"
 gem "builder"
+gem "jquery-rails"
 gem "plek", "~> 1.8"
 gem 'gds-sso', '9.3.0'
 gem "railties"
@@ -33,6 +34,7 @@ gem "aws-ses", require: "aws/ses" #used for sync emails
 gem "logstasher", "0.4.8"
 gem "foreman"
 
+gem "bootstrap-sass"
 gem "sass-rails", "~> 4.0.3"
 gem "therubyracer", "0.12.0"
 gem "uglifier", "~> 2.5.3"
