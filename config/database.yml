@@ -16,3 +16,6 @@ development: &default
 test:
   <<: *default
   database: tariff_test
+
+docker:
+  <<: *default
