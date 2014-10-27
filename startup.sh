@@ -1,5 +1,6 @@
 #!/bin/bash
+export RAILS_ENV=docker
 bundle install
 bundle exec whenever --update-crontab
-bundle exec unicorn -p 3018
+bundle exec foreman start
 exit 0
