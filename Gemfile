@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "rails", "3.2.19"
+gem "rails", "~> 4.1.6"
 
 gem "addressable", "2.3.2"
 gem "hashie", "2.0.5"
@@ -15,10 +15,8 @@ gem "sidekiq", "2.17.2"
 gem "elasticsearch", "0.4.7"
 gem "elasticsearch-extensions", "0.0.12"
 gem "yajl-ruby", "1.2.0", require: "yajl"
-gem "strong_parameters"
 gem "dalli", "2.7.2"
 gem "builder"
-gem "jquery-rails", "1.0.19"
 gem "plek", "~> 1.8"
 gem 'gds-sso', '9.3.0'
 gem "railties"
@@ -33,12 +31,9 @@ gem "airbrake", "3.1.16"
 gem "aws-ses", require: "aws/ses" #used for sync emails
 gem "logstasher", "0.4.8"
 
-group :assets do
-  gem "bootstrap-sass"
-  gem "sass-rails"
-  gem "therubyracer", "0.12.0"
-  gem "uglifier"
-end
+gem "sass-rails", "~> 4.0.3"
+gem "therubyracer", "0.12.0"
+gem "uglifier", "~> 2.5.3"
 
 group :development do
   gem "capistrano"
@@ -53,11 +48,12 @@ end
 
 group :test do
   gem "brakeman", "1.7.0"
-  gem "ci_reporter"
+  gem "ci_reporter_rspec"
   gem "factory_girl_rails"
   gem "fakefs", require: "fakefs/safe"
   gem "forgery"
   gem "json_expressions"
+  gem "minitest", "~> 5.4.2"
   gem "rspec-rails", "~> 2.14.0"
   gem "shoulda-matchers", "~> 2.0.0"
   gem "simplecov"

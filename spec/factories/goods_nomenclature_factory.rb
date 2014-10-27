@@ -2,7 +2,7 @@ FactoryGirl.define do
   sequence(:goods_nomenclature_sid) { |n| n}
 
   factory :goods_nomenclature do
-    ignore do
+    transient do
       indents { 1 }
       description { Forgery(:basic).text }
     end
@@ -123,7 +123,7 @@ FactoryGirl.define do
   end
 
   factory :goods_nomenclature_description do
-    ignore do
+    transient do
       validity_start_date { Date.today.ago(3.years) }
       validity_end_date { nil }
     end

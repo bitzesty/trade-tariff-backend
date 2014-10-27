@@ -4,7 +4,7 @@ FactoryGirl.define do
   sequence(:measure_condition_sid) { |n| n}
 
   factory :measure do |f|
-    ignore do
+    transient do
       type_explosion_level { 10 }
       gono_number_indents { 1 }
       gono_producline_suffix { "80" }
@@ -107,7 +107,7 @@ FactoryGirl.define do
   end
 
   factory :measure_type do
-    ignore do
+    transient do
       measure_type_description { Forgery(:basic).text }
     end
 

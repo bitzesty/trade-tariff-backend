@@ -69,7 +69,7 @@ module Chief
     #
     # More info https://www.pivotaltracker.com/story/show/59551288
     def duty_type_components
-      if duty_type == '30' && tty_code.to_s.in?('570', '551')
+      if duty_type == '30' && tty_code.to_s.in?(['570', '551'])
         [
           MeasureComponent.new do |mc|
             mc.duty_amount = 0.0
