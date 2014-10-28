@@ -2,7 +2,7 @@ class Rollback < Sequel::Model
 
   dataset_module do
     def descending
-      order(Sequel.desc(:date))
+      order(Sequel.desc(:id))
     end
   end
   
