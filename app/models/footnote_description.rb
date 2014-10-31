@@ -1,5 +1,5 @@
 class FootnoteDescription < Sequel::Model
-  include Models::Formatter
+  include Formatter
 
   plugin :time_machine
   plugin :oplog, primary_key: [:footnote_description_period_sid,
