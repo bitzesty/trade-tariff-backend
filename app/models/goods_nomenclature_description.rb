@@ -2,7 +2,7 @@ require 'time_machine'
 require 'formatter'
 
 class GoodsNomenclatureDescription < Sequel::Model
-  include Models::Formatter
+  include Formatter
 
   plugin :time_machine
   plugin :oplog, primary_key: [:goods_nomenclature_sid,
@@ -24,5 +24,3 @@ class GoodsNomenclatureDescription < Sequel::Model
     description
   end
 end
-
-

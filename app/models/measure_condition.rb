@@ -1,7 +1,7 @@
 require 'formatter'
 
 class MeasureCondition < Sequel::Model
-  include Models::Formatter
+  include Formatter
 
   plugin :time_machine
   plugin :national

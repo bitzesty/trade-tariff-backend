@@ -1,7 +1,7 @@
 require 'formatter'
 
 class MeasureComponent < Sequel::Model
-  include Models::Formatter
+  include Formatter
 
   plugin :time_machine
   plugin :oplog, primary_key: [:measure_sid, :duty_expression_id]
