@@ -1,6 +1,3 @@
-require 'formatter'
-require 'declarable'
-
 class Commodity < GoodsNomenclature
   include Model::Declarable
 

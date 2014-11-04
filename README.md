@@ -112,7 +112,7 @@ In case of any errors, changes (per single update) are roll-backed and record it
    ##### NOTE: can take some time to download and build some docker images
 
    ```
-   fig build && fig up -d && chmod -x docker_ips.sh && sudo bash docker_ips.sh
+   fig build && fig up -d && sudo -E bash docker_ips.sh
 
    # NOTE: it's important to run 'sudo bash docker_ips.sh', because IPs of docker containers are dynamic
    # and will be changed anytime you run 'fig start' or 'fig up'
@@ -120,7 +120,7 @@ In case of any errors, changes (per single update) are roll-backed and record it
 
 #### 3. Prepare database in api docker containers:
    ```
-   fig run api bundle exec db:create db:migrate db:seed
+   fig run api bundle exec rake db:create db:migrate db:seed
    ```
 
 #### 4. Now you can open in browser:
