@@ -1,6 +1,3 @@
-require 'formatter'
-require 'declarable'
-
 class Heading < GoodsNomenclature
   include Model::Declarable
 

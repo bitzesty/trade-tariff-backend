@@ -1,5 +1,3 @@
-require 'formatter'
-
 class MeasurementUnitQualifierDescription < Sequel::Model
   include Models::Formatter
 

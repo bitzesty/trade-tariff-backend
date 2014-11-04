@@ -1,5 +1,6 @@
 source "https://rubygems.org"
 
+gem "dotenv"
 gem "rails", "~> 4.1.6"
 
 gem "addressable", "2.3.2"

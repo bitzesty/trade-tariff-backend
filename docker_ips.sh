@@ -5,9 +5,9 @@ FRONTEND_HOST=tariff.dev.gov.uk
 ADMIN_HOST=tariff-admin.dev.gov.uk
 
 # Remove current line with hostname at the end of line ($ means end of line)
-sed -i '/'$API_HOST'$/ d' /etc/hosts
-sed -i '/'$FRONTEND_HOST'$/ d' /etc/hosts
-sed -i '/'$ADMIN_HOST'$/ d' /etc/hosts
+sed -i '' '/'$API_HOST'$/ d' /etc/hosts
+sed -i '' '/'$FRONTEND_HOST'$/ d' /etc/hosts
+sed -i '' '/'$ADMIN_HOST'$/ d' /etc/hosts
 
 # Puts new IPs of docker containers
 api_ip=$(docker inspect -f '{{ .NetworkSettings.IPAddress }}' tradetariffbackend_api_1)
