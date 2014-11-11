@@ -1,8 +1,8 @@
 FROM macool/baseimage-rbenv-docker:latest
 
 # Install ruby and gems
-RUN rbenv install 2.1.2
-RUN rbenv global 2.1.2
+RUN rbenv install 2.1.4
+RUN rbenv global 2.1.4
 
 RUN echo 'gem: --no-rdoc --no-ri' >> ~/.gemrc
 
