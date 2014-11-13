@@ -11,8 +11,8 @@ describe TariffSynchronizer::Logger, truncation: true do
   before {
     setup # ActiveSupport::LogSubscriber::TestHelper.setup
 
+    TariffSynchronizer::Logger.any_instance.stub(:logger).and_return(@logger)
     TariffSynchronizer::Logger.attach_to :tariff_synchronizer
-    TariffSynchronizer::Logger.logger = @logger
   }
 
   describe '#download logging' do
@@ -212,6 +212,7 @@ describe TariffSynchronizer::Logger, truncation: true do
   describe '#failed_download logging' do
     before {
        TariffSynchronizer.retry_count = 0
+       TariffSynchronizer.exception_retry_count = 0
        TariffSynchronizer.stub(:sync_variables_set?).and_return(true)
 
        Curl::Easy.any_instance

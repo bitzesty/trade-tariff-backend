@@ -53,7 +53,7 @@ module TariffSynchronizer
 
   # Times to retry downloading update in case of serious problems (host resolution, ssl handshake, partial file) before giving up
   mattr_accessor :exception_retry_count
-  self.exception_retry_count = 3
+  self.exception_retry_count = 10
 
   # CHIEF update url template
   mattr_accessor :chief_update_url_template
