@@ -1,8 +1,25 @@
 module TariffSynchronizer
   class Logger < ActiveSupport::LogSubscriber
-    cattr_accessor :logger
-    self.logger = ::Logger.new('log/tariff_synchronizer.log')
-    self.logger.formatter = Proc.new {|severity, time, progname, msg| "#{time.strftime('%Y-%m-%dT%H:%M:%S.%L %z')} #{sprintf('%5s', severity)} #{msg}\n" }
+
+    def logger
+      @logger ||= if
+        formatter = Proc.new {|severity, time, progname, msg| "#{time.strftime('%Y-%m-%dT%H:%M:%S.%L %z')} #{sprintf('%5s', severity)} #{msg}\n" }
+
+        file_logger = ::Logger.new('log/tariff_synchronizer.log')
+        file_logger.formatter = formatter
+
+        if defined?(Rails) &&
+              Rails.respond_to?(:configuration) &&
+              Rails.configuration.respond_to?(:synchronizer_console_logs) &&
+              Rails.configuration.synchronizer_console_logs
+          console_logger = ActiveSupport::Logger.new(STDOUT)
+          console_logger.formatter = formatter
+          console_logger.extend(ActiveSupport::Logger.broadcast(file_logger))
+        else
+          file_logger
+        end
+      end
+    end
 
     # Download all pending Taric and Chief updates
     def download(event)
@@ -162,7 +179,17 @@ module TariffSynchronizer
 
     # Delayed update fetching
     def delay_download(event)
-      info "Delaying update fetching: #{event.payload[:url]}"
+      info "Delaying update fetching: #{event.payload[:url]} (response code: #{event.payload[:response_code]})"
+    end
+
+    # Problems downloading
+    def download_exception(event)
+      info "Delaying update fetching: #{event.payload[:url]} (reason: #{event.payload[:class]})"
+    end
+
+    # Problems downloading
+    def download_exception_exceeded(event)
+      info "Giving up fetching: #{event.payload[:url]}, too many DownloadExceptions"
     end
 
     # We missed three update files in a row

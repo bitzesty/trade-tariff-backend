@@ -51,6 +51,10 @@ module TariffSynchronizer
   mattr_accessor :retry_count
   self.retry_count = 10
 
+  # Times to retry downloading update in case of serious problems (host resolution, ssl handshake, partial file) before giving up
+  mattr_accessor :exception_retry_count
+  self.exception_retry_count = 10
+
   # CHIEF update url template
   mattr_accessor :chief_update_url_template
   self.chief_update_url_template = "%{host}/taric/%{file_name}"
