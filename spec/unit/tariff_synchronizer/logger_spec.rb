@@ -363,11 +363,12 @@ describe TariffSynchronizer::Logger, truncation: true do
 
   describe '#download_taric logging' do
     let(:success_response) { build :response, :success }
+    let(:query_response) { build :response, :success, :content => 'file_name', :url => 'url' }
 
     before {
       # Skip Taric update file name fetching
-      TariffSynchronizer::TaricUpdate.should_receive(:taric_updates_for).and_return(
-        [OpenStruct.new(url: 'url', file_name: 'file_name')]
+      TariffSynchronizer::TaricUpdate.should_receive(:taric_update_name_for).and_return(
+        query_response
       )
       # Download mock response
       TariffSynchronizer::TaricUpdate.should_receive(:download_content).and_return(success_response)
