@@ -45,19 +45,6 @@ module TradeTariffBackend
       File.join(Rails.root, 'db', 'data_migrations')
     end
 
-    def with_locked_database(&block)
-      # We should use the master database for this
-      Sequel::Model.db.with_server(:default) do
-        begin
-          if Sequel::Model.db.get_lock(db_lock_key)
-            yield
-          end
-        ensure
-          Sequel::Model.db.release_lock(db_lock_key)
-        end
-      end
-    end
-
     def with_redis_lock(lock_name = db_lock_key, &block)
       Redis::Mutex.with_lock(lock_name, expire: 10.minutes) { yield }
     end
