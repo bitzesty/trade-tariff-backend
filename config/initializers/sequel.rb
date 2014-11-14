@@ -1,5 +1,3 @@
-require 'sequel/extensions/db_lock'
-
 # Defaults for sensible migrations
 Sequel::MySQL.default_engine = 'InnoDB'
 Sequel::MySQL.default_charset = 'utf8'
