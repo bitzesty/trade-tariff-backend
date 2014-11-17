@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "rails", "~> 4.1.6"
+gem "rails", "~> 4.1.8"
 
 gem "addressable", "2.3.2"
 gem "hashie", "2.0.5"
