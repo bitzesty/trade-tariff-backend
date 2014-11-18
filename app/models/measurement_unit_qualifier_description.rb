@@ -1,5 +1,5 @@
 class MeasurementUnitQualifierDescription < Sequel::Model
-  include Models::Formatter
+  include Formatter
 
   plugin :oplog, primary_key: :measurement_unit_qualifier_code
   plugin :conformance_validator
