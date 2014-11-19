@@ -2,7 +2,7 @@ require 'formatter'
 require 'declarable'
 
 class Heading < GoodsNomenclature
-  include Model::Declarable
+  include Declarable
 
   plugin :oplog, primary_key: :goods_nomenclature_sid
   plugin :conformance_validator
