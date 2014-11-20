@@ -22,7 +22,7 @@ gem 'gds-sso', '9.3.0'
 gem "railties"
 
 gem "unicorn", "~> 4.6.3"
-gem "curb", "0.8.3"
+gem "curb", "0.8.6"
 
 gem "nokogiri", "1.5.4"
 

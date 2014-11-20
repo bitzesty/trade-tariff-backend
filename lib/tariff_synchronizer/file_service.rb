@@ -70,8 +70,6 @@ module TariffSynchronizer
       def send_request(url)
         begin
           crawler = Curl::Easy.new(url)
-          crawler.use_ssl = 3
-          crawler.ssl_version = 3
           crawler.ssl_verify_peer = false
           crawler.ssl_verify_host = false
           crawler.http_auth_types = :basic

@@ -68,7 +68,7 @@ GEM
     connection_pool (2.0.0)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
-    curb (0.8.3)
+    curb (0.8.6)
     dalli (2.7.2)
     database_cleaner (1.2.0)
     diff-lcs (1.2.5)
@@ -317,7 +317,7 @@ DEPENDENCIES
   builder
   capistrano
   ci_reporter_rspec
-  curb (= 0.8.3)
+  curb (= 0.8.6)
   dalli (= 2.7.2)
   database_cleaner
   elasticsearch (= 0.4.7)
