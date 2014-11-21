@@ -43,7 +43,7 @@ describe TariffSynchronizer, truncation: true do
         TariffSynchronizer.should_receive(:sync_variables_set?).and_return(true)
 
         Curl::Easy.any_instance
-                  .should_receive(:perform)
+                  .stub(:perform)
                   .and_raise(Curl::Err::HostResolutionError) }
 
       it 'raises original exception ending process' do

@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 gem "dotenv"
-gem "rails", "~> 4.1.6"
+gem "rails", "~> 4.1.8"
 
 gem "addressable", "2.3.2"
 gem "hashie", "2.0.5"
@@ -23,7 +23,7 @@ gem 'gds-sso', '9.3.0'
 gem "railties"
 
 gem "unicorn", "~> 4.6.3"
-gem "curb", "0.8.3"
+gem "curb", "0.8.6"
 
 gem "nokogiri", "1.5.4"
 

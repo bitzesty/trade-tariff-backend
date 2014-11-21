@@ -11,8 +11,8 @@ describe TariffSynchronizer::Logger, truncation: true do
   before {
     setup # ActiveSupport::LogSubscriber::TestHelper.setup
 
+    TariffSynchronizer::Logger.any_instance.stub(:logger).and_return(@logger)
     TariffSynchronizer::Logger.attach_to :tariff_synchronizer
-    TariffSynchronizer::Logger.logger = @logger
   }
 
   describe '#download logging' do
@@ -212,6 +212,7 @@ describe TariffSynchronizer::Logger, truncation: true do
   describe '#failed_download logging' do
     before {
        TariffSynchronizer.retry_count = 0
+       TariffSynchronizer.exception_retry_count = 0
        TariffSynchronizer.stub(:sync_variables_set?).and_return(true)
 
        Curl::Easy.any_instance
@@ -363,11 +364,12 @@ describe TariffSynchronizer::Logger, truncation: true do
 
   describe '#download_taric logging' do
     let(:success_response) { build :response, :success }
+    let(:query_response) { build :response, :success, :content => 'file_name', :url => 'url' }
 
     before {
       # Skip Taric update file name fetching
-      TariffSynchronizer::TaricUpdate.should_receive(:taric_updates_for).and_return(
-        [OpenStruct.new(url: 'url', file_name: 'file_name')]
+      TariffSynchronizer::TaricUpdate.should_receive(:taric_update_name_for).and_return(
+        query_response
       )
       # Download mock response
       TariffSynchronizer::TaricUpdate.should_receive(:download_content).and_return(success_response)

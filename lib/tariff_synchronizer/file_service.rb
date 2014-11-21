@@ -36,20 +36,31 @@ module TariffSynchronizer
         # The server in question may respond with 403 from time to time so keep retrying
         # until it returns either 200 or 404 or retry count limit is reached
         retry_count = TariffSynchronizer.retry_count
+        ex_retry_count = TariffSynchronizer.exception_retry_count
 
         loop do
-          response = send_request(url)
+          begin
+            response = send_request(url)
 
-          if response.terminated?
-            return response
-          elsif retry_count == 0
-            response.retry_count_exceeded!
-
-            return response
-          else
-            retry_count -= 1
-            ActiveSupport::Notifications.instrument("delay_download.tariff_synchronizer", url: url)
-            sleep TariffSynchronizer.request_throttle
+            if response.terminated?
+              return response
+            elsif retry_count == 0
+              response.retry_count_exceeded!
+              return response
+            else
+              retry_count -= 1
+              ActiveSupport::Notifications.instrument("delay_download.tariff_synchronizer", url: url, response_code: response.response_code)
+              sleep TariffSynchronizer.request_throttle
+            end
+          rescue DownloadException => exception
+            ActiveSupport::Notifications.instrument("download_exception.tariff_synchronizer", url: url, class: exception.original.class)
+            if ex_retry_count == 0
+              ActiveSupport::Notifications.instrument("download_exception_exceeded.tariff_synchronizer", url: url)
+              raise
+            else
+              ex_retry_count -= 1
+              sleep TariffSynchronizer.request_throttle
+            end
           end
         end
       end
@@ -59,8 +70,6 @@ module TariffSynchronizer
       def send_request(url)
         begin
           crawler = Curl::Easy.new(url)
-          crawler.use_ssl = 3
-          crawler.ssl_version = 3
           crawler.ssl_verify_peer = false
           crawler.ssl_verify_host = false
           crawler.http_auth_types = :basic
