@@ -172,7 +172,7 @@ module TariffSynchronizer
           import!
         end
       end
-    rescue ChiefImporter::ImportException, TaricImporter::ImportException, TariffImporter::NotFound => e
+    rescue => e
       e = e.original if e.respond_to?(:original) && e.original
       update(exception_class: e.class.to_s + " " + e.message.to_s,
              exception_backtrace: e.backtrace.join("\n"),
