@@ -2,6 +2,7 @@ require 'tariff_importer'
 require 'date'
 require 'logger'
 require 'fileutils'
+require 'redis_lock'
 require 'active_support/notifications'
 require 'active_support/log_subscriber'
 
@@ -153,7 +154,7 @@ module TariffSynchronizer
       ) if applied_updates.any? && BaseUpdate.pending_or_failed.none?
     end
 
-  rescue Redis::Mutex::LockError
+  rescue RedisLock::LockTimeout
     instrument "apply_lock_error.tariff_synchronizer"
 
   end
@@ -203,7 +204,7 @@ module TariffSynchronizer
         keep: keep
       )
     end
-  rescue Redis::Mutex::LockError
+  rescue RedisLock::LockTimeout
     instrument(
       "rollback_lock_error.tariff_synchronizer",
       date: rollback_date,
