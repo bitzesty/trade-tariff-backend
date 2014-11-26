@@ -43,16 +43,16 @@ RSpec.configure do |config|
 
   config.include FactoryGirl::Syntax::Methods
 
-  Redis::Classy.db = Redis.new(:db => 15)
+  redis = Redis.new(:db => 15)
+  RedisLockDb.redis = redis
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
-    Redis::Classy.flushdb
+    redis.flushdb
   end
 
   config.after(:suite) do
-    Redis::Classy.flushdb
-    Redis::Classy.quit
+    redis.flushdb
   end
 
   config.before(:each) do

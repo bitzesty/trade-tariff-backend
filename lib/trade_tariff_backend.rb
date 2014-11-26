@@ -1,3 +1,4 @@
+require 'redis_lock'
 require 'ostruct'
 
 module TradeTariffBackend
@@ -46,7 +47,8 @@ module TradeTariffBackend
     end
 
     def with_redis_lock(lock_name = db_lock_key, &block)
-      Redis::Mutex.with_lock(lock_name, expire: 10.minutes) { yield }
+      lock = RedisLock.new(RedisLockDb.redis, lock_name)
+      lock.lock &block
     end
 
     def reindex(indexer = search_client)
