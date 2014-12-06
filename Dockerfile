@@ -13,6 +13,9 @@ RUN echo 'gem: --no-rdoc --no-ri' >> ~/.gemrc
 RUN gem install bundler --no-ri --no-rdoc
 RUN rbenv rehash
 
+# update sources
+RUN apt-get -qqy update
+
 # make sure we have libcurl and libmysqlclient-dev
 RUN apt-get install -qqy libcurl4-openssl-dev libmysqlclient-dev
 
