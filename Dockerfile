@@ -16,6 +16,9 @@ RUN rbenv rehash
 # update sources
 RUN apt-get -qqy update
 
+# install mysql-client (will be used by `db:create` task)
+RUN apt-get install -qqy mysql-client
+
 # make sure we have libcurl and libmysqlclient-dev
 RUN apt-get install -qqy libcurl4-openssl-dev libmysqlclient-dev
 
