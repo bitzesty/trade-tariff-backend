@@ -43,7 +43,9 @@ RSpec.configure do |config|
 
   config.include FactoryGirl::Syntax::Methods
 
-  redis = Redis.new(:db => 15)
+  redis_url = ENV["REDIS_1_PORT_6379_TCP"] || "redis://localhost:6379"
+
+  redis = Redis.new(:db => 15, url: redis_url)
   RedisLockDb.redis = redis
 
   config.before(:suite) do
