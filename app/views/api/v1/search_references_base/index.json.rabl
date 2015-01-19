@@ -2,6 +2,10 @@ collection @search_references
 
 attributes :id, :title, :referenced_id, :referenced_class
 
-child :referenced => :referenced do |referenced|
-  partial("api/v1/search_references_base/#{referenced.class.to_s.underscore}", object: :referenced)
+node :referenced do |s|
+  # use serializers:
+  # ChapterSerializer, CommoditySerializer,
+  # HeadingSerializer, SectionSerializer
+  klass = "#{s.referenced_class}Serializer".constantize
+  klass.new(s.referenced).serializable_hash
 end
