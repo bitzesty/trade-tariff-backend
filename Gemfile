@@ -30,7 +30,7 @@ gem "airbrake", "3.1.16"
 gem "aws-ses", require: "aws/ses" #used for sync emails
 gem "logstasher", "0.4.8"
 
-gem "sass-rails", "~> 4.0.3"
+gem "sass-rails", "~> 4.0.5"
 gem "therubyracer", "0.12.0"
 gem "uglifier", "~> 2.5.3"
 
