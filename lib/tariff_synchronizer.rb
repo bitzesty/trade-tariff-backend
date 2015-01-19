@@ -37,8 +37,9 @@ module TariffSynchronizer
   mattr_accessor :root_path
   self.root_path = Rails.env.test? ? "tmp/data" : "data"
 
+  # Numer of seconds to sleep between sync retries
   mattr_accessor :request_throttle
-  self.request_throttle = 1
+  self.request_throttle = 60
 
   # Initial dump date + 1 day
   mattr_accessor :taric_initial_update
@@ -50,7 +51,7 @@ module TariffSynchronizer
 
   # Times to retry downloading update before giving up
   mattr_accessor :retry_count
-  self.retry_count = 10
+  self.retry_count = 20
 
   # Times to retry downloading update in case of serious problems (host resolution, ssl handshake, partial file) before giving up
   mattr_accessor :exception_retry_count
