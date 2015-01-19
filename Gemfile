@@ -23,7 +23,7 @@ gem "railties"
 gem "unicorn", "~> 4.6.3"
 gem "curb", "0.8.6"
 
-gem "nokogiri", "1.5.4"
+gem "nokogiri", "1.6.1"
 
 gem "whenever", "~> 0.9.2"
 gem "airbrake", "3.1.16"
