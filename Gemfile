@@ -44,10 +44,10 @@ group :development, :test do
   gem "pry-rails"
   gem "pry-nav"
   gem "bundler-audit"
+  gem "brakeman", "~> 3.0.0", require: false
 end
 
 group :test do
-  gem "brakeman", "1.7.0"
   gem "ci_reporter_rspec"
   gem "factory_girl_rails"
   gem "fakefs", require: "fakefs/safe"
