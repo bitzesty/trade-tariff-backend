@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/getsentry/raven-ruby.git
+  revision: 40b7d4c23e24e4bcc6a9fd4114f569eb7d158532
+  specs:
+    sentry-raven (0.12.3)
+      faraday (>= 0.7.6)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -28,9 +35,6 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     addressable (2.3.2)
-    airbrake (3.1.16)
-      builder
-      multi_json
     ansi (1.4.3)
     arel (5.0.1.20140414130214)
     aws-ses (0.6.0)
@@ -312,7 +316,6 @@ PLATFORMS
 
 DEPENDENCIES
   addressable (= 2.3.2)
-  airbrake (= 3.1.16)
   ansi
   aws-ses
   brakeman (= 1.7.0)
@@ -347,6 +350,7 @@ DEPENDENCIES
   railties
   rspec-rails (~> 2.14.0)
   sass-rails (~> 4.0.3)
+  sentry-raven!
   sequel (= 4.3.0)
   sequel-rails (= 0.7.0)
   shoulda-matchers (~> 2.0.0)
