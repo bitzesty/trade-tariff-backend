@@ -6,6 +6,9 @@
 - A-Z fixed with move to serializers for the api
 - Increase the retries count and sleep time between failed downloads
 
+### Added
+- rake task for [budler-audit](https://github.com/rubysec/bundler-audit)
+
 ## release_878...release_903
 ### Changed
 - Upgraded Rails to 4.1.8 from 3.2.17

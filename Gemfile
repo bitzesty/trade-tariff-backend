@@ -43,6 +43,7 @@ end
 group :development, :test do
   gem "pry-rails"
   gem "pry-nav"
+  gem "bundler-audit"
 end
 
 group :test do
