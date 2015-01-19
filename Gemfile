@@ -23,14 +23,14 @@ gem "railties"
 gem "unicorn", "~> 4.6.3"
 gem "curb", "0.8.6"
 
-gem "nokogiri", "1.5.4"
+gem "nokogiri", "1.6.1"
 
 gem "whenever", "~> 0.9.2"
 gem "airbrake", "3.1.16"
 gem "aws-ses", require: "aws/ses" #used for sync emails
 gem "logstasher", "0.4.8"
 
-gem "sass-rails", "~> 4.0.3"
+gem "sass-rails", "~> 4.0.5"
 gem "therubyracer", "0.12.0"
 gem "uglifier", "~> 2.5.3"
 
@@ -44,10 +44,10 @@ group :development, :test do
   gem "pry-rails"
   gem "pry-nav"
   gem "bundler-audit"
+  gem "brakeman", "~> 3.0.0", require: false
 end
 
 group :test do
-  gem "brakeman", "1.7.0"
   gem "ci_reporter_rspec"
   gem "factory_girl_rails"
   gem "fakefs", require: "fakefs/safe"
