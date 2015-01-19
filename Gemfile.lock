@@ -211,10 +211,6 @@ GEM
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
     redis (3.1.0)
-    redis-classy (1.2.0)
-      redis-namespace (~> 1.0)
-    redis-mutex (2.1.1)
-      redis-classy (~> 1.2)
     redis-namespace (1.5.1)
       redis (~> 3.0, >= 3.0.4)
     ref (1.0.5)
@@ -349,7 +345,6 @@ DEPENDENCIES
   rabl (= 0.10.0)
   rails (~> 4.1.8)
   railties
-  redis-mutex (= 2.1.1)
   rspec-rails (~> 2.14.0)
   sass-rails (~> 4.0.3)
   sequel (= 4.3.0)

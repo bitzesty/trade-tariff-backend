@@ -580,7 +580,7 @@ describe TariffSynchronizer::Logger, truncation: true do
   describe "#rollback_lock_error" do
     before {
        TradeTariffBackend.should_receive(
-        :with_redis_lock).and_raise(Redis::Mutex::LockError)
+        :with_redis_lock).and_raise(RedisLock::LockTimeout)
 
        TariffSynchronizer.rollback(Date.today, true)
     }
@@ -594,7 +594,7 @@ describe TariffSynchronizer::Logger, truncation: true do
   describe "#apply_lock_error" do
     before {
        TradeTariffBackend.should_receive(
-        :with_redis_lock).and_raise(Redis::Mutex::LockError)
+        :with_redis_lock).and_raise(RedisLock::LockTimeout)
 
        TariffSynchronizer.apply
     }

@@ -115,6 +115,30 @@ describe Heading do
   end
 
   describe '#declarable' do
+
+    context 'different points in time' do
+      today = Date.today
+      t1 = today.ago(2.years)
+      t2 = today.ago(1.year)
+      let!(:declarable_heading) { create :heading, :declarable, goods_nomenclature_item_id: "0102000000", validity_start_date: t1, validity_end_date: nil }
+      let!(:commodity) { create :commodity, goods_nomenclature_item_id: "0102000010",
+                                                         producline_suffix: "80",
+                                                         validity_start_date: t1,
+                                                         validity_end_date: t2 }
+
+      it 'returns true if there are no commodities under this heading that are valid during headings validity period' do
+        TimeMachine.now {
+          declarable_heading.declarable.should be_true
+        } 
+      end
+
+      it 'returns false if there are commodities under the heading that are valid during headings validity period' do
+        TimeMachine.at(t2.ago(1.day)) {
+          declarable_heading.declarable.should be_false
+        }
+      end
+    end
+
     context 'different commodity codes' do
       let!(:declarable_heading)     { create :heading, :declarable, goods_nomenclature_item_id: "0101000000" }
       let!(:non_declarable_heading) { create :heading, goods_nomenclature_item_id: "0102000000", producline_suffix: "10" }
