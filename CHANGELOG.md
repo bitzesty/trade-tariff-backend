@@ -5,6 +5,7 @@
 - QuotaCriticalEvent primary key modified to include `occurrence_timestamp` fixes 2015-01-02 sync issue
 - A-Z fixed with move to serializers for the api
 - Increase the retries count and sleep time between failed downloads
+- Updated nokogiri, sprokets, breakman for security
 
 ### Added
 - rake task for [budler-audit](https://github.com/rubysec/bundler-audit)
