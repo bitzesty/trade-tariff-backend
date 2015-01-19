@@ -1,5 +1,11 @@
 # Change Log
 
+## release_903...release_906
+### Changed
+- QuotaCriticalEvent primary key modified to include `occurrence_timestamp` fixes 2015-01-02 sync issue
+- A-Z fixed with move to serializers for the api
+- Increase the retries count and sleep time between failed downloads
+
 ## release_878...release_903
 ### Changed
 - Upgraded Rails to 4.1.8 from 3.2.17
