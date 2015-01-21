@@ -1,12 +1,16 @@
 # Change Log
 
-## release_903...release_906
+## [release_903...release_912](https://github.com/alphagov/trade-tariff-backend/compare/release_903...release_912)
 ### Changed
 - QuotaCriticalEvent primary key modified to include `occurrence_timestamp` fixes 2015-01-02 sync issue
-- A-Z fixed with move to serializers for the api
+- A-Z pages fixed with move to serializers for the api
 - Increase the retries count and sleep time between failed downloads
+- Updated nokogiri, sprokets, breakman for security
 
-## release_878...release_903
+### Added
+- [budler-audit](https://github.com/rubysec/bundler-audit) added to check for security vulnerabilities
+
+## [release_878...release_903](https://github.com/alphagov/trade-tariff-backend/compare/release_878...release_903)
 ### Changed
 - Upgraded Rails to 4.1.8 from 3.2.17
 - Upgraded Ruby to 2.1.4 from 2.0.0
