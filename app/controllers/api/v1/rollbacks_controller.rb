@@ -2,12 +2,9 @@ module Api
   module V1
     class RollbacksController < ApiController
       before_filter :authenticate_user!
-      after_filter :paginate, only: :index
-
-      PER_PAGE = 20
+      before_filter :collection, only: :index
 
       def index
-        @rollback_jobs = collection
       end
 
       def create
@@ -28,20 +25,17 @@ module Api
       end
 
       def collection
-        @collection ||= Rollback.descending.paginate(page, PER_PAGE)
+        @collection ||= Rollback.descending.paginate(current_page, per_page)
       end
 
-      def paginate
-        response.headers["X-Pagination"] = {
-          page: page,
-          per_page: PER_PAGE,
-          total_count: collection.pagination_record_count
-        }.to_json
-      end
-
-      def page
+      def current_page
         Integer(params[:page] || 1)
       end
+
+      def per_page
+        20
+      end
+      helper_method :current_page, :per_page
     end
   end
 end
