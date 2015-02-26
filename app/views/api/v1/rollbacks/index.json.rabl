@@ -1,3 +1,7 @@
-collection @rollback_jobs
+object false
 
-extends('api/v1/rollbacks/rollback_job')
+child @collection do
+  extends("api/v1/rollbacks/rollback_job")
+end
+
+extends "api/v1/shared/pagination"
