@@ -9,7 +9,7 @@ module Api
 
       def create
         rollback = Rollback.new(rollback_params)
-        
+
         if rollback.valid?
           rollback.save
           render json: rollback, status: :created, location: api_rollbacks_url
@@ -28,14 +28,9 @@ module Api
         @collection ||= Rollback.descending.paginate(current_page, per_page)
       end
 
-      def current_page
-        Integer(params[:page] || 1)
-      end
-
       def per_page
         20
       end
-      helper_method :current_page, :per_page
     end
   end
 end

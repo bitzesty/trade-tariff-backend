@@ -69,16 +69,6 @@ describe Api::V1::RollbacksController, "GET to #index" do
     }.ignore_extra_keys!
   }
 
-  let(:pagination_pattern) {
-    { pagination:
-      {
-        page: 1,
-        per_page: Fixnum,
-        total_count: Fixnum
-      }
-    }.ignore_extra_keys!
-  }
-
   it 'returns scheduled rollbacks' do
     get :index, format: :json
 
