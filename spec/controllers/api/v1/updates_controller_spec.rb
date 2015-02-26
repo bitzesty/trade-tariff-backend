@@ -4,16 +4,18 @@ describe Api::V1::UpdatesController, "GET #index" do
   render_views
 
   let(:pattern) {
-    [
-     { update_type: "TariffSynchronizer::TaricUpdate",
-       state: String,
-       filename: String
-     }.ignore_extra_keys!,
-     { update_type: "TariffSynchronizer::TaricUpdate",
-       state: String,
-       filename: String
-     }.ignore_extra_keys!
-    ].ignore_extra_values!
+    { updates:
+      [
+       { update_type: "TariffSynchronizer::TaricUpdate",
+         state: String,
+         filename: String
+       }.ignore_extra_keys!,
+       { update_type: "TariffSynchronizer::TaricUpdate",
+         state: String,
+         filename: String
+       }.ignore_extra_keys!
+      ].ignore_extra_values!
+    }.ignore_extra_keys!
   }
 
   context 'when records are present' do
@@ -24,6 +26,7 @@ describe Api::V1::UpdatesController, "GET #index" do
       get :index, format: :json
 
       response.body.should match_json_expression pattern
+      response.body.should match_json_expression pagination_pattern
     end
   end
 
@@ -31,7 +34,7 @@ describe Api::V1::UpdatesController, "GET #index" do
     it 'returns blank array' do
       get :index, format: :json
 
-      JSON.parse(response.body).should eq []
+      JSON.parse(response.body)["updates"].should eq []
     end
   end
 end
