@@ -27,10 +27,6 @@ module Api
       def collection
         @collection ||= Rollback.descending.paginate(current_page, per_page)
       end
-
-      def per_page
-        20
-      end
     end
   end
 end

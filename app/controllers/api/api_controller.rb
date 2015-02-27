@@ -17,7 +17,7 @@ module Api
     end
 
     def per_page
-      30
+      20
     end
     helper_method :current_page, :per_page
   end
