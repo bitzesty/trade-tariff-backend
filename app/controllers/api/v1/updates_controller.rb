@@ -17,6 +17,10 @@ module Api
       def collection
         @collection ||= TariffSynchronizer::BaseUpdate.descending.paginate(current_page, per_page)
       end
+
+      def per_page
+        60
+      end
     end
   end
 end
