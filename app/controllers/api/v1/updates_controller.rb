@@ -1,16 +1,25 @@
 module Api
   module V1
     class UpdatesController < ApiController
-      def index
-        @updates = TariffSynchronizer::BaseUpdate.descending
+      before_filter :collection, only: :index
 
-        respond_with @updates
+      def index
       end
 
       def latest
         @updates = TariffSynchronizer::BaseUpdate.latest_applied_of_both_kinds
 
         respond_with @updates
+      end
+
+      private
+
+      def collection
+        @collection ||= TariffSynchronizer::BaseUpdate.descending.paginate(current_page, per_page)
+      end
+
+      def per_page
+        60
       end
     end
   end

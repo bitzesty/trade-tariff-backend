@@ -55,16 +55,18 @@ describe Api::V1::RollbacksController, "GET to #index" do
   let!(:rollback) { create :rollback }
 
   let(:response_pattern) {
-    [
-      {
-        id: rollback.id,
-        user_id: rollback.user_id,
-        reason: rollback.reason,
-        enqueued_at: rollback.enqueued_at,
-        date: rollback.date.to_s,
-        keep: rollback.keep
-      }.ignore_extra_keys!
-    ].ignore_extra_values!
+    { rollbacks:
+      [
+        {
+          id: rollback.id,
+          user_id: rollback.user_id,
+          reason: rollback.reason,
+          enqueued_at: rollback.enqueued_at,
+          date: rollback.date.to_s,
+          keep: rollback.keep
+        }.ignore_extra_keys!
+      ].ignore_extra_values!
+    }.ignore_extra_keys!
   }
 
   it 'returns scheduled rollbacks' do
@@ -72,5 +74,6 @@ describe Api::V1::RollbacksController, "GET to #index" do
 
     expect(response.status).to eq 200
     expect(response.body).to match_json_expression response_pattern
+    expect(response.body).to match_json_expression pagination_pattern
   end
 end
