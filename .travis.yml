@@ -15,7 +15,7 @@ script:
  - RAILS_ENV=test bundle exec rake spec
  - RAILS_ENV=test bundle exec rake bundler:audit
 rvm:
-  - 2.1.4
+  - 2.2.1
 branches:
   except:
     - release

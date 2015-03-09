@@ -5,7 +5,7 @@ gem "rails", "~> 4.1.8"
 gem "addressable", "2.3.2"
 gem "hashie", "2.0.5"
 gem "multi_json", "~> 1.7"
-gem "mysql2", "0.3.13"
+gem "mysql2", "~> 0.3"
 gem "sequel-rails", "0.7.0"
 gem "rabl", "0.10.0"
 gem "ansi"
@@ -48,6 +48,7 @@ group :development, :test do
 end
 
 group :test do
+  gem "test-unit", "~> 3.0"
   gem "ci_reporter_rspec"
   gem "factory_girl_rails"
   gem "fakefs", require: "fakefs/safe"
