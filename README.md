@@ -80,7 +80,7 @@ Applying downloaded CSV files is the most confusing and buggy part.
 Updates are performed in portions and protected by redis lock (see TariffSynchronizer#apply).
 
 BaseUpdate#apply is responsible for most of the logging/checking job and running
-#import! methods located in Taric/ChiefUpdate classes. Then it runs TaricImporter
+`import!` methods located in Taric/ChiefUpdate classes. Then it runs TaricImporter
 and ChiefImporter to parse and store xml/csv files.
 
 Whole process is quite similar for both TARIC and CHIEF, but CHIEF updates also does
