@@ -1,29 +1,39 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe SearchService do
   describe 'initialization' do
     let(:query) { Forgery(:basic).text }
 
     it 'assigns search query' do
-      SearchService.new(t: query).t.should == query
+      expect(
+        SearchService.new(t: query).t
+      ).to eq query
     end
 
     it 'strips [, ] characters from search query' do
-      SearchService.new(t: '[hello] [world]').t.should == 'hello world'
+      expect(
+        SearchService.new(t: '[hello] [world]').t
+      ).to eq 'hello world'
     end
   end
 
   describe "#valid?" do
     it 'is not valid if has no t param assigned' do
-      SearchService.new(t: nil).valid?.should be_false
+      expect(
+        SearchService.new(t: nil).valid?
+      ).to be_falsy
     end
 
     it 'is not valid if has no as_of param assigned' do
-      SearchService.new(t: 'value').valid?.should be_false
+      expect(
+        SearchService.new(t: 'value').valid?
+      ).to be_falsy
     end
 
     it 'is valid if has both t and as_of params provided' do
-      SearchService.new(t: 'value', as_of: Date.today).valid?.should be_true
+      expect(
+        SearchService.new(t: 'value', as_of: Date.today).valid?
+      ).to be_truthy
     end
   end
 
@@ -50,14 +60,14 @@ describe SearchService do
           result = SearchService.new(t: chapter.goods_nomenclature_item_id.first(2),
                                      as_of: Date.today).to_json
 
-          result.should match_json_expression pattern
+          expect(result).to match_json_expression pattern
         end
 
         it 'returns endpoint and identifier if provided with matching 3 digit chapter code' do
           result = SearchService.new(t: chapter.goods_nomenclature_item_id.first(2),
                                      as_of: Date.today).to_json
 
-          result.should match_json_expression pattern
+          expect(result).to match_json_expression pattern
         end
       end
 
@@ -77,7 +87,7 @@ describe SearchService do
           result = SearchService.new(t: chapter.goods_nomenclature_item_id.first(2),
                                      as_of: Date.today).to_json
 
-          result.should match_json_expression pattern
+          expect(result).to match_json_expression pattern
         end
       end
     end
@@ -98,21 +108,21 @@ describe SearchService do
         result = SearchService.new(t: heading.goods_nomenclature_item_id.first(4),
                                    as_of: Date.today).to_json
 
-        result.should match_json_expression pattern
+        expect(result).to match_json_expression pattern
       end
 
       it 'returns endpoint and identifier if provided with matching 6 (or any between length of 4 to 9) symbol heading code' do
         result = SearchService.new(t: heading.goods_nomenclature_item_id.first(6),
                                    as_of: Date.today).to_json
 
-        result.should match_json_expression pattern
+        expect(result).to match_json_expression pattern
       end
 
       it 'returns endpoint and identifier if provided with matching 10 symbol declarable heading code' do
         result = SearchService.new(t: heading.goods_nomenclature_item_id,
                                    as_of: Date.today).to_json
 
-        result.should match_json_expression pattern
+        expect(result).to match_json_expression pattern
       end
     end
 
@@ -143,7 +153,7 @@ describe SearchService do
           result = SearchService.new(t: commodity.goods_nomenclature_item_id.first(10),
                                      as_of: Date.today).to_json
 
-          result.should match_json_expression commodity_pattern
+          expect(result).to match_json_expression commodity_pattern
         end
 
         it 'returns endpoint and identifier if provided with 10 symbol commodity code separated by spaces' do
@@ -155,7 +165,7 @@ describe SearchService do
           result = SearchService.new(t: code,
                                      as_of: Date.today).to_json
 
-          result.should match_json_expression commodity_pattern
+          expect(result).to match_json_expression commodity_pattern
         end
 
         it 'returns endpoint and identifier if provided with 10 digits separated by whitespace of varying length' do
@@ -168,7 +178,7 @@ describe SearchService do
           result = SearchService.new(t: code,
                                      as_of: Date.today).to_json
 
-          result.should match_json_expression commodity_pattern
+          expect(result).to match_json_expression commodity_pattern
         end
 
         it 'returns endpoint and identifier if provided with 10 symbol commodity code separated by dots' do
@@ -180,7 +190,7 @@ describe SearchService do
           result = SearchService.new(t: code,
                                      as_of: Date.today).to_json
 
-          result.should match_json_expression commodity_pattern
+          expect(result).to match_json_expression commodity_pattern
         end
 
         it 'returns endpoint and identifier if provided with 10 digits separated by various non number characters' do
@@ -193,14 +203,14 @@ describe SearchService do
           result = SearchService.new(t: code,
                                      as_of: Date.today).to_json
 
-          result.should match_json_expression commodity_pattern
+          expect(result).to match_json_expression commodity_pattern
         end
 
         it 'returns endpoint and identifier if provided with matching 12 symbol commodity code' do
           result = SearchService.new(t: commodity.goods_nomenclature_item_id + commodity.producline_suffix,
                                      as_of: Date.today).to_json
 
-          result.should match_json_expression commodity_pattern
+          expect(result).to match_json_expression commodity_pattern
         end
       end
 
@@ -233,7 +243,7 @@ describe SearchService do
           result = SearchService.new(t: commodity1.goods_nomenclature_item_id,
                                      as_of: Date.today).to_json
 
-          result.should match_json_expression heading_pattern
+          expect(result).to match_json_expression heading_pattern
         end
       end
     end
@@ -258,7 +268,7 @@ describe SearchService do
       }
 
       it 'does not return hidden commodity as exact match' do
-        @result.should_not match_json_expression commodity_pattern
+        expect(@result).to_not match_json_expression commodity_pattern
       end
     end
   end
@@ -291,14 +301,14 @@ describe SearchService do
           @result = SearchService.new(t: "water",
                                       as_of: "2005-01-01").to_json
 
-          @result.should match_json_expression heading_pattern
+          expect(@result).to match_json_expression heading_pattern
         end
 
         it 'does not return goods code if search date does not fall within validity period' do
           @result = SearchService.new(t: "water",
                                       as_of: "2007-01-01").to_json
 
-          @result.should_not match_json_expression heading_pattern
+          expect(@result).to_not match_json_expression heading_pattern
         end
       end
 
@@ -328,14 +338,14 @@ describe SearchService do
           @result = SearchService.new(t: "animal products",
                                       as_of: "2007-01-01").to_json
 
-          @result.should match_json_expression heading_pattern
+          expect(@result).to match_json_expression heading_pattern
         end
 
         it 'does not return goods code if search date is less than start of validity period' do
           @result = SearchService.new(t: "animal products",
                                       as_of: "1970-01-01").to_json
 
-          @result.should_not match_json_expression heading_pattern
+          expect(@result).to_not match_json_expression heading_pattern
         end
       end
     end
@@ -447,14 +457,14 @@ describe SearchService do
         @result = SearchService.new(t: "water",
                                     as_of: "2005-01-01").to_json
 
-        @result.should match_json_expression heading_pattern
+        expect(@result).to match_json_expression heading_pattern
       end
 
       it 'does not return goods code if search date does not fall within validity period' do
         @result = SearchService.new(t: "water",
                                     as_of: "2007-01-01").to_json
 
-        @result.should_not match_json_expression heading_pattern
+        expect(@result).to_not match_json_expression heading_pattern
       end
     end
 
@@ -491,7 +501,7 @@ describe SearchService do
         @result = SearchService.new(t: 'acid oil',
                                     as_of: Date.today).to_json
 
-        @result.should match_json_expression heading_pattern
+        expect(@result).to match_json_expression heading_pattern
       end
     end
   end

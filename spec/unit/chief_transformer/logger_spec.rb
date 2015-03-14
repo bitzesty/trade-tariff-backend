@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'chief_transformer'
 require 'active_support/log_subscriber/test_helper'
 
@@ -16,8 +16,8 @@ describe ChiefTransformer::Logger do
     before { ChiefTransformer.instance.invoke }
 
     it 'logs an info event' do
-      @logger.logged(:info).size.should be >= 1
-      @logger.logged(:info).first.should =~ /CHIEF Transformer started/
+      expect(@logger.logged(:info).size).to be >= 1
+      expect(@logger.logged(:info).first).to match /CHIEF Transformer started/
     end
   end
 
@@ -29,21 +29,23 @@ describe ChiefTransformer::Logger do
       let!(:measure) { create :measure }
 
       before {
-        Chief::Tame.any_instance.should_receive(:mark_as_processed!)
-            .and_raise(Sequel::ValidationFailed.new(measure))
+        allow_any_instance_of(
+          Chief::Tame
+        ).to receive(:mark_as_processed!)
+        .and_raise(Sequel::ValidationFailed.new(measure))
 
         rescuing { ChiefTransformer.instance.invoke }
       }
 
       it 'logs an error event' do
-        @logger.logged(:error).size.should eq 1
-        @logger.logged(:error).last.should =~ /Could not transform/i
+        expect(@logger.logged(:error).size).to eq 1
+        expect(@logger.logged(:error).last).to match /Could not transform/i
       end
 
       it 'sends an error email' do
-        ActionMailer::Base.deliveries.should_not be_empty
+        expect(ActionMailer::Base.deliveries).to_not be_empty
         email = ActionMailer::Base.deliveries.last
-        email.encoded.should =~ /invalid CHIEF operation/
+        expect(email.encoded).to match /invalid CHIEF operation/
       end
     end
   end
@@ -55,8 +57,8 @@ describe ChiefTransformer::Logger do
       before { ChiefTransformer.instance.invoke }
 
       it 'logs an info event' do
-        @logger.logged(:info).size.should be >= 1
-        @logger.logged(:info)[1].should =~ /processed/i
+        expect(@logger.logged(:info).size).to be >= 1
+        expect(@logger.logged(:info)[1]).to match /processed/i
       end
     end
   end

@@ -1,8 +1,8 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Commodity do
   it 'has primary key set to goods_nomenclature_sid' do
-    subject.primary_key.should == :goods_nomenclature_sid
+    expect(subject.primary_key).to eq :goods_nomenclature_sid
   end
 
   describe 'associations' do
@@ -24,10 +24,10 @@ describe Commodity do
       context 'fetching actual' do
         it 'fetches correct chapter' do
           TimeMachine.at("2000-1-1") {
-            gono1.reload.heading.pk.should eq heading1.pk
+            expect(gono1.reload.heading.pk).to eq heading1.pk
           }
           TimeMachine.at("2010-1-1") {
-            gono1.reload.heading.pk.should eq heading2.pk
+            expect(gono1.reload.heading.pk).to eq heading2.pk
           }
         end
       end
@@ -35,7 +35,7 @@ describe Commodity do
       context 'fetching relevant' do
         it 'fetches correct chapter' do
           TimeMachine.with_relevant_validity_periods {
-            gono2.reload.heading.pk.should eq heading2.pk
+            expect(gono2.reload.heading.pk).to eq heading2.pk
           }
         end
       end
@@ -82,10 +82,10 @@ describe Commodity do
       context 'fetching actual' do
         it 'fetches correct chapter' do
           TimeMachine.at("2000-1-1") {
-            gono1.reload.chapter.pk.should eq chapter1.pk
+            expect(gono1.reload.chapter.pk).to eq chapter1.pk
           }
           TimeMachine.at("2010-1-1") {
-            gono1.reload.chapter.pk.should eq chapter2.pk
+            expect(gono1.reload.chapter.pk).to eq chapter2.pk
           }
         end
       end
@@ -93,7 +93,7 @@ describe Commodity do
       context 'fetching relevant' do
         it 'fetches correct chapter' do
           TimeMachine.with_relevant_validity_periods {
-            gono2.reload.chapter.pk.should eq chapter2.pk
+            expect(gono2.reload.chapter.pk).to eq chapter2.pk
           }
         end
       end
@@ -109,7 +109,7 @@ describe Commodity do
         measure_type
         measure
 
-        commodity.measures.map(&:measure_sid).should_not include measure.measure_sid
+        expect(commodity.measures.map(&:measure_sid)).to_not include measure.measure_sid
       end
     end
 
@@ -135,8 +135,8 @@ describe Commodity do
                                              validity_start_date: Date.today.ago(2.years)  }
 
       it 'groups measures by measure_generating_regulation_id and picks latest one' do
-        commodity.measures.map(&:measure_sid).should     include measure1.measure_sid
-        commodity.measures.map(&:measure_sid).should_not include measure2.measure_sid
+        expect(commodity.measures.map(&:measure_sid)).to     include measure1.measure_sid
+        expect(commodity.measures.map(&:measure_sid)).to_not include measure2.measure_sid
       end
     end
 
@@ -160,11 +160,11 @@ describe Commodity do
           import_measure_type
           import_measure
 
-          commodity1.export_measures.map(&:measure_sid).should     include export_measure.measure_sid
-          commodity1.export_measures.map(&:measure_sid).should_not include import_measure.measure_sid
+          expect(commodity1.export_measures.map(&:measure_sid)).to     include export_measure.measure_sid
+          expect(commodity1.export_measures.map(&:measure_sid)).to_not include import_measure.measure_sid
 
-          commodity2.import_measures.map(&:measure_sid).should     include import_measure.measure_sid
-          commodity2.import_measures.map(&:measure_sid).should_not include export_measure.measure_sid
+          expect(commodity2.import_measures.map(&:measure_sid)).to     include import_measure.measure_sid
+          expect(commodity2.import_measures.map(&:measure_sid)).to_not include export_measure.measure_sid
         end
       end
 
@@ -176,8 +176,8 @@ describe Commodity do
                                                              goods_nomenclature_item_id: commodity.goods_nomenclature_item_id  }
 
         it 'includes measures that belongs to related export refund nomenclature' do
-          commodity.measures.should_not be_blank
-          commodity.measures.map(&:measure_sid).should include export_measure.measure_sid
+          expect(commodity.measures).to_not be_blank
+          expect(commodity.measures.map(&:measure_sid)).to include export_measure.measure_sid
         end
       end
     end
@@ -208,19 +208,19 @@ describe Commodity do
 
       it 'measure validity date superseeds regulation validity date' do
         measures = TimeMachine.at(Time.now.ago(1.year)) { Commodity.actual.first.measures }.map(&:measure_sid)
-        measures.should     include measure3.measure_sid
-        measures.should_not include measure2.measure_sid
-        measures.should_not include measure1.measure_sid
+        expect(measures).to     include measure3.measure_sid
+        expect(measures).to_not include measure2.measure_sid
+        expect(measures).to_not include measure1.measure_sid
 
         measures = TimeMachine.at(Time.now.ago(2.years)) { Commodity.actual.first.measures }.map(&:measure_sid)
-        measures.should     include measure3.measure_sid
-        measures.should     include measure2.measure_sid
-        measures.should_not include measure1.measure_sid
+        expect(measures).to     include measure3.measure_sid
+        expect(measures).to     include measure2.measure_sid
+        expect(measures).to_not include measure1.measure_sid
 
         measures = TimeMachine.at(Time.now.ago(3.years)) { Commodity.actual.first.measures }.map(&:measure_sid)
-        measures.should     include measure3.measure_sid
-        measures.should     include measure2.measure_sid
-        measures.should     include measure1.measure_sid
+        expect(measures).to     include measure3.measure_sid
+        expect(measures).to     include measure2.measure_sid
+        expect(measures).to     include measure1.measure_sid
       end
     end
   end
@@ -229,7 +229,7 @@ describe Commodity do
     let(:commodity) { create :commodity }
 
     it 'uses goods_nomenclature_item_id as param' do
-      commodity.to_param.should == commodity.goods_nomenclature_item_id
+      expect(commodity.to_param).to eq commodity.goods_nomenclature_item_id
     end
   end
 
@@ -240,8 +240,8 @@ describe Commodity do
     context 'when not in TimeMachine block' do
       it 'fetches all commodities' do
         commodities = Commodity.all
-        commodities.should include actual_commodity
-        commodities.should include expired_commodity
+        expect(commodities).to include actual_commodity
+        expect(commodities).to include expired_commodity
       end
     end
 
@@ -249,8 +249,8 @@ describe Commodity do
       it 'fetches commodities that are actual on specified Date' do
         TimeMachine.at(Date.today.ago(2.years)) do
           commodities = Commodity.actual.all
-          commodities.should include actual_commodity
-          commodities.should include expired_commodity
+          expect(commodities).to include actual_commodity
+          expect(commodities).to include expired_commodity
         end
       end
     end
@@ -282,11 +282,11 @@ describe Commodity do
     end
 
     it 'does not returns children if there are no commodities with higher indent levels and item ids' do
-      commodity1.children.should be_empty
+      expect(commodity1.children).to be_empty
     end
 
     it 'returns children commodities with higher ident levels and items ids' do
-      commodity2.children.map(&:pk).should include commodity3.pk
+      expect(commodity2.children.map(&:pk)).to include commodity3.pk
     end
   end
 
@@ -314,7 +314,7 @@ describe Commodity do
                                 validity_start_date: Date.new(1995,1,1))  }
 
       it 'does not pick ancestor_commodity as ancestor (indent number is not lower (same level))' do
-        commodity.ancestors.should be_empty
+        expect(commodity.ancestors).to be_empty
       end
     end
   end

@@ -1,8 +1,8 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe HealthcheckController, "GET #index" do
   it 'tries to fetch section index' do
-    Section.should_receive(:all).and_return(true)
+    expect(Section).to receive(:all).and_return(true)
 
     get :index
   end
@@ -10,6 +10,6 @@ describe HealthcheckController, "GET #index" do
   it 'returns current release sha' do
     get :index
 
-    response.body.should match_json_expression({ git_sha1: String })
+    expect(response.body).to match_json_expression({ git_sha1: String })
   end
 end

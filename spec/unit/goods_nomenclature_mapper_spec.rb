@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'goods_nomenclature_mapper'
 
 describe GoodsNomenclatureMapper do
@@ -24,19 +24,19 @@ describe GoodsNomenclatureMapper do
 
       it 'assigns no parents or children to both commodities' do
         commodities = GoodsNomenclatureMapper.new([commodity1, commodity2, commodity3])
-        commodity1.children.should include commodity2
-        commodity1.children.should include commodity3
-        commodity1.ancestors.should be_blank
-        commodity1.parent.should be_blank
+        expect(commodity1.children).to include commodity2
+        expect(commodity1.children).to include commodity3
+        expect(commodity1.ancestors).to be_blank
+        expect(commodity1.parent).to be_blank
 
-        commodity2.children.should be_blank
-        commodity2.ancestors.should include commodity1
-        commodity2.parent.should == commodity1
+        expect(commodity2.children).to be_blank
+        expect(commodity2.ancestors).to include commodity1
+        expect(commodity2.parent).to eq commodity1
 
-        commodity3.children.should be_blank
-        commodity3.ancestors.should include commodity1
-        commodity3.ancestors.should_not include commodity2
-        commodity3.parent.should == commodity1
+        expect(commodity3.children).to be_blank
+        expect(commodity3.ancestors).to include commodity1
+        expect(commodity3.ancestors).to_not include commodity2
+        expect(commodity3.parent).to eq commodity1
       end
     end
 
@@ -63,21 +63,21 @@ describe GoodsNomenclatureMapper do
 
       it 'assigns no parents or children to both commodities' do
         commodities = GoodsNomenclatureMapper.new([commodity1, commodity2, commodity3, commodity4])
-        commodity1.children.should include commodity2
-        commodity1.ancestors.should be_blank
-        commodity1.parent.should be_blank
+        expect(commodity1.children).to include commodity2
+        expect(commodity1.ancestors).to be_blank
+        expect(commodity1.parent).to be_blank
 
-        commodity2.children.should be_blank
-        commodity2.ancestors.should include commodity1
-        commodity2.parent.should == commodity1
+        expect(commodity2.children).to be_blank
+        expect(commodity2.ancestors).to include commodity1
+        expect(commodity2.parent).to eq commodity1
 
-        commodity3.children.should include commodity4
-        commodity3.ancestors.should be_blank
-        commodity3.parent.should be_blank
+        expect(commodity3.children).to include commodity4
+        expect(commodity3.ancestors).to be_blank
+        expect(commodity3.parent).to be_blank
 
-        commodity4.children.should be_blank
-        commodity4.ancestors.should include commodity3
-        commodity4.parent.should == commodity3
+        expect(commodity4.children).to be_blank
+        expect(commodity4.ancestors).to include commodity3
+        expect(commodity4.parent).to eq commodity3
       end
     end
 
@@ -111,28 +111,28 @@ describe GoodsNomenclatureMapper do
 
       it 'assigns no parents or children to both commodities' do
         commodities = GoodsNomenclatureMapper.new([commodity1, commodity2, commodity3, commodity4, commodity5])
-        commodity1.children.should include commodity2
-        commodity1.children.should include commodity5
-        commodity1.ancestors.should be_blank
-        commodity1.parent.should be_blank
+        expect(commodity1.children).to include commodity2
+        expect(commodity1.children).to include commodity5
+        expect(commodity1.ancestors).to be_blank
+        expect(commodity1.parent).to be_blank
 
-        commodity2.children.should include commodity3
-        commodity2.ancestors.should include commodity1
-        commodity2.parent.should == commodity1
+        expect(commodity2.children).to include commodity3
+        expect(commodity2.ancestors).to include commodity1
+        expect(commodity2.parent).to eq commodity1
 
-        commodity3.children.should be_blank
-        commodity3.ancestors.should include commodity1
-        commodity3.ancestors.should include commodity2
-        commodity3.parent.should == commodity2
+        expect(commodity3.children).to be_blank
+        expect(commodity3.ancestors).to include commodity1
+        expect(commodity3.ancestors).to include commodity2
+        expect(commodity3.parent).to eq commodity2
 
-        commodity4.children.should be_blank
-        commodity4.ancestors.should include commodity1
-        commodity4.ancestors.should include commodity2
-        commodity4.parent.should == commodity2
+        expect(commodity4.children).to be_blank
+        expect(commodity4.ancestors).to include commodity1
+        expect(commodity4.ancestors).to include commodity2
+        expect(commodity4.parent).to eq commodity2
 
-        commodity5.children.should be_blank
-        commodity5.ancestors.should include commodity1
-        commodity5.parent.should == commodity1
+        expect(commodity5.children).to be_blank
+        expect(commodity5.ancestors).to include commodity1
+        expect(commodity5.parent).to eq commodity1
       end
     end
 
@@ -165,23 +165,23 @@ describe GoodsNomenclatureMapper do
 
       it 'assigns no parents or children to both commodities' do
         headings = GoodsNomenclatureMapper.new([heading1, heading2, heading3, heading4])
-        heading1.children.should include heading2
-        heading1.children.should_not include heading3
-        heading1.ancestors.should be_blank
-        heading1.parent.should be_blank
+        expect(heading1.children).to include heading2
+        expect(heading1.children).to_not include heading3
+        expect(heading1.ancestors).to be_blank
+        expect(heading1.parent).to be_blank
 
-        heading2.children.should be_blank
-        heading2.ancestors.should include heading1
-        heading2.parent.should == heading1
+        expect(heading2.children).to be_blank
+        expect(heading2.ancestors).to include heading1
+        expect(heading2.parent).to eq heading1
 
-        heading3.children.should include heading4
-        heading3.ancestors.should be_blank
-        heading3.parent.should be_blank
+        expect(heading3.children).to include heading4
+        expect(heading3.ancestors).to be_blank
+        expect(heading3.parent).to be_blank
 
-        heading4.children.should be_blank
-        heading4.ancestors.should include heading3
-        heading4.ancestors.should_not include heading1
-        heading4.parent.should == heading3
+        expect(heading4.children).to be_blank
+        expect(heading4.ancestors).to include heading3
+        expect(heading4.ancestors).to_not include heading1
+        expect(heading4.parent).to eq heading3
       end
     end
   end

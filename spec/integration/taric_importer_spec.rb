@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'taric_importer'
 require 'active_support/notifications'
 

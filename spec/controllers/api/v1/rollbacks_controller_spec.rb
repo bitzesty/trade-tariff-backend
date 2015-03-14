@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Api::V1::RollbacksController, "POST to #create", sidekiq: :inline do
   render_views

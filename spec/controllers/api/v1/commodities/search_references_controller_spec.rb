@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Api::V1::Commodities::SearchReferencesController do
   it_behaves_like 'search references controller' do

@@ -1,9 +1,11 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TradeTariffBackend::Validator::ValidationDefiner do
   describe '.generic_validation_klass' do
     it 'defaults to GenericValidation' do
-      described_class.generic_validation_klass.should eq TradeTariffBackend::Validations::GenericValidation
+      expect(
+        described_class.generic_validation_klass
+      ).to eq TradeTariffBackend::Validations::GenericValidation
     end
   end
 
@@ -17,9 +19,11 @@ describe TradeTariffBackend::Validator::ValidationDefiner do
     context 'block without arguments given' do
       context 'validation evaluated' do
         it 'returns instance of validation' do
-          described_class.define(:vld1, 'inclusion validation', {}) {
-            validates :inclusion, of: [:abc]
-          }.should be_kind_of TradeTariffBackend::Validations::InclusionValidation
+          expect(
+            described_class.define(:vld1, 'inclusion validation', {}) {
+              validates :inclusion, of: [:abc]
+            }
+          ).to be_kind_of TradeTariffBackend::Validations::InclusionValidation
         end
       end
 
@@ -36,7 +40,9 @@ describe TradeTariffBackend::Validator::ValidationDefiner do
 
     context 'block with argument given' do
       it 'returns generic validation instance' do
-        described_class.define(:vld1, 'generic_validation', {}) { |record| }.should be_kind_of described_class.generic_validation_klass
+        expect(
+          described_class.define(:vld1, 'generic_validation', {}) { |record| }
+        ).to be_kind_of described_class.generic_validation_klass
       end
     end
   end
@@ -47,20 +53,22 @@ describe TradeTariffBackend::Validator::ValidationDefiner do
     before { validation.validates(:validation_type, {a: :b}) }
 
     it 'assigns validation type' do
-      validation.validation_type.should eq :validation_type
+      expect(validation.validation_type).to eq :validation_type
     end
 
     it 'assigns validation options' do
-      validation.validation_options.should eq Hash[:a, :b]
+      expect(validation.validation_options).to eq Hash[:a, :b]
     end
   end
 
   describe '#validation' do
     context 'validation type set' do
       it 'returns instance of validation' do
+        expect(
           described_class.new('inclusion validation', {}) {
             validates :inclusion, of: [:a]
-          }.validation.should  be_kind_of TradeTariffBackend::Validations::InclusionValidation
+          }.validation
+        ).to be_kind_of TradeTariffBackend::Validations::InclusionValidation
       end
     end
 

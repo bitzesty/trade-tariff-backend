@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TradeTariffBackend::DataMigrator do
   before { TradeTariffBackend::DataMigrator.migrations = [] }
@@ -99,20 +99,20 @@ describe TradeTariffBackend::DataMigrator do
       applied_migration = double("Applied Migration", can_rollup?: false).as_null_object
       TradeTariffBackend::DataMigrator.migrations = [applied_migration]
 
-      TradeTariffBackend::DataMigrator.redo
+      expect(applied_migration).to receive :down
+      expect(applied_migration).to receive :apply
 
-      expect(applied_migration).to have_received :down
-      expect(applied_migration).to have_received :apply
+      TradeTariffBackend::DataMigrator.redo
     end
 
     it 'migrates rolled back migration' do
       applied_migration = double("Applied Migration", can_rollup?: true).as_null_object
       TradeTariffBackend::DataMigrator.migrations = [applied_migration]
 
-      TradeTariffBackend::DataMigrator.redo
+      expect(applied_migration).to receive :up
+      expect(applied_migration).to receive(:apply).twice
 
-      expect(applied_migration).to have_received :up
-      expect(applied_migration).to have_received(:apply).twice
+      TradeTariffBackend::DataMigrator.redo
     end
   end
 end

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'chief_transformer'
 
 describe "CHIEF: Prohibitions and Restrictions \n" do
@@ -58,131 +58,131 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
     end
 
     it 'creates 6 measures' do
-      Measure.count.should == 6
+      expect(Measure.count).to eq 6
     end
 
     it "should create measure for 1211300000" do
       m = Measure.where(goods_nomenclature_item_id: "1211300000", validity_start_date: DateTime.parse("2006-07-24 08:45:00")).first
-      m.should_not be_nil
-      m[:geographical_area_id].should == "IQ"
+      expect(m).to_not be_nil
+      expect(m[:geographical_area_id]).to eq "IQ"
     end
 
     it "should create measure for 1210100010" do
       m = Measure.where(goods_nomenclature_item_id: "1210100010", validity_start_date: DateTime.parse("2008-04-01 00:00:00")).first
-      m.should_not be_nil
-      m[:geographical_area_id].should == "XC"
+      expect(m).to_not be_nil
+      expect(m[:geographical_area_id]).to eq "XC"
     end
 
     it "should create measure for 2106909829" do
       m = Measure.where(goods_nomenclature_item_id: "2106909829", validity_start_date: DateTime.parse("2008-04-01 00:00:00")).first
-      m.should_not be_nil
-      m[:geographical_area_id].should == "1011"
+      expect(m).to_not be_nil
+      expect(m[:geographical_area_id]).to eq "1011"
     end
 
     it "should create measure for 9706000000" do
       m = Measure.where(goods_nomenclature_item_id: "9706000000", validity_start_date: DateTime.parse("2008-04-01 00:00:00")).first
-      m.should_not be_nil
-      m[:geographical_area_id].should == "A001"
+      expect(m).to_not be_nil
+      expect(m[:geographical_area_id]).to eq "A001"
     end
 
     it "should create measure for 9706000010" do
       m = Measure.where(goods_nomenclature_item_id: "9706000010", validity_start_date: DateTime.parse("2008-04-01 00:00:00")).first
-      m.should_not be_nil
-      m[:geographical_area_id].should == "A001"
+      expect(m).to_not be_nil
+      expect(m[:geographical_area_id]).to eq "A001"
     end
 
     it "should create measure for 9706000090" do
       m = Measure.where(goods_nomenclature_item_id: "9706000090", validity_start_date: DateTime.parse("2008-04-01 00:00:00")).first
-      m.should_not be_nil
-      m[:geographical_area_id].should == "A001"
+      expect(m).to_not be_nil
+      expect(m[:geographical_area_id]).to eq "A001"
     end
 
     it "should create measure conditions for 1211300000" do
       m = Measure.where(goods_nomenclature_item_id: '1211300000').take
-      m.measure_conditions.count.should == 3
+      expect(m.measure_conditions.count).to eq 3
       m = m.measure_conditions.first
-      m.condition_code.should == "Z"
-      m.certificate_code.should == "113"
+      expect(m.condition_code).to eq "Z"
+      expect(m.certificate_code).to eq "113"
     end
 
     it "should create measure conditions for 1210100010" do
       m = Measure.where(goods_nomenclature_item_id: '1210100010').take
-      m.measure_conditions.count.should == 3
+      expect(m.measure_conditions.count).to eq 3
       m = m.measure_conditions.first
-      m.condition_code.should == "Z"
-      m.certificate_code.should == "001"
+      expect(m.condition_code).to eq "Z"
+      expect(m.certificate_code).to eq "001"
     end
 
     it "should create measure conditions for 2106909829" do
       m = Measure.where(goods_nomenclature_item_id: '2106909829').take
-      m.measure_conditions.count.should == 2
+      expect(m.measure_conditions.count).to eq 2
       m = m.measure_conditions.first
-      m.condition_code.should == "B"
-      m.certificate_code.should == "853"
+      expect(m.condition_code).to eq "B"
+      expect(m.certificate_code).to eq "853"
     end
 
     it "should create measure conditions for 9706000000" do
       m = Measure.where(goods_nomenclature_item_id: '9706000000').take
-      m.measure_conditions.count.should == 2
+      expect(m.measure_conditions.count).to eq 2
       m = m.measure_conditions.first
-      m.condition_code.should == "B"
-      m.certificate_code.should == "115"
+      expect(m.condition_code).to eq "B"
+      expect(m.certificate_code).to eq "115"
     end
 
     it "should create measure conditions for 9706000010" do
       m = Measure.where(goods_nomenclature_item_id: '9706000010').take
-      m.measure_conditions.count.should == 2
+      expect(m.measure_conditions.count).to eq 2
       m = m.measure_conditions.first
-      m.condition_code.should == "B"
-      m.certificate_code.should == "115"
+      expect(m.condition_code).to eq "B"
+      expect(m.certificate_code).to eq "115"
     end
 
     it "should create measure conditions for 9706000090" do
       m = Measure.where(goods_nomenclature_item_id: '9706000090').take
-      m.measure_conditions.count.should == 2
+      expect(m.measure_conditions.count).to eq 2
       m = m.measure_conditions.first
-      m.condition_code.should == "B"
-      m.certificate_code.should == "115"
+      expect(m.condition_code).to eq "B"
+      expect(m.certificate_code).to eq "115"
     end
 
     it "should create the following excluded countries or regions" do
-      MeasureExcludedGeographicalArea.all.count.should == 5
+      expect(MeasureExcludedGeographicalArea.all.count).to eq 5
     end
 
     it "should create the following footnote association for 015" do
       f = FootnoteAssociationMeasure.where(measure_sid: -6, footnote_type_id: "04", footnote_id: "015").first
-      f.should_not be_nil
-      f.national.should be_true
+      expect(f).to_not be_nil
+      expect(f.national).to be_truthy
     end
 
     it "should create the following footnote association for 004" do
       f = FootnoteAssociationMeasure.where(measure_sid: -5, footnote_type_id: "04", footnote_id: "004").first
-      f.should_not be_nil
-      f.national.should be_true
+      expect(f).to_not be_nil
+      expect(f.national).to be_truthy
     end
 
     it "should create the following footnote association for 006" do
       f = FootnoteAssociationMeasure.where(measure_sid: -4, footnote_type_id: "04", footnote_id: "006").first
-      f.should_not be_nil
-      f.national.should be_true
+      expect(f).to_not be_nil
+      expect(f.national).to be_truthy
     end
 
     it "should create the following footnote association for 011" do
       f = FootnoteAssociationMeasure.where(measure_sid: -1, footnote_type_id: "04", footnote_id: "011").first
-      f.should_not be_nil
-      f.national.should be_true
+      expect(f).to_not be_nil
+      expect(f.national).to be_truthy
     end
 
     it "should create the following footnote association for 011#2" do
       f = FootnoteAssociationMeasure.where(measure_sid: -2, footnote_type_id: "04", footnote_id: "011").first
-      f.should_not be_nil
-      f.national.should be_true
+      expect(f).to_not be_nil
+      expect(f.national).to be_truthy
     end
 
     it "should create the following footnote association for 011#3" do
       f = FootnoteAssociationMeasure.where(measure_sid: -3, footnote_type_id: "04", footnote_id: "011").first
-      f.should_not be_nil
-      f.national.should be_true
+      expect(f).to_not be_nil
+      expect(f.national).to be_truthy
     end
 
     describe "Daily Update TAME and TAMF \n" do
@@ -559,26 +559,26 @@ describe "CHIEF: Prohibitions and Restrictions \n" do
       }
 
       it 'should create three new measures for preconditions with components and footnotes' do
-        Measure.count.should == 3
+        expect(Measure.count).to eq 3
         m1 = Measure.where(goods_nomenclature_item_id: "2106909829",
                       geographical_area_id: 'US',
                       validity_start_date: DateTime.parse("2008-05-01 00:00:00")).take
-        m1.measure_conditions.count.should == 2
-        m1.footnote_association_measures.count.should == 1
+        expect(m1.measure_conditions.count).to eq 2
+        expect(m1.footnote_association_measures.count).to eq 1
         m2 = Measure.where(goods_nomenclature_item_id: "2106909829",
                            geographical_area_id: 'CN',
                            validity_start_date: DateTime.parse("2008-05-01 00:00:00")).take
-        m2.measure_conditions.count.should == 2
-        m2.footnote_association_measures.count.should == 1
+        expect(m2.measure_conditions.count).to eq 2
+        expect(m2.footnote_association_measures.count).to eq 1
         m3 =Measure.where(goods_nomenclature_item_id: "2106909829",
                           geographical_area_id: 'IQ',
                           validity_start_date: DateTime.parse("2008-05-01 00:00:00")).take
-        m3.measure_conditions.count.should == 2
-        m3.footnote_association_measures.count.should == 1
+        expect(m3.measure_conditions.count).to eq 2
+        expect(m3.footnote_association_measures.count).to eq 1
       end
 
       it 'should create no excluded countries' do
-        MeasureExcludedGeographicalArea.count.should == 0
+        expect(MeasureExcludedGeographicalArea.count).to eq 0
       end
 
       context "Alternative 1: Update TAME & TAMF" do

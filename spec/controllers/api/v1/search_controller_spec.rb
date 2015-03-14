@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Api::V1::SearchController, "POST #search" do
   describe 'exact matching' do
@@ -17,9 +17,9 @@ describe Api::V1::SearchController, "POST #search" do
       post :search, { t: chapter.to_param, as_of: chapter.validity_start_date }
     }
 
-    it { should respond_with(:success) }
+    it { is_expected.to respond_with(:success) }
     it 'returns exact match endpoint and indetifier if query for exact record' do
-        response.body.should match_json_expression pattern
+      expect(response.body).to match_json_expression pattern
     end
   end
 
@@ -47,9 +47,9 @@ describe Api::V1::SearchController, "POST #search" do
       post :search, { t: chapter.description,  as_of: chapter.validity_start_date }
     }
 
-    it { should respond_with(:success) }
+    it { is_expected.to respond_with(:success) }
     it 'returns records grouped by type' do
-      response.body.should match_json_expression pattern
+      expect(response.body).to match_json_expression pattern
     end
   end
 
@@ -65,9 +65,9 @@ describe Api::V1::SearchController, "POST #search" do
       post :search
     }
 
-    it { should respond_with(:success) }
+    it { is_expected.to respond_with(:success) }
     it 'returns list of errors' do
-        response.body.should match_json_expression pattern
+        expect(response.body).to match_json_expression pattern
     end
   end
 end

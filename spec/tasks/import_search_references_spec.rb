@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe ImportSearchReferences, :with_fakefs do
   let(:file_name) { 'green-pages.csv' }
@@ -33,7 +33,7 @@ describe ImportSearchReferences, :with_fakefs do
         it 'creates SearchReference entries for Chapters' do
           task.run
 
-          expect(SearchReference.for_chapter(chapter).any?).to be_true
+          expect(SearchReference.for_chapter(chapter).any?).to be_truthy
         end
       end
 
@@ -57,7 +57,7 @@ describe ImportSearchReferences, :with_fakefs do
         it 'creates SearchReference entries for Headings' do
           task.run
 
-          expect(SearchReference.for_heading(heading).any?).to be_true
+          expect(SearchReference.for_heading(heading).any?).to be_truthy
         end
       end
 
@@ -81,7 +81,7 @@ describe ImportSearchReferences, :with_fakefs do
         it 'creates SearchReference entries for Sections' do
           task.run
 
-          expect(SearchReference.for_section(section).any?).to be_true
+          expect(SearchReference.for_section(section).any?).to be_truthy
         end
       end
 
@@ -105,11 +105,11 @@ describe ImportSearchReferences, :with_fakefs do
       }
 
       it 'creates SearchReference entry for Chapter' do
-        expect(SearchReference.for_chapter(chapter).any?).to be_true
+        expect(SearchReference.for_chapter(chapter).any?).to be_truthy
       end
 
       it 'creates SearchReference entry for Heading' do
-        expect(SearchReference.for_heading(heading).any?).to be_true
+        expect(SearchReference.for_heading(heading).any?).to be_truthy
       end
     end
 

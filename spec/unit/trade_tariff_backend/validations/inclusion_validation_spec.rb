@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TradeTariffBackend::Validations::InclusionValidation do
   describe '#valid?' do
@@ -12,7 +12,9 @@ describe TradeTariffBackend::Validations::InclusionValidation do
         let(:record) { double(attr: :c) }
 
         it 'returns true' do
-          validation.valid?(record).should be_true
+          expect(
+            validation.valid?(record)
+          ).to be_truthy
         end
       end
 
@@ -20,7 +22,9 @@ describe TradeTariffBackend::Validations::InclusionValidation do
         let(:record) { double(attr: :d) }
 
         it 'returns false' do
-          validation.valid?(record).should be_false
+          expect(
+            validation.valid?(record)
+          ).to be_falsy
         end
       end
     end

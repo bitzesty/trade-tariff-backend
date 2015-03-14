@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 require 'taric_importer'
 require 'taric_importer/record_processor'

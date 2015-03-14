@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 require 'taric_importer/transaction'
 
@@ -39,11 +39,11 @@ describe TaricImporter::Transaction do
     before { subject.persist(record_processor_klass) }
 
     it 'instantiates record processor class' do
-      record_processor_klass.should have_received(:new)
+      expect(record_processor_klass).to have_received(:new)
     end
 
     it 'invokes relevant record processor' do
-      record_processor.should have_received(:process!)
+      expect(record_processor).to have_received(:process!)
     end
   end
 end

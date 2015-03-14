@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe ChiefTransformer::Processor::MfcmInsert do
   let(:sample_operation_date) { Date.new(2013,8,5) }
@@ -36,7 +36,7 @@ describe ChiefTransformer::Processor::MfcmInsert do
               operation: 'C',
               operation_date: sample_operation_date
             ).one?
-          ).to be_true
+          ).to be_truthy
         end
 
         it 'creates Measure component for P&R measure' do
@@ -89,7 +89,7 @@ describe ChiefTransformer::Processor::MfcmInsert do
               operation: 'C',
               operation_date: sample_operation_date
             ).one?
-          ).to be_true
+          ).to be_truthy
         end
 
         it 'creates Measure component with duty rate of 15 for the VAT Measure' do
@@ -99,7 +99,7 @@ describe ChiefTransformer::Processor::MfcmInsert do
               operation: 'C',
               operation_date: sample_operation_date
             ).one?
-          ).to be_true
+          ).to be_truthy
         end
 
         it 'create Footnote association for the VAT measure' do
@@ -111,7 +111,7 @@ describe ChiefTransformer::Processor::MfcmInsert do
               operation: 'C',
               operation_date: sample_operation_date
             ).one?
-          ).to be_true
+          ).to be_truthy
         end
       end
     end

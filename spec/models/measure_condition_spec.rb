@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe MeasureCondition do
   describe 'associations' do
@@ -58,29 +58,37 @@ describe MeasureCondition do
 
       context 'direct loading' do
         it 'loads associated measure condition components' do
-          measure_condition.measure_condition_components.should include measure_condition_component1
+          expect(
+            measure_condition.measure_condition_components
+          ).to include measure_condition_component1
         end
 
         it 'does not load associated measure component' do
-          measure_condition.measure_condition_components.should_not include measure_condition_component2
+          expect(
+            measure_condition.measure_condition_components
+          ).to_not include measure_condition_component2
         end
       end
 
       context 'eager loading' do
         it 'loads associated measure components' do
-          MeasureCondition.where(measure_condition_sid: measure_condition.measure_condition_sid)
+          expect(
+            MeasureCondition.where(measure_condition_sid: measure_condition.measure_condition_sid)
                  .eager(:measure_condition_components)
                  .all
                  .first
-                 .measure_condition_components.should include measure_condition_component1
+                 .measure_condition_components
+          ).to include measure_condition_component1
         end
 
         it 'does not load associated measure component' do
-          MeasureCondition.where(measure_condition_sid: measure_condition.measure_condition_sid)
+          expect(
+            MeasureCondition.where(measure_condition_sid: measure_condition.measure_condition_sid)
                  .eager(:measure_condition_components)
                  .all
                  .first
-                 .measure_condition_components.should_not include measure_condition_component2
+                 .measure_condition_components
+          ).to_not include measure_condition_component2
         end
       end
     end

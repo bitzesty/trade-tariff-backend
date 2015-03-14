@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe GeographicalArea do
   describe 'associations' do
@@ -16,17 +16,23 @@ describe GeographicalArea do
       context 'direct loading' do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
-            geographical_area.geographical_area_description.pk.should == geographical_area_description1.pk
+            expect(
+              geographical_area.geographical_area_description.pk
+            ).to eq geographical_area_description1.pk
           end
         end
 
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
-            geographical_area.geographical_area_description.pk.should == geographical_area_description1.pk
+            expect(
+              geographical_area.geographical_area_description.pk
+            ).to eq geographical_area_description1.pk
           end
 
           TimeMachine.at(4.years.ago) do
-            geographical_area.reload.geographical_area_description.pk.should == geographical_area_description2.pk
+            expect(
+              geographical_area.reload.geographical_area_description.pk
+            ).to eq geographical_area_description2.pk
           end
         end
       end
@@ -34,29 +40,35 @@ describe GeographicalArea do
       context 'eager loading' do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
-            GeographicalArea.where(geographical_area_sid: geographical_area.geographical_area_sid)
+            expect(
+              GeographicalArea.where(geographical_area_sid: geographical_area.geographical_area_sid)
                           .eager(:geographical_area_descriptions)
                           .all
                           .first
-                          .geographical_area_description.pk.should == geographical_area_description1.pk
+                          .geographical_area_description.pk
+            ).to eq geographical_area_description1.pk
           end
         end
 
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
-            GeographicalArea.where(geographical_area_sid: geographical_area.geographical_area_sid)
+            expect(
+              GeographicalArea.where(geographical_area_sid: geographical_area.geographical_area_sid)
                           .eager(:geographical_area_descriptions)
                           .all
                           .first
-                          .geographical_area_description.pk.should == geographical_area_description1.pk
+                          .geographical_area_description.pk
+            ).to eq geographical_area_description1.pk
           end
 
           TimeMachine.at(4.years.ago) do
-            GeographicalArea.where(geographical_area_sid: geographical_area.geographical_area_sid)
+            expect(
+              GeographicalArea.where(geographical_area_sid: geographical_area.geographical_area_sid)
                           .eager(:geographical_area_descriptions)
                           .all
                           .first
-                          .geographical_area_description.pk.should == geographical_area_description2.pk
+                          .geographical_area_description.pk
+            ).to eq geographical_area_description2.pk
           end
         end
       end
@@ -82,17 +94,23 @@ describe GeographicalArea do
       context 'direct loading' do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
-            geographical_area.contained_geographical_areas.map(&:pk).should include contained_area_present.pk
+            expect(
+              geographical_area.contained_geographical_areas.map(&:pk)
+            ).to include contained_area_present.pk
           end
         end
 
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
-            geographical_area.contained_geographical_areas.map(&:pk).should include contained_area_present.pk
+            expect(
+              geographical_area.contained_geographical_areas.map(&:pk)
+            ).to include contained_area_present.pk
           end
 
           TimeMachine.at(4.years.ago) do
-            geographical_area.reload.contained_geographical_areas.map(&:pk).should include contained_area_past.pk
+            expect(
+              geographical_area.reload.contained_geographical_areas.map(&:pk)
+            ).to include contained_area_past.pk
           end
         end
       end
@@ -100,32 +118,38 @@ describe GeographicalArea do
       context 'eager loading' do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
-            GeographicalArea.where(geographical_area_sid: geographical_area.geographical_area_sid)
+            expect(
+              GeographicalArea.where(geographical_area_sid: geographical_area.geographical_area_sid)
                           .eager(:contained_geographical_areas)
                           .all
                           .first
                           .contained_geographical_areas
-                          .map(&:pk).should include contained_area_present.pk
+                          .map(&:pk)
+            ).to include contained_area_present.pk
           end
         end
 
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
-            GeographicalArea.where(geographical_area_sid: geographical_area.geographical_area_sid)
+            expect(
+              GeographicalArea.where(geographical_area_sid: geographical_area.geographical_area_sid)
                           .eager(:contained_geographical_areas)
                           .all
                           .first
                           .contained_geographical_areas
-                          .map(&:pk).should include contained_area_present.pk
+                          .map(&:pk)
+            ).to include contained_area_present.pk
           end
 
           TimeMachine.at(4.years.ago) do
-            GeographicalArea.where(geographical_area_sid: geographical_area.geographical_area_sid)
+            expect(
+              GeographicalArea.where(geographical_area_sid: geographical_area.geographical_area_sid)
                           .eager(:contained_geographical_areas)
                           .all
                           .first
                           .contained_geographical_areas
-                          .map(&:pk).should include contained_area_past.pk
+                          .map(&:pk)
+            ).to include contained_area_past.pk
           end
         end
       end
@@ -134,9 +158,9 @@ describe GeographicalArea do
 
   describe 'validations' do
     # GA1 The combination geographical area id + validity start date must be unique.
-    it { should validate_uniqueness.of([:geographical_area_id, :validity_start_date])}
+    it { is_expected.to validate_uniqueness.of([:geographical_area_id, :validity_start_date])}
     # GA2 The start date must be less than or equal to the end date.
-    it { should validate_validity_dates }
+    it { is_expected.to validate_validity_dates }
 
     describe "GA4" do
       let(:geographical_area) {

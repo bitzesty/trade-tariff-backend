@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TradeTariffBackend::Validations::ExclusionValidation do
   describe '#valid?' do
@@ -10,7 +10,7 @@ describe TradeTariffBackend::Validations::ExclusionValidation do
       }
 
       it 'should validate' do
-        validation.valid?(model).should be_false
+        expect(validation.valid?(model)).to be_falsy
       end
     end
 
@@ -22,7 +22,7 @@ describe TradeTariffBackend::Validations::ExclusionValidation do
       }
 
       it 'should validate' do
-        validation.valid?(model).should be_false
+        expect(validation.valid?(model)).to be_falsy
       end
     end
 

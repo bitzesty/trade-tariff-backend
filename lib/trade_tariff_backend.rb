@@ -56,7 +56,7 @@ module TradeTariffBackend
         begin
           indexer.reindex
         rescue StandardError => e
-          Mailer.reindex_exception(e).deliver
+          Mailer.reindex_exception(e).deliver_now
         end
       end
     end

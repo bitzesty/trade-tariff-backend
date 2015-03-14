@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'tariff_importer'
 require 'active_support/log_subscriber/test_helper'
 
@@ -18,8 +18,8 @@ describe TariffImporter::Logger do
     before { ChiefImporter.new(valid_file).import }
 
     it 'logs an info event' do
-      @logger.logged(:info).size.should eq 1
-      @logger.logged(:info).last.should =~ /Parsed (.*) CHIEF records/
+      expect(@logger.logged(:info).size).to eq 1
+      expect(@logger.logged(:info).last).to match /Parsed (.*) CHIEF records/
     end
   end
 
@@ -31,8 +31,8 @@ describe TariffImporter::Logger do
     }
 
     it 'logs an info event' do
-      @logger.logged(:error).size.should eq 1
-      @logger.logged(:error).last.should =~ /CHIEF import (.*) failed/
+      expect(@logger.logged(:error).size).to eq 1
+      expect(@logger.logged(:error).last).to match /CHIEF import (.*) failed/
     end
   end
 
@@ -44,8 +44,8 @@ describe TariffImporter::Logger do
     }
 
     it 'logs an info event' do
-      @logger.logged(:error).size.should eq 1
-      @logger.logged(:error).last.should =~ /Taric import failed/
+      expect(@logger.logged(:error).size).to eq 1
+      expect(@logger.logged(:error).last).to match /Taric import failed/
     end
   end
 
@@ -58,8 +58,8 @@ describe TariffImporter::Logger do
     }
 
     it 'logs an info event' do
-      @logger.logged(:info).size.should eq 1
-      @logger.logged(:info).last.should =~ /Successfully imported/
+      expect(@logger.logged(:info).size).to eq 1
+      expect(@logger.logged(:info).last).to match /Successfully imported/
     end
   end
 
@@ -69,8 +69,8 @@ describe TariffImporter::Logger do
     it 'logs an info event' do
       rescuing { TaricImporter.new(unknown_file).import }
 
-      @logger.logged(:error).size.should be >= 1
-      @logger.logged(:error).first.should =~ /Unexpected Taric operation/
+      expect(@logger.logged(:error).size).to be >= 1
+      expect(@logger.logged(:error).first).to match /Unexpected Taric operation/
     end
 
     it 'raises ImportException' do

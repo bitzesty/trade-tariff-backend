@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Chief::CountryGroup do
   describe '.to_taric' do

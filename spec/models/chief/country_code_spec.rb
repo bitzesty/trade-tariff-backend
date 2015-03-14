@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Chief::CountryCode do
   describe '.to_taric' do

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 require 'chief_importer'
 require 'chief_importer/strategies/base_strategy'
@@ -12,7 +12,7 @@ describe ChiefImporter::Strategies::BaseStrategy do
   describe 'initialization' do
     it 'assigns attributes, first effective timestamp and operation' do
       strategy = ChiefImporter::Strategies::BaseStrategy.new(args)
-      strategy.operation.should_not == operation
+      expect(strategy.operation).to_not eq operation
     end
   end
 
@@ -20,11 +20,11 @@ describe ChiefImporter::Strategies::BaseStrategy do
     it 'assigns correct HTTP operation' do
       strategy = ChiefImporter::Strategies::BaseStrategy.new(args)
       strategy.operation = 'X'
-      strategy.operation.should == :delete
+      expect(strategy.operation).to eq :delete
       strategy.operation = 'U'
-      strategy.operation.should == :update
+      expect(strategy.operation).to eq :update
       strategy.operation = 'I'
-      strategy.operation.should == :insert
+      expect(strategy.operation).to eq :insert
     end
   end
 end

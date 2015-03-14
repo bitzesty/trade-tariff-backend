@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TradeTariffBackend::DataMigration::Dependency do
   describe '#applicable?' do
@@ -7,7 +7,7 @@ describe TradeTariffBackend::DataMigration::Dependency do
       let(:dep2) { double('Dependency 2', applicable: true) }
 
       it 'returns false' do
-        expect(described_class[dep1, dep2].applicable?).to be_false
+        expect(described_class[dep1, dep2].applicable?).to be_falsy
       end
     end
 
@@ -16,7 +16,7 @@ describe TradeTariffBackend::DataMigration::Dependency do
       let(:dep2) { double('Dependency 2', applicable: true) }
 
       it 'returns true' do
-        expect(described_class[dep1, dep2].applicable?).to be_true
+        expect(described_class[dep1, dep2].applicable?).to be_truthy
       end
     end
   end

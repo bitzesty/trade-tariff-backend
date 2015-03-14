@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 shared_examples_for 'one to one to' do |associated_object, eager_load_association = associated_object|
   @source_record =  :"#{described_class.to_s.underscore}"
@@ -33,17 +33,23 @@ shared_examples_for 'one to one to' do |associated_object, eager_load_associatio
   context 'direct loading' do
     it "loads correct #{associated_object.to_s.humanize} respecting given actual time" do
       TimeMachine.now do
-        send(source_record).send(associated_object).pk.should == send(:"#{associated_object}1").pk
+        expect(
+          send(source_record).send(associated_object).pk
+        ).to eq send(:"#{associated_object}1").pk
       end
     end
 
     it "loads correct #{associated_object.to_s.humanize} respecting given time" do
       TimeMachine.at(1.year.ago) do
-        send(source_record).send(associated_object).pk.should == send(:"#{associated_object}1").pk
+        expect(
+          send(source_record).send(associated_object).pk
+        ).to eq send(:"#{associated_object}1").pk
       end
 
       TimeMachine.at(4.years.ago) do
-        send(source_record).reload.send(associated_object).pk.should == send(:"#{associated_object}2").pk
+        expect(
+          send(source_record).reload.send(associated_object).pk
+        ).to eq send(:"#{associated_object}2").pk
       end
     end
   end
@@ -62,29 +68,35 @@ shared_examples_for 'one to one to' do |associated_object, eager_load_associatio
 
     it "loads correct #{associated_object.to_s.humanize} respecting given actual time" do
       TimeMachine.now do
-        described_class.where(association_conditions)
+        expect(
+          described_class.where(association_conditions)
                        .eager(eager_load_association)
                        .all
                        .first
-                       .send(associated_object).pk.should == send(:"#{associated_object}1").pk
+                       .send(associated_object).pk
+        ).to eq send(:"#{associated_object}1").pk
       end
     end
 
     it "loads correct #{associated_object.to_s.humanize} respecting given time" do
       TimeMachine.at(1.year.ago) do
-        described_class.where(association_conditions)
+        expect(
+          described_class.where(association_conditions)
                        .eager(eager_load_association)
                        .all
                        .first
-                       .send(associated_object).pk.should == send(:"#{associated_object}1").pk
+                       .send(associated_object).pk
+        ).to eq send(:"#{associated_object}1").pk
       end
 
       TimeMachine.at(4.years.ago) do
-        described_class.where(association_conditions)
+        expect(
+          described_class.where(association_conditions)
                        .eager(eager_load_association)
                        .all
                        .first
-                       .send(associated_object).pk.should == send(:"#{associated_object}2").pk
+                       .send(associated_object).pk
+        ).to eq send(:"#{associated_object}2").pk
       end
     end
   end

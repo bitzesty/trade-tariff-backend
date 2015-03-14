@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Api::V1::Sections::SectionNotesController, "GET #show" do
   render_views
@@ -19,7 +19,7 @@ describe Api::V1::Sections::SectionNotesController, "GET #show" do
     it 'returns rendered record' do
       get :show, section_id: section.id, format: :json
 
-      response.body.should match_json_expression pattern
+      expect(response.body).to match_json_expression pattern
     end
   end
 

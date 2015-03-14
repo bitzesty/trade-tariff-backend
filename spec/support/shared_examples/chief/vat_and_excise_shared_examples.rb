@@ -2,39 +2,39 @@ shared_examples_for "VAT and Excise TAME Daily Scenario 1: Changed VAT rate outc
   before { ChiefTransformer.instance.invoke }
 
   it 'creates two new measures' do
-    Measure.count.should == 5
+    expect(Measure.count).to eq 5
   end
 
   it 'should add end date to measure 0101010100' do
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
                       validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
-    m.measure_components.first.duty_amount.should == 15
+    expect(m.measure_components.first.duty_amount).to eq 15
   end
 
   it 'should add end date to measure 0202020200' do
     m = Measure.where(goods_nomenclature_item_id: "0202020200",
                       validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
                       validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
-    m.measure_components.first.duty_amount.should == 15
+    expect(m.measure_components.first.duty_amount).to eq 15
   end
 
   it 'should increase Duty Amount to 17% for measure 0303030300' do
     m = Measure.where(goods_nomenclature_item_id: "0303030300",
                       validity_start_date: DateTime.parse("2008-04-30 14:00:00")).take
-    m.measure_components.first.duty_amount.should == 17
+    expect(m.measure_components.first.duty_amount).to eq 17
   end
 
   it 'should create new Measure for 0101010100 with duty amount of 17%' do
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
-    m.measure_components.first.duty_amount.should == 17
+    expect(m.measure_components.first.duty_amount).to eq 17
   end
 
   it 'should create new Measure for 0202020200 with duty amount of 17%' do
     m = Measure.where(goods_nomenclature_item_id: "0202020200",
                       validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
-    m.measure_components.first.duty_amount.should == 17
+    expect(m.measure_components.first.duty_amount).to eq 17
   end
 end
 
@@ -45,13 +45,13 @@ shared_examples_for "VAT and Excise TAME Daily Scenario 2: VAT applied to anothe
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
                       validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
-    m.measure_components.first.duty_amount.should == 15
+    expect(m.measure_components.first.duty_amount).to eq 15
   end
 
   it 'creates commodity 0404040400' do
     m = Measure.where(goods_nomenclature_item_id: "0404040400",
                       validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
-    m.measure_components.first.duty_amount.should == 15
+    expect(m.measure_components.first.duty_amount).to eq 15
   end
 end
 
@@ -62,7 +62,7 @@ shared_examples_for "VAT and Excise TAME Daily Scenario 3: VAT no longer applied
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
                       validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
-    m.measure_components.first.duty_amount.should == 15
+    expect(m.measure_components.first.duty_amount).to eq 15
   end
 end
 
@@ -72,7 +72,7 @@ shared_examples_for "VAT and Excise TAME Daily Scenario 4: VAT applied to additi
   it 'creates new measure for commodity 0404040400' do
     m = Measure.where(goods_nomenclature_item_id: "0404040400",
                       validity_start_date: DateTime.parse("2008-01-01 00:00:00")).take
-    m.measure_components.first.duty_amount.should == 15
+    expect(m.measure_components.first.duty_amount).to eq 15
   end
 end
 
@@ -83,7 +83,7 @@ shared_examples_for "VAT and Excise TAME Daily Scenario 5: VAT applied to incorr
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
                       validity_end_date: DateTime.parse("2007-11-15 11:00:00")).take
-    m.measure_components.first.duty_amount.should == 15
+    expect(m.measure_components.first.duty_amount).to eq 15
   end
 end
 
@@ -91,28 +91,28 @@ shared_examples_for "VAT and Excise TAME Daily Scenario 6: VAT removed outcome" 
   before { ChiefTransformer.instance.invoke }
 
   it 'keeps three measures in the database' do
-    Measure.count.should == 3
+    expect(Measure.count).to eq 3
   end
 
   it 'adds validity end date to commodity 0101010100' do
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
                       validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
-    m.measure_components.first.duty_amount.should == 15
+    expect(m.measure_components.first.duty_amount).to eq 15
   end
 
   it 'adds validity end date to commodity 0202020100' do
     m = Measure.where(goods_nomenclature_item_id: "0202020200",
                       validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
                       validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
-    m.measure_components.first.duty_amount.should == 15
+    expect(m.measure_components.first.duty_amount).to eq 15
   end
 
   it 'adds validity end date to commodity 0303030300' do
     m = Measure.where(goods_nomenclature_item_id: "0303030300",
                       validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
                       validity_end_date: DateTime.parse("2008-05-01 00:00:00")).take
-    m.measure_components.first.duty_amount.should == 15
+    expect(m.measure_components.first.duty_amount).to eq 15
   end
 end
 
@@ -122,19 +122,19 @@ shared_examples_for "VAT and Excise TAME Daily Scenario 7: Incorrect VAT rate ou
   it 'updates duty amount for commodity 0101010100 measure' do
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2007-11-15 11:00:00")).take
-    m.measure_components.first.duty_amount.should == 17.0
+    expect(m.measure_components.first.duty_amount).to eq 17.0
   end
 
   it 'updates duty amount for commodity 0202020200 measure' do
     m = Measure.where(goods_nomenclature_item_id: "0202020200",
                       validity_start_date: DateTime.parse("2008-01-01 00:00:00")).take
-    m.measure_components.first.duty_amount.should == 17.0
+    expect(m.measure_components.first.duty_amount).to eq 17.0
   end
 
   it 'updates duty amount for commodity 0303030300 measure' do
     m = Measure.where(goods_nomenclature_item_id: "0303030300",
                       validity_start_date: DateTime.parse("2008-04-30 14:00:00")).take
-    m.measure_components.first.duty_amount.should == 17.0
+    expect(m.measure_components.first.duty_amount).to eq 17.0
   end
 end
 
@@ -142,45 +142,45 @@ shared_examples_for "VAT and Excise TAMF Daily Scenario 1: Added max amount outc
   before { ChiefTransformer.instance.invoke }
 
   it 'adds two new measures' do
-    Measure.count.should == 8
+    expect(Measure.count).to eq 8
   end
 
   it 'adds end date to measure for 0101010100' do
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
                       validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
-    m.measure_components.first.duty_amount.should == 10
+    expect(m.measure_components.first.duty_amount).to eq 10
   end
 
   it 'adds end date to measure for 0202020200' do
     m = Measure.where(goods_nomenclature_item_id: "0202020200",
                       validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
                       validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
-    m.measure_components.first.duty_amount.should == 10
+    expect(m.measure_components.first.duty_amount).to eq 10
   end
 
   it 'adds additional measure component to 0303030300' do
     m = Measure.where(goods_nomenclature_item_id: "0303030300",
                       validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
                       measure_type_id: 'EGJ').take
-    m.measure_components.first.duty_amount.should == 10
-    m.measure_components.last.duty_amount.should == 2
+    expect(m.measure_components.first.duty_amount).to eq 10
+    expect(m.measure_components.last.duty_amount).to eq 2
   end
 
   it 'creates new measure  for 0101010100 with measure components for duty amount 10% and 2kg' do
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
                       measure_type_id: 'EGJ').take
-    m.measure_components.first.duty_amount.should == 10
-    m.measure_components.last.duty_amount.should == 2
+    expect(m.measure_components.first.duty_amount).to eq 10
+    expect(m.measure_components.last.duty_amount).to eq 2
   end
 
   it 'creates new measure  for 0202020200 with measure components for duty amount 10% and 2kg' do
     m = Measure.where(goods_nomenclature_item_id: "0202020200",
                       validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
                       measure_type_id: 'EGJ').take
-    m.measure_components.first.duty_amount.should == 10
-    m.measure_components.last.duty_amount.should == 2
+    expect(m.measure_components.first.duty_amount).to eq 10
+    expect(m.measure_components.last.duty_amount).to eq 2
   end
 end
 
@@ -188,31 +188,31 @@ shared_examples_for "VAT and Excise TAMF Daily Scenario 2: Missing max amount ou
   before { ChiefTransformer.instance.invoke }
 
   it 'does not add new measures' do
-    Measure.count.should == 6
+    expect(Measure.count).to eq 6
   end
 
   it 'adds additional duty amount of 2kg to 0101010100' do
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
                       measure_type_id: 'EGJ').take
-    m.measure_components.first.duty_amount.should == 10
-    m.measure_components.last.duty_amount.should == 2
+    expect(m.measure_components.first.duty_amount).to eq 10
+    expect(m.measure_components.last.duty_amount).to eq 2
   end
 
   it 'adds additional duty amount of 2kg to 0202020200' do
     m = Measure.where(goods_nomenclature_item_id: "0202020200",
                       validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
                       measure_type_id: 'EGJ').take
-    m.measure_components.first.duty_amount.should == 10
-    m.measure_components.last.duty_amount.should == 2
+    expect(m.measure_components.first.duty_amount).to eq 10
+    expect(m.measure_components.last.duty_amount).to eq 2
   end
 
   it 'adds additional duty amount of 2kg to 0303030300' do
     m = Measure.where(goods_nomenclature_item_id: "0303030300",
                       validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
                       measure_type_id: 'EGJ').take
-    m.measure_components.first.duty_amount.should == 10
-    m.measure_components.last.duty_amount.should == 2
+    expect(m.measure_components.first.duty_amount).to eq 10
+    expect(m.measure_components.last.duty_amount).to eq 2
   end
 end
 
@@ -220,7 +220,7 @@ shared_examples_for "VAT and Excise TAMF Daily Scenario 3: Removed max amount ou
   before { ChiefTransformer.instance.invoke }
 
   it 'creates two new measures' do
-    Measure.count.should == 8
+    expect(Measure.count).to eq 8
   end
 
   it 'adds validity end date to 0101010100 measure' do
@@ -228,8 +228,8 @@ shared_examples_for "VAT and Excise TAMF Daily Scenario 3: Removed max amount ou
                       validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
                       validity_end_date: DateTime.parse("2008-04-01 00:00:00"),
                       measure_type_id: 'DAA').take
-    m.measure_components.first.duty_amount.should == 20
-    m.measure_components.last.duty_amount.should == 1
+    expect(m.measure_components.first.duty_amount).to eq 20
+    expect(m.measure_components.last.duty_amount).to eq 1
   end
 
   it 'adds validity end date to 0202020200 measure' do
@@ -237,30 +237,30 @@ shared_examples_for "VAT and Excise TAMF Daily Scenario 3: Removed max amount ou
                       validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
                       validity_end_date: DateTime.parse("2008-04-01 00:00:00"),
                       measure_type_id: 'DAA').take
-    m.measure_components.first.duty_amount.should == 20
-    m.measure_components.last.duty_amount.should == 1
+    expect(m.measure_components.first.duty_amount).to eq 20
+    expect(m.measure_components.last.duty_amount).to eq 1
   end
 
   it 'removes measure component (1kg) from 0303030300' do
     m = Measure.where(goods_nomenclature_item_id: "0303030300",
                       validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
                       measure_type_id: 'DAA').take
-    m.measure_components.first.duty_amount.should == 20
-    m.measure_components.size.should == 1
+    expect(m.measure_components.first.duty_amount).to eq 20
+    expect(m.measure_components.size).to eq 1
   end
 
   it 'creates new measure for 0101010100 with duty amount of 20%' do
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
                       measure_type_id: 'DAA').take
-    m.measure_components.first.duty_amount.should == 20
+    expect(m.measure_components.first.duty_amount).to eq 20
   end
 
   it 'creates new measure for 0202020200 with duty amount of 20%' do
     m = Measure.where(goods_nomenclature_item_id: "0202020200",
                       validity_start_date: DateTime.parse("2008-04-01 00:00:00"),
                       measure_type_id: 'DAA').take
-    m.measure_components.first.duty_amount.should == 20
+    expect(m.measure_components.first.duty_amount).to eq 20
   end
 end
 
@@ -270,7 +270,7 @@ shared_examples_for "VAT and Excise MFCM Daily Scenario 1: Updated measure with 
   it 'no changes should be done to Measure because just fe_tsmp was moved forward' do
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2007-11-15 11:00:00")).take
-    m.measure_components.first.duty_amount.should == 15
+    expect(m.measure_components.first.duty_amount).to eq 15
   end
 end
 
@@ -278,20 +278,20 @@ shared_examples_for "VAT and Excise MFCM Daily Scenario 2: Updated measure with 
   before { ChiefTransformer.instance.invoke }
 
   it 'leaves two measures in the table' do
-    Measure.count.should == 2
+    expect(Measure.count).to eq 2
   end
 
   it 'adds end date to existing measure' do
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
                       validity_end_date: DateTime.parse("2007-12-31 11:00:00")).take
-    m.measure_components.first.duty_amount.should == 15
+    expect(m.measure_components.first.duty_amount).to eq 15
   end
 
   it 'creates new measure with new start date' do
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2008-01-01 00:00:00")).take
-    m.measure_components.first.duty_amount.should == 15
+    expect(m.measure_components.first.duty_amount).to eq 15
   end
 end
 
@@ -302,13 +302,13 @@ shared_examples_for "VAT and Excise MFCM Daily Scenario 3: Updated measure with 
     m1 = Measure.where(goods_nomenclature_item_id: "0101010100",
                        validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
                        validity_end_date: DateTime.parse("2007-11-30 00:00:00")).take
-    m1.measure_components.first.duty_amount.should == 15
+    expect(m1.measure_components.first.duty_amount).to eq 15
   end
 
   it 'creates new measure with new start date' do
     m2 = Measure.where(goods_nomenclature_item_id: "0101010100",
                        validity_start_date: DateTime.parse("2008-01-01 00:00:00")).take
-    m2.measure_components.first.duty_amount.should == 15
+    expect(m2.measure_components.first.duty_amount).to eq 15
   end
 end
 
@@ -324,7 +324,7 @@ shared_examples_for "VAT and Excise MFCM Daily Scenario 4: Start date for measur
   it 'inserts new measures' do
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2008-01-01 00:00:00")).take
-    m.measure_components.first.duty_amount.should == 15
+    expect(m.measure_components.first.duty_amount).to eq 15
   end
 end
 
@@ -332,27 +332,27 @@ shared_examples_for "Unsupported Scenario 1: Several updates in same daily updat
   before { ChiefTransformer.instance.invoke }
 
   it 'creates two new measures' do
-    Measure.count.should == 3
+    expect(Measure.count).to eq 3
   end
 
   it 'adds end date to 0101010100 with duty amount of 20%' do
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
                       validity_end_date: DateTime.parse("2008-02-01 00:00:00")).take
-    m.measure_components.first.duty_amount.should == 20
+    expect(m.measure_components.first.duty_amount).to eq 20
   end
 
   it 'creates new temporary measure for 0101010100 with duty amount of 20%' do
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2008-02-01 00:00:00"),
                       validity_end_date: DateTime.parse("2008-04-01 00:00:00")).take
-    m.measure_components.first.duty_amount.should == 19
+    expect(m.measure_components.first.duty_amount).to eq 19
   end
 
   it 'creates new measure for 0101010100 with duty amount of 18' do
     m = Measure.where(goods_nomenclature_item_id: "0101010100",
                       validity_start_date: DateTime.parse("2008-04-01 00:00:00")).take
-    m.measure_components.first.duty_amount.should == 18
+    expect(m.measure_components.first.duty_amount).to eq 18
   end
 end
 
@@ -360,7 +360,7 @@ shared_examples_for "Unsupported Scenario 2: Insert and delete in same daily upd
   before { ChiefTransformer.instance.invoke }
 
   it 'no Taric measures should be created' do
-    Measure.count.should == 0
+    expect(Measure.count).to eq 0
   end
 end
 
@@ -368,9 +368,9 @@ shared_examples_for "Unsupported Scenario 3: Insert and update in same daily fil
   before { ChiefTransformer.instance.invoke }
 
   it 'creates measure for 0101010100 with duty rate of 15%' do
-    Measure.count.should == 1
+    expect(Measure.count).to eq 1
     m = Measure.where({validity_start_date: DateTime.parse("2008-03-01 00:00:00"),
                        goods_nomenclature_item_id: "0101010100"}).take
-    m.measure_components.first.duty_amount.should == 15
+    expect(m.measure_components.first.duty_amount).to eq 15
   end
 end

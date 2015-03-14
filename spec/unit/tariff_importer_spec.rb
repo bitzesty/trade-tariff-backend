@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 require 'tariff_importer'
 
@@ -10,11 +10,15 @@ describe TariffImporter do
 
   describe "initialization" do
     it 'sets path on initialization' do
-      -> { TariffImporter.new(valid_file, ChiefImporter) }.should_not raise_error
+      expect(
+        -> { TariffImporter.new(valid_file, ChiefImporter) }
+      ).to_not raise_error
     end
 
     it 'throws an error if path is non existent' do
-      -> { TariffImporter.new(invalid_file) }.should raise_error
+      expect(
+        -> { TariffImporter.new(invalid_file) }
+      ).to raise_error
     end
   end
 end

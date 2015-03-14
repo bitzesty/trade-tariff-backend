@@ -1,11 +1,13 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Heading do
   describe '#to_param' do
     let(:heading) { create :heading }
 
     it 'uses first four digits of goods_nomenclature_item_id as param' do
-      heading.to_param.should == heading.goods_nomenclature_item_id.first(4)
+      expect(
+        heading.to_param
+      ).to eq heading.goods_nomenclature_item_id.first(4)
     end
   end
 
@@ -26,10 +28,14 @@ describe Heading do
       context 'fetching actual' do
         it 'fetches correct chapter' do
           TimeMachine.at("2000-1-1") {
-            heading1.reload.chapter.pk.should eq chapter1.pk
+            expect(
+              heading1.reload.chapter.pk
+            ).to eq chapter1.pk
           }
           TimeMachine.at("2010-1-1") {
-            heading1.reload.chapter.pk.should eq chapter2.pk
+            expect(
+              heading1.reload.chapter.pk
+            ).to eq chapter2.pk
           }
         end
       end
@@ -37,7 +43,9 @@ describe Heading do
       context 'fetching relevant' do
         it 'fetches correct chapter' do
           TimeMachine.with_relevant_validity_periods {
-            heading2.reload.chapter.pk.should eq chapter2.pk
+            expect(
+              heading2.reload.chapter.pk
+            ).to eq chapter2.pk
           }
         end
       end
@@ -53,7 +61,9 @@ describe Heading do
         measure_type
         measure
 
-        heading.measures.map(&:measure_sid).should_not include measure.measure_sid
+        expect(
+          heading.measures.map(&:measure_sid)
+        ).to_not include measure.measure_sid
       end
     end
 
@@ -76,15 +86,21 @@ describe Heading do
       end
 
       it 'returns commodities matched by part of own goods nomenclature item id' do
-        heading.commodities.should include commodity1
+        expect(
+          heading.commodities
+        ).to include commodity1
       end
 
       it 'returns relevant by actual time commodities' do
-        heading.commodities.should include commodity2
+        expect(
+          heading.commodities
+        ).to include commodity2
       end
 
       it 'does not return commodity that is irrelevant to given time' do
-        heading.commodities.should_not include commodity3
+        expect(
+          heading.commodities
+        ).to_not include commodity3
       end
     end
 
@@ -128,13 +144,17 @@ describe Heading do
 
       it 'returns true if there are no commodities under this heading that are valid during headings validity period' do
         TimeMachine.now {
-          declarable_heading.declarable.should be_true
-        } 
+          expect(
+            declarable_heading.declarable
+          ).to be_truthy
+        }
       end
 
       it 'returns false if there are commodities under the heading that are valid during headings validity period' do
         TimeMachine.at(t2.ago(1.day)) {
-          declarable_heading.declarable.should be_false
+          expect(
+            declarable_heading.declarable
+          ).to be_falsy
         }
       end
     end
@@ -148,11 +168,15 @@ describe Heading do
                                                          validity_end_date: non_declarable_heading.validity_end_date }
 
       it 'returns true if there are no commodities under this heading that are valid during headings validity period' do
-        declarable_heading.declarable.should be_true
+        expect(
+          declarable_heading.declarable
+        ).to be_truthy
       end
 
       it 'returns false if there are commodities under the heading that are valid during headings validity period' do
-        non_declarable_heading.declarable.should be_false
+        expect(
+          non_declarable_heading.declarable
+        ).to be_falsy
       end
     end
 
@@ -163,11 +187,15 @@ describe Heading do
                                          producline_suffix: "80" }
 
       it 'returns true if there are no commodities under this heading that are valid during headings validity period' do
-        heading1.declarable.should be_false
+        expect(
+          heading1.declarable
+        ).to be_falsy
       end
 
       it 'returns false if there are commodities under the heading that are valid during headings validity period' do
-        heading2.declarable.should be_true
+        expect(
+          heading2.declarable
+        ).to be_truthy
       end
     end
   end

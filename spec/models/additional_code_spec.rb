@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe AdditionalCode do
   describe 'associations' do
@@ -16,17 +16,23 @@ describe AdditionalCode do
       context 'direct loading' do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
-            additional_code.additional_code_description.pk.should == additional_code_description1.pk
+            expect(
+              additional_code.additional_code_description.pk
+            ).to eq additional_code_description1.pk
           end
         end
 
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
-            additional_code.additional_code_description.pk.should == additional_code_description1.pk
+            expect(
+              additional_code.additional_code_description.pk
+            ).to eq additional_code_description1.pk
           end
 
           TimeMachine.at(4.years.ago) do
-            additional_code.reload.additional_code_description.pk.should == additional_code_description2.pk
+            expect(
+              additional_code.reload.additional_code_description.pk
+            ).to eq additional_code_description2.pk
           end
         end
       end
@@ -34,29 +40,35 @@ describe AdditionalCode do
       context 'eager loading' do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
-            AdditionalCode.where(additional_code_sid: additional_code.additional_code_sid)
+            expect(
+              AdditionalCode.where(additional_code_sid: additional_code.additional_code_sid)
                           .eager(:additional_code_descriptions)
                           .all
                           .first
-                          .additional_code_description.pk.should == additional_code_description1.pk
+                          .additional_code_description.pk
+            ).to eq additional_code_description1.pk
           end
         end
 
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
-            AdditionalCode.where(additional_code_sid: additional_code.additional_code_sid)
+            expect(
+              AdditionalCode.where(additional_code_sid: additional_code.additional_code_sid)
                           .eager(:additional_code_descriptions)
                           .all
                           .first
-                          .additional_code_description.pk.should == additional_code_description1.pk
+                          .additional_code_description.pk
+            ).to eq additional_code_description1.pk
           end
 
           TimeMachine.at(4.years.ago) do
-            AdditionalCode.where(additional_code_sid: additional_code.additional_code_sid)
+            expect(
+              AdditionalCode.where(additional_code_sid: additional_code.additional_code_sid)
                           .eager(:additional_code_descriptions)
                           .all
                           .first
-                          .additional_code_description.pk.should == additional_code_description2.pk
+                          .additional_code_description.pk
+            ).to eq additional_code_description2.pk
           end
         end
       end
@@ -65,16 +77,18 @@ describe AdditionalCode do
 
   describe 'validations' do
     # ACN1
-    it { should validate_uniqueness.of([:additional_code, :additional_code_type_id, :validity_start_date]) }
+    it { is_expected.to validate_uniqueness.of([:additional_code, :additional_code_type_id, :validity_start_date]) }
     # ACN3
-    it { should validate_validity_dates }
+    it { is_expected.to validate_validity_dates }
   end
 
   describe "#code" do
     let(:additional_code) { build :additional_code }
 
     it 'returns conjucation of additional code type id and additional code' do
-      additional_code.code.should == [additional_code.additional_code_type_id, additional_code.additional_code].join
+      expect(
+        additional_code.code
+      ).to eq [additional_code.additional_code_type_id, additional_code.additional_code].join
     end
   end
 end

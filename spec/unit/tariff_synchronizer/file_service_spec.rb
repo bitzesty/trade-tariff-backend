@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'tariff_synchronizer'
 
 describe TariffSynchronizer::FileService do
@@ -10,7 +10,9 @@ describe TariffSynchronizer::FileService do
 
   describe '.download_content' do
     context 'partial content received' do
-      before { Curl::Easy.any_instance.stub(:perform).and_raise(Curl::Err::PartialFileError) }
+      before {
+        allow_any_instance_of(Curl::Easy).to receive(:perform).and_raise(Curl::Err::PartialFileError)
+      }
 
       it 'raises DownloadException' do
         expect { klass.download_content("http://localhost:9999/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
@@ -18,7 +20,9 @@ describe TariffSynchronizer::FileService do
     end
 
     context 'unable to connect' do
-      before { Curl::Easy.any_instance.stub(:perform).and_raise(Curl::Err::ConnectionFailedError) }
+      before {
+        allow_any_instance_of(Curl::Easy).to receive(:perform).and_raise(Curl::Err::ConnectionFailedError)
+      }
 
       it 'raises DownloadException' do
         expect { klass.download_content("http://localhost:9999/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
@@ -26,7 +30,9 @@ describe TariffSynchronizer::FileService do
     end
 
     context 'host resultion error' do
-      before { Curl::Easy.any_instance.stub(:perform).and_raise(Curl::Err::HostResolutionError) }
+      before {
+        allow_any_instance_of(Curl::Easy).to receive(:perform).and_raise(Curl::Err::HostResolutionError)
+      }
 
       it 'raises DownloadException' do
         expect { klass.download_content("http://localhost:9999/test") }.to raise_error TariffSynchronizer::FileService::DownloadException

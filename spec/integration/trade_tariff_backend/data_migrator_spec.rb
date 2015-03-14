@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TradeTariffBackend::DataMigrator do
   before { TradeTariffBackend::DataMigrator.migrations = [] }
@@ -40,7 +40,7 @@ describe TradeTariffBackend::DataMigrator do
       }
 
       it 'executes migrations in transactions' do
-        Language.should_receive(:restrict_primary_key).and_raise(ArgumentError.new)
+        allow(Language).to receive(:restrict_primary_key).and_raise(ArgumentError.new)
 
         rescuing { TradeTariffBackend::DataMigrator.migrate }
 
@@ -101,7 +101,7 @@ describe TradeTariffBackend::DataMigrator do
       }
 
       it 'executes migrations in transactions' do
-        Language.should_receive(:restrict_primary_key).and_raise(StandardError)
+        allow(Language).to receive(:restrict_primary_key).and_raise(StandardError)
 
         rescuing { TradeTariffBackend::DataMigrator.rollback }
 

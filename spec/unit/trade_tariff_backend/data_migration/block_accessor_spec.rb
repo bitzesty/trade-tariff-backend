@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TradeTariffBackend::DataMigration::BlockAccessor do
   let(:mock_class) {

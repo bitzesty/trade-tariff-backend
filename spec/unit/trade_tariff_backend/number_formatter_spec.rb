@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TradeTariffBackend::NumberFormatter do
   let(:number_formatter) { described_class.new }

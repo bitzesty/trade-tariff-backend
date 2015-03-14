@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TradeTariffBackend::Validator do
   let(:model) { double(operation: :create, conformance_errors: double(add: true)) }
@@ -15,21 +15,21 @@ describe TradeTariffBackend::Validator do
       let(:validator) { Class.new(TradeTariffBackend::Validator) }
 
       it 'defaults to empty array' do
-        validator.validations.should eq []
+        expect(validator.validations).to eq []
       end
     end
 
     context 'some validations defined' do
       it 'returns list of defined Validations' do
-        generic_validator.validations.should_not be_blank
-        generic_validator.validations.first.should be_kind_of TradeTariffBackend::Validations::GenericValidation
+        expect(generic_validator.validations).to_not be_blank
+        expect(generic_validator.validations.first).to be_kind_of TradeTariffBackend::Validations::GenericValidation
       end
     end
   end
 
   describe '#validations' do
     it 'is an alias to class .validations method' do
-      generic_validator.validations.should eq generic_validator.new.validations
+      expect(generic_validator.validations).to eq generic_validator.new.validations
     end
   end
 
@@ -43,7 +43,7 @@ describe TradeTariffBackend::Validator do
     }
 
     it 'runs validations on record' do
-      model.conformance_errors.should have_received(:add)
+      expect(model.conformance_errors).to have_received(:add)
     end
   end
 
@@ -52,7 +52,7 @@ describe TradeTariffBackend::Validator do
       before { generic_validator.new.validate(model) }
 
       it 'adds no error to object errors hash' do
-        model.conformance_errors.should_not have_received(:add)
+        expect(model.conformance_errors).to_not have_received(:add)
       end
     end
 
@@ -66,7 +66,7 @@ describe TradeTariffBackend::Validator do
       }
 
       it 'adds error to object errors hash' do
-        model.conformance_errors.should have_received(:add)
+        expect(model.conformance_errors).to have_received(:add)
       end
     end
   end
@@ -94,7 +94,7 @@ describe TradeTariffBackend::Validator do
         before { contextual_validator.new.validate_for_operations(model, :create) }
 
         it 'adds no error to object errors hash' do
-          model.conformance_errors.should_not have_received(:add)
+          expect(model.conformance_errors).to_not have_received(:add)
         end
       end
 
@@ -104,7 +104,7 @@ describe TradeTariffBackend::Validator do
         }
 
         it 'adds an error to object errors hash' do
-          model.conformance_errors.should have_received(:add)
+          expect(model.conformance_errors).to have_received(:add)
         end
       end
     end
@@ -121,7 +121,7 @@ describe TradeTariffBackend::Validator do
       before {  contextual_validator.new.validate_for_operations(model, :destroy) }
 
       it 'adds no errors to objects hash' do
-        model.conformance_errors.should_not have_received(:add)
+        expect(model.conformance_errors).to_not have_received(:add)
       end
     end
   end

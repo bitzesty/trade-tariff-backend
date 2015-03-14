@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Api::V1::GeographicalAreasController, "GET #countries" do
   render_views
@@ -16,6 +16,6 @@ describe Api::V1::GeographicalAreasController, "GET #countries" do
   it 'returns rendered records' do
     get :countries, format: :json
 
-    response.body.should match_json_expression pattern
+    expect(response.body).to match_json_expression pattern
   end
 end

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TaricImporter::RecordProcessor::Operation do
   describe '#call' do
