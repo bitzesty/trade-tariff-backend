@@ -73,18 +73,6 @@ module TariffSynchronizer
 
     private
 
-    def self.validate_file!(response)
-      begin
-        Nokogiri::XML(response.content) do |config|
-          config.options = Nokogiri::XML::ParseOptions::STRICT
-        end
-      rescue Nokogiri::XML::SyntaxError => e
-        raise InvalidContents.new(e.message, e)
-      else
-        true
-      end
-    end
-
     def self.taric_update_name_for(date)
       taric_query_url = taric_query_url_for(date)
 

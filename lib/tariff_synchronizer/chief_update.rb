@@ -1,6 +1,5 @@
 require 'tariff_synchronizer/base_update'
 require 'tariff_synchronizer/file_service'
-require "csv"
 
 module TariffSynchronizer
   class ChiefUpdate < BaseUpdate
@@ -38,16 +37,6 @@ module TariffSynchronizer
     end
 
     private
-
-    def self.validate_file!(response)
-      begin
-        CSV.parse(response.content)
-      rescue CSV::MalformedCSVError => e
-        raise InvalidContents.new(e.message, e)
-      else
-        true
-      end
-    end
 
     def self.chief_file_name_for(date)
       day = sprintf("%03d", date.yday)

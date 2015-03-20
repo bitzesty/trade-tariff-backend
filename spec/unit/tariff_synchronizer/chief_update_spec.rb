@@ -6,12 +6,6 @@ describe TariffSynchronizer::ChiefUpdate do
 
   let(:example_date)      { Date.new(2010,1,1) }
 
-  before do
-    # we assume csv contents are ok unless otherwise specified
-    TariffSynchronizer::ChiefUpdate.stub(:validate_file!)
-                                   .and_return(true)
-  end
-
   describe '.download' do
     let(:blank_response)     { build :response, content: nil }
     let(:not_found_response) { build :response, :not_found }
@@ -88,30 +82,6 @@ describe TariffSynchronizer::ChiefUpdate do
               TariffSynchronizer::ChiefUpdate.download(example_date)
             }.to_not change { TariffSynchronizer::ChiefUpdate.count }
           end
-        end
-
-        context "invalid csv contents" do
-          let(:success_response) {
-            build :response, :success,
-                             content: '"header1","header2'
-          }
-          let(:update_entry) {
-            TariffSynchronizer::ChiefUpdate.last
-          }
-
-          before {
-            TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
-                                           .with(url)
-                                           .and_return(success_response)
-
-            TariffSynchronizer::ChiefUpdate.unstub(:validate_file!)
-          }
-
-          it {
-            TariffSynchronizer::ChiefUpdate.download(example_date)
-
-            expect(update_entry.exception_class).to include("CSV::MalformedCSVError")
-          }
         end
       end
 

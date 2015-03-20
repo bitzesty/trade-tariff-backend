@@ -192,10 +192,6 @@ module TariffSynchronizer
       info "Giving up fetching: #{event.payload[:url]}, too many DownloadExceptions"
     end
 
-    def invalid_contents
-      error "File contents are not parseable for #{event.payload[:date]}"
-    end
-
     # We missed three update files in a row
     # Might be okay for Taric, but most likely not ok for CHIEF
     # this is precautionary measure

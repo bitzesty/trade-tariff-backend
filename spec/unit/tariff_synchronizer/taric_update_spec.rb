@@ -18,12 +18,7 @@ describe TariffSynchronizer::TaricUpdate do
 
     before do
       TariffSynchronizer.host = "http://example.com"
-
       prepare_synchronizer_folders
-
-      # we assume contents are ok unless otherwise specified
-      TariffSynchronizer::TaricUpdate.stub(:validate_file!)
-                                     .and_return(true)
     end
 
     after  { purge_synchronizer_folders }
@@ -66,32 +61,6 @@ describe TariffSynchronizer::TaricUpdate do
 
           TariffSynchronizer::TaricUpdate.download(example_date)
           File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}").should be_false
-        end
-      end
-
-      describe "content validation" do
-        before {
-          TariffSynchronizer::TaricUpdate.should_receive(:download_content)
-                                         .with(update_url)
-                                         .and_return(success_response)
-
-          TariffSynchronizer::TaricUpdate.stub(:validate_file!) do
-            original = Nokogiri::XML::SyntaxError.new
-            raise TariffSynchronizer::BaseUpdate::InvalidContents.new(
-              original.message,
-              original
-            )
-          end
-        }
-
-        let(:update_entry) {
-          TariffSynchronizer::TaricUpdate.last
-        }
-
-        it "marks an update as failed if the file contents cannot be parsed" do
-          TariffSynchronizer::TaricUpdate.download(example_date)
-
-          expect(update_entry.exception_class).to include("Nokogiri::XML::SyntaxError")
         end
       end
     end

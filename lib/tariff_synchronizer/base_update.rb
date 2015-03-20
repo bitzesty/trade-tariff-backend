@@ -13,14 +13,6 @@ module TariffSynchronizer
     plugin :validation_class_methods
 
     class InvalidArgument < StandardError; end
-    class InvalidContents < StandardError
-      attr_reader :original
-
-      def initialize(msg, original)
-        @original = original
-        super(msg)
-      end
-    end
 
     APPLIED_STATE = 'A'
     PENDING_STATE = 'P'
@@ -256,7 +248,8 @@ module TariffSynchronizer
 
       def create_entry(date, response, file_name)
         if response.success? && response.content_present?
-          validate_and_create_update(date, response, file_name)
+          create_update_entry(date, PENDING_STATE, file_name, response.content.size)
+          write_update_file(date, response, file_name)
         elsif response.success? && !response.content_present?
           create_update_entry(date, FAILED_STATE, file_name)
           instrument("blank_update.tariff_synchronizer", date: date, url: response.url)
@@ -268,25 +261,6 @@ module TariffSynchronizer
             create_update_entry(date, MISSING_STATE, missing_update_name_for(date))
             instrument("not_found.tariff_synchronizer", date: date, url: response.url)
           end
-        end
-      end
-
-      def validate_and_create_update(date, response, file_name)
-        begin
-          validate_file!(response)
-        rescue InvalidContents => e
-          instrument("invalid_contents.tariff_synchronizer", date: date, url: response.url)
-          exception = e.original
-          create_update_entry(date, FAILED_STATE, file_name).tap do |entry|
-            entry.update(
-              exception_class: "#{exception.class}: #{exception.message}",
-              exception_backtrace: exception.backtrace.try(:join, "\n")
-            )
-          end
-        else
-          # file is valid
-          create_update_entry(date, PENDING_STATE, file_name, response.content.size)
-          write_update_file(date, response, file_name)
         end
       end
 
