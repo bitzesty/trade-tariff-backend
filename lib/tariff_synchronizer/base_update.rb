@@ -174,7 +174,7 @@ module TariffSynchronizer
       end
     rescue => e
       e = e.original if e.respond_to?(:original) && e.original
-      update(exception_class: e.class.to_s + " " + e.message.to_s,
+      update(exception_class: e.class.to_s + ": " + e.message.to_s,
              exception_backtrace: e.backtrace.join("\n"),
              exception_queries: @database_queries.join("\n"))
 
