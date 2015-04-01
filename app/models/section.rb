@@ -1,4 +1,6 @@
 class Section < Sequel::Model
+  extend ActiveModel::Naming
+
   plugin :active_model
   plugin :nullable
   plugin :elasticsearch

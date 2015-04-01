@@ -1,4 +1,6 @@
 class SearchReference < Sequel::Model
+  extend ActiveModel::Naming
+
   plugin :active_model
   plugin :elasticsearch
 
