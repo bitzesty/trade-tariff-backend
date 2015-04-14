@@ -108,7 +108,7 @@ GEM
     ffi (1.9.6)
     forgery (0.6.0)
     formatador (0.2.5)
-    gds-sso (9.3.0)
+    gds-sso (10.0.0)
       multi_json (~> 1.0)
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
@@ -360,7 +360,7 @@ DEPENDENCIES
   factory_girl_rails
   fakefs
   forgery
-  gds-sso (= 9.3.0)
+  gds-sso (~> 10.0)
   guard-rspec
   hashie (~> 3.4)
   json_expressions
@@ -370,7 +370,7 @@ DEPENDENCIES
   mysql2 (~> 0.3)
   newrelic_rpm
   nokogiri (~> 1.6)
-  plek (~> 1.8)
+  plek (~> 1.10)
   pry-nav
   pry-rails
   rabl (~> 0.11)
