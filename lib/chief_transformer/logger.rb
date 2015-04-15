@@ -20,7 +20,7 @@ class ChiefTransformer
       Mailer.failed_transformation_notice(event.payload[:operation],
                                           event.payload[:exception],
                                           event.payload[:model],
-                                          event.payload[:errors]).deliver
+                                          event.payload[:errors]).deliver_now
     end
 
     def transform_lock_error(event)
