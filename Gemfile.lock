@@ -274,7 +274,9 @@ GEM
       sprockets-rails (>= 2.0, < 4.0)
       tilt (~> 1.1)
     sequel (4.3.0)
-    sequel-rails (0.7.0)
+    sequel-rails (0.9.11)
+      actionpack (>= 3.2.0)
+      activemodel
       railties (>= 3.2.0)
       sequel (>= 3.28, < 5.0)
     sexp_processor (4.5.0)
@@ -379,7 +381,7 @@ DEPENDENCIES
   rspec-rails (~> 2.14.2)
   sass-rails (~> 5.0)
   sequel (~> 4.3.0)
-  sequel-rails (= 0.7.0)
+  sequel-rails (~> 0.9)
   shoulda-matchers (~> 2.8)
   sidekiq (~> 2.17)
   simplecov
