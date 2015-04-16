@@ -35,7 +35,7 @@ module TariffSynchronizer
     def failed_updates_present(event)
       error "TariffSynchronizer found failed updates that need to be fixed before running: #{event.payload[:file_names]}"
 
-      Mailer.failures_reminder(event.payload[:file_names]).deliver
+      Mailer.failures_reminder(event.payload[:file_names]).deliver_now
     end
 
     # Apply all pending Taric and Chief updates
@@ -45,7 +45,7 @@ module TariffSynchronizer
       Mailer.applied(
         event.payload[:update_names],
         event.payload.fetch(:unconformant_records, [])
-      ).deliver
+      ).deliver_now
     end
 
     def apply_lock_error(event)
@@ -60,7 +60,7 @@ module TariffSynchronizer
         event.payload[:exception],
         event.payload[:update],
         event.payload[:database_queries]
-      ).deliver
+      ).deliver_now
     end
 
     def rollback(event)
@@ -76,7 +76,7 @@ module TariffSynchronizer
       error "Download failed: #{event.payload[:exception].to_s}, url: #{event.payload[:url]}"
 
       Mailer.failed_download(event.payload[:exception], event.payload[:url])
-            .deliver
+            .deliver_now
     end
 
     # Update rebuild from files present in the file system
@@ -88,7 +88,7 @@ module TariffSynchronizer
     def retry_exceeded(event)
       warn "Download retry count exceeded for #{event.payload[:url]}"
 
-      Mailer.retry_exceeded(event.payload[:url], event.payload[:date]).deliver
+      Mailer.retry_exceeded(event.payload[:url], event.payload[:date]).deliver_now
     end
 
     # Update not found
@@ -100,7 +100,7 @@ module TariffSynchronizer
     def not_found_on_file_system(event)
       error "Update not found on file system at #{event.payload[:path]}"
 
-      Mailer.file_not_found_on_filesystem(event.payload[:path]).deliver
+      Mailer.file_not_found_on_filesystem(event.payload[:path]).deliver_now
     end
 
     def created_chief(event)
@@ -153,28 +153,28 @@ module TariffSynchronizer
     def blank_update(event)
       error "Blank update content received for #{event.payload[:date]}: #{event.payload[:url]}"
 
-      Mailer.blank_update(event.payload[:url], event.payload[:url]).deliver
+      Mailer.blank_update(event.payload[:url], event.payload[:url]).deliver_now
     end
 
     # Can't open file for writing
     def cant_open_file(event)
       error "Can't open file for writing update at #{event.payload[:path]}"
 
-      Mailer.file_write_error(event.payload[:path], "can't open for writing").deliver
+      Mailer.file_write_error(event.payload[:path], "can't open for writing").deliver_now
     end
 
     # Can't write to file
     def cant_write_to_file(event)
       error "Can't write to update file at #{event.payload[:path]}"
 
-      Mailer.file_write_error(event.payload[:path], "can't write to file").deliver
+      Mailer.file_write_error(event.payload[:path], "can't write to file").deliver_now
     end
 
     # No permission to write update file
     def write_permission_error(event)
       error "No permission to write update to #{event.payload[:path]}"
 
-      Mailer.file_write_error(event.payload[:path], 'permission error').deliver
+      Mailer.file_write_error(event.payload[:path], 'permission error').deliver_now
     end
 
     # Delayed update fetching
@@ -198,7 +198,7 @@ module TariffSynchronizer
     def missing_updates(event)
       warn "Missing #{event.payload[:count]} updates in a row for #{event.payload[:update_type].to_s.upcase}"
 
-      Mailer.missing_updates(event.payload[:count], event.payload[:update_type].to_s).deliver
+      Mailer.missing_updates(event.payload[:count], event.payload[:update_type].to_s).deliver_now
     end
   end
 end

@@ -176,7 +176,7 @@ describe GeographicalArea do
 
     describe "GA5" do
       let(:geographical_area) {
-        build(:geographical_area,
+        create(:geographical_area,
               validity_end_date: Date.today,
               validity_start_date: Date.today.ago(3.years),
               parent_geographical_area: parent)
