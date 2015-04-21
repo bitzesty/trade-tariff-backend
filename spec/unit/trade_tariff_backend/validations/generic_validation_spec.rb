@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TradeTariffBackend::Validations::GenericValidation do
   describe 'initialization' do
@@ -14,7 +14,9 @@ describe TradeTariffBackend::Validations::GenericValidation do
       let(:validation) { described_class.new(:vld1, 'description', on: [:destroy]) { true } }
 
       it 'returns defined operation list' do
-        validation.operations.should eq [:destroy]
+        expect(
+          validation.operations
+        ).to eq [:destroy]
       end
     end
 
@@ -22,14 +24,18 @@ describe TradeTariffBackend::Validations::GenericValidation do
       let(:validation) { described_class.new(:vld1, 'description') { true } }
 
       it 'returns default (all) operation list' do
-        validation.operations.should eq TradeTariffBackend::Validations::GenericValidation::DEFAULT_OPERATIONS
+        expect(
+          validation.operations
+        ).to eq TradeTariffBackend::Validations::GenericValidation::DEFAULT_OPERATIONS
       end
     end
   end
 
   describe "#type" do
     it 'returns validation name as symbol' do
-      described_class.new(:vld1, 'description') { true }.type.should eq :generic
+      expect(
+        described_class.new(:vld1, 'description') { true }.type
+      ).to eq :generic
     end
   end
 
@@ -38,7 +44,9 @@ describe TradeTariffBackend::Validations::GenericValidation do
       let(:validation) { described_class.new(:vld1, 'description') { true } }
 
       it 'returns true' do
-        validation.valid?.should be_true
+        expect(
+          validation.valid?
+        ).to be_truthy
       end
     end
 
@@ -46,7 +54,9 @@ describe TradeTariffBackend::Validations::GenericValidation do
       let(:validation) { described_class.new(:vld1, 'description') { false } }
 
       it 'returns false' do
-        validation.valid?.should be_false
+        expect(
+          validation.valid?
+        ).to be_falsy
       end
     end
   end
@@ -62,7 +72,9 @@ describe TradeTariffBackend::Validations::GenericValidation do
       let(:record) { double(criteria: true) }
 
       it 'returns true' do
-        validation.relevant_for?(record).should eq true
+        expect(
+          validation.relevant_for?(record)
+        ).to eq true
       end
     end
 
@@ -70,7 +82,9 @@ describe TradeTariffBackend::Validations::GenericValidation do
       let(:record) { double(criteria: false) }
 
       it 'returns false' do
-        validation.relevant_for?(record).should eq false
+        expect(
+          validation.relevant_for?(record)
+        ).to eq false
       end
     end
   end
@@ -79,7 +93,9 @@ describe TradeTariffBackend::Validations::GenericValidation do
     let(:validation) { described_class.new(:vld1, 'description') { false } }
 
     it 'composes validation identifier and description' do
-      validation.to_s.should eq validation.description
+      expect(
+        validation.to_s
+      ).to eq validation.description
     end
   end
 end

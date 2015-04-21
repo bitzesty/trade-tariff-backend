@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe ChiefTransformer::Processor::TameUpdate do
   before(:all) { preload_standing_data }

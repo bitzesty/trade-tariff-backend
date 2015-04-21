@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe ChiefTransformer::Processor::TameInsert do
   before(:all) { preload_standing_data }
@@ -118,7 +118,7 @@ describe ChiefTransformer::Processor::TameInsert do
               operation: 'X',
               operation_date: sample_operation_date
             )
-          ).to be_true
+          ).to be_truthy
         end
 
         it 'creates new measure components' do
@@ -133,7 +133,7 @@ describe ChiefTransformer::Processor::TameInsert do
               operation: 'X',
               operation_date: sample_operation_date
             )
-          ).to be_true
+          ).to be_truthy
         end
 
         it 'creates new excluded geographical area associations' do
@@ -169,7 +169,7 @@ describe ChiefTransformer::Processor::TameInsert do
               operation_date: sample_operation_date,
               operation: 'C'
             ).one?
-          ).to be_true
+          ).to be_truthy
         end
       end
 

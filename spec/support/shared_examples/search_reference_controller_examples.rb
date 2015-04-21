@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 shared_examples_for 'search references controller' do
   before { login_as_api_user }
@@ -18,7 +18,7 @@ shared_examples_for 'search references controller' do
       it 'returns rendered records with default pagination values' do
         get :index, { format: :json }.merge(collection_query)
 
-        response.body.should match_json_expression pattern
+        expect(response.body).to match_json_expression pattern
       end
     end
 
@@ -39,7 +39,7 @@ shared_examples_for 'search references controller' do
         it 'defaults to first page' do
           get(:index, { format: :json }.merge(collection_query))
 
-          response.body.should match_json_expression pattern
+          expect(response.body).to match_json_expression pattern
         end
       end
     end
@@ -62,7 +62,7 @@ shared_examples_for 'search references controller' do
         format: :json
       }.merge(resource_query)
 
-      response.body.should match_json_expression pattern
+      expect(response.body).to match_json_expression pattern
     end
   end
 

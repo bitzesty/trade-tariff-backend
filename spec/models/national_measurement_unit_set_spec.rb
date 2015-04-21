@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe NationalMeasurementUnitSet do
   describe "#national_measurement_unit_set_units" do
@@ -16,7 +16,7 @@ describe NationalMeasurementUnitSet do
     end
 
     it 'should include national measurement units' do
-      expect(nmus.national_measurement_unit_set_units.all?{ |nmusu| nmusu.is_a?(NationalMeasurementUnit) }).to be_true
+      expect(nmus.national_measurement_unit_set_units.all?{ |nmusu| nmusu.is_a?(NationalMeasurementUnit) }).to be_truthy
     end
 
     it 'should set first national measurement unit code/description to comm uoq_code_cdu1' do

@@ -1,11 +1,13 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'requirement_duty_expression_formatter'
 
 describe RequirementDutyExpressionFormatter do
   describe '.format' do
     context 'duty amount present' do
       it 'result includes duty amount' do
-        RequirementDutyExpressionFormatter.format(duty_amount: '55').should =~ /55/
+        expect(
+          RequirementDutyExpressionFormatter.format(duty_amount: '55')
+        ).to match /55/
       end
     end
 
@@ -17,7 +19,7 @@ describe RequirementDutyExpressionFormatter do
       }
 
       it 'properly formats output' do
-        subject.should =~ /EUR\/\(Tonne\/L\)/
+        expect(subject).to match /EUR\/\(Tonne\/L\)/
       end
     end
 
@@ -28,7 +30,7 @@ describe RequirementDutyExpressionFormatter do
       }
 
       it 'properly formats result' do
-        subject.should =~ /EUR\/KG/
+        expect(subject).to match /EUR\/KG/
       end
     end
 
@@ -38,7 +40,7 @@ describe RequirementDutyExpressionFormatter do
       }
 
       it 'properly formats output' do
-        subject.should =~ /KG/
+        expect(subject).to match /KG/
       end
     end
   end

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe MeasurementUnitQualifier do
   describe 'validations' do

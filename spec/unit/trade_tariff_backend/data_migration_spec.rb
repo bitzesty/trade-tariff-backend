@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TradeTariffBackend::DataMigration do
   describe 'migration definition' do
@@ -41,7 +41,7 @@ describe TradeTariffBackend::DataMigration do
       end
 
       it 'sets up runner with provided up block' do
-        expect(example_migration.up.applicable?).to be_true
+        expect(example_migration.up.applicable?).to be_truthy
       end
     end
 
@@ -60,7 +60,7 @@ describe TradeTariffBackend::DataMigration do
       end
 
       it 'sets up runner with provided up block' do
-        expect(example_migration.down.applicable?).to be_true
+        expect(example_migration.down.applicable?).to be_truthy
       end
     end
   end
@@ -76,7 +76,7 @@ describe TradeTariffBackend::DataMigration do
     }
 
     it 'delegates to up_runner' do
-      expect(example_migration.can_rollup?).to be_true
+      expect(example_migration.can_rollup?).to be_truthy
     end
   end
 
@@ -91,7 +91,7 @@ describe TradeTariffBackend::DataMigration do
     }
 
     it 'delegates to down_runner' do
-      expect(example_migration.can_rolldown?).to be_true
+      expect(example_migration.can_rolldown?).to be_truthy
     end
   end
 

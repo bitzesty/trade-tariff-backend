@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TaricImporter::RecordProcessor::CreateOperation do
   let(:record_hash) {
@@ -28,9 +28,9 @@ describe TaricImporter::RecordProcessor::CreateOperation do
     }
 
     it 'identifies as create operation' do
-      LanguageDescription.count.should eq 0
+      expect(LanguageDescription.count).to eq 0
       operation.call
-      LanguageDescription.count.should eq 1
+      expect(LanguageDescription.count).to eq 1
     end
 
     it 'returns model instance' do

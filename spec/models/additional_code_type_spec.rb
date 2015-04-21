@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe AdditionalCodeType do
   describe 'validations' do
@@ -14,7 +14,7 @@ describe AdditionalCodeType do
                                                                      :meursing }
 
           it 'should be valid' do
-            additional_code_type.conformant?.should be_true
+            expect(additional_code_type.conformant?).to be_truthy
           end
         end
 
@@ -23,7 +23,7 @@ describe AdditionalCodeType do
                                                                      :adco }
 
           it 'should not be valid' do
-            additional_code_type.conformant?.should be_false
+            expect(additional_code_type.conformant?).to be_falsy
           end
         end
       end
@@ -32,7 +32,7 @@ describe AdditionalCodeType do
         let!(:additional_code_type) { build :additional_code_type, :adco }
 
         it 'should be valid' do
-          additional_code_type.conformant?.should be_true
+          expect(additional_code_type.conformant?).to be_truthy
         end
       end
     end
@@ -43,7 +43,7 @@ describe AdditionalCodeType do
                                                                    :meursing }
 
         it 'should be valid' do
-          additional_code_type.should be_valid
+          expect(additional_code_type).to be_valid
         end
       end
 
@@ -51,7 +51,7 @@ describe AdditionalCodeType do
         let!(:additional_code_type) { build :additional_code_type, meursing_table_plan_id: 'XX' }
 
         it 'should not be valid' do
-          additional_code_type.should_not be_conformant
+          expect(additional_code_type).to_not be_conformant
         end
       end
     end
@@ -131,8 +131,8 @@ describe AdditionalCodeType do
     end
 
     describe 'CT11' do
-      specify 'The additional code type cannot be deleted if it is related with an Export Refund for Processed Agricultural Goods additional code.' do
-        pending
+      pending 'The additional code type cannot be deleted if it is related with an Export Refund for Processed Agricultural Goods additional code.' do
+        raise "pending - to do"
       end
     end
   end

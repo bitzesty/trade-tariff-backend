@@ -1,11 +1,17 @@
+require 'core_ext/object'
+
 describe Object do
   describe '#tap!' do
     it 'returns self if block results in nil' do
-      'a'.tap!{ nil }.should == 'a'
+      expect(
+        'a'.tap!{ nil }
+      ).to eq 'a'
     end
 
     it 'returns block result if block does not result in nil' do
-      'a'.tap!{'b'}.should == 'b'
+      expect(
+        'a'.tap!{'b'}
+      ).to eq 'b'
     end
   end
 end

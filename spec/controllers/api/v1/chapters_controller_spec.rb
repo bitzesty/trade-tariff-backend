@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Api::V1::ChaptersController, "GET #show" do
   render_views
@@ -22,7 +22,7 @@ describe Api::V1::ChaptersController, "GET #show" do
     it 'returns rendered record' do
       get :show, id: chapter, format: :json
 
-      response.body.should match_json_expression pattern
+      expect(response.body).to match_json_expression pattern
     end
   end
 
@@ -61,7 +61,7 @@ describe Api::V1::ChaptersController, "GET #index" do
   it 'returns rendered records' do
     get :index, format: :json
 
-    response.body.should match_json_expression pattern
+    expect(response.body).to match_json_expression pattern
   end
 end
 
@@ -112,7 +112,7 @@ describe Api::V1::ChaptersController, "GET #changes" do
     it 'returns chapter changes' do
       get :changes, id: chapter, format: :json
 
-      response.body.should match_json_expression pattern
+      expect(response.body).to match_json_expression pattern
     end
   end
 
@@ -132,7 +132,7 @@ describe Api::V1::ChaptersController, "GET #changes" do
     it 'does not include change records' do
       get :changes, id: chapter, as_of: Date.yesterday, format: :json
 
-      response.body.should match_json_expression []
+      expect(response.body).to match_json_expression []
     end
   end
 
@@ -183,7 +183,7 @@ describe Api::V1::ChaptersController, "GET #changes" do
     it 'renders record attributes' do
       get :changes, id: chapter, format: :json
 
-      response.body.should match_json_expression pattern
+      expect(response.body).to match_json_expression pattern
     end
   end
 end

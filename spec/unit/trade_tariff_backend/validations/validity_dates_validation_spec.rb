@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TradeTariffBackend::Validations::ValidityDatesValidation do
   describe '#valid?' do
@@ -9,7 +9,7 @@ describe TradeTariffBackend::Validations::ValidityDatesValidation do
                           validity_end_date: nil) }
 
       it 'returns true' do
-        validation.valid?(record).should be_true
+        expect(validation.valid?(record)).to be_truthy
       end
     end
 
@@ -18,7 +18,7 @@ describe TradeTariffBackend::Validations::ValidityDatesValidation do
                           validity_end_date: nil) }
 
       it 'returns true' do
-        validation.valid?(record).should be_true
+        expect(validation.valid?(record)).to be_truthy
       end
     end
 
@@ -27,7 +27,7 @@ describe TradeTariffBackend::Validations::ValidityDatesValidation do
                           validity_end_date: Date.today) }
 
       it 'returns true' do
-        validation.valid?(record).should be_true
+        expect(validation.valid?(record)).to be_truthy
       end
     end
 
@@ -36,7 +36,7 @@ describe TradeTariffBackend::Validations::ValidityDatesValidation do
                           validity_end_date: Date.yesterday) }
 
       it 'returns false' do
-        validation.valid?(record).should be_false
+        expect(validation.valid?(record)).to be_falsy
       end
     end
   end

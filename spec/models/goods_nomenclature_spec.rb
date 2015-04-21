@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe GoodsNomenclature do
   describe 'associations' do
@@ -20,17 +20,23 @@ describe GoodsNomenclature do
         context 'direct loading' do
           it 'loads correct indent respecting given actual time' do
             TimeMachine.now do
-              goods_nomenclature.goods_nomenclature_indent.pk.should == goods_nomenclature_indent1.pk
+              expect(
+                goods_nomenclature.goods_nomenclature_indent.pk
+              ).to eq goods_nomenclature_indent1.pk
             end
           end
 
           it 'loads correct indent respecting given time' do
             TimeMachine.at(1.year.ago) do
-              goods_nomenclature.goods_nomenclature_indent.pk.should == goods_nomenclature_indent1.pk
+              expect(
+                goods_nomenclature.goods_nomenclature_indent.pk
+              ).to eq goods_nomenclature_indent1.pk
             end
 
             TimeMachine.at(4.years.ago) do
-              goods_nomenclature.reload.goods_nomenclature_indent.pk.should == goods_nomenclature_indent3.pk
+              expect(
+                goods_nomenclature.reload.goods_nomenclature_indent.pk
+              ).to eq goods_nomenclature_indent3.pk
             end
           end
         end
@@ -38,29 +44,35 @@ describe GoodsNomenclature do
         context 'eager loading' do
           it 'loads correct indent respecting given actual time' do
             TimeMachine.now do
-              GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+              expect(
+                GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                             .eager(:goods_nomenclature_indents)
                             .all
                             .first
-                            .goods_nomenclature_indent.pk.should == goods_nomenclature_indent1.pk
+                            .goods_nomenclature_indent.pk
+              ).to eq goods_nomenclature_indent1.pk
             end
           end
 
           it 'loads correct indent respecting given time' do
             TimeMachine.at(1.year.ago) do
-              GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+              expect(
+                GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                             .eager(:goods_nomenclature_indents)
                             .all
                             .first
-                            .goods_nomenclature_indent.pk.should == goods_nomenclature_indent1.pk
+                            .goods_nomenclature_indent.pk
+              ).to eq goods_nomenclature_indent1.pk
             end
 
             TimeMachine.at(4.years.ago) do
-              GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+              expect(
+                GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                             .eager(:goods_nomenclature_indents)
                             .all
                             .first
-                            .goods_nomenclature_indent.pk.should == goods_nomenclature_indent3.pk
+                            .goods_nomenclature_indent.pk
+              ).to eq goods_nomenclature_indent3.pk
             end
           end
         end
@@ -83,17 +95,23 @@ describe GoodsNomenclature do
           context 'direct loading' do
             it 'loads correct description respecting given actual time' do
               TimeMachine.now do
-                goods_nomenclature.goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
+                expect(
+                  goods_nomenclature.goods_nomenclature_description.pk
+                ).to eq goods_nomenclature_description1.pk
               end
             end
 
             it 'loads correct description respecting given time' do
               TimeMachine.at(1.year.ago) do
-                goods_nomenclature.goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
+                expect(
+                  goods_nomenclature.goods_nomenclature_description.pk
+                ).to eq goods_nomenclature_description1.pk
               end
 
               TimeMachine.at(4.years.ago) do
-                goods_nomenclature.reload.goods_nomenclature_description.pk.should == goods_nomenclature_description2.pk
+                expect(
+                  goods_nomenclature.reload.goods_nomenclature_description.pk
+                ).to eq goods_nomenclature_description2.pk
               end
             end
           end
@@ -101,29 +119,35 @@ describe GoodsNomenclature do
           context 'eager loading' do
             it 'loads correct description respecting given actual time' do
               TimeMachine.now do
-                GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                expect(
+                  GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                               .eager(:goods_nomenclature_descriptions)
                               .all
                               .first
-                              .goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
+                              .goods_nomenclature_description.pk
+                ).to eq goods_nomenclature_description1.pk
               end
             end
 
             it 'loads correct description respecting given time' do
               TimeMachine.at(1.year.ago) do
-                GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                expect(
+                  GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                               .eager(:goods_nomenclature_descriptions)
                               .all
                               .first
-                              .goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
+                              .goods_nomenclature_description.pk
+                ).to eq goods_nomenclature_description1.pk
               end
 
               TimeMachine.at(4.years.ago) do
-                GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                expect(
+                  GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                               .eager(:goods_nomenclature_descriptions)
                               .all
                               .first
-                              .goods_nomenclature_description.pk.should == goods_nomenclature_description2.pk
+                              .goods_nomenclature_description.pk
+                ).to eq goods_nomenclature_description2.pk
               end
             end
           end
@@ -143,17 +167,23 @@ describe GoodsNomenclature do
           context 'direct loading' do
             it 'loads correct description respecting given actual time' do
               TimeMachine.now do
-                goods_nomenclature.goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
+                expect(
+                  goods_nomenclature.goods_nomenclature_description.pk
+                ).to eq goods_nomenclature_description1.pk
               end
             end
 
             it 'loads correct description respecting given time' do
               TimeMachine.at(2.years.ago) do
-                goods_nomenclature.goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
+                expect(
+                  goods_nomenclature.goods_nomenclature_description.pk
+                ).to eq goods_nomenclature_description1.pk
               end
 
               TimeMachine.at(4.years.ago) do
-                goods_nomenclature.reload.goods_nomenclature_description.pk.should == goods_nomenclature_description2.pk
+                expect(
+                  goods_nomenclature.reload.goods_nomenclature_description.pk
+                ).to eq goods_nomenclature_description2.pk
               end
             end
           end
@@ -161,29 +191,35 @@ describe GoodsNomenclature do
           context 'eager loading' do
             it 'loads correct description respecting given actual time' do
               TimeMachine.now do
-                GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                expect(
+                  GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                               .eager(:goods_nomenclature_descriptions)
                               .all
                               .first
-                              .goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
+                              .goods_nomenclature_description.pk
+                ).to eq goods_nomenclature_description1.pk
               end
             end
 
             it 'loads correct description respecting given time' do
               TimeMachine.at(2.years.ago) do
-                GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                expect(
+                  GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                               .eager(:goods_nomenclature_descriptions)
                               .all
                               .first
-                              .goods_nomenclature_description.pk.should == goods_nomenclature_description1.pk
+                              .goods_nomenclature_description.pk
+                ).to eq goods_nomenclature_description1.pk
               end
 
               TimeMachine.at(4.years.ago) do
-                GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                expect(
+                  GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                               .eager(:goods_nomenclature_descriptions)
                               .all
                               .first
-                              .goods_nomenclature_description.pk.should == goods_nomenclature_description2.pk
+                              .goods_nomenclature_description.pk
+                ).to eq goods_nomenclature_description2.pk
               end
             end
           end
@@ -203,7 +239,9 @@ describe GoodsNomenclature do
                                                               validity_end_date: 3.years.ago }
         it 'fetches correct description' do
           TimeMachine.with_relevant_validity_periods {
-            goods_nomenclature.goods_nomenclature_description.pk.should eq goods_nomenclature_description1.pk
+            expect(
+              goods_nomenclature.goods_nomenclature_description.pk
+            ).to eq goods_nomenclature_description1.pk
           }
         end
       end
@@ -223,17 +261,23 @@ describe GoodsNomenclature do
       context 'direct loading' do
         it 'loads correct indent respecting given actual time' do
           TimeMachine.now do
-            goods_nomenclature.footnote.pk.should == footnote1.pk
+            expect(
+              goods_nomenclature.footnote.pk
+            ).to eq footnote1.pk
           end
         end
 
         it 'loads correct indent respecting given time' do
           TimeMachine.at(1.year.ago) do
-            goods_nomenclature.footnote.pk.should == footnote1.pk
+            expect(
+              goods_nomenclature.footnote.pk
+            ).to eq footnote1.pk
           end
 
           TimeMachine.at(4.years.ago) do
-            goods_nomenclature.reload.footnote.pk.should == footnote2.pk
+            expect(
+              goods_nomenclature.reload.footnote.pk
+            ).to eq footnote2.pk
           end
         end
       end
@@ -241,29 +285,35 @@ describe GoodsNomenclature do
       context 'eager loading' do
         it 'loads correct indent respecting given actual time' do
           TimeMachine.now do
-            GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+            expect(
+              GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                           .eager(:footnotes)
                           .all
                           .first
-                          .footnote.pk.should == footnote1.pk
+                          .footnote.pk
+            ).to eq footnote1.pk
           end
         end
 
         it 'loads correct indent respecting given time' do
           TimeMachine.at(1.year.ago) do
-            GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+            expect(
+              GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                           .eager(:footnotes)
                           .all
                           .first
-                          .footnote.pk.should == footnote1.pk
+                          .footnote.pk
+            ).to eq footnote1.pk
           end
 
           TimeMachine.at(4.years.ago) do
-            GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+            expect(
+              GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                           .eager(:footnotes)
                           .all
                           .first
-                          .footnote.pk.should == footnote2.pk
+                          .footnote.pk
+            ).to eq footnote2.pk
           end
         end
       end
@@ -290,11 +340,11 @@ describe GoodsNomenclature do
                         .first
                         .national_measurement_unit_set
 
-          nset.second_quantity_code.should eq tbl1.tbl_code
-          nset.second_quantity_description.should eq tbl1.tbl_txt
+          expect(nset.second_quantity_code).to eq tbl1.tbl_code
+          expect(nset.second_quantity_description).to eq tbl1.tbl_txt
 
-          nset.third_quantity_code.should eq tbl2.tbl_code
-          nset.third_quantity_description.should eq tbl2.tbl_txt
+          expect(nset.third_quantity_code).to eq tbl2.tbl_code
+          expect(nset.third_quantity_description).to eq tbl2.tbl_txt
         end
 
         TimeMachine.at(4.year.ago) do
@@ -302,11 +352,11 @@ describe GoodsNomenclature do
                         .first
                         .national_measurement_unit_set
 
-          nset.second_quantity_code.should eq tbl3.tbl_code
-          nset.second_quantity_description.should eq tbl3.tbl_txt
+          expect(nset.second_quantity_code).to eq tbl3.tbl_code
+          expect(nset.second_quantity_description).to eq tbl3.tbl_txt
 
-          nset.third_quantity_code.should be_blank
-          nset.third_quantity_description.should be_blank
+          expect(nset.third_quantity_code).to be_blank
+          expect(nset.third_quantity_description).to be_blank
         end
       end
     end
@@ -314,6 +364,6 @@ describe GoodsNomenclature do
 
   describe 'validations' do
     # NIG4 The start date of the goods nomenclature must be less than or equal to the end date.
-    it { should validate_validity_dates }
+    it { is_expected.to validate_validity_dates }
   end
 end

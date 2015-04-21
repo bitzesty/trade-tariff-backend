@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 require 'chief_importer'
 
@@ -6,7 +6,7 @@ describe ChiefImporter do
   describe 'initialization' do
     it 'assigns path' do
       importer = ChiefImporter.new("spec/fixtures/chief_samples/KBT009\(12044\).txt")
-      importer.path.to_s.should == "spec/fixtures/chief_samples/KBT009\(12044\).txt"
+      expect(importer.path.to_s).to eq "spec/fixtures/chief_samples/KBT009\(12044\).txt"
     end
   end
 
@@ -21,11 +21,11 @@ describe ChiefImporter do
       end
 
       it 'assigns start entry' do
-        @importer.start_entry.should be_kind_of ChiefImporter::StartEntry
+        expect(@importer.start_entry).to be_kind_of ChiefImporter::StartEntry
       end
 
       it 'assigns end entry' do
-        @importer.end_entry.should be_kind_of ChiefImporter::EndEntry
+        expect(@importer.end_entry).to be_kind_of ChiefImporter::EndEntry
       end
     end
 
@@ -38,11 +38,11 @@ describe ChiefImporter do
       end
 
       it 'does not assign start entry' do
-        @importer.start_entry.should be_blank
+        expect(@importer.start_entry).to be_blank
       end
 
       it 'does not assign end entry' do
-        @importer.end_entry.should be_blank
+        expect(@importer.end_entry).to be_blank
       end
     end
 

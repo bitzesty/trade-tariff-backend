@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'goods_nomenclature'
 require 'chief_transformer'
 require 'tariff_importer'
@@ -29,7 +29,7 @@ describe 'CHIEF: Custom scenarios' do
                                                          validity_start_date: DateTime.parse("2012-03-01 00:00:00 +0200")   }
 
     specify 'national measure is valid before update' do
-      national_measure.valid?.should be_true
+      expect(national_measure.valid?).to be_truthy
     end
 
     context 'Taric update occurs' do
@@ -64,8 +64,8 @@ describe 'CHIEF: Custom scenarios' do
 
         perform_transaction
 
-        national_measure.reload.invalidated_by.should eq transaction_id
-        national_measure.valid?.should be_true
+        expect(national_measure.reload.invalidated_by).to eq transaction_id
+        expect(national_measure.valid?).to be_truthy
       end
 
       specify 'sets goods nomenclature update date to operation date' do
@@ -103,7 +103,7 @@ describe 'CHIEF: Custom scenarios' do
                                                          validity_start_date: DateTime.parse("2012-07-01 00:00:00 +0200")   }
 
     specify 'national measure is valid before update' do
-      national_measure.valid?.should be_true
+      expect(national_measure.valid?).to be_truthy
     end
 
     context 'Taric update occurs' do
@@ -137,8 +137,8 @@ describe 'CHIEF: Custom scenarios' do
       }
 
       specify 'sets national measures invalidate_by to Taric transaction number' do
-        national_measure.reload.invalidated_by.should eq transaction_id
-        national_measure.valid?.should be_true
+        expect(national_measure.reload.invalidated_by).to eq transaction_id
+        expect(national_measure.valid?).to be_truthy
       end
 
       specify 'deletes goods nomenclature' do
@@ -185,8 +185,8 @@ describe 'CHIEF: Custom scenarios' do
 
     it 'should set measure validity end date to gono validity end date' do
       # so that ME8 validation on Measure is kept valid
-      measure.reload.validity_end_date.should eq gono.validity_end_date
-      measure.validity_end_date.should_not eq tame.fe_tsmp
+      expect(measure.reload.validity_end_date).to eq gono.validity_end_date
+      expect(measure.validity_end_date).to_not eq tame.fe_tsmp
     end
   end
 
@@ -225,7 +225,7 @@ describe 'CHIEF: Custom scenarios' do
     it 'will update measure validity dates' do
       ChiefTransformer.instance.invoke
 
-      measure.reload.validity_end_date.should eq mfcm.le_tsmp
+      expect(measure.reload.validity_end_date).to eq mfcm.le_tsmp
     end
 
     it 'will mark measure as invalidated' do
@@ -289,7 +289,7 @@ describe 'CHIEF: Custom scenarios' do
           validity_end_date: DateTime.new(2013,7,10,10,28),
           measure_type_id: 'VTZ'
         ).any?
-      ).to be_true
+      ).to be_truthy
     end
 
     it 'creates an open VTZ measure for 1104291710' do
@@ -300,7 +300,7 @@ describe 'CHIEF: Custom scenarios' do
           validity_end_date: nil,
           measure_type_id: 'VTZ'
         ).any?
-      ).to be_true
+      ).to be_truthy
     end
   end
 
@@ -346,7 +346,7 @@ describe 'CHIEF: Custom scenarios' do
           measure_type_id: 'DPO',
           geographical_area_id: '1011' # erga omnes
         ).any?
-      ).to be_true
+      ).to be_truthy
     end
   end
 

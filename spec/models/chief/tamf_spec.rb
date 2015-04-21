@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Chief::Tamf do
   describe 'associations' do
@@ -9,8 +9,8 @@ describe Chief::Tamf do
       let!(:measure_type_cond_irrelevant) { create :measure_type_cond }
 
       it 'associates correct Chief measure type conditions' do
-        tamf.measure_type_conds.should     include measure_type_cond
-        tamf.measure_type_conds.should_not include measure_type_cond_irrelevant
+        expect(tamf.measure_type_conds).to     include measure_type_cond
+        expect(tamf.measure_type_conds).to_not include measure_type_cond_irrelevant
       end
     end
   end
@@ -19,9 +19,9 @@ describe Chief::Tamf do
     let!(:tamf) { create :tamf }
 
     it 'marks itself as processed' do
-      tamf.processed.should be_false
+      expect(tamf.processed).to be_falsy
       tamf.mark_as_processed!
-      tamf.reload.processed.should be_true
+      expect(tamf.reload.processed).to be_truthy
     end
   end
 
@@ -30,17 +30,17 @@ describe Chief::Tamf do
 
     it 'picks cngp_code if it is available' do
       tamf = Chief::Tamf.new(cngp_code: 'abc')
-      tamf.geographical_area.should eq 'abc'
+      expect(tamf.geographical_area).to eq 'abc'
     end
 
     it 'picks cntry_orig if cngp_code is unavailable' do
       tamf = Chief::Tamf.new(cntry_orig: 'abc')
-      tamf.geographical_area.should eq 'abc'
+      expect(tamf.geographical_area).to eq 'abc'
     end
 
     it 'picks cntry_disp if cngp_cod and cntry_orig are unavailable' do
       tamf = Chief::Tamf.new(cntry_disp: 'abc')
-      tamf.geographical_area.should eq 'abc'
+      expect(tamf.geographical_area).to eq 'abc'
     end
   end
 
@@ -53,13 +53,17 @@ describe Chief::Tamf do
 
     context 'cmpd_uoq present' do
       it 'fetches Chief::MeasurementUnit with cmpd_uoq as part of the key' do
-        tamf.measurement_unit('12', '13').should eq chief_measurement_unit1
+        expect(
+          tamf.measurement_unit('12', '13')
+        ).to eq chief_measurement_unit1
       end
     end
 
     context 'cmpd_uoq blank' do
       it 'fetches Chief::MeasurementUnit with uoq as key' do
-        tamf.measurement_unit(nil, '13').should eq chief_measurement_unit2
+        expect(
+          tamf.measurement_unit(nil, '13')
+        ).to eq chief_measurement_unit2
       end
     end
   end

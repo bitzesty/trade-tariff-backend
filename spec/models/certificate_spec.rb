@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Certificate do
   describe 'associations' do
@@ -18,17 +18,23 @@ describe Certificate do
       context 'direct loading' do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
-            certificate.certificate_description.pk.should == certificate_description1.pk
+            expect(
+              certificate.certificate_description.pk
+            ).to eq certificate_description1.pk
           end
         end
 
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
-            certificate.certificate_description.pk.should == certificate_description1.pk
+            expect(
+              certificate.certificate_description.pk
+            ).to eq certificate_description1.pk
           end
 
           TimeMachine.at(4.years.ago) do
-            certificate.reload.certificate_description.pk.should == certificate_description2.pk
+            expect(
+              certificate.reload.certificate_description.pk
+            ).to eq certificate_description2.pk
           end
         end
       end
@@ -36,32 +42,38 @@ describe Certificate do
       context 'eager loading' do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
-            Certificate.where(certificate_type_code: certificate.certificate_type_code,
+            expect(
+              Certificate.where(certificate_type_code: certificate.certificate_type_code,
                               certificate_code: certificate.certificate_code)
                         .eager(:certificate_descriptions)
                         .all
                         .first
-                        .certificate_description.pk.should == certificate_description1.pk
+                        .certificate_description.pk
+            ).to eq certificate_description1.pk
           end
         end
 
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
-            Certificate.where(certificate_type_code: certificate.certificate_type_code,
+            expect(
+              Certificate.where(certificate_type_code: certificate.certificate_type_code,
                               certificate_code: certificate.certificate_code)
                         .eager(:certificate_descriptions)
                         .all
                         .first
-                        .certificate_description.pk.should == certificate_description1.pk
+                        .certificate_description.pk
+            ).to eq certificate_description1.pk
           end
 
           TimeMachine.at(4.years.ago) do
-            Certificate.where(certificate_type_code: certificate.certificate_type_code,
+            expect(
+              Certificate.where(certificate_type_code: certificate.certificate_type_code,
                               certificate_code: certificate.certificate_code)
                        .eager(:certificate_descriptions)
                        .all
                        .first
-                       .certificate_description.pk.should == certificate_description2.pk
+                       .certificate_description.pk
+            ).to eq certificate_description2.pk
           end
         end
       end

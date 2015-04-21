@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TradeTariffBackend::Validations::ValidityDateSpanValidation do
   describe '#valid?' do
@@ -17,7 +17,13 @@ describe TradeTariffBackend::Validations::ValidityDateSpanValidation do
         let(:validation) { described_class.new(:vld1, 'validity_date') }
 
         it 'should return false' do
-          described_class.new(:vld1, 'validity date span validation', validation_options: { of: :associated_record }).valid?(model).should be_false
+          expect(
+            described_class.new(
+              :vld1,
+              'validity date span validation',
+              validation_options: { of: :associated_record }
+            ).valid?(model)
+          ).to be_falsy
         end
       end
 
@@ -29,7 +35,13 @@ describe TradeTariffBackend::Validations::ValidityDateSpanValidation do
         let(:validation) { described_class.new(:vld1, 'validity_date') }
 
         it 'should return false' do
-          described_class.new(:vld1, 'validity date span validation', validation_options: { of: :associated_record }).valid?(model).should be_false
+          expect(
+            described_class.new(
+              :vld1,
+              'validity date span validation',
+              validation_options: { of: :associated_record }
+            ).valid?(model)
+          ).to be_falsy
         end
       end
 
@@ -42,7 +54,13 @@ describe TradeTariffBackend::Validations::ValidityDateSpanValidation do
         let(:validation) { described_class.new(:vld1, 'validity_date') }
 
         it 'should return false' do
-          described_class.new(:vld1, 'validity date span validation', validation_options: { of: :associated_record }).valid?(model).should be_false
+          expect(
+            described_class.new(
+              :vld1,
+              'validity date span validation',
+              validation_options: { of: :associated_record }
+            ).valid?(model)
+          ).to be_falsy
         end
       end
     end

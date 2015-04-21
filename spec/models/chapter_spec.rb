@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Chapter do
   describe 'associations' do
@@ -25,19 +25,19 @@ describe Chapter do
       end
 
       it 'returns headings matched by part of own goods nomenclature item id' do
-        chapter.headings.should include heading1
+        expect(chapter.headings).to include heading1
       end
 
       it 'returns relevant by actual time headings' do
-        chapter.headings.should include heading2
+        expect(chapter.headings).to include heading2
       end
 
       it 'does not return heading that is irrelevant to given time' do
-        chapter.headings.should_not include heading3
+        expect(chapter.headings).to_not include heading3
       end
 
       it 'does not include hidden commodity' do
-        chapter.headings.should_not include heading4
+        expect(chapter.headings).to_not include heading4
       end
     end
   end
@@ -46,7 +46,7 @@ describe Chapter do
     let(:chapter) { build :chapter }
 
     it 'defaults to zero' do
-      chapter.number_indents.should == 0
+      expect(chapter.number_indents).to eq 0
     end
   end
 
@@ -54,7 +54,7 @@ describe Chapter do
     let(:chapter) { create :chapter }
 
     it 'uses first two digits of goods_nomenclature_item_id as param' do
-      chapter.to_param.should == chapter.goods_nomenclature_item_id.first(2)
+      expect(chapter.to_param).to eq chapter.goods_nomenclature_item_id.first(2)
     end
   end
 

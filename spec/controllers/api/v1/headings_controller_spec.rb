@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Api::V1::HeadingsController, "GET #show" do
   render_views
@@ -25,7 +25,7 @@ describe Api::V1::HeadingsController, "GET #show" do
     context 'when record is present' do
       it 'returns rendered record' do
         get :show, id: heading, format: :json
-        response.body.should match_json_expression pattern
+        expect(response.body).to match_json_expression pattern
       end
     end
 
@@ -39,8 +39,12 @@ describe Api::V1::HeadingsController, "GET #show" do
         get :show, id: heading, format: :json
 
         body = JSON.parse(response.body)
-        body["commodities"].map{|c| c["goods_nomenclature_item_id"] }.should     include commodity1.goods_nomenclature_item_id
-        body["commodities"].map{|c| c["goods_nomenclature_item_id"] }.should_not include commodity2.goods_nomenclature_item_id
+        expect(
+          body["commodities"].map{|c| c["goods_nomenclature_item_id"] }
+        ).to include commodity1.goods_nomenclature_item_id
+        expect(
+          body["commodities"].map{|c| c["goods_nomenclature_item_id"] }
+        ).to_not include commodity2.goods_nomenclature_item_id
       end
     end
 
@@ -76,7 +80,7 @@ describe Api::V1::HeadingsController, "GET #show" do
       it 'returns rendered record' do
         get :show, id: heading, format: :json
 
-        response.body.should match_json_expression pattern
+        expect(response.body).to match_json_expression pattern
       end
     end
 
@@ -130,7 +134,7 @@ describe Api::V1::HeadingsController, "GET #changes" do
     it 'returns heading changes' do
       get :changes, id: heading, format: :json
 
-      response.body.should match_json_expression pattern
+      expect(response.body).to match_json_expression pattern
     end
   end
 
@@ -144,7 +148,7 @@ describe Api::V1::HeadingsController, "GET #changes" do
     it 'does not include change records' do
       get :changes, id: heading, as_of: Date.yesterday, format: :json
 
-      response.body.should match_json_expression []
+      expect(response.body).to match_json_expression []
     end
   end
 
@@ -195,7 +199,7 @@ describe Api::V1::HeadingsController, "GET #changes" do
     it 'renders record attributes' do
       get :changes, id: heading, format: :json
 
-      response.body.should match_json_expression pattern
+      expect(response.body).to match_json_expression pattern
     end
   end
 end

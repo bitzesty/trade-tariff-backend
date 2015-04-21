@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'tariff_synchronizer'
 
 describe TariffSynchronizer do
@@ -21,69 +21,73 @@ describe TariffSynchronizer do
 
     context 'when chief fails' do
       before do
-        ChiefImporter.any_instance.should_receive(
-          :import
-        ).and_raise ChiefImporter::ImportException
+        expect_any_instance_of(
+          ChiefImporter
+        ).to receive(:import).and_raise(
+          ChiefImporter::ImportException
+        )
       end
 
       it 'should mark chief update as failed' do
-        taric_update.should be_pending
-        chief_update.should be_pending
+        expect(taric_update).to be_pending
+        expect(chief_update).to be_pending
         rescuing { TariffSynchronizer.apply }
-        taric_update.reload.should be_applied
-        chief_update.reload.should be_failed
+        expect(taric_update.reload).to be_applied
+        expect(chief_update.reload).to be_failed
       end
     end
 
     context 'when taric fails' do
       before do
-        TaricImporter.any_instance.should_receive(
+        expect_any_instance_of(TaricImporter).to receive(
           :import
         ).and_raise TaricImporter::ImportException
       end
 
       it 'should mark taric update as failed' do
-        taric_update.should be_pending
-        chief_update.should be_pending
+        expect(taric_update).to be_pending
+        expect(chief_update).to be_pending
         rescuing { TariffSynchronizer.apply }
-        taric_update.reload.should be_failed
-        chief_update.reload.should be_pending
+        expect(taric_update.reload).to be_failed
+        expect(chief_update.reload).to be_pending
       end
     end
 
     context 'when everything is fine' do
       it 'applies missing updates' do
         TariffSynchronizer.apply
-        taric_update.reload.should be_applied
-        chief_update.reload.should be_applied
+        expect(taric_update.reload).to be_applied
+        expect(chief_update.reload).to be_applied
       end
     end
 
     context 'but elasticsearch is buggy' do
       before do
-        TaricImporter::Transaction.any_instance.should_receive(
+        expect_any_instance_of(TaricImporter::Transaction).to receive(
           :persist
         ).and_raise Elasticsearch::Transport::Transport::SnifferTimeoutError
       end
 
       it 'stops syncing' do
         expect { TariffSynchronizer.apply }.to raise_error Sequel::Rollback
-        taric_update.reload.should_not be_applied
-        chief_update.reload.should_not be_applied
+        expect(taric_update.reload).to_not be_applied
+        expect(chief_update.reload).to_not be_applied
       end
     end
 
     context 'but we have a timeout' do
       before do
-        TaricImporter::Transaction.any_instance.should_receive(
+        expect_any_instance_of(
+          TaricImporter::Transaction
+        ).to receive(
           :persist
         ).and_raise Timeout::Error
       end
 
       it 'stops syncing' do
         expect { TariffSynchronizer.apply }.to raise_error Sequel::Rollback
-        taric_update.reload.should_not be_applied
-        chief_update.reload.should_not be_applied
+        expect(taric_update.reload).to_not be_applied
+        expect(chief_update.reload).to_not be_applied
       end
     end
   end
@@ -99,35 +103,35 @@ describe TariffSynchronizer do
       }
 
       it 'removes entries from oplog tables' do
-        expect { Measure.none? }.to be_true
+        expect(Measure).to be_none
       end
 
       it 'marks Chief and Taric updates as pending' do
-        update.reload.should be_pending
+        expect(update.reload).to be_pending
       end
 
       it 'removes imported Chief records entries' do
-        expect { Chief::Mfcm.none? }.to be_true
+        expect(Chief::Mfcm).to be_none
       end
     end
 
     context 'encounters an exception' do
       before {
-        Measure.should_receive(:operation_klass).and_raise(StandardError)
+        expect(Measure).to receive(:operation_klass).and_raise(StandardError)
 
         rescuing { TariffSynchronizer.rollback(Date.yesterday, true) }
       }
 
       it 'does not remove entries from oplog derived tables' do
-        expect { Measure.any? }.to be_true
+        expect(Measure.any?).to be_truthy
       end
 
       it 'leaves Chief and Taric updates in applid state' do
-        update.reload.should be_applied
+        expect(update.reload).to be_applied
       end
 
       it 'removes imported Chief records entries' do
-        expect { Chief::Mfcm.any? }.to be_true
+        expect(Chief::Mfcm.any?).to be_truthy
       end
     end
 
@@ -137,7 +141,7 @@ describe TariffSynchronizer do
       }
 
       it 'removes entries from oplog derived tables' do
-        expect { Measure.none? }.to be_true
+        expect(Measure).to be_none
       end
 
       it 'deletes Chief and Taric updates' do
@@ -145,7 +149,7 @@ describe TariffSynchronizer do
       end
 
       it 'removes imported Chief records entries' do
-        expect { Chief::Mfcm.none? }.to be_true
+        expect(Chief::Mfcm).to be_none
       end
     end
 
@@ -159,7 +163,7 @@ describe TariffSynchronizer do
       }
 
       it 'removes entries from oplog derived tables' do
-        expect { Measure.none? }.to be_true
+        expect(Measure).to be_none
       end
 
       it 'deletes Chief and Taric updates' do
@@ -167,7 +171,7 @@ describe TariffSynchronizer do
       end
 
       it 'removes imported Chief records entries' do
-        expect { Chief::Mfcm.none? }.to be_true
+        expect(Chief::Mfcm).to be_none
       end
 
       it 'does not remove earlier updates (casts date as string to date)' do

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TaricImporter::RecordProcessor::UpdateOperation do
   let(:record_hash) {

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'chief_transformer'
 
 describe ChiefTransformer::CandidateMeasure::Collection do
@@ -8,12 +8,12 @@ describe ChiefTransformer::CandidateMeasure::Collection do
 
       it 'creates no measures' do
         ChiefTransformer.instance.invoke(:initial_load)
-        Measure.count.should == 0
+        expect(Measure.count).to eq 0
       end
 
       it 'creates no measure associations' do
         ChiefTransformer.instance.invoke(:initial_load)
-        MeasureComponent.count.should == 0
+        expect(MeasureComponent.count).to eq 0
       end
     end
 
@@ -26,8 +26,8 @@ describe ChiefTransformer::CandidateMeasure::Collection do
 
       it 'create Measure with Measure Components from TAME' do
         ChiefTransformer.instance.invoke(:initial_load)
-        Measure.count.should == 1
-        MeasureComponent.count.should == 1
+        expect(Measure.count).to eq 1
+        expect(MeasureComponent.count).to eq 1
       end
     end
 
@@ -44,8 +44,8 @@ describe ChiefTransformer::CandidateMeasure::Collection do
 
       it 'creates Measure and Measure Components from TAMF' do
         ChiefTransformer.instance.invoke(:initial_load)
-        Measure.count.should == 1
-        MeasureComponent.count.should == 1
+        expect(Measure.count).to eq 1
+        expect(MeasureComponent.count).to eq 1
       end
 
       it 'create Measure Conditions from TAMF' do
@@ -55,8 +55,8 @@ describe ChiefTransformer::CandidateMeasure::Collection do
                              msrgp_code: 'PR'
 
         ChiefTransformer.instance.invoke(:initial_load)
-        Measure.count.should == 2
-        MeasureCondition.count.should == 1
+        expect(Measure.count).to eq 2
+        expect(MeasureCondition.count).to eq 1
       end
     end
   end
@@ -104,7 +104,7 @@ describe ChiefTransformer::CandidateMeasure::Collection do
       }
 
       it 'validity end dates differentiate measures' do
-        candidate_measures.uniq.size.should eq mfcm.tames.size
+        expect(candidate_measures.uniq.size).to eq mfcm.tames.size
       end
     end
 
@@ -147,7 +147,7 @@ describe ChiefTransformer::CandidateMeasure::Collection do
       }
 
       it 'removes duplicate measures' do
-        candidate_measures.uniq.size.should eq 1
+        expect(candidate_measures.uniq.size).to eq 1
       end
     end
   end

@@ -1,19 +1,19 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'chief_transformer'
 
 describe ChiefTransformer::CandidateMeasure do
   it 'should be a Sequel Model tied to Measures Oplog table' do
-    subject.should be_kind_of Sequel::Model
-    subject.class.table_name.should == :measures_oplog
+    expect(subject).to be_kind_of Sequel::Model
+    expect(subject.class.table_name).to eq :measures_oplog
   end
 
   describe 'initialization' do
     it 'sets default values for UK measures' do
-      subject.measure_generating_regulation_id.should == ChiefTransformer::CandidateMeasure::DEFAULT_REGULATION_ID
-      subject.measure_generating_regulation_role.should == ChiefTransformer::CandidateMeasure::DEFAULT_REGULATION_ROLE_TYPE_ID
-      subject.geographical_area_id.should == ChiefTransformer::CandidateMeasure::DEFAULT_GEOGRAPHICAL_AREA_ID
-      subject.stopped_flag.should be_false
-      subject.national.should be_true
+      expect(subject.measure_generating_regulation_id).to eq ChiefTransformer::CandidateMeasure::DEFAULT_REGULATION_ID
+      expect(subject.measure_generating_regulation_role).to eq ChiefTransformer::CandidateMeasure::DEFAULT_REGULATION_ROLE_TYPE_ID
+      expect(subject.geographical_area_id).to eq ChiefTransformer::CandidateMeasure::DEFAULT_GEOGRAPHICAL_AREA_ID
+      expect(subject.stopped_flag).to be_falsy
+      expect(subject.national).to be_truthy
     end
   end
 
@@ -23,7 +23,7 @@ describe ChiefTransformer::CandidateMeasure do
       subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm) }
 
       it "should return true if a vat or excise measure" do
-        candidate_measure.is_vat_or_excise?.should == true
+        expect(candidate_measure.is_vat_or_excise?).to eq true
       end
     end
     context 'non vat mfcm' do
@@ -31,7 +31,7 @@ describe ChiefTransformer::CandidateMeasure do
       subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm) }
 
       it "should return false if for some reason non vat measures exist" do
-        candidate_measure.is_vat_or_excise?.should == false
+        expect(candidate_measure.is_vat_or_excise?).to eq false
       end
     end
   end
@@ -40,13 +40,13 @@ describe ChiefTransformer::CandidateMeasure do
     subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new }
 
     it 'expects mfcm to be set' do
-      candidate_measure.valid?.should be_false
-      candidate_measure.errors.should include :mfcm
+      expect(candidate_measure.valid?).to be_falsy
+      expect(candidate_measure.errors).to include :mfcm
     end
 
     it 'expects either tame or tamf to be set' do
-      candidate_measure.valid?.should be_false
-      candidate_measure.errors.should include :tame_tamf
+      expect(candidate_measure.valid?).to be_falsy
+      expect(candidate_measure.errors).to include :tame_tamf
     end
   end
 
@@ -57,19 +57,19 @@ describe ChiefTransformer::CandidateMeasure do
       subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm) }
 
       it 'assigns validity start date using mfcm component' do
-        candidate_measure.validity_start_date.should == mfcm.fe_tsmp
+        expect(candidate_measure.validity_start_date).to eq mfcm.fe_tsmp
       end
 
       it 'assigns validity end date using mfcm component' do
-        candidate_measure.validity_end_date.should == mfcm.le_tsmp
+        expect(candidate_measure.validity_end_date).to eq mfcm.le_tsmp
       end
 
       it 'assigns goods nomenclature item id using mfcm component' do
-        candidate_measure.goods_nomenclature_item_id.should == mfcm.cmdty_code
+        expect(candidate_measure.goods_nomenclature_item_id).to eq mfcm.cmdty_code
       end
 
       it 'assigns measure type using chief measure type adco table' do
-        candidate_measure.measure_type_id.should == mfcm.measure_type_adco.measure_type_id
+        expect(candidate_measure.measure_type_id).to eq mfcm.measure_type_adco.measure_type_id
       end
     end
 
@@ -79,7 +79,7 @@ describe ChiefTransformer::CandidateMeasure do
       subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm) }
 
       it 'pads commodity code with leading zeros' do
-        subject.goods_nomenclature_item_id.should == "1234567800"
+        expect(subject.goods_nomenclature_item_id).to eq "1234567800"
       end
     end
   end
@@ -92,7 +92,7 @@ describe ChiefTransformer::CandidateMeasure do
 
       it 'sets the default geographical area code' do
         candidate_measure = subject.new(geographical_area_id: default_geo_area)
-        candidate_measure.geographical_area_id.should == default_geo_area
+        expect(candidate_measure.geographical_area_id).to eq default_geo_area
       end
     end
 
@@ -116,7 +116,7 @@ describe ChiefTransformer::CandidateMeasure do
 
       it 'maps Geographical Area Chief code to Taric code' do
         candidate_measure = subject.new(chief_geographical_area: country_code.chief_country_cd)
-        candidate_measure.geographical_area_id.should == country_code.country_cd # mapped to Taric country code
+        expect(candidate_measure.geographical_area_id).to eq country_code.country_cd # mapped to Taric country code
       end
 
       it 'builds country exclusion associations for geographical area if mapping present' do
@@ -124,9 +124,9 @@ describe ChiefTransformer::CandidateMeasure do
                                         tame: tame,
                                         mfcm: mfcm)
         candidate_measure.save
-        candidate_measure.candidate_associations.should have_key :excluded_geographical_areas
-        candidate_measure.candidate_associations[:excluded_geographical_areas].map(&:geographical_area_sid).should include geographical_area1.geographical_area_sid
-        candidate_measure.candidate_associations[:excluded_geographical_areas].map(&:geographical_area_sid).should include geographical_area2.geographical_area_sid
+        expect(candidate_measure.candidate_associations).to have_key :excluded_geographical_areas
+        expect(candidate_measure.candidate_associations[:excluded_geographical_areas].map(&:geographical_area_sid)).to include geographical_area1.geographical_area_sid
+        expect(candidate_measure.candidate_associations[:excluded_geographical_areas].map(&:geographical_area_sid)).to include geographical_area2.geographical_area_sid
       end
     end
   end
@@ -139,7 +139,7 @@ describe ChiefTransformer::CandidateMeasure do
                                                                              tame: mfcm.tame,
                                                                              tamf: mfcm.tame.tamfs.first) }
         it "should use the tamf start date" do
-          candidate_measure.validity_start_date.should == mfcm.tame.tamfs.first.fe_tsmp
+          expect(candidate_measure.validity_start_date).to eq mfcm.tame.tamfs.first.fe_tsmp
         end
       end
 
@@ -149,7 +149,7 @@ describe ChiefTransformer::CandidateMeasure do
                                                                              tame: mfcm.tame,
                                                                              tamf: mfcm.tame.tamfs.first) }
         it "should use the mfcm start date" do
-          candidate_measure.validity_start_date.should == mfcm.fe_tsmp
+          expect(candidate_measure.validity_start_date).to eq mfcm.fe_tsmp
         end
       end
 
@@ -158,7 +158,7 @@ describe ChiefTransformer::CandidateMeasure do
         subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm,
                                                                          tame: mfcm.tame) }
         it "should use the mfcm start date" do
-          candidate_measure.validity_start_date.should == mfcm.fe_tsmp
+          expect(candidate_measure.validity_start_date).to eq mfcm.fe_tsmp
         end
       end
 
@@ -166,7 +166,7 @@ describe ChiefTransformer::CandidateMeasure do
         let(:mfcm) { create :mfcm }
         subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm) }
         it "should use the mfcm start date" do
-          candidate_measure.validity_start_date.should == mfcm.fe_tsmp
+          expect(candidate_measure.validity_start_date).to eq mfcm.fe_tsmp
         end
       end
     end
@@ -177,7 +177,7 @@ describe ChiefTransformer::CandidateMeasure do
         subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm,
                                                                          tame: mfcm.tame) }
         it "should use the mfcm end date" do
-          candidate_measure.validity_end_date.should == mfcm.le_tsmp
+          expect(candidate_measure.validity_end_date).to eq mfcm.le_tsmp
         end
       end
 
@@ -186,7 +186,7 @@ describe ChiefTransformer::CandidateMeasure do
         subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm,
                                                                          tame: mfcm.tame) }
         it "should use the tame end date" do
-          candidate_measure.validity_end_date.should == mfcm.tame.le_tsmp
+          expect(candidate_measure.validity_end_date).to eq mfcm.tame.le_tsmp
         end
       end
 
@@ -194,7 +194,7 @@ describe ChiefTransformer::CandidateMeasure do
         let(:mfcm) { create :mfcm, :with_le_tsmp }
         subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm) }
         it "should use the mfcm end date" do
-          candidate_measure.validity_end_date.should == mfcm.le_tsmp
+          expect(candidate_measure.validity_end_date).to eq mfcm.le_tsmp
         end
       end
 
@@ -202,7 +202,7 @@ describe ChiefTransformer::CandidateMeasure do
         let(:mfcm) { create :mfcm }
         subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm) }
         it "should be nil" do
-          candidate_measure.validity_end_date.should == nil
+          expect(candidate_measure.validity_end_date).to eq nil
         end
       end
 
@@ -210,8 +210,8 @@ describe ChiefTransformer::CandidateMeasure do
         let(:mfcm) { create :mfcm, :with_le_tsmp }
         subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm) }
         it 'sets justifications regulation role id and type (ME33, ME34 confirmance)' do
-          candidate_measure.justification_regulation_role.should_not be_blank
-          candidate_measure.justification_regulation_id.should_not be_blank
+          expect(candidate_measure.justification_regulation_role).to_not be_blank
+          expect(candidate_measure.justification_regulation_id).to_not be_blank
         end
       end
     end
@@ -226,7 +226,7 @@ describe ChiefTransformer::CandidateMeasure do
 
         candidate_measure = ChiefTransformer::CandidateMeasure.new(mfcm: mfcm,
                                                                    tame: mfcm.tame)
-        candidate_measure.measure_type_id.should == "AB"
+        expect(candidate_measure.measure_type_id).to eq "AB"
       end
     end
   end
@@ -237,8 +237,8 @@ describe ChiefTransformer::CandidateMeasure do
                                                                          tame: mfcm.tame,
                                                                          tamf: mfcm.tame.tamfs.first) }
     it "should build the measure conditions from a tamf" do
-      candidate_measure.candidate_associations[:measure_conditions].should_not be_blank
-      candidate_measure.candidate_associations[:measure_conditions].first.component_sequence_number.should == 2
+      expect(candidate_measure.candidate_associations[:measure_conditions]).to_not be_blank
+      expect(candidate_measure.candidate_associations[:measure_conditions].first.component_sequence_number).to eq 2
     end
 
   end
@@ -250,8 +250,8 @@ describe ChiefTransformer::CandidateMeasure do
       subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm,
                                                                          tame: mfcm.tame) }
       it "should build the measure component from the tame" do
-        candidate_measure.candidate_associations[:measure_components].should_not be_blank
-        candidate_measure.candidate_associations[:measure_components].first.duty_amount.should == 20
+        expect(candidate_measure.candidate_associations[:measure_components]).to_not be_blank
+        expect(candidate_measure.candidate_associations[:measure_components].first.duty_amount).to eq 20
       end
     end
 
@@ -268,7 +268,7 @@ describe ChiefTransformer::CandidateMeasure do
                                                                              tamf: mfcm.tame.tamfs.first) }
 
         it "should build the measure component from the tamf" do
-          candidate_measure.candidate_associations[:measure_components].should_not be_blank
+          expect(candidate_measure.candidate_associations[:measure_components]).to_not be_blank
         end
       end
 
@@ -288,7 +288,7 @@ describe ChiefTransformer::CandidateMeasure do
                                                                              tamf: mfcm.tame.tamfs.first) }
 
         it 'picks duty expression that matches adval1_rate being present condition' do
-          candidate_measure.candidate_associations[:measure_components].should_not be_blank
+          expect(candidate_measure.candidate_associations[:measure_components]).to_not be_blank
         end
       end
     end
@@ -299,7 +299,7 @@ describe ChiefTransformer::CandidateMeasure do
     subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm) }
 
     it "according to measure type and chief measure type map" do
-      candidate_measure.candidate_associations[:footnote_association_measures].should_not be_blank
+      expect(candidate_measure.candidate_associations[:footnote_association_measures]).to_not be_blank
     end
   end
 end

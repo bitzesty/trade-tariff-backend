@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TimeMachine do
   let!(:commodity1) { create :commodity, validity_start_date: Time.now.ago(1.day),
@@ -9,22 +9,22 @@ describe TimeMachine do
   describe '.at' do
     it 'sets date to current date if argument is blank' do
       TimeMachine.at(nil) {
-        Commodity.actual.all.should     include commodity1
-        Commodity.actual.all.should_not include commodity2
+        expect(Commodity.actual.all).to     include commodity1
+        expect(Commodity.actual.all).to_not include commodity2
       }
     end
 
     it 'sets date to current date if argument is errorenous' do
       TimeMachine.at("#&$*(#)") {
-        Commodity.actual.all.should     include commodity1
-        Commodity.actual.all.should_not include commodity2
+        expect(Commodity.actual.all).to     include commodity1
+        expect(Commodity.actual.all).to_not include commodity2
       }
     end
 
     it 'parses and sets valid date from argument' do
       TimeMachine.at(Time.now.ago(15.days).to_s) {
-        Commodity.actual.all.should_not include commodity1
-        Commodity.actual.all.should     include commodity2
+        expect(Commodity.actual.all).to_not include commodity1
+        expect(Commodity.actual.all).to     include commodity2
       }
     end
   end
@@ -32,8 +32,8 @@ describe TimeMachine do
   describe '.now' do
     it 'sets date to current date' do
       TimeMachine.now {
-        Commodity.actual.all.should     include commodity1
-        Commodity.actual.all.should_not include commodity2
+        expect(Commodity.actual.all).to     include commodity1
+        expect(Commodity.actual.all).to_not include commodity2
       }
     end
   end

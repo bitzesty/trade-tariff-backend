@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TradeTariffBackend::Validations::UniquenessValidation do
   describe '#valid?' do
@@ -13,7 +13,9 @@ describe TradeTariffBackend::Validations::UniquenessValidation do
                           new?: false) }
 
       it 'returns false' do
-        validation.valid?(record).should be_false
+        expect(
+          validation.valid?(record)
+        ).to be_falsy
       end
     end
 
@@ -23,7 +25,9 @@ describe TradeTariffBackend::Validations::UniquenessValidation do
                           model: model) }
 
       it 'returns true' do
-        validation.valid?(record).should be_true
+        expect(
+          validation.valid?(record)
+        ).to be_truthy
       end
     end
 

@@ -55,7 +55,7 @@ group :test do
   gem "forgery"
   gem "json_expressions"
   gem "minitest", "~> 5.5"
-  gem "rspec-rails", "~> 2.14.2"
+  gem "rspec-rails", "~> 3.2.1"
   gem "shoulda-matchers", "~> 2.8"
   gem "simplecov"
   gem "simplecov-rcov"

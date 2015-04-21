@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 require 'taric_importer'
 
@@ -6,7 +6,7 @@ describe TaricImporter do
   describe 'initialization' do
     it 'assigns path' do
       importer = TaricImporter.new("spec/fixtures/taric_samples/footnote.xml")
-      importer.path.should == "spec/fixtures/taric_samples/footnote.xml"
+      expect(importer.path).to eq "spec/fixtures/taric_samples/footnote.xml"
     end
   end
 
@@ -15,7 +15,9 @@ describe TaricImporter do
       let(:valid_file) { "spec/fixtures/taric_samples/footnote.xml" }
 
       it 'instantiates appropriate processing strategy' do
-        TaricImporter::RecordProcessor.any_instance.should_receive(:process!)
+        allow_any_instance_of(
+          TaricImporter::RecordProcessor
+        ).to receive(:process!)
 
         @importer = TaricImporter.new(valid_file)
         @importer.import

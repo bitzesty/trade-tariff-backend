@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Chief::Tame do
   let(:common_tame_attributes) { attributes_for(:tame).slice(:fe_tsmp, :msrgp_code, :msr_type, :tty_code, :fe_tsmp, :amend_indicator) }
@@ -10,7 +10,7 @@ describe Chief::Tame do
 
       context 'single choice' do
         it 'can be associated to one tamf record' do
-          tame.tamfs.should include tamf
+          expect(tame.tamfs).to include tamf
         end
       end
 
@@ -18,8 +18,8 @@ describe Chief::Tame do
         let!(:tamf1) { create :tamf, common_tame_attributes.merge(fe_tsmp: Date.today.ago(20.years)) }
 
         it 'latest relevant tamf record is chosen' do
-          tame.tamfs.should     include tamf
-          tame.tamfs.should_not include tamf1
+          expect(tame.tamfs).to     include tamf
+          expect(tame.tamfs).to_not include tamf1
         end
       end
     end
@@ -32,8 +32,8 @@ describe Chief::Tame do
       let!(:mfcm2) { create :mfcm, common_mfcm_attributes.merge(fe_tsmp: tame.fe_tsmp + 1.day) }
 
       it 'matches MFCMs that have fe_tsmp equal or later to own fe_tsmp' do
-        tame.mfcms.should include mfcm1
-        tame.mfcms.should include mfcm2
+        expect(tame.mfcms).to include mfcm1
+        expect(tame.mfcms).to include mfcm2
       end
     end
   end
@@ -43,15 +43,15 @@ describe Chief::Tame do
     let!(:tamf) { create :tamf, common_tame_attributes }
 
     it 'marks itself as processed' do
-      tame.processed.should be_false
+      expect(tame.processed).to be_falsy
       tame.mark_as_processed!
-      tame.reload.processed.should be_true
+      expect(tame.reload.processed).to be_truthy
     end
 
     it 'marks related tamfs as processed' do
-      tamf.processed.should be_false
+      expect(tamf.processed).to be_falsy
       tame.mark_as_processed!
-      tamf.reload.processed.should be_true
+      expect(tamf.reload.processed).to be_truthy
     end
   end
 end

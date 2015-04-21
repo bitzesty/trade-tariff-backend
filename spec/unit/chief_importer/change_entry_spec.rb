@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 require 'chief_importer'
 require 'chief_importer/change_entry'
@@ -25,30 +25,34 @@ describe ChiefImporter::ChangeEntry do
 
     it 'assigns table name' do
       ce = ChiefImporter::ChangeEntry.new(valid_args)
-      ce.table.should == valid_table_name
+      expect(ce.table).to eq valid_table_name
     end
 
     it 'assigns proper available strategy' do
       ce = ChiefImporter::ChangeEntry.new(invalid_args)
-      ce.table.should == invalid_table_name
-      ce.strategy.should be_blank
+      expect(ce.table).to eq invalid_table_name
+      expect(ce.strategy).to be_blank
 
       ce = ChiefImporter::ChangeEntry.new(valid_args)
-      ce.table.should == valid_table_name
-      ce.strategy.should_not be_blank
-      ce.strategy.should be_kind_of ChiefImporter::Strategies::TestStrategy
+      expect(ce.table).to eq valid_table_name
+      expect(ce.strategy).to_not be_blank
+      expect(ce.strategy).to be_kind_of ChiefImporter::Strategies::TestStrategy
     end
   end
 
   describe "#relevant?" do
     it 'returns false if table is relevant' do
-      ChiefImporter::ChangeEntry.new(invalid_args).relevant?.should be_false
+      expect(
+        ChiefImporter::ChangeEntry.new(invalid_args).relevant?
+      ).to be_falsy
     end
 
     it 'returns true if table is relevant' do
       ChiefImporter.relevant_tables += valid_args
 
-      ChiefImporter::ChangeEntry.new(valid_args).relevant?.should be_true
+      expect(
+        ChiefImporter::ChangeEntry.new(valid_args).relevant?
+      ).to be_truthy
     end
   end
 end

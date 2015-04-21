@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'chief_transformer'
 
 describe "CHIEF: VAT and Excises" do
@@ -36,22 +36,22 @@ describe "CHIEF: VAT and Excises" do
 
     it "should create measure for 0101010100" do
       m = Measure.where(goods_nomenclature_item_id: "0101010100", validity_start_date: DateTime.parse("2005-01-01 11:00:00")).take
-      m.measure_components.first.duty_amount.should == 17.5
+      expect(m.measure_components.first.duty_amount).to eq 17.5
     end
 
     it "should create measure for 0202020200" do
       m = Measure.where(goods_nomenclature_item_id: "0202020200", validity_start_date: DateTime.parse("2006-06-01 00:00:00"), validity_end_date: DateTime.parse("2008-12-31 23:14:10")).take
-      m.measure_components.first.duty_amount.should == 17.5
+      expect(m.measure_components.first.duty_amount).to eq 17.5
     end
 
     it "should create measure for 0303030300" do
       m = Measure.where(goods_nomenclature_item_id: "0303030300", validity_start_date: DateTime.parse("2007-11-15 11:00:00")).take
-      m.measure_components.first.duty_amount.should == 5
+      expect(m.measure_components.first.duty_amount).to eq 5
     end
 
     it "should create measure for 0404040400" do
       m = Measure.where(goods_nomenclature_item_id: "0404040400", validity_start_date: DateTime.parse("2007-10-01 00:00:00")).take
-      m.measure_components.first.duty_amount.should == 0
+      expect(m.measure_components.first.duty_amount).to eq 0
     end
   end
 
@@ -65,14 +65,14 @@ describe "CHIEF: VAT and Excises" do
     let!(:geographical_area) { create :geographical_area, :fifteen_years, :erga_omnes }
 
     it "should not save invalid mfcm records" do
-      mfcm1.should_not be_valid
-      mfcm3.should_not be_valid
+      expect(mfcm1).to_not be_valid
+      expect(mfcm3).to_not be_valid
     end
 
     it "should create the following measures" do
       ChiefTransformer.instance.invoke(:initial_load)
       m = Measure.where(goods_nomenclature_item_id: "0101010100", validity_start_date: DateTime.parse("2006-06-01 00:00:00")).take
-      m.measure_components.first.duty_amount.should == 17.5
+      expect(m.measure_components.first.duty_amount).to eq 17.5
     end
   end
 
@@ -104,39 +104,39 @@ describe "CHIEF: VAT and Excises" do
 
     it "should create measures for 0101010100" do
       m = Measure.where(goods_nomenclature_item_id: "0101010100", validity_start_date: DateTime.parse("2005-01-01 11:00:00")).first
-      m.goods_nomenclature_item_id.should == "0101010100"
-      m.measure_components.first.duty_amount.should == 1.7799
-      m.measure_components.first.monetary_unit_code.should == 'GBP'
+      expect(m.goods_nomenclature_item_id).to eq "0101010100"
+      expect(m.measure_components.first.duty_amount).to eq 1.7799
+      expect(m.measure_components.first.monetary_unit_code).to eq 'GBP'
     end
 
     it "should create measures for 0202020200" do
       m = Measure.where(goods_nomenclature_item_id: "0202020200", validity_start_date: DateTime.parse("2006-06-01 00:00:00")).first
-      m.goods_nomenclature_item_id.should == "0202020200"
-      m.measure_components.first.duty_amount.should == 22.0
-      m.measure_components.second.duty_amount.should == 108.650
-      m.measure_components.second.monetary_unit_code.should == 'GBP'
+      expect(m.goods_nomenclature_item_id).to eq "0202020200"
+      expect(m.measure_components.first.duty_amount).to eq 22.0
+      expect(m.measure_components.second.duty_amount).to eq 108.650
+      expect(m.measure_components.second.monetary_unit_code).to eq 'GBP'
     end
 
     it "should create measures for 0303030300" do
       m = Measure.where(goods_nomenclature_item_id: "0303030300", validity_start_date: DateTime.parse("2007-11-15 11:00:00")).first
-      m.goods_nomenclature_item_id.should == "0303030300"
-      m.validity_end_date.should == Time.parse("2007-12-01 00:00:00")
-      m.measure_components.first.duty_amount.should == 0.6007
-      m.measure_components.first.monetary_unit_code.should == 'GBP'
+      expect(m.goods_nomenclature_item_id).to eq "0303030300"
+      expect(m.validity_end_date).to eq Time.parse("2007-12-01 00:00:00")
+      expect(m.measure_components.first.duty_amount).to eq 0.6007
+      expect(m.measure_components.first.monetary_unit_code).to eq 'GBP'
     end
 
     it "should create measures for 0404040400" do
       m = Measure.where(goods_nomenclature_item_id: "0404040400", validity_start_date: DateTime.parse("2007-10-01 00:00:00")).first
-      m.goods_nomenclature_item_id.should == "0404040400"
-      m.validity_end_date.should == Time.parse("2007-12-31 23:50:00")
-      m.measure_components.first.duty_amount.should == 0.6007
-      m.measure_components.first.monetary_unit_code.should == 'GBP'
+      expect(m.goods_nomenclature_item_id).to eq "0404040400"
+      expect(m.validity_end_date).to eq Time.parse("2007-12-31 23:50:00")
+      expect(m.measure_components.first.duty_amount).to eq 0.6007
+      expect(m.measure_components.first.monetary_unit_code).to eq 'GBP'
     end
 
     it "should create measures for 0505050500" do
       m = Measure.where(goods_nomenclature_item_id: "0505050500", validity_start_date: DateTime.parse("2005-01-01 00:00:00")).first
-      m.goods_nomenclature_item_id.should == "0505050500"
-      m.measure_components.first.duty_amount.should == 0
+      expect(m.goods_nomenclature_item_id).to eq "0505050500"
+      expect(m.measure_components.first.duty_amount).to eq 0
     end
   end
 
@@ -161,27 +161,27 @@ describe "CHIEF: VAT and Excises" do
                         geographical_area_id: "US",
                         validity_start_date: DateTime.parse("2005-01-01 11:00:00")).take
 
-      m.geographical_area_sid.should == 103
-      m.measure_components.first.duty_amount.should == 1.7799
-      m.measure_components.first.monetary_unit_code.should == 'GBP'
+      expect(m.geographical_area_sid).to eq 103
+      expect(m.measure_components.first.duty_amount).to eq 1.7799
+      expect(m.measure_components.first.monetary_unit_code).to eq 'GBP'
     end
 
     it "should create measures for CN" do
       m = Measure.where(goods_nomenclature_item_id: "0101010100",
                         geographical_area_id: "CN",
                         validity_start_date: DateTime.parse("2005-01-01 11:00:00")).take
-      m.geographical_area_sid.should == 439
-      m.measure_components.first.duty_amount.should == 2.300
-      m.measure_components.first.monetary_unit_code.should == 'GBP'
+      expect(m.geographical_area_sid).to eq 439
+      expect(m.measure_components.first.duty_amount).to eq 2.300
+      expect(m.measure_components.first.monetary_unit_code).to eq 'GBP'
     end
 
     it "should create measures for IN" do
       m = Measure.where(goods_nomenclature_item_id: "0101010100",
                         geographical_area_id: "IN",
                         validity_start_date: DateTime.parse("2005-01-01 11:00:00")).take
-      m.geographical_area_sid.should == 154
-      m.measure_components.first.duty_amount.should == 2.000
-      m.measure_components.first.monetary_unit_code.should == 'GBP'
+      expect(m.geographical_area_sid).to eq 154
+      expect(m.measure_components.first.duty_amount).to eq 2.000
+      expect(m.measure_components.first.monetary_unit_code).to eq 'GBP'
     end
   end
 
@@ -200,15 +200,15 @@ describe "CHIEF: VAT and Excises" do
 
     it "should create the 0101010100 measure" do
       m = Measure.where(goods_nomenclature_item_id: "0101010100", validity_start_date: DateTime.parse("2007-11-15 11:00:00")).take
-      m.measure_components.first.duty_amount.should == 15
+      expect(m.measure_components.first.duty_amount).to eq 15
     end
     it "should create the 0202020200 measure" do
       m = Measure.where(goods_nomenclature_item_id: "0202020200", validity_start_date: DateTime.parse("2008-01-01 00:00:00")).take
-      m.measure_components.first.duty_amount.should == 15
+      expect(m.measure_components.first.duty_amount).to eq 15
     end
     it "should create the 0303030300 measure" do
       m = Measure.where(goods_nomenclature_item_id: "0303030300", validity_start_date: DateTime.parse("2008-04-30 14:00:00")).take
-      m.measure_components.first.duty_amount.should == 15
+      expect(m.measure_components.first.duty_amount).to eq 15
     end
 
     context "TAME Daily Scenario 1: Changed VAT rate" do
@@ -550,45 +550,45 @@ describe "CHIEF: VAT and Excises" do
       m = Measure.where(goods_nomenclature_item_id: "0101010100",
                         validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
                         measure_type_id: 'DAA').take
-      m.measure_components.first.duty_amount.should == 20
-      m.measure_components.last.duty_amount.should == 1
+      expect(m.measure_components.first.duty_amount).to eq 20
+      expect(m.measure_components.last.duty_amount).to eq 1
     end
 
     it 'creates measure for 0202020200 with two measure components for duty amount of 20% and max 1kg' do
       m = Measure.where(goods_nomenclature_item_id: "0202020200",
                         validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
                         measure_type_id: 'DAA').take
-      m.measure_components.first.duty_amount.should == 20
-      m.measure_components.last.duty_amount.should == 1
+      expect(m.measure_components.first.duty_amount).to eq 20
+      expect(m.measure_components.last.duty_amount).to eq 1
     end
 
     it 'creates measure for 0303030300 with two measure components for duty amount of 20% and max 1kg' do
       m = Measure.where(goods_nomenclature_item_id: "0303030300",
                         validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
                         measure_type_id: 'DAA').take
-      m.measure_components.first.duty_amount.should == 20
-      m.measure_components.last.duty_amount.should == 1
+      expect(m.measure_components.first.duty_amount).to eq 20
+      expect(m.measure_components.last.duty_amount).to eq 1
     end
 
     it 'create measure for 0101010100 with one measure component, duty amount of 10%' do
       m = Measure.where(goods_nomenclature_item_id: "0101010100",
                         validity_start_date: DateTime.parse("2007-11-15 11:00:00"),
                         measure_type_id: 'EGJ').take
-      m.measure_components.first.duty_amount.should == 10
+      expect(m.measure_components.first.duty_amount).to eq 10
     end
 
     it 'create measure for 0202020200 with one measure component, duty amount of 10%' do
       m = Measure.where(goods_nomenclature_item_id: "0202020200",
                         validity_start_date: DateTime.parse("2008-01-01 00:00:00"),
                         measure_type_id: 'EGJ').take
-      m.measure_components.first.duty_amount.should == 10
+      expect(m.measure_components.first.duty_amount).to eq 10
     end
 
     it 'create measure for 0303030300 with one measure component, duty amount of 10%' do
       m = Measure.where(goods_nomenclature_item_id: "0303030300",
                         validity_start_date: DateTime.parse("2008-04-30 14:00:00"),
                         measure_type_id: 'EGJ').take
-      m.measure_components.first.duty_amount.should == 10
+      expect(m.measure_components.first.duty_amount).to eq 10
     end
 
     describe "TAMF Daily Scenario 1: Added max amount" do
@@ -787,7 +787,7 @@ describe "CHIEF: VAT and Excises" do
     it "should create the 0101010100 measure" do
       m = Measure.where(goods_nomenclature_item_id: "0101010100",
                         validity_start_date: DateTime.parse("2007-11-15 11:00:00")).take
-      m.measure_components.first.duty_amount.should == 15
+      expect(m.measure_components.first.duty_amount).to eq 15
     end
 
     describe "MFCM Daily Scenario 1: Updated measure with later start date" do
@@ -908,13 +908,13 @@ describe "CHIEF: VAT and Excises" do
     before { ChiefTransformer.instance.invoke(:initial_load) }
 
     it 'creates one measure' do
-      Measure.count.should == 1
+      expect(Measure.count).to eq 1
     end
 
     it 'measure for 0101010100 with duty rate of 20.0' do
       m = Measure.where(goods_nomenclature_item_id: "0101010100",
                         validity_start_date: DateTime.parse("2008-01-01 00:00:00")).take
-      m.measure_components.first.duty_amount.should == 20
+      expect(m.measure_components.first.duty_amount).to eq 20
     end
 
     describe "Alt 1. Multiple updates" do
@@ -964,7 +964,7 @@ describe "CHIEF: VAT and Excises" do
     before { ChiefTransformer.instance.invoke(:initial_load) }
 
     it 'no Taric measures should be created' do
-      Measure.count.should == 0
+      expect(Measure.count).to eq 0
     end
 
     context 'Alt 1. Insertion and deletion' do

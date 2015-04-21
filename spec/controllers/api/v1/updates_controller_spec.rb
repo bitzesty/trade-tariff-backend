@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Api::V1::UpdatesController, "GET #index" do
   render_views
@@ -25,8 +25,8 @@ describe Api::V1::UpdatesController, "GET #index" do
     it 'returns rendered records' do
       get :index, format: :json
 
-      response.body.should match_json_expression pattern
-      response.body.should match_json_expression pagination_pattern
+      expect(response.body).to match_json_expression pattern
+      expect(response.body).to match_json_expression pagination_pattern
     end
   end
 
@@ -34,7 +34,7 @@ describe Api::V1::UpdatesController, "GET #index" do
     it 'returns blank array' do
       get :index, format: :json
 
-      JSON.parse(response.body)["updates"].should eq []
+      expect(JSON.parse(response.body)["updates"]).to eq []
     end
   end
 end
@@ -55,7 +55,7 @@ describe Api::V1::UpdatesController, "GET #latest" do
     it 'returns rendered records' do
       get :latest, format: :json
 
-      response.body.should match_json_expression pattern
+      expect(response.body).to match_json_expression pattern
     end
   end
 
@@ -63,7 +63,9 @@ describe Api::V1::UpdatesController, "GET #latest" do
     it 'returns blank array' do
       get :latest, format: :json
 
-      JSON.parse(response.body).should eq []
+      expect(
+        JSON.parse(response.body)
+      ).to eq []
     end
   end
 end

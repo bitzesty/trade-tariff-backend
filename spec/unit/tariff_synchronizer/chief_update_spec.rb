@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'tariff_synchronizer'
 
 describe TariffSynchronizer::ChiefUpdate do
@@ -8,8 +8,8 @@ describe TariffSynchronizer::ChiefUpdate do
 
   before do
     # we assume csv contents are ok unless otherwise specified
-    TariffSynchronizer::ChiefUpdate.stub(:validate_file!)
-                                   .and_return(true)
+    allow(TariffSynchronizer::ChiefUpdate).to receive(:validate_file!)
+                                          .and_return(true)
   end
 
   describe '.download' do
@@ -29,7 +29,7 @@ describe TariffSynchronizer::ChiefUpdate do
 
         context 'file for the day not downloaded yet' do
           it 'downloads CHIEF file for specific date' do
-            TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
+            expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
                                            .with(url)
                                            .and_return(blank_response)
 
@@ -37,24 +37,28 @@ describe TariffSynchronizer::ChiefUpdate do
           end
 
           it 'writes CHIEF file contents to file if they are not blank' do
-            TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
+            expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
                                            .with(url)
                                            .and_return(success_response)
 
             TariffSynchronizer::ChiefUpdate.download(example_date)
 
-            File.exists?("#{TariffSynchronizer.root_path}/chief/#{TariffSynchronizer::ChiefUpdate.file_name_for(example_date)}").should be_true
-            File.read("#{TariffSynchronizer.root_path}/chief/#{TariffSynchronizer::ChiefUpdate.file_name_for(example_date)}").should == 'abc'
+            expect(
+              File.exists?("#{TariffSynchronizer.root_path}/chief/#{TariffSynchronizer::ChiefUpdate.file_name_for(example_date)}")
+            ).to be_truthy
+            expect(
+              File.read("#{TariffSynchronizer.root_path}/chief/#{TariffSynchronizer::ChiefUpdate.file_name_for(example_date)}")
+            ).to eq 'abc'
           end
 
           it 'creates pending ChiefUpdate entry in the table' do
-            TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
+            expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
                                            .with(url)
                                            .and_return(success_response)
             TariffSynchronizer::ChiefUpdate.download(example_date)
-            TariffSynchronizer::ChiefUpdate.count.should == 1
-            TariffSynchronizer::ChiefUpdate.first.issue_date.should == example_date
-            TariffSynchronizer::ChiefUpdate.first.filesize.should == success_response.content.size
+            expect(TariffSynchronizer::ChiefUpdate.count).to eq 1
+            expect(TariffSynchronizer::ChiefUpdate.first.issue_date).to eq example_date
+            expect(TariffSynchronizer::ChiefUpdate.first.filesize).to eq success_response.content.size
           end
         end
 
@@ -67,17 +71,19 @@ describe TariffSynchronizer::ChiefUpdate do
           }
 
           before {
-            TariffSynchronizer::ChiefUpdate.should_receive(
+            expect(TariffSynchronizer::ChiefUpdate).to receive(
               :download_content
             ).with(url).and_return(success_response)
 
             TariffSynchronizer::ChiefUpdate.download(example_date)
 
-            File.exists?("#{TariffSynchronizer.root_path}/chief/#{TariffSynchronizer::ChiefUpdate.file_name_for(example_date)}").should be_true
+            expect(
+              File.exists?("#{TariffSynchronizer.root_path}/chief/#{TariffSynchronizer::ChiefUpdate.file_name_for(example_date)}")
+            ).to be_truthy
           }
 
           it 'does not download CHIEF file for date when it exists' do
-            TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
+            expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
                                            .never
 
             TariffSynchronizer::ChiefUpdate.download(example_date)
@@ -100,11 +106,15 @@ describe TariffSynchronizer::ChiefUpdate do
           }
 
           before {
-            TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
-                                           .with(url)
-                                           .and_return(success_response)
+            expect(
+              TariffSynchronizer::ChiefUpdate
+            ).to receive(:download_content)
+             .with(url)
+             .and_return(success_response)
 
-            TariffSynchronizer::ChiefUpdate.unstub(:validate_file!)
+            # unstub
+            allow(TariffSynchronizer::ChiefUpdate).to receive(:validate_file!)
+                                                  .and_call_original
           }
 
           it {
@@ -119,30 +129,36 @@ describe TariffSynchronizer::ChiefUpdate do
         let(:not_found_response) { build :response, :not_found }
 
         before {
-          TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
+          expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
                                          .and_return(not_found_response)
         }
 
         it 'does not write CHIEF file contents to file' do
           TariffSynchronizer::ChiefUpdate.download(example_date)
 
-          File.exists?("#{TariffSynchronizer.root_path}/chief/#{example_date}_#{update_name}").should be_false
+          expect(
+            File.exists?("#{TariffSynchronizer.root_path}/chief/#{example_date}_#{update_name}")
+          ).to be_falsy
         end
 
         it 'does not create not found entry if update is still for today' do
           TariffSynchronizer::ChiefUpdate.download(Date.today)
 
-          TariffSynchronizer::ChiefUpdate.missing
-                                         .with_issue_date(Date.today)
-                                         .present?.should be_false
+          expect(
+            TariffSynchronizer::ChiefUpdate.missing
+                                           .with_issue_date(Date.today)
+                                           .present?
+          ).to be_falsy
         end
 
         it 'creates not found entry if date has passed' do
           TariffSynchronizer::ChiefUpdate.download(Date.today)
 
-          TariffSynchronizer::ChiefUpdate.missing
-                                         .with_issue_date(Date.today)
-                                         .present?.should be_false
+          expect(
+            TariffSynchronizer::ChiefUpdate.missing
+                                           .with_issue_date(Date.today)
+                                           .present?
+          ).to be_falsy
         end
       end
 
@@ -158,13 +174,15 @@ describe TariffSynchronizer::ChiefUpdate do
       end
 
       it 'logs error about permissions' do
-        TariffSynchronizer::ChiefUpdate.should_receive(:download_content)
-                                       .with(url)
-                                       .and_return(success_response)
+        expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
+                                               .with(url)
+                                               .and_return(success_response)
 
         TariffSynchronizer::ChiefUpdate.download(example_date)
 
-        File.exists?("#{TariffSynchronizer.root_path}/chief/#{example_date}_#{update_name}").should be_false
+        expect(
+          File.exists?("#{TariffSynchronizer.root_path}/chief/#{example_date}_#{update_name}")
+        ).to be_falsy
       end
 
       after  {
@@ -183,12 +201,12 @@ describe TariffSynchronizer::ChiefUpdate do
       let!(:stub_logger)   { double.as_null_object }
 
       before {
-        TariffSynchronizer::ChiefUpdate.stub(:download_content)
-                                       .and_return(not_found_response)
+        allow(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
+                                              .and_return(not_found_response)
       }
 
       it 'notifies about several missing updates in a row' do
-        TariffSynchronizer::ChiefUpdate.should_receive(:notify_about_missing_updates).and_return(true)
+        expect(TariffSynchronizer::ChiefUpdate).to receive(:notify_about_missing_updates).and_return(true)
         TariffSynchronizer::ChiefUpdate.sync
       end
     end
@@ -206,37 +224,37 @@ describe TariffSynchronizer::ChiefUpdate do
 
     it 'sets applied_at' do
       TariffSynchronizer::ChiefUpdate.first.apply
-      example_chief_update.reload.applied_at.should_not be_nil
+      expect(example_chief_update.reload.applied_at).to_not be_nil
     end
 
     it 'executes importer' do
       mock_importer = double
-      mock_importer.should_receive(:import).and_return(true)
-      TariffImporter.should_receive(:new).and_return(mock_importer)
+      expect(mock_importer).to receive(:import).and_return(true)
+      expect(TariffImporter).to receive(:new).and_return(mock_importer)
 
       TariffSynchronizer::ChiefUpdate.first.apply
     end
 
     it 'updates file entry state to processed' do
       mock_importer = double('importer').as_null_object
-      TariffImporter.should_receive(:new).and_return(mock_importer)
+      expect(TariffImporter).to receive(:new).and_return(mock_importer)
 
-      TariffSynchronizer::ChiefUpdate.pending.count.should == 1
+      expect(TariffSynchronizer::ChiefUpdate.pending.count).to eq 1
       TariffSynchronizer::ChiefUpdate.first.apply
-      TariffSynchronizer::ChiefUpdate.pending.count.should == 0
-      TariffSynchronizer::ChiefUpdate.applied.count.should == 1
+      expect(TariffSynchronizer::ChiefUpdate.pending.count).to eq 0
+      expect(TariffSynchronizer::ChiefUpdate.applied.count).to eq 1
     end
 
     it 'does not move file to processed if import fails' do
       mock_importer = double
-      mock_importer.should_receive(:import).and_raise(ChiefImporter::ImportException)
-      TariffImporter.should_receive(:new).and_return(mock_importer)
+      expect(mock_importer).to receive(:import).and_raise(ChiefImporter::ImportException)
+      expect(TariffImporter).to receive(:new).and_return(mock_importer)
 
-      TariffSynchronizer::ChiefUpdate.pending.count.should == 1
+      expect(TariffSynchronizer::ChiefUpdate.pending.count).to eq 1
       rescuing { TariffSynchronizer::ChiefUpdate.first.apply }
-      TariffSynchronizer::ChiefUpdate.pending.count.should == 0
-      TariffSynchronizer::ChiefUpdate.applied.count.should == 0
-      TariffSynchronizer::ChiefUpdate.failed.count.should
+      expect(TariffSynchronizer::ChiefUpdate.pending.count).to eq 0
+      expect(TariffSynchronizer::ChiefUpdate.applied.count).to eq 0
+      expect(TariffSynchronizer::ChiefUpdate.failed.count).to eq 1
     end
 
     after  { purge_synchronizer_folders }
@@ -250,13 +268,13 @@ describe TariffSynchronizer::ChiefUpdate do
 
     context 'entry for the day/update does not exist yet' do
       it 'creates db record from available file name' do
-        TariffSynchronizer::BaseUpdate.count.should == 0
+        expect(TariffSynchronizer::BaseUpdate.count).to eq 0
 
         TariffSynchronizer::ChiefUpdate.rebuild
 
-        TariffSynchronizer::BaseUpdate.count.should == 1
+        expect(TariffSynchronizer::BaseUpdate.count).to eq 1
         first_update = TariffSynchronizer::BaseUpdate.first
-        first_update.issue_date.should == example_date
+        expect(first_update.issue_date).to eq example_date
       end
     end
 
@@ -264,11 +282,11 @@ describe TariffSynchronizer::ChiefUpdate do
       let!(:example_chief_update) { create :chief_update, example_date: example_date }
 
       it 'does not create db record if it is already available for the day/update type combo' do
-        TariffSynchronizer::BaseUpdate.count.should == 1
+        expect(TariffSynchronizer::BaseUpdate.count).to eq 1
 
         TariffSynchronizer::ChiefUpdate.rebuild
 
-        TariffSynchronizer::BaseUpdate.count.should == 1
+        expect(TariffSynchronizer::BaseUpdate.count).to eq 1
       end
     end
 

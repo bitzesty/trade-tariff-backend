@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe ChapterSerializer do
   describe '#to_json' do
@@ -15,7 +15,7 @@ describe ChapterSerializer do
                    }
 
     it 'returns json representation for ElasticSearch' do
-      chapter.to_json.should match_json_expression pattern
+      expect(chapter.to_json).to match_json_expression pattern
     end
   end
 end

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe ChiefTransformer::Processor::MfcmUpdate do
   before(:all) { preload_standing_data }
@@ -49,7 +49,7 @@ describe ChiefTransformer::Processor::MfcmUpdate do
                 justification_regulation_role: nil
               )
             ).one?
-          ).to be_true
+          ).to be_truthy
         end
       end
 
@@ -86,7 +86,7 @@ describe ChiefTransformer::Processor::MfcmUpdate do
               justification_regulation_id: nil,
               justification_regulation_role: nil
             ).one?
-          ).to be_true
+          ).to be_truthy
         end
       end
     end
@@ -137,7 +137,7 @@ describe ChiefTransformer::Processor::MfcmUpdate do
               justification_regulation_id: nil,
               justification_regulation_role: nil
             ).one?
-          ).to be_true
+          ).to be_truthy
         end
       end
 

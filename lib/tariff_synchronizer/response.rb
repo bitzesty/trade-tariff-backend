@@ -18,6 +18,9 @@ module TariffSynchronizer
       self.url == other_response.url &&
       self.response_code == other_response.response_code &&
       self.content == other_response.content
+    rescue NoMethodError
+      # if `other_response` doesn't respond to methods above
+      false
     end
 
     def uri

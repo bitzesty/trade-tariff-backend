@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 shared_examples_for 'Base Update' do
   describe '.sync' do
@@ -7,7 +7,7 @@ shared_examples_for 'Base Update' do
       let!(:example_taric_update) { create :taric_update, example_date: Date.yesterday }
 
       it 'should_receive download to be invoed' do
-        described_class.should_receive(:download).at_least(1)
+        expect(described_class).to receive(:download).at_least(1)
 
         described_class.sync
       end

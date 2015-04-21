@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Api::V1::SectionsController, "GET #show" do
   render_views
@@ -23,7 +23,7 @@ describe Api::V1::SectionsController, "GET #show" do
     it 'returns rendered record' do
       get :show, id: section.position, format: :json
 
-      response.body.should match_json_expression pattern
+      expect(response.body).to match_json_expression pattern
     end
   end
 
@@ -54,6 +54,6 @@ describe Api::V1::SectionsController, "GET #index" do
   it 'returns rendered records' do
     get :index, format: :json
 
-    response.body.should match_json_expression pattern
+    expect(response.body).to match_json_expression pattern
   end
 end

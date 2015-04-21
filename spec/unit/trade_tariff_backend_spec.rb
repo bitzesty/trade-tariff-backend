@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TradeTariffBackend do
   describe '.reindex' do
@@ -8,7 +8,7 @@ describe TradeTariffBackend do
       before { TradeTariffBackend.reindex(stub_indexer) }
 
       it 'reindexes Tariff model contents in the search engine' do
-        stub_indexer.should have_received(:reindex)
+        expect(stub_indexer).to have_received(:reindex)
       end
     end
 
@@ -16,16 +16,16 @@ describe TradeTariffBackend do
       let(:mock_indexer) { double }
 
       before {
-        mock_indexer.should_receive(:reindex).and_raise(StandardError)
+        expect(mock_indexer).to receive(:reindex).and_raise(StandardError)
 
         TradeTariffBackend.reindex(mock_indexer)
       }
 
       it 'notified system operator about indexing failure' do
-        ActionMailer::Base.deliveries.should_not be_empty
+        expect(ActionMailer::Base.deliveries).to_not be_empty
         email = ActionMailer::Base.deliveries.last
-        email.encoded.should =~ /Backtrace/
-        email.encoded.should =~ /failed to reindex/
+        expect(email.encoded).to match /Backtrace/
+        expect(email.encoded).to match /failed to reindex/
       end
     end
   end
