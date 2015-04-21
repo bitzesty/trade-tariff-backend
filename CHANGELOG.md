@@ -1,5 +1,20 @@
 # Change Log
 
+## [release_912...release_931](https://github.com/alphagov/trade-tariff-backend/compare/release_912...release_931)
+
+### Changed
+- Modified default pagination from 30 to 20 items per page
+- Modified updates pagination to 60 updates per page
+- Fixed bundler audit in production
+- Upgrade Ruby version to 2.2.2
+- Upgrade Rails gem version to 4.2.0 and related gems
+- Upgrade MySql gem version to 0.3.13 for ruby compatibility
+- Upgrade gds-sso gem version to 10.0
+- Added a control to see if the update file can be XML/CSV parsed before marking it as pending
+
+### Added
+- Added pagination to Rollback controller
+
 ## [release_903...release_912](https://github.com/alphagov/trade-tariff-backend/compare/release_903...release_912)
 ### Changed
 - QuotaCriticalEvent primary key modified to include `occurrence_timestamp` fixes 2015-01-02 sync issue
