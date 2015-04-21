@@ -277,7 +277,7 @@ describe Commodity do
 
     around do |example|
       TimeMachine.at(Date.new(2011,2,1)) do
-        example.yield
+        example.run
       end
     end
 
