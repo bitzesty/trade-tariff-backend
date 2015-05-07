@@ -17,7 +17,7 @@ gem "yajl-ruby", "~> 1.2", require: "yajl"
 gem "dalli", "~> 2.7.2"
 gem "builder", "~> 3.2"
 gem "plek", "~> 1.10"
-gem "gds-sso", "~> 10.0"
+gem "gds-sso", "~> 11.0"
 
 gem "unicorn", "~> 4.8"
 gem "curb", "0.8.6"
@@ -28,10 +28,6 @@ gem "whenever", "~> 0.9"
 gem "airbrake", "~> 4.1"
 gem "aws-ses", "~> 0.6", require: "aws/ses" #used for sync emails
 gem "logstasher", "~> 0.6"
-
-gem "sass-rails", "~> 5.0"
-gem "therubyracer", "~> 0.12"
-gem "uglifier", "~> 2.7"
 gem "responders", "~> 2.0"
 
 group :development do
