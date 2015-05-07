@@ -28,11 +28,6 @@ gem "whenever", "~> 0.9"
 gem "airbrake", "~> 4.1"
 gem "aws-ses", "~> 0.6", require: "aws/ses" #used for sync emails
 gem "logstasher", "~> 0.6"
-
-gem "sass", "~> 3.4"
-gem "sass-rails", "~> 5.0"
-gem "therubyracer", "~> 0.12"
-gem "uglifier", "~> 2.7"
 gem "responders", "~> 2.0"
 
 group :development do
