@@ -16,7 +16,7 @@ class User < Sequel::Model
 
     # update details of existing user
     if user = find(uid: auth_hash["uid"])
-      user.update(user_params)
+      user.update_attributes(user_params)
     else # Create a new user.
       create(user_params)
     end
@@ -52,5 +52,6 @@ class User < Sequel::Model
 
   def update_attributes(attributes)
     update(attributes)
+    self
   end
 end
