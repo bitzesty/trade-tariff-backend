@@ -16,9 +16,9 @@ script:
  - RAILS_ENV=test bundle exec rake bundler:audit
 rvm:
   - 2.2.1
+# Only build pushes to the master branch (and PRs)
 branches:
-  except:
-    - release
-    - /^release_[0-9]+$/
+  only:
+    - master
 notifications:
   email: false
