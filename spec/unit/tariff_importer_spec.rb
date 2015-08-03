@@ -18,7 +18,7 @@ describe TariffImporter do
     it 'throws an error if path is non existent' do
       expect(
         -> { TariffImporter.new(invalid_file) }
-      ).to raise_error
+      ).to raise_error(TariffImporter::NotFound)
     end
   end
 end

@@ -142,7 +142,7 @@ describe 'CHIEF: Custom scenarios' do
       end
 
       specify 'deletes goods nomenclature' do
-        expect { goods_nomenclature.reload }.to raise_error
+        expect { goods_nomenclature.reload }.to raise_error(Sequel::Error)
       end
 
       specify 'sets goods nomenclature destroy date to operation date' do

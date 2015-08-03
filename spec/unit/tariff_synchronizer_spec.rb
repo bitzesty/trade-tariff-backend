@@ -7,7 +7,7 @@ describe TariffSynchronizer, truncation: true do
     it 'returns initial update day for specific update type' do
       expect(TariffSynchronizer.initial_update_for(:taric)).to eq(TariffSynchronizer.taric_initial_update)
       expect(TariffSynchronizer.initial_update_for(:chief)).to eq(TariffSynchronizer.chief_initial_update)
-      expect { TariffSynchronizer.initial_update_for(:non_existent) }.to raise_error
+      expect { TariffSynchronizer.initial_update_for(:non_existent) }.to raise_error(NoMethodError)
     end
   end
 
