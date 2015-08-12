@@ -7,7 +7,7 @@ describe TaricImporter::RecordProcessor::Operation do
     }
 
     it 'must be implemented by subclasses' do
-      expect{ empty_operation.call }.to raise_error
+      expect{ empty_operation.call }.to raise_error(NotImplementedError)
     end
   end
 
@@ -17,7 +17,7 @@ describe TaricImporter::RecordProcessor::Operation do
     }
 
     it 'must be implemented by subclasses' do
-      expect{ empty_operation.to_oplog_operation }.to raise_error
+      expect{ empty_operation.to_oplog_operation }.to raise_error(NotImplementedError)
     end
   end
 end

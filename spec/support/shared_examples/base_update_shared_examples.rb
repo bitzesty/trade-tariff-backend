@@ -16,7 +16,7 @@ shared_examples_for 'Base Update' do
 
   describe '.update_type' do
     it 'raises error on base class' do
-      expect { TariffSynchronizer::BaseUpdate.update_type }.to raise_error
+      expect { TariffSynchronizer::BaseUpdate.update_type }.to raise_error(RuntimeError)
     end
 
     it 'does not raise error on class that overrides it' do
