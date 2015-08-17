@@ -1,5 +1,11 @@
 # Change Log
 
+## [release_931...release_940](https://github.com/alphagov/trade-tariff-backend/compare/release_931...release_940)
+### Changed
+- Rails update to 4.2.3
+- Rspec update and changed to rspec syntax, depreication warning fixes.
+- gds-sso fixes for AR and Sequel differences
+
 ## [release_912...release_931](https://github.com/alphagov/trade-tariff-backend/compare/release_912...release_931)
 
 ### Changed
