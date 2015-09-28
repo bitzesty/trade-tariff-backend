@@ -1,3 +1,4 @@
+sudo: false
 language: ruby
 cache: bundler
 env: GOVUK_APP_DOMAIN=test
@@ -13,7 +14,6 @@ script:
  - RAILS_ENV=test bundle exec rake db:create
  - RAILS_ENV=test bundle exec rake db:migrate
  - RAILS_ENV=test bundle exec rake spec
- - RAILS_ENV=test bundle exec rake bundler:audit
 rvm:
   - 2.2.1
 # Only build pushes to the master branch (and PRs)

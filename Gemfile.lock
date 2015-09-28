@@ -58,9 +58,6 @@ GEM
       sass (~> 3.0)
       terminal-table (~> 1.4)
     builder (3.2.2)
-    bundler-audit (0.4.0)
-      bundler (~> 1.2)
-      thor (~> 0.18)
     capistrano (3.4.0)
       i18n
       rake (>= 10.0.0)
@@ -353,7 +350,6 @@ DEPENDENCIES
   aws-ses (~> 0.6)
   brakeman (~> 3.0)
   builder (~> 3.2)
-  bundler-audit (~> 0.4)
   capistrano (~> 3.4)
   ci_reporter_rspec
   curb (~> 0.8)
