@@ -44,7 +44,6 @@ end
 group :development, :test do
   gem "pry-rails", "~> 0.3"
   gem "pry-nav"
-  gem "bundler-audit", "~> 0.4"
   gem "brakeman", "~> 3.0", require: false
 end
 
