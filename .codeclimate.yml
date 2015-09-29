@@ -4,3 +4,28 @@ engines:
     enabled: true
   bundler-audit:
     enabled: true
+ratings:
+  paths:
+  - app/**
+  - lib/**
+  - "*.rb"
+exclude_paths:
+- app/assets/images/*
+- config/**/*
+- data/**/*
+- db/**/*
+- bin/**/*
+- spec/**/*
+- vendor/**/*
+- .*
+- Gemfile*
+- Procfile*
+- Rakefile
+- startup.sh
+- prod2dev.sed
+- CHANGELOG.md
+- CONTRIBUTING.md
+- LICENCE.txt
+- README.md
+- Guardfile
+- jenkins.sh
