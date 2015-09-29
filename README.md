@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/alphagov/trade-tariff-backend.png?branch=master)](https://travis-ci.org/alphagov/trade-tariff-backend)
+[![Code Climate](https://codeclimate.com/github/alphagov/trade-tariff-backend/badges/gpa.svg)](https://codeclimate.com/github/alphagov/trade-tariff-backend)
 
 # Trade Tariff Backend
 
@@ -91,7 +92,7 @@ In case of any errors, changes (per single update) are roll-backed and record it
 ### Manual Rollback
 
   Keep in mind that there are two ways of rolling-back, one with keeping the intermediary updates stored in db, and another one without.
-  The default option is to remove TARIC/CHIEF updates and data transformations. 
+  The default option is to remove TARIC/CHIEF updates and data transformations.
 
   ```
   DATE='2014-01-30' bundle exec rake tariff:sync:rollback
