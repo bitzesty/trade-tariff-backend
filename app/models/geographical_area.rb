@@ -1,4 +1,6 @@
 class GeographicalArea < Sequel::Model
+  COUNTRIES_CODES = ['0', '2'].freeze
+
   plugin :time_machine
   plugin :oplog, primary_key: :geographical_area_sid
   plugin :conformance_validator
@@ -51,7 +53,7 @@ class GeographicalArea < Sequel::Model
     end
 
     def countries
-      where(geographical_code: '0')
+      where(geographical_code: COUNTRIES_CODES)
     end
   end
 
