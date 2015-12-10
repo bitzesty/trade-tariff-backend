@@ -61,4 +61,5 @@ group :test do
   gem "simplecov-rcov"
   gem "webmock"
   gem "database_cleaner"
+  gem "rspec_junit_formatter"
 end
