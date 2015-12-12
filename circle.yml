@@ -2,15 +2,15 @@ machine:
   services:
     - elasticsearch
     - redis
-    - mysql
+    - postgresql
   environment:
     GOVUK_APP_DOMAIN: test
 database:
   pre:
-    - echo "create database circle_ruby_test;" | mysql -u ubuntu -h localhost
+    - echo "create database circle_ruby_test;" | psql -U ubuntu -h localhost
   override:
     - mv config/database.ci.yml config/database.yml
-    - bundle exec rake db:create db:migrate --trace
+    - bundle exec rake db:migrate --trace
 dependencies:
   bundler:
     without: [development]

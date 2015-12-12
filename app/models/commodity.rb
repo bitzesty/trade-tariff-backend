@@ -13,7 +13,7 @@ class Commodity < GoodsNomenclature
   one_to_one :heading, dataset: -> {
     actual_or_relevant(Heading)
            .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
-           .filter(producline_suffix: 80)
+           .filter(producline_suffix: "80")
   }
 
   one_to_one :chapter, dataset: -> {
@@ -34,7 +34,7 @@ class Commodity < GoodsNomenclature
     end
 
    def declarable
-      filter(producline_suffix: 80)
+      filter(producline_suffix: "80")
     end
   end
 

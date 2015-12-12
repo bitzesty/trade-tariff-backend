@@ -77,7 +77,7 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:additional_code_sid], :name=>:adco_pk
-      index [:additional_code_type_id], :name=>:type_id
+      index [:additional_code_type_id], :name=>:adco_type_id
     end
 
     create_table(:base_regulations, :ignore_index_errors=>false) do
@@ -133,7 +133,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:certificate_code, :certificate_type_code], :name=>:certificate
+      index [:certificate_code, :certificate_type_code], :name=>:cert_desc_certificate
       index [:language_id], :name=>:index_certificate_descriptions_on_language_id
       index [:certificate_description_period_sid], :name=>:cert_desc_pk
     end
@@ -597,7 +597,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:explicit_abrogation_regulation_role, :explicit_abrogation_regulation_id], :name=>:explicit_abrogation_regulation
+      index [:explicit_abrogation_regulation_role, :explicit_abrogation_regulation_id], :name=>:full_temp_explicit_abrogation_regulation
       index [:full_temporary_stop_regulation_id, :full_temporary_stop_regulation_role], :name=>:full_temp_stop_reg_pk
     end
 
@@ -662,7 +662,7 @@ Sequel.migration do
       DateTime :updated_at
       DateTime :validity_end_date
 
-      index [:goods_nomenclature_description_period_sid], :name=>:primary_key
+      index [:goods_nomenclature_description_period_sid], :name=>:gono_desc_primary_key
       index [:goods_nomenclature_sid, :validity_start_date, :validity_end_date], :name=>:gono_desc_periods_pk
     end
 
@@ -864,7 +864,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:certificate_code, :certificate_type_code], :name=>:certificate
+      index [:certificate_code, :certificate_type_code], :name=>:meas_cond_certificate
       index [:condition_measurement_unit_qualifier_code], :name=>:condition_measurement_unit_qualifier_code
       index [:action_code], :name=>:index_measure_conditions_on_action_code
       index [:condition_measurement_unit_code], :name=>:index_measure_conditions_on_condition_measurement_unit_code
@@ -880,7 +880,7 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
 
-      index [:measure_sid, :excluded_geographical_area, :geographical_area_sid], :name=>:primary_key
+      index [:measure_sid, :excluded_geographical_area, :geographical_area_sid], :name=>:meas_excl_geog_primary_key
       index :geographical_area_sid, :name=>:meas_excl_geog_area_pk
     end
 
@@ -1061,7 +1061,7 @@ Sequel.migration do
 
     create_table(:meursing_headings, :ignore_index_errors=>false) do
       String :meursing_table_plan_id, :size=>2
-      Integer :meursing_heading_number
+      String :meursing_heading_number
       Integer :row_column_code
       DateTime :validity_start_date
       DateTime :validity_end_date
@@ -1133,8 +1133,8 @@ Sequel.migration do
       DateTime :updated_at
 
       index [:base_regulation_id, :base_regulation_role], :name=>:base_regulation
-      index [:complete_abrogation_regulation_id, :complete_abrogation_regulation_role], :name=>:complete_abrogation_regulation
-      index [:explicit_abrogation_regulation_id, :explicit_abrogation_regulation_role], :name=>:explicit_abrogation_regulation
+      index [:complete_abrogation_regulation_id, :complete_abrogation_regulation_role], :name=>:mod_reg_complete_abrogation_regulation
+      index [:explicit_abrogation_regulation_id, :explicit_abrogation_regulation_role], :name=>:mod_reg_explicit_abrogation_regulation
       index [:modification_regulation_id, :modification_regulation_role], :name=>:mod_reg_pk
     end
 

@@ -15,11 +15,11 @@ describe Commodity do
       let!(:heading1) { create :heading, goods_nomenclature_item_id: "#{gono1.goods_nomenclature_item_id.first(4)}000000",
                                          validity_start_date: Date.new(1991,1,1),
                                          validity_end_date: Date.new(2002,1,1),
-                                         producline_suffix: 80 }
+                                         producline_suffix: "80" }
       let!(:heading2) { create :heading, goods_nomenclature_item_id: "#{gono1.goods_nomenclature_item_id.first(4)}000000",
                                          validity_start_date: Date.new(2002,1,1),
                                          validity_end_date: Date.new(2014,1,1),
-                                         producline_suffix: 80 }
+                                         producline_suffix: "80" }
 
       context 'fetching actual' do
         it 'fetches correct chapter' do

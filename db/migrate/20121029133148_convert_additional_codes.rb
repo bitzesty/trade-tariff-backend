@@ -1,11 +1,13 @@
 Sequel.migration do
+  no_transaction
+
   up do
     alter_table :meursing_additional_codes do
-      set_column_type :additional_code, String, size: 3
+      set_column_type :additional_code, String, using: "additional_code::text", size: 3
     end
 
     alter_table :meursing_table_cell_components do
-      set_column_type :additional_code, String, size: 3
+      set_column_type :additional_code, String, using: "additional_code::text", size: 3
     end
 
     MeursingAdditionalCode.each do |madco|
@@ -19,11 +21,11 @@ Sequel.migration do
 
   down do
     alter_table :meursing_additional_codes do
-      set_column_type :additional_code, Integer
+      set_column_type :additional_code, Integer, using: "additional_code::integer"
     end
 
     alter_table :meursing_table_cell_components do
-      set_column_type :additional_code, Integer
+      set_column_type :additional_code, Integer, using: "additional_code::integer"
     end
   end
 end

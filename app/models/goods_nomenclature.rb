@@ -92,7 +92,7 @@ class GoodsNomenclature < Sequel::Model
 
   dataset_module do
     def declarable
-      filter(producline_suffix: 80)
+      filter(producline_suffix: "80")
     end
 
     def non_hidden

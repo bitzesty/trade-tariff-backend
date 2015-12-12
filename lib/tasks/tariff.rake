@@ -161,6 +161,7 @@ namespace :tariff do
 
     task fix_chief: :environment do
       Chief::Tame.unprocessed
+                 .order(:msrgp_code, :msr_type, :tty_code)
                  .distinct(:msrgp_code, :msr_type, :tty_code)
                  .where(tar_msr_no: nil).each do |ref_tame|
         tames = Chief::Tame.unprocessed

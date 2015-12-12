@@ -36,11 +36,11 @@ class Heading < GoodsNomenclature
     end
 
     def declarable
-      filter(producline_suffix: 80)
+      filter(producline_suffix: "80")
     end
 
     def non_grouping
-      filter{Sequel.~(producline_suffix: 10) }
+      filter{Sequel.~(producline_suffix: "10") }
     end
   end
 
