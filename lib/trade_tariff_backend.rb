@@ -137,15 +137,12 @@ module TradeTariffBackend
     private
 
     def load_secrets
-      if File.exists?(secrets_path)
-        YAML.load_file(secrets_path)
-      else
-        {}
-      end
-    end
-
-    def secrets_path
-      File.join(Rails.root, 'config', 'trade_tariff_backend_secrets.yml')
+      {
+        sync_username: ENV["TARIFF_SYNC_USERNAME"],
+        sync_password: ENV["TARIFF_SYNC_PASSWORD"],
+        sync_email: ENV["TARIFF_SYNC_EMAIL"],
+        sync_host: ENV["TARIFF_SYNC_HOST"]
+      }
     end
   end
 end
