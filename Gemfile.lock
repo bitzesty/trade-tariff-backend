@@ -260,6 +260,9 @@ GEM
       rspec-mocks (~> 3.3.0)
       rspec-support (~> 3.3.0)
     rspec-support (3.3.0)
+    rspec_junit_formatter (0.2.3)
+      builder (< 4)
+      rspec-core (>= 2, < 4, != 2.12.0)
     ruby-prof (0.15.6)
     ruby2ruby (2.1.4)
       ruby_parser (~> 3.1)
@@ -377,6 +380,7 @@ DEPENDENCIES
   rails (= 4.2.3)
   responders (~> 2.1)
   rspec-rails (~> 3.3)
+  rspec_junit_formatter
   sass (~> 3.4)
   sass-rails (~> 5.0)
   sequel (~> 4.3.0)
@@ -392,6 +396,3 @@ DEPENDENCIES
   webmock
   whenever (~> 0.9)
   yajl-ruby (~> 1.2)
-
-BUNDLED WITH
-   1.10.6
