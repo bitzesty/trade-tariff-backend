@@ -24,6 +24,8 @@ gem "curb", "~> 0.8"
 
 gem "nokogiri", "~> 1.6"
 
+gem "rails_12factor"
+
 gem "whenever", "~> 0.9"
 gem "airbrake", "~> 4.3"
 gem "aws-ses", "~> 0.6", require: "aws/ses" #used for sync emails
