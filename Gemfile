@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "rails", "4.2.3"
+gem "rails", "4.2.5"
 
 gem "addressable", "~> 2.3"
 gem "hashie", "~> 3.4"
@@ -61,4 +61,5 @@ group :test do
   gem "simplecov-rcov"
   gem "webmock"
   gem "database_cleaner"
+  gem "rspec_junit_formatter"
 end
