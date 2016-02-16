@@ -141,7 +141,7 @@ GEM
     json_expressions (0.8.3)
     jwt (1.4.1)
     kgio (2.9.3)
-    libv8 (3.16.14.7)
+    libv8 (3.16.14.13)
     listen (3.0.3)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)

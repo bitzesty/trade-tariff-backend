@@ -11,4 +11,4 @@ end
 
 require 'ci/reporter/rake/rspec' if Rails.env.development? or Rails.env.test?
 
-TradeTariffBackend::Application.load_tasks
+Rails.application.load_tasks
