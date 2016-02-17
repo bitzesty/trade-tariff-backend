@@ -3,6 +3,7 @@ FactoryGirl.define do
     position      { Forgery(:basic).number }
     numeral       { ["I", "II", "III"].sample }
     title         { Forgery(:basic).text }
+    created_at    { Time.now }
 
     trait :with_note do
       after(:create) { |section, evaluator|
