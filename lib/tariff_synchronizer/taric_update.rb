@@ -35,7 +35,7 @@ module TariffSynchronizer
           elsif response.not_found?
             # We will be retrying a few more times today, so do not create
             # missing record until we are sure
-            if date < Date.today
+            if date < Date.current
               create_update_entry(date, BaseUpdate::MISSING_STATE, missing_update_name_for(date))
               instrument("not_found.tariff_synchronizer",
                        date: date,

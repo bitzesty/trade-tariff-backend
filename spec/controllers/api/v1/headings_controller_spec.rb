@@ -143,7 +143,7 @@ describe Api::V1::HeadingsController, "GET #changes" do
                                      :non_declarable,
                                      :with_description,
                                      :with_chapter,
-                                     operation_date: Date.today }
+                                     operation_date: Date.current }
 
     it 'does not include change records' do
       get :changes, id: heading, as_of: Date.yesterday, format: :json

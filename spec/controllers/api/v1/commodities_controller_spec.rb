@@ -111,7 +111,7 @@ describe Api::V1::CommoditiesController, "GET #changes" do
                                           :with_heading,
                                           :with_description,
                                           :declarable,
-                                          operation_date: Date.today }
+                                          operation_date: Date.current }
 
     it 'does not include change records' do
       get :changes, id: commodity, as_of: Date.yesterday, format: :json

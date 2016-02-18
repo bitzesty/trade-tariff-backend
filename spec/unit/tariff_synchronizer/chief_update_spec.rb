@@ -142,21 +142,21 @@ describe TariffSynchronizer::ChiefUpdate do
         end
 
         it 'does not create not found entry if update is still for today' do
-          TariffSynchronizer::ChiefUpdate.download(Date.today)
+          TariffSynchronizer::ChiefUpdate.download(Date.current)
 
           expect(
             TariffSynchronizer::ChiefUpdate.missing
-                                           .with_issue_date(Date.today)
+                                           .with_issue_date(Date.current)
                                            .present?
           ).to be_falsy
         end
 
         it 'creates not found entry if date has passed' do
-          TariffSynchronizer::ChiefUpdate.download(Date.today)
+          TariffSynchronizer::ChiefUpdate.download(Date.current)
 
           expect(
             TariffSynchronizer::ChiefUpdate.missing
-                                           .with_issue_date(Date.today)
+                                           .with_issue_date(Date.current)
                                            .present?
           ).to be_falsy
         end

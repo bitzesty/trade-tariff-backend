@@ -223,11 +223,11 @@ describe TariffSynchronizer::TaricUpdate do
       end
 
       it 'does not create not found entry if update is still for today' do
-        TariffSynchronizer::TaricUpdate.download(Date.today)
+        TariffSynchronizer::TaricUpdate.download(Date.current)
 
         expect(
           TariffSynchronizer::TaricUpdate.missing
-                                       .with_issue_date(Date.today)
+                                       .with_issue_date(Date.current)
                                        .present?
         ).to be_falsy
       end
