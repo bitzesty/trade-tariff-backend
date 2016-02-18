@@ -18,7 +18,7 @@ gem "dalli", "~> 2.7"
 gem "builder", "~> 3.2"
 gem "plek", "~> 1.11"
 gem "gds-sso", "~> 11.0"
-
+gem "ox", '~> 2.3'
 gem "unicorn", "~> 4.9"
 gem "curb", "~> 0.8"
 

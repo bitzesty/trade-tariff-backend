@@ -1,6 +1,5 @@
 require 'forwardable'
 
-require 'taric_importer/helpers/string_helper'
 require 'taric_importer/record_processor/record'
 require 'taric_importer/record_processor/operation'
 require 'taric_importer/record_processor/update_operation'
@@ -49,7 +48,7 @@ class TaricImporter < TariffImporter
 
     def initialize(record_hash, operation_date = nil)
       self.record = record_hash
-      self.operation_class = record_hash['update.type']
+      self.operation_class = record_hash['update_type']
       self.operation_date = operation_date
     end
 
