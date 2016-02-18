@@ -24,7 +24,7 @@ gem "curb", "~> 0.8"
 
 gem "nokogiri", "~> 1.6"
 
-gem "rails_12factor"
+gem "rails_12factor", group: :production
 
 gem "whenever", "~> 0.9"
 gem "airbrake", "~> 4.3"
