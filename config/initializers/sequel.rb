@@ -7,3 +7,5 @@ Sequel::Model.plugin :validation_class_methods
 
 Sequel::Model.db.extension :pagination
 Sequel::Model.db.extension :server_block
+
+Sequel.default_timezone = :utc

@@ -175,7 +175,7 @@ module TariffSynchronizer
         Sequel::Model.db.transaction(reraise: true) do
           # If a error is raised during import, the transaction is roll-backed
           # we then run this block afterwards to mark the update as failed
-          Sequel::Model.db.after_rollback { mark_as_failed } 
+          Sequel::Model.db.after_rollback { mark_as_failed }
 
           import!
         end
@@ -200,7 +200,7 @@ module TariffSynchronizer
       delegate :instrument, to: ActiveSupport::Notifications
 
       def sync
-        (pending_from..Date.today).each { |date| download(date) }
+        (pending_from..Date.current).each { |date| download(date) }
 
         notify_about_missing_updates if self.order(Sequel.desc(:issue_date)).last(TariffSynchronizer.warning_day_count).all?(&:missing?)
       end
@@ -264,7 +264,7 @@ module TariffSynchronizer
           create_update_entry(date, FAILED_STATE, file_name)
           instrument("retry_exceeded.tariff_synchronizer", date: date, url: response.url)
         elsif response.not_found?
-          if date < Date.today
+          if date < Date.current
             create_update_entry(date, MISSING_STATE, missing_update_name_for(date))
             instrument("not_found.tariff_synchronizer", date: date, url: response.url)
           end

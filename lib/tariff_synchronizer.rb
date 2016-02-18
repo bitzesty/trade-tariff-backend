@@ -167,7 +167,7 @@ module TariffSynchronizer
     TradeTariffBackend.with_redis_lock do
       date = Date.parse(rollback_date.to_s)
 
-      (date..Date.today).to_a.reverse.each do |date_for_rollback|
+      (date..Date.current).to_a.reverse.each do |date_for_rollback|
         Sequel::Model.db.transaction do
           oplog_based_models.each do |model|
             model.operation_klass.where { operation_date > date_for_rollback }.delete
@@ -239,7 +239,7 @@ module TariffSynchronizer
 
   def update_range_in_days
     last_pending_update = BaseUpdate.last_pending.first
-    update_to = ENV['DATE'] ? Date.parse(ENV['DATE']) : Date.today
+    update_to = ENV['DATE'] ? Date.parse(ENV['DATE']) : Date.current
 
     if last_pending_update
       (last_pending_update.issue_date..update_to)

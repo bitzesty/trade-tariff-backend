@@ -3,7 +3,7 @@ require 'tariff_synchronizer'
 
 describe TariffSynchronizer do
   describe '#apply', truncation: true do
-    let(:example_date)  { Date.today }
+    let(:example_date)  { Date.current }
     let!(:taric_update) { create :taric_update, example_date: example_date }
     let!(:chief_update) { create :chief_update, example_date: example_date }
 
@@ -93,8 +93,8 @@ describe TariffSynchronizer do
   end
 
   describe '.rollback' do
-    let!(:measure) { create :measure, operation_date: Date.today }
-    let!(:update)  { create :chief_update, :applied, issue_date: Date.today }
+    let!(:measure) { create :measure, operation_date: Date.current }
+    let!(:update)  { create :chief_update, :applied, issue_date: Date.current }
     let!(:mfcm)    { create :mfcm, origin: update.filename }
 
     context 'successful run' do

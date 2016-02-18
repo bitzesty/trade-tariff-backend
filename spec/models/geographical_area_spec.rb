@@ -81,7 +81,7 @@ describe GeographicalArea do
                                                                            validity_end_date: Date.today.ago(2.years) }
       let!(:contained_area_past)              { create :geographical_area, geographical_area_id: 'de',
                                                                            validity_start_date: Date.today.ago(5.years),
-                                                                           validity_end_date: Date.today.ago(3.years) }
+                                                                           validity_end_date: 3.years.ago }
       let!(:geographical_area_membership1)    { create :geographical_area_membership, geographical_area_sid: contained_area_present.geographical_area_sid,
                                                                                       geographical_area_group_sid: geographical_area.geographical_area_sid,
                                                                                       validity_start_date: Date.today.ago(2.years),
@@ -89,7 +89,7 @@ describe GeographicalArea do
       let!(:geographical_area_membership2)    { create :geographical_area_membership, geographical_area_sid: contained_area_past.geographical_area_sid,
                                                                                       geographical_area_group_sid: geographical_area.geographical_area_sid,
                                                                                       validity_start_date: Date.today.ago(5.years),
-                                                                                      validity_end_date: Date.today.ago(3.years) }
+                                                                                      validity_end_date: 3.years.ago }
 
       context 'direct loading' do
         it 'loads correct description respecting given actual time' do
@@ -201,8 +201,8 @@ describe GeographicalArea do
     describe "GA5" do
       let(:geographical_area) {
         create(:geographical_area,
-              validity_end_date: Date.today,
-              validity_start_date: Date.today.ago(3.years),
+              validity_end_date: Date.current,
+              validity_start_date: 3.years.ago,
               parent_geographical_area: parent)
       }
 
@@ -223,7 +223,7 @@ describe GeographicalArea do
           let(:parent) {
             create(:geographical_area,
                    validity_end_date: Date.yesterday,
-                   validity_start_date: Date.today.ago(3.years))
+                   validity_start_date: 3.years.ago)
           }
 
           it {
@@ -233,8 +233,8 @@ describe GeographicalArea do
 
         context "without end date" do
           let(:parent) { create(:geographical_area,
-                                validity_end_date: Date.today,
-                                validity_start_date: Date.today.ago(3.years))
+                                validity_end_date: Date.current,
+                                validity_start_date: 3.years.ago)
           }
 
           before {
@@ -249,8 +249,8 @@ describe GeographicalArea do
 
         context "with start_date after parent and no end date" do
           let(:parent) { create(:geographical_area,
-                                validity_end_date: Date.today,
-                                validity_start_date: Date.today.ago(3.years))
+                                validity_end_date: Date.current,
+                                validity_start_date: 3.years.ago)
           }
 
           before {
@@ -269,8 +269,8 @@ describe GeographicalArea do
         context "with end date" do
           let(:parent) {
             create(:geographical_area,
-                   validity_end_date: Date.today,
-                   validity_start_date: Date.today.ago(3.years))
+                   validity_end_date: Date.current,
+                   validity_start_date: 3.years.ago)
           }
 
           it {
@@ -282,7 +282,7 @@ describe GeographicalArea do
           let(:parent) {
             create(:geographical_area,
                    validity_end_date: nil,
-                   validity_start_date: Date.today.ago(3.years))
+                   validity_start_date: 3.years.ago)
           }
 
           it {
@@ -294,7 +294,7 @@ describe GeographicalArea do
           let(:parent) {
             create(:geographical_area,
                    validity_end_date: nil,
-                   validity_start_date: Date.today.ago(3.years))
+                   validity_start_date: 3.years.ago)
           }
 
           before {
