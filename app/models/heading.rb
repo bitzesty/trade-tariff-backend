@@ -93,7 +93,7 @@ class Heading < GoodsNomenclature
        criteria.where { |o| o.>=(:operation_date, operation_date) } unless operation_date.blank?
       }
      .limit(TradeTariffBackend.change_count)
-     .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date), Sequel.desc(:depth))
+     .order(Sequel.desc(:operation_date, nulls: :last), Sequel.desc(:depth))
   end
 
   def self.changes_for(depth = 0, conditions = {})
@@ -105,7 +105,7 @@ class Heading < GoodsNomenclature
       Sequel.as(depth, :depth)
     ).where(conditions)
      .limit(TradeTariffBackend.change_count)
-     .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date))
+     .order(Sequel.desc(:operation_date, nulls: :last))
   end
 
   private
