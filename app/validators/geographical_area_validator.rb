@@ -20,10 +20,10 @@ class GeographicalAreaValidator < TradeTariffBackend::Validator
     if record.parent_geographical_area.present?
       parent = record.parent_geographical_area
       conditions = []
-      conditions << ->{ parent.validity_start_date <= record.validity_start_date }
+      conditions << ->{ parent.validity_start_date.to_i <= record.validity_start_date.to_i }
       if parent.validity_end_date
         conditions << ->{ record.validity_end_date.present? }
-        conditions << ->{ parent.validity_end_date >= record.validity_end_date }
+        conditions << ->{ parent.validity_end_date.to_i >= record.validity_end_date.to_i }
       end
       conditions.inject(true) do |valid, condition|
         break valid unless valid
