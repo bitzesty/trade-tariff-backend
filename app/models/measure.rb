@@ -371,6 +371,6 @@ class Measure < Sequel::Model
     ).where(conditions)
      .where { |o| o.<=(:validity_start_date, point_in_time) }
      .limit(TradeTariffBackend.change_count)
-     .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date))
+     .order(Sequel.desc(:operation_date, nulls: :last))
   end
 end
