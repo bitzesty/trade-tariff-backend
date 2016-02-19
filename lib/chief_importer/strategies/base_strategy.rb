@@ -25,7 +25,7 @@ class ChiefImporter < TariffImporter
     end
     class ChiefBoolean
       def self.format(value)
-        (value == "N") ? 0 : 1
+        (value == "N") ? false : true
       end
     end
   end
@@ -68,8 +68,7 @@ class ChiefImporter < TariffImporter
 
       def process!
         # execute either defined or default strategy process action
-        if processor.has_key?(operation) &&
-           processor[operation].is_a?(Proc)
+        if processor.has_key?(operation) && processor[operation].is_a?(Proc)
           instance_eval(&processor[operation])
         end
 
