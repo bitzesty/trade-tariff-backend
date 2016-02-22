@@ -134,7 +134,7 @@ class Commodity < GoodsNomenclature
 
   def changes(depth = 1)
     operation_klass.select(
-      Sequel.as('GoodsNomenclature', :model),
+      Sequel.as(Sequel.cast_string("GoodsNomenclature"), :model),
       :oid,
       :operation_date,
       :operation,

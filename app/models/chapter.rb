@@ -66,7 +66,7 @@ class Chapter < GoodsNomenclature
 
   def changes(depth = 1)
     operation_klass.select(
-      Sequel.as('Chapter', :model),
+      Sequel.as(Sequel.cast_string("Chapter"), :model),
       :oid,
       :operation_date,
       :operation,
