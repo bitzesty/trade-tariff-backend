@@ -4,7 +4,7 @@ module Declarable
 
   included do
     one_to_many :measures, primary_key: {}, key: {}, dataset: -> {
-       Measure.join(
+      Measure.join(
          Measure.with_base_regulations
                 .with_actual(BaseRegulation)
                 .where({measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid)})
@@ -39,11 +39,7 @@ module Declarable
         .order(Sequel.asc(:measures__geographical_area_id),
                Sequel.desc(:effective_start_date)),
         t1__measure_sid: :measures__measure_sid
-      ).group(:measures__measure_type_id,
-              :measures__geographical_area_sid,
-              :measures__measure_generating_regulation_id,
-              :measures__additional_code_type_id,
-              :measures__additional_code_id)
+      )
     }
 
     one_to_many :import_measures, key: {}, primary_key: {}, dataset: -> {
