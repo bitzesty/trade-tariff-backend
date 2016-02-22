@@ -77,7 +77,7 @@ class Heading < GoodsNomenclature
 
   def changes(depth = 1)
     operation_klass.select(
-      Sequel.as('Heading', :model),
+      Sequel.as(Sequel.cast_string("Heading"), :model),
       :oid,
       :operation_date,
       :operation,

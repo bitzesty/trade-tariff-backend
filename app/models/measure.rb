@@ -363,7 +363,7 @@ class Measure < Sequel::Model
 
   def self.changes_for(depth = 1, conditions = {})
     operation_klass.select(
-      Sequel.as('Measure', :model),
+      Sequel.as(Sequel.cast_string("Measure"), :model),
       :oid,
       :operation_date,
       :operation,
