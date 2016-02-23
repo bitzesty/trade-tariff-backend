@@ -308,7 +308,7 @@ describe Commodity do
                                 number_indents: 7,
                                 validity_start_date: Date.new(2010,1,1))  }
       let!(:indent2) { create(:goods_nomenclature_indent,
-                                number_indents: 5,
+                                number_indents: 7,
                                 goods_nomenclature_sid: ancestor_commodity.goods_nomenclature_sid,
                                 goods_nomenclature_item_id: ancestor_commodity.goods_nomenclature_item_id,
                                 validity_start_date: Date.new(1995,1,1))  }
