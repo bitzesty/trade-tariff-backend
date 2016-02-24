@@ -52,9 +52,8 @@ Sequel.migration do
                                           .select(*column_names)
                                           .where(:"#{view_name}1__oid" => Sequel::Model.db[:"#{table_name}___#{view_name}2"]
                                                                                        .select(Sequel.function(:max, :oid))
-                                                                                       .where(pk_assoc_hash)
-                                                                                       .group(:oid)
-                                                                                       .order(Sequel.desc(:oid))).where{ Sequel.~(:"#{view_name}1__operation" => 'D') })
+                                                                                       .where(pk_assoc_hash))
+                                                                                       .where{ Sequel.~(:"#{view_name}1__operation" => 'D') })
     end
   end
 
