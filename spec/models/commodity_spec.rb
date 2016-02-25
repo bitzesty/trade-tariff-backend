@@ -134,7 +134,7 @@ describe Commodity do
                                              additional_code_id: measure1.additional_code_id,
                                              validity_start_date: Date.today.ago(2.years)  }
 
-      xit 'groups measures by measure_generating_regulation_id and picks latest one' do
+      it 'groups measures by measure_generating_regulation_id and picks latest one' do
         expect(commodity.measures.map(&:measure_sid)).to     include measure1.measure_sid
         expect(commodity.measures.map(&:measure_sid)).to_not include measure2.measure_sid
       end
