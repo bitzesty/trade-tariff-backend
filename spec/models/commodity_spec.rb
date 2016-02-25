@@ -175,7 +175,7 @@ describe Commodity do
         let!(:export_measure)             { create :measure, export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid,
                                                              goods_nomenclature_item_id: commodity.goods_nomenclature_item_id  }
 
-        xit 'includes measures that belongs to related export refund nomenclature' do
+        it 'includes measures that belongs to related export refund nomenclature' do
           expect(commodity.measures).to_not be_blank
           expect(commodity.measures.map(&:measure_sid)).to include export_measure.measure_sid
         end
