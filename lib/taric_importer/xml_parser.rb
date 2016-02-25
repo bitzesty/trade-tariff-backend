@@ -5,6 +5,7 @@ module XmlParser
       @file_path = file_path
       @target = target
       @target_handler = target_handler
+      @in_target = false
       @elements = []
     end
 
@@ -13,30 +14,38 @@ module XmlParser
     end
 
     def start_element(name)
+      @in_target = true if name == @target
+
+      return unless @in_target
       name = replace_dots(name)
       @elements << { name=>{} }
     end
 
     def end_element(name)
-      name = replace_dots(name)
-      if @elements[-1][name]
-        @element = @elements.pop
+      if @in_target
+        name = replace_dots(name)
+        if @elements[-1][name]
+          @element = @elements.pop
 
-        @element.delete name
+          @element.delete name
 
-        if @element.keys.size == 1 and @element[:text]
-          inject_into_last name, @element[:text]
-        else
-          inject_into_last name, @element
+          if @element.keys.size == 1 and @element[:text]
+            inject_into_last name, @element[:text]
+          else
+            inject_into_last name, @element
+          end
         end
       end
-      # Send element to the Class Handler
+
       if name == @target
-        @target_handler.next_element @element
+        # Send element to the Class Handler
+        @target_handler.process_xml_node @element
+        @in_target = false
       end
     end
 
     def attr(name, value)
+      return unless @in_target
       return if name =~ %r{xmlns} # Exclude namespace attributes
       return unless @elements[-1]
 
@@ -45,6 +54,7 @@ module XmlParser
     end
 
     def text(value)
+      return unless @in_target
       return unless @elements[-1]
       @elements[-1][:text] = value
     end

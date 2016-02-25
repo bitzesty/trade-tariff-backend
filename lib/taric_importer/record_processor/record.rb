@@ -31,7 +31,7 @@ class TaricImporter < TariffImporter
 
       def initialize(record_hash)
         self.transaction_id = record_hash['transaction_id']
-        self.klass = record_hash.keys.last.classify.constantize
+        self.klass = record_hash.keys.last.camelcase.constantize
         self.primary_key = [klass.primary_key].flatten.map(&:to_s)
         self.attributes = record_hash.values.last
       end

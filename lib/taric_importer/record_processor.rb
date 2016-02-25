@@ -38,10 +38,10 @@ class TaricImporter < TariffImporter
     }
 
     # Instance of Record, containing extracted primary key, attributes etc
-    attr_accessor :record
+    attr_reader :record
 
     # Operation Class
-    attr_accessor :operation_class
+    attr_reader :operation_class
 
     # The date of the update. NB not necessarily the current date.
     attr_accessor :operation_date
