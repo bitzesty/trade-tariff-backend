@@ -14,8 +14,8 @@ class TaricImporter < TariffImporter
       verify_transaction
     end
 
-    def persist(processor = RecordProcessor)
-      @record = processor.new(@transaction, @issue_date).process!
+    def persist
+      @record = RecordProcessor.new(@transaction, @issue_date).process!
     end
 
     def validate
