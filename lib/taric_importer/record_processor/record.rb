@@ -31,7 +31,7 @@ class TaricImporter < TariffImporter
 
       def initialize(record_hash)
         self.transaction_id = record_hash['transaction_id']
-        self.klass = record_hash.keys.last.camelcase.constantize
+        self.klass = fast_classify(record_hash.keys.last).constantize
         self.primary_key = [klass.primary_key].flatten.map(&:to_s)
         self.attributes = record_hash.values.last
       end
@@ -56,6 +56,17 @@ class TaricImporter < TariffImporter
         else
           TaricImporter::RecordProcessor::AttributeMutator.mutate(attributes)
         end
+      end
+
+      def fast_classify(string)
+        # We can do safe assumptions with the name of the class, using ActiveSupport
+        # 'classify' method will be 5.47x slower
+        string =  if string =~ %r{(s)eries$} # singularize
+                    string.sub(%r{(s)eries$}, "\\1eries")
+                  else
+                    string.sub(%r{s$}, "")
+                  end
+        string.gsub(%r{(^|_)(.)}) { $2.upcase } # camelize
       end
     end
   end
