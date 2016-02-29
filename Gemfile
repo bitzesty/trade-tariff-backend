@@ -24,8 +24,6 @@ gem "curb", "~> 0.8"
 
 gem "nokogiri", "~> 1.6"
 
-gem "rails_12factor", group: :production
-
 gem "whenever", "~> 0.9"
 gem "airbrake", "~> 4.3"
 gem "aws-ses", "~> 0.6", require: "aws/ses" #used for sync emails
@@ -37,10 +35,14 @@ gem "sass-rails", "~> 5.0"
 gem "therubyracer", "~> 0.12"
 gem "uglifier", "~> 2.7"
 
+group :production do
+  gem "newrelic_rpm", "~> 3.12"
+  gem "rails_12factor"
+end
+
 group :development do
   gem "capistrano", "~> 3.4"
   gem "guard-rspec", "~> 4.6"
-  gem "newrelic_rpm", "~> 3.12"
 end
 
 group :development, :test do
