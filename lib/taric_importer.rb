@@ -3,6 +3,7 @@ require 'nokogiri'
 require 'taric_importer/transaction'
 require 'taric_importer/record_processor'
 require 'taric_importer/xml_parser'
+require 'taric_importer/helpers/string_helper'
 
 class TaricImporter < TariffImporter
   class ImportException < StandardError

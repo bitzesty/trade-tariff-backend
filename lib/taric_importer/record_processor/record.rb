@@ -16,6 +16,7 @@ Dir[File.join(Rails.root, 'lib', 'taric_importer', 'record_processor', 'attribut
 class TaricImporter < TariffImporter
   class RecordProcessor
     class Record
+      include TaricImporter::Helpers::StringHelper
 
       # Entity class, e.g. Measure
       attr_accessor :klass
@@ -56,17 +57,6 @@ class TaricImporter < TariffImporter
         else
           TaricImporter::RecordProcessor::AttributeMutator.mutate(attributes)
         end
-      end
-
-      def fast_classify(string)
-        # We can do safe assumptions with the name of the class, using ActiveSupport
-        # 'classify' method will be 5.47x slower
-        string =  if string =~ %r{(s)eries$} # singularize
-                    string.sub(%r{(s)eries$}, "\\1eries")
-                  else
-                    string.sub(%r{s$}, "")
-                  end
-        string.gsub(%r{(^|_)(.)}) { $2.upcase } # camelize
       end
     end
   end
