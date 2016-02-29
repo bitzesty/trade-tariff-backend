@@ -25,19 +25,14 @@ describe TaricImporter::Transaction do
   end
 
   describe '#persist' do
-    let(:record_processor) { double(process!: true).as_null_object }
-    let(:record_processor_klass) { double(new: record_processor).as_null_object }
+    it 'instantiates RecordProcessor class and calls the process! method' do
+      record_processor_instance = instance_double(TaricImporter::RecordProcessor)
+      expect(TaricImporter::RecordProcessor).to receive(:new)
+                                                .with(record, transaction_date)
+                                                .and_return(record_processor_instance)
+      expect(record_processor_instance).to receive(:process!)
 
-    subject { described_class.new(record, transaction_date) }
-
-    before { subject.persist(record_processor_klass) }
-
-    it 'instantiates record processor class' do
-      expect(record_processor_klass).to have_received(:new)
-    end
-
-    it 'invokes relevant record processor' do
-      expect(record_processor).to have_received(:process!)
+      described_class.new(record, transaction_date).persist
     end
   end
 end

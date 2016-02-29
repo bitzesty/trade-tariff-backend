@@ -18,15 +18,27 @@ class TaricImporter < TariffImporter
   class UnknownOperationError < ImportException
   end
 
-  def import
-    XmlParser::Reader.new(path, "record", XmlProcessor.new).parse
+  def import(validate: true)
+    ActiveSupport::Notifications.instrument("taric_imported.tariff_importer", path: path) do
+      XmlParser::Reader.new(path, "record", XmlProcessor.new(issue_date, validate)).parse
+    end
   end
 
   class XmlProcessor
-    def process_xml_node property
-      transaction = Transaction.new(property, nil)
-      transaction.persist
-      transaction.validate
+    def initialize(issue_date, validate)
+      @issue_date = issue_date
+      @validate = validate
+    end
+
+    def process_xml_node hash_from_node
+      begin
+        transaction = Transaction.new(hash_from_node, @issue_date)
+        transaction.persist
+        transaction.validate if @validate
+      rescue StandardError => exception
+        ActiveSupport::Notifications.instrument("taric_failed.tariff_importer", exception: exception)
+        raise ImportException.new
+      end
     end
   end
 end

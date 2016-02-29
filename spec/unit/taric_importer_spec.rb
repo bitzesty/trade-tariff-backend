@@ -12,15 +12,13 @@ describe TaricImporter do
 
   describe "#import" do
     context "when provided with valid taric file" do
-      let(:valid_file) { "spec/fixtures/taric_samples/footnote.xml" }
-
       it 'instantiates appropriate processing strategy' do
         allow_any_instance_of(
           TaricImporter::RecordProcessor
         ).to receive(:process!)
-
-        @importer = TaricImporter.new(valid_file)
-        @importer.import
+        path = "spec/fixtures/taric_samples/footnote.xml"
+        @importer = TaricImporter.new(path)
+        @importer.import(validate: false)
       end
     end
 

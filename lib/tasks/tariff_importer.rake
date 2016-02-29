@@ -23,8 +23,8 @@ namespace :importer do
         # We will be fetching updates from Taric and modifying primary keys
         # so unrestrict it for all models.
         Sequel::Model.descendants.each(&:unrestrict_primary_key)
-
-        TaricImporter.new(ENV["TARGET"], ENV["DATE"]).import
+        Sequel::Model.plugin :skip_create_refresh
+        TaricImporter.new(ENV["TARGET"], ENV["DATE"]).import(validate: false)
       else
         puts "Please provide TARGET environment variable pointing to Tariff file to import"
       end
