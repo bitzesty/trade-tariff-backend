@@ -2,14 +2,14 @@ require 'rails_helper'
 
 describe TaricImporter::RecordProcessor::UpdateOperation do
   let(:record_hash) {
-    {"transaction.id"=>"31946",
-     "record.code"=>"130",
-     "subrecord.code"=>"05",
-     "record.sequence.number"=>"1",
-     "update.type"=>"1",
-     "language.description"=>
-      {"language.code.id"=>"FR",
-       "language.id"=>"EN",
+    {"transaction_id"=>"31946",
+     "record_code"=>"130",
+     "subrecord_code"=>"05",
+     "record_sequence_number"=>"1",
+     "update_type"=>"1",
+     "language_description"=>
+      {"language_code_id"=>"FR",
+       "language_id"=>"EN",
        "description"=>"French!"}}
   }
 

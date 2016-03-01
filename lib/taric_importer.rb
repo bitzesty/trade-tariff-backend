@@ -2,6 +2,7 @@ require 'nokogiri'
 
 require 'taric_importer/transaction'
 require 'taric_importer/record_processor'
+require 'taric_importer/xml_parser'
 require 'taric_importer/helpers/string_helper'
 
 class TaricImporter < TariffImporter
@@ -17,32 +18,25 @@ class TaricImporter < TariffImporter
   class UnknownOperationError < ImportException
   end
 
-  cattr_accessor :opening_element
-  self.opening_element = 1
-
-  cattr_accessor :transaction_node
-  self.transaction_node = 'env:transaction'
-
-  def import
-    xml = nil
-
+  def import(validate: true)
     ActiveSupport::Notifications.instrument("taric_imported.tariff_importer", path: path) do
+      XmlParser::Reader.new(path, "record", XmlProcessor.new(issue_date, validate)).parse
+    end
+  end
+
+  class XmlProcessor
+    def initialize(issue_date, validate)
+      @issue_date = issue_date
+      @validate = validate
+    end
+
+    def process_xml_node hash_from_node
       begin
-        handler = File.open(path, "r")
-        reader = Nokogiri::XML::Reader(handler, nil, nil, Nokogiri::XML::ParseOptions::RECOVER | Nokogiri::XML::ParseOptions::NOERROR | Nokogiri::XML::ParseOptions::NONET)
-        reader.each do |node|
-          if node.name == self.transaction_node && node.node_type == self.opening_element
-            xml = Nokogiri::XML(node.outer_xml).remove_namespaces!
-            transaction = Transaction.new(Hash.from_xml(xml.to_s), issue_date)
-            transaction.persist
-            transaction.validate
-          end
-        end
+        transaction = Transaction.new(hash_from_node, @issue_date)
+        transaction.persist
+        transaction.validate if @validate
       rescue StandardError => exception
-        ActiveSupport::Notifications.instrument("taric_failed.tariff_importer",
-          exception: exception,
-          xml: xml
-        )
+        ActiveSupport::Notifications.instrument("taric_failed.tariff_importer", exception: exception)
         raise ImportException.new
       end
     end
