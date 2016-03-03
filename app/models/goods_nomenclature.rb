@@ -34,7 +34,7 @@ class GoodsNomenclature < Sequel::Model
   end
 
   def goods_nomenclature_indent
-    goods_nomenclature_indents.first
+    goods_nomenclature_indents(true).first
   end
 
   many_to_many :goods_nomenclature_descriptions, join_table: :goods_nomenclature_description_periods,
@@ -47,7 +47,7 @@ class GoodsNomenclature < Sequel::Model
   end
 
   def goods_nomenclature_description
-    goods_nomenclature_descriptions.first || NullGoodsNomenclature.new
+    goods_nomenclature_descriptions(true).first || NullGoodsNomenclature.new
   end
 
   many_to_many :footnotes, join_table: :footnote_association_goods_nomenclatures,
@@ -59,7 +59,7 @@ class GoodsNomenclature < Sequel::Model
   end
 
   def footnote
-    footnotes.first
+    footnotes(true).first
   end
 
   one_to_one :national_measurement_unit_set, key: :cmdty_code,
