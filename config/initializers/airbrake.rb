@@ -1,7 +1,6 @@
-# This file is overwritten on deploy
-#
 Airbrake.configure do |config|
-  # Adding "production" to the development environments causes Airbrake not
-  # to attempt to send notifications.
-  config.development_environments << "production"
+  config.port    = 443
+  config.secure  = true
+  config.host    = Rails.application.secrets.errbit_host
+  config.api_key = Rails.application.secrets.errbit_api_key
 end

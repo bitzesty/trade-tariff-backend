@@ -56,13 +56,13 @@ Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff
 
 ## Performing daily updates
 
-1. Create config/trade_tariff_backend_secrets.yml file with correct values.
+1. Make sure you have set required environment variables with correct values.
 
-  ```yaml
-  sync_username:
-  sync_password:
-  sync_host:
-  sync_email:
+  ```
+  TARIFF_SYNC_USERNAME=username
+  TARIFF_SYNC_PASSWORD=password
+  TARIFF_SYNC_EMAIL=email
+  TARIFF_SYNC_HOST=host
   ```
 
 2. Run the sync rake task
