@@ -19,7 +19,7 @@ class GeographicalArea < Sequel::Model
   end
 
   def geographical_area_description
-    geographical_area_descriptions.first
+    geographical_area_descriptions(true).first
   end
 
   many_to_one :parent_geographical_area, class: self

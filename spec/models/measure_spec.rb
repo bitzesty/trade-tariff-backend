@@ -286,7 +286,7 @@ describe Measure do
                           .eager(:footnotes)
                           .all
                           .first
-                          .footnotes.map(&:pk)
+                          .footnotes(true).map(&:pk)
             ).to include footnote1.pk
           end
 
@@ -296,7 +296,7 @@ describe Measure do
                           .eager(:footnotes)
                           .all
                           .first
-                          .footnotes.map(&:pk)
+                          .footnotes(true).map(&:pk)
             ).to include footnote2.pk
           end
         end

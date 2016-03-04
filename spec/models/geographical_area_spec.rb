@@ -136,7 +136,7 @@ describe GeographicalArea do
                           .eager(:contained_geographical_areas)
                           .all
                           .first
-                          .contained_geographical_areas
+                          .contained_geographical_areas(true)
                           .map(&:pk)
             ).to include contained_area_present.pk
           end
@@ -147,7 +147,7 @@ describe GeographicalArea do
                           .eager(:contained_geographical_areas)
                           .all
                           .first
-                          .contained_geographical_areas
+                          .contained_geographical_areas(true)
                           .map(&:pk)
             ).to include contained_area_past.pk
           end

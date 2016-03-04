@@ -4,12 +4,12 @@ describe Footnote do
   describe 'associations' do
     describe 'additional code description' do
       let!(:footnote)                { create :footnote }
-      let!(:footnote_description1)   { create :footnote_description, :with_period,
+      let!(:footnote_description_2)   { create :footnote_description, :with_period,
                                                             footnote_id: footnote.footnote_id,
                                                             footnote_type_id: footnote.footnote_type_id,
                                                             valid_at: 2.years.ago,
                                                             valid_to: nil }
-      let!(:footnote_description2) { create :footnote_description, :with_period,
+      let!(:footnote_description_3) { create :footnote_description, :with_period,
                                                             footnote_id: footnote.footnote_id,
                                                             footnote_type_id: footnote.footnote_type_id,
                                                             valid_at: 5.years.ago,
@@ -20,7 +20,7 @@ describe Footnote do
           TimeMachine.now do
             expect(
               footnote.footnote_description.pk
-            ).to eq footnote_description1.pk
+            ).to eq footnote_description_2.pk
           end
         end
 
@@ -28,13 +28,13 @@ describe Footnote do
           TimeMachine.at(1.year.ago) do
             expect(
               footnote.footnote_description.pk
-            ).to eq footnote_description1.pk
+            ).to eq footnote_description_2.pk
           end
 
           TimeMachine.at(4.years.ago) do
             expect(
               footnote.reload.footnote_description.pk
-            ).to eq footnote_description2.pk
+            ).to eq footnote_description_3.pk
           end
         end
       end
@@ -49,7 +49,7 @@ describe Footnote do
                           .all
                           .first
                           .footnote_description.pk
-            ).to eq footnote_description1.pk
+            ).to eq footnote_description_2.pk
           end
         end
 
@@ -62,7 +62,7 @@ describe Footnote do
                           .all
                           .first
                           .footnote_description.pk
-            ).to eq footnote_description1.pk
+            ).to eq footnote_description_2.pk
           end
 
           TimeMachine.at(4.years.ago) do
@@ -73,7 +73,7 @@ describe Footnote do
                           .all
                           .first
                           .footnote_description.pk
-            ).to eq footnote_description2.pk
+            ).to eq footnote_description_3.pk
           end
         end
       end

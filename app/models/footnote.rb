@@ -20,7 +20,7 @@ class Footnote < Sequel::Model
   end
 
   def footnote_description
-    footnote_descriptions.first
+    footnote_descriptions(true).first
   end
 
   one_to_one :footnote_type, primary_key: :footnote_type_id,
