@@ -248,10 +248,7 @@ module TariffSynchronizer
   end
 
   def sync_variables_set?
-    username.present? &&
-    password.present? &&
-    host.present? &&
-    TradeTariffBackend.admin_email.present?
+    username.present? && password.present? && host.present?
   end
 
   def oplog_based_models
