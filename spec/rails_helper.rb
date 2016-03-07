@@ -42,6 +42,7 @@ RSpec.configure do |config|
   config.include SynchronizerHelper
   config.include RescueHelper
   config.include ChiefDataHelper
+  config.include ActiveSupport::Testing::TimeHelpers
 
   config.include FactoryGirl::Syntax::Methods
 
