@@ -201,8 +201,7 @@ module TariffSynchronizer
 
       def sync
         (pending_from..Date.current).each { |date| download(date) }
-
-        notify_about_missing_updates if self.order(Sequel.desc(:issue_date)).last(TariffSynchronizer.warning_day_count).all?(&:missing?)
+        notify_about_missing_updates if last_updates_are_missing?
       end
 
       def find_update(local_file_name, date)
@@ -326,6 +325,10 @@ module TariffSynchronizer
       def parse_file_path(file_path)
         filename = Pathname.new(file_path).basename.to_s
         filename.match(/^(\d{4}-\d{2}-\d{2})_(.*)$/)[1,2]
+      end
+
+      def last_updates_are_missing?
+        order(Sequel.desc(:issue_date)).last(TariffSynchronizer.warning_day_count).all?(&:missing?)
       end
 
       def notify_about_missing_updates
