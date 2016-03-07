@@ -28,7 +28,7 @@ module TariffSynchronizer
 
     # Sync variables were not set correctly
     def config_error(event)
-      error "Missing: config/trade_tariff_backend_secrets.yml. Variables: username, password, host and email."
+      error "Missing: Tariff sync enviroment variables: TARIFF_SYNC_USERNAME, TARIFF_SYNC_PASSWORD, TARIFF_SYNC_HOST and TARIFF_SYNC_EMAIL."
     end
 
     # There are failed updates (can't proceed)
