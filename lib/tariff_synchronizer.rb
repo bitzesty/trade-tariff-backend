@@ -79,33 +79,27 @@ module TariffSynchronizer
   # Gets latest downloaded file present in (inbox/failbox/processed) and tries
   # to download any further updates to current day.
   def download
-    TradeTariffBackend.with_redis_lock do
-      if sync_variables_set?
-        instrument("download.tariff_synchronizer") do
-          begin
-            [TaricUpdate, ChiefUpdate].map(&:sync)
-          rescue FileService::DownloadException => exception
-            instrument("failed_download.tariff_synchronizer",
-              exception: exception.original,
-              url: exception.url
-            )
+    return instrument("config_error.tariff_synchronizer") unless sync_variables_set?
 
-            raise exception.original
-          end
+    TradeTariffBackend.with_redis_lock do
+      instrument("download.tariff_synchronizer") do
+        begin
+          [TaricUpdate, ChiefUpdate].map(&:sync)
+        rescue FileService::DownloadException => exception
+          instrument("failed_download.tariff_synchronizer",
+            exception: exception.original,
+            url: exception.url)
+          raise exception.original
         end
-      else
-        instrument("config_error.tariff_synchronizer")
       end
     end
   end
 
   def download_archive
-    if sync_variables_set?
-      instrument("download.tariff_synchronizer") do
-        [TaricArchive, ChiefArchive].map(&:sync)
-      end
-    else
-      instrument("config_error.tariff_synchronizer")
+    return instrument("config_error.tariff_synchronizer") unless sync_variables_set?
+    
+    instrument("download.tariff_synchronizer") do
+      [TaricArchive, ChiefArchive].map(&:sync)
     end
   end
 
