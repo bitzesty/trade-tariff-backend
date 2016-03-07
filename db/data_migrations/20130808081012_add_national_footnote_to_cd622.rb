@@ -10,7 +10,7 @@ TradeTariffBackend::DataMigrator.migration do
 
   VALIDITY_START_DATE = Date.new(2013,8,6)
 
-  ASSOCIATED_GOODS_CODES = %w[
+  GOODS_NOMENCLATURE_ITEM_IDS = %w[
     3818001011
     3818001019
     8541409021
@@ -82,7 +82,7 @@ TradeTariffBackend::DataMigrator.migration do
         :measures,
         { footnote_association_measures__measure_sid: :measures__measure_sid }
       ).where(
-        measures__goods_nomenclature_item_id: ASSOCIATED_GOODS_CODES
+        measures__goods_nomenclature_item_id: GOODS_NOMENCLATURE_ITEM_IDS
       ).each { |measure_association|
         FootnoteAssociationMeasure.new { |fa_meas|
           fa_meas.measure_sid = measure_association.measure_sid
