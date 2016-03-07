@@ -319,7 +319,7 @@ module TariffSynchronizer
         if last_download = last_pending.first || descending.first
           last_download.issue_date
         else
-         TariffSynchronizer.initial_update_for(update_type)
+         TariffSynchronizer.initial_update_date_for(update_type)
         end
       end
 

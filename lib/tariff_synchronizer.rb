@@ -42,12 +42,12 @@ module TariffSynchronizer
   self.request_throttle = 60
 
   # Initial dump date + 1 day
-  mattr_accessor :taric_initial_update
-  self.taric_initial_update = Date.new(2012,6,6)
+  mattr_accessor :taric_initial_update_date
+  self.taric_initial_update_date = Date.new(2012,6,6)
 
   # Initial dump date + 1 day
-  mattr_accessor :chief_initial_update
-  self.chief_initial_update = Date.new(2012,6,30)
+  mattr_accessor :chief_initial_update_date
+  self.chief_initial_update_date = Date.new(2012,6,30)
 
   # Times to retry downloading update before giving up
   mattr_accessor :retry_count
@@ -224,9 +224,8 @@ module TariffSynchronizer
     end
   end
 
-  # Initial update day for specific update type
-  def initial_update_for(update_type)
-    send("#{update_type}_initial_update".to_sym)
+  def initial_update_date_for(update_type)
+    send("#{update_type}_initial_update_date")
   end
 
   private

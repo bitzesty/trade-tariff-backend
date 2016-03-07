@@ -24,7 +24,7 @@ module TariffSynchronizer
         if ENV["TARIC_START_DATE"].present?
           Date.strptime(ENV["TARIC_START_DATE"], "%Y-%m-%d")
         else
-          TariffSynchronizer.initial_update_for(update_type)
+          TariffSynchronizer.initial_update_date_for(update_type)
         end
       end
 
