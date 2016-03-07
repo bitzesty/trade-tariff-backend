@@ -26,13 +26,13 @@ module TariffSynchronizer
   extend self
 
   mattr_accessor :username
-  self.username = TradeTariffBackend.secrets.sync_username
+  self.username = ENV["TARIFF_SYNC_USERNAME"]
 
   mattr_accessor :password
-  self.password = TradeTariffBackend.secrets.sync_password
+  self.password = ENV["TARIFF_SYNC_PASSWORD"]
 
   mattr_accessor :host
-  self.host = TradeTariffBackend.secrets.sync_host
+  self.host = ENV["TARIFF_SYNC_HOST"]
 
   mattr_accessor :root_path
   self.root_path = Rails.env.test? ? "tmp/data" : "data"
@@ -97,7 +97,6 @@ module TariffSynchronizer
 
   def download_archive
     return instrument("config_error.tariff_synchronizer") unless sync_variables_set?
-    
     instrument("download.tariff_synchronizer") do
       [TaricArchive, ChiefArchive].map(&:sync)
     end
