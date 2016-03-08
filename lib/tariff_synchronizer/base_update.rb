@@ -204,43 +204,28 @@ module TariffSynchronizer
         notify_about_missing_updates if last_updates_are_missing?
       end
 
-      def find_update(local_file_name, date)
-        find(
-          filename: local_file_name,
-          update_type: self.name,
-          issue_date: date
-        )
-      end
-
       def perform_download(local_file_name, tariff_url, date)
-        if File.exists?(update_file_path(local_file_name))
-          if update = find_update(local_file_name, date)
-            update.update(filesize: File.read(update_file_path(local_file_name)).size)
+        local_file_path = get_local_file_path(local_file_name)
+
+        if File.exists?(local_file_path)
+          if update = find(filename: local_file_name, update_type: self.name, issue_date: date)
+            update.update(filesize: File.read(local_file_path).size)
           else
             create_update_entry(
               date,
               BaseUpdate::PENDING_STATE,
               local_file_name,
-              File.read(update_file_path(local_file_name)).size
+              File.read(local_file_path).size
             )
           end
           instrument("created_tariff.tariff_synchronizer", date: date, filename: local_file_name, type: update_type)
         else
-          instrument("download_tariff.tariff_synchronizer",
-            date: date,
-            url: tariff_url,
-            filename: local_file_name,
-            type: update_type
-          ) do
+          instrument("download_tariff.tariff_synchronizer", date: date, url: tariff_url, filename: local_file_name,type: update_type) do
             download_content(tariff_url).tap { |response|
               create_entry(date, response, local_file_name)
             }
           end
         end
-      end
-
-      def update_file_path(update_file_name)
-        File.join(TariffSynchronizer.root_path, update_type.to_s, update_file_name)
       end
 
       def update_file_exists?(filename)
@@ -252,6 +237,10 @@ module TariffSynchronizer
       end
 
       private
+
+      def get_local_file_path(local_file_name)
+        File.join(TariffSynchronizer.root_path, update_type.to_s, local_file_name)
+      end
 
       def create_entry(date, response, file_name)
         if response.success? && response.content_present?
