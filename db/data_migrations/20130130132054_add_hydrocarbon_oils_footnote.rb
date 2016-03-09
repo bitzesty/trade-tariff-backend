@@ -1,9 +1,6 @@
 TradeTariffBackend::DataMigrator.migration do
   name "Add hydrocarbon oils footnote 05976"
 
-  FOOTNOTE_TYPE_ID = '05'
-  FOOTNOTE_ID = '976'
-
   ASSOCIATED_GOODS_CODES = %w[
     3826001010
     3826001090

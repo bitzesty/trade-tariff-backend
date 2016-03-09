@@ -88,9 +88,7 @@ module TariffSynchronizer
     def self.taric_update_name_for(date)
       taric_query_url = taric_query_url_for(date)
 
-      instrument(
-        "get_taric_update_name.tariff_synchronizer", date: date, url: taric_query_url
-      ) do
+      instrument("get_taric_update_name.tariff_synchronizer", date: date, url: taric_query_url) do
         download_content(taric_query_url)
       end
     end

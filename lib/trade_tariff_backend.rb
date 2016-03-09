@@ -27,7 +27,7 @@ module TradeTariffBackend
 
     # Email of the user who receives all info/error notifications
     def admin_email
-      secrets.sync_email || 'trade-tariff-alerts@digital.cabinet-office.gov.uk'
+      ENV.fetch("TARIFF_SYNC_EMAIL", "trade-tariff-alerts@digital.cabinet-office.gov.uk")
     end
 
     def platform
@@ -59,10 +59,6 @@ module TradeTariffBackend
           Mailer.reindex_exception(e).deliver_now
         end
       end
-    end
-
-    def secrets
-      @secrets ||= OpenStruct.new(load_secrets)
     end
 
     # Number of changes to fetch for Commodity/Heading/Chapter
@@ -132,17 +128,6 @@ module TradeTariffBackend
 
     def model_serializer_for(model)
       "#{model}Serializer".constantize
-    end
-
-    private
-
-    def load_secrets
-      {
-        sync_username: ENV["TARIFF_SYNC_USERNAME"],
-        sync_password: ENV["TARIFF_SYNC_PASSWORD"],
-        sync_email: ENV["TARIFF_SYNC_EMAIL"],
-        sync_host: ENV["TARIFF_SYNC_HOST"]
-      }
     end
   end
 end

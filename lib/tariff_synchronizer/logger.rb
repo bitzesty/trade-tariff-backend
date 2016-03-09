@@ -2,18 +2,12 @@ module TariffSynchronizer
   class Logger < ActiveSupport::LogSubscriber
 
     def logger
-      @logger ||= if
-        formatter = Proc.new {|severity, time, progname, msg| "#{time.strftime('%Y-%m-%dT%H:%M:%S.%L %z')} #{sprintf('%5s', severity)} #{msg}\n" }
-
+      @logger ||= begin
         file_logger = ::Logger.new('log/tariff_synchronizer.log')
-        file_logger.formatter = formatter
-
-        if defined?(Rails) &&
-              Rails.respond_to?(:configuration) &&
-              Rails.configuration.respond_to?(:synchronizer_console_logs) &&
-              Rails.configuration.synchronizer_console_logs
+        file_logger.formatter = TradeTariffBackend.log_formatter
+        if defined?(Rails) && Rails.env.development?
           console_logger = ActiveSupport::Logger.new(STDOUT)
-          console_logger.formatter = formatter
+          console_logger.formatter = TradeTariffBackend.log_formatter
           console_logger.extend(ActiveSupport::Logger.broadcast(file_logger))
         else
           file_logger
@@ -28,7 +22,7 @@ module TariffSynchronizer
 
     # Sync variables were not set correctly
     def config_error(event)
-      error "Missing: config/trade_tariff_backend_secrets.yml. Variables: username, password, host and email."
+      error "Missing: Tariff sync enviroment variables: TARIFF_SYNC_USERNAME, TARIFF_SYNC_PASSWORD, TARIFF_SYNC_HOST and TARIFF_SYNC_EMAIL."
     end
 
     # There are failed updates (can't proceed)

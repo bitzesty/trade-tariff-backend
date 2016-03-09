@@ -2,12 +2,12 @@ require 'rails_helper'
 require 'tariff_synchronizer'
 
 describe TariffSynchronizer, truncation: true do
-  describe '.initial_update_for' do
+  describe '.initial_update_date_for' do
     # helper method where update type is a param
-    it 'returns initial update day for specific update type' do
-      expect(TariffSynchronizer.initial_update_for(:taric)).to eq(TariffSynchronizer.taric_initial_update)
-      expect(TariffSynchronizer.initial_update_for(:chief)).to eq(TariffSynchronizer.chief_initial_update)
-      expect { TariffSynchronizer.initial_update_for(:non_existent) }.to raise_error(NoMethodError)
+    it 'returns initial update date for specific update type taric or chief ' do
+      expect(TariffSynchronizer.initial_update_date_for(:taric)).to eq(TariffSynchronizer.taric_initial_update_date)
+      expect(TariffSynchronizer.initial_update_date_for(:chief)).to eq(TariffSynchronizer.chief_initial_update_date)
+      expect { TariffSynchronizer.initial_update_date_for(:non_existent) }.to raise_error(NoMethodError)
     end
   end
 

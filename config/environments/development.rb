@@ -32,12 +32,4 @@ Rails.application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
-
-  file_logger = Logger.new(Rails.root.join("log", "development.log"))
-  console_logger = Logger.new(STDOUT)
-
-  config.logger = console_logger.extend(ActiveSupport::Logger.broadcast(file_logger))
-
-  config.log_level = :info
-  config.synchronizer_console_logs = true
 end

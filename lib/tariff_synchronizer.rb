@@ -26,13 +26,13 @@ module TariffSynchronizer
   extend self
 
   mattr_accessor :username
-  self.username = TradeTariffBackend.secrets.sync_username
+  self.username = ENV["TARIFF_SYNC_USERNAME"]
 
   mattr_accessor :password
-  self.password = TradeTariffBackend.secrets.sync_password
+  self.password = ENV["TARIFF_SYNC_PASSWORD"]
 
   mattr_accessor :host
-  self.host = TradeTariffBackend.secrets.sync_host
+  self.host = ENV["TARIFF_SYNC_HOST"]
 
   mattr_accessor :root_path
   self.root_path = Rails.env.test? ? "tmp/data" : "data"
@@ -42,12 +42,12 @@ module TariffSynchronizer
   self.request_throttle = 60
 
   # Initial dump date + 1 day
-  mattr_accessor :taric_initial_update
-  self.taric_initial_update = Date.new(2012,6,6)
+  mattr_accessor :taric_initial_update_date
+  self.taric_initial_update_date = Date.new(2012,6,6)
 
   # Initial dump date + 1 day
-  mattr_accessor :chief_initial_update
-  self.chief_initial_update = Date.new(2012,6,30)
+  mattr_accessor :chief_initial_update_date
+  self.chief_initial_update_date = Date.new(2012,6,30)
 
   # Times to retry downloading update before giving up
   mattr_accessor :retry_count
@@ -79,33 +79,26 @@ module TariffSynchronizer
   # Gets latest downloaded file present in (inbox/failbox/processed) and tries
   # to download any further updates to current day.
   def download
-    TradeTariffBackend.with_redis_lock do
-      if sync_variables_set?
-        instrument("download.tariff_synchronizer") do
-          begin
-            [TaricUpdate, ChiefUpdate].map(&:sync)
-          rescue FileService::DownloadException => exception
-            instrument("failed_download.tariff_synchronizer",
-              exception: exception.original,
-              url: exception.url
-            )
+    return instrument("config_error.tariff_synchronizer") unless sync_variables_set?
 
-            raise exception.original
-          end
+    TradeTariffBackend.with_redis_lock do
+      instrument("download.tariff_synchronizer") do
+        begin
+          [TaricUpdate, ChiefUpdate].map(&:sync)
+        rescue FileService::DownloadException => exception
+          instrument("failed_download.tariff_synchronizer",
+            exception: exception.original,
+            url: exception.url)
+          raise exception.original
         end
-      else
-        instrument("config_error.tariff_synchronizer")
       end
     end
   end
 
   def download_archive
-    if sync_variables_set?
-      instrument("download.tariff_synchronizer") do
-        [TaricArchive, ChiefArchive].map(&:sync)
-      end
-    else
-      instrument("config_error.tariff_synchronizer")
+    return instrument("config_error.tariff_synchronizer") unless sync_variables_set?
+    instrument("download.tariff_synchronizer") do
+      [TaricArchive, ChiefArchive].map(&:sync)
     end
   end
 
@@ -224,9 +217,8 @@ module TariffSynchronizer
     end
   end
 
-  # Initial update day for specific update type
-  def initial_update_for(update_type)
-    send("#{update_type}_initial_update".to_sym)
+  def initial_update_date_for(update_type)
+    send("#{update_type}_initial_update_date")
   end
 
   private
@@ -249,10 +241,7 @@ module TariffSynchronizer
   end
 
   def sync_variables_set?
-    username.present? &&
-    password.present? &&
-    host.present? &&
-    TradeTariffBackend.admin_email.present?
+    username.present? && password.present? && host.present?
   end
 
   def oplog_based_models
