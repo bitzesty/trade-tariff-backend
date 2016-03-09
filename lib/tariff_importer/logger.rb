@@ -14,8 +14,8 @@ class TariffImporter
 
     def taric_failed(event)
       "Taric import failed: #{event.payload[:exception]}".tap {|message|
-        message << "\n Failed transaction: #{event.payload[:xml]}" if event.payload.has_key?(:xml)
-        message << "Backtrace:\n #{event.payload[:exception].backtrace.join("\n")}"
+        message << "\n Failed transaction:\n #{event.payload[:hash]}"
+        message << "\n Backtrace:\n #{event.payload[:exception].backtrace.join("\n")}"
         error message
       }
     end

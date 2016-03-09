@@ -36,7 +36,7 @@ class TaricImporter < TariffImporter
         transaction.persist
         transaction.validate if @validate
       rescue StandardError => exception
-        ActiveSupport::Notifications.instrument("taric_failed.tariff_importer", exception: exception)
+        ActiveSupport::Notifications.instrument("taric_failed.tariff_importer", exception: exception, hash: hash_from_node)
         raise ImportException.new
       end
     end
