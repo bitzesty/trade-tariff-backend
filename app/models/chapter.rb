@@ -66,7 +66,7 @@ class Chapter < GoodsNomenclature
 
   def changes(depth = 1)
     operation_klass.select(
-      Sequel.as('Chapter', :model),
+      Sequel.as(Sequel.cast_string("Chapter"), :model),
       :oid,
       :operation_date,
       :operation,
@@ -83,7 +83,7 @@ class Chapter < GoodsNomenclature
        criteria.where{ |o| o.>=(:operation_date, operation_date) } unless operation_date.blank?
       }
      .limit(TradeTariffBackend.change_count)
-     .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date), Sequel.desc(:depth))
+     .order(Sequel.desc(:operation_date, nulls: :last), Sequel.desc(:depth))
   end
 
   private

@@ -15,7 +15,7 @@ describe 'CHIEF: Custom scenarios' do
                                                             :with_indent,
                                                             goods_nomenclature_item_id: '1604141620',
                                                             goods_nomenclature_sid: 70180,
-                                                            producline_suffix: 80,
+                                                            producline_suffix: "80",
                                                             validity_start_date: DateTime.parse("1998-07-14 00:00:00 -0700"),
                                                             validity_end_date: nil }
     let!(:goods_nomenclature_indent) { create :goods_nomenclature_indent, number_indents: 10,
@@ -161,7 +161,7 @@ describe 'CHIEF: Custom scenarios' do
     let!(:gono) { create :goods_nomenclature, :with_indent,
                                              goods_nomenclature_sid: 86487,
                                              goods_nomenclature_item_id: '1211908500',
-                                             producline_suffix: 80,
+                                             producline_suffix: "80",
                                              validity_start_date: Date.new(2007,1,1),
                                              validity_end_date: Date.new(2012,12,13) }
     let!(:measure) { create :measure, :national, measure_sid: -262016,
@@ -194,7 +194,7 @@ describe 'CHIEF: Custom scenarios' do
     let!(:gono) { create :goods_nomenclature, :declarable, :with_indent,
                                              goods_nomenclature_sid: 91900,
                                              goods_nomenclature_item_id: '5607509090',
-                                             producline_suffix: 80,
+                                             producline_suffix: "80",
                                              validity_start_date: Date.new(2010,1,1),
                                              validity_end_date: Date.new(2013,2,28) }
     let!(:measure) { create :measure, :national, measure_sid: -41534,
@@ -239,7 +239,7 @@ describe 'CHIEF: Custom scenarios' do
     let!(:gono) { create :goods_nomenclature, :declarable, :with_indent,
                                              goods_nomenclature_sid: 97701,
                                              goods_nomenclature_item_id: '1104291710',
-                                             producline_suffix: 80,
+                                             producline_suffix: "80",
                                              validity_start_date: Date.new(2013,7,1),
                                              validity_end_date: nil}
     let!(:mfcm_insert) { create :mfcm, msrgp_code: 'VT',
@@ -330,7 +330,7 @@ describe 'CHIEF: Custom scenarios' do
     let!(:gono) { create :goods_nomenclature, :declarable, :with_indent,
                                              goods_nomenclature_sid: 97701,
                                              goods_nomenclature_item_id: '6111301000',
-                                             producline_suffix: 80,
+                                             producline_suffix: "80",
                                              validity_start_date: Date.new(1999,7,1),
                                              validity_end_date: nil}
     let!(:national_geographical_area)  { create :geographical_area, geographical_area_id: 'B110', validity_start_date: Date.new(1999,7,1),
@@ -355,7 +355,7 @@ describe 'CHIEF: Custom scenarios' do
     let!(:gono) { create :goods_nomenclature, :declarable, :with_indent,
                                              goods_nomenclature_sid: 79289,
                                              goods_nomenclature_item_id: "3902200010",
-                                             producline_suffix: 80,
+                                             producline_suffix: "80",
                                              validity_start_date: Date.new(1999,7,1),
                                              validity_end_date: nil}
     let!(:mfcm) { create :mfcm, msrgp_code: 'EX',

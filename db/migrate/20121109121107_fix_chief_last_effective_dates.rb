@@ -1,8 +1,11 @@
 Sequel.migration do
+  no_transaction
+
   # Makes sure that there is only one TAME record per (msrgp_code, msr_type, tty_code, tar_msr_no) group that has blank validity end date.
   # Fixes CHIEF initial load.
   up do
-    Chief::Tame.distinct(:msrgp_code, :msr_type, :tty_code)
+    Chief::Tame.order(:msrgp_code, :msr_type, :tty_code)
+               .distinct(:msrgp_code, :msr_type, :tty_code)
                .where(tar_msr_no: nil).each do |ref_tame|
       tames = Chief::Tame.where(msrgp_code: ref_tame.msrgp_code,
                                 msr_type: ref_tame.msr_type,

@@ -75,7 +75,10 @@ module TariffSynchronizer
       end
 
       def latest_applied_of_both_kinds
-        descending.from_self.group(:update_type).applied
+        select(:state, :update_type).applied
+                                      .select_group(:update_type, :state)
+                                      .select_append{max(:applied_at).as(:applied_at)}
+                                      .select_append{max(:filename).as(:filename)}.all
       end
     end
 

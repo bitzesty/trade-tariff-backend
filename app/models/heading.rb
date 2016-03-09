@@ -36,11 +36,11 @@ class Heading < GoodsNomenclature
     end
 
     def declarable
-      filter(producline_suffix: 80)
+      filter(producline_suffix: "80")
     end
 
     def non_grouping
-      filter{Sequel.~(producline_suffix: 10) }
+      filter{Sequel.~(producline_suffix: "10") }
     end
   end
 
@@ -77,7 +77,7 @@ class Heading < GoodsNomenclature
 
   def changes(depth = 1)
     operation_klass.select(
-      Sequel.as('Heading', :model),
+      Sequel.as(Sequel.cast_string("Heading"), :model),
       :oid,
       :operation_date,
       :operation,
@@ -93,19 +93,19 @@ class Heading < GoodsNomenclature
        criteria.where { |o| o.>=(:operation_date, operation_date) } unless operation_date.blank?
       }
      .limit(TradeTariffBackend.change_count)
-     .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date), Sequel.desc(:depth))
+     .order(Sequel.desc(:operation_date, nulls: :last), Sequel.desc(:depth))
   end
 
   def self.changes_for(depth = 0, conditions = {})
     operation_klass.select(
-      Sequel.as('Heading', :model),
+      Sequel.as(Sequel.cast_string("Heading"), :model),
       :oid,
       :operation_date,
       :operation,
       Sequel.as(depth, :depth)
     ).where(conditions)
      .limit(TradeTariffBackend.change_count)
-     .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date))
+     .order(Sequel.desc(:operation_date, nulls: :last))
   end
 
   private

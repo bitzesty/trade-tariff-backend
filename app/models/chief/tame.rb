@@ -50,10 +50,10 @@ module Chief
       end
     end
 
-    def adval1_rate; 1; end
-    def adval2_rate; 0; end
-    def spfc1_rate; 0; end
-    def spfc2_rate; 0; end
+    def adval1_rate; true; end
+    def adval2_rate; false; end
+    def spfc1_rate; false; end
+    def spfc2_rate; false; end
 
     def mark_as_processed!
       self.this.unlimited.update(processed: true)
@@ -74,5 +74,3 @@ module Chief
     end
   end
 end
-
-

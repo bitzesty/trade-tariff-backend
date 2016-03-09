@@ -161,7 +161,6 @@ GEM
     multi_json (1.11.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
-    mysql2 (0.3.19)
     nenv (0.2.0)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
@@ -188,6 +187,7 @@ GEM
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
     ox (2.3.0)
+    pg (0.18.4)
     plek (1.11.0)
     power_assert (0.2.4)
     pry (0.10.1)
@@ -378,10 +378,10 @@ DEPENDENCIES
   logstasher (~> 0.6)
   minitest (~> 5.5)
   multi_json (~> 1.11)
-  mysql2 (~> 0.3)
   newrelic_rpm (~> 3.12)
   nokogiri (~> 1.6)
   ox (~> 2.3)
+  pg
   plek (~> 1.11)
   pry-nav
   pry-rails (~> 0.3)
