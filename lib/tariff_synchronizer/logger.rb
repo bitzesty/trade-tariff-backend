@@ -2,18 +2,12 @@ module TariffSynchronizer
   class Logger < ActiveSupport::LogSubscriber
 
     def logger
-      @logger ||= if
-        formatter = Proc.new {|severity, time, progname, msg| "#{time.strftime('%Y-%m-%dT%H:%M:%S.%L %z')} #{sprintf('%5s', severity)} #{msg}\n" }
-
+      @logger ||= begin
         file_logger = ::Logger.new('log/tariff_synchronizer.log')
-        file_logger.formatter = formatter
-
-        if defined?(Rails) &&
-              Rails.respond_to?(:configuration) &&
-              Rails.configuration.respond_to?(:synchronizer_console_logs) &&
-              Rails.configuration.synchronizer_console_logs
+        file_logger.formatter = TradeTariffBackend.log_formatter
+        if defined?(Rails) && Rails.env.development?
           console_logger = ActiveSupport::Logger.new(STDOUT)
-          console_logger.formatter = formatter
+          console_logger.formatter = TradeTariffBackend.log_formatter
           console_logger.extend(ActiveSupport::Logger.broadcast(file_logger))
         else
           file_logger
