@@ -67,7 +67,7 @@ module TariffSynchronizer
       end
 
       def last_pending
-        pending.order(:issue_date).limit(1)
+        pending.order(:issue_date).first
       end
 
       def descending
@@ -307,7 +307,7 @@ module TariffSynchronizer
       end
 
       def pending_from
-        if last_download = last_pending.first || descending.first
+        if last_download = last_pending || descending.first
           last_download.issue_date
         else
          TariffSynchronizer.initial_update_date_for(update_type)
