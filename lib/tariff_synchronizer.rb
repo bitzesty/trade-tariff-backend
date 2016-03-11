@@ -104,11 +104,8 @@ module TariffSynchronizer
 
   def check_failures
     if BaseUpdate.failed.any?
-      instrument(
-        "failed_updates_present.tariff_synchronizer",
-        file_names: BaseUpdate.failed.map(&:filename)
-      )
-
+      instrument("failed_updates_present.tariff_synchronizer",
+                 file_names: BaseUpdate.failed.map(&:filename))
       raise FailedUpdatesError
     end
   end
@@ -133,8 +130,7 @@ module TariffSynchronizer
         unconformant_records << event.payload[:record]
       end
 
-      # Updates are run since the last pending update, to today or to ENV['DATE']
-      update_range_in_days.each do |day|
+      date_range_since_last_pending_update.each do |day|
         # TARIC updates should be applied before CHIEF
         applied_updates << perform_update(TaricUpdate, day)
         applied_updates << perform_update(ChiefUpdate, day)
@@ -225,19 +221,18 @@ module TariffSynchronizer
 
   def perform_update(update_type, day)
     updates = update_type.pending_at(day).to_a
-    updates.each { |update| update.apply }
+    updates.map(&:apply)
     updates
   end
 
-  def update_range_in_days
-    last_pending_update = BaseUpdate.last_pending.first
-    update_to = ENV['DATE'] ? Date.parse(ENV['DATE']) : Date.current
+  def date_range_since_last_pending_update
+    last_pending_update = BaseUpdate.last_pending
+    return [] if last_pending_update.blank?
+    (last_pending_update.issue_date..update_to)
+  end
 
-    if last_pending_update
-      (last_pending_update.issue_date..update_to)
-    else
-      []
-    end
+  def update_to
+    ENV['DATE'] ? Date.parse(ENV['DATE']) : Date.current
   end
 
   def sync_variables_set?
