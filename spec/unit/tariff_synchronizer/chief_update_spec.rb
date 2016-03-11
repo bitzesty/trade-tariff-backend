@@ -5,6 +5,7 @@ describe TariffSynchronizer::ChiefUpdate do
   it_behaves_like 'Base Update'
 
   let(:example_date)      { Date.new(2010,1,1) }
+  let(:chief_file) { ChiefFileNameGenerator.new(example_date) }
 
   before do
     # we assume csv contents are ok unless otherwise specified
@@ -44,10 +45,10 @@ describe TariffSynchronizer::ChiefUpdate do
             TariffSynchronizer::ChiefUpdate.download(example_date)
 
             expect(
-              File.exists?("#{TariffSynchronizer.root_path}/chief/#{TariffSynchronizer::ChiefUpdate.file_name_for(example_date)}")
+              File.exists?("#{TariffSynchronizer.root_path}/chief/#{chief_file.name}")
             ).to be_truthy
             expect(
-              File.read("#{TariffSynchronizer.root_path}/chief/#{TariffSynchronizer::ChiefUpdate.file_name_for(example_date)}")
+              File.read("#{TariffSynchronizer.root_path}/chief/#{chief_file.name}")
             ).to eq 'abc'
           end
 
@@ -67,7 +68,7 @@ describe TariffSynchronizer::ChiefUpdate do
             create :chief_update,
               :applied,
               issue_date: example_date,
-              filename: TariffSynchronizer::ChiefUpdate.file_name_for(example_date)
+              filename: chief_file.name
           }
 
           before {
@@ -78,7 +79,7 @@ describe TariffSynchronizer::ChiefUpdate do
             TariffSynchronizer::ChiefUpdate.download(example_date)
 
             expect(
-              File.exists?("#{TariffSynchronizer.root_path}/chief/#{TariffSynchronizer::ChiefUpdate.file_name_for(example_date)}")
+              File.exists?("#{TariffSynchronizer.root_path}/chief/#{chief_file.name}")
             ).to be_truthy
           }
 

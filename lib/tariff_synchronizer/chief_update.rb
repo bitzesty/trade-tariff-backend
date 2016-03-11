@@ -1,13 +1,14 @@
 require 'tariff_synchronizer/base_update'
 require 'tariff_synchronizer/file_service'
+require 'tariff_synchronizer/chief_file_name_generator'
 require "csv"
 
 module TariffSynchronizer
   class ChiefUpdate < BaseUpdate
     class << self
       def download(date)
-        update_file_name = file_name_for(date)
-        perform_download(update_file_name, chief_update_url_for(date), date)
+        chief_file = ChiefFileNameGenerator.new(date)
+        perform_download(chief_file.name, chief_file.url, date)
       end
 
       def update_type
@@ -20,10 +21,6 @@ module TariffSynchronizer
 
           create_update_entry(Date.parse(date), BaseUpdate::PENDING_STATE, Pathname.new(file_path).basename.to_s)
         end
-      end
-
-      def file_name_for(date)
-        "#{date}_#{chief_file_name_for(date)}"
       end
     end
 
@@ -47,17 +44,6 @@ module TariffSynchronizer
       else
         true
       end
-    end
-
-    def self.chief_file_name_for(date)
-      day = sprintf("%03d", date.yday)
-
-      "KBT009(#{date.strftime("%y")}#{day}).txt"
-    end
-
-    def self.chief_update_url_for(date)
-      TariffSynchronizer.chief_update_url_template % { host: TariffSynchronizer.host,
-                                                       file_name: chief_file_name_for(date)}
     end
   end
 end
