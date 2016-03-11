@@ -26,11 +26,6 @@ namespace :tariff do
       TariffSynchronizer.apply
     end
 
-    desc "Download all Taric and CHIEF updates"
-    task download: :environment do
-      TariffSynchronizer.download_archive
-    end
-
     desc 'Apply pending Taric and CHIEF'
     task transform: %w[environment] do
       require 'chief_transformer'

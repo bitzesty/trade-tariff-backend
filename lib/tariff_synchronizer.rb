@@ -17,10 +17,8 @@ module TariffSynchronizer
 
   class FailedUpdatesError < StandardError; end
 
-  autoload :ChiefArchive,  'tariff_synchronizer/chief_archive'
   autoload :ChiefUpdate,   'tariff_synchronizer/chief_update'
   autoload :Mailer,        'tariff_synchronizer/mailer'
-  autoload :TaricArchive,  'tariff_synchronizer/taric_archive'
   autoload :TaricUpdate,   'tariff_synchronizer/taric_update'
 
   extend self
@@ -92,13 +90,6 @@ module TariffSynchronizer
           raise exception.original
         end
       end
-    end
-  end
-
-  def download_archive
-    return instrument("config_error.tariff_synchronizer") unless sync_variables_set?
-    instrument("download.tariff_synchronizer") do
-      [TaricArchive, ChiefArchive].map(&:sync)
     end
   end
 
