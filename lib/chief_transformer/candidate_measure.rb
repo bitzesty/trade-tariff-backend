@@ -3,8 +3,7 @@ require 'chief_transformer/candidate_measure/candidate_associations'
 require 'chief_transformer/time'
 
 class ChiefTransformer
-  class CandidateMeasure < Sequel::Model
-    set_dataset db[:measures_oplog]
+  class CandidateMeasure < Sequel::Model(:measures_oplog)
     set_primary_key :measure_sid
 
     plugin :national
