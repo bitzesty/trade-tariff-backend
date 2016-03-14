@@ -1,5 +1,4 @@
 require 'tariff_synchronizer/base_update'
-require 'tariff_synchronizer/file_service'
 require 'tariff_synchronizer/chief_file_name_generator'
 require "csv"
 

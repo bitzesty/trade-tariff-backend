@@ -84,9 +84,7 @@ module TariffSynchronizer
         begin
           [TaricUpdate, ChiefUpdate].map(&:sync)
         rescue FileService::DownloadException => exception
-          instrument("failed_download.tariff_synchronizer",
-            exception: exception.original,
-            url: exception.url)
+          instrument("failed_download.tariff_synchronizer", exception: exception)
           raise exception.original
         end
       end
