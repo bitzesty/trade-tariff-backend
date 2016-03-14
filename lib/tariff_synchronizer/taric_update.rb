@@ -7,8 +7,10 @@ module TariffSynchronizer
     class << self
 
       def download(date)
-        taric_update_name_for(date).tap do |response|
-          if response.success? && response.content_present?
+        response = get_filenames_for_taric_updates(date)
+
+        if response.success?
+          if response.content_present?
             taric_updates = response.content.
                               split("\n").
                               map{|name| name.gsub(/[^0-9a-zA-Z\.]/i, '')}.
@@ -25,23 +27,22 @@ module TariffSynchronizer
               local_file_name = file_name_for(date, taric_update.file_name)
               perform_download(local_file_name, taric_update.url, date)
             end
-
-          elsif response.success? && !response.content_present?
+          else
             create_update_entry(date, BaseUpdate::FAILED_STATE, missing_update_name_for(date))
             instrument("blank_update.tariff_synchronizer", date: date, url: response.url)
-          elsif response.retry_count_exceeded?
-            create_update_entry(date, BaseUpdate::FAILED_STATE, missing_update_name_for(date))
-            instrument("retry_exceeded.tariff_synchronizer", date: date, url: response.url)
-          elsif response.not_found?
-            # We will be retrying a few more times today, so do not create
-            # missing record until we are sure
-            if date < Date.current
-              create_update_entry(date, BaseUpdate::MISSING_STATE, missing_update_name_for(date))
-              instrument("not_found.tariff_synchronizer",
-                       date: date,
-                       url: taric_query_url_for(date))
-              false
-            end
+          end
+        elsif response.retry_count_exceeded?
+          create_update_entry(date, BaseUpdate::FAILED_STATE, missing_update_name_for(date))
+          instrument("retry_exceeded.tariff_synchronizer", date: date, url: response.url)
+        elsif response.not_found?
+          # We will be retrying a few more times today, so do not create
+          # missing record until we are sure
+          if date < Date.current
+            create_update_entry(date, BaseUpdate::MISSING_STATE, missing_update_name_for(date))
+            instrument("not_found.tariff_synchronizer",
+                     date: date,
+                     url: taric_query_url_for(date))
+            false
           end
         end
       end
@@ -85,18 +86,16 @@ module TariffSynchronizer
       end
     end
 
-    def self.taric_update_name_for(date)
-      taric_query_url = taric_query_url_for(date)
+    def self.get_filenames_for_taric_updates(date)
+      url = taric_query_url_for(date)
 
-      instrument("get_taric_update_name.tariff_synchronizer", date: date, url: taric_query_url) do
-        download_content(taric_query_url)
+      instrument("get_taric_update_name.tariff_synchronizer", date: date, url: url) do
+        download_content(url)
       end
     end
 
     def self.taric_query_url_for(date)
-      date_query = Date.parse(date.to_s).strftime("%Y%m%d")
-      TariffSynchronizer.taric_query_url_template % { host: TariffSynchronizer.host,
-                                                      date: date_query}
+      TariffSynchronizer.taric_query_url_template % { host: TariffSynchronizer.host, date: date.strftime("%Y%m%d")}
     end
   end
 end

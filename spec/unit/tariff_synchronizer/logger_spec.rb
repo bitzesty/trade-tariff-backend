@@ -371,7 +371,7 @@ describe TariffSynchronizer::Logger, truncation: true do
 
     before {
       # Skip Taric update file name fetching
-      expect(TariffSynchronizer::TaricUpdate).to receive(:taric_update_name_for).and_return(
+      expect(TariffSynchronizer::TaricUpdate).to receive(:get_filenames_for_taric_updates).and_return(
         query_response
       )
       # Download mock response
