@@ -282,7 +282,7 @@ module TariffSynchronizer
       end
 
       def write_update_file(date, response, file_name)
-        update_path = update_path(date, file_name)
+        update_path = update_path(file_name)
 
         instrument("update_written.tariff_synchronizer", date: date,
           path: update_path, size: response.content.size) do
@@ -302,7 +302,7 @@ module TariffSynchronizer
         ).update(state: state, filesize: filesize)
       end
 
-      def update_path(date, file_name)
+      def update_path(file_name)
         File.join(TariffSynchronizer.root_path, update_type.to_s, file_name)
       end
 
