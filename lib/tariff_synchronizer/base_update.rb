@@ -22,10 +22,10 @@ module TariffSynchronizer
       end
     end
 
-    APPLIED_STATE = 'A'
-    PENDING_STATE = 'P'
-    FAILED_STATE  = 'F'
-    MISSING_STATE = 'M'
+    APPLIED_STATE = "A".freeze
+    PENDING_STATE = "P".freeze
+    FAILED_STATE  = "F".freeze
+    MISSING_STATE = "M".freeze
 
     self.unrestrict_primary_key
 
@@ -284,10 +284,9 @@ module TariffSynchronizer
       def write_update_file(date, response, file_name)
         update_path = update_path(file_name)
 
-        instrument("update_written.tariff_synchronizer", date: date,
-          path: update_path, size: response.content.size) do
-            write_file(update_path, response.content)
-          end
+        instrument("update_written.tariff_synchronizer", date: date, path: update_path, size: response.content.size) do
+          write_file(update_path, response.content)
+        end
       end
 
       def missing_update_name_for(date)
