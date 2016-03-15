@@ -75,10 +75,11 @@ module TariffSynchronizer
       end
 
       def latest_applied_of_both_kinds
-        select(:state, :update_type).applied
-                                      .select_group(:update_type, :state)
-                                      .select_append{max(:applied_at).as(:applied_at)}
-                                      .select_append{max(:filename).as(:filename)}.all
+        select(:state, :update_type)
+          .applied
+          .select_group(:update_type, :state)
+          .select_append { max(:applied_at).as(:applied_at) }
+          .select_append { max(:filename).as(:filename) }.all
       end
     end
 
@@ -146,17 +147,17 @@ module TariffSynchronizer
         event = ActiveSupport::Notifications::Event.new(*args)
 
         binds = unless event.payload.fetch(:binds, []).blank?
-                  event.payload[:binds].map { |column, value|
+                  event.payload[:binds].map do |column, value|
                     [column.name, value]
-                  }.inspect
+                  end.inspect
                 end
 
         @database_queries.push(
-          "(%{class_name}) %{sql} %{binds}" % {
+          format("(%{class_name}) %{sql} %{binds}",
             class_name: event.payload[:name],
-            sql: event.payload[:sql].squeeze(' '),
+            sql: event.payload[:sql].squeeze(" "),
             binds: binds
-          }
+          )
         )
       end
 
@@ -223,10 +224,10 @@ module TariffSynchronizer
           end
           instrument("created_tariff.tariff_synchronizer", date: date, filename: local_file_name, type: update_type)
         else
-          instrument("download_tariff.tariff_synchronizer", date: date, url: tariff_url, filename: local_file_name,type: update_type) do
-            download_content(tariff_url).tap { |response|
+          instrument("download_tariff.tariff_synchronizer", date: date, url: tariff_url, filename: local_file_name, type: update_type) do
+            download_content(tariff_url).tap do |response|
               create_entry(date, response, local_file_name)
-            }
+            end
           end
         end
       end
@@ -306,10 +307,10 @@ module TariffSynchronizer
       end
 
       def pending_from
-        if last_download = last_pending || descending.first
+        if last_download = (last_pending || descending.first)
           last_download.issue_date
         else
-         TariffSynchronizer.initial_update_date_for(update_type)
+          TariffSynchronizer.initial_update_date_for(update_type)
         end
       end
 
