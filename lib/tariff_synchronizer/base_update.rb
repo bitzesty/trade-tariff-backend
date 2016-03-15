@@ -4,8 +4,6 @@ module TariffSynchronizer
 
     delegate :instrument, to: ActiveSupport::Notifications
 
-    set_dataset db[:tariff_updates]
-
     one_to_many :conformance_errors, class: TariffUpdateConformanceError, key: :tariff_update_filename
 
     plugin :timestamps
