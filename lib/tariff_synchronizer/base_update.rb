@@ -142,14 +142,14 @@ module TariffSynchronizer
       # Based on http://goo.gl/vpTFyT (SequelRails LogSubscriber)
       @database_queries = RingBuffer.new(10)
 
-      sql_subscriber = ActiveSupport::Notifications.subscribe /sql\.sequel/ do |*args|
+      sql_subscriber = ActiveSupport::Notifications.subscribe(/sql\.sequel/) do |*args|
         event = ActiveSupport::Notifications::Event.new(*args)
 
         binds = unless event.payload.fetch(:binds, []).blank?
-          event.payload[:binds].map { |column, value|
-            [column.name, value]
-          }.inspect
-        end
+                  event.payload[:binds].map { |column, value|
+                    [column.name, value]
+                  }.inspect
+                end
 
         @database_queries.push(
           "(%{class_name}) %{sql} %{binds}" % {
@@ -161,7 +161,7 @@ module TariffSynchronizer
       end
 
       # Subscribe to conformance errors and save them to DB
-      conformance_errors_subscriber = ActiveSupport::Notifications.subscribe /conformance_error/ do |*args|
+      conformance_errors_subscriber = ActiveSupport::Notifications.subscribe(/conformance_error/) do |*args|
         event = ActiveSupport::Notifications::Event.new(*args)
         record = event.payload[:record]
         TariffUpdateConformanceError.create(
