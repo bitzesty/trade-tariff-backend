@@ -23,7 +23,7 @@ class ChiefTransformer
                                                                                              errors: exception.errors)
 
               raise ChiefTransformer::TransformException.new("Could not transform: #{operation.inspect}. \nModel: #{exception.model.inspect}. \nErrors: #{exception.errors.inspect} \nBacktrace: \n#{exception.backtrace.join("\n")}", exception)
-            rescue Exception => exception
+            rescue => exception
               ActiveSupport::Notifications.instrument("invalid_operation.chief_transformer", operation: operation,
                                                                                              exception: exception)
 

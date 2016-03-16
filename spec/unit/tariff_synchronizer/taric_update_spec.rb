@@ -17,7 +17,6 @@ describe TariffSynchronizer::TaricUpdate do
 
 
     before do
-      TariffSynchronizer.host = "http://example.com"
       prepare_synchronizer_folders
 
       # we assume contents are ok unless otherwise specified

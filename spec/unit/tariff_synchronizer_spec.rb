@@ -26,11 +26,10 @@ describe TariffSynchronizer, truncation: true do
     end
 
     context 'sync variables are not set' do
-      before {
+      before do
         TariffSynchronizer.username = nil
         TariffSynchronizer.password = nil
-        TariffSynchronizer.host = nil
-      }
+      end
 
       it 'does not start sync process' do
         expect(TariffSynchronizer::TaricUpdate).to_not receive(:sync)
@@ -61,7 +60,7 @@ describe TariffSynchronizer, truncation: true do
 
     context 'success scenario' do
       before {
-        allow(TariffSynchronizer).to receive(:update_range_in_days).and_return([Date.yesterday, Date.today])
+        allow(TariffSynchronizer).to receive(:date_range_since_last_pending_update).and_return([Date.yesterday, Date.today])
         expect(TariffSynchronizer::TaricUpdate).to receive(:pending_at).with(update_1.issue_date).and_return([update_1])
         expect(TariffSynchronizer::TaricUpdate).to receive(:pending_at).with(update_2.issue_date).and_return([update_2])
       }
@@ -78,7 +77,7 @@ describe TariffSynchronizer, truncation: true do
 
     context 'failure scenario' do
       before do
-        allow(TariffSynchronizer).to receive(:update_range_in_days).and_return([Date.yesterday, Date.today])
+        allow(TariffSynchronizer).to receive(:date_range_since_last_pending_update).and_return([Date.yesterday, Date.today])
         expect(TariffSynchronizer::TaricUpdate).to receive(:pending_at).with(update_1.issue_date).and_return([update_1])
 
         expect(update_1).to receive(:apply).and_raise(Sequel::Rollback)

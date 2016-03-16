@@ -355,7 +355,7 @@ FactoryGirl.define do
   end
 
   factory :chief_update, parent: :base_update, class: TariffSynchronizer::ChiefUpdate do
-    filename { TariffSynchronizer::ChiefUpdate.file_name_for(example_date)  }
+    filename { ChiefFileNameGenerator.new(example_date).name  }
     update_type { 'TariffSynchronizer::ChiefUpdate' }
   end
 

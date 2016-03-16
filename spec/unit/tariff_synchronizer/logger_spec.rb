@@ -371,11 +371,9 @@ describe TariffSynchronizer::Logger, truncation: true do
 
     before {
       # Skip Taric update file name fetching
-      expect(TariffSynchronizer::TaricUpdate).to receive(:taric_update_name_for).and_return(
-        query_response
-      )
+      expect(TaricFileNameGenerator).to receive(:new).and_return(query_response)
       # Download mock response
-      expect(TariffSynchronizer::TaricUpdate).to receive(:download_content).and_return(success_response)
+      expect(TariffSynchronizer::TaricUpdate).to receive(:download_content).and_return(success_response).twice
       # Do not write file to file system
       expect(TariffSynchronizer::TaricUpdate).to receive(:create_entry).and_return(true)
       # Actual Download
@@ -383,7 +381,7 @@ describe TariffSynchronizer::Logger, truncation: true do
     }
 
     it 'logs an info event' do
-      expect(@logger.logged(:info).size).to eq 1
+      expect(@logger.logged(:info).size).to eq 2
       expect(@logger.logged(:info).last).to match /Downloaded TARIC update/
     end
   end

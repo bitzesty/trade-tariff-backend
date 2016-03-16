@@ -4,8 +4,6 @@ module TariffSynchronizer
 
     delegate :instrument, to: ActiveSupport::Notifications
 
-    set_dataset db[:tariff_updates]
-
     one_to_many :conformance_errors, class: TariffUpdateConformanceError, key: :tariff_update_filename
 
     plugin :timestamps
@@ -22,10 +20,10 @@ module TariffSynchronizer
       end
     end
 
-    APPLIED_STATE = 'A'
-    PENDING_STATE = 'P'
-    FAILED_STATE  = 'F'
-    MISSING_STATE = 'M'
+    APPLIED_STATE = "A".freeze
+    PENDING_STATE = "P".freeze
+    FAILED_STATE  = "F".freeze
+    MISSING_STATE = "M".freeze
 
     self.unrestrict_primary_key
 
@@ -67,7 +65,7 @@ module TariffSynchronizer
       end
 
       def last_pending
-        pending.order(:issue_date).limit(1)
+        pending.order(:issue_date).first
       end
 
       def descending
@@ -75,10 +73,11 @@ module TariffSynchronizer
       end
 
       def latest_applied_of_both_kinds
-        select(:state, :update_type).applied
-                                      .select_group(:update_type, :state)
-                                      .select_append{max(:applied_at).as(:applied_at)}
-                                      .select_append{max(:filename).as(:filename)}.all
+        select(:state, :update_type)
+          .applied
+          .select_group(:update_type, :state)
+          .select_append { max(:applied_at).as(:applied_at) }
+          .select_append { max(:filename).as(:filename) }.all
       end
     end
 
@@ -142,26 +141,26 @@ module TariffSynchronizer
       # Based on http://goo.gl/vpTFyT (SequelRails LogSubscriber)
       @database_queries = RingBuffer.new(10)
 
-      sql_subscriber = ActiveSupport::Notifications.subscribe /sql\.sequel/ do |*args|
+      sql_subscriber = ActiveSupport::Notifications.subscribe(/sql\.sequel/) do |*args|
         event = ActiveSupport::Notifications::Event.new(*args)
 
         binds = unless event.payload.fetch(:binds, []).blank?
-          event.payload[:binds].map { |column, value|
-            [column.name, value]
-          }.inspect
-        end
+                  event.payload[:binds].map do |column, value|
+                    [column.name, value]
+                  end.inspect
+                end
 
         @database_queries.push(
-          "(%{class_name}) %{sql} %{binds}" % {
+          format("(%{class_name}) %{sql} %{binds}",
             class_name: event.payload[:name],
-            sql: event.payload[:sql].squeeze(' '),
+            sql: event.payload[:sql].squeeze(" "),
             binds: binds
-          }
+          )
         )
       end
 
       # Subscribe to conformance errors and save them to DB
-      conformance_errors_subscriber = ActiveSupport::Notifications.subscribe /conformance_error/ do |*args|
+      conformance_errors_subscriber = ActiveSupport::Notifications.subscribe(/conformance_error/) do |*args|
         event = ActiveSupport::Notifications::Event.new(*args)
         record = event.payload[:record]
         TariffUpdateConformanceError.create(
@@ -223,10 +222,10 @@ module TariffSynchronizer
           end
           instrument("created_tariff.tariff_synchronizer", date: date, filename: local_file_name, type: update_type)
         else
-          instrument("download_tariff.tariff_synchronizer", date: date, url: tariff_url, filename: local_file_name,type: update_type) do
-            download_content(tariff_url).tap { |response|
+          instrument("download_tariff.tariff_synchronizer", date: date, url: tariff_url, filename: local_file_name, type: update_type) do
+            download_content(tariff_url).tap do |response|
               create_entry(date, response, local_file_name)
-            }
+            end
           end
         end
       end
@@ -282,12 +281,11 @@ module TariffSynchronizer
       end
 
       def write_update_file(date, response, file_name)
-        update_path = update_path(date, file_name)
+        update_path = update_path(file_name)
 
-        instrument("update_written.tariff_synchronizer", date: date,
-          path: update_path, size: response.content.size) do
-            write_file(update_path, response.content)
-          end
+        instrument("update_written.tariff_synchronizer", date: date, path: update_path, size: response.content.size) do
+          write_file(update_path, response.content)
+        end
       end
 
       def missing_update_name_for(date)
@@ -302,15 +300,15 @@ module TariffSynchronizer
         ).update(state: state, filesize: filesize)
       end
 
-      def update_path(date, file_name)
+      def update_path(file_name)
         File.join(TariffSynchronizer.root_path, update_type.to_s, file_name)
       end
 
       def pending_from
-        if last_download = last_pending.first || descending.first
+        if last_download = (last_pending || descending.first)
           last_download.issue_date
         else
-         TariffSynchronizer.initial_update_date_for(update_type)
+          TariffSynchronizer.initial_update_date_for(update_type)
         end
       end
 

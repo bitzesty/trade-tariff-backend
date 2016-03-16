@@ -61,7 +61,7 @@ class ChiefImporter < TariffImporter
       count: record_count
     )
 
-  rescue Exception => exception
+  rescue => exception
     ActiveSupport::Notifications.instrument("chief_failed.tariff_importer",
       path: path,
       exception: exception

@@ -13,12 +13,9 @@ describe Api::V1::SearchController, "POST #search" do
       }
     }
 
-    before {
-      post :search, { t: chapter.to_param, as_of: chapter.validity_start_date }
-    }
-
-    it { is_expected.to respond_with(:success) }
     it 'returns exact match endpoint and indetifier if query for exact record' do
+      post :search, { t: chapter.to_param, as_of: chapter.validity_start_date }
+      expect(response.status).to eq(200)
       expect(response.body).to match_json_expression pattern
     end
   end
@@ -43,12 +40,9 @@ describe Api::V1::SearchController, "POST #search" do
       }
     }
 
-    before {
-      post :search, { t: chapter.description,  as_of: chapter.validity_start_date }
-    }
-
-    it { is_expected.to respond_with(:success) }
     it 'returns records grouped by type' do
+      post :search, { t: chapter.description,  as_of: chapter.validity_start_date }
+      expect(response.status).to eq(200)
       expect(response.body).to match_json_expression pattern
     end
   end
@@ -61,13 +55,10 @@ describe Api::V1::SearchController, "POST #search" do
       }
     }
 
-    before {
-      post :search
-    }
-
-    it { is_expected.to respond_with(:success) }
     it 'returns list of errors' do
-        expect(response.body).to match_json_expression pattern
+      post :search
+      expect(response.status).to eq(200)
+      expect(response.body).to match_json_expression pattern
     end
   end
 end

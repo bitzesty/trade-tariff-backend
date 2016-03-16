@@ -3,7 +3,7 @@ ENV["RAILS_ENV"] ||= 'test'
 require "spec_helper"
 
 require 'webmock/rspec'
-WebMock.allow_net_connect!
+WebMock.disable_net_connect!(allow_localhost: true)
 
 require 'simplecov'
 require 'simplecov-rcov'
@@ -73,12 +73,7 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
-
-  config.before(:each, :webmock) do
-    WebMock.disable_net_connect!
-  end
-
-  config.after(:each, :webmock) do
-    WebMock.allow_net_connect!
-  end
 end
+
+
+TariffSynchronizer.host = "http://example.com"
