@@ -1,5 +1,6 @@
 require 'tariff_synchronizer/base_update'
 require 'tariff_synchronizer/file_service'
+require 'tariff_synchronizer/taric_file_name_generator'
 require 'ostruct'
 
 module TariffSynchronizer
@@ -7,7 +8,11 @@ module TariffSynchronizer
     class << self
 
       def download(date)
-        response = get_filenames_for_taric_updates(date)
+
+        url = TaricFileNameGenerator.new(date).url
+
+        instrument("get_taric_update_name.tariff_synchronizer", date: date, url: url)
+        response = download_content(url)
 
         if response.success?
           if response.content_present?
@@ -39,9 +44,7 @@ module TariffSynchronizer
           # missing record until we are sure
           if date < Date.current
             create_update_entry(date, BaseUpdate::MISSING_STATE, missing_update_name_for(date))
-            instrument("not_found.tariff_synchronizer",
-                     date: date,
-                     url: taric_query_url_for(date))
+            instrument("not_found.tariff_synchronizer", date: date, url: url)
             false
           end
         end
@@ -84,18 +87,6 @@ module TariffSynchronizer
       else
         true
       end
-    end
-
-    def self.get_filenames_for_taric_updates(date)
-      url = taric_query_url_for(date)
-
-      instrument("get_taric_update_name.tariff_synchronizer", date: date, url: url) do
-        download_content(url)
-      end
-    end
-
-    def self.taric_query_url_for(date)
-      TariffSynchronizer.taric_query_url_template % { host: TariffSynchronizer.host, date: date.strftime("%Y%m%d")}
     end
   end
 end
