@@ -175,7 +175,7 @@ describe TariffSynchronizer::Logger, truncation: true do
     }
 
     before {
-      allow_any_instance_of(TariffImporter).to receive(:file_exists?).and_return true
+      allow(File).to receive(:exist?).and_return true
       allow_any_instance_of(TariffSynchronizer::BaseUpdate).to receive(:file_exists?).and_return true
       allow_any_instance_of(TaricImporter).to receive(:import) {
         Measure.first
@@ -348,7 +348,7 @@ describe TariffSynchronizer::Logger, truncation: true do
     before {
       # Test in isolation, file is not actually in the file system
       # so bypass the check
-      expect(File).to receive(:exists?)
+      expect(File).to receive(:exist?)
                   .with(chief_update.file_path)
                   .twice
                   .and_return(true)
@@ -391,7 +391,7 @@ describe TariffSynchronizer::Logger, truncation: true do
     before {
       # Test in isolation, file is not actually in the file system
       # so bypass the check
-      expect(File).to receive(:exists?)
+      expect(File).to receive(:exist?)
                   .with(taric_update.file_path)
                   .twice
                   .and_return(true)

@@ -1,24 +1,26 @@
-require 'rails_helper'
-
-require 'tariff_importer'
+require "rails_helper"
+require "tariff_importer"
 
 describe TariffImporter do
-  let(:valid_file)       { "spec/fixtures/chief_samples/KBT009\(12044\).txt" }
-  let(:invalid_file)     { "err" }
-  let(:valid_importer)   { "ChiefImporter" }
-  let(:invalid_importer) { "Err" }
+  let(:valid_path)       { "spec/fixtures/chief_samples/KBT009\(12044\).txt" }
+  let(:date)             { Date.new(2013, 8, 2) }
 
-  describe "initialization" do
-    it 'sets path on initialization' do
-      expect(
-        -> { TariffImporter.new(valid_file, ChiefImporter) }
-      ).to_not raise_error
+  describe "#initialize" do
+    it "set path and issue_date attributes" do
+      importer = TariffImporter.new(valid_path, date)
+      expect(importer.path).to eq(valid_path)
+      expect(importer.issue_date).to eq(date)
     end
 
-    it 'throws an error if path is non existent' do
-      expect(
-        -> { TariffImporter.new(invalid_file) }
-      ).to raise_error(TariffImporter::NotFound)
+    it "set issue_date as nil if not defined" do
+      importer = TariffImporter.new(valid_path)
+      expect(importer.issue_date).to be_nil
+    end
+
+    it "throws an error if path is non existent" do
+      expect {
+        TariffImporter.new("x")
+      }.to raise_error(TariffImporter::FileNotFoundError)
     end
   end
 end

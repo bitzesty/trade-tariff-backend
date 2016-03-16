@@ -125,7 +125,7 @@ module TariffSynchronizer
       # Check if file exists and if it doesn't try redownloading it.
       # This may be necessary when tariff runs in multiserver environment
       # where one server downloads updates and another server tries to apply it
-      File.exists?(file_path) || (
+      File.exist?(file_path) || (
         instrument("not_found_on_file_system.tariff_synchronizer", path: file_path)
         self.class.download(issue_date) || file_exists?
       )
