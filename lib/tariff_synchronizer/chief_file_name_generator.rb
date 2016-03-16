@@ -1,6 +1,7 @@
 class ChiefFileNameGenerator
 
   attr_reader :date
+  delegate :chief_update_url_template, :host, to: TariffSynchronizer
 
   def initialize(date)
     @date = date
@@ -11,7 +12,7 @@ class ChiefFileNameGenerator
   end
 
   def url
-    TariffSynchronizer.chief_update_url_template % { host: TariffSynchronizer.host, file_name: file_name }
+    format(chief_update_url_template, host: host, file_name: file_name)
   end
 
   private
