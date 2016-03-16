@@ -2,19 +2,10 @@ require 'rails_helper'
 require 'tariff_synchronizer'
 
 describe TariffSynchronizer::Logger, truncation: true do
-  include ActiveSupport::LogSubscriber::TestHelper
-
   before(:all) { WebMock.disable_net_connect! }
   after(:all)  { WebMock.allow_net_connect! }
 
-  before {
-    setup # ActiveSupport::LogSubscriber::TestHelper.setup
-
-    allow_any_instance_of(
-      TariffSynchronizer::Logger
-    ).to receive(:logger).and_return(@logger)
-    TariffSynchronizer::Logger.attach_to :tariff_synchronizer
-  }
+  before { tariff_synchronizer_logger_listener }
 
   describe '#download logging' do
     before {
