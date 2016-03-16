@@ -7,7 +7,7 @@ describe TaricFileNameGenerator do
 
   describe "#url" do
     it "returns the expected url to have the taric file for a specific date" do
-      expect(taric_file_name_generator.url).to eq("/taric/TARIC320100101")
+      expect(taric_file_name_generator.url).to eq("http://example.com/taric/TARIC320100101")
     end
   end
 end

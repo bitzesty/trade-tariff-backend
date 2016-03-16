@@ -13,7 +13,7 @@ describe ChiefFileNameGenerator do
 
   describe "#url" do
     it "returns the expected url to have the chief file for a specific date" do
-      expect(chief_file_name.url).to eq("/taric/KBT009(10001).txt")
+      expect(chief_file_name.url).to eq("http://example.com/taric/KBT009(10001).txt")
     end
   end
 end

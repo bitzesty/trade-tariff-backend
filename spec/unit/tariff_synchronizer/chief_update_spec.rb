@@ -23,10 +23,7 @@ describe TariffSynchronizer::ChiefUpdate do
 
     context 'has permission to write update file' do
       context 'single file for the day is found' do
-        before do
-          TariffSynchronizer.host = "http://example.com"
-          prepare_synchronizer_folders
-        end
+        before { prepare_synchronizer_folders }
 
         context 'file for the day not downloaded yet' do
           it 'downloads CHIEF file for specific date' do
@@ -168,7 +165,6 @@ describe TariffSynchronizer::ChiefUpdate do
 
     context 'has no permissions to write update file' do
       before do
-        TariffSynchronizer.host = "http://example.com"
         prepare_synchronizer_folders
 
         File.chmod(0500, File.join(TariffSynchronizer.root_path, 'chief'))
@@ -186,10 +182,10 @@ describe TariffSynchronizer::ChiefUpdate do
         ).to be_falsy
       end
 
-      after  {
+      after do
         File.chmod(0755, File.join(TariffSynchronizer.root_path, 'chief'))
         purge_synchronizer_folders
-      }
+      end
     end
   end
 

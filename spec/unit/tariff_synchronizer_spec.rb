@@ -26,11 +26,10 @@ describe TariffSynchronizer, truncation: true do
     end
 
     context 'sync variables are not set' do
-      before {
+      before do
         TariffSynchronizer.username = nil
         TariffSynchronizer.password = nil
-        TariffSynchronizer.host = nil
-      }
+      end
 
       it 'does not start sync process' do
         expect(TariffSynchronizer::TaricUpdate).to_not receive(:sync)
