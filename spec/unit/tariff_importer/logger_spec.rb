@@ -2,14 +2,7 @@ require 'rails_helper'
 require 'tariff_importer'
 
 describe TariffImporter::Logger do
-  include ActiveSupport::LogSubscriber::TestHelper
-
-  before {
-    setup # ActiveSupport::LogSubscriber::TestHelper.setup
-
-    TariffImporter::Logger.attach_to :tariff_importer
-    TariffImporter::Logger.logger = @logger
-  }
+  before { tariff_importer_logger_listener }
 
   describe '#chief_imported logging' do
     let(:valid_file) { "spec/fixtures/chief_samples/KBT009\(12044\).txt" }
