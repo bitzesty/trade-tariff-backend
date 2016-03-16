@@ -1,6 +1,5 @@
 require 'rails_helper'
 require 'chief_transformer'
-require 'active_support/log_subscriber/test_helper'
 
 describe ChiefTransformer::Logger do
   include ActiveSupport::LogSubscriber::TestHelper

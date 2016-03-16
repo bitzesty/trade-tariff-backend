@@ -1,6 +1,5 @@
 require 'rails_helper'
 require 'tariff_importer'
-require 'active_support/log_subscriber/test_helper'
 
 describe TariffImporter::Logger do
   include ActiveSupport::LogSubscriber::TestHelper

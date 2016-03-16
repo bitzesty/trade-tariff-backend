@@ -1,6 +1,5 @@
 require 'rails_helper'
 require 'tariff_synchronizer'
-require 'active_support/log_subscriber/test_helper'
 
 describe TariffSynchronizer::Logger, truncation: true do
   include ActiveSupport::LogSubscriber::TestHelper
