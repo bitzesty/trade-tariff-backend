@@ -1,19 +1,17 @@
-require 'csv'
-
-require 'tariff_importer'
-require 'chief_importer/entry'
-require 'chief_importer/start_entry'
-require 'chief_importer/end_entry'
-require 'chief_importer/change_entry'
-
-require 'chief_importer/strategies/base_strategy'
-require 'chief_importer/strategies/strategies'
+require "csv"
+require "tariff_importer"
+require "chief_importer/entry"
+require "chief_importer/start_entry"
+require "chief_importer/end_entry"
+require "chief_importer/change_entry"
+require "chief_importer/strategies/base_strategy"
+require "chief_importer/strategies/strategies"
 
 class ChiefImporter < TariffImporter
   class ImportException < StandardError
     attr_reader :original
 
-    def initialize(msg = "ChiefImporter::ImportException", original=$!)
+    def initialize(msg = "ChiefImporter::ImportException", original = $!)
       super(msg)
       @original = original
     end
@@ -41,14 +39,14 @@ class ChiefImporter < TariffImporter
   end
 
   def import
-    CSV.foreach(path, encoding: 'ISO-8859-1') do |line|
+    CSV.foreach(path, encoding: "ISO-8859-1") do |line|
       entry = Entry.build(line)
 
       if entry.is_a?(StartEntry)
         @start_entry = entry
       elsif entry.is_a?(EndEntry)
         @end_entry = entry
-      else # means it's ChangeEntry
+      else # means it"s ChangeEntry
         next unless entry.relevant?
         entry.origin = file_name
         entry.process!
@@ -56,16 +54,13 @@ class ChiefImporter < TariffImporter
     end
 
     ActiveSupport::Notifications.instrument("chief_imported.tariff_importer",
-      path: path,
-      date: extraction_date,
-      count: record_count
-    )
-
+                                             path: path,
+                                             date: extraction_date,
+                                             count: record_count)
   rescue => exception
     ActiveSupport::Notifications.instrument("chief_failed.tariff_importer",
-      path: path,
-      exception: exception
-    )
+                                              path: path,
+                                              exception: exception)
 
     raise ImportException.new(exception.message, exception)
   end
