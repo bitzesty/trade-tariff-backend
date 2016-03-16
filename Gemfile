@@ -52,15 +52,11 @@ group :development, :test do
 end
 
 group :test do
-  gem "test-unit", "~> 3.1"
-  gem "ci_reporter_rspec"
   gem "factory_girl_rails"
   gem "fakefs", require: "fakefs/safe"
   gem "forgery"
   gem "json_expressions"
-  gem "minitest", "~> 5.5"
   gem "rspec-rails", "~> 3.3"
-  gem "shoulda-matchers", "~> 2.8"
   gem "simplecov"
   gem "simplecov-rcov"
   gem "webmock"
