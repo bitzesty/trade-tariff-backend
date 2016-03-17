@@ -32,4 +32,9 @@ Rails.application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  # Configure Rails.logger to log to both STDOUT and development.log file.
+  config.log_level = :info
+  file_logger = Logger.new(Rails.root.join("log", "development.log"))
+  config.logger = file_logger.extend(ActiveSupport::Logger.broadcast(Logger.new(STDOUT)))
 end
