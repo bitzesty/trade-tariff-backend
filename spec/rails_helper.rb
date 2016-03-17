@@ -28,6 +28,7 @@ Dir[Rails.root.join("app/models/*.rb")].each {|f| require f}
 Dir[Rails.root.join("app/serializers/*.rb")].each {|f| require f}
 
 RSpec.configure do |config|
+  config.use_transactional_fixtures = false
   config.raise_errors_for_deprecations!
   config.mock_with :rspec
   config.order = "random"
