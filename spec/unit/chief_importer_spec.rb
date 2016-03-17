@@ -3,13 +3,6 @@ require "tariff_importer"
 require "chief_importer"
 
 describe ChiefImporter do
-  describe "initialization" do
-    it "assigns path" do
-      importer = ChiefImporter.new("spec/fixtures/chief_samples/KBT009\(12044\).txt")
-      expect(importer.path.to_s).to eq "spec/fixtures/chief_samples/KBT009\(12044\).txt"
-    end
-  end
-
   describe "#import" do
 
     context "when provided with valid chief file" do

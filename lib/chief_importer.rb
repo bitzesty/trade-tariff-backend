@@ -44,7 +44,7 @@ class ChiefImporter < TariffImporter
         @start_entry = entry
       elsif entry.is_a?(EndEntry)
         @end_entry = entry
-      else # means it"s ChangeEntry
+      else # means it's ChangeEntry
         next unless entry.relevant?
         entry.origin = file_name
         entry.process!
