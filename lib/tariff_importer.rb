@@ -13,9 +13,9 @@ class TariffImporter
     @issue_date = issue_date
   end
 
-  # def importer_logger(key, payload)
-  #   ActiveSupport::Notifications.instrument("#{key}.tariff_importer", payload)
-  # end
+  def importer_logger(key, payload)
+    ActiveSupport::Notifications.instrument("#{key}.tariff_importer", payload)
+  end
 
   class FileNotFoundError < StandardError
   end

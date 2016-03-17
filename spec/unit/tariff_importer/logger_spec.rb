@@ -4,14 +4,10 @@ require 'tariff_importer'
 describe TariffImporter::Logger do
   before { tariff_importer_logger_listener }
 
-  describe '#chief_imported logging' do
-    let(:valid_file) { "spec/fixtures/chief_samples/KBT009\(12044\).txt" }
-
-    before { ChiefImporter.new(valid_file).import }
-
-    it 'logs an info event' do
-      expect(@logger.logged(:info).size).to eq 1
-      expect(@logger.logged(:info).last).to match /Parsed (.*) CHIEF records/
+  describe '#chief_imported' do
+    it 'logs an info event with count date and path' do
+      log = TariffImporter::Logger.new.chief_imported(chief_imported_event)
+      expect(log[0]).to eq "Parsed 5 CHIEF records for 2012-12-21 at file.xml"
     end
   end
 
@@ -68,5 +64,9 @@ describe TariffImporter::Logger do
     it 'raises ImportException' do
       expect { TaricImporter.new(unknown_file).import }.to raise_error TaricImporter::ImportException
     end
+  end
+
+  def chief_imported_event
+    double("event", payload: {count: '5', date: '2012-12-21', path: 'file.xml'})
   end
 end

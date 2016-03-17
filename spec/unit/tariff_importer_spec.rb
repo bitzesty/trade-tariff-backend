@@ -23,4 +23,12 @@ describe TariffImporter do
       }.to raise_error(TariffImporter::FileNotFoundError)
     end
   end
+
+  describe "#importer_logger" do
+    it "triggers a call to the tariff importer logger" do
+      expect(ActiveSupport::Notifications).to receive(:instrument)
+                                              .with("chief_imported.tariff_importer", {:x=>"y"})
+      TariffImporter.new(valid_path).importer_logger("chief_imported", x: "y")
+    end
+  end
 end

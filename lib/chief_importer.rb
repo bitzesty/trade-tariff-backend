@@ -52,11 +52,7 @@ class ChiefImporter < TariffImporter
         entry.process!
       end
     end
-
-    ActiveSupport::Notifications.instrument("chief_imported.tariff_importer",
-                                             path: path,
-                                             date: extraction_date,
-                                             count: record_count)
+    importer_logger("chief_imported",path: path, date: extraction_date, count: record_count)
   rescue => exception
     ActiveSupport::Notifications.instrument("chief_failed.tariff_importer",
                                               path: path,
