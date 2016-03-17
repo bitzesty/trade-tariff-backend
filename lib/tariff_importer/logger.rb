@@ -1,9 +1,6 @@
 class TariffImporter
   class Logger < ActiveSupport::LogSubscriber
-    cattr_accessor :logger
-    self.logger = ::Logger.new('log/tariff_importer.log')
-    self.logger.formatter = TradeTariffBackend.log_formatter
-
+    
     def chief_imported(event)
       info "Parsed #{event.payload[:count]} CHIEF records for #{event.payload[:date]} at #{event.payload[:path]}"
     end
