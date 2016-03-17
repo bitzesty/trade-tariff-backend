@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Api::V1::RollbacksController, "POST to #create", sidekiq: :inline do
+describe Api::V1::RollbacksController, "POST to #create" do
   render_views
 
   before { login_as_api_user }
