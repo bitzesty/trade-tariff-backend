@@ -56,9 +56,12 @@ describe ChiefImporter do
     context "when provided with malformed sample" do
       let(:invalid_file) { "spec/fixtures/chief_samples/malformed_sample.txt" }
 
-      it "raises ChiefImportException" do
+      it "raises ChiefImportException and sends a log" do
+        tariff_importer_logger_listener
         @importer = ChiefImporter.new(invalid_file)
         expect { @importer.import }.to raise_error ChiefImporter::ImportException
+        expect(@logger.logged(:error).size).to eq 1
+        expect(@logger.logged(:error).last).to match /CHIEF import of (.*) failed/
       end
     end
   end
