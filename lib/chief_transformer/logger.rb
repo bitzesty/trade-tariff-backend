@@ -1,9 +1,6 @@
 class ChiefTransformer
   class Logger < ActiveSupport::LogSubscriber
-    cattr_accessor :logger
-    self.logger = ::Logger.new('log/chief_transformer.log')
-    self.logger.formatter = TradeTariffBackend.log_formatter
-
+    
     def start_transform(event)
       info "CHIEF Transformer started in #{event.payload[:mode]} mode"
     end

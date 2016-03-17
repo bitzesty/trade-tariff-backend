@@ -1,38 +1,22 @@
 require 'rails_helper'
 require 'tariff_importer'
-require 'active_support/log_subscriber/test_helper'
 
 describe TariffImporter::Logger do
-  include ActiveSupport::LogSubscriber::TestHelper
+  before { tariff_importer_logger_listener }
 
-  before {
-    setup # ActiveSupport::LogSubscriber::TestHelper.setup
-
-    TariffImporter::Logger.attach_to :tariff_importer
-    TariffImporter::Logger.logger = @logger
-  }
-
-  describe '#chief_imported logging' do
-    let(:valid_file) { "spec/fixtures/chief_samples/KBT009\(12044\).txt" }
-
-    before { ChiefImporter.new(valid_file).import }
-
-    it 'logs an info event' do
-      expect(@logger.logged(:info).size).to eq 1
-      expect(@logger.logged(:info).last).to match /Parsed (.*) CHIEF records/
+  describe '#chief_imported' do
+    it 'logs an info event with count date and path' do
+      imported_event = double("event", payload: {count: '5', date: '2012-12-21', path: 'file.xml'})
+      log = TariffImporter::Logger.new.chief_imported(imported_event)
+      expect(log[0]).to eq "Parsed 5 CHIEF records for 2012-12-21 at file.xml"
     end
   end
 
-  describe '#chief_failed logging' do
-    let(:invalid_file) { "spec/fixtures/chief_samples/malformed_sample.txt" }
-
-    before {
-      rescuing { ChiefImporter.new(invalid_file).import }
-    }
-
-    it 'logs an info event' do
-      expect(@logger.logged(:error).size).to eq 1
-      expect(@logger.logged(:error).last).to match /CHIEF import (.*) failed/
+  describe '#chief_failed' do
+    it 'logs an error event with path and exception' do
+      failed_event = double("event", payload: {path: 'file.txt', exception: 'fail'})
+      log = TariffImporter::Logger.new.chief_failed(failed_event)
+      expect(log[0]).to eq "CHIEF import of #{Rails.root}/file.txt failed: Reason: fail"
     end
   end
 

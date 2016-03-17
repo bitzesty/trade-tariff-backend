@@ -1,16 +1,8 @@
 require 'rails_helper'
 require 'chief_transformer'
-require 'active_support/log_subscriber/test_helper'
 
 describe ChiefTransformer::Logger do
-  include ActiveSupport::LogSubscriber::TestHelper
-
-  before {
-    setup # ActiveSupport::LogSubscriber::TestHelper.setup
-
-    ChiefTransformer::Logger.attach_to :chief_transformer
-    ChiefTransformer::Logger.logger = @logger
-  }
+  before { chief_transformer_logger_listener }
 
   describe '#start_transform logging' do
     before { ChiefTransformer.instance.invoke }

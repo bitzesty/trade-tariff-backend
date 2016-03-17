@@ -1,21 +1,11 @@
 require 'rails_helper'
 require 'tariff_synchronizer'
-require 'active_support/log_subscriber/test_helper'
 
 describe TariffSynchronizer::Logger, truncation: true do
-  include ActiveSupport::LogSubscriber::TestHelper
-
   before(:all) { WebMock.disable_net_connect! }
   after(:all)  { WebMock.allow_net_connect! }
 
-  before {
-    setup # ActiveSupport::LogSubscriber::TestHelper.setup
-
-    allow_any_instance_of(
-      TariffSynchronizer::Logger
-    ).to receive(:logger).and_return(@logger)
-    TariffSynchronizer::Logger.attach_to :tariff_synchronizer
-  }
+  before { tariff_synchronizer_logger_listener }
 
   describe '#download logging' do
     before {
@@ -176,7 +166,7 @@ describe TariffSynchronizer::Logger, truncation: true do
     }
 
     before {
-      allow_any_instance_of(TariffImporter).to receive(:file_exists?).and_return true
+      allow(File).to receive(:exist?).and_return true
       allow_any_instance_of(TariffSynchronizer::BaseUpdate).to receive(:file_exists?).and_return true
       allow_any_instance_of(TaricImporter).to receive(:import) {
         Measure.first
@@ -349,7 +339,7 @@ describe TariffSynchronizer::Logger, truncation: true do
     before {
       # Test in isolation, file is not actually in the file system
       # so bypass the check
-      expect(File).to receive(:exists?)
+      expect(File).to receive(:exist?)
                   .with(chief_update.file_path)
                   .twice
                   .and_return(true)
@@ -392,7 +382,7 @@ describe TariffSynchronizer::Logger, truncation: true do
     before {
       # Test in isolation, file is not actually in the file system
       # so bypass the check
-      expect(File).to receive(:exists?)
+      expect(File).to receive(:exist?)
                   .with(taric_update.file_path)
                   .twice
                   .and_return(true)

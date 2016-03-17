@@ -1,20 +1,6 @@
 module TariffSynchronizer
   class Logger < ActiveSupport::LogSubscriber
 
-    def logger
-      @logger ||= begin
-        file_logger = ::Logger.new('log/tariff_synchronizer.log')
-        file_logger.formatter = TradeTariffBackend.log_formatter
-        if defined?(Rails) && Rails.env.development?
-          console_logger = ActiveSupport::Logger.new(STDOUT)
-          console_logger.formatter = TradeTariffBackend.log_formatter
-          console_logger.extend(ActiveSupport::Logger.broadcast(file_logger))
-        else
-          file_logger
-        end
-      end
-    end
-
     # Download all pending Taric and Chief updates
     def download(event)
       info "Finished downloading updates"

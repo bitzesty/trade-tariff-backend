@@ -28,6 +28,7 @@ Dir[Rails.root.join("app/models/*.rb")].each {|f| require f}
 Dir[Rails.root.join("app/serializers/*.rb")].each {|f| require f}
 
 RSpec.configure do |config|
+  config.use_transactional_fixtures = false
   config.raise_errors_for_deprecations!
   config.mock_with :rspec
   config.order = "random"
@@ -40,6 +41,7 @@ RSpec.configure do |config|
   config.include RSpec::Rails::RequestExampleGroup, type: :request, file_path: /spec\/api/
   config.include ControllerSpecHelper, type: :controller
   config.include SynchronizerHelper
+  config.include LoggerHelper
   config.include RescueHelper
   config.include ChiefDataHelper
   config.include ActiveSupport::Testing::TimeHelpers
