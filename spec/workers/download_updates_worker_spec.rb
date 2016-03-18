@@ -87,7 +87,7 @@ describe DownloadUpdatesWorker do
 
       it "Creates an Update entry with failed status when all retries fail" do
 
-        # Begin: Trigger the sidekiq_retries_exhausted block
+        # Trigger the sidekiq_retries_exhausted block
         params = { 'class' => 'DownloadUpdatesWorker',
                     'args' => [filename, path, string_date, :chief],
                     'retry_count' => 0, 'retry' => 1, 'dead' => false }
@@ -96,7 +96,6 @@ describe DownloadUpdatesWorker do
             raise "Invalid Status"
           end
         end.to raise_error(RuntimeError)
-        # End
 
         update = TariffSynchronizer::ChiefUpdate.last
         expect(update.filename).to eq(filename)
