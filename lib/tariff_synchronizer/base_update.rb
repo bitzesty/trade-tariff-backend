@@ -230,6 +230,19 @@ module TariffSynchronizer
         end
       end
 
+      def save_entry(date, state, filename, type, filesize = nil)
+        type = "TariffSynchronizer::#{type.to_s.classify}Update"
+
+        if state == :failed
+          state = FAILED_STATE
+        elsif state == :pending
+          state = PENDING_STATE
+        end
+
+        find_or_create(filename: filename, update_type: type, issue_date: date)
+          .update(state: state, filesize: filesize)
+      end
+
       def update_file_exists?(filename)
         dataset.where(filename: filename).present?
       end
