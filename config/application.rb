@@ -47,5 +47,8 @@ module TradeTariffBackend
 
     # Disable Rack::Cache.
     config.action_dispatch.rack_cache = nil
+
+    # Configure schema format
+    config.sequel.schema_format = :sql
   end
 end

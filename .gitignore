@@ -18,9 +18,7 @@ pickle-email-*.html
 ERD.pdf
 data/*/*.xml
 data/*/*.txt
-*.sql
 *.sql.bz2
-db/schema.rb
 spec/coverage
 .rbenv-version
 /spec/reports
