@@ -1,5 +1,5 @@
-require 'rails_helper'
-require 'tariff_synchronizer'
+require "rails_helper"
+require "tariff_synchronizer"
 
 describe TariffSynchronizer::FileService do
   let(:klass) {
@@ -8,34 +8,25 @@ describe TariffSynchronizer::FileService do
     end
   }
 
-  describe '.download_content' do
-    context 'partial content received' do
-      before {
+  describe ".download_content" do
+    context "partial content received" do
+      it "raises DownloadException" do
         allow_any_instance_of(Curl::Easy).to receive(:perform).and_raise(Curl::Err::PartialFileError)
-      }
-
-      it 'raises DownloadException' do
-        expect { klass.download_content("http://localhost:9999/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
+        expect { klass.download_content("http://example/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
       end
     end
 
-    context 'unable to connect' do
-      before {
+    context "unable to connect" do
+      it "raises DownloadException" do
         allow_any_instance_of(Curl::Easy).to receive(:perform).and_raise(Curl::Err::ConnectionFailedError)
-      }
-
-      it 'raises DownloadException' do
-        expect { klass.download_content("http://localhost:9999/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
+        expect { klass.download_content("http://example/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
       end
     end
 
-    context 'host resultion error' do
-      before {
+    context "host resolution error" do
+      it "raises DownloadException" do
         allow_any_instance_of(Curl::Easy).to receive(:perform).and_raise(Curl::Err::HostResolutionError)
-      }
-
-      it 'raises DownloadException' do
-        expect { klass.download_content("http://localhost:9999/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
+        expect { klass.download_content("http://example/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
       end
     end
   end
