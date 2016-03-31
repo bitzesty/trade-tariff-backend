@@ -30,12 +30,8 @@ Dir[Rails.root.join("app/serializers/*.rb")].each {|f| require f}
 RSpec.configure do |config|
   config.use_transactional_fixtures = false
   config.raise_errors_for_deprecations!
-  config.mock_with :rspec
-  config.order = "random"
   config.infer_spec_type_from_file_location!
   config.infer_base_class_for_anonymous_controllers = false
-  config.filter_run focus: true
-  config.run_all_when_everything_filtered = true
   config.alias_it_should_behave_like_to :it_results_in, "it results in"
   config.alias_it_should_behave_like_to :it_is_associated, "it is associated"
   config.include RSpec::Rails::RequestExampleGroup, type: :request, file_path: /spec\/api/
