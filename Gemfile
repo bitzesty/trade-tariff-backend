@@ -40,10 +40,6 @@ group :production do
   gem "rails_12factor"
 end
 
-group :development do
-  gem "guard-rspec", "~> 4.6", require: false
-end
-
 group :development, :test do
   gem "pry-rails", "~> 0.3"
   gem "pry-nav"
