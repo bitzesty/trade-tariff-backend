@@ -48,6 +48,7 @@ group :development, :test do
   gem "pry-rails", "~> 0.3"
   gem "pry-nav"
   gem "brakeman", "~> 3.0", require: false
+  gem "rspec-rails", "~> 3.3"
 end
 
 group :test do
@@ -55,7 +56,6 @@ group :test do
   gem "fakefs", require: "fakefs/safe"
   gem "forgery"
   gem "json_expressions"
-  gem "rspec-rails", "~> 3.3"
   gem "simplecov"
   gem "simplecov-rcov"
   gem "webmock"
