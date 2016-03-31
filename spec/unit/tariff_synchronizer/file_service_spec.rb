@@ -29,5 +29,18 @@ describe TariffSynchronizer::FileService do
         expect { klass.download_content("http://example/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
       end
     end
+
+    it "returns response object if the request is successful" do
+      stub_request(:get, "http://example/test").to_return(body: "abc")
+      response = klass.download_content("http://example/test")
+      expect(response.content).to eq("abc")
+      expect(response.response_code).to eq(200)
+    end
+
+    it "returns retry_count_exceeded? as true when not valid request" do
+      stub_request(:get, "http://example/test").to_return(status: 401)
+      response = klass.download_content("http://example/test")
+      expect(response.retry_count_exceeded?).to be_truthy
+    end
   end
 end
