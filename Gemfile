@@ -41,8 +41,7 @@ group :production do
 end
 
 group :development do
-  gem "capistrano", "~> 3.4"
-  gem "guard-rspec", "~> 4.6"
+  gem "guard-rspec", "~> 4.6", require: false
 end
 
 group :development, :test do
