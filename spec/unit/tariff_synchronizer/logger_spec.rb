@@ -285,15 +285,14 @@ describe TariffSynchronizer::Logger, truncation: true do
   describe '#not_found_on_file_system logging' do
     let(:taric_update) { create :taric_update }
 
-    before {
+    before do
       expect(TariffSynchronizer::TaricUpdate).to receive(:download)
                                      .with(taric_update.issue_date)
                                      .and_return(true)
-    }
+      taric_update.file_exists?
+    end
 
     context "errors" do
-      before { taric_update.file_exists? }
-
       it 'logs an error event' do
         expect(@logger.logged(:error).size).to eq 1
         expect(@logger.logged(:error).last).to match /Update not found on file system/
@@ -304,14 +303,6 @@ describe TariffSynchronizer::Logger, truncation: true do
         email = ActionMailer::Base.deliveries.last
         expect(email.encoded).to match /was not found/
       end
-    end
-
-    context "applies the update" do
-      it {
-        expect {
-          taric_update.apply
-        }.to raise_error(Sequel::Rollback)
-      }
     end
   end
 
@@ -509,10 +500,13 @@ describe TariffSynchronizer::Logger, truncation: true do
 
     before {
       # Download mock response
-      expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
+      allow(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
                                              .and_return(success_response)
+      # Stub creation of the record
+      allow(TariffSynchronizer::ChiefUpdate).to receive(:create_update_entry)
+                                             .and_return(nil)
       # Simulate I/O exception
-      expect(File).to receive(:open).and_raise(Errno::EACCES)
+      allow(File).to receive(:open).and_raise(Errno::EACCES)
       # Actual Download
       TariffSynchronizer::ChiefUpdate.download(Date.today)
     }
@@ -549,10 +543,9 @@ describe TariffSynchronizer::Logger, truncation: true do
 
   describe '#missing_updates' do
     let(:not_found_response) { build :response, :not_found }
-    let!(:chief_update1) { create :chief_update, :missing, issue_date: Date.today.ago(2.days) }
-    let!(:chief_update2) { create :chief_update, :missing, issue_date: Date.today.ago(3.days) }
-
     before {
+      create :chief_update, :missing, issue_date: Date.today.ago(2.days)
+      create :chief_update, :missing, issue_date: Date.today.ago(3.days)
       allow(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
                                             .and_return(not_found_response)
       TariffSynchronizer::ChiefUpdate.sync
