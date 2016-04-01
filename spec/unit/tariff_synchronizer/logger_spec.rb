@@ -324,28 +324,6 @@ describe TariffSynchronizer::Logger, truncation: true do
     end
   end
 
-  describe '#apply_chief logging' do
-    let(:chief_update) { create :chief_update }
-
-    before {
-      # Test in isolation, file is not actually in the file system
-      # so bypass the check
-      expect(File).to receive(:exist?)
-                  .with(chief_update.file_path)
-                  .twice
-                  .and_return(true)
-
-      rescuing {
-        chief_update.apply
-      }
-    }
-
-    it 'logs an info event' do
-      expect(@logger.logged(:info).size).to eq 1
-      expect(@logger.logged(:info).last).to match /Applied CHIEF update/
-    end
-  end
-
   describe '#download_taric logging' do
     let(:success_response) { build :response, :success }
     let(:query_response) { build :response, :success, :content => 'file_name', :url => 'url' }
