@@ -33,7 +33,7 @@ module TariffSynchronizer
   self.host = ENV["TARIFF_SYNC_HOST"]
 
   mattr_accessor :root_path
-  self.root_path = Rails.env.test? ? "tmp/data" : "data"
+  self.root_path = "data"
 
   # Numer of seconds to sleep between sync retries
   mattr_accessor :request_throttle

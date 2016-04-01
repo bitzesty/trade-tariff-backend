@@ -1,6 +1,8 @@
 require 'rails_helper'
 
-describe ImportSearchReferences, :with_fakefs do
+describe ImportSearchReferences do
+  include FakeFS::SpecHelpers
+
   let(:file_name) { 'green-pages.csv' }
 
   describe '.reload' do

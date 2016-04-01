@@ -211,12 +211,11 @@ describe TariffSynchronizer::ChiefUpdate do
 
   describe "#apply", truncation: true do
     let(:example_date) { Forgery(:date).date }
-    let(:state) { :pending }
     let!(:example_chief_update) { create :chief_update, example_date: example_date }
 
     before do
       prepare_synchronizer_folders
-      create_chief_file state, example_date
+      create_chief_file :pending, example_date
     end
 
     it 'sets applied_at' do
@@ -230,6 +229,13 @@ describe TariffSynchronizer::ChiefUpdate do
       expect(TariffImporter).to receive(:new).and_return(mock_importer)
 
       TariffSynchronizer::ChiefUpdate.first.apply
+    end
+
+    it 'logs an info event' do
+      tariff_synchronizer_logger_listener
+      TariffSynchronizer::ChiefUpdate.first.apply
+      expect(@logger.logged(:info).size).to eq 1
+      expect(@logger.logged(:info).last).to match /Applied CHIEF update/
     end
 
     it 'updates file entry state to processed' do

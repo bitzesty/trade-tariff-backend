@@ -1,5 +1,5 @@
-require 'rails_helper'
-require 'tariff_synchronizer'
+require "rails_helper"
+require "tariff_synchronizer"
 
 describe TariffSynchronizer::FileService do
   let(:klass) {
@@ -8,35 +8,39 @@ describe TariffSynchronizer::FileService do
     end
   }
 
-  describe '.download_content' do
-    context 'partial content received' do
-      before {
-        allow_any_instance_of(Curl::Easy).to receive(:perform).and_raise(Curl::Err::PartialFileError)
-      }
-
-      it 'raises DownloadException' do
-        expect { klass.download_content("http://localhost:9999/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
+  describe ".download_content" do
+    context "partial content received" do
+      it "raises DownloadException" do
+        stub_request(:get, "http://example/test").to_raise(Curl::Err::PartialFileError)
+        expect { klass.download_content("http://example/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
       end
     end
 
-    context 'unable to connect' do
-      before {
-        allow_any_instance_of(Curl::Easy).to receive(:perform).and_raise(Curl::Err::ConnectionFailedError)
-      }
-
-      it 'raises DownloadException' do
-        expect { klass.download_content("http://localhost:9999/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
+    context "unable to connect" do
+      it "raises DownloadException" do
+        stub_request(:get, "http://example/test").to_raise(Curl::Err::ConnectionFailedError)
+        expect { klass.download_content("http://example/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
       end
     end
 
-    context 'host resultion error' do
-      before {
-        allow_any_instance_of(Curl::Easy).to receive(:perform).and_raise(Curl::Err::HostResolutionError)
-      }
-
-      it 'raises DownloadException' do
-        expect { klass.download_content("http://localhost:9999/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
+    context "host resolution error" do
+      it "raises DownloadException" do
+        stub_request(:get, "http://example/test").to_raise(Curl::Err::HostResolutionError)
+        expect { klass.download_content("http://example/test") }.to raise_error TariffSynchronizer::FileService::DownloadException
       end
+    end
+
+    it "returns response object if the request is successful" do
+      stub_request(:get, "http://example/test").to_return(body: "abc")
+      response = klass.download_content("http://example/test")
+      expect(response.content).to eq("abc")
+      expect(response.response_code).to eq(200)
+    end
+
+    it "returns retry_count_exceeded? as true when not valid request" do
+      stub_request(:get, "http://example/test").to_return(status: 401)
+      response = klass.download_content("http://example/test")
+      expect(response.retry_count_exceeded?).to be_truthy
     end
   end
 end
