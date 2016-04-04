@@ -42,8 +42,6 @@ module SynchronizerHelper
 
     taric_file_path = File.join(TariffSynchronizer.root_path, 'taric', "#{date}_TGB#{date.strftime("%y")}#{date.yday}.xml")
     create_file taric_file_path, content
-
-    Pathname.new(taric_file_path)
   end
 
   def create_chief_file(state, date = Date.today)
@@ -67,14 +65,12 @@ CSV
     day = sprintf('%03d', date.yday)
     chief_file_path = File.join(TariffSynchronizer.root_path, 'chief', "#{date}_KBT009(#{date.strftime("%y")}#{day}).txt")
     create_file chief_file_path, content
-
-    Pathname.new(chief_file_path)
   end
 
   def prepare_synchronizer_folders
-    FileUtils.mkdir_p File.join(Rails.root, TariffSynchronizer.root_path)
-    FileUtils.mkdir_p File.join(Rails.root, TariffSynchronizer.root_path, 'taric')
-    FileUtils.mkdir_p File.join(Rails.root, TariffSynchronizer.root_path, 'chief')
+    FileUtils.mkdir_p File.join(TariffSynchronizer.root_path)
+    FileUtils.mkdir_p File.join(TariffSynchronizer.root_path, 'taric')
+    FileUtils.mkdir_p File.join(TariffSynchronizer.root_path, 'chief')
   end
 
   def purge_synchronizer_folders
