@@ -215,7 +215,7 @@ describe TariffSynchronizer::ChiefUpdate do
 
     before do
       prepare_synchronizer_folders
-      create_chief_file :pending, example_date
+      create_chief_file example_date
     end
 
     it 'sets applied_at' do
@@ -266,7 +266,7 @@ describe TariffSynchronizer::ChiefUpdate do
   describe '.rebuild' do
     before {
       prepare_synchronizer_folders
-      create_chief_file :pending, example_date
+      create_chief_file example_date
     }
 
     context 'entry for the day/update does not exist yet' do

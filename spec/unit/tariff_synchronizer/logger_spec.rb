@@ -65,7 +65,7 @@ describe TariffSynchronizer::Logger, truncation: true do
 
       before {
         prepare_synchronizer_folders
-        create_taric_file :pending, example_date
+        create_taric_file example_date
 
         Footnote.unrestrict_primary_key
 
@@ -125,7 +125,7 @@ describe TariffSynchronizer::Logger, truncation: true do
 
       before {
         prepare_synchronizer_folders
-        create_taric_file :pending, example_date
+        create_taric_file example_date
 
         Footnote.unrestrict_primary_key
 

@@ -7,17 +7,15 @@ describe TariffSynchronizer do
     let!(:taric_update) { create :taric_update, example_date: example_date }
     let!(:chief_update) { create :chief_update, example_date: example_date }
 
-
-    before {
+    before do
       prepare_synchronizer_folders
-      create_taric_file :pending, example_date
-      create_chief_file :pending, example_date
-    }
+      create_taric_file example_date
+      create_chief_file example_date
+    end
 
-    after  {
+    after  do
       purge_synchronizer_folders
-    }
-
+    end
 
     context 'when chief fails' do
       before do
