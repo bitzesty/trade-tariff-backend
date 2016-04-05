@@ -4,7 +4,7 @@ require 'tariff_synchronizer'
 describe TariffSynchronizer::TaricUpdate do
   it_behaves_like 'Base Update'
 
-  let(:example_date)      { Forgery(:date).date }
+  let(:example_date) { Forgery(:date).date }
 
   describe '.download' do
     let(:taric_update_name)  { "TGB#{example_date.strftime("%y")}#{example_date.yday}.xml" }
@@ -400,6 +400,47 @@ describe TariffSynchronizer::TaricUpdate do
 
         expect(TariffSynchronizer::BaseUpdate.count).to eq 1
       end
+    end
+  end
+
+  describe "#import!" do
+
+    let(:taric_update) { create :taric_update}
+
+    before do
+      # stub the file_path method to return a valid path of a real file.
+      allow(taric_update).to receive(:file_path)
+                              .and_return("spec/fixtures/taric_samples/insert_record.xml")
+
+    end
+
+    it "Calls the TaricImporter import method" do
+      taric_importer = instance_double("TaricImporter")
+      expect(TaricImporter).to receive(:new).with(taric_update.file_path,
+                                                  taric_update.issue_date)
+                                                  .and_return(taric_importer)
+      expect(taric_importer).to receive(:import)
+      taric_update.import!
+    end
+
+    it "Updates the filesize attribute of the Taric update" do
+      allow_any_instance_of(TaricImporter).to receive(:import)
+      taric_update.import!
+      expect(taric_update.filesize).to eq(1553)
+    end
+
+    it "Mark the Taric update as applied" do
+      allow_any_instance_of(TaricImporter).to receive(:import)
+      taric_update.import!
+      expect(taric_update.reload).to be_applied
+    end
+
+    it 'logs an info event' do
+      tariff_synchronizer_logger_listener
+      allow_any_instance_of(TaricImporter).to receive(:import)
+      taric_update.import!
+      expect(@logger.logged(:info).size).to eq 1
+      expect(@logger.logged(:info).last).to match /Applied TARIC update/
     end
   end
 end
