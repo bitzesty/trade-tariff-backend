@@ -3,18 +3,25 @@ require 'tariff_synchronizer'
 
 describe TariffSynchronizer do
   describe '#apply', truncation: true do
-    let(:example_date)  { Date.current }
     let!(:taric_update) { create :taric_update, example_date: example_date }
     let!(:chief_update) { create :chief_update, example_date: example_date }
 
-    before do
+    before(:context) do
       prepare_synchronizer_folders
       create_taric_file example_date
       create_chief_file example_date
     end
 
-    after  do
+    after(:context) do
       purge_synchronizer_folders
+    end
+
+    context "when everything is fine" do
+      it "applies missing updates" do
+        TariffSynchronizer.apply
+        expect(taric_update.reload).to be_applied
+        expect(chief_update.reload).to be_applied
+      end
     end
 
     context 'when chief fails' do
@@ -48,14 +55,6 @@ describe TariffSynchronizer do
         rescuing { TariffSynchronizer.apply }
         expect(taric_update.reload).to be_failed
         expect(chief_update.reload).to be_pending
-      end
-    end
-
-    context 'when everything is fine' do
-      it 'applies missing updates' do
-        TariffSynchronizer.apply
-        expect(taric_update.reload).to be_applied
-        expect(chief_update.reload).to be_applied
       end
     end
 
@@ -176,5 +175,9 @@ describe TariffSynchronizer do
         expect { older_update.reload }.not_to raise_error
       end
     end
+  end
+
+  def example_date
+    @example_date ||= Date.current
   end
 end
