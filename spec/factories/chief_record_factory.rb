@@ -328,43 +328,6 @@ FactoryGirl.define do
     footn_id { Forgery(:basic).text(exactly: 3).upcase }
   end
 
-  factory :base_update, class: TariffSynchronizer::BaseUpdate do
-    transient do
-      example_date { Forgery(:date).date }
-    end
-
-    filename { Forgery(:basic).text }
-    issue_date { example_date }
-    state { 'P' }
-
-    trait :applied do
-      state { 'A' }
-    end
-
-    trait :pending do
-      state { 'P' }
-    end
-
-    trait :failed do
-      state { 'F' }
-    end
-
-    trait :missing do
-      state { 'M' }
-    end
-  end
-
-  factory :chief_update, parent: :base_update, class: TariffSynchronizer::ChiefUpdate do
-    filename { ChiefFileNameGenerator.new(example_date).name  }
-    update_type { 'TariffSynchronizer::ChiefUpdate' }
-  end
-
-  factory :taric_update, parent: :base_update, class: TariffSynchronizer::TaricUpdate do
-    issue_date { example_date }
-    filename { TariffSynchronizer::TaricUpdate.file_name_for(example_date, "TGB#{example_date.strftime("%y")}#{example_date.yday}.xml")  }
-    update_type { 'TariffSynchronizer::TaricUpdate' }
-  end
-
   factory :response, class: TariffSynchronizer::Response do
     url { Forgery::Internet.domain_name }
     response_code { [200, 404, 403].sample }

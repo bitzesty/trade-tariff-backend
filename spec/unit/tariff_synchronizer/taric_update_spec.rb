@@ -333,7 +333,7 @@ describe TariffSynchronizer::TaricUpdate do
 
     before {
       prepare_synchronizer_folders
-      create_taric_file :pending, example_date
+      create_taric_file example_date
     }
 
     it 'executes Taric importer' do
@@ -373,7 +373,7 @@ describe TariffSynchronizer::TaricUpdate do
   describe '.rebuild' do
     before {
       prepare_synchronizer_folders
-      create_taric_file :pending, example_date
+      create_taric_file example_date
     }
 
     after { purge_synchronizer_folders }
