@@ -97,10 +97,6 @@ module TariffSynchronizer
       update(state: APPLIED_STATE, applied_at: Time.now, last_error: nil, last_error_at: nil, exception_backtrace: nil, exception_class: nil)
     end
 
-    def update_file_size(file_path)
-      update(filesize: File.size(file_path))
-    end
-
     def mark_as_failed
       update(state: FAILED_STATE)
     end

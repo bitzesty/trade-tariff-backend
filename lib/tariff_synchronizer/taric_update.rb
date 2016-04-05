@@ -77,6 +77,10 @@ module TariffSynchronizer
 
     private
 
+    def update_file_size(file_path)
+      update(filesize: File.size(file_path))
+    end
+
     def self.validate_file!(response)
       begin
         Nokogiri::XML(response.content) do |config|
