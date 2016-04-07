@@ -87,7 +87,7 @@ describe TariffSynchronizer::TaricUpdate do
         it "marks an update as failed if the file contents cannot be parsed" do
           TariffSynchronizer::TaricUpdate.download(example_date)
           update_entry = TariffSynchronizer::TaricUpdate.last
-          expect(update_entry.exception_class).to include("XML::SyntaxError")
+          expect(update_entry.exception_class).to include("Ox::ParseError: invalid format")
         end
       end
     end

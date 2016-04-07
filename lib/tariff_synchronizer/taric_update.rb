@@ -71,10 +71,8 @@ module TariffSynchronizer
 
     def self.validate_file!(xml_string)
       begin
-        Nokogiri::XML(xml_string) do |config|
-          config.options = Nokogiri::XML::ParseOptions::STRICT
-        end
-      rescue Nokogiri::XML::SyntaxError => e
+        Ox.parse(xml_string)
+      rescue Ox::ParseError => e
         raise InvalidContents.new(e.message, e)
       else
         true
