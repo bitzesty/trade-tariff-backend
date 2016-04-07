@@ -34,6 +34,8 @@ describe TariffSynchronizer::TaricUpdate do
                                                         content: taric_update_name }
 
       before do
+        # Mock First request made to check if url can return multiple files
+        # In this case return only one reference.
         expect(TariffSynchronizer::TaricUpdate).to receive(:download_content)
                                        .with(taric_query_url)
                                        .and_return(query_response)
@@ -73,30 +75,19 @@ describe TariffSynchronizer::TaricUpdate do
       end
 
       describe "content validation" do
-        before {
-          expect(
-            TariffSynchronizer::TaricUpdate
-          ).to receive(:download_content)
-           .with(update_url)
-           .and_return(success_response)
-
-          allow(TariffSynchronizer::TaricUpdate).to receive(:validate_file!) do
-            original = Nokogiri::XML::SyntaxError.new
-            raise TariffSynchronizer::BaseUpdate::InvalidContents.new(
-              original.message,
-              original
-            )
-          end
-        }
-
-        let(:update_entry) {
-          TariffSynchronizer::TaricUpdate.last
-        }
+        before do
+          allow(TariffSynchronizer::TaricUpdate).to receive(:download_content)
+                                                    .with(update_url)
+                                                    .and_return(success_response)
+          # unstub
+          allow(TariffSynchronizer::TaricUpdate).to receive(:validate_file!)
+                                                    .and_call_original
+        end
 
         it "marks an update as failed if the file contents cannot be parsed" do
           TariffSynchronizer::TaricUpdate.download(example_date)
-
-          expect(update_entry.exception_class).to include("Nokogiri::XML::SyntaxError")
+          update_entry = TariffSynchronizer::TaricUpdate.last
+          expect(update_entry.exception_class).to include("XML::SyntaxError")
         end
       end
     end
