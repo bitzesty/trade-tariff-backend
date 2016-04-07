@@ -65,7 +65,7 @@ module TariffSynchronizer
 
   # TARIC update url template
   mattr_accessor :taric_update_url_template
-  self.taric_update_url_template = "%{host}/taric/%{file_name}"
+  self.taric_update_url_template = "%{host}/taric/%{filename}"
 
   # Number of days to warn about missing updates after
   mattr_accessor :warning_day_count
