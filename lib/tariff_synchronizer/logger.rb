@@ -82,14 +82,6 @@ module TariffSynchronizer
       Mailer.file_not_found_on_filesystem(event.payload[:path]).deliver_now
     end
 
-    def created_chief(event)
-      info "Created/Updated CHIEF entry for #{event.payload[:date]} and #{event.payload[:filename]}"
-    end
-
-    def created_taric(event)
-      info "Created/Updated TARIC entry for #{event.payload[:date]} and #{event.payload[:filename]}"
-    end
-
     def created_tariff(event)
       info "Created/Updated #{event.payload[:type].upcase}  entry for #{event.payload[:date]} and #{event.payload[:filename]}"
     end
@@ -98,19 +90,9 @@ module TariffSynchronizer
       info "Downloaded #{event.payload[:type].upcase} update for #{event.payload[:date]} at #{event.payload[:url]}, looking for file #{event.payload[:filename]}"
     end
 
-    # Download chief update
-    def download_chief(event)
-      info "Downloaded CHIEF update for #{event.payload[:date]} at #{event.payload[:url]}, looking for file #{event.payload[:filename]}"
-    end
-
     # Apply CHIEF update
     def apply_chief(event)
       info "Applied CHIEF update #{event.payload[:filename]}"
-    end
-
-    # Download TARIC update
-    def download_taric(event)
-      info "Downloaded TARIC update for #{event.payload[:date]} at #{event.payload[:url]}"
     end
 
     # Apply TARIC update
