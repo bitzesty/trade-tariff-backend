@@ -58,14 +58,14 @@ module TariffSynchronizer
     def import!
       instrument("apply_taric.tariff_synchronizer", filename: filename) do
         TaricImporter.new(file_path, issue_date).import
-        update_file_size(file_path)
+        update_file_size
         mark_as_applied
       end
     end
 
     private
 
-    def update_file_size(file_path)
+    def update_file_size
       update(filesize: File.size(file_path))
     end
 
