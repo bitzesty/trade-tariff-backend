@@ -69,9 +69,9 @@ module TariffSynchronizer
       update(filesize: File.size(file_path))
     end
 
-    def self.validate_file!(response)
+    def self.validate_file!(xml_string)
       begin
-        Nokogiri::XML(response.content) do |config|
+        Nokogiri::XML(xml_string) do |config|
           config.options = Nokogiri::XML::ParseOptions::STRICT
         end
       rescue Nokogiri::XML::SyntaxError => e

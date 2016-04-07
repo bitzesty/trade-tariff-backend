@@ -233,8 +233,7 @@ module TariffSynchronizer
       def rebuild
         Dir[File.join(Rails.root, TariffSynchronizer.root_path, update_type.to_s, '*')].each do |file_path|
           begin
-            contents = File.read(file_path)
-            validate_file!(OpenStruct.new(content: contents))
+            validate_file!(File.read(file_path))
             date, file_name = parse_file_path(file_path)
             create_update_entry(Date.parse(date), BaseUpdate::PENDING_STATE, Pathname.new(file_path).basename.to_s)
           rescue
@@ -268,7 +267,7 @@ module TariffSynchronizer
 
       def validate_and_create_update(date, response, file_name)
         begin
-          validate_file!(response)
+          validate_file!(response.content)
         rescue InvalidContents => e
           instrument("invalid_contents.tariff_synchronizer", date: date, url: response.url)
           exception = e.original

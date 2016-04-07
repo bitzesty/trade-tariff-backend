@@ -27,9 +27,9 @@ module TariffSynchronizer
 
     private
 
-    def self.validate_file!(response)
+    def self.validate_file!(cvs_string)
       begin
-        CSV.parse(response.content)
+        CSV.parse(cvs_string)
       rescue CSV::MalformedCSVError => e
         raise InvalidContents.new(e.message, e)
       else
