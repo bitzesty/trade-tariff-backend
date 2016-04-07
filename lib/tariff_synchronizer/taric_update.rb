@@ -1,36 +1,22 @@
 require 'tariff_synchronizer/base_update'
 require 'tariff_synchronizer/file_service'
 require 'tariff_synchronizer/taric_file_name_generator'
-require 'ostruct'
 
 module TariffSynchronizer
   class TaricUpdate < BaseUpdate
     class << self
 
       def download(date)
+        generator = TaricFileNameGenerator.new(date)
+        initial_url = generator.url
 
-        url = TaricFileNameGenerator.new(date).url
-
-        instrument("get_taric_update_name.tariff_synchronizer", date: date, url: url)
-        response = download_content(url)
+        instrument("get_taric_update_name.tariff_synchronizer", date: date, url: initial_url)
+        response = download_content(initial_url)
 
         if response.success?
           if response.content_present?
-            taric_updates = response.content.
-                              split("\n").
-                              map{|name| name.gsub(/[^0-9a-zA-Z\.]/i, '')}.
-                              map{|name|
-                                OpenStruct.new(
-                                  file_name: name,
-                                  url: TariffSynchronizer.taric_update_url_template % {
-                                         host: TariffSynchronizer.host,
-                                         file_name: name }
-                                )
-                              }
-
-            taric_updates.each do |taric_update|
-              local_file_name = "#{date}_#{taric_update.file_name}"
-              perform_download(local_file_name, taric_update.url, date)
+            generator.get_info_from_response(response.content).each do |update|
+              perform_download(update[:filename], update[:url], date)
             end
           else
             create_update_entry(date, BaseUpdate::FAILED_STATE, missing_update_name_for(date))
@@ -40,11 +26,11 @@ module TariffSynchronizer
           create_update_entry(date, BaseUpdate::FAILED_STATE, missing_update_name_for(date))
           instrument("retry_exceeded.tariff_synchronizer", date: date, url: response.url)
         elsif response.not_found?
-          # We will be retrying a few more times today, so do not create
-          # missing record until we are sure
+          # We will be retrying
+          # So do not create missing record until we are sure until the next day
           if date < Date.current
             create_update_entry(date, BaseUpdate::MISSING_STATE, missing_update_name_for(date))
-            instrument("not_found.tariff_synchronizer", date: date, url: url)
+            instrument("not_found.tariff_synchronizer", date: date, url: initial_url)
             false
           end
         end
