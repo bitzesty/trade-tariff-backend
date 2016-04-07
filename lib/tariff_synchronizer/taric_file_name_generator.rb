@@ -11,7 +11,8 @@ class TaricFileNameGenerator
   end
 
   def get_info_from_response(string)
-    string.split("\n")
+    string
+      .split("\n")
       .map { |name| remove_invalid_characters(name) }
       .map { |name| { filename: local_filename(name), url: update_url(name) } }
   end

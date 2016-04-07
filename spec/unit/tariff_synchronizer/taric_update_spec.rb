@@ -314,9 +314,9 @@ describe TariffSynchronizer::TaricUpdate do
 
   describe "#apply", truncation: true do
     let(:state) { :pending }
-    let!(:example_taric_update) { create :taric_update, example_date: example_date }
 
     before do
+      create :taric_update, example_date: example_date
       prepare_synchronizer_folders
       create_taric_file example_date
     end
@@ -376,13 +376,11 @@ describe TariffSynchronizer::TaricUpdate do
     end
 
     context "entry for the day/update exists already" do
-      let!(:example_taric_update) { create :taric_update, example_date: example_date }
-
       it "does not create db record if it is already available for the day/update type combo" do
+        create :taric_update, example_date: example_date
+
         expect(TariffSynchronizer::BaseUpdate.count).to eq 1
-
         TariffSynchronizer::TaricUpdate.rebuild
-
         expect(TariffSynchronizer::BaseUpdate.count).to eq 1
       end
     end
