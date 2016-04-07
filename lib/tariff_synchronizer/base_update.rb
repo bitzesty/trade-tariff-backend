@@ -231,7 +231,7 @@ module TariffSynchronizer
       end
 
       def rebuild
-        Dir[File.join(Rails.root, TariffSynchronizer.root_path, update_type.to_s, '*')].each do |file_path|
+        Dir[File.join(Rails.root, TariffSynchronizer.root_path, update_type.to_s, "*")].each do |file_path|
           begin
             validate_file!(File.read(file_path))
             date, file_name = parse_file_path(file_path)

@@ -1,5 +1,4 @@
 class TaricFileNameGenerator
-
   attr_reader :date
   delegate :taric_query_url_template, :taric_update_url_template, :host, to: TariffSynchronizer
 
@@ -12,9 +11,9 @@ class TaricFileNameGenerator
   end
 
   def get_info_from_response(string)
-    string.split("\n").
-    map {|name| remove_invalid_characters(name)}.
-    map {|name| {filename: local_filename(name), url: update_url(name)} }
+    string.split("\n")
+      .map { |name| remove_invalid_characters(name) }
+      .map { |name| { filename: local_filename(name), url: update_url(name) } }
   end
 
   private
@@ -28,6 +27,6 @@ class TaricFileNameGenerator
   end
 
   def remove_invalid_characters(name)
-    name.gsub(/[^0-9a-zA-Z\.]/i, '')
+    name.gsub(/[^0-9a-zA-Z\.]/i, "")
   end
 end
