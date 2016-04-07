@@ -13,14 +13,6 @@ module TariffSynchronizer
       def update_type
         :chief
       end
-
-      def rebuild
-        Dir[File.join(Rails.root, TariffSynchronizer.root_path, 'chief', '*.txt')].each do |file_path|
-          date, file_name = parse_file_path(file_path)
-
-          create_update_entry(Date.parse(date), BaseUpdate::PENDING_STATE, Pathname.new(file_path).basename.to_s)
-        end
-      end
     end
 
     def import!

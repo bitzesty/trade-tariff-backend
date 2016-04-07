@@ -230,6 +230,19 @@ module TariffSynchronizer
         raise "Update Type should be specified in inheriting class"
       end
 
+      def rebuild
+        Dir[File.join(Rails.root, TariffSynchronizer.root_path, update_type.to_s, '*')].each do |file_path|
+          begin
+            contents = File.read(file_path)
+            validate_file!(OpenStruct.new(content: contents))
+            date, file_name = parse_file_path(file_path)
+            create_update_entry(Date.parse(date), BaseUpdate::PENDING_STATE, Pathname.new(file_path).basename.to_s)
+          rescue
+            next
+          end
+        end
+      end
+
       private
 
       def get_local_file_path(local_file_name)
