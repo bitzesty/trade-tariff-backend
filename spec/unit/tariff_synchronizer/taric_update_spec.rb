@@ -15,6 +15,9 @@ describe TariffSynchronizer::TaricUpdate do
     let(:failed_response)    { build :response, :failed }
     let(:update_url)         { "#{TariffSynchronizer.host}/taric/#{taric_update_name}" }
 
+    def local_file_name(filename = taric_update_name)
+      "#{example_date}_#{filename}"
+    end
 
     before do
       prepare_synchronizer_folders
@@ -27,14 +30,14 @@ describe TariffSynchronizer::TaricUpdate do
     after  { purge_synchronizer_folders }
 
     context "when single file for the day is found" do
-      let(:query_response)     { build :response, :success, url: taric_query_url,
-                                                         content: taric_update_name }
+      let(:query_response) { build :response, :success, url: taric_query_url,
+                                                        content: taric_update_name }
 
-      before {
+      before do
         expect(TariffSynchronizer::TaricUpdate).to receive(:download_content)
                                        .with(taric_query_url)
                                        .and_return(query_response)
-      }
+      end
 
       context 'update not downloaded yet' do
 
@@ -53,12 +56,9 @@ describe TariffSynchronizer::TaricUpdate do
 
           TariffSynchronizer::TaricUpdate.download(example_date)
 
-          expect(
-            File.exists?("#{TariffSynchronizer.root_path}/taric/#{TariffSynchronizer::TaricUpdate.file_name_for(example_date, taric_update_name)}")
-          ).to be_truthy
-          expect(
-            File.read("#{TariffSynchronizer.root_path}/taric/#{TariffSynchronizer::TaricUpdate.file_name_for(example_date, taric_update_name)}")
-          ).to eq 'abc'
+          file_path = "#{TariffSynchronizer.root_path}/taric/#{local_file_name}"
+          expect(File.exist?(file_path)).to be_truthy
+          expect(File.read(file_path)).to eq 'abc'
         end
 
         it 'does not write Taric file contents to file if they are blank' do
@@ -67,9 +67,8 @@ describe TariffSynchronizer::TaricUpdate do
                                          .and_return(blank_response)
 
           TariffSynchronizer::TaricUpdate.download(example_date)
-          expect(
-            File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}")
-          ).to be_falsy
+          file_path = "#{TariffSynchronizer.root_path}/taric/#{local_file_name}"
+          expect(File.exist?(file_path)).to be_falsy
         end
       end
 
@@ -104,23 +103,23 @@ describe TariffSynchronizer::TaricUpdate do
 
 
     context 'update already downloaded' do
-      let(:query_response)  {
+      let(:query_response) do
         build :response, :success, url: taric_query_url, content: taric_update_name
-      }
+      end
 
-      let!(:present_taric_update) {
+      let!(:present_taric_update) do
         create :taric_update,
           :applied,
           issue_date: example_date,
-          filename: TariffSynchronizer::TaricUpdate.file_name_for(example_date, taric_update_name)
-      }
+          filename: local_file_name
+      end
 
-      before {
+      before do
         expect(TariffSynchronizer::TaricUpdate).to receive(
           :download_content).with(taric_query_url).and_return(query_response)
-
-        File.new("#{TariffSynchronizer.root_path}/taric/#{TariffSynchronizer::TaricUpdate.file_name_for(example_date, taric_update_name)}", "w").write('abc')
-      }
+        file_path = "#{TariffSynchronizer.root_path}/taric/#{local_file_name}"
+        File.new(file_path, "w").write('abc')
+      end
 
       it 'does not download TARIC file for date' do
         expect(TariffSynchronizer::TaricUpdate).to receive(:download_content)
@@ -174,18 +173,13 @@ describe TariffSynchronizer::TaricUpdate do
 
         TariffSynchronizer::TaricUpdate.download(example_date)
 
-        expect(
-          File.exists?("#{TariffSynchronizer.root_path}/taric/#{TariffSynchronizer::TaricUpdate.file_name_for(example_date, taric_update_names.first)}")
-        ).to be_truthy
-        expect(
-          File.read("#{TariffSynchronizer.root_path}/taric/#{TariffSynchronizer::TaricUpdate.file_name_for(example_date, taric_update_names.first)}")
-        ).to eq 'abc'
-        expect(
-          File.exists?("#{TariffSynchronizer.root_path}/taric/#{TariffSynchronizer::TaricUpdate.file_name_for(example_date, taric_update_names.last)}")
-        ).to be_truthy
-        expect(
-          File.read("#{TariffSynchronizer.root_path}/taric/#{TariffSynchronizer::TaricUpdate.file_name_for(example_date, taric_update_names.last)}")
-        ).to eq 'def'
+        first_file_path = "#{TariffSynchronizer.root_path}/taric/#{local_file_name(taric_update_names.first)}"
+        second_file_path = "#{TariffSynchronizer.root_path}/taric/#{local_file_name(taric_update_names.last)}"
+
+        expect(File.exist?(first_file_path)).to be_truthy
+        expect(File.read(first_file_path)).to eq 'abc'
+        expect(File.exist?(second_file_path)).to be_truthy
+        expect(File.read(second_file_path)).to eq 'def'
       end
 
       it 'does not write Taric file contents to file if they are blank' do
@@ -199,10 +193,10 @@ describe TariffSynchronizer::TaricUpdate do
         TariffSynchronizer::TaricUpdate.download(example_date)
 
         expect(
-          File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{success_response_1.file_name}")
+          File.exist?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{success_response_1.file_name}")
         ).to be_falsy
         expect(
-          File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{success_response_2.file_name}")
+          File.exist?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{success_response_2.file_name}")
         ).to be_falsy
       end
     end
@@ -217,7 +211,7 @@ describe TariffSynchronizer::TaricUpdate do
         TariffSynchronizer::TaricUpdate.download(example_date)
 
         expect(
-          File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}")
+          File.exist?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}")
         ).to be_falsy
       end
 
@@ -263,7 +257,7 @@ describe TariffSynchronizer::TaricUpdate do
 
       it 'does not write file to file system' do
         expect(
-          File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}")
+          File.exist?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}")
         ).to be_falsy
       end
 
@@ -294,7 +288,7 @@ describe TariffSynchronizer::TaricUpdate do
 
       it 'does not write file to file system' do
         expect(
-          File.exists?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}")
+          File.exist?("#{TariffSynchronizer.root_path}/taric/#{example_date}_#{taric_update_name}")
         ).to be_falsy
       end
 

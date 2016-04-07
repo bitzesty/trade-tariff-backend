@@ -29,7 +29,7 @@ module TariffSynchronizer
                               }
 
             taric_updates.each do |taric_update|
-              local_file_name = file_name_for(date, taric_update.file_name)
+              local_file_name = "#{date}_#{taric_update.file_name}"
               perform_download(local_file_name, taric_update.url, date)
             end
           else
@@ -48,10 +48,6 @@ module TariffSynchronizer
             false
           end
         end
-      end
-
-      def file_name_for(date, update_name)
-        "#{date}_#{update_name}"
       end
 
       def update_type
