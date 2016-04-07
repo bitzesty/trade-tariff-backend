@@ -74,8 +74,6 @@ module TariffSynchronizer
         Ox.parse(xml_string)
       rescue Ox::ParseError => e
         raise InvalidContents.new(e.message, e)
-      else
-        true
       end
     end
   end

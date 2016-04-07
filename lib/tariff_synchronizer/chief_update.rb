@@ -32,8 +32,6 @@ module TariffSynchronizer
         CSV.parse(cvs_string)
       rescue CSV::MalformedCSVError => e
         raise InvalidContents.new(e.message, e)
-      else
-        true
       end
     end
   end
