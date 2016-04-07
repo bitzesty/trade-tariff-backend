@@ -234,8 +234,9 @@ module TariffSynchronizer
         Dir[File.join(Rails.root, TariffSynchronizer.root_path, update_type.to_s, "*")].each do |file_path|
           begin
             validate_file!(File.read(file_path))
-            date, file_name = parse_file_path(file_path)
-            create_update_entry(Date.parse(date), BaseUpdate::PENDING_STATE, Pathname.new(file_path).basename.to_s)
+            filename = Pathname.new(file_path).basename.to_s
+            file_date = Date.parse(filename.match(/^(\d{4}-\d{2}-\d{2})_.*$/)[1])
+            create_update_entry(file_date, BaseUpdate::PENDING_STATE, filename)
           rescue InvalidContents
             next
           end
@@ -314,11 +315,6 @@ module TariffSynchronizer
         else
           TariffSynchronizer.initial_update_date_for(update_type)
         end
-      end
-
-      def parse_file_path(file_path)
-        filename = Pathname.new(file_path).basename.to_s
-        filename.match(/^(\d{4}-\d{2}-\d{2})_(.*)$/)[1,2]
       end
 
       def last_updates_are_missing?
