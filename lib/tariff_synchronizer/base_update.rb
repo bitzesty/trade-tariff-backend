@@ -205,9 +205,9 @@ module TariffSynchronizer
           if update = find(filename: local_file_name, update_type: self.name, issue_date: date)
             update.update(filesize: File.read(local_file_path).size)
           else
-            create_update_entry(
+            create_or_update(
               date,
-              BaseUpdate::PENDING_STATE,
+              PENDING_STATE,
               local_file_name,
               File.read(local_file_path).size
             )
@@ -236,7 +236,7 @@ module TariffSynchronizer
             validate_file!(File.read(file_path))
             filename = Pathname.new(file_path).basename.to_s
             file_date = Date.parse(filename.match(/^(\d{4}-\d{2}-\d{2})_.*$/)[1])
-            create_update_entry(file_date, BaseUpdate::PENDING_STATE, filename)
+            create_or_update(file_date, PENDING_STATE, filename)
           rescue InvalidContents
             next
           end
@@ -253,14 +253,14 @@ module TariffSynchronizer
         if response.success? && response.content_present?
           validate_and_create_update(date, response, file_name)
         elsif response.success? && !response.content_present?
-          create_update_entry(date, FAILED_STATE, file_name)
+          create_or_update(date, FAILED_STATE, file_name)
           instrument("blank_update.tariff_synchronizer", date: date, url: response.url)
         elsif response.retry_count_exceeded?
-          create_update_entry(date, FAILED_STATE, file_name)
+          create_or_update(date, FAILED_STATE, file_name)
           instrument("retry_exceeded.tariff_synchronizer", date: date, url: response.url)
         elsif response.not_found?
           if date < Date.current
-            create_update_entry(date, MISSING_STATE, missing_update_name_for(date))
+            create_or_update(date, MISSING_STATE, missing_update_name_for(date))
             instrument("not_found.tariff_synchronizer", date: date, url: response.url)
           end
         end
@@ -272,7 +272,7 @@ module TariffSynchronizer
         rescue InvalidContents => e
           instrument("invalid_contents.tariff_synchronizer", date: date, url: response.url)
           exception = e.original
-          create_update_entry(date, FAILED_STATE, file_name).tap do |entry|
+          create_or_update(date, FAILED_STATE, file_name).tap do |entry|
             entry.update(
               exception_class: "#{exception.class}: #{exception.message}",
               exception_backtrace: exception.backtrace.try(:join, "\n")
@@ -280,7 +280,7 @@ module TariffSynchronizer
           end
         else
           # file is valid
-          create_update_entry(date, PENDING_STATE, file_name, response.content.size)
+          create_or_update(date, PENDING_STATE, file_name, response.content.size)
           write_update_file(date, response, file_name)
         end
       end
@@ -297,7 +297,7 @@ module TariffSynchronizer
         "#{date}_#{update_type}"
       end
 
-      def create_update_entry(date, state, file_name, filesize = nil)
+      def create_or_update(date, state, file_name, filesize = nil)
         find_or_create(
           filename: file_name,
           update_type: self.name,

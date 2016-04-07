@@ -420,7 +420,7 @@ describe TariffSynchronizer::Logger, truncation: true do
       allow(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
                                              .and_return(success_response)
       # Stub creation of the record
-      allow(TariffSynchronizer::ChiefUpdate).to receive(:create_update_entry)
+      allow(TariffSynchronizer::ChiefUpdate).to receive(:create_or_update)
                                              .and_return(nil)
       # Simulate I/O exception
       allow(File).to receive(:open).and_raise(Errno::EACCES)

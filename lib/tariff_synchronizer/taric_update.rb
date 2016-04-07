@@ -33,19 +33,19 @@ module TariffSynchronizer
       private
 
       def create_record_for_empty_response(date, response)
-        create_update_entry(date, BaseUpdate::FAILED_STATE, missing_update_name_for(date))
+        create_or_update(date, BaseUpdate::FAILED_STATE, missing_update_name_for(date))
         instrument("blank_update.tariff_synchronizer", date: date, url: response.url)
       end
 
       def create_record_for_retries_exceeded(date, response)
-        create_update_entry(date, BaseUpdate::FAILED_STATE, missing_update_name_for(date))
+        create_or_update(date, BaseUpdate::FAILED_STATE, missing_update_name_for(date))
         instrument("retry_exceeded.tariff_synchronizer", date: date, url: response.url)
       end
 
       def create_missing_record(date, initial_url)
         # Do not create missing record until we are sure until the next day
         if date < Date.current
-          create_update_entry(date, BaseUpdate::MISSING_STATE, missing_update_name_for(date))
+          create_or_update(date, BaseUpdate::MISSING_STATE, missing_update_name_for(date))
           instrument("not_found.tariff_synchronizer", date: date, url: initial_url)
         end
       end
