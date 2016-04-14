@@ -73,6 +73,3 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 end
-
-
-TariffSynchronizer.host = "http://example.com"

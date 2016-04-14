@@ -306,67 +306,6 @@ describe TariffSynchronizer::Logger, truncation: true do
     end
   end
 
-  describe '#download_chief logging' do
-    let(:success_response) { build :response, :success }
-
-    before {
-      # Download mock response
-      expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content).and_return(success_response)
-      # Do not write file to file system
-      expect(TariffSynchronizer::ChiefUpdate).to receive(:create_entry).and_return(true)
-      # Actual Download
-      TariffSynchronizer::ChiefUpdate.download(Date.today)
-    }
-
-    it 'logs an info event' do
-      expect(@logger.logged(:info).size).to eq 1
-      expect(@logger.logged(:info).last).to match /Downloaded CHIEF update/
-    end
-  end
-
-  describe '#download_taric logging' do
-    let(:success_response) { build :response, :success }
-    let(:query_response) { build :response, :success, :content => 'file_name', :url => 'url' }
-
-    before {
-      # Skip Taric update file name fetching
-      expect(TaricFileNameGenerator).to receive(:new).and_return(query_response)
-      # Download mock response
-      expect(TariffSynchronizer::TaricUpdate).to receive(:download_content).and_return(success_response).twice
-      # Do not write file to file system
-      expect(TariffSynchronizer::TaricUpdate).to receive(:create_entry).and_return(true)
-      # Actual Download
-      TariffSynchronizer::TaricUpdate.download(Date.today)
-    }
-
-    it 'logs an info event' do
-      expect(@logger.logged(:info).size).to eq 2
-      expect(@logger.logged(:info).last).to match /Downloaded TARIC update/
-    end
-  end
-
-  describe '#apply_taric logging' do
-    let(:taric_update) { create :taric_update }
-
-    before {
-      # Test in isolation, file is not actually in the file system
-      # so bypass the check
-      expect(File).to receive(:exist?)
-                  .with(taric_update.file_path)
-                  .twice
-                  .and_return(true)
-
-      rescuing {
-        taric_update.apply
-      }
-    }
-
-    it 'logs an info event' do
-      expect(@logger.logged(:info).size).to eq 1
-      expect(@logger.logged(:info).last).to match /Applied TARIC update/
-    end
-  end
-
   describe '#get_taric_update_name logging' do
     let(:not_found_response) { build :response, :not_found }
 
@@ -481,7 +420,7 @@ describe TariffSynchronizer::Logger, truncation: true do
       allow(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
                                              .and_return(success_response)
       # Stub creation of the record
-      allow(TariffSynchronizer::ChiefUpdate).to receive(:create_update_entry)
+      allow(TariffSynchronizer::ChiefUpdate).to receive(:create_or_update)
                                              .and_return(nil)
       # Simulate I/O exception
       allow(File).to receive(:open).and_raise(Errno::EACCES)
