@@ -7,34 +7,6 @@ describe TariffSynchronizer::Logger, truncation: true do
 
   before { tariff_synchronizer_logger_listener }
 
-  describe '#download logging' do
-    before {
-      expect(TariffSynchronizer::TaricUpdate).to receive(:sync).and_return(true)
-      expect(TariffSynchronizer::ChiefUpdate).to receive(:sync).and_return(true)
-      expect(TariffSynchronizer).to receive(:sync_variables_set?).and_return(true)
-
-      TariffSynchronizer.download
-    }
-
-    it 'logs an info event' do
-      expect(@logger.logged(:info).size).to eq 1
-      expect(@logger.logged(:info).last).to match /Finished downloading/
-    end
-  end
-
-  describe '#config_error logging' do
-    before {
-      expect(TariffSynchronizer).to receive(:sync_variables_set?).and_return(false)
-
-      TariffSynchronizer.download
-    }
-
-    it 'logs an info event' do
-      expect(@logger.logged(:error).size).to eq 1
-      expect(@logger.logged(:error).last).to match /Missing/
-    end
-  end
-
   describe '#failed_updates_present logging' do
     let(:update_stubs) { double(any?: true, map: []).as_null_object }
 
@@ -200,35 +172,6 @@ describe TariffSynchronizer::Logger, truncation: true do
       expect(taric_update.reload.exception_backtrace).to_not be_nil
       expect(taric_update.reload.exception_class).to_not be_nil
       expect(taric_update.reload.exception_queries).to_not be_nil
-    end
-  end
-
-  describe '#failed_download logging' do
-    before {
-      TariffSynchronizer.retry_count = 0
-      TariffSynchronizer.exception_retry_count = 0
-      allow(TariffSynchronizer).to receive(:sync_variables_set?).and_return(true)
-
-      allow_any_instance_of(Curl::Easy).to receive(:perform)
-                                       .and_raise(Curl::Err::HostResolutionError)
-
-      rescuing { TariffSynchronizer.download }
-    }
-
-    it 'logs and info event' do
-      expect(@logger.logged(:error).size).to eq 1
-      expect(@logger.logged(:error).last).to match /Download failed/
-    end
-
-    it 'sends email error email' do
-      expect(ActionMailer::Base.deliveries).to_not be_empty
-      email = ActionMailer::Base.deliveries.last
-      expect(email.encoded).to match /Backtrace/
-    end
-
-    it 'email includes information about exception' do
-      email = ActionMailer::Base.deliveries.last
-      expect(email.encoded).to match /Curl::Err::HostResolutionError/
     end
   end
 

@@ -91,14 +91,6 @@ module TariffSynchronizer
     end
   end
 
-  def check_tariff_updates_failures
-    if BaseUpdate.failed.any?
-      instrument("failed_updates_present.tariff_synchronizer",
-                 file_names: BaseUpdate.failed.map(&:filename))
-      raise FailedUpdatesError
-    end
-  end
-
   def apply
     check_tariff_updates_failures
 
@@ -131,9 +123,8 @@ module TariffSynchronizer
       ) if applied_updates.any? && BaseUpdate.pending_or_failed.none?
     end
 
-  rescue RedisLock::LockTimeout
-    instrument "apply_lock_error.tariff_synchronizer"
-
+    rescue RedisLock::LockTimeout
+      instrument "apply_lock_error.tariff_synchronizer"
   end
 
   # Restore database to specific date in the past
@@ -230,5 +221,13 @@ module TariffSynchronizer
     Sequel::Model.descendants.select { |model|
       model.plugins.include?(Sequel::Plugins::Oplog)
     }
+  end
+
+  def check_tariff_updates_failures
+    if BaseUpdate.failed.any?
+      instrument("failed_updates_present.tariff_synchronizer",
+                 file_names: BaseUpdate.failed.map(&:filename))
+      raise FailedUpdatesError
+    end
   end
 end
