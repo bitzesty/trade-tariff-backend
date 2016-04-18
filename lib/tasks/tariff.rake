@@ -18,15 +18,17 @@ namespace :tariff do
   task sync: %w[environment sync:apply]
 
   namespace :sync do
-    desc 'Download pending Taric and CHIEF updates'
-    task apply: [:environment, :class_eager_load] do
-      # Download pending updates for CHIEF and Taric
-      TariffSynchronizer.check_failures
+    desc 'Download pending Taric and CHIEF update files, Update tariff_updates table'
+    task download: [:environment, :class_eager_load] do
       TariffSynchronizer.download
+    end
+
+    desc 'Apply pending updates Taric and CHIEF'
+    task apply: [:environment, :class_eager_load] do
       TariffSynchronizer.apply
     end
 
-    desc 'Apply pending Taric and CHIEF'
+    desc 'Transform CHIEF updates'
     task transform: %w[environment] do
       require 'chief_transformer'
 

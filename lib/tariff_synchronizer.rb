@@ -91,7 +91,7 @@ module TariffSynchronizer
     end
   end
 
-  def check_failures
+  def check_tariff_updates_failures
     if BaseUpdate.failed.any?
       instrument("failed_updates_present.tariff_synchronizer",
                  file_names: BaseUpdate.failed.map(&:filename))
@@ -100,6 +100,8 @@ module TariffSynchronizer
   end
 
   def apply
+    check_tariff_updates_failures
+
     applied_updates = []
     unconformant_records = []
 
@@ -109,10 +111,6 @@ module TariffSynchronizer
 
       # Updates could be modifying primary keys so unrestricted it for all models.
       Sequel::Model.descendants.each(&:unrestrict_primary_key)
-
-      # If there is an existing failed update and error is raised
-      # There needs to be as manual rollback to clear the error
-      check_failures
 
       subscribe /conformance_error/ do |*args|
         event = ActiveSupport::Notifications::Event.new(*args)
