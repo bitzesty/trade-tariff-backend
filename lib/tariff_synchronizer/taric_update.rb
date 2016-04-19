@@ -44,10 +44,9 @@ module TariffSynchronizer
 
       def create_missing_record(date, initial_url)
         # Do not create missing record until we are sure until the next day
-        if date < Date.current
-          create_or_update(date, BaseUpdate::MISSING_STATE, missing_update_name_for(date))
-          instrument("not_found.tariff_synchronizer", date: date, url: initial_url)
-        end
+        return if date >= Date.current
+        create_or_update(date, BaseUpdate::MISSING_STATE, missing_update_name_for(date))
+        instrument("not_found.tariff_synchronizer", date: date, url: initial_url)
       end
     end
 
