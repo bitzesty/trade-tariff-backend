@@ -14,7 +14,7 @@ describe TariffSynchronizer::ChiefUpdate do
   end
 
   describe '.download' do
-    let(:blank_response)     { build :response, content: nil }
+    let(:blank_response)     { build :response, :blank }
     let(:not_found_response) { build :response, :not_found }
     let(:success_response)   { build :response, :success, content: 'abc' }
     let(:update_name)        { "KBT009(10001).txt" }
@@ -27,7 +27,7 @@ describe TariffSynchronizer::ChiefUpdate do
 
         context 'file for the day not downloaded yet' do
           it 'downloads CHIEF file for specific date' do
-            expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
+            expect(TariffSynchronizer::TariffDownloader).to receive(:download_content)
                                            .with(url)
                                            .and_return(blank_response)
 
@@ -35,7 +35,7 @@ describe TariffSynchronizer::ChiefUpdate do
           end
 
           it 'writes CHIEF file contents to file if they are not blank' do
-            expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
+            expect(TariffSynchronizer::TariffDownloader).to receive(:download_content)
                                            .with(url)
                                            .and_return(success_response)
 
@@ -50,7 +50,7 @@ describe TariffSynchronizer::ChiefUpdate do
           end
 
           it 'creates pending ChiefUpdate entry in the table' do
-            expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
+            expect(TariffSynchronizer::TariffDownloader).to receive(:download_content)
                                            .with(url)
                                            .and_return(success_response)
             TariffSynchronizer::ChiefUpdate.download(example_date)
@@ -61,28 +61,24 @@ describe TariffSynchronizer::ChiefUpdate do
         end
 
         context 'file for the day already downloaded' do
-          let!(:present_chief_update) {
-            create :chief_update,
-              :applied,
-              issue_date: example_date,
-              filename: chief_file.name
-          }
-
-          before {
-            expect(TariffSynchronizer::ChiefUpdate).to receive(
-              :download_content
-            ).with(url).and_return(success_response)
+          before do
+            create :chief_update, :applied,
+                                  issue_date: example_date,
+                                  filename: chief_file.name
+            allow(TariffSynchronizer::TariffDownloader).to receive(:download_content)
+                                                           .with(url)
+                                                           .and_return(success_response)
 
             TariffSynchronizer::ChiefUpdate.download(example_date)
 
             expect(
               File.exists?("#{TariffSynchronizer.root_path}/chief/#{chief_file.name}")
             ).to be_truthy
-          }
+          end
 
           it 'does not download CHIEF file for date when it exists' do
-            expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
-                                           .never
+            # expect(TariffSynchronizer::TariffDownloader).to receive(:download_content)
+            #                                                 .never
 
             TariffSynchronizer::ChiefUpdate.download(example_date)
           end
@@ -103,17 +99,15 @@ describe TariffSynchronizer::ChiefUpdate do
             TariffSynchronizer::ChiefUpdate.last
           }
 
-          before {
-            expect(
-              TariffSynchronizer::ChiefUpdate
-            ).to receive(:download_content)
-             .with(url)
-             .and_return(success_response)
+          before do
+            allow(TariffSynchronizer::TariffDownloader).to receive(:download_content)
+                                                           .with(url)
+                                                           .and_return(success_response)
 
             # unstub
             allow(TariffSynchronizer::ChiefUpdate).to receive(:validate_file!)
-                                                  .and_call_original
-          }
+                                                      .and_call_original
+          end
 
           it {
             TariffSynchronizer::ChiefUpdate.download(example_date)
@@ -127,7 +121,7 @@ describe TariffSynchronizer::ChiefUpdate do
         let(:not_found_response) { build :response, :not_found }
 
         before {
-          expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
+          expect(TariffSynchronizer::TariffDownloader).to receive(:download_content)
                                          .and_return(not_found_response)
         }
 
@@ -171,7 +165,7 @@ describe TariffSynchronizer::ChiefUpdate do
       end
 
       it 'logs error about permissions' do
-        expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
+        expect(TariffSynchronizer::TariffDownloader).to receive(:download_content)
                                                .with(url)
                                                .and_return(success_response)
 
@@ -197,10 +191,10 @@ describe TariffSynchronizer::ChiefUpdate do
       let!(:chief_update2) { create :chief_update, :missing, issue_date: Date.today.ago(3.days) }
       let!(:stub_logger)   { double.as_null_object }
 
-      before {
-        allow(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
-                                              .and_return(not_found_response)
-      }
+      before do
+        allow(TariffSynchronizer::TariffDownloader).to receive(:download_content)
+                                                       .and_return(not_found_response)
+      end
 
       it 'notifies about several missing updates in a row' do
         expect(TariffSynchronizer::ChiefUpdate).to receive(:notify_about_missing_updates).and_return(true)

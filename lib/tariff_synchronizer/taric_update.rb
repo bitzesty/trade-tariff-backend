@@ -13,11 +13,11 @@ module TariffSynchronizer
         instrument("get_taric_update_name.tariff_synchronizer", date: date, url: initial_url)
         response = download_content(initial_url)
 
-        if response.success? && response.content_present?
+        if response.present?
           generator.get_info_from_response(response.content).each do |update|
             perform_download(update[:filename], update[:url], date)
           end
-        elsif response.success? && !response.content_present?
+        elsif response.empty?
           create_record_for_empty_response(date, response)
         elsif response.retry_count_exceeded?
           create_record_for_retries_exceeded
@@ -33,21 +33,24 @@ module TariffSynchronizer
       private
 
       def create_record_for_empty_response(date, response)
-        create_or_update(date, BaseUpdate::FAILED_STATE, missing_update_name_for(date))
+        create_or_update(date, BaseUpdate::FAILED_STATE, missing_filename(date))
         instrument("blank_update.tariff_synchronizer", date: date, url: response.url)
       end
 
       def create_record_for_retries_exceeded(date, response)
-        create_or_update(date, BaseUpdate::FAILED_STATE, missing_update_name_for(date))
+        create_or_update(date, BaseUpdate::FAILED_STATE, missing_filename(date))
         instrument("retry_exceeded.tariff_synchronizer", date: date, url: response.url)
       end
 
       def create_missing_record(date, initial_url)
         # Do not create missing record until we are sure until the next day
-        if date < Date.current
-          create_or_update(date, BaseUpdate::MISSING_STATE, missing_update_name_for(date))
-          instrument("not_found.tariff_synchronizer", date: date, url: initial_url)
-        end
+        return if date >= Date.current
+        create_or_update(date, BaseUpdate::MISSING_STATE, missing_filename(date))
+        instrument("not_found.tariff_synchronizer", date: date, url: initial_url)
+      end
+
+      def missing_filename(date)
+        "#{date}_#{update_type}"
       end
     end
 

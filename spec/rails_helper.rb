@@ -7,7 +7,6 @@ WebMock.disable_net_connect!(allow_localhost: true)
 
 require 'simplecov'
 require 'simplecov-rcov'
-require 'database_cleaner'
 
 SimpleCov.start 'rails'
 SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
@@ -48,7 +47,6 @@ RSpec.configure do |config|
   RedisLockDb.redis = redis
 
   config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
     redis.flushdb
   end
 
@@ -57,19 +55,6 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do
-    DatabaseCleaner.strategy = :transaction
     Sidekiq::Worker.clear_all
-  end
-
-  config.before(:each, :truncation => true) do
-    DatabaseCleaner.strategy = :truncation
-  end
-
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean
   end
 end

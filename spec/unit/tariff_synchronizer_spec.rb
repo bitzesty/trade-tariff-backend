@@ -1,5 +1,5 @@
-require 'rails_helper'
-require 'tariff_synchronizer'
+require "rails_helper"
+require "tariff_synchronizer"
 
 describe TariffSynchronizer, truncation: true do
   describe '.initial_update_date_for' do
@@ -11,43 +11,66 @@ describe TariffSynchronizer, truncation: true do
     end
   end
 
-  describe '.download' do
-    context 'sync variables are set' do
-      before {
-        expect(TariffSynchronizer).to receive(:sync_variables_set?).and_return(true)
-      }
+  describe ".download" do
+    context "sync variables are set" do
+      before do
+        allow(TariffSynchronizer).to receive(:sync_variables_set?).and_return(true)
+      end
 
-      it 'invokes update downloading/syncing on all update types' do
+      it "invokes update downloading/syncing on all update types" do
         expect(TariffSynchronizer::TaricUpdate).to receive(:sync).and_return(true)
         expect(TariffSynchronizer::ChiefUpdate).to receive(:sync).and_return(true)
 
         TariffSynchronizer.download
       end
+
+      it "logs an info event" do
+        allow(TariffSynchronizer::TaricUpdate).to receive(:sync).and_return(true)
+        allow(TariffSynchronizer::ChiefUpdate).to receive(:sync).and_return(true)
+        tariff_synchronizer_logger_listener
+        TariffSynchronizer.download
+        expect(@logger.logged(:info).size).to eq 1
+        expect(@logger.logged(:info).last).to match /Finished downloading updates/
+      end
     end
 
-    context 'sync variables are not set' do
-      before do
-        TariffSynchronizer.username = nil
-        TariffSynchronizer.password = nil
-      end
-
-      it 'does not start sync process' do
+    context "sync variables are not set" do
+      it "does not start sync process" do
         expect(TariffSynchronizer::TaricUpdate).to_not receive(:sync)
         expect(TariffSynchronizer::ChiefUpdate).to_not receive(:sync)
 
         TariffSynchronizer.download
       end
+
+      it "logs an error event" do
+        tariff_synchronizer_logger_listener
+        TariffSynchronizer.download
+        expect(@logger.logged(:error).size).to eq 1
+        expect(@logger.logged(:error).last).to match /Missing: Tariff sync enviroment variables/
+      end
     end
 
-    context 'with download exceptions' do
-      before {
+    context "when a download exception" do
+      before do
         expect(TariffSynchronizer).to receive(:sync_variables_set?).and_return(true)
-
         allow_any_instance_of(Curl::Easy).to receive(:perform)
-                                         .and_raise(Curl::Err::HostResolutionError) }
+                                         .and_raise(Curl::Err::HostResolutionError)
+      end
 
-      it 'raises original exception ending process' do
+      it "raises original exception ending the process and logs an error event" do
+        tariff_synchronizer_logger_listener
         expect { TariffSynchronizer.download }.to raise_error Curl::Err::HostResolutionError
+        expect(@logger.logged(:error).size).to eq 1
+        expect(@logger.logged(:error).last).to match /Download failed/
+      end
+
+      it "sends an email with the exception error" do
+        ActionMailer::Base.deliveries.clear
+        expect { TariffSynchronizer.download }.to raise_error(Curl::Err::HostResolutionError)
+
+        expect(ActionMailer::Base.deliveries).to_not be_empty
+        expect(ActionMailer::Base.deliveries.last.encoded).to match /Backtrace/
+        expect(ActionMailer::Base.deliveries.last.encoded).to match /Curl::Err::HostResolutionError/
       end
     end
   end
