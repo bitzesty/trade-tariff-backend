@@ -14,7 +14,7 @@ describe TariffSynchronizer::ChiefUpdate do
   end
 
   describe '.download' do
-    let(:blank_response)     { build :response, content: nil }
+    let(:blank_response)     { build :response, :blank }
     let(:not_found_response) { build :response, :not_found }
     let(:success_response)   { build :response, :success, content: 'abc' }
     let(:update_name)        { "KBT009(10001).txt" }
