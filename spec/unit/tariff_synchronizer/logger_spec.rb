@@ -193,7 +193,7 @@ describe TariffSynchronizer::Logger, truncation: true do
     let(:failed_response) { build :response, :retry_exceeded }
 
     before {
-      expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content).and_return(failed_response)
+      expect(TariffSynchronizer::TariffDownloader).to receive(:download_content).and_return(failed_response)
 
       TariffSynchronizer::ChiefUpdate.download(Date.today)
     }
@@ -214,7 +214,7 @@ describe TariffSynchronizer::Logger, truncation: true do
     let(:not_found_response) { build :response, :not_found }
 
     before {
-      expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content).and_return(not_found_response)
+      expect(TariffSynchronizer::TariffDownloader).to receive(:download_content).and_return(not_found_response)
 
       TariffSynchronizer::ChiefUpdate.download(Date.yesterday)
     }
@@ -268,9 +268,9 @@ describe TariffSynchronizer::Logger, truncation: true do
 
     before {
       # Download mock response
-      expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content).and_return(success_response)
+      expect(TariffSynchronizer::TariffDownloader).to receive(:download_content).and_return(success_response)
       # Do not write file to file system
-      expect(TariffSynchronizer::ChiefUpdate).to receive(:write_file).and_return(true)
+      expect(TariffSynchronizer::TariffDownloader).to receive(:write_file).and_return(true)
       # Actual Download
       TariffSynchronizer::ChiefUpdate.download(Date.today)
     }
@@ -286,7 +286,7 @@ describe TariffSynchronizer::Logger, truncation: true do
 
     before {
       # Download mock response
-      expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
+      expect(TariffSynchronizer::TariffDownloader).to receive(:download_content)
                                              .and_return(blank_response)
       # Actual Download
       TariffSynchronizer::ChiefUpdate.download(Date.today)
@@ -309,7 +309,7 @@ describe TariffSynchronizer::Logger, truncation: true do
 
     before {
       # Download mock response
-      expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
+      expect(TariffSynchronizer::TariffDownloader).to receive(:download_content)
                                              .and_return(success_response)
 
       # Simulate I/O exception
@@ -335,7 +335,7 @@ describe TariffSynchronizer::Logger, truncation: true do
 
     before {
       # Download mock response
-      expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
+      expect(TariffSynchronizer::TariffDownloader).to receive(:download_content)
                                              .and_return(success_response)
       # Simulate I/O exception
       expect(File).to receive(:open).and_raise(IOError)
@@ -360,7 +360,7 @@ describe TariffSynchronizer::Logger, truncation: true do
 
     before {
       # Download mock response
-      allow(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
+      allow(TariffSynchronizer::TariffDownloader).to receive(:download_content)
                                              .and_return(success_response)
       # Stub creation of the record
       allow(TariffSynchronizer::ChiefUpdate).to receive(:create_or_update)
@@ -389,7 +389,7 @@ describe TariffSynchronizer::Logger, truncation: true do
 
     before {
       TariffSynchronizer.retry_count = 10
-      expect(TariffSynchronizer::ChiefUpdate).to receive(:send_request)
+      expect(TariffSynchronizer::TariffDownloader).to receive(:send_request)
                                              .exactly(3).times
                                              .and_return(failed_response, failed_response, success_response)
       TariffSynchronizer::ChiefUpdate.download(Date.today)
@@ -406,7 +406,7 @@ describe TariffSynchronizer::Logger, truncation: true do
     before {
       create :chief_update, :missing, issue_date: Date.today.ago(2.days)
       create :chief_update, :missing, issue_date: Date.today.ago(3.days)
-      allow(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
+      allow(TariffSynchronizer::TariffDownloader).to receive(:download_content)
                                             .and_return(not_found_response)
       TariffSynchronizer::ChiefUpdate.sync
     }

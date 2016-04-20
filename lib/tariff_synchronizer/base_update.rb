@@ -1,3 +1,5 @@
+require "tariff_synchronizer/tariff_downloader"
+
 module TariffSynchronizer
   class BaseUpdate < Sequel::Model(:tariff_updates)
     include FileService
@@ -199,27 +201,7 @@ module TariffSynchronizer
       end
 
       def perform_download(local_file_name, tariff_url, date)
-        local_file_path = get_local_file_path(local_file_name)
-
-        if File.exists?(local_file_path)
-          if update = find(filename: local_file_name, update_type: self.name, issue_date: date)
-            update.update(filesize: File.read(local_file_path).size)
-          else
-            create_or_update(
-              date,
-              PENDING_STATE,
-              local_file_name,
-              File.read(local_file_path).size
-            )
-          end
-          instrument("created_tariff.tariff_synchronizer", date: date, filename: local_file_name, type: update_type)
-        else
-          instrument("download_tariff.tariff_synchronizer", date: date, url: tariff_url, filename: local_file_name, type: update_type) do
-            download_content(tariff_url).tap do |response|
-              create_entry(date, response, local_file_name)
-            end
-          end
-        end
+        TariffDownloader.new(local_file_name, tariff_url, date, self).perform
       end
 
       def update_file_exists?(filename)
@@ -245,58 +227,6 @@ module TariffSynchronizer
 
       private
 
-      def get_local_file_path(local_file_name)
-        File.join(TariffSynchronizer.root_path, update_type.to_s, local_file_name)
-      end
-
-      def create_entry(date, response, file_name)
-        if response.success? && response.content_present?
-          validate_and_create_update(date, response, file_name)
-        elsif response.success? && !response.content_present?
-          create_or_update(date, FAILED_STATE, file_name)
-          instrument("blank_update.tariff_synchronizer", date: date, url: response.url)
-        elsif response.retry_count_exceeded?
-          create_or_update(date, FAILED_STATE, file_name)
-          instrument("retry_exceeded.tariff_synchronizer", date: date, url: response.url)
-        elsif response.not_found?
-          if date < Date.current
-            create_or_update(date, MISSING_STATE, missing_update_name_for(date))
-            instrument("not_found.tariff_synchronizer", date: date, url: response.url)
-          end
-        end
-      end
-
-      def validate_and_create_update(date, response, file_name)
-        begin
-          validate_file!(response.content)
-        rescue InvalidContents => e
-          instrument("invalid_contents.tariff_synchronizer", date: date, url: response.url)
-          exception = e.original
-          create_or_update(date, FAILED_STATE, file_name).tap do |entry|
-            entry.update(
-              exception_class: "#{exception.class}: #{exception.message}",
-              exception_backtrace: exception.backtrace.try(:join, "\n")
-            )
-          end
-        else
-          # file is valid
-          create_or_update(date, PENDING_STATE, file_name, response.content.size)
-          write_update_file(date, response, file_name)
-        end
-      end
-
-      def write_update_file(date, response, file_name)
-        update_path = update_path(file_name)
-
-        instrument("update_written.tariff_synchronizer", date: date, path: update_path, size: response.content.size) do
-          write_file(update_path, response.content)
-        end
-      end
-
-      def missing_update_name_for(date)
-        "#{date}_#{update_type}"
-      end
-
       def create_or_update(date, state, file_name, filesize = nil)
         find_or_create(
           filename: file_name,
@@ -305,8 +235,8 @@ module TariffSynchronizer
         ).update(state: state, filesize: filesize)
       end
 
-      def update_path(file_name)
-        File.join(TariffSynchronizer.root_path, update_type.to_s, file_name)
+      def missing_update_name_for(date)
+        "#{date}_#{update_type}"
       end
 
       def pending_from

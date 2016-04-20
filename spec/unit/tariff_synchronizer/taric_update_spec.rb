@@ -44,7 +44,7 @@ describe TariffSynchronizer::TaricUpdate do
       context "update not downloaded yet" do
 
         it "downloads Taric file for specific date" do
-          expect(TariffSynchronizer::TaricUpdate).to receive(:download_content)
+          expect(TariffSynchronizer::TariffDownloader).to receive(:download_content)
                                          .with(update_url)
                                          .and_return(blank_response)
 
@@ -52,7 +52,7 @@ describe TariffSynchronizer::TaricUpdate do
         end
 
         it "writes Taric file contents to file if they are not blank" do
-          expect(TariffSynchronizer::TaricUpdate).to receive(:download_content)
+          expect(TariffSynchronizer::TariffDownloader).to receive(:download_content)
                                          .with(update_url)
                                          .and_return(success_response)
 
@@ -64,7 +64,7 @@ describe TariffSynchronizer::TaricUpdate do
         end
 
         it "does not write Taric file contents to file if they are blank" do
-          expect(TariffSynchronizer::TaricUpdate).to receive(:download_content)
+          expect(TariffSynchronizer::TariffDownloader).to receive(:download_content)
                                          .with(update_url)
                                          .and_return(blank_response)
 
@@ -76,7 +76,7 @@ describe TariffSynchronizer::TaricUpdate do
 
       describe "content validation" do
         before do
-          allow(TariffSynchronizer::TaricUpdate).to receive(:download_content)
+          allow(TariffSynchronizer::TariffDownloader).to receive(:download_content)
                                                     .with(update_url)
                                                     .and_return(success_response)
           # unstub
@@ -91,7 +91,6 @@ describe TariffSynchronizer::TaricUpdate do
         end
       end
     end
-
 
     context "update already downloaded" do
       let(:query_response) do
@@ -146,7 +145,7 @@ describe TariffSynchronizer::TaricUpdate do
 
       it "downloads Taric file for specific date" do
         taric_update_names.each do |name|
-          expect(TariffSynchronizer::TaricUpdate).to receive(:download_content)
+          expect(TariffSynchronizer::TariffDownloader).to receive(:download_content)
                                          .with(taric_update_url % { name: name })
                                          .and_return(blank_response)
         end
@@ -155,10 +154,10 @@ describe TariffSynchronizer::TaricUpdate do
       end
 
       it "writes Taric file contents to file if they are not blank" do
-        expect(TariffSynchronizer::TaricUpdate).to receive(:download_content)
+        expect(TariffSynchronizer::TariffDownloader).to receive(:download_content)
                                        .with(taric_update_url % { name: taric_update_names.first })
                                        .and_return(success_response_1)
-        expect(TariffSynchronizer::TaricUpdate).to receive(:download_content)
+        expect(TariffSynchronizer::TariffDownloader).to receive(:download_content)
                                        .with(taric_update_url % { name: taric_update_names.last })
                                        .and_return(success_response_2)
 
@@ -174,10 +173,10 @@ describe TariffSynchronizer::TaricUpdate do
       end
 
       it "does not write Taric file contents to file if they are blank" do
-        expect(TariffSynchronizer::TaricUpdate).to receive(:download_content)
+        expect(TariffSynchronizer::TariffDownloader).to receive(:download_content)
                                        .with(taric_update_url % { name: taric_update_names.first })
                                        .and_return(blank_response)
-        expect(TariffSynchronizer::TaricUpdate).to receive(:download_content)
+        expect(TariffSynchronizer::TariffDownloader).to receive(:download_content)
                                        .with(taric_update_url % { name: taric_update_names.last })
                                        .and_return(blank_response)
 
@@ -238,7 +237,7 @@ describe TariffSynchronizer::TaricUpdate do
                                        .with(taric_query_url)
                                        .and_return(success_response)
 
-        expect(TariffSynchronizer::TaricUpdate).to receive(:send_request)
+        expect(TariffSynchronizer::TariffDownloader).to receive(:send_request)
                                        .with(update_url)
                                        .twice
                                        .and_return(failed_response)
@@ -270,7 +269,7 @@ describe TariffSynchronizer::TaricUpdate do
                                        .with(taric_query_url)
                                        .and_return(success_response)
 
-        expect(TariffSynchronizer::TaricUpdate).to receive(:send_request)
+        expect(TariffSynchronizer::TariffDownloader).to receive(:send_request)
                                        .with(update_url)
                                        .and_return(blank_success_response)
 
