@@ -8,75 +8,90 @@ module TariffSynchronizer
 
     delegate :instrument, :subscribe, to: ActiveSupport::Notifications
 
-    attr_reader :local_file_name, :tariff_url, :date, :update_klass
+    attr_reader :filename, :url, :date, :update_klass
 
-    def initialize(local_file_name, tariff_url, date, update_klass)
-      @local_file_name = local_file_name
-      @tariff_url = tariff_url
+    def initialize(filename, url, date, update_klass)
+      @filename = filename
+      @url = url
       @date = date
       @update_klass = update_klass
     end
 
     def perform
-      if File.exists?(local_file_path)
-        if update = update_klass.find(filename: local_file_name, update_type: update_klass.name, issue_date: date)
-          update.update(filesize: File.read(local_file_path).size)
-        else
-          create_or_update(
-            date,
-            BaseUpdate::PENDING_STATE,
-            local_file_name,
-            File.read(local_file_path).size
-          )
-        end
-        instrument("created_tariff.tariff_synchronizer", date: date, filename: local_file_name, type: update_klass.update_type)
+      if file_downloaded?
+        update_record
+        instrument("created_tariff.tariff_synchronizer", date: date, filename: filename, type: update_klass.update_type)
       else
-        instrument("download_tariff.tariff_synchronizer", date: date, url: tariff_url, filename: local_file_name, type: update_klass.update_type) do
-          TariffDownloader.download_content(tariff_url).tap do |response|
-            create_entry(date, response, local_file_name)
-          end
+        instrument("download_tariff.tariff_synchronizer", date: date, url: url, filename: filename, type: update_klass.update_type) do
+          response = TariffDownloader.download_content(url)
+          create_entry(response)
         end
       end
     end
 
     private
 
-    def local_file_path
-      File.join(TariffSynchronizer.root_path, update_klass.update_type.to_s, local_file_name)
-    end
-
-    def create_entry(date, response, file_name)
-      if response.success? && response.content_present?
-        validate_and_create_update(date, response, file_name)
-      elsif response.success? && !response.content_present?
-        create_or_update(date, BaseUpdate::FAILED_STATE, file_name)
-        instrument("blank_update.tariff_synchronizer", date: date, url: response.url)
-      elsif response.retry_count_exceeded?
-        create_or_update(date, BaseUpdate::FAILED_STATE, file_name)
-        instrument("retry_exceeded.tariff_synchronizer", date: date, url: response.url)
-      elsif response.not_found?
-        if date < Date.current
-          create_or_update(date, BaseUpdate::MISSING_STATE, missing_update_name_for(date))
-          instrument("not_found.tariff_synchronizer", date: date, url: response.url)
-        end
+    def update_record
+      if update_object.present?
+        update_object.update(filesize: filesize)
+      else
+        create_or_update(BaseUpdate::PENDING_STATE, filename, filesize)
       end
     end
 
-    def create_or_update(date, state, file_name, filesize = nil)
-      update_klass.find_or_create(
-        filename: file_name,
-        update_type: update_klass.name,
-        issue_date: date
-      ).update(state: state, filesize: filesize)
+    def file_downloaded?
+      File.exist?(file_path)
     end
 
-    def validate_and_create_update(date, response, file_name)
+    def update_object
+      update_klass.find(filename: filename, update_type: update_klass.name, issue_date: date)
+    end
+
+    def file_path
+      File.join(TariffSynchronizer.root_path, update_klass.update_type.to_s, filename)
+    end
+
+    def filesize
+      @filesize ||= File.read(file_path).size
+    end
+
+    def create_entry(response)
+      if response.success? && response.content_present?
+        validate_and_create_update(response)
+      elsif response.success? && !response.content_present?
+        create_record_for_empty_response(response)
+      elsif response.retry_count_exceeded?
+        create_record_for_retries_exceeded(response)
+      elsif response.not_found?
+        create_missing_record(response)
+      end
+    end
+
+    def create_record_for_empty_response(response)
+      create_or_update(BaseUpdate::FAILED_STATE, filename)
+      instrument("blank_update.tariff_synchronizer", date: date, url: response.url)
+    end
+
+    def create_record_for_retries_exceeded(response)
+      create_or_update(BaseUpdate::FAILED_STATE, filename)
+      instrument("retry_exceeded.tariff_synchronizer", date: date, url: response.url)
+    end
+
+    def create_missing_record(response)
+      # Do not create missing record until we are sure until the next day
+      return if date >= Date.current
+
+      create_or_update(BaseUpdate::MISSING_STATE, missing_update_name)
+      instrument("not_found.tariff_synchronizer", date: date, url: response.url)
+    end
+
+    def validate_and_create_update(response)
       begin
         update_klass.validate_file!(response.content)
       rescue BaseUpdate::InvalidContents => e
         instrument("invalid_contents.tariff_synchronizer", date: date, url: response.url)
         exception = e.original
-        create_or_update(date, BaseUpdate::FAILED_STATE, file_name).tap do |entry|
+        create_or_update(BaseUpdate::FAILED_STATE, filename).tap do |entry|
           entry.update(
             exception_class: "#{exception.class}: #{exception.message}",
             exception_backtrace: exception.backtrace.try(:join, "\n")
@@ -84,24 +99,30 @@ module TariffSynchronizer
         end
       else
         # file is valid
-        create_or_update(date, BaseUpdate::PENDING_STATE, file_name, response.content.size)
-        write_update_file(date, response, file_name)
+        create_or_update(BaseUpdate::PENDING_STATE, filename, response.content.size)
+        write_update_file(response)
       end
     end
 
-    def write_update_file(date, response, file_name)
-      update_path = update_path(file_name)
+    def create_or_update(state, file_name, file_size = nil)
+      update_klass.find_or_create(
+        filename: file_name,
+        update_type: update_klass.name,
+        issue_date: date
+      ).update(state: state, filesize: file_size)
+    end
 
+    def write_update_file(response)
       instrument("update_written.tariff_synchronizer", date: date, path: update_path, size: response.content.size) do
         TariffDownloader.write_file(update_path, response.content)
       end
     end
 
-    def update_path(file_name)
-      File.join(TariffSynchronizer.root_path, update_klass.update_type.to_s, file_name)
+    def update_path
+      File.join(TariffSynchronizer.root_path, update_klass.update_type.to_s, filename)
     end
 
-    def missing_update_name_for(date)
+    def missing_update_name
       "#{date}_#{update_klass.update_type}"
     end
   end
