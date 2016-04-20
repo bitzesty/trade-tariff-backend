@@ -13,11 +13,11 @@ module TariffSynchronizer
         instrument("get_taric_update_name.tariff_synchronizer", date: date, url: initial_url)
         response = download_content(initial_url)
 
-        if response.success? && response.content_present?
+        if response.present?
           generator.get_info_from_response(response.content).each do |update|
             perform_download(update[:filename], update[:url], date)
           end
-        elsif response.success? && !response.content_present?
+        elsif response.empty?
           create_record_for_empty_response(date, response)
         elsif response.retry_count_exceeded?
           create_record_for_retries_exceeded

@@ -6,8 +6,6 @@ module TariffSynchronizer
 
     attr_reader :response_code, :url
 
-    delegate :present?, :size, to: :content, prefix: true, allow_nil: true
-
     def initialize(url, response_code, content)
       @url = url
       @response_code = response_code
@@ -37,6 +35,14 @@ module TariffSynchronizer
 
     def not_found?
       response_code == 404
+    end
+
+    def present?
+      response_code == 200 && @content.present?
+    end
+
+    def empty?
+      response_code == 200 && @content.empty?
     end
 
     def content

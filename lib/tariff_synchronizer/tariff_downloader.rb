@@ -53,9 +53,9 @@ module TariffSynchronizer
     end
 
     def create_entry(response)
-      if response.success? && response.content_present?
+      if response.present?
         validate_and_create_update(response)
-      elsif response.success? && !response.content_present?
+      elsif response.empty?
         create_record_for_empty_response(response)
       elsif response.retry_count_exceeded?
         create_record_for_retries_exceeded(response)
