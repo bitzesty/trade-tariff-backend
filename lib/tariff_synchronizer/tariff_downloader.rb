@@ -90,7 +90,7 @@ module TariffSynchronizer
       create_or_update(filename, BaseUpdate::PENDING_STATE, response.content.size)
       write_update_file(response)
     rescue BaseUpdate::InvalidContents => exception
-      persist_exception_for_review(exception, response)
+      persist_exception_for_review(exception)
     end
 
     def create_or_update(file_name, state, file_size = nil)
@@ -114,8 +114,7 @@ module TariffSynchronizer
       "#{date}_#{update_klass.update_type}"
     end
 
-    def persist_exception_for_review
-      instrument("invalid_contents.tariff_synchronizer", date: date, url: response.url)
+    def persist_exception_for_review(exception)
       create_or_update(filename, BaseUpdate::FAILED_STATE)
         .update(exception_class: "#{exception.original.class}: #{exception.original.message}",
                 exception_backtrace: exception.original.backtrace.try(:join, "\n"))
