@@ -328,42 +328,6 @@ FactoryGirl.define do
     footn_id { Forgery(:basic).text(exactly: 3).upcase }
   end
 
-  factory :response, class: TariffSynchronizer::Response do
-    url { Forgery::Internet.domain_name }
-    response_code { [200, 404, 403].sample }
-    content { Forgery(:basic).text }
-
-    trait :success do
-      response_code { 200 }
-    end
-
-    trait :not_found do
-      response_code { 404 }
-      content { nil }
-    end
-
-    trait :failed do
-      response_code { 403 }
-      content { nil }
-    end
-
-    trait :blank do
-      success
-
-      content { nil }
-    end
-
-    trait :retry_exceeded do
-      failed
-
-      after(:build) { |response| response.retry_count_exceeded! }
-    end
-
-    initialize_with {
-      new(url, response_code, content)
-    }
-  end
-
   factory :comm, class: Chief::Comm do
     fe_tsmp { Date.today.ago(2.years) }
     le_tsmp { nil }
