@@ -204,10 +204,6 @@ module TariffSynchronizer
         TariffDownloader.new(local_file_name, tariff_url, date, self).perform
       end
 
-      def update_file_exists?(filename)
-        dataset.where(filename: filename).present?
-      end
-
       def update_type
         raise "Update Type should be specified in inheriting class"
       end
@@ -233,10 +229,6 @@ module TariffSynchronizer
           update_type: self.name,
           issue_date: date
         ).update(state: state, filesize: filesize)
-      end
-
-      def missing_update_name_for(date)
-        "#{date}_#{update_type}"
       end
 
       def pending_from
