@@ -90,20 +90,14 @@ module TariffSynchronizer
       create_or_update(filename, BaseUpdate::PENDING_STATE, response.content.size)
       write_update_file(response)
     rescue BaseUpdate::InvalidContents => exception
-      instrument("invalid_contents.tariff_synchronizer", date: date, url: response.url)
-      create_or_update(filename, BaseUpdate::FAILED_STATE).tap do |entry|
-        entry.update(
-          exception_class: "#{exception.original.class}: #{exception.original.message}",
-          exception_backtrace: exception.original.backtrace.try(:join, "\n")
-        )
-      end
+      persist_exception_for_review(exception, response)
     end
 
     def create_or_update(file_name, state, file_size = nil)
       update_klass.find_or_create(filename: file_name,
                                   update_type: update_klass.name,
                                   issue_date: date)
-                                  .update(state: state, filesize: file_size)
+        .update(state: state, filesize: file_size)
     end
 
     def write_update_file(response)
@@ -119,9 +113,12 @@ module TariffSynchronizer
     def missing_update_name
       "#{date}_#{update_klass.update_type}"
     end
-    #
-    # def logger(key, payload = {})
-    #   ActiveSupport::Notifications.instrument("#{key}.tariff_synchronizer", payload)
-    # end
+
+    def persist_exception_for_review
+      instrument("invalid_contents.tariff_synchronizer", date: date, url: response.url)
+      create_or_update(filename, BaseUpdate::FAILED_STATE)
+        .update(exception_class: "#{exception.original.class}: #{exception.original.message}",
+                exception_backtrace: exception.original.backtrace.try(:join, "\n"))
+    end
   end
 end
