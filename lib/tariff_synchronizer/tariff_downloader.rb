@@ -1,8 +1,5 @@
-# Download pending updates for TARIC and CHIEF data
-# Gets latest downloaded file present in (inbox/failbox/processed) and tries
-# to download any further updates to current day.
-# require "tariff_synchronizer/file_service"
 module TariffSynchronizer
+  # Download pending updates for TARIC and CHIEF data
   class TariffDownloader
     include FileService
 
@@ -18,7 +15,7 @@ module TariffSynchronizer
     end
 
     def perform
-      if file_downloaded?
+      if file_already_downloaded?
         update_record
         instrument("created_tariff.tariff_synchronizer", date: date, filename: filename, type: update_klass.update_type)
       else
@@ -39,7 +36,7 @@ module TariffSynchronizer
       end
     end
 
-    def file_downloaded?
+    def file_already_downloaded?
       File.exist?(file_path)
     end
 
@@ -86,21 +83,17 @@ module TariffSynchronizer
     end
 
     def validate_and_create_update(response)
-      begin
-        update_klass.validate_file!(response.content)
-      rescue BaseUpdate::InvalidContents => e
-        instrument("invalid_contents.tariff_synchronizer", date: date, url: response.url)
-        exception = e.original
-        create_or_update(BaseUpdate::FAILED_STATE, filename).tap do |entry|
-          entry.update(
-            exception_class: "#{exception.class}: #{exception.message}",
-            exception_backtrace: exception.backtrace.try(:join, "\n")
-          )
-        end
-      else
-        # file is valid
-        create_or_update(BaseUpdate::PENDING_STATE, filename, response.content.size)
-        write_update_file(response)
+      update_klass.validate_file!(response.content)
+      # file is valid
+      create_or_update(BaseUpdate::PENDING_STATE, filename, response.content.size)
+      write_update_file(response)
+    rescue BaseUpdate::InvalidContents => exception
+      instrument("invalid_contents.tariff_synchronizer", date: date, url: response.url)
+      create_or_update(BaseUpdate::FAILED_STATE, filename).tap do |entry|
+        entry.update(
+          exception_class: "#{exception.original.class}: #{exception.original.message}",
+          exception_backtrace: exception.original.backtrace.try(:join, "\n")
+        )
       end
     end
 
