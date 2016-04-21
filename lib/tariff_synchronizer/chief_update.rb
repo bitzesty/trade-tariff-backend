@@ -6,8 +6,8 @@ module TariffSynchronizer
   class ChiefUpdate < BaseUpdate
     class << self
       def download(date)
-        chief_file = ChiefFileNameGenerator.new(date)
-        TariffDownloader.new(chief_file.name, chief_file.url, date, self).perform
+        generator = ChiefFileNameGenerator.new(date)
+        TariffDownloader.new(generator.name, generator.url, date, self).perform
       end
 
       def update_type
@@ -18,7 +18,6 @@ module TariffSynchronizer
     def import!
       instrument("apply_chief.tariff_synchronizer", filename: filename) do
         ChiefImporter.new(file_path, issue_date).import
-
         mark_as_applied
       end
 
