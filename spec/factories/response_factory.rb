@@ -20,13 +20,11 @@ FactoryGirl.define do
 
     trait :blank do
       success
-
       content { "" }
     end
 
     trait :retry_exceeded do
       failed
-
       after(:build) { |response| response.retry_count_exceeded! }
     end
 

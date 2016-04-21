@@ -189,42 +189,6 @@ describe TariffSynchronizer::Logger, truncation: true do
     end
   end
 
-  describe '#retry_exceeded logging' do
-    let(:failed_response) { build :response, :retry_exceeded }
-
-    before {
-      expect(TariffSynchronizer::TariffDownloader).to receive(:download_content).and_return(failed_response)
-
-      TariffSynchronizer::ChiefUpdate.download(Date.today)
-    }
-
-    it 'logs a warning event' do
-      expect(@logger.logged(:warn).size).to eq 1
-      expect(@logger.logged(:warn).last).to match /Download retry/
-    end
-
-    it 'sends a warning email' do
-      expect(ActionMailer::Base.deliveries).to_not be_empty
-      email = ActionMailer::Base.deliveries.last
-      expect(email.encoded).to match /Retry count exceeded/
-    end
-  end
-
-  describe '#not_found logging' do
-    let(:not_found_response) { build :response, :not_found }
-
-    before {
-      expect(TariffSynchronizer::TariffDownloader).to receive(:download_content).and_return(not_found_response)
-
-      TariffSynchronizer::ChiefUpdate.download(Date.yesterday)
-    }
-
-    it 'logs a warning event' do
-      expect(@logger.logged(:warn).size).to eq 1
-      expect(@logger.logged(:warn).last).to match /Update not found/
-    end
-  end
-
   describe '#not_found_on_file_system logging' do
     let(:taric_update) { create :taric_update }
 
@@ -260,47 +224,6 @@ describe TariffSynchronizer::Logger, truncation: true do
     it 'logs an info event' do
       expect(@logger.logged(:info).size).to eq 1
       expect(@logger.logged(:info).first).to match /Checking for TARIC update/
-    end
-  end
-
-  describe '#update_written logging' do
-    let(:success_response) { build :response, :success }
-
-    before {
-      # Download mock response
-      expect(TariffSynchronizer::TariffDownloader).to receive(:download_content).and_return(success_response)
-      # Do not write file to file system
-      expect(TariffSynchronizer::TariffDownloader).to receive(:write_file).and_return(true)
-      # Actual Download
-      TariffSynchronizer::ChiefUpdate.download(Date.today)
-    }
-
-    it 'logs an info event' do
-      expect(@logger.logged(:info).size).to eq 2
-      expect(@logger.logged(:info).first).to match /Update file written to/
-    end
-  end
-
-  describe '#blank_update logging' do
-    let(:blank_response) { build :response, :blank }
-
-    before {
-      # Download mock response
-      expect(TariffSynchronizer::TariffDownloader).to receive(:download_content)
-                                             .and_return(blank_response)
-      # Actual Download
-      TariffSynchronizer::ChiefUpdate.download(Date.today)
-    }
-
-    it 'logs an error event' do
-      expect(@logger.logged(:error).size).to eq 1
-      expect(@logger.logged(:error).first).to match /Blank update content/
-    end
-
-    it 'sends and error email' do
-      expect(ActionMailer::Base.deliveries).to_not be_empty
-      email = ActionMailer::Base.deliveries.last
-      expect(email.encoded).to match /blank file/
     end
   end
 

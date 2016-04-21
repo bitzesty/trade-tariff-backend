@@ -83,7 +83,7 @@ module TariffSynchronizer
     end
 
     def created_tariff(event)
-      info "Created/Updated #{event.payload[:type].upcase}  entry for #{event.payload[:date]} and #{event.payload[:filename]}"
+      info "Created/Updated #{event.payload[:type].upcase} entry for #{event.payload[:date]} and #{event.payload[:filename]}"
     end
 
     def download_tariff(event)
