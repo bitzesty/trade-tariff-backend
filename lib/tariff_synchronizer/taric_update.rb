@@ -15,7 +15,7 @@ module TariffSynchronizer
 
         if response.present?
           generator.get_info_from_response(response.content).each do |update|
-            perform_download(update[:filename], update[:url], date)
+            TariffDownloader.new(update[:filename], update[:url], date, self).perform
           end
         elsif response.empty?
           create_record_for_empty_response(date, response)

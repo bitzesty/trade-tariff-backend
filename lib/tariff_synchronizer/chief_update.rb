@@ -7,7 +7,7 @@ module TariffSynchronizer
     class << self
       def download(date)
         chief_file = ChiefFileNameGenerator.new(date)
-        perform_download(chief_file.name, chief_file.url, date)
+        TariffDownloader.new(chief_file.name, chief_file.url, date, self).perform
       end
 
       def update_type

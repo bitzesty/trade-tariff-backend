@@ -200,10 +200,6 @@ module TariffSynchronizer
         notify_about_missing_updates if last_updates_are_missing?
       end
 
-      def perform_download(local_file_name, tariff_url, date)
-        TariffDownloader.new(local_file_name, tariff_url, date, self).perform
-      end
-
       def update_type
         raise "Update Type should be specified in inheriting class"
       end
@@ -223,12 +219,12 @@ module TariffSynchronizer
 
       private
 
-      def create_or_update(date, state, file_name, filesize = nil)
+      def create_or_update(date, state, file_name)
         find_or_create(
           filename: file_name,
           update_type: self.name,
           issue_date: date
-        ).update(state: state, filesize: filesize)
+        ).update(state: state)
       end
 
       def pending_from
