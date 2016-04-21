@@ -41,6 +41,7 @@ end
 
 group :development, :test do
   gem "foreman"
+  gem "dotenv-rails"
   gem "pry-rails", "~> 0.3"
   gem "pry-byebug"
   gem "brakeman", "~> 3.0", require: false
