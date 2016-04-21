@@ -10,6 +10,7 @@ gem "rabl", "~> 0.11"
 gem "ansi", "~> 1.5"
 gem "sequel", "~> 4.32"
 gem "sidekiq", "~> 4.1.1"
+gem "sidekiq-scheduler", "~> 2.0"
 gem "elasticsearch", "~> 0.4"
 gem "elasticsearch-extensions", "~> 0.0"
 gem "yajl-ruby", "~> 1.2", require: "yajl"
@@ -23,7 +24,6 @@ gem "curb", "~> 0.8"
 
 gem "nokogiri", "~> 1.6"
 
-gem "whenever", "~> 0.9"
 gem "airbrake", "~> 4.3"
 gem "aws-ses", "~> 0.6", require: "aws/ses" #used for sync emails
 gem "logstasher", "~> 0.6"
