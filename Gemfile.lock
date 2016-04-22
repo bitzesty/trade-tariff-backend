@@ -62,7 +62,6 @@ GEM
       timers (~> 4.0.0)
     chronic (0.10.2)
     coderay (1.1.0)
-    colorize (0.7.5)
     concurrent-ruby (1.0.1)
     connection_pool (2.2.0)
     crack (0.4.2)
@@ -297,7 +296,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  addressable (~> 2.3)
   airbrake (~> 4.3)
   ansi (~> 1.5)
   aws-ses (~> 0.6)

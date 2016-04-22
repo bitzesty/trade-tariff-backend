@@ -1,36 +1,12 @@
-require 'addressable/uri'
-
 module TariffSynchronizer
   class Response
     TERMINATING_RESPONSE_CODES = [200, 404]
 
-    attr_reader :response_code, :url
+    attr_reader :response_code
 
-    def initialize(url, response_code, content)
-      @url = url
+    def initialize(response_code, content)
       @response_code = response_code
       @content = content
-    end
-
-    def ==(other_response)
-      self.url == other_response.url &&
-      self.response_code == other_response.response_code &&
-      self.content == other_response.content
-    rescue NoMethodError
-      # if `other_response` doesn't respond to methods above
-      false
-    end
-
-    def uri
-      @uri ||= Addressable::URI.parse(url)
-    end
-
-    def file_name
-      uri.basename
-    end
-
-    def success?
-      response_code == 200
     end
 
     def not_found?
@@ -47,10 +23,6 @@ module TariffSynchronizer
 
     def content
       @content.presence || ""
-    end
-
-    def valid?
-      true
     end
 
     def terminated?

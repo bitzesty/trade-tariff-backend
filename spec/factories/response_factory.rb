@@ -1,6 +1,5 @@
 FactoryGirl.define do
   factory :response, class: TariffSynchronizer::Response do
-    url { Forgery::Internet.domain_name }
     response_code { [200, 404, 403].sample }
     content { Forgery(:basic).text }
 
@@ -28,8 +27,6 @@ FactoryGirl.define do
       after(:build) { |response| response.retry_count_exceeded! }
     end
 
-    initialize_with {
-      new(url, response_code, content)
-    }
+    initialize_with { new(response_code, content) }
   end
 end
