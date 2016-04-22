@@ -55,6 +55,6 @@ group :test do
   gem "simplecov"
   gem "simplecov-rcov"
   gem "webmock"
-  gem "database_cleaner"
+  gem "database_cleaner", github: "theharq/database_cleaner", branch: "sequel-updates"
   gem "rspec_junit_formatter"
 end

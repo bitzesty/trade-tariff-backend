@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/theharq/database_cleaner.git
+  revision: 0492595ea22901f9facd05f94586c9a0c29b5766
+  branch: sequel-updates
+  specs:
+    database_cleaner (1.5.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -69,7 +76,6 @@ GEM
       safe_yaml (~> 1.0.0)
     curb (0.8.8)
     dalli (2.7.4)
-    database_cleaner (1.5.3)
     diff-lcs (1.2.5)
     docile (1.1.5)
     elasticsearch (0.4.11)
@@ -307,7 +313,7 @@ DEPENDENCIES
   builder (~> 3.2)
   curb (~> 0.8)
   dalli (~> 2.7)
-  database_cleaner
+  database_cleaner!
   elasticsearch (~> 0.4)
   elasticsearch-extensions (~> 0.0)
   factory_girl_rails
