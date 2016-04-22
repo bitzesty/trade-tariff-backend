@@ -7,13 +7,13 @@ describe TariffSynchronizer::TariffDownloader do
   describe "#perform" do
     context "a CHIEF file" do
       let(:generator) { ChiefFileNameGenerator.new(example_date) }
-
+      let(:chief_update_klass) { TariffSynchronizer::ChiefUpdate }
       let(:tariff_downloader) do
-        TariffSynchronizer::TariffDownloader.new(
+        described_class.new(
           generator.name,
           generator.url,
           example_date,
-          TariffSynchronizer::ChiefUpdate)
+          chief_update_klass)
       end
 
       context "File already downloaded" do
@@ -24,19 +24,19 @@ describe TariffSynchronizer::TariffDownloader do
 
         it "Update filesize to ChiefUpdate record if this is already created" do
           create(:chief_update, filename: generator.name, issue_date: example_date)
-          chief_update = TariffSynchronizer::ChiefUpdate.last
+          chief_update = chief_update_klass.last
           expect(chief_update.filesize).to be_nil
           expect {
             tariff_downloader.perform
-          }.to_not change(TariffSynchronizer::ChiefUpdate, :count)
+          }.to_not change(chief_update_klass, :count)
           expect(chief_update.reload.filesize).to eq(999)
         end
 
         it "Creates a ChiefUpdate record with a pending state" do
           expect {
             tariff_downloader.perform
-          }.to change(TariffSynchronizer::ChiefUpdate, :count).by(1)
-          chief_update = TariffSynchronizer::ChiefUpdate.last
+          }.to change(chief_update_klass, :count).by(1)
+          chief_update = chief_update_klass.last
           expect(chief_update.filename).to eq(generator.name)
           expect(chief_update.filesize).to eq(999)
           expect(chief_update.issue_date).to eq(example_date)
@@ -58,7 +58,7 @@ describe TariffSynchronizer::TariffDownloader do
         end
 
         it "Calls the external server to download file" do
-          expect(TariffSynchronizer::TariffDownloader).to receive(:download_content)
+          expect(described_class).to receive(:download_content)
             .with(generator.url)
           allow(tariff_downloader).to receive(:create_entry)
           tariff_downloader.perform
@@ -66,23 +66,23 @@ describe TariffSynchronizer::TariffDownloader do
 
         context "Successful Response" do
           before do
-            allow(TariffSynchronizer::TariffDownloader).to receive(:download_content)
+            allow(described_class).to receive(:download_content)
               .with(generator.url).and_return(build :response, :success, content: "abc")
 
             # Let's assume 'abc' is a valid csv content
-            allow(TariffSynchronizer::ChiefUpdate).to receive(:validate_file!)
+            allow(chief_update_klass).to receive(:validate_file!)
                                                   .and_return(true)
           end
 
           it "Creates a record with a pending state" do
             # Let's stub the creation of the file
-            expect(TariffSynchronizer::TariffDownloader).to receive(:write_file)
+            expect(described_class).to receive(:write_file)
 
             expect {
               tariff_downloader.perform
-            }.to change(TariffSynchronizer::ChiefUpdate, :count).by(1)
+            }.to change(chief_update_klass, :count).by(1)
 
-            chief_update = TariffSynchronizer::ChiefUpdate.last
+            chief_update = chief_update_klass.last
             expect(chief_update.filename).to eq("2010-01-01_KBT009(10001).txt")
             expect(chief_update.filesize).to eq(3)
             expect(chief_update.issue_date).to eq(example_date)
@@ -91,13 +91,13 @@ describe TariffSynchronizer::TariffDownloader do
 
           it "Calls the write_file method to create the file" do
             path = "#{TariffSynchronizer.root_path}/chief/#{generator.name}"
-            expect(TariffSynchronizer::TariffDownloader).to receive(:write_file).with(path, "abc")
+            expect(described_class).to receive(:write_file).with(path, "abc")
             tariff_downloader.perform
           end
 
           it "Logs the creating of the ChiefUpdate record with missing state" do
             # Let's stub the creation of the file
-            expect(TariffSynchronizer::TariffDownloader).to receive(:write_file)
+            expect(described_class).to receive(:write_file)
             tariff_synchronizer_logger_listener
 
             tariff_downloader.perform
@@ -108,16 +108,16 @@ describe TariffSynchronizer::TariffDownloader do
 
         context "Missing Response" do
           before do
-            allow(TariffSynchronizer::TariffDownloader).to receive(:download_content)
+            allow(described_class).to receive(:download_content)
               .with(generator.url).and_return(build(:response, :not_found))
           end
 
           it "Creates a record with a missing state if the date has passed" do
             expect {
               tariff_downloader.perform
-            }.to change(TariffSynchronizer::ChiefUpdate, :count).by(1)
+            }.to change(chief_update_klass, :count).by(1)
 
-            chief_update = TariffSynchronizer::ChiefUpdate.last
+            chief_update = chief_update_klass.last
             expect(chief_update.filename).to eq("2010-01-01_chief")
             expect(chief_update.filesize).to be_nil
             expect(chief_update.issue_date).to eq(example_date)
@@ -129,7 +129,7 @@ describe TariffSynchronizer::TariffDownloader do
               travel_to example_date do
                 tariff_downloader.perform
               end
-            }.to_not change(TariffSynchronizer::ChiefUpdate, :count)
+            }.to_not change(chief_update_klass, :count)
           end
 
           it "Logs the creating of the ChiefUpdate record with missing state" do
@@ -142,16 +142,16 @@ describe TariffSynchronizer::TariffDownloader do
 
         context "Retries Exceeded Response" do
           before do
-            allow(TariffSynchronizer::TariffDownloader).to receive(:download_content)
+            allow(described_class).to receive(:download_content)
               .with(generator.url).and_return(build(:response, :retry_exceeded))
           end
 
           it "Creates a record with a failed state" do
             expect {
               tariff_downloader.perform
-            }.to change(TariffSynchronizer::ChiefUpdate, :count).by(1)
+            }.to change(chief_update_klass, :count).by(1)
 
-            chief_update = TariffSynchronizer::ChiefUpdate.last
+            chief_update = chief_update_klass.last
             expect(chief_update.filename).to eq("2010-01-01_KBT009(10001).txt")
             expect(chief_update.filesize).to be_nil
             expect(chief_update.issue_date).to eq(example_date)
@@ -175,16 +175,16 @@ describe TariffSynchronizer::TariffDownloader do
 
         context "Blank Response" do
           before do
-            allow(TariffSynchronizer::TariffDownloader).to receive(:download_content)
+            allow(described_class).to receive(:download_content)
               .with(generator.url).and_return(build(:response, :blank))
           end
 
           it "Creates a record with a missing state" do
             expect {
               tariff_downloader.perform
-            }.to change(TariffSynchronizer::ChiefUpdate, :count).by(1)
+            }.to change(chief_update_klass, :count).by(1)
 
-            chief_update = TariffSynchronizer::ChiefUpdate.last
+            chief_update = chief_update_klass.last
             expect(chief_update.filename).to eq("2010-01-01_KBT009(10001).txt")
             expect(chief_update.filesize).to be_nil
             expect(chief_update.issue_date).to eq(example_date)
