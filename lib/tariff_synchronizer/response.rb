@@ -9,18 +9,6 @@ module TariffSynchronizer
       @content = content
     end
 
-    def not_found?
-      response_code == 404
-    end
-
-    def present?
-      response_code == 200 && @content.present?
-    end
-
-    def empty?
-      response_code == 200 && @content.empty?
-    end
-
     def content
       @content.presence || ""
     end
@@ -35,6 +23,32 @@ module TariffSynchronizer
 
     def retry_count_exceeded?
       @retry_count_exceeded
+    end
+
+    def state
+      if successful?
+        :successful
+      elsif empty?
+        :empty
+      elsif retry_count_exceeded?
+        :exceeded
+      elsif not_found?
+        :not_found
+      end
+    end
+
+    private
+
+    def successful?
+      response_code == 200 && @content.present?
+    end
+
+    def empty?
+      response_code == 200 && @content.empty?
+    end
+
+    def not_found?
+      response_code == 404
     end
   end
 end
