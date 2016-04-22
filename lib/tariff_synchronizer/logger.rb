@@ -86,10 +86,6 @@ module TariffSynchronizer
       info "Created/Updated #{event.payload[:type].upcase} entry for #{event.payload[:date]} and #{event.payload[:filename]}"
     end
 
-    def download_tariff(event)
-      info "Downloaded #{event.payload[:type].upcase} update for #{event.payload[:date]} at #{event.payload[:url]}, looking for file #{event.payload[:filename]}"
-    end
-
     # Apply CHIEF update
     def apply_chief(event)
       info "Applied CHIEF update #{event.payload[:filename]}"
@@ -105,9 +101,8 @@ module TariffSynchronizer
       info "Checking for TARIC update for #{event.payload[:date]} at #{event.payload[:url]}"
     end
 
-    # Update file written to file system
-    def update_written(event)
-      info "Update file written to file system: #{File.join(Rails.root, event.payload[:path])} (size: #{event.payload[:size]})"
+    def downloaded_tariff_update(event)
+      info "#{event.payload[:type].upcase} update for #{event.payload[:date]} downloaded from #{event.payload[:url]}, to #{event.payload[:path]} (size: #{event.payload[:size]})"
     end
 
     # Update with blank content received
