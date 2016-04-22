@@ -6,141 +6,13 @@ describe TariffSynchronizer::TaricUpdate do
 
   let(:example_date) { Date.new(2010,1,1) }
 
-  describe ".download" do
-    let(:generator) { TaricFileNameGenerator.new(example_date) }
-
-    it "Logs the request for the TaricUpdate file" do
-      allow(TariffSynchronizer::TaricUpdate).to receive(:download_content)
-        .with(generator.url).and_return(build(:response, :not_found))
-      tariff_synchronizer_logger_listener
+  describe '.download' do
+    it "Calls TaricUpdateDownloader perform for a TARIC update" do
+      downlader = instance_double("TariffSynchronizer::TaricUpdateDownloader", perform: true)
+      expect(TariffSynchronizer::TaricUpdateDownloader).to receive(:new)
+        .with(example_date)
+        .and_return(downlader)
       TariffSynchronizer::TaricUpdate.download(example_date)
-      expect(@logger.logged(:info).size).to eq 1
-      expect(@logger.logged(:info).last).to eq("Checking for TARIC update for #{example_date} at #{generator.url}")
-    end
-
-    it "Calls the external server to download file" do
-      expect(TariffSynchronizer::TaricUpdate).to receive(:download_content)
-        .with(generator.url).and_return(build(:response, :not_found))
-      TariffSynchronizer::TaricUpdate.download(example_date)
-    end
-
-    context "Successful Response" do
-      before do
-        allow(TariffSynchronizer::TaricUpdate).to receive(:download_content)
-          .with(generator.url).and_return(build :response, :success, content: "ABC.xml\nXYZ.xml")
-      end
-
-      it "Calls TariffDownloader perform for each TARIC update file found" do
-        downlader = instance_double("TariffSynchronizer::TariffDownloader", perform: true)
-
-        ["ABC.xml", "XYZ.xml"].each do |filename|
-          expect(TariffSynchronizer::TariffDownloader).to receive(:new)
-            .with("2010-01-01_#{filename}", "http://example.com/taric/#{filename}", example_date, TariffSynchronizer::TaricUpdate)
-            .and_return(downlader)
-        end
-
-        TariffSynchronizer::TaricUpdate.download(example_date)
-      end
-    end
-
-    context "Missing Response" do
-      before do
-        allow(TariffSynchronizer::TaricUpdate).to receive(:download_content)
-          .with(generator.url).and_return(build(:response, :not_found))
-      end
-
-      it "Creates a record with a missing state if the date has passed" do
-        expect {
-          TariffSynchronizer::TaricUpdate.download(example_date)
-        }.to change(TariffSynchronizer::TaricUpdate, :count).by(1)
-
-        taric_update = TariffSynchronizer::TaricUpdate.last
-        expect(taric_update.filename).to eq("2010-01-01_taric")
-        expect(taric_update.filesize).to be_nil
-        expect(taric_update.issue_date).to eq(example_date)
-        expect(taric_update.state).to eq(TariffSynchronizer::BaseUpdate::MISSING_STATE)
-      end
-
-      it "Doesn't create a record if the date is the same" do
-        expect {
-          travel_to example_date do
-            TariffSynchronizer::TaricUpdate.download(example_date)
-          end
-        }.to_not change(TariffSynchronizer::TaricUpdate, :count)
-      end
-
-      it "Logs the creating of the TaricUpdate record with missing state" do
-        tariff_synchronizer_logger_listener
-        TariffSynchronizer::TaricUpdate.download(example_date)
-        expect(@logger.logged(:warn).size).to eq 1
-        expect(@logger.logged(:warn).last).to eq("Update not found for 2010-01-01 at http://example.com/taric/TARIC320100101")
-      end
-    end
-
-    context "Retries Exceeded Response" do
-      before do
-        allow(TariffSynchronizer::TaricUpdate).to receive(:download_content)
-          .with(generator.url).and_return(build(:response, :retry_exceeded))
-      end
-
-      it "Creates a record with a failed state" do
-        expect {
-          TariffSynchronizer::TaricUpdate.download(example_date)
-        }.to change(TariffSynchronizer::TaricUpdate, :count).by(1)
-
-        taric_update = TariffSynchronizer::TaricUpdate.last
-        expect(taric_update.filename).to eq("2010-01-01_taric")
-        expect(taric_update.filesize).to be_nil
-        expect(taric_update.issue_date).to eq(example_date)
-        expect(taric_update.state).to eq(TariffSynchronizer::BaseUpdate::FAILED_STATE)
-      end
-
-      it "Logs the creating of the TaricUpdate record with failed state" do
-        tariff_synchronizer_logger_listener
-        TariffSynchronizer::TaricUpdate.download(example_date)
-        expect(@logger.logged(:warn).size).to eq 1
-        expect(@logger.logged(:warn).last).to eq("Download retry count exceeded for http://example.com/taric/TARIC320100101")
-      end
-
-      it "Sends a warning email" do
-        ActionMailer::Base.deliveries.clear
-        TariffSynchronizer::TaricUpdate.download(example_date)
-        email = ActionMailer::Base.deliveries.last
-        expect(email.encoded).to match /Retry count exceeded/
-      end
-    end
-
-    context "Blank Response" do
-      before do
-        allow(TariffSynchronizer::TaricUpdate).to receive(:download_content)
-          .with(generator.url).and_return(build(:response, :blank))
-      end
-
-      it "Creates a record with a missing state" do
-        expect {
-          TariffSynchronizer::TaricUpdate.download(example_date)
-        }.to change(TariffSynchronizer::TaricUpdate, :count).by(1)
-
-        taric_update = TariffSynchronizer::TaricUpdate.last
-        expect(taric_update.filename).to eq("2010-01-01_taric")
-        expect(taric_update.filesize).to be_nil
-        expect(taric_update.issue_date).to eq(example_date)
-        expect(taric_update.state).to eq(TariffSynchronizer::BaseUpdate::FAILED_STATE)
-      end
-
-      it "Logs the creating of the TaricUpdate record with failed state" do
-        tariff_synchronizer_logger_listener
-        TariffSynchronizer::TaricUpdate.download(example_date)
-        expect(@logger.logged(:error).size).to eq 1
-        expect(@logger.logged(:error).last).to eq("Blank update content received for 2010-01-01: http://example.com/taric/TARIC320100101")
-      end
-
-      it "Sends a warning email" do
-        ActionMailer::Base.deliveries.clear
-        TariffSynchronizer::TaricUpdate.download(example_date)
-        email = ActionMailer::Base.deliveries.last
-        expect(email.encoded).to match /Received a blank file/
-      end
     end
   end
 
@@ -148,7 +20,7 @@ describe TariffSynchronizer::TaricUpdate do
     let(:not_found_response) { build :response, :not_found }
 
     it "notifies about several missing updates in a row" do
-      allow(TariffSynchronizer::TaricUpdate).to receive(:download_content).and_return(not_found_response)
+      allow(TariffSynchronizer::TaricUpdateDownloader).to receive(:download_content).and_return(not_found_response)
       expect(TariffSynchronizer::TaricUpdate).to receive(:notify_about_missing_updates)
       create :taric_update, :missing, issue_date: Date.today.ago(2.days)
       create :taric_update, :missing, issue_date: Date.today.ago(3.days)
@@ -156,7 +28,7 @@ describe TariffSynchronizer::TaricUpdate do
     end
 
     it "Calls the difference from the intial update to the current time, the donwload method" do
-      expect(TariffSynchronizer::TaricUpdate).to receive(:download_content).and_return(not_found_response).exactly(3).times
+      expect(TariffSynchronizer::TaricUpdateDownloader).to receive(:download_content).and_return(not_found_response).exactly(3).times
       travel_to TariffSynchronizer.taric_initial_update_date + 2 do
         TariffSynchronizer::TaricUpdate.sync
       end
