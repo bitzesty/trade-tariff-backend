@@ -59,8 +59,7 @@ describe TariffSynchronizer::TariffDownloader do
 
         it "Calls the external server to download file" do
           expect(described_class).to receive(:download_content)
-            .with(generator.url)
-          allow(tariff_downloader).to receive(:create_entry)
+            .with(generator.url).and_return(build(:response, :not_found))
           tariff_downloader.perform
         end
 

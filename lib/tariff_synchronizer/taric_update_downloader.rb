@@ -17,16 +17,7 @@ module TariffSynchronizer
 
     def perform
       log_request_to_taric_update
-
-      if response.present?
-        create_records_for_successful_response
-      elsif response.empty?
-        create_record_for_empty_response
-      elsif response.retry_count_exceeded?
-        create_record_for_retries_exceeded
-      elsif response.not_found?
-        create_missing_record
-      end
+      send("create_record_for_#{response.state}_response")
     end
 
     private
@@ -35,7 +26,7 @@ module TariffSynchronizer
       @response ||= TaricUpdateDownloader.download_content(url)
     end
 
-    def create_records_for_successful_response
+    def create_record_for_successful_response
       @generator.get_info_from_response(response.content).each do |update|
         TariffDownloader.new(update[:filename], update[:url], date, TariffSynchronizer::TaricUpdate).perform
       end
@@ -46,12 +37,12 @@ module TariffSynchronizer
       instrument("blank_update.tariff_synchronizer", date: date, url: url)
     end
 
-    def create_record_for_retries_exceeded
+    def create_record_for_exceeded_response
       update_or_create(BaseUpdate::FAILED_STATE, missing_filename)
       instrument("retry_exceeded.tariff_synchronizer", date: date, url: url)
     end
 
-    def create_missing_record
+    def create_record_for_not_found_response
       # Do not create missing record until we are sure until the next day
       return if date >= Date.current
       update_or_create(BaseUpdate::MISSING_STATE, missing_filename)

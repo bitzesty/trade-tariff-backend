@@ -33,10 +33,6 @@ module TariffSynchronizer
       instrument("created_tariff.tariff_synchronizer", date: date, filename: filename, type: update_klass.update_type)
     end
 
-    def download_and_create_entry
-      create_entry TariffDownloader.download_content(url)
-    end
-
     def file_already_downloaded?
       File.exist?(file_path)
     end
@@ -53,16 +49,12 @@ module TariffSynchronizer
       @filesize ||= File.read(file_path).size
     end
 
-    def create_entry(response)
-      if response.present?
-        validate_and_create_update(response.content)
-      elsif response.empty?
-        create_record_for_empty_response
-      elsif response.retry_count_exceeded?
-        create_record_for_retries_exceeded
-      elsif response.not_found?
-        create_missing_record
-      end
+    def response
+      @response ||= TariffDownloader.download_content(url)
+    end
+
+    def download_and_create_entry
+      send("create_record_for_#{response.state}_response")
     end
 
     def create_record_for_empty_response
@@ -70,12 +62,12 @@ module TariffSynchronizer
       instrument("blank_update.tariff_synchronizer", date: date, url: url)
     end
 
-    def create_record_for_retries_exceeded
+    def create_record_for_exceeded_response
       update_or_create(filename, BaseUpdate::FAILED_STATE)
       instrument("retry_exceeded.tariff_synchronizer", date: date, url: url)
     end
 
-    def create_missing_record
+    def create_record_for_not_found_response
       # Do not create missing record until we are sure until the next day
       return if date >= Date.current
 
@@ -83,10 +75,10 @@ module TariffSynchronizer
       instrument("not_found.tariff_synchronizer", date: date, url: url)
     end
 
-    def validate_and_create_update(response_body)
-      update_klass.validate_file!(response_body) # Validate response
-      update_or_create(filename, BaseUpdate::PENDING_STATE, response_body.size)
-      write_update_file(response_body)
+    def create_record_for_successful_response
+      update_klass.validate_file!(response.content) # Validate response
+      update_or_create(filename, BaseUpdate::PENDING_STATE, response.content.size)
+      write_update_file(response.content)
     rescue BaseUpdate::InvalidContents => exception
       persist_exception_for_review(exception)
     end
