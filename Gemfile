@@ -42,7 +42,7 @@ end
 group :development, :test do
   gem "foreman"
   gem "pry-rails", "~> 0.3"
-  gem "pry-nav"
+  gem "pry-byebug"
   gem "brakeman", "~> 3.0", require: false
   gem "factory_girl_rails"
   gem "rspec-rails", "~> 3.0"

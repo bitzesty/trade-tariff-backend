@@ -58,6 +58,7 @@ GEM
       sass (~> 3.0)
       terminal-table (~> 1.4)
     builder (3.2.2)
+    byebug (8.2.4)
     celluloid (0.16.0)
       timers (~> 4.0.0)
     chronic (0.10.2)
@@ -157,8 +158,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    pry-nav (0.2.4)
-      pry (>= 0.9.10, < 0.11.0)
+    pry-byebug (3.3.0)
+      byebug (~> 8.0)
+      pry (~> 0.10)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
     puma (2.13.4)
@@ -322,7 +324,7 @@ DEPENDENCIES
   ox (~> 2.3)
   pg
   plek (~> 1.11)
-  pry-nav
+  pry-byebug
   pry-rails (~> 0.3)
   puma
   rabl (~> 0.11)
