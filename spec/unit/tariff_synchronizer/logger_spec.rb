@@ -213,20 +213,6 @@ describe TariffSynchronizer::Logger, truncation: true do
     end
   end
 
-  describe '#get_taric_update_name logging' do
-    let(:not_found_response) { build :response, :not_found }
-
-    before {
-      expect(TariffSynchronizer::TaricUpdate).to receive(:download_content).and_return(not_found_response)
-      TariffSynchronizer::TaricUpdate.download(Date.today)
-    }
-
-    it 'logs an info event' do
-      expect(@logger.logged(:info).size).to eq 1
-      expect(@logger.logged(:info).first).to match /Checking for TARIC update/
-    end
-  end
-
   describe '#cant_open_file logging' do
     let(:success_response) { build :response, :success }
 
