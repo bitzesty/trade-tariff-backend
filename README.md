@@ -28,10 +28,10 @@ Run the bootstrap command `govuk_puppet`.
     ```
     brew install elasticsearch
     brew install redis
-    brew install mysql
+    brew install postgresql
     ```
 
-2. Ruby 2.0.0
+2. Ruby 2.2.3
 
     ```
     brew install chruby
