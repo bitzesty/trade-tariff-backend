@@ -15,12 +15,6 @@ Also uses:
 
 ## Setup
 
-### If using the GOV.UK development Vagrant VM
-
-Ensure that you have pulled the latest version of the puppet repo.
-
-Run the bootstrap command `govuk_puppet`.
-
 ### Dependencies (OS X using Homebrew)
 
 1. ElasticSearch & MySQL & Redis
@@ -32,11 +26,6 @@ Run the bootstrap command `govuk_puppet`.
     ```
 
 2. Ruby 2.2.3
-
-    ```
-    brew install chruby
-    brew install ruby-install
-    ```
 
 ## Load database
 
@@ -51,7 +40,7 @@ Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff
 ## Run Backend
 
   ```
-  bundle exec ./startup.sh
+  bundle exec foreman start
   ```
 
 ## Performing daily updates

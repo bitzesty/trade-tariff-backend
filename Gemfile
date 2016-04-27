@@ -41,6 +41,7 @@ group :production do
 end
 
 group :development, :test do
+  gem "foreman"
   gem "pry-rails", "~> 0.3"
   gem "pry-nav"
   gem "brakeman", "~> 3.0", require: false
