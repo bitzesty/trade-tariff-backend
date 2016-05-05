@@ -1,5 +1,3 @@
-require 'time_machine'
-
 class GoodsNomenclature < Sequel::Model
   extend ActiveModel::Naming
 
@@ -124,7 +122,3 @@ class GoodsNomenclature < Sequel::Model
     "http://ec.europa.eu/taxation_customs/dds2/ebti/ebti_consultation.jsp?Lang=en&nomenc=#{code}&Expand=true"
   end
 end
-
-require 'heading'
-require 'chapter'
-require 'commodity'

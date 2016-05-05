@@ -1,5 +1,3 @@
-require 'formatter'
-
 class MeasureComponent < Sequel::Model
   include Formatter
 

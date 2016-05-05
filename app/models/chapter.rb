@@ -1,5 +1,3 @@
-require_relative 'goods_nomenclature'
-
 class Chapter < GoodsNomenclature
   plugin :oplog, primary_key: :goods_nomenclature_sid
   plugin :conformance_validator

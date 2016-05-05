@@ -1,5 +1,3 @@
-require 'formatter'
-
 class AdditionalCodeDescription < Sequel::Model
   include Formatter
 

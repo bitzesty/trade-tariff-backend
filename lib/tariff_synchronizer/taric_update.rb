@@ -1,6 +1,3 @@
-require "tariff_synchronizer/base_update"
-require "tariff_synchronizer/taric_update_downloader"
-
 module TariffSynchronizer
   class TaricUpdate < BaseUpdate
     class << self

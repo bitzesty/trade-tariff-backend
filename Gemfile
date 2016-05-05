@@ -42,19 +42,19 @@ end
 group :development, :test do
   gem "foreman"
   gem "pry-rails", "~> 0.3"
-  gem "pry-nav"
+  gem "pry-byebug"
   gem "brakeman", "~> 3.0", require: false
-  gem "rspec-rails", "~> 3.3"
+  gem "factory_girl_rails"
+  gem "rspec-rails", "~> 3.0"
 end
 
 group :test do
-  gem "factory_girl_rails"
   gem "fakefs", require: "fakefs/safe"
   gem "forgery"
   gem "json_expressions"
   gem "simplecov"
   gem "simplecov-rcov"
   gem "webmock"
-  gem "database_cleaner"
+  gem "database_cleaner", github: "theharq/database_cleaner", branch: "sequel-updates"
   gem "rspec_junit_formatter"
 end

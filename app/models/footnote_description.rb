@@ -1,5 +1,3 @@
-require 'formatter'
-
 class FootnoteDescription < Sequel::Model
   include Formatter
 

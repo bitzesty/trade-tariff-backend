@@ -1,7 +1,4 @@
-require 'tariff_synchronizer/base_update'
-require 'tariff_synchronizer/chief_file_name_generator'
 require "csv"
-
 module TariffSynchronizer
   class ChiefUpdate < BaseUpdate
     class << self
