@@ -13,48 +13,42 @@ Also uses:
 * [Trade Tariff Suite](https://github.com/alphagov/trade-tariff-suite)
 * [Trade Tariff Oracle](https://github.com/alphagov/trade-tariff-oracle)
 
-## Setup
+## Development
 
-### Dependencies (OS X using Homebrew)
+### Dependencies
 
-1. ElasticSearch & MySQL & Redis
+  - ElasticSearch
+  - Postgresql
+  - Redis
+  - Ruby 2.2.3
 
-    ```
-    brew install elasticsearch
-    brew install redis
-    brew install postgresql
-    ```
+### Setup
 
-2. Ruby 2.2.3
+1. Get the code.
+
+        % git clone git@github.com:alphagov/trade-tariff-backend.git
+
+2. Setup your environment.
+
+        % bin/setup
+
+3. Update `.env` file with valid data.
+
+        % vim .env
+
+4. Start Foreman.
+
+        % foreman start
+
+5. Verify that the app is up and running.
+
+        % open http://localhost:3018/healthcheck
 
 ## Load database
 
 Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff-backend/wiki/System-rebuild-procedure), or get a recent database snapshot.
 
-### Load database seeds for development API user
-
-  ```
-  bundle exec rake db:seed
-  ```
-
-## Run Backend
-
-  ```
-  bundle exec foreman start
-  ```
-
 ## Performing daily updates
-
-1. Make sure you have set required environment variables with correct values.
-
-  ```
-  TARIFF_SYNC_USERNAME=username
-  TARIFF_SYNC_PASSWORD=password
-  TARIFF_SYNC_EMAIL=email
-  TARIFF_SYNC_HOST=host
-  ```
-
-2. Run the sync rake task
 
   ```
   bundle exec rake tariff:sync:apply
@@ -88,9 +82,6 @@ In case of any errors, changes (per single update) are roll-backed and record it
   ```
 
 ## Notes
-
-* Project does __not__ contain schema.rb, do not use rake db:schema:load. Sequel
-does not yet support view creation via schema file.
 
 * When writing validators in `app/validators` please run the rake task
 `audit:verify` which runs the validator against existing data.
