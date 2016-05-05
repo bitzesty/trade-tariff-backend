@@ -17,30 +17,26 @@ Also uses:
 
 ### Dependencies
 
-  - ElasticSearch
-  - Postgresql
-  - Redis
   - Ruby 2.2.3
+  - Postgresql
+  - ElasticSearch
+  - Redis
 
 ### Setup
 
-1. Get the code.
-
-        % git clone git@github.com:alphagov/trade-tariff-backend.git
-
-2. Setup your environment.
+1. Setup your environment.
 
         % bin/setup
 
-3. Update `.env` file with valid data.
+2. Update `.env` file with valid data.
 
         % vim .env
 
-4. Start Foreman.
+3. Start Foreman.
 
         % foreman start
 
-5. Verify that the app is up and running.
+4. Verify that the app is up and running.
 
         % open http://localhost:3018/healthcheck
 
