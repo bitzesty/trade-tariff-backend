@@ -41,8 +41,6 @@ RSpec.configure do |config|
   config.include ChiefDataHelper
   config.include ActiveSupport::Testing::TimeHelpers
 
-  config.include FactoryGirl::Syntax::Methods
-
   redis = Redis.new(:db => 15)
   RedisLockDb.redis = redis
 

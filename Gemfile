@@ -2,7 +2,6 @@ source "https://rubygems.org"
 
 gem "rails", "4.2.5.2"
 
-gem "addressable", "~> 2.3"
 gem "hashie", "~> 3.4"
 gem "multi_json", "~> 1.11"
 gem "pg"

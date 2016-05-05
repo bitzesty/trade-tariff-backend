@@ -298,7 +298,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  addressable (~> 2.3)
   airbrake (~> 4.3)
   ansi (~> 1.5)
   aws-ses (~> 0.6)

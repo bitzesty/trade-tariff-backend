@@ -85,7 +85,7 @@ module TariffSynchronizer
           raise DownloadException.new(url, exception)
         end
 
-        Response.new(url, crawler.response_code, crawler.body_str)
+        Response.new(crawler.response_code, crawler.body_str)
       end
     end
   end
