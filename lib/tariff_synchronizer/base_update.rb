@@ -1,5 +1,3 @@
-require "tariff_synchronizer/tariff_downloader"
-
 module TariffSynchronizer
   class BaseUpdate < Sequel::Model(:tariff_updates)
     include FileService

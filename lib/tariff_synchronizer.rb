@@ -6,7 +6,12 @@ require 'redis_lock'
 require 'active_support/notifications'
 require 'active_support/log_subscriber'
 
+require 'tariff_synchronizer/base_update'
+require 'tariff_synchronizer/chief_file_name_generator'
+require 'tariff_synchronizer/file_service'
 require 'tariff_synchronizer/logger'
+require 'tariff_synchronizer/taric_file_name_generator'
+require 'tariff_synchronizer/tariff_downloader'
 
 # How TariffSynchronizer works
 #
