@@ -22,3 +22,4 @@ spec/coverage
 .rbenv-version
 /spec/reports
 .env
+config/trade_tariff_backend_secrets.yml
