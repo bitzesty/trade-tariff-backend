@@ -1,5 +1,3 @@
-require 'time_machine'
-
 class GoodsNomenclature < Sequel::Model
   extend ActiveModel::Naming
 

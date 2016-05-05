@@ -1,5 +1,3 @@
-require 'tariff_synchronizer'
-
 namespace :tariff do
   desc 'Installs Trade Tariff, creates relevant records, imports national data'
   task install: %w[environment

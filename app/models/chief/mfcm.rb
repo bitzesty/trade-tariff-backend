@@ -1,5 +1,3 @@
-require 'null_object'
-
 module Chief
   class Mfcm < Sequel::Model
     EXCISE_GROUP_CODES = %w[EX]

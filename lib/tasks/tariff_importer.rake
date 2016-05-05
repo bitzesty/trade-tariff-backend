@@ -1,8 +1,4 @@
-require 'tariff_importer'
-
-# Import CHIEF or Taric file manually. Usually needed to import initial
-# seed files.
-
+# Import CHIEF or Taric file manually. Usually for initial seed files.
 namespace :importer do
   namespace :chief do
     desc "Import CHIEF file"
