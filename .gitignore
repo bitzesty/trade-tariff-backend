@@ -21,4 +21,3 @@ data/*/*.txt
 spec/coverage
 .rbenv-version
 /spec/reports
-.env
