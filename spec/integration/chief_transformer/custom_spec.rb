@@ -1,7 +1,6 @@
 require 'rails_helper'
 require 'goods_nomenclature'
 require 'chief_transformer'
-require 'tariff_importer'
 
 describe 'CHIEF: Custom scenarios' do
   before(:all) { preload_standing_data }

@@ -49,6 +49,12 @@ GEM
       multi_json
     ansi (1.5.0)
     arel (6.0.3)
+    aws-sdk (2.3.7)
+      aws-sdk-resources (= 2.3.7)
+    aws-sdk-core (2.3.7)
+      jmespath (~> 1.0)
+    aws-sdk-resources (2.3.7)
+      aws-sdk-core (= 2.3.7)
     aws-ses (0.6.0)
       builder
       mail (> 2.2.5)
@@ -118,8 +124,11 @@ GEM
     hashie (3.4.2)
     highline (1.6.21)
     i18n (0.7.0)
+    jmespath (1.2.4)
+      json_pure (>= 1.8.1)
     json (1.8.3)
     json_expressions (0.8.3)
+    json_pure (1.8.3)
     jwt (1.4.1)
     libv8 (3.16.14.13)
     logstash-event (1.2.02)
@@ -305,6 +314,7 @@ PLATFORMS
 DEPENDENCIES
   airbrake (~> 4.3)
   ansi (~> 1.5)
+  aws-sdk (~> 2)
   aws-ses (~> 0.6)
   brakeman (~> 3.0)
   builder (~> 3.2)

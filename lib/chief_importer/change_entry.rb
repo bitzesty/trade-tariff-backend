@@ -1,4 +1,4 @@
-class ChiefImporter < TariffImporter
+class ChiefImporter
   class ChangeEntry
     attr_accessor :table, :strategy, :origin
 

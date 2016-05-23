@@ -1,4 +1,3 @@
-require 'tariff_importer'
 require 'date'
 require 'logger'
 require 'fileutils'
@@ -7,10 +6,12 @@ require 'active_support/notifications'
 require 'active_support/log_subscriber'
 
 require 'tariff_synchronizer/base_update'
+require 'tariff_synchronizer/base_update_importer'
 require 'tariff_synchronizer/chief_file_name_generator'
 require 'tariff_synchronizer/file_service'
 require 'tariff_synchronizer/logger'
 require 'tariff_synchronizer/taric_file_name_generator'
+require 'tariff_synchronizer/taric_update_downloader'
 require 'tariff_synchronizer/tariff_downloader'
 
 # How TariffSynchronizer works
@@ -88,7 +89,7 @@ module TariffSynchronizer
       instrument("download.tariff_synchronizer") do
         begin
           [TaricUpdate, ChiefUpdate].map(&:sync)
-        rescue FileService::DownloadException => exception
+        rescue TariffUpdatesRequester::DownloadException => exception
           instrument("failed_download.tariff_synchronizer", exception: exception)
           raise exception.original
         end
@@ -185,17 +186,6 @@ module TariffSynchronizer
     )
   end
 
-  # Builds tariff_update entries from files available in the
-  # TariffSynchronizer.root_path directories.
-  #
-  # Warning: rebuilt updates will be marked as pending.
-  # missing or failed updates are not restored.
-  def rebuild
-    instrument("rebuild.tariff_synchronizer") do
-      [TaricUpdate, ChiefUpdate].map(&:rebuild)
-    end
-  end
-
   def initial_update_date_for(update_type)
     send("#{update_type}_initial_update_date")
   end
@@ -204,7 +194,7 @@ module TariffSynchronizer
 
   def perform_update(update_type, day)
     updates = update_type.pending_at(day).to_a
-    updates.map(&:apply)
+    updates.map{ |update| BaseUpdateImporter.perform(update) }
     updates
   end
 

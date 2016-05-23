@@ -1,12 +1,12 @@
-class TariffImporter
+module TariffImporter
   class Logger < ActiveSupport::LogSubscriber
-    
+
     def chief_imported(event)
-      info "Parsed #{event.payload[:count]} CHIEF records for #{event.payload[:date]} at #{event.payload[:path]}"
+      info "Parsed #{event.payload[:count]} CHIEF records from #{event.payload[:filename]}"
     end
 
     def chief_failed(event)
-      error "CHIEF import of #{File.join(Rails.root, event.payload[:path])} failed: Reason: #{event.payload[:exception]}"
+      error "CHIEF import of #{event.payload[:filename]} failed: Reason: #{event.payload[:exception]}"
     end
 
     def taric_failed(event)
@@ -18,7 +18,7 @@ class TariffImporter
     end
 
     def taric_imported(event)
-      info "Successfully imported Taric file at #{event.payload[:path]}" unless event.payload.has_key?(:exception)
+      info "Successfully imported Taric file: #{event.payload[:filename]}"
     end
 
     def taric_unexpected_update_type(event)

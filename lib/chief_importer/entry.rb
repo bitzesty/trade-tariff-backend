@@ -1,4 +1,4 @@
-class ChiefImporter < TariffImporter
+class ChiefImporter
   class Entry
     class << self
       def build(data = [])

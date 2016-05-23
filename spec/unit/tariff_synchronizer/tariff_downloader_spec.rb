@@ -22,14 +22,12 @@ describe TariffSynchronizer::TariffDownloader do
           allow(tariff_downloader).to receive(:filesize).and_return(999)
         end
 
-        it "Update filesize to ChiefUpdate record if this is already created" do
+        it "Do no create a ChiefUpdate record if this is already created" do
           create(:chief_update, filename: generator.name, issue_date: example_date)
           chief_update = chief_update_klass.last
-          expect(chief_update.filesize).to be_nil
           expect {
             tariff_downloader.perform
           }.to_not change(chief_update_klass, :count)
-          expect(chief_update.reload.filesize).to eq(999)
         end
 
         it "Creates a ChiefUpdate record with a pending state" do
@@ -58,14 +56,14 @@ describe TariffSynchronizer::TariffDownloader do
         end
 
         it "Calls the external server to download file" do
-          expect(described_class).to receive(:download_content)
+          expect(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform)
             .with(generator.url).and_return(build(:response, :not_found))
           tariff_downloader.perform
         end
 
         context "Successful Response" do
           before do
-            allow(described_class).to receive(:download_content)
+            allow(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform)
               .with(generator.url).and_return(build :response, :success, content: "abc")
 
             # Let's assume 'abc' is a valid csv content
@@ -75,7 +73,7 @@ describe TariffSynchronizer::TariffDownloader do
 
           it "Creates a record with a pending state" do
             # Let's stub the creation of the file
-            expect(described_class).to receive(:write_file)
+            allow(TariffSynchronizer::FileService).to receive(:write_file)
 
             expect {
               tariff_downloader.perform
@@ -90,13 +88,13 @@ describe TariffSynchronizer::TariffDownloader do
 
           it "Calls the write_file method to create the file" do
             path = "#{TariffSynchronizer.root_path}/chief/#{generator.name}"
-            expect(described_class).to receive(:write_file).with(path, "abc")
+            expect(TariffSynchronizer::FileService).to receive(:write_file).with(path, "abc")
             tariff_downloader.perform
           end
 
           it "Logs the creating of the ChiefUpdate record with missing state" do
             # Let's stub the creation of the file
-            expect(described_class).to receive(:write_file)
+            expect(TariffSynchronizer::FileService).to receive(:write_file)
             tariff_synchronizer_logger_listener
 
             tariff_downloader.perform
@@ -107,7 +105,7 @@ describe TariffSynchronizer::TariffDownloader do
 
         context "Missing Response" do
           before do
-            allow(described_class).to receive(:download_content)
+            allow(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform)
               .with(generator.url).and_return(build(:response, :not_found))
           end
 
@@ -141,7 +139,7 @@ describe TariffSynchronizer::TariffDownloader do
 
         context "Retries Exceeded Response" do
           before do
-            allow(described_class).to receive(:download_content)
+            allow(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform)
               .with(generator.url).and_return(build(:response, :retry_exceeded))
           end
 
@@ -174,7 +172,7 @@ describe TariffSynchronizer::TariffDownloader do
 
         context "Blank Response" do
           before do
-            allow(described_class).to receive(:download_content)
+            allow(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform)
               .with(generator.url).and_return(build(:response, :blank))
           end
 

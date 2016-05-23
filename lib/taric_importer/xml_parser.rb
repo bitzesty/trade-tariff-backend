@@ -1,8 +1,8 @@
 module XmlParser
   class Reader < ::Ox::Sax
 
-    def initialize(file_path, target, target_handler)
-      @file_path = file_path
+    def initialize(stringio, target, target_handler)
+      @stringio = stringio
       @target = target
       @target_handler = target_handler
       @in_target = false
@@ -10,7 +10,7 @@ module XmlParser
     end
 
     def parse
-      Ox.sax_parse self, IO.new(IO.sysopen @file_path), symbolize: false, strip_namespace: '*'
+      Ox.sax_parse self, @stringio, symbolize: false, strip_namespace: '*'
     end
 
     def start_element(name)

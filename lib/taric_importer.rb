@@ -5,7 +5,7 @@ require 'taric_importer/record_processor'
 require 'taric_importer/xml_parser'
 require 'taric_importer/helpers/string_helper'
 
-class TaricImporter < TariffImporter
+class TaricImporter
   class ImportException < StandardError
     attr_reader :original
 
@@ -18,10 +18,16 @@ class TaricImporter < TariffImporter
   class UnknownOperationError < ImportException
   end
 
+  def initialize(taric_update)
+    @taric_update = taric_update
+  end
+
   def import(validate: true)
-    ActiveSupport::Notifications.instrument("taric_imported.tariff_importer", path: path) do
-      XmlParser::Reader.new(path, "record", XmlProcessor.new(issue_date, validate)).parse
-    end
+    handler = XmlProcessor.new(@taric_update.issue_date, validate)
+    file = TariffSynchronizer::FileService.file_as_stringio(@taric_update)
+    XmlParser::Reader.new(file, "record", handler).parse
+    ActiveSupport::Notifications.instrument("taric_imported.tariff_importer",
+      filename: @taric_update.filename)
   end
 
   class XmlProcessor

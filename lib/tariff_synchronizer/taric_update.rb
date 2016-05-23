@@ -12,17 +12,12 @@ module TariffSynchronizer
 
     def import!
       instrument("apply_taric.tariff_synchronizer", filename: filename) do
-        TaricImporter.new(file_path, issue_date).import
-        update_file_size
+        TaricImporter.new(self).import
         mark_as_applied
       end
     end
 
     private
-
-    def update_file_size
-      update(filesize: File.size(file_path))
-    end
 
     def self.validate_file!(xml_string)
       Ox.parse(xml_string)

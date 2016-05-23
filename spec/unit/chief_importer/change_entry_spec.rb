@@ -4,7 +4,7 @@ require 'chief_importer'
 require 'chief_importer/change_entry'
 
 # Define a test strategy
-class ChiefImporter < TariffImporter
+class ChiefImporter
   module Strategies
     class TestStrategy < BaseStrategy
     end

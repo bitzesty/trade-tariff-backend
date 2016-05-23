@@ -13,7 +13,7 @@ Dir[File.join(Rails.root, 'lib', 'taric_importer', 'record_processor', 'attribut
   require file
 }
 
-class TaricImporter < TariffImporter
+class TaricImporter
   class RecordProcessor
     class Record
       include TaricImporter::Helpers::StringHelper

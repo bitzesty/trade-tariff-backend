@@ -1,5 +1,3 @@
-require "csv"
-require "tariff_importer"
 require "chief_importer/entry"
 require "chief_importer/start_entry"
 require "chief_importer/end_entry"
@@ -7,7 +5,7 @@ require "chief_importer/change_entry"
 require "chief_importer/strategies/base_strategy"
 require "chief_importer/strategies/strategies"
 
-class ChiefImporter < TariffImporter
+class ChiefImporter
   class ImportException < StandardError
     attr_reader :original
 
@@ -26,18 +24,18 @@ class ChiefImporter < TariffImporter
   cattr_accessor :end_mark
   self.end_mark = "ZZZZZZZZZZZ"
 
-  attr_reader :processor, :start_entry, :end_entry, :file_name
+  attr_reader :processor, :start_entry, :end_entry
 
   delegate :extraction_date, to: :start_entry, allow_nil: true
   delegate :record_count, to: :end_entry, allow_nil: true
 
-  def initialize(path, issue_date = nil)
-    super(path, issue_date)
-    @file_name = Pathname.new(path).basename.to_s
+  def initialize(chief_update)
+    @chief_update = chief_update
   end
 
   def import
-    CSV.foreach(path, encoding: "ISO-8859-1") do |line|
+    file = TariffSynchronizer::FileService.file_as_stringio(@chief_update)
+    CSV.parse(file, encoding: "ISO-8859-1") do |line|
       entry = Entry.build(line)
 
       if entry.is_a?(StartEntry)
@@ -46,13 +44,15 @@ class ChiefImporter < TariffImporter
         @end_entry = entry
       else # means it's ChangeEntry
         next unless entry.relevant?
-        entry.origin = file_name
+        entry.origin = @chief_update.filename
         entry.process!
       end
     end
-    importer_logger("chief_imported",path: path, date: extraction_date, count: record_count)
+    ActiveSupport::Notifications.instrument("chief_imported.tariff_importer",
+      filename: @chief_update.filename, count: record_count)
   rescue => exception
-    importer_logger("chief_failed",path: path, exception: exception)
+    ActiveSupport::Notifications.instrument("chief_failed.tariff_importer",
+      filename: @chief_update.filename, exception: exception)
     raise ImportException.new(exception.message, exception)
   end
 end

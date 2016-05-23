@@ -2,6 +2,7 @@ source "https://rubygems.org"
 
 gem "rails", "4.2.5.2"
 
+gem "aws-sdk", "~> 2"
 gem "hashie", "~> 3.4"
 gem "multi_json", "~> 1.11"
 gem "pg"
