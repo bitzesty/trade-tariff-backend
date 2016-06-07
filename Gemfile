@@ -24,7 +24,6 @@ gem "curb", "~> 0.8"
 
 gem "nokogiri", "~> 1.6"
 
-gem "airbrake", "~> 4.3"
 gem "aws-ses", "~> 0.6", require: "aws/ses" #used for sync emails
 gem "logstasher", "~> 0.6"
 gem "responders", "~> 2.1"
@@ -37,6 +36,7 @@ gem "uglifier", "~> 2.7"
 group :production do
   gem "newrelic_rpm", "~> 3.12"
   gem "rails_12factor"
+  gem "sentry-raven"
 end
 
 group :development, :test do

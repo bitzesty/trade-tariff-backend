@@ -44,9 +44,6 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.3.8)
-    airbrake (4.3.0)
-      builder
-      multi_json
     ansi (1.5.0)
     arel (6.0.3)
     aws-ses (0.6.0)
@@ -245,6 +242,8 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (~> 1.1)
+    sentry-raven (0.15.6)
+      faraday (>= 0.7.6)
     sequel (4.32.0)
     sequel-rails (0.9.12)
       actionpack (>= 3.2.0)
@@ -303,7 +302,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  airbrake (~> 4.3)
   ansi (~> 1.5)
   aws-ses (~> 0.6)
   brakeman (~> 3.0)
@@ -338,6 +336,7 @@ DEPENDENCIES
   rspec_junit_formatter
   sass (~> 3.4)
   sass-rails (~> 5.0)
+  sentry-raven
   sequel (~> 4.32)
   sequel-rails (~> 0.9)
   sidekiq (~> 4.1.1)
