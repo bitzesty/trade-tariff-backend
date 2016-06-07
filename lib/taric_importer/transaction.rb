@@ -1,6 +1,6 @@
 require 'forwardable'
 
-class TaricImporter < TariffImporter
+class TaricImporter
   class Transaction
     extend Forwardable
 

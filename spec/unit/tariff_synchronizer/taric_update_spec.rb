@@ -20,7 +20,7 @@ describe TariffSynchronizer::TaricUpdate do
     let(:not_found_response) { build :response, :not_found }
 
     it "notifies about several missing updates in a row" do
-      allow(TariffSynchronizer::TaricUpdateDownloader).to receive(:download_content).and_return(not_found_response)
+      allow(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform).and_return(not_found_response)
       expect(TariffSynchronizer::TaricUpdate).to receive(:notify_about_missing_updates)
       create :taric_update, :missing, issue_date: Date.today.ago(2.days)
       create :taric_update, :missing, issue_date: Date.today.ago(3.days)
@@ -28,83 +28,9 @@ describe TariffSynchronizer::TaricUpdate do
     end
 
     it "Calls the difference from the intial update to the current time, the donwload method" do
-      expect(TariffSynchronizer::TaricUpdateDownloader).to receive(:download_content).and_return(not_found_response).exactly(3).times
+      expect(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform).and_return(not_found_response).exactly(3).times
       travel_to TariffSynchronizer.taric_initial_update_date + 2 do
         TariffSynchronizer::TaricUpdate.sync
-      end
-    end
-  end
-
-  describe "#apply", truncation: true do
-    let(:state) { :pending }
-
-    before do
-      create :taric_update, example_date: example_date
-      prepare_synchronizer_folders
-      create_taric_file example_date
-    end
-
-    it "executes Taric importer" do
-      mock_importer = double("importer").as_null_object
-      expect(TariffImporter).to receive(:new).and_return(mock_importer)
-
-      TariffSynchronizer::TaricUpdate.first.apply
-    end
-
-    it "updates file entry state to processed" do
-      mock_importer = double("importer").as_null_object
-      expect(TariffImporter).to receive(:new).and_return(mock_importer)
-
-      expect(TariffSynchronizer::TaricUpdate.pending.count).to eq 1
-      TariffSynchronizer::TaricUpdate.first.apply
-      expect(TariffSynchronizer::TaricUpdate.pending.count).to eq 0
-      expect(TariffSynchronizer::TaricUpdate.applied.count).to eq 1
-    end
-
-    it "does not move file to processed if import fails" do
-      mock_importer = double
-      expect(mock_importer).to receive(:import).and_raise(TaricImporter::ImportException)
-      expect(TariffImporter).to receive(:new).and_return(mock_importer)
-
-      expect(TariffSynchronizer::TaricUpdate.pending.count).to eq 1
-
-      expect { TariffSynchronizer::TaricUpdate.first.apply }.to raise_error Sequel::Rollback
-
-      expect(TariffSynchronizer::TaricUpdate.pending.count).to eq 0
-      expect(TariffSynchronizer::TaricUpdate.failed.count).to eq 1
-      expect(TariffSynchronizer::TaricUpdate.applied.count).to eq 0
-    end
-
-    after  { purge_synchronizer_folders }
-  end
-
-  describe ".rebuild" do
-    before do
-      prepare_synchronizer_folders
-      create_taric_file example_date
-    end
-
-    after { purge_synchronizer_folders }
-
-    context "entry for the day/update does not exist yet" do
-      it "creates db record from available file name" do
-        expect(TariffSynchronizer::BaseUpdate.count).to eq 0
-
-        TariffSynchronizer::TaricUpdate.rebuild
-
-        expect(TariffSynchronizer::BaseUpdate.count).to eq 1
-        first_update = TariffSynchronizer::BaseUpdate.first
-        expect(first_update.issue_date).to eq example_date
-      end
-    end
-
-    context "entry for the day/update exists already" do
-      it "does not create db record if it is already available for the day/update type combo" do
-        create :taric_update, example_date: example_date
-
-        expect(TariffSynchronizer::BaseUpdate.count).to eq 1
-        TariffSynchronizer::TaricUpdate.rebuild
-        expect(TariffSynchronizer::BaseUpdate.count).to eq 1
       end
     end
   end
@@ -122,17 +48,10 @@ describe TariffSynchronizer::TaricUpdate do
 
     it "Calls the TaricImporter import method" do
       taric_importer = instance_double("TaricImporter")
-      expect(TaricImporter).to receive(:new).with(taric_update.file_path,
-                                                  taric_update.issue_date)
+      expect(TaricImporter).to receive(:new).with(taric_update)
                                                   .and_return(taric_importer)
       expect(taric_importer).to receive(:import)
       taric_update.import!
-    end
-
-    it "Updates the filesize attribute of the Taric update" do
-      allow_any_instance_of(TaricImporter).to receive(:import)
-      taric_update.import!
-      expect(taric_update.filesize).to eq(1553)
     end
 
     it "Mark the Taric update as applied" do

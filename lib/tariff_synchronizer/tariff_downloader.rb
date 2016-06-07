@@ -1,8 +1,6 @@
 module TariffSynchronizer
   # Download pending updates for TARIC and CHIEF data
   class TariffDownloader
-    include FileService
-
     delegate :instrument, :subscribe, to: ActiveSupport::Notifications
 
     attr_reader :filename, :url, :date, :update_klass
@@ -16,7 +14,7 @@ module TariffSynchronizer
 
     def perform
       if file_already_downloaded?
-        update_or_create_entry
+        create_entry
       else
         download_and_create_entry
       end
@@ -24,33 +22,26 @@ module TariffSynchronizer
 
     private
 
-    def update_or_create_entry
-      if update_object.present?
-        update_object.update(filesize: filesize)
-      else
-        update_or_create(filename, BaseUpdate::PENDING_STATE, filesize)
-      end
+    def create_entry
+      return if tariff_update.present?
+      update_or_create(filename, BaseUpdate::PENDING_STATE, filesize)
       instrument("created_tariff.tariff_synchronizer", date: date, filename: filename, type: update_klass.update_type)
     end
 
     def file_already_downloaded?
-      File.exist?(file_path)
+      FileService.file_exists?(file_path)
     end
 
-    def update_object
+    def tariff_update
       update_klass.find(filename: filename, update_type: update_klass.name, issue_date: date)
     end
 
-    def file_path
-      File.join(TariffSynchronizer.root_path, update_klass.update_type.to_s, filename)
-    end
-
     def filesize
-      @filesize ||= File.read(file_path).size
+      @filesize ||= FileService.file_size(file_path)
     end
 
     def response
-      @response ||= TariffDownloader.download_content(url)
+      @response ||= TariffUpdatesRequester.perform(url)
     end
 
     def download_and_create_entry
@@ -91,16 +82,16 @@ module TariffSynchronizer
     end
 
     def write_update_file(response_body)
-      TariffDownloader.write_file(update_path, response_body)
+      FileService.write_file(file_path, response_body)
       instrument("downloaded_tariff_update.tariff_synchronizer",
                  date: date,
                  url: url,
                  type: update_klass.update_type,
-                 path: update_path,
+                 path: file_path,
                  size: response_body.size)
     end
 
-    def update_path
+    def file_path
       File.join(TariffSynchronizer.root_path, update_klass.update_type.to_s, filename)
     end
 

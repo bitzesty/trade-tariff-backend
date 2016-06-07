@@ -58,11 +58,6 @@ module TariffSynchronizer
       Mailer.failed_download(exception.original, exception.url).deliver_now
     end
 
-    # Update rebuild from files present in the file system
-    def rebuild(event)
-      info "Rebuilding updates from file system"
-    end
-
     # Exceeded retry count
     def retry_exceeded(event)
       warn "Download retry count exceeded for #{event.payload[:url]}"
@@ -73,13 +68,6 @@ module TariffSynchronizer
     # Update not found
     def not_found(event)
       warn "Update not found for #{event.payload[:date]} at #{event.payload[:url]}"
-    end
-
-    # Update not found on file system
-    def not_found_on_file_system(event)
-      error "Update not found on file system at #{event.payload[:path]}"
-
-      Mailer.file_not_found_on_filesystem(event.payload[:path]).deliver_now
     end
 
     def created_tariff(event)
@@ -110,27 +98,6 @@ module TariffSynchronizer
       error "Blank update content received for #{event.payload[:date]}: #{event.payload[:url]}"
 
       Mailer.blank_update(event.payload[:url], event.payload[:url]).deliver_now
-    end
-
-    # Can't open file for writing
-    def cant_open_file(event)
-      error "Can't open file for writing update at #{event.payload[:path]}"
-
-      Mailer.file_write_error(event.payload[:path], "can't open for writing").deliver_now
-    end
-
-    # Can't write to file
-    def cant_write_to_file(event)
-      error "Can't write to update file at #{event.payload[:path]}"
-
-      Mailer.file_write_error(event.payload[:path], "can't write to file").deliver_now
-    end
-
-    # No permission to write update file
-    def write_permission_error(event)
-      error "No permission to write update to #{event.payload[:path]}"
-
-      Mailer.file_write_error(event.payload[:path], 'permission error').deliver_now
     end
 
     # Delayed update fetching

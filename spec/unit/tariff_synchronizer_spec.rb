@@ -1,5 +1,4 @@
 require "rails_helper"
-require "tariff_synchronizer"
 
 describe TariffSynchronizer, truncation: true do
   describe '.initial_update_date_for' do
@@ -36,6 +35,8 @@ describe TariffSynchronizer, truncation: true do
 
     context "sync variables are not set" do
       it "does not start sync process" do
+        allow(TariffSynchronizer).to receive(:sync_variables_set?).and_return(false)
+
         expect(TariffSynchronizer::TaricUpdate).to_not receive(:sync)
         expect(TariffSynchronizer::ChiefUpdate).to_not receive(:sync)
 
@@ -44,7 +45,10 @@ describe TariffSynchronizer, truncation: true do
 
       it "logs an error event" do
         tariff_synchronizer_logger_listener
+        allow(TariffSynchronizer).to receive(:sync_variables_set?).and_return(false)
+
         TariffSynchronizer.download
+
         expect(@logger.logged(:error).size).to eq 1
         expect(@logger.logged(:error).last).to match /Missing: Tariff sync enviroment variables/
       end
@@ -75,65 +79,77 @@ describe TariffSynchronizer, truncation: true do
     end
   end
 
-  describe '.apply' do
-    let(:update_1) { double('update', issue_date: Date.yesterday, filename: Date.yesterday) }
-    let(:update_2) { double('update', issue_date: Date.today, filename: Date.today) }
-    let(:pending_updates) { [update_1, update_2] }
+  describe ".apply" do
+    let(:update_1) { instance_double("TariffSynchronizer::TaricUpdate", issue_date: Date.yesterday, filename: Date.yesterday) }
+    let(:update_2) { instance_double("TariffSynchronizer::TaricUpdate", issue_date: Date.today, filename: Date.today) }
 
-
-    context 'success scenario' do
-      before {
-        allow(TariffSynchronizer).to receive(:date_range_since_last_pending_update).and_return([Date.yesterday, Date.today])
-        expect(TariffSynchronizer::TaricUpdate).to receive(:pending_at).with(update_1.issue_date).and_return([update_1])
-        expect(TariffSynchronizer::TaricUpdate).to receive(:pending_at).with(update_2.issue_date).and_return([update_2])
-      }
-
-      it 'all pending updates get applied' do
-
-        pending_updates.each {|update|
-          expect(update).to receive(:apply).and_return(true)
-        }
-
-        TariffSynchronizer.apply
-      end
-    end
-
-    context 'failure scenario' do
+    context "success scenario" do
       before do
         allow(TariffSynchronizer).to receive(:date_range_since_last_pending_update).and_return([Date.yesterday, Date.today])
         expect(TariffSynchronizer::TaricUpdate).to receive(:pending_at).with(update_1.issue_date).and_return([update_1])
-
-        expect(update_1).to receive(:apply).and_raise(Sequel::Rollback)
+        expect(TariffSynchronizer::TaricUpdate).to receive(:pending_at).with(update_2.issue_date).and_return([update_2])
       end
 
-      it 'transaction gets rolled back' do
-        expect { TariffSynchronizer.apply }.to raise_error Sequel::Rollback
+      it "all pending updates get applied" do
+        expect(TariffSynchronizer::BaseUpdateImporter).to receive(:perform).with(update_1)
+        expect(TariffSynchronizer::BaseUpdateImporter).to receive(:perform).with(update_2)
+
+        TariffSynchronizer.apply
       end
 
-      it 'update gets marked as failed' do
-        expect(update_2).to receive(:apply).never
+      it "logs the info event and send email" do
+        allow(TariffSynchronizer::BaseUpdateImporter).to receive(:perform).with(update_1).and_return(true)
+        allow(TariffSynchronizer::BaseUpdateImporter).to receive(:perform).with(update_2).and_return(true)
+        tariff_synchronizer_logger_listener
 
-        rescuing { TariffSynchronizer.apply }
+        TariffSynchronizer.apply
+
+        expect(@logger.logged(:info).size).to eq(1)
+        expect(@logger.logged(:info).last).to include("Finished applying updates")
+        expect(ActionMailer::Base.deliveries).to_not be_empty
+        expect(ActionMailer::Base.deliveries.last.subject).to include("Tariff updates applied")
+        expect(ActionMailer::Base.deliveries.last.encoded).to include("No conformance errors found.")
       end
     end
 
-    context 'with failed updates present' do
-      let!(:failed_update)  { create :taric_update, :failed }
+    context "failure scenario" do
+      before do
+        allow(TariffSynchronizer).to receive(:date_range_since_last_pending_update).and_return([Date.yesterday, Date.today])
+        allow(TariffSynchronizer::TaricUpdate).to receive(:pending_at).with(update_1.issue_date).and_return([update_1])
+        allow(TariffSynchronizer::BaseUpdateImporter).to receive(:perform).with(update_1).and_raise(Sequel::Rollback)
+      end
 
-      it 'does not apply pending updates' do
+      it "after an error next record is not processed" do
+        expect { TariffSynchronizer.apply }.to raise_error(Sequel::Rollback)
+        expect(TariffSynchronizer::BaseUpdateImporter).to_not receive(:perform).with(update_2)
+      end
+    end
+
+    context "with failed updates present" do
+      before { create :taric_update, :failed }
+
+      it "does not apply pending updates" do
         expect(TariffSynchronizer::TaricUpdate).to receive(:pending_at).never
         expect(TariffSynchronizer::ChiefUpdate).to receive(:pending_at).never
-        expect { TariffSynchronizer.apply }.to raise_error TariffSynchronizer::FailedUpdatesError
+
+        expect { TariffSynchronizer.apply }.to raise_error(TariffSynchronizer::FailedUpdatesError)
       end
-    end
-  end
 
-  describe '.rebuild' do
-    it 'invokes rebuild on TaricUpdate and ChiefUpdate' do
-      expect(TariffSynchronizer::TaricUpdate).to receive(:rebuild)
-      expect(TariffSynchronizer::ChiefUpdate).to receive(:rebuild)
+      it "logs the error event" do
+        tariff_synchronizer_logger_listener
+        expect { TariffSynchronizer.apply }.to raise_error(TariffSynchronizer::FailedUpdatesError)
 
-      TariffSynchronizer.rebuild
+        expect(@logger.logged(:error).size).to eq(1)
+        expect(@logger.logged(:error).last).to include("TariffSynchronizer found failed updates that need to be fixed before running:")
+      end
+
+      it "sends email with the error" do
+        expect { TariffSynchronizer.apply }.to raise_error(TariffSynchronizer::FailedUpdatesError)
+
+        expect(ActionMailer::Base.deliveries).to_not be_empty
+        expect(ActionMailer::Base.deliveries.last.subject).to include("Update application failed: failed Trade Tariff updates present")
+        expect(ActionMailer::Base.deliveries.last.encoded).to include("There are failed updates for Trade Tariff that cannot be applied.")
+      end
     end
   end
 end

@@ -1,7 +1,5 @@
 module TariffSynchronizer
   class BaseUpdate < Sequel::Model(:tariff_updates)
-    include FileService
-
     delegate :instrument, to: ActiveSupport::Notifications
 
     one_to_many :conformance_errors, class: TariffUpdateConformanceError, key: :tariff_update_filename
@@ -10,7 +8,6 @@ module TariffSynchronizer
     plugin :single_table_inheritance, :update_type
     plugin :validation_class_methods
 
-    class InvalidArgument < StandardError; end
     class InvalidContents < StandardError
       attr_reader :original
 
@@ -110,84 +107,11 @@ module TariffSynchronizer
     end
 
     def file_path
-      File.join(TariffSynchronizer.root_path, self.class.update_type.to_s, filename)
-    end
-
-    def file_exists?
-      # Check if file exists and if it doesn't try redownloading it.
-      # This may be necessary when tariff runs in multiserver environment
-      # where one server downloads updates and another server tries to apply it
-      File.exist?(file_path) || (
-        instrument("not_found_on_file_system.tariff_synchronizer", path: file_path)
-        self.class.download(issue_date) || file_exists?
-      )
+      "#{TariffSynchronizer.root_path}/#{self.class.update_type}/#{filename}"
     end
 
     def import!
       raise NotImplementedError
-    end
-
-    def apply
-      # Track latest SQL queries in a ring buffer and with error
-      # email in case it happens
-      # Based on http://goo.gl/vpTFyT (SequelRails LogSubscriber)
-      @database_queries = RingBuffer.new(10)
-
-      sql_subscriber = ActiveSupport::Notifications.subscribe(/sql\.sequel/) do |*args|
-        event = ActiveSupport::Notifications::Event.new(*args)
-
-        binds = unless event.payload.fetch(:binds, []).blank?
-                  event.payload[:binds].map do |column, value|
-                    [column.name, value]
-                  end.inspect
-                end
-
-        @database_queries.push(
-          format("(%{class_name}) %{sql} %{binds}",
-            class_name: event.payload[:name],
-            sql: event.payload[:sql].squeeze(" "),
-            binds: binds
-          )
-        )
-      end
-
-      # Subscribe to conformance errors and save them to DB
-      conformance_errors_subscriber = ActiveSupport::Notifications.subscribe(/conformance_error/) do |*args|
-        event = ActiveSupport::Notifications::Event.new(*args)
-        record = event.payload[:record]
-        TariffUpdateConformanceError.create(
-          base_update: self,
-          model_name: record.class.to_s,
-          model_primary_key: record.pk,
-          model_values: record.values,
-          model_conformance_errors: record.conformance_errors
-        )
-      end
-
-      if file_exists?
-
-        Sequel::Model.db.transaction(reraise: true) do
-          # If a error is raised during import, the transaction is roll-backed
-          # we then run this block afterwards to mark the update as failed
-          Sequel::Model.db.after_rollback { mark_as_failed }
-
-          import!
-        end
-      end
-    rescue => e
-      e = e.original if e.respond_to?(:original) && e.original
-      update(exception_class: e.class.to_s + ": " + e.message.to_s,
-             exception_backtrace: e.backtrace.join("\n"),
-             exception_queries: @database_queries.join("\n"))
-
-      instrument(
-        "failed_update.tariff_synchronizer",
-        exception: e, update: self, database_queries: @database_queries
-      )
-      raise Sequel::Rollback
-    ensure
-      ActiveSupport::Notifications.unsubscribe(sql_subscriber)
-      ActiveSupport::Notifications.unsubscribe(conformance_errors_subscriber)
     end
 
     class << self
@@ -202,28 +126,7 @@ module TariffSynchronizer
         raise "Update Type should be specified in inheriting class"
       end
 
-      def rebuild
-        Dir[File.join(Rails.root, TariffSynchronizer.root_path, update_type.to_s, "*")].each do |file_path|
-          begin
-            validate_file!(File.read(file_path))
-            filename = Pathname.new(file_path).basename.to_s
-            file_date = Date.parse(filename.match(/^(\d{4}-\d{2}-\d{2})_.*$/)[1])
-            create_or_update(file_date, PENDING_STATE, filename)
-          rescue InvalidContents
-            next
-          end
-        end
-      end
-
       private
-
-      def create_or_update(date, state, file_name)
-        find_or_create(
-          filename: file_name,
-          update_type: self.name,
-          issue_date: date
-        ).update(state: state)
-      end
 
       def pending_from
         if last_download = (last_pending || descending.first)

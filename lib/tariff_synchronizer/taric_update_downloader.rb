@@ -3,8 +3,6 @@ require "tariff_synchronizer/taric_file_name_generator"
 module TariffSynchronizer
   # Download pending updates TARIC files
   class TaricUpdateDownloader
-    include FileService
-
     delegate :instrument, :subscribe, to: ActiveSupport::Notifications
 
     attr_reader :date, :url
@@ -23,7 +21,7 @@ module TariffSynchronizer
     private
 
     def response
-      @response ||= TaricUpdateDownloader.download_content(url)
+      @response ||= TariffUpdatesRequester.perform(url)
     end
 
     def create_record_for_successful_response

@@ -1,4 +1,4 @@
-class TaricImporter < TariffImporter
+class TaricImporter
   class RecordProcessor
     class GoodsNomenclatureUpdateOperation < UpdateOperation
       def call

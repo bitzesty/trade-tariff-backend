@@ -1,4 +1,4 @@
-class TaricImporter < TariffImporter
+class TaricImporter
   class RecordProcessor
     class MeasureAttributeMutator < TaricImporter::RecordProcessor::AttributeMutator
       # Avoid naming conflicts with associations.

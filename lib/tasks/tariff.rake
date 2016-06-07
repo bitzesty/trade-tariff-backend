@@ -29,8 +29,6 @@ namespace :tariff do
     desc 'Transform CHIEF updates'
     task transform: %w[environment] do
       require 'chief_transformer'
-
-      # Apply pending updates (use TariffImporter to import record to database)
       # Transform imported intermediate Chief records to insert/change national measures
 
       mode = ENV["MODE"].try(:to_sym).presence || :update

@@ -25,7 +25,7 @@ Dir[File.join(Rails.root, 'lib', 'taric_importer', 'record_processor', 'operatio
   require file
 }
 
-class TaricImporter < TariffImporter
+class TaricImporter
   class RecordProcessor
     extend Forwardable
 

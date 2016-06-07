@@ -8,7 +8,7 @@ describe TariffSynchronizer::TaricUpdateDownloader do
     let(:generator) { TaricFileNameGenerator.new(example_date) }
 
     it "Logs the request for the TaricUpdate file" do
-      allow(described_class).to receive(:download_content)
+      expect(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform)
         .with(generator.url).and_return(build(:response, :not_found))
       tariff_synchronizer_logger_listener
       described_class.new(example_date).perform
@@ -17,14 +17,14 @@ describe TariffSynchronizer::TaricUpdateDownloader do
     end
 
     it "Calls the external server to download file" do
-      expect(described_class).to receive(:download_content)
+      expect(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform)
         .with(generator.url).and_return(build(:response, :not_found))
       described_class.new(example_date).perform
     end
 
     context "Successful Response" do
       before do
-        allow(described_class).to receive(:download_content)
+        allow(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform)
           .with(generator.url).and_return(build :response, :success, content: "ABC.xml\nXYZ.xml")
       end
 
@@ -43,7 +43,7 @@ describe TariffSynchronizer::TaricUpdateDownloader do
 
     context "Missing Response" do
       before do
-        allow(described_class).to receive(:download_content)
+        allow(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform)
           .with(generator.url).and_return(build(:response, :not_found))
       end
 
@@ -77,7 +77,7 @@ describe TariffSynchronizer::TaricUpdateDownloader do
 
     context "Retries Exceeded Response" do
       before do
-        allow(described_class).to receive(:download_content)
+        allow(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform)
           .with(generator.url).and_return(build(:response, :retry_exceeded))
       end
 
@@ -110,7 +110,7 @@ describe TariffSynchronizer::TaricUpdateDownloader do
 
     context "Blank Response" do
       before do
-        allow(described_class).to receive(:download_content)
+        allow(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform)
           .with(generator.url).and_return(build(:response, :blank))
       end
 

@@ -14,7 +14,7 @@ module TariffSynchronizer
 
     def import!
       instrument("apply_chief.tariff_synchronizer", filename: filename) do
-        ChiefImporter.new(file_path, issue_date).import
+        ChiefImporter.new(self).import
         mark_as_applied
       end
 
