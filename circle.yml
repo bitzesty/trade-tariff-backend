@@ -14,3 +14,10 @@ database:
 dependencies:
   bundler:
     without: [development]
+  post:
+    - sudo apt-get install openvpn
+    - openvpn --version
+    - wget 'https://cli.run.pivotal.io/stable?release=linux64-binary&source=github' -O cf.tgz
+    - tar -zxvf cf.tgz
+    - sudo mv cf /usr/local/bin
+    - cf -v
