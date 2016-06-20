@@ -26,7 +26,6 @@ gem "curb", "~> 0.8"
 gem "nokogiri", "~> 1.6"
 
 gem "aws-ses", "~> 0.6", require: "aws/ses" #used for sync emails
-gem "logstasher", "~> 0.6"
 gem "responders", "~> 2.1"
 
 gem "sass", "~> 3.4"
