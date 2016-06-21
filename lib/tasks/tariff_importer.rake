@@ -18,7 +18,7 @@ namespace :importer do
       if ENV["TARGET"] && File.exists?(ENV["TARGET"])
         # We will be fetching updates from Taric and modifying primary keys
         # so unrestrict it for all models.
-        Sequel::Model.descendants.each(&:unrestrict_primary_key)
+        Sequel::Model.subclasses.each(&:unrestrict_primary_key)
         Sequel::Model.plugin :skip_create_refresh
         TaricImporter.new(ENV["TARGET"], ENV["DATE"]).import(validate: false)
       else

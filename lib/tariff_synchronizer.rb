@@ -108,7 +108,7 @@ module TariffSynchronizer
     TradeTariffBackend.with_redis_lock do
 
       # Updates could be modifying primary keys so unrestricted it for all models.
-      Sequel::Model.descendants.each(&:unrestrict_primary_key)
+      Sequel::Model.subclasses.each(&:unrestrict_primary_key)
 
       subscribe /conformance_error/ do |*args|
         event = ActiveSupport::Notifications::Event.new(*args)
@@ -213,7 +213,7 @@ module TariffSynchronizer
   end
 
   def oplog_based_models
-    Sequel::Model.descendants.select { |model|
+    Sequel::Model.subclasses.select { |model|
       model.plugins.include?(Sequel::Plugins::Oplog)
     }
   end
