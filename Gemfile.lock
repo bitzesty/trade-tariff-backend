@@ -75,7 +75,6 @@ GEM
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
     curb (0.8.8)
-    dalli (2.7.4)
     diff-lcs (1.2.5)
     docile (1.1.5)
     dotenv (2.1.1)
@@ -312,7 +311,6 @@ DEPENDENCIES
   brakeman (~> 3.0)
   builder (~> 3.2)
   curb (~> 0.8)
-  dalli (~> 2.7)
   database_cleaner!
   dotenv-rails
   elasticsearch (~> 1.0)
