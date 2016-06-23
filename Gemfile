@@ -45,7 +45,7 @@ end
 
 group :test do
   gem "rspec-rails", "~> 3.0"
-  gem "factory_girl_rails"
+  gem "factory_girl_rails", require: false
   gem "fakefs", require: "fakefs/safe"
   gem "forgery"
   gem "json_expressions"
