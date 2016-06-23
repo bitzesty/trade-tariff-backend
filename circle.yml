@@ -6,3 +6,6 @@ machine:
     - redis
   environment:
     GOVUK_APP_DOMAIN: test
+dependencies:
+  post:
+    - sudo service redis-server status || sudo service redis-server start
