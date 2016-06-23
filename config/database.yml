@@ -1,19 +1,16 @@
-development:
+default: &default
   adapter: postgresql
   encoding: utf8
-  reconnect: true
+  pool: 5
+
+development:
+  <<: *default
   database: tariff_development
-  single_threaded: true
-  username: tariff
-  password: tariff
-  host: localhost
 
 test:
-  adapter: postgresql
-  encoding: utf8
-  reconnect: true
+  <<: *default
   database: tariff_test
-  single_threaded: true
-  username: tariff
-  password: tariff
-  host: localhost
+
+production:
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
