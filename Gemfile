@@ -40,14 +40,12 @@ end
 
 group :development, :test do
   gem "dotenv-rails"
-  gem "pry-rails", "~> 0.3"
   gem "pry-byebug"
-  gem "brakeman", "~> 3.0", require: false
-  gem "factory_girl_rails"
-  gem "rspec-rails", "~> 3.0"
 end
 
 group :test do
+  gem "rspec-rails", "~> 3.0"
+  gem "factory_girl_rails"
   gem "fakefs", require: "fakefs/safe"
   gem "forgery"
   gem "json_expressions"
