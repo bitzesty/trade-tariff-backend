@@ -46,7 +46,16 @@ module TradeTariffBackend
     # Disable Rack::Cache.
     config.action_dispatch.rack_cache = nil
 
-    # Configure schema format
+    # Configure sequel
     config.sequel.schema_format = :sql
+    config.sequel.default_timezone = :utc
+
+    config.sequel.after_connect = proc do
+      Sequel::Model.plugin :take
+      Sequel::Model.plugin :validation_class_methods
+
+      Sequel::Model.db.extension :pagination
+      Sequel::Model.db.extension :server_block
+    end
   end
 end
