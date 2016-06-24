@@ -1,4 +1,5 @@
 source "https://rubygems.org"
+ruby "2.3.1"
 
 gem "rails", "4.2.5.2"
 
@@ -18,8 +19,8 @@ gem "yajl-ruby", "~> 1.2", require: "yajl"
 gem "builder", "~> 3.2"
 gem "plek", "~> 1.11"
 gem "gds-sso", "~> 11.0"
-gem "ox", '~> 2.3'
-gem "puma"
+gem "ox", "~> 2.3"
+gem "puma", "~> 3.4"
 gem "curb", "~> 0.8"
 
 gem "nokogiri", "~> 1.6"

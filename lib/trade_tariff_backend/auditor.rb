@@ -27,7 +27,7 @@ module TradeTariffBackend
     end
 
     def models
-      @models.presence || Sequel::Model.descendants.select{ |model|
+      @models.presence || Sequel::Model.subclasses.select{ |model|
                             model.plugins.include?(Sequel::Plugins::Oplog)
                           }
     end
