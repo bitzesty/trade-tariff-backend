@@ -77,6 +77,32 @@ In case of any errors, changes (per single update) are roll-backed and record it
   DATE='2014-01-30' bundle exec rake tariff:sync:rollback
   ```
 
+## Deployment
+
+We use manifest files to deploy manually to CloudFoundry, but these are not in the repository since they have reference of environment variables that may hold sensitive information.
+
+Make sure to be on the right organization and space:
+
+    cf target -o "trade-tariff" -s "staging"
+
+Make sure the services that the app depends are available in the marketplace:
+
+    cf create-service <service> <service-plan> <new-service-name>
+
+If it's the first time the app is deployed, from the root folder of the app:
+
+    cf push <app-name-we-desired>
+
+If the app is already created we can create a manifest file with this command:
+
+    cf create-app-manifest tariff-backend-staging
+
+And deploy with the new manifest file with:
+
+    cf push -f tariff-backend-worker-staging_manifest.yml
+
+In the newer Diego architecture from CloudFoundry, no-route skips creating and binding a route for the app, but does not specify which type of health check to perform. If your app does not listen on a port, for example the sidekiq worker, then it does not satisfy the port-based health check and Cloud Foundry marks it as crashed. To prevent this, disable the port-based health check with cf set-health-check APP_NAME none.
+
 ## Notes
 
 * When writing validators in `app/validators` please run the rake task
