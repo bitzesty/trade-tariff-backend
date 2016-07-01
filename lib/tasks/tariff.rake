@@ -15,7 +15,7 @@ namespace :tariff do
   desc 'Download and apply Taric and CHIEF data'
   task sync: %w[environment sync:apply]
 
-  desc "Sample data for local development environment"
+  desc "Restore missing chief records files"
   task restore_missing_chief_records: :environment do
     require "csv"
 
@@ -35,6 +35,12 @@ namespace :tariff do
 
       puts "#{table_name} table processed"
     end
+  end
+
+  desc "Process missing chief records files"
+  task process_missing_chief_records: :environment do
+    processor = ChiefTransformer::Processor.new(Chief::Mfcm.unprocessed.all, Chief::Tame.unprocessed.all)
+    processor.process
   end
 
   namespace :sync do
