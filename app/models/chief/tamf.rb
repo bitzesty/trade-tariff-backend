@@ -1,11 +1,8 @@
 module Chief
-  class Tamf < Sequel::Model
-    set_dataset db[:chief_tamf].
-                order(Sequel.asc(:msrgp_code)).
-                order_more(Sequel.asc(:msr_type)).
-                order_more(Sequel.asc(:tty_code)).
-                order_more(Sequel.asc(:fe_tsmp))
-
+  class Tamf < Sequel::Model(Sequel::Model.db[:chief_tamf].order(Sequel.asc(:msrgp_code)).
+                                                           order_more(Sequel.asc(:msr_type)).
+                                                           order_more(Sequel.asc(:tty_code)).
+                                                           order_more(Sequel.asc(:fe_tsmp)))
     set_primary_key [:msrgp_code,
                      :msr_type,
                      :tty_code,
