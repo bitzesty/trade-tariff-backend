@@ -15,6 +15,34 @@ namespace :tariff do
   desc 'Download and apply Taric and CHIEF data'
   task sync: %w[environment sync:apply]
 
+  desc "Restore missing chief records files"
+  task restore_missing_chief_records: :environment do
+    require "csv"
+
+    # Custom converter
+    CSV::Converters[:null_to_nil] = lambda do |field|
+      field && field == "NULL" ? nil : field
+    end
+
+    ["comm", "tamf", "tbl9", "mfcm", "tame"].each do |table_name|
+      file_path = File.join(Rails.root, "data", "missing_chief_records", "#{table_name}.csv")
+
+      rows = CSV.read(file_path, headers: true, header_converters: :symbol, converters: [:null_to_nil])
+
+      rows.each do |line|
+        "Chief::#{table_name.capitalize}".constantize.insert line.to_hash
+      end
+
+      puts "#{table_name} table processed"
+    end
+  end
+
+  desc "Process missing chief records files"
+  task process_missing_chief_records: :environment do
+    processor = ChiefTransformer::Processor.new(Chief::Mfcm.unprocessed.all, Chief::Tame.unprocessed.all)
+    processor.process
+  end
+
   namespace :sync do
     desc 'Download pending Taric and CHIEF update files, Update tariff_updates table'
     task download: [:environment, :class_eager_load] do
