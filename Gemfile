@@ -4,6 +4,7 @@ ruby "2.3.1"
 gem "rails", "4.2.5.2"
 
 gem "aws-sdk", "~> 2"
+gem "aws-sdk-rails"
 gem "hashie", "~> 3.4"
 gem "multi_json", "~> 1.11"
 gem "pg"
@@ -24,8 +25,6 @@ gem "puma", "~> 3.4"
 gem "curb", "~> 0.8"
 
 gem "nokogiri", "~> 1.6"
-
-gem "aws-ses", "~> 0.6", require: "aws/ses" #used for sync emails
 gem "responders", "~> 2.1"
 
 gem "sass", "~> 3.4"
