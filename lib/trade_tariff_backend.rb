@@ -27,7 +27,7 @@ module TradeTariffBackend
 
     # Email of the user who receives all info/error notifications
     def admin_email
-      ENV.fetch("TARIFF_SYNC_EMAIL", "trade-tariff-alerts@digital.cabinet-office.gov.uk")
+      ENV.fetch("TARIFF_SYNC_EMAIL")
     end
 
     def platform
