@@ -49,9 +49,6 @@ Rails.application.configure do
   config.after_initialize do
     TradeTariffBackend.configure do |tariff|
       tariff.search_namespace = 'tariff-test' # default is just tariff
-      tariff.search_options = {
-        log: false
-      }
       # We need search index to be refreshed after each operation
       # in order to assert record presence in the index (in integration specs)
       # Elasticsearch has a 1 second interval between index refreshes
