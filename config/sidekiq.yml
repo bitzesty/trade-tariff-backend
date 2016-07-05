@@ -2,6 +2,7 @@
 :concurrency:  1
 :queues:
   - [rollbacks, 2]
+  - [sync, 2]
   - [default, 5]
 :schedule:
   UpdatesSynchronizerWorker:
