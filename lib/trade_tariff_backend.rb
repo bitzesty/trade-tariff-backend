@@ -72,17 +72,12 @@ module TradeTariffBackend
 
     def search_client
       @search_client ||= SearchClient.new(
-        Elasticsearch::Client.new(search_options),
+        Elasticsearch::Client.new,
         namespace: search_namespace,
         indexed_models: indexed_models,
         search_operation_options: search_operation_options
       )
     end
-
-    def search_host
-      @search_host ||= "http://localhost:#{search_port}"
-    end
-    attr_writer :search_host
 
     def search_namespace
       @search_namespace ||= 'tariff'
@@ -96,20 +91,6 @@ module TradeTariffBackend
 
       "#{index_name}Index".constantize.new(search_namespace)
     end
-
-    def search_port
-      @search_port ||= 9200
-    end
-    attr_writer :search_port
-
-    def default_search_options
-      { host: search_host, logger: Rails.logger }
-    end
-
-    def search_options
-      default_search_options.merge(@search_options || {})
-    end
-    attr_writer :search_options
 
     def search_operation_options
       @search_operation_options || {}
