@@ -50,13 +50,11 @@ GEM
       aws-sdk-resources (= 2.3.7)
     aws-sdk-core (2.3.7)
       jmespath (~> 1.0)
+    aws-sdk-rails (1.0.1)
+      aws-sdk-resources (~> 2)
+      railties (>= 3)
     aws-sdk-resources (2.3.7)
       aws-sdk-core (= 2.3.7)
-    aws-ses (0.6.0)
-      builder
-      mail (> 2.2.5)
-      mime-types
-      xml-simple
     builder (3.2.2)
     byebug (8.2.4)
     coderay (1.1.0)
@@ -275,7 +273,6 @@ GEM
     webmock (1.20.4)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
-    xml-simple (1.1.5)
     yajl-ruby (1.2.1)
 
 PLATFORMS
@@ -284,7 +281,7 @@ PLATFORMS
 DEPENDENCIES
   ansi (~> 1.5)
   aws-sdk (~> 2)
-  aws-ses (~> 0.6)
+  aws-sdk-rails
   builder (~> 3.2)
   curb (~> 0.8)
   database_cleaner!
