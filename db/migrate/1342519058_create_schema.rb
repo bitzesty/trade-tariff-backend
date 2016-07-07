@@ -499,7 +499,7 @@ Sequel.migration do
 
     create_table(:footnote_association_meursing_headings, :ignore_index_errors=>false) do
       String :meursing_table_plan_id, :size=>2
-      String :meursing_heading_number, :size=>255
+      Integer :meursing_heading_number
       Integer :row_column_code
       String :footnote_type, :size=>2
       String :footnote_id, :size=>3
@@ -1061,7 +1061,7 @@ Sequel.migration do
 
     create_table(:meursing_headings, :ignore_index_errors=>false) do
       String :meursing_table_plan_id, :size=>2
-      String :meursing_heading_number
+      Integer :meursing_heading_number
       Integer :row_column_code
       DateTime :validity_start_date
       DateTime :validity_end_date
