@@ -6,76 +6,56 @@ module XmlParser
       @target = target
       @target_handler = target_handler
       @in_target = false
-      @elements = []
+      @stack = []
     end
 
     def parse
       Ox.sax_parse self, @stringio, symbolize: false, strip_namespace: '*'
     end
 
-    def start_element(name)
-      @in_target = true if name == @target
-
+    def start_element(key)
+      @in_target = true if key == @target
       return unless @in_target
-      name = replace_dots(name)
-      @elements << { name=>{} }
+
+      @stack << @node = {}
     end
 
-    def end_element(name)
-      if @in_target
-        name = replace_dots(name)
-        if @elements[-1][name]
-          @element = @elements.pop
+    def text(val)
+      @node[:__content__] = val
+    end
 
-          @element.delete name
-
-          if @element.keys.size == 1 and @element[:text]
-            inject_into_last name, @element[:text]
-          else
-            inject_into_last name, @element
-          end
-        end
-      end
-
-      if name == @target
-        # Send element to the Class Handler
-        @target_handler.process_xml_node @element
+    def end_element(key)
+      if key == @target
+        @target_handler.process_xml_node @stack[-1]
         @in_target = false
       end
-    end
 
-    def attr(name, value)
       return unless @in_target
-      return if name =~ %r{xmlns} # Exclude namespace attributes
-      return unless @elements[-1]
 
-      @elements[-1] ||= {}
-      @elements[-1][name] = value
-    end
+      child = @stack.pop
+      @node = @stack.last
 
-    def text(value)
-      return unless @in_target
-      return unless @elements[-1]
-      @elements[-1][:text] = value
+      key = replace_dots(key)
+
+      case @node[key]
+      when Array
+        @node[key] << child
+      when Hash
+        @node[key] = [@node[key], child]
+      else
+        if child.keys == [:__content__]
+          @node[key] = child[:__content__]
+        else
+          @node[key] = child
+        end
+      end
     end
 
     private
 
-    def inject_into_last name, value
-      return unless @elements[-1]
-
-      if @elements[-1][name]
-        @elements[-1][name] = [ @elements[-1][name] ] unless @elements[-1][name].is_a? Array
-        @elements[-1][name] << value
-
-      else
-        @elements[-1][name] = value
-      end
-    end
-
-    def replace_dots(name)
+    def replace_dots(key)
       # Rails requires name attributes with underscore
-      name.tr(".".freeze, "_".freeze)
+      key.tr(".".freeze, "_".freeze)
     end
   end
 end
