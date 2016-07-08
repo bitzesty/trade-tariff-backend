@@ -33,7 +33,7 @@ gem "therubyracer", "~> 0.12"
 gem "uglifier", "~> 2.7"
 
 group :production do
-  gem "newrelic_rpm", "~> 3.12"
+  gem "newrelic_rpm"
   gem "rails_12factor"
   gem "sentry-raven"
 end

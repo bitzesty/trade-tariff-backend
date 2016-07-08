@@ -295,7 +295,7 @@ DEPENDENCIES
   hashie (~> 3.4)
   json_expressions
   multi_json (~> 1.11)
-  newrelic_rpm (~> 3.12)
+  newrelic_rpm
   nokogiri (~> 1.6)
   ox (~> 2.3)
   pg
