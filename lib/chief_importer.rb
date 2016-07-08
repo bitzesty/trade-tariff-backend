@@ -35,7 +35,8 @@ class ChiefImporter
 
   def import
     file = TariffSynchronizer::FileService.file_as_stringio(@chief_update)
-    CSV.parse(file, encoding: "ISO-8859-1") do |line|
+    file.set_encoding("ISO-8859-1")
+    CSV.parse(file) do |line|
       entry = Entry.build(line)
 
       if entry.is_a?(StartEntry)
