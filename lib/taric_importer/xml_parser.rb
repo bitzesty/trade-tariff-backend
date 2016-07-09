@@ -21,6 +21,7 @@ module XmlParser
     end
 
     def text(val)
+      return unless @in_target
       @node[:__content__] = val
     end
 
