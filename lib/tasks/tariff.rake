@@ -44,6 +44,11 @@ namespace :tariff do
   end
 
   namespace :sync do
+    desc 'Update database by downloading and then applying CHIEF and TARIC updates via worker'
+    task update: [:environment, :class_eager_load] do
+      UpdatesSynchronizerWorker.perform_async
+    end
+
     desc 'Download pending Taric and CHIEF update files, Update tariff_updates table'
     task download: [:environment, :class_eager_load] do
       TariffSynchronizer.download
