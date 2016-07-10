@@ -14,6 +14,7 @@ module TariffSynchronizer
     end
 
     def perform
+      return if check_date_already_downloaded?
       log_request_to_taric_update
       send("create_record_for_#{response.state}_response")
     end
@@ -22,6 +23,10 @@ module TariffSynchronizer
 
     def response
       @response ||= TariffUpdatesRequester.perform(url)
+    end
+
+    def check_date_already_downloaded?
+      TaricUpdate.find(issue_date: date).present?
     end
 
     def create_record_for_successful_response
