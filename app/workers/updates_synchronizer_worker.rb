@@ -4,6 +4,7 @@ class UpdatesSynchronizerWorker
   sidekiq_options queue: :sync, retry: false
 
   def perform
+    logger.info "Running UpdatesSynchronizerWorker"
     TariffSynchronizer.download
     TariffSynchronizer.apply
   end
