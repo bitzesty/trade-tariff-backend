@@ -25,7 +25,7 @@ common: &default_settings
   # completely turn the agent off regardless of the other settings.
   # Valid values are true, false and auto.
   #
-  agent_enabled: auto
+  # agent_enabled: auto
 
   # Application Name Set this to be the name of your application as
   # you'd like it show up in New Relic. The service will then auto-map
@@ -158,7 +158,7 @@ common: &default_settings
     # Error collector is enabled by default. Set this to false to turn
     # it off. This feature is only available at the Professional and above
     # product levels.
-    enabled: false
+    enabled: true
 
     # Rails Only - tells error collector whether or not to capture a
     # source snippet around the place of the error when errors are View
@@ -217,3 +217,11 @@ test:
 # incurring any user-visible performance degradation.
 production:
   <<: *default_settings
+
+# Many applications have a staging environment which behaves
+# identically to production. Support for that environment is provided
+# here.  By default, the staging environment has the agent turned on.
+staging:
+  <<: *default_settings
+  monitor_mode: false
+  # app_name: My Application (Staging)
