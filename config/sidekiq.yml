@@ -1,4 +1,4 @@
-:verbose: false
+:verbose: true
 :concurrency:  1
 :queues:
   - [rollbacks, 2]
