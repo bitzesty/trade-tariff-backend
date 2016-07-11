@@ -31,9 +31,9 @@ gem "sass", "~> 3.4"
 gem "sass-rails", "~> 5.0"
 gem "therubyracer", "~> 0.12"
 gem "uglifier", "~> 2.7"
+gem "newrelic_rpm"
 
 group :production do
-  gem "newrelic_rpm"
   gem "rails_12factor"
   gem "sentry-raven"
 end
