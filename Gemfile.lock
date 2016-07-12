@@ -150,6 +150,8 @@ GEM
     pry-byebug (3.3.0)
       byebug (~> 8.0)
       pry (~> 0.10)
+    pry-rails (0.3.4)
+      pry (>= 0.9.10)
     puma (3.4.0)
     rabl (0.11.6)
       activesupport (>= 2.3.14)
@@ -301,6 +303,7 @@ DEPENDENCIES
   pg
   plek (~> 1.11)
   pry-byebug
+  pry-rails
   puma (~> 3.4)
   rabl (~> 0.11)
   rails (= 4.2.5.2)
