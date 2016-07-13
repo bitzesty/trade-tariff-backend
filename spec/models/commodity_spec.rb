@@ -140,6 +140,32 @@ describe Commodity do
       end
     end
 
+    describe 'measure duplication on same date but different goods_nomenclature_item_id' do
+      let(:measure_type) { create :measure_type }
+      let(:commodity)    { create :commodity, :with_indent, validity_start_date: Date.today.ago(3.years), goods_nomenclature_item_id: "2202901919" }
+      let!(:measure1)    { create :measure, measure_sid: 1,
+                                           measure_type_id: measure_type.measure_type_id,
+                                           additional_code_type_id: nil,
+                                           goods_nomenclature_sid: commodity.goods_nomenclature_sid,
+                                           goods_nomenclature_item_id: "2202901900",
+                                           validity_start_date: Date.today.ago(1.year)  }
+      let!(:measure2)    { create :measure,  measure_sid: 2,
+                                            measure_generating_regulation_id: measure1.measure_generating_regulation_id,
+                                            geographical_area_id: measure1.geographical_area_id,
+                                            measure_type_id: measure_type.measure_type_id,
+                                            geographical_area_sid: measure1.geographical_area_sid,
+                                            goods_nomenclature_sid: commodity.goods_nomenclature_sid,
+                                            goods_nomenclature_item_id: "2202901919",
+                                            additional_code_type_id: measure1.additional_code_type_id,
+                                            additional_code_id: measure1.additional_code_id,
+                                            validity_start_date: Date.today.ago(1.years)  }
+
+      it 'groups measures by measure_generating_regulation_id and picks the measure with the highest goods_nomenclature_item_id' do
+        expect(commodity.measures.map(&:measure_sid)).to_not     include measure1.measure_sid
+        expect(commodity.measures.map(&:measure_sid)).to include measure2.measure_sid
+      end
+    end
+
     describe 'measures for export' do
       context 'trade movement code' do
         let(:export_measure_type) { create :measure_type, :export }
