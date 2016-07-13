@@ -6,7 +6,9 @@ class Commodity < GoodsNomenclature
   plugin :elasticsearch
 
   set_dataset filter("goods_nomenclatures.goods_nomenclature_item_id NOT LIKE ?", '____000000').
-              order(Sequel.asc(:goods_nomenclatures__goods_nomenclature_item_id))
+              order(Sequel.asc(:goods_nomenclatures__goods_nomenclature_item_id),
+                    Sequel.asc(:goods_nomenclatures__producline_suffix),
+                    Sequel.asc(:goods_nomenclatures__goods_nomenclature_sid))
 
   set_primary_key [:goods_nomenclature_sid]
 
