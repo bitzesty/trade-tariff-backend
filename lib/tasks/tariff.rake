@@ -93,6 +93,21 @@ namespace :tariff do
         load(File.join(Rails.root, 'db', 'import_sections.rb'))
       end
 
+      desc "Dump Section notes"
+      task dump_section_notes: :environment do
+        section_note = SectionNote.all.each do |section_note|
+          section_file = "db/notes/sections/#{section_note.section_id}.yaml"
+          File.open(section_file, 'w') do |out|
+            section_doc = {
+              section: section_note.section_id,
+              content: section_note.content
+            }
+            YAML::dump(section_doc, out)
+          end
+        end
+      end
+
+
       desc "Load Section notes into database"
       task section_notes: :environment do
         Dir[Rails.root.join('db','notes','sections','*')].each do |file|
@@ -103,6 +118,21 @@ namespace :tariff do
             section_note.save
           rescue StandardError => e
             puts "Error loading: #{file}, #{e}"
+          end
+        end
+      end
+
+      desc "Dump Chapter notes"
+      task dump_chapter_notes: :environment do
+        chatper_notes = ChapterNote.all.each do |chatper_note|
+          chapter_file = "db/notes/chapters/#{chatper_note.section_id}_#{chatper_note.chapter_id.to_i}.yaml"
+          File.open(chapter_file, 'w') do |out|
+            chapter_doc = {
+              section: chatper_note.section_id,
+              chapter: chatper_note.chapter_id.to_i,
+              content: chatper_note.content.force_encoding("ASCII-8BIT").encode('UTF-8', undef: :replace, replace: '')
+            }
+            YAML::dump(chapter_doc, out)
           end
         end
       end
