@@ -143,11 +143,9 @@ namespace :tariff do
           begin
             note = YAML.load(File.read(file))
             chapter_note = ChapterNote.find(section_id: note[:section],
-                                            chapter_id: note[:chapter]) || ChapterNote.new(section_id: note[:section], chapter_id: note[:chapter])
+                                            chapter_id: note[:chapter].to_s) || ChapterNote.new(section_id: note[:section], chapter_id: note[:chapter].to_s)
             chapter_note.content = note[:content]
             chapter_note.save
-          rescue StandardError => e
-            puts "Error loading: #{file}, #{e}"
           end
         end
       end
