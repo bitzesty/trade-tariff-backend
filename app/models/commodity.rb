@@ -78,8 +78,8 @@ class Commodity < GoodsNomenclature
     @_uptree ||= [ancestors, heading, chapter, self].flatten.compact
   end
 
-  def next_sibling
-    heading.commodities_dataset
+  def children
+    next_sibling = heading.commodities_dataset
       .join(:goods_nomenclature_indents, goods_nomenclature_sid: :goods_nomenclature_sid)
       .where("goods_nomenclature_indents.number_indents = ?", goods_nomenclature_indent.number_indents)
       .where("goods_nomenclatures.goods_nomenclature_sid != ?", goods_nomenclature_sid)
@@ -87,10 +87,7 @@ class Commodity < GoodsNomenclature
       .where("goods_nomenclature_indents.validity_start_date <= ? AND (goods_nomenclature_indents.validity_end_date >= ? OR goods_nomenclature_indents.validity_end_date IS NULL)", point_in_time, point_in_time)
       .order(2)
       .first
-  end
 
-
-  def children
     if next_sibling.present?
       heading.commodities_dataset
              .join(:goods_nomenclature_indents, goods_nomenclature_sid: :goods_nomenclature_sid)
