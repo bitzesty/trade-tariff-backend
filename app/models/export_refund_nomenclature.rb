@@ -35,7 +35,7 @@ class ExportRefundNomenclature < Sequel::Model
   delegate :number_indents, to: :export_refund_nomenclature_indent
 
   def uptree
-    @_uptree ||= [ancestors, self].flatten.compact.uniq
+    @_uptree ||= [ancestors, self].flatten.compact
   end
 
   def ancestors
