@@ -75,7 +75,7 @@ class Commodity < GoodsNomenclature
   end
 
   def uptree
-    @_uptree ||= [chapter, heading, ancestors].flatten.compact.uniq
+    @_uptree ||= [chapter, heading, ancestors, self].flatten.compact.uniq
   end
 
   def children
