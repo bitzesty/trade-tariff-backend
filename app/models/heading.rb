@@ -60,7 +60,7 @@ class Heading < GoodsNomenclature
   end
 
   def uptree
-    [self, self.chapter].compact
+    [self.chapter, self].compact
   end
 
   def non_grouping?
