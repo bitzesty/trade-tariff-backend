@@ -85,7 +85,7 @@ class Commodity < GoodsNomenclature
       .where("goods_nomenclatures.goods_nomenclature_sid != ?", goods_nomenclature_sid)
       .where("goods_nomenclatures.goods_nomenclature_item_id > ?", goods_nomenclature_item_id)
       .where("goods_nomenclature_indents.validity_start_date <= ? AND (goods_nomenclature_indents.validity_end_date >= ? OR goods_nomenclature_indents.validity_end_date IS NULL)", point_in_time, point_in_time)
-      .order(2)
+      .order(:goods_nomenclatures__goods_nomenclature_item_id)
       .first
 
     if next_sibling.present?
