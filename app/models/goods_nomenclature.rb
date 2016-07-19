@@ -106,6 +106,10 @@ class GoodsNomenclature < Sequel::Model
     goods_nomenclature_sid
   end
 
+  def to_s
+    "#{number_indents}: #{goods_nomenclature_item_id}: #{description}"
+  end
+
   def heading_id
     "#{goods_nomenclature_item_id.first(4)}______"
   end
