@@ -3,6 +3,7 @@ class DescriptionTrimFormatter
     raise ArgumentError.new("DescriptionFormatter expects :using arg to be a single value") if opts.keys.many?
 
     str = opts.values.first
+    str.gsub!("&nbsp;", " ")
     str.gsub!("|", " ")
     str.gsub!("!1!", "")
     str.gsub!("!X!", "")
