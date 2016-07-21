@@ -79,7 +79,9 @@ module Declarable
   end
 
   def basic_duty_rate
-    basic_duty_rate_components.map(&:formatted_duty_expression).join(" ")
+    if basic_duty_rate_components.count == 1
+      basic_duty_rate_components.map(&:formatted_duty_expression).join(" ")
+    end
   end
 
   def meursing_code?
