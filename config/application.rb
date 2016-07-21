@@ -2,7 +2,6 @@ require File.expand_path('../boot', __FILE__)
 
 require "action_controller/railtie"
 require "action_mailer/railtie"
-require "sprockets/railtie"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -38,7 +37,7 @@ module TradeTariffBackend
     config.encoding = "utf-8"
 
     # Enable the asset pipeline
-    config.assets.enabled = true
+    config.assets.enabled = false
 
     # Version of your assets, change this if you want to expire all your assets
     # config.assets.version = '1.0'
