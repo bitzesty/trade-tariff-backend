@@ -135,8 +135,10 @@ describe Commodity do
                                              validity_start_date: Date.today.ago(2.years)  }
 
       it 'groups measures by measure_generating_regulation_id and picks latest one' do
-        expect(commodity.measures.map(&:measure_sid)).to     include measure1.measure_sid
-        expect(commodity.measures.map(&:measure_sid)).to_not include measure2.measure_sid
+        TimeMachine.at(Date.current) do
+          expect(commodity.measures.map(&:measure_sid)).to     include measure1.measure_sid
+          expect(commodity.measures.map(&:measure_sid)).to_not include measure2.measure_sid
+        end
       end
     end
 
@@ -161,8 +163,10 @@ describe Commodity do
                                             validity_start_date: Date.today.ago(1.years)  }
 
       it 'groups measures by measure_generating_regulation_id and picks the measure with the highest goods_nomenclature_item_id' do
-        expect(commodity.measures.map(&:measure_sid)).to_not     include measure1.measure_sid
-        expect(commodity.measures.map(&:measure_sid)).to include measure2.measure_sid
+        TimeMachine.at(Date.current) do
+          expect(commodity.measures.map(&:measure_sid)).to_not     include measure1.measure_sid
+          expect(commodity.measures.map(&:measure_sid)).to include measure2.measure_sid
+        end
       end
     end
 

@@ -7,7 +7,6 @@ module Declarable
       Measure.join(
          Measure.with_base_regulations
                 .with_actual(BaseRegulation)
-                .actual_for_base_regulations
                 .where({measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid)})
                 .where{ Sequel.~(measures__measure_type_id: MeasureType::EXCLUDED_TYPES) }
                 .order(Sequel.desc(:measures__measure_generating_regulation_id), Sequel.desc(:measures__measure_type_id), Sequel.desc(:measures__goods_nomenclature_sid), Sequel.desc(:measures__geographical_area_id), Sequel.desc(:measures__geographical_area_sid), Sequel.desc(:measures__additional_code_type_id), Sequel.desc(:measures__additional_code_id), Sequel.desc(:effective_start_date)).tap! { |query|
@@ -22,7 +21,6 @@ module Declarable
         .union(
          Measure.with_modification_regulations
                 .with_actual(ModificationRegulation)
-                .actual_for_modifications_regulations
                 .where({measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid)})
                 .where{ Sequel.~(measures__measure_type_id: MeasureType::EXCLUDED_TYPES) }
                 .order(Sequel.desc(:measures__measure_generating_regulation_id), Sequel.desc(:measures__measure_type_id), Sequel.desc(:measures__goods_nomenclature_sid), Sequel.desc(:measures__geographical_area_id), Sequel.desc(:measures__geographical_area_sid), Sequel.desc(:measures__additional_code_type_id), Sequel.desc(:measures__additional_code_id), Sequel.desc(:effective_start_date))
