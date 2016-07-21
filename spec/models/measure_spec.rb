@@ -19,6 +19,39 @@ describe Measure do
     end
   end
 
+  describe '#measures with different dates' do
+    it 'returns all measures that are relevant to the modification regulation' do
+      Sequel::Model.db.run(%{
+        INSERT INTO measures_oplog (measure_sid, measure_type_id, geographical_area_id, goods_nomenclature_item_id, validity_start_date, validity_end_date, measure_generating_regulation_role, measure_generating_regulation_id, justification_regulation_role, justification_regulation_id, stopped_flag, geographical_area_sid, goods_nomenclature_sid, ordernumber, additional_code_type_id, additional_code_id, additional_code_sid, reduction_indicator, export_refund_nomenclature_sid, national, tariff_measure_number, invalidated_by, invalidated_at, oid, operation, operation_date)
+        VALUES
+        (3445395, '103', '1011', '0805201000', '2016-01-01 00:00:00', '2016-02-29 00:00:00', 4, 'R1517542', 4, 'R1517542', false, 400, 68304, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3071870, 'U', '2015-11-26'),
+        (3445396, '103', '1011', '0805201000', '2016-03-01 00:00:00', '2016-10-31 00:00:00', 4, 'R1517542', 4, 'R1517542', false, 400, 68304, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3071871, 'U', '2015-11-26'),
+        (3445397, '103', '1011', '0805201000', '2016-11-01 00:00:00', '2016-12-31 00:00:00', 4, 'R1517542', 4, 'R1517542', false, 400, 68304, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3071872, 'U', '2015-11-26');
+      })
+      Sequel::Model.db.run(%{
+        INSERT INTO modification_regulations_oplog (modification_regulation_role, modification_regulation_id, validity_start_date, validity_end_date, published_date, officialjournal_number, officialjournal_page, base_regulation_role, base_regulation_id, replacement_indicator, stopped_flag, information_text, approved_flag, explicit_abrogation_regulation_role, explicit_abrogation_regulation_id, effective_end_date, complete_abrogation_regulation_role, complete_abrogation_regulation_id, oid, operation, operation_date)
+        VALUES
+        (4, 'R1517542', '2016-01-01 00:00:00', NULL, '2015-10-30', 'L 285', 1, 1, 'R8726580', 0, false, 'CN 2016 (Entry prices)', true, NULL, NULL, NULL, NULL, NULL, 26064, 'C', '2015-11-26');
+      })
+      Sequel::Model.db.run(%{
+        INSERT INTO goods_nomenclatures_oplog (goods_nomenclature_sid, goods_nomenclature_item_id, producline_suffix, validity_start_date, validity_end_date, statistical_indicator, created_at, oid, operation, operation_date)
+        VALUES
+	      (68304, '0805201000', '80', '1998-01-01 00:00:00', NULL, 0, '2013-08-02 20:03:55', 37691, 'C', NULL);
+
+        INSERT INTO goods_nomenclature_indents_oplog (goods_nomenclature_indent_sid, goods_nomenclature_sid, validity_start_date, number_indents, goods_nomenclature_item_id, productline_suffix, created_at, validity_end_date, oid, operation, operation_date)
+        VALUES
+	      (67883, 68304, '1998-01-01 00:00:00', 2, '0805201000', '80', '2013-08-02 20:03:55', NULL, 38832, 'C', NULL);
+      })
+
+      expect(Measure.with_modification_regulations.all.count).to eq 3
+      expect(Commodity[68304].measures.count).to eq 3
+      expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Measure.with_modification_regulations.with_actual(ModificationRegulation).all.count}).to eq 1
+      expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Measure.with_modification_regulations.with_actual(ModificationRegulation).all.first.measure_sid}).to eq 3445396
+      expect(TimeMachine.at(DateTime.parse("2016-07-21")){Commodity[68304].measures.count}).to eq 1
+      expect(TimeMachine.at(DateTime.parse("2016-07-21")){Commodity[68304].measures.first.measure_sid}).to eq 3445396
+    end
+  end
+
   # According to Taric guide
   describe '#validity_end_date' do
     let(:base_regulation) { create :base_regulation, effective_end_date: Date.yesterday }
