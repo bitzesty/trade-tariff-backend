@@ -36,19 +36,23 @@ describe Measure do
       Sequel::Model.db.run(%{
         INSERT INTO goods_nomenclatures_oplog (goods_nomenclature_sid, goods_nomenclature_item_id, producline_suffix, validity_start_date, validity_end_date, statistical_indicator, created_at, oid, operation, operation_date)
         VALUES
-	      (68304, '0805201000', '80', '1998-01-01 00:00:00', NULL, 0, '2013-08-02 20:03:55', 37691, 'C', NULL);
+	      (68304, '0805201000', '80', '1998-01-01 00:00:00', NULL, 0, '2013-08-02 20:03:55', 37691, 'C', NULL),
+        (70329, '0805201005', '80', '1999-01-01 00:00:00', NULL, 0, '2013-08-02 20:04:48', 39237, 'C', NULL);
 
         INSERT INTO goods_nomenclature_indents_oplog (goods_nomenclature_indent_sid, goods_nomenclature_sid, validity_start_date, number_indents, goods_nomenclature_item_id, productline_suffix, created_at, validity_end_date, oid, operation, operation_date)
         VALUES
-	      (67883, 68304, '1998-01-01 00:00:00', 2, '0805201000', '80', '2013-08-02 20:03:55', NULL, 38832, 'C', NULL);
+	      (67883, 68304, '1998-01-01 00:00:00', 2, '0805201000', '80', '2013-08-02 20:03:55', NULL, 38832, 'C', NULL),
+	      (69920, 70329, '1999-01-01 00:00:00', 3, '0805201005', '80', '2013-08-02 20:04:48', NULL, 40421, 'C', NULL);
       })
 
       expect(Measure.with_modification_regulations.all.count).to eq 3
-      expect(Commodity[68304].measures.count).to eq 3
+      # Measures on a parent code should also be present (e.g. 0805201000 on 0805201005)
+      expect(Commodity.by_code('0805201005').measures.count).to eq 3
+      # In TimeMachine we should only see vaild/the correct measure (with start date within the time range)
       expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Measure.with_modification_regulations.with_actual(ModificationRegulation).all.count }).to eq 1
       expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Measure.with_modification_regulations.with_actual(ModificationRegulation).all.first.measure_sid }).to eq 3445396
-      expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Heading.by_code('0805201000').first.measures.count }).to eq 1
-      expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Heading.by_code('0805201000').first.measures.first.measure_sid }).to eq 3445396
+      expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Commodity.by_code('0805201005').first.measures.count }).to eq 1
+      expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Commodity.by_code('0805201005').first.measures.first.measure_sid }).to eq 3445396
     end
   end
 
