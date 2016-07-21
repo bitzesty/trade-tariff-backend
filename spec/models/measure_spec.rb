@@ -45,10 +45,10 @@ describe Measure do
 
       expect(Measure.with_modification_regulations.all.count).to eq 3
       expect(Commodity[68304].measures.count).to eq 3
-      expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Measure.with_modification_regulations.with_actual(ModificationRegulation).all.count}).to eq 1
-      expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Measure.with_modification_regulations.with_actual(ModificationRegulation).all.first.measure_sid}).to eq 3445396
-      expect(TimeMachine.at(DateTime.parse("2016-07-21")){Commodity[68304].measures.count}).to eq 1
-      expect(TimeMachine.at(DateTime.parse("2016-07-21")){Commodity[68304].measures.first.measure_sid}).to eq 3445396
+      expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Measure.with_modification_regulations.with_actual(ModificationRegulation).all.count }).to eq 1
+      expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Measure.with_modification_regulations.with_actual(ModificationRegulation).all.first.measure_sid }).to eq 3445396
+      expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Heading.by_code('0805201000').first.measures.count }).to eq 1
+      expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Heading.by_code('0805201000').first.measure_sid }).to eq 3445396
     end
   end
 
