@@ -16,6 +16,7 @@ data/*/*.txt
 
 # Cloud Foundry manifest files
 *manifest.yml
+cf-ssh.yml
 
 # Other files
 config/trade_tariff_backend_secrets.yml
