@@ -47,7 +47,10 @@ Rails.application.configure do
   # when problems arise.
   config.log_level = :info
   config.lograge.enabled = true
-  config.lograge.formatter = Lograge::Formatters::Json.new
+  config.lograge.formatter = Lograge::Formatters::Logstash.new
+  config.lograge.custom_options = lambda do |event|
+    { params: event.payload[:params].except('controller', 'action', 'format', 'utf8'), domain: ENV["GOVUK_APP_DOMAIN"] }
+  end
 
   # Use a different cache store in production.
   config.cache_store = :dalli_store, nil, { namespace: ENV["GOVUK_APP_DOMAIN"], expires_in: 1.day, compress: true, username: ENV["MEMCACHE_USER"], password: ENV["MEMCACHE_PASSWORD"] }
