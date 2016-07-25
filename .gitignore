@@ -15,12 +15,7 @@ data/*/*.txt
 .env
 
 # Cloud Foundry manifest files
-tariff-backend-dev_manifest.yml
-tariff-backend-staging_manifest.yml
-tariff-backend-production_manifest.yml
-tariff-backend-worker-dev_manifest.yml
-tariff-backend-worker-staging_manifest.yml
-tariff-backend-worker-production_manifest.yml
+*manifest.yml
 
 # Other files
 config/trade_tariff_backend_secrets.yml
