@@ -29,6 +29,7 @@ gem "nokogiri", "~> 1.6"
 gem "responders", "~> 2.1"
 
 gem "newrelic_rpm"
+gem "logstash-event"
 gem "lograge"
 
 group :production do
