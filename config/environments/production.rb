@@ -45,13 +45,9 @@ Rails.application.configure do
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
-  config.log_level = :error
-
-  # Prepend all log lines with the following tags.
-  # config.log_tags = [ :subdomain, :uuid ]
-
-  # Use a different logger for distributed setups.
-  # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
+  config.log_level = :info
+  config.lograge.enabled = true
+  config.lograge.formatter = Lograge::Formatters::Json.new
 
   # Use a different cache store in production.
   config.cache_store = :dalli_store, nil, { namespace: ENV["GOVUK_APP_DOMAIN"], expires_in: 1.day, compress: true, username: ENV["MEMCACHE_USER"], password: ENV["MEMCACHE_PASSWORD"] }
