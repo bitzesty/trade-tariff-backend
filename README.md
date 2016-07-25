@@ -93,6 +93,7 @@ Set the following ENV variables:
 * CF_ORG
 * CF_SPACE
 * CF_APP
+* CF_APP_WORKER
 
 Then run
 

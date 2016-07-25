@@ -5,5 +5,7 @@ cf a
 cf create-app-manifest $CF_APP
 cf zero-downtime-push $CF_APP -f "$CF_APP"_manifest.yml
 
+cf push $CF_APP_WORKER
+
 cf push $CF_APP -c "rake db:migrate"
 cf push $CF_APP -c "null"
