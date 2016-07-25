@@ -2,7 +2,7 @@ module Api
   module V1
     class SearchReferencesController < ApiController
       def index
-        @search_references = SearchReference.for_letter(letter).by_title.all
+        @search_references = SearchReference.eager(:referenced).for_letter(letter).by_title.all
 
         respond_to do |format|
           format.json {

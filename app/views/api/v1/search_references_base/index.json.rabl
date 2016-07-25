@@ -6,6 +6,6 @@ node :referenced do |s|
   # use serializers:
   # ChapterSerializer, CommoditySerializer,
   # HeadingSerializer, SectionSerializer
-  klass = "#{s.referenced_class}Serializer".constantize
-  klass.new(s.referenced).serializable_hash
+  serializer_klass = "#{s.referenced_class}Serializer".constantize
+  serializer_klass.new(s.referenced).serializable_hash
 end
