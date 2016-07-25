@@ -24,6 +24,7 @@ gem "gds-sso", "~> 12"
 gem "ox", "~> 2.3"
 gem "puma", "~> 3.4"
 gem "curb", "~> 0.8"
+gem "dalli"
 
 gem "nokogiri", "~> 1.6"
 gem "responders", "~> 2.1"
