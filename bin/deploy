@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Fetch deployed revision
-export GIT_OLD_REVISION=`curl "https://$CF_APP.cloudapps.digital/healthcheck" | grep -o -w -E '[[:alnum:]]{7}'`
+export GIT_OLD_REVISION=`curl "$HEALTHCHECK_URL" | grep -o -w -E '[[:alnum:]]{7}'`
 # Log the new revision
 export GIT_REVISION=`git rev-parse --short HEAD`
 echo $GIT_REVISION > REVISION
