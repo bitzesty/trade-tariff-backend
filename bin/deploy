@@ -20,13 +20,13 @@ $SLACK_WEBHOOK
 
 # Deploy App
 cf create-app-manifest $CF_APP
-cf zero-downtime-push $CF_APP -f "$CF_APP"_manifest.yml
+# cf zero-downtime-push $CF_APP -f "$CF_APP"_manifest.yml
 # Deploy Worker
-cf push $CF_APP_WORKER
+# cf push $CF_APP_WORKER
 
-# Disabling migrations for now, while we make this zero downtime
-# cf push $CF_APP -c "rake db:migrate"
-# cf push $CF_APP -c "null"
+# Database migrations
+cf push "$CF_APP"-migrations -f "$CF_APP"_manifest.yml -c "rake db:migrate" -i 1
+cf delete "$CF_APP"-migrations
 
 # Notify Slack deployment finished
 curl -X POST \
