@@ -80,6 +80,8 @@ Set the following ENV variables:
 * CF_SPACE
 * CF_APP
 * CF_APP_WORKER
+* SLACK_CHANNEL
+* SLACK_WEBHOOK
 
 Then run
 
