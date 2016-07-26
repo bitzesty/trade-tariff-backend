@@ -279,8 +279,9 @@ DEPENDENCIES
   aws-sdk (~> 2)
   aws-sdk-rails
   builder (~> 3.2)
+  connection_pool (~> 2.2)
   curb (~> 0.8)
-  dalli
+  dalli (~> 2.7)
   database_cleaner!
   dotenv-rails
   elasticsearch (~> 1.0)
