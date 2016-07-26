@@ -1,20 +1,34 @@
 #!/usr/bin/env bash
 
+# Fetch deployed revision
+export GIT_OLD_REVISION=`curl "https://$CF_APP.cloudapps.digital/healthcheck" | grep -o -w -E '[[:alnum:]]{7}'`
+# Log the new revision
+export GIT_REVISION=`git rev-parse --short HEAD`
+echo $GIT_REVISION > REVISION
+
+export GIT_MESSAGE=`git log --oneline $GIT_OLD_REVISION..$GIT_REVISION`
+
+
+# Check CF connectivity
 cf login -a api.cloud.service.gov.uk -u $CF_USER -p "$CF_PASSWORD" -o $CF_ORG -s $CF_SPACE
 cf a
 
+# Notify Slack deployment started
 curl -X POST \
---data-urlencode 'payload={"text": "'"Deploying $CF_APP..."'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":cloud:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}]}' \
+--data-urlencode 'payload={"text": "'"Deploying $CF_APP. ${GIT_MESSAGE:8}"'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":cloud:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}, {"title": "SHA1", "value": "'"$GIT_REVISION"'", "short": true}]}' \
 $SLACK_WEBHOOK
 
+# Deploy App
 cf create-app-manifest $CF_APP
 cf zero-downtime-push $CF_APP -f "$CF_APP"_manifest.yml
-
+# Deploy Worker
 cf push $CF_APP_WORKER
 
-cf push $CF_APP -c "rake db:migrate"
-cf push $CF_APP -c "null"
+# Disabling migrations for now, while we make this zero downtime
+# cf push $CF_APP -c "rake db:migrate"
+# cf push $CF_APP -c "null"
 
+# Notify Slack deployment finished
 curl -X POST \
---data-urlencode 'payload={"text": "'"Deployment finished for $CF_APP..."'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":cloud:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}]}' \
+--data-urlencode 'payload={"text": "'"Deployment finished for $CF_APP"'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":cloud:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}, {"title": "SHA1", "value": "'"$GIT_REVISION"'", "short": true}]}' \
 $SLACK_WEBHOOK
