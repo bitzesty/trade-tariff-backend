@@ -61,7 +61,7 @@ describe Api::V1::RollbacksController, "GET to #index" do
           id: rollback.id,
           user_id: rollback.user_id,
           reason: rollback.reason,
-          enqueued_at: rollback.enqueued_at.to_s,
+          enqueued_at: wildcard_matcher,
           date: rollback.date.to_s,
           keep: rollback.keep
         }.ignore_extra_keys!
