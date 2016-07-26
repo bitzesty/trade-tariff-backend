@@ -32,6 +32,7 @@ gem "responders", "~> 2.1"
 gem "newrelic_rpm"
 gem "logstash-event"
 gem "lograge"
+gem "rack-timeout", "~> 0.4"
 
 group :production do
   gem "rails_12factor"

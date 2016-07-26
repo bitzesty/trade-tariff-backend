@@ -168,6 +168,7 @@ GEM
       rack (>= 0.4)
     rack-test (0.6.3)
       rack (>= 1.0)
+    rack-timeout (0.4.2)
     rails (4.2.5.2)
       actionmailer (= 4.2.5.2)
       actionpack (= 4.2.5.2)
@@ -304,6 +305,7 @@ DEPENDENCIES
   pry-rails
   puma (~> 3.4)
   rabl (~> 0.12)
+  rack-timeout (~> 0.4)
   rails (= 4.2.5.2)
   rails_12factor
   responders (~> 2.1)
