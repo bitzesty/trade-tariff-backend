@@ -15,7 +15,7 @@ cf a
 
 # Notify Slack deployment started
 curl -X POST \
---data-urlencode 'payload={"text": "'"Deploying $CF_APP. ${GIT_MESSAGE:8}"'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":cloud:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}, {"title": "SHA1", "value": "'"$GIT_REVISION"'", "short": true}]}' \
+--data-urlencode 'payload={"text": "'"Deploying $CF_APP. ${GIT_MESSAGE:8}"'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":cloud:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}, {"title": "SHA1", "value": "'"<https://github.com/bitzesty/trade-tariff-backend/compare/$GIT_OLD_REVISION...$GIT_REVISION|$GIT_REVISION>"'", "short": true}]}' \
 $SLACK_WEBHOOK
 
 # Deploy App
