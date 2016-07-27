@@ -8,6 +8,3 @@
   UpdatesSynchronizerWorker:
     cron: "0 * * * *"
     description: "This job will run every hour, every day."
-  ReindexModelsWorker:
-    cron: "0 1 * * *"
-    description: "This job will run at 01:00 every day."
