@@ -35,9 +35,12 @@ module Api
       end
 
       def changes
-        @changes = ChangeLog.new(@commodity.changes.where { |o|
-          o.operation_date <= actual_date
-        })
+        key = "commodity-#{@commodity.goods_nomenclature_sid}-#{actual_date}/changes"
+        @changes = Rails.cache.fetch(key, expires_in: 12.hours) do
+          ChangeLog.new(@commodity.changes.where { |o|
+            o.operation_date <= actual_date
+          })
+        end
 
         render 'api/v1/changes/changes'
       end
