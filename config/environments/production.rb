@@ -49,7 +49,10 @@ Rails.application.configure do
   config.lograge.enabled = true
   config.lograge.formatter = Lograge::Formatters::Logstash.new
   config.lograge.custom_options = lambda do |event|
-    { params: event.payload[:params].except('controller', 'action', 'format', 'utf8'), domain: ENV["GOVUK_APP_DOMAIN"] }
+    {
+      params: event.payload[:params].except('controller', 'action', 'format', 'utf8'),
+      domain: ENV["GOVUK_APP_DOMAIN"]
+    }.merge(JSON.parse(ENV['VCAP_APPLICATION']))
   end
 
   # Use a different cache store in production.
