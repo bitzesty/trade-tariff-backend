@@ -25,10 +25,11 @@ describe ChiefImporter do
       end
 
       it "logs an info event" do
-        tariff_importer_logger_listener
-        importer = ChiefImporter.new(chief_update)
-        importer.import
-        expect(@logger.logged(:info).last).to eq("Parsed 1506 CHIEF records from 2012-02-13_KBT009(12044).txt")
+        tariff_importer_logger do
+          importer = ChiefImporter.new(chief_update)
+          importer.import
+          expect(@logger.logged(:info).last).to eq("Parsed 1506 CHIEF records from 2012-02-13_KBT009(12044).txt")
+        end
       end
     end
 
@@ -58,10 +59,11 @@ describe ChiefImporter do
       end
 
       it "raises ChiefImportException and sends a log" do
-        tariff_importer_logger_listener
-        importer = ChiefImporter.new(chief_update)
-        expect { importer.import }.to raise_error ChiefImporter::ImportException
-        expect(@logger.logged(:error).last).to eq("CHIEF import of 2012-02-13_KBT009(12044).txt failed: Reason: Unclosed quoted field on line 1.")
+        tariff_importer_logger do
+          importer = ChiefImporter.new(chief_update)
+          expect { importer.import }.to raise_error ChiefImporter::ImportException
+          expect(@logger.logged(:error).last).to eq("CHIEF import of 2012-02-13_KBT009(12044).txt failed: Reason: Unclosed quoted field on line 1.")
+        end
       end
     end
   end

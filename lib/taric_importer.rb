@@ -1,5 +1,6 @@
 require 'nokogiri'
 
+require 'tariff_importer/logger'
 require 'taric_importer/transaction'
 require 'taric_importer/record_processor'
 require 'taric_importer/xml_parser'
