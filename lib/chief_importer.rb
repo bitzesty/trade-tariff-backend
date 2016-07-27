@@ -1,3 +1,4 @@
+require "tariff_importer/logger"
 require "chief_importer/entry"
 require "chief_importer/start_entry"
 require "chief_importer/end_entry"

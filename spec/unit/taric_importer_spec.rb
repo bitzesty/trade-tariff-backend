@@ -1,5 +1,4 @@
 require "rails_helper"
-require "taric_importer"
 
 describe TaricImporter do
   describe "#import" do
@@ -20,11 +19,12 @@ describe TaricImporter do
       end
 
       it "logs an error event" do
-        tariff_importer_logger_listener
-        importer = TaricImporter.new(taric_update)
-        expect { importer.import }.to raise_error TaricImporter::ImportException
-        expect(@logger.logged(:error).size).to eq(1)
-        expect(@logger.logged(:error).last).to include("Taric import failed: uninitialized constant")
+        tariff_importer_logger do
+          importer = TaricImporter.new(taric_update)
+          expect { importer.import }.to raise_error TaricImporter::ImportException
+          expect(@logger.logged(:error).size).to eq(1)
+          expect(@logger.logged(:error).last).to include("Taric import failed: uninitialized constant")
+        end
       end
     end
 
@@ -99,11 +99,12 @@ describe TaricImporter do
       after { ExplicitAbrogationRegulation.restrict_primary_key }
 
       it "logs an info event" do
-        tariff_importer_logger_listener
-        importer = TaricImporter.new(taric_update)
-        importer.import
-        expect(@logger.logged(:info).size).to eq(1)
-        expect(@logger.logged(:info).last).to eq("Successfully imported Taric file: 2013-08-02_TGB13214.xml")
+        tariff_importer_logger do
+          importer = TaricImporter.new(taric_update)
+          importer.import
+          expect(@logger.logged(:info).size).to eq(1)
+          expect(@logger.logged(:info).last).to eq("Successfully imported Taric file: 2013-08-02_TGB13214.xml")
+        end
       end
     end
 
@@ -115,10 +116,11 @@ describe TaricImporter do
       end
 
       it "logs an error event" do
-        tariff_importer_logger_listener
-        importer = TaricImporter.new(taric_update)
-        expect { importer.import }.to raise_error TaricImporter::ImportException
-        expect(@logger.logged(:error).first).to include("Unexpected Taric operation type:")
+        tariff_importer_logger do
+          importer = TaricImporter.new(taric_update)
+          expect { importer.import }.to raise_error TaricImporter::ImportException
+          expect(@logger.logged(:error).first).to include("Unexpected Taric operation type:")
+        end
       end
   end
 end
