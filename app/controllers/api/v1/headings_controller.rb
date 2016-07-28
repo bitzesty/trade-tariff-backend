@@ -40,6 +40,7 @@ module Api
 
         end
 
+        @heading_cache_key = "heading-#{@heading.goods_nomenclature_sid}-#{actual_date}-#{@heading.declarable?}"
         respond_with @heading
       end
 
