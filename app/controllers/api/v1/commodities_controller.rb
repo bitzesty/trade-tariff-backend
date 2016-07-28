@@ -31,6 +31,7 @@ module Api
                                                       :full_temporary_stop_regulations,
                                                       :measure_partial_temporary_stops).all, @commodity).validate!
 
+        @commodity_cache_key = "commodity-#{@commodity.goods_nomenclature_sid}-#{actual_date}"
         respond_with @commodity
       end
 
