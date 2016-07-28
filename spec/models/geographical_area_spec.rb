@@ -43,7 +43,6 @@ describe GeographicalArea do
             expect(
               GeographicalArea.where(geographical_area_sid: geographical_area.geographical_area_sid)
                           .eager(:geographical_area_descriptions)
-                          .all
                           .first
                           .geographical_area_description.pk
             ).to eq geographical_area_description1.pk
@@ -52,23 +51,19 @@ describe GeographicalArea do
 
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
-            expect(
-              GeographicalArea.where(geographical_area_sid: geographical_area.geographical_area_sid)
-                          .eager(:geographical_area_descriptions)
-                          .all
-                          .first
-                          .geographical_area_description.pk
-            ).to eq geographical_area_description1.pk
+            result = GeographicalArea.eager(:geographical_area_descriptions)
+                      .where(geographical_area_sid: geographical_area.geographical_area_sid)
+                      .first.geographical_area_description.pk
+            expect(result).to eq(geographical_area_description1.pk)
           end
+        end
 
+        it 'loads correct description respecting given time' do
           TimeMachine.at(4.years.ago) do
-            expect(
-              GeographicalArea.where(geographical_area_sid: geographical_area.geographical_area_sid)
-                          .eager(:geographical_area_descriptions)
-                          .all
-                          .first
-                          .geographical_area_description.pk
-            ).to eq geographical_area_description2.pk
+            result = GeographicalArea.where(geographical_area_sid: geographical_area.geographical_area_sid)
+                      .eager(:geographical_area_descriptions)
+                      .first.geographical_area_description.pk
+            expect(result).to eq(geographical_area_description2.pk)
           end
         end
       end
