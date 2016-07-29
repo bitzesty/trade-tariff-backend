@@ -42,6 +42,13 @@ class ApplicationController < ActionController::Base
     render nothing: true
   end
 
+  protected
+
+  def append_info_to_payload(payload)
+    super
+    payload[:user_agent] = request.headers["HTTP_X_ORIGINAL_USER_AGENT"].presence || request.env["HTTP_USER_AGENT"]
+  end
+
   private
 
   def actual_date
