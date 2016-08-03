@@ -53,14 +53,8 @@ Rails.application.configure do
       params: event.payload[:params].except('controller', 'action', 'format', 'utf8'),
     }.merge(JSON.parse(ENV['VCAP_APPLICATION']))
   end
-  config.lograge.ignore_custom = lambda do |event, *args|
-    [
-      "Smokey Test / Ruby",
-      "updown.io"
-    ].any? do |ignored_user_agent|
-      event[:payload][:user_agent] == ignored_user_agent
-    end
-  end
+
+  config.lograge.ignore_actions = ['HealthcheckController#index']
 
   # Use a different cache store in production.
   config.cache_store = :dalli_store, nil, {
