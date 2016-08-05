@@ -53,6 +53,7 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do
+    Rails.cache.clear
     Sidekiq::Worker.clear_all
   end
 end
