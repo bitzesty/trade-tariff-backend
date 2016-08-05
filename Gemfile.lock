@@ -55,6 +55,7 @@ GEM
       railties (>= 3)
     aws-sdk-resources (2.3.7)
       aws-sdk-core (= 2.3.7)
+    bootscale (0.5.2)
     builder (3.2.2)
     byebug (8.2.4)
     coderay (1.1.0)
@@ -279,6 +280,7 @@ DEPENDENCIES
   ansi (~> 1.5)
   aws-sdk (~> 2)
   aws-sdk-rails
+  bootscale (~> 0.5)
   builder (~> 3.2)
   connection_pool (~> 2.2)
   curb (~> 0.8)
