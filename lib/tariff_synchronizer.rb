@@ -75,7 +75,7 @@ module TariffSynchronizer
 
   # Number of days to warn about missing updates after
   mattr_accessor :warning_day_count
-  self.warning_day_count = 3
+  self.warning_day_count = 4
 
   delegate :instrument, :subscribe, to: ActiveSupport::Notifications
 
