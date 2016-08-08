@@ -36,5 +36,9 @@ module TradeTariffBackend
       Sequel::Model.db.extension :pagination
       Sequel::Model.db.extension :server_block
     end
+
+    initializer :regenerate_require_cache, before: :load_environment_config do
+      Bootscale.regenerate
+    end
   end
 end
