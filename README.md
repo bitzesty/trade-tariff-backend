@@ -10,7 +10,6 @@ The API back-end for:
 
 Other related projects:
 
-* [Trade Tariff Suite](https://github.com/alphagov/trade-tariff-suite)
 * [Trade Tariff Oracle](https://github.com/alphagov/trade-tariff-oracle)
 
 ## Development
@@ -41,7 +40,7 @@ Other related projects:
 
 ## Load database
 
-Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff-backend/wiki/System-rebuild-procedure), or get a recent database snapshot.
+Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff-backend/wiki/System-rebuild-procedure), or get a [recent database snapshot](mailto:support@bitzesty.com).
 
 ## Performing daily updates
 
