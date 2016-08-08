@@ -1,4 +1,3 @@
-require 'tariff_importer'
 require 'date'
 require 'logger'
 require 'fileutils'
@@ -6,7 +5,14 @@ require 'redis_lock'
 require 'active_support/notifications'
 require 'active_support/log_subscriber'
 
+require 'tariff_synchronizer/base_update'
+require 'tariff_synchronizer/base_update_importer'
+require 'tariff_synchronizer/chief_file_name_generator'
+require 'tariff_synchronizer/file_service'
 require 'tariff_synchronizer/logger'
+require 'tariff_synchronizer/taric_file_name_generator'
+require 'tariff_synchronizer/taric_update_downloader'
+require 'tariff_synchronizer/tariff_downloader'
 
 # How TariffSynchronizer works
 #
@@ -17,37 +23,35 @@ module TariffSynchronizer
 
   class FailedUpdatesError < StandardError; end
 
-  autoload :ChiefArchive,  'tariff_synchronizer/chief_archive'
   autoload :ChiefUpdate,   'tariff_synchronizer/chief_update'
   autoload :Mailer,        'tariff_synchronizer/mailer'
-  autoload :TaricArchive,  'tariff_synchronizer/taric_archive'
   autoload :TaricUpdate,   'tariff_synchronizer/taric_update'
 
   extend self
 
   mattr_accessor :username
-  self.username = TradeTariffBackend.secrets.sync_username
+  self.username = ENV["TARIFF_SYNC_USERNAME"]
 
   mattr_accessor :password
-  self.password = TradeTariffBackend.secrets.sync_password
+  self.password = ENV["TARIFF_SYNC_PASSWORD"]
 
   mattr_accessor :host
-  self.host = TradeTariffBackend.secrets.sync_host
+  self.host = ENV["TARIFF_SYNC_HOST"]
 
   mattr_accessor :root_path
-  self.root_path = Rails.env.test? ? "tmp/data" : "data"
+  self.root_path = "data"
 
   # Numer of seconds to sleep between sync retries
   mattr_accessor :request_throttle
   self.request_throttle = 60
 
   # Initial dump date + 1 day
-  mattr_accessor :taric_initial_update
-  self.taric_initial_update = Date.new(2012,6,6)
+  mattr_accessor :taric_initial_update_date
+  self.taric_initial_update_date = Date.new(2012,6,6)
 
   # Initial dump date + 1 day
-  mattr_accessor :chief_initial_update
-  self.chief_initial_update = Date.new(2012,6,30)
+  mattr_accessor :chief_initial_update_date
+  self.chief_initial_update_date = Date.new(2012,6,30)
 
   # Times to retry downloading update before giving up
   mattr_accessor :retry_count
@@ -67,11 +71,11 @@ module TariffSynchronizer
 
   # TARIC update url template
   mattr_accessor :taric_update_url_template
-  self.taric_update_url_template = "%{host}/taric/%{file_name}"
+  self.taric_update_url_template = "%{host}/taric/%{filename}"
 
   # Number of days to warn about missing updates after
   mattr_accessor :warning_day_count
-  self.warning_day_count = 3
+  self.warning_day_count = 4
 
   delegate :instrument, :subscribe, to: ActiveSupport::Notifications
 
@@ -79,48 +83,23 @@ module TariffSynchronizer
   # Gets latest downloaded file present in (inbox/failbox/processed) and tries
   # to download any further updates to current day.
   def download
+    return instrument("config_error.tariff_synchronizer") unless sync_variables_set?
+
     TradeTariffBackend.with_redis_lock do
-      if sync_variables_set?
-        instrument("download.tariff_synchronizer") do
-          begin
-            [TaricUpdate, ChiefUpdate].map(&:sync)
-          rescue FileService::DownloadException => exception
-            instrument("failed_download.tariff_synchronizer",
-              exception: exception.original,
-              url: exception.url
-            )
-
-            raise exception.original
-          end
-        end
-      else
-        instrument("config_error.tariff_synchronizer")
-      end
-    end
-  end
-
-  def download_archive
-    if sync_variables_set?
       instrument("download.tariff_synchronizer") do
-        [TaricArchive, ChiefArchive].map(&:sync)
+        begin
+          [TaricUpdate, ChiefUpdate].map(&:sync)
+        rescue TariffUpdatesRequester::DownloadException => exception
+          instrument("failed_download.tariff_synchronizer", exception: exception)
+          raise exception.original
+        end
       end
-    else
-      instrument("config_error.tariff_synchronizer")
-    end
-  end
-
-  def check_failures
-    if BaseUpdate.failed.any?
-      instrument(
-        "failed_updates_present.tariff_synchronizer",
-        file_names: BaseUpdate.failed.map(&:filename)
-      )
-
-      raise FailedUpdatesError
     end
   end
 
   def apply
+    check_tariff_updates_failures
+
     applied_updates = []
     unconformant_records = []
 
@@ -129,19 +108,14 @@ module TariffSynchronizer
     TradeTariffBackend.with_redis_lock do
 
       # Updates could be modifying primary keys so unrestricted it for all models.
-      Sequel::Model.descendants.each(&:unrestrict_primary_key)
-
-      # If there is an existing failed update and error is raised
-      # There needs to be as manual rollback to clear the error
-      check_failures
+      Sequel::Model.subclasses.each(&:unrestrict_primary_key)
 
       subscribe /conformance_error/ do |*args|
         event = ActiveSupport::Notifications::Event.new(*args)
         unconformant_records << event.payload[:record]
       end
 
-      # Updates are run since the last pending update, to today or to ENV['DATE']
-      update_range_in_days.each do |day|
+      date_range_since_last_pending_update.each do |day|
         # TARIC updates should be applied before CHIEF
         applied_updates << perform_update(TaricUpdate, day)
         applied_updates << perform_update(ChiefUpdate, day)
@@ -155,9 +129,8 @@ module TariffSynchronizer
       ) if applied_updates.any? && BaseUpdate.pending_or_failed.none?
     end
 
-  rescue RedisLock::LockTimeout
-    instrument "apply_lock_error.tariff_synchronizer"
-
+    rescue RedisLock::LockTimeout
+      instrument "apply_lock_error.tariff_synchronizer"
   end
 
   # Restore database to specific date in the past
@@ -167,7 +140,7 @@ module TariffSynchronizer
     TradeTariffBackend.with_redis_lock do
       date = Date.parse(rollback_date.to_s)
 
-      (date..Date.today).to_a.reverse.each do |date_for_rollback|
+      (date..Date.current).to_a.reverse.each do |date_for_rollback|
         Sequel::Model.db.transaction do
           oplog_based_models.each do |model|
             model.operation_klass.where { operation_date > date_for_rollback }.delete
@@ -213,51 +186,43 @@ module TariffSynchronizer
     )
   end
 
-  # Builds tariff_update entries from files available in the
-  # TariffSynchronizer.root_path directories.
-  #
-  # Warning: rebuilt updates will be marked as pending.
-  # missing or failed updates are not restored.
-  def rebuild
-    instrument("rebuild.tariff_synchronizer") do
-      [TaricUpdate, ChiefUpdate].map(&:rebuild)
-    end
-  end
-
-  # Initial update day for specific update type
-  def initial_update_for(update_type)
-    send("#{update_type}_initial_update".to_sym)
+  def initial_update_date_for(update_type)
+    send("#{update_type}_initial_update_date")
   end
 
   private
 
   def perform_update(update_type, day)
     updates = update_type.pending_at(day).to_a
-    updates.each { |update| update.apply }
+    updates.map{ |update| BaseUpdateImporter.perform(update) }
     updates
   end
 
-  def update_range_in_days
-    last_pending_update = BaseUpdate.last_pending.first
-    update_to = ENV['DATE'] ? Date.parse(ENV['DATE']) : Date.today
+  def date_range_since_last_pending_update
+    last_pending_update = BaseUpdate.last_pending
+    return [] if last_pending_update.blank?
+    (last_pending_update.issue_date..update_to)
+  end
 
-    if last_pending_update
-      (last_pending_update.issue_date..update_to)
-    else
-      []
-    end
+  def update_to
+    ENV['DATE'] ? Date.parse(ENV['DATE']) : Date.current
   end
 
   def sync_variables_set?
-    username.present? &&
-    password.present? &&
-    host.present? &&
-    TradeTariffBackend.admin_email.present?
+    username.present? && password.present? && host.present?
   end
 
   def oplog_based_models
-    Sequel::Model.descendants.select { |model|
+    Sequel::Model.subclasses.select { |model|
       model.plugins.include?(Sequel::Plugins::Oplog)
     }
+  end
+
+  def check_tariff_updates_failures
+    if BaseUpdate.failed.any?
+      instrument("failed_updates_present.tariff_synchronizer",
+                 file_names: BaseUpdate.failed.map(&:filename))
+      raise FailedUpdatesError
+    end
   end
 end

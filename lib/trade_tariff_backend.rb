@@ -26,8 +26,13 @@ module TradeTariffBackend
     end
 
     # Email of the user who receives all info/error notifications
+    def from_email
+      ENV.fetch("TARIFF_FROM_EMAIL")
+    end
+
+    # Email of the user who receives all info/error notifications
     def admin_email
-      secrets.sync_email || 'trade-tariff-alerts@digital.cabinet-office.gov.uk'
+      ENV.fetch("TARIFF_SYNC_EMAIL")
     end
 
     def platform
@@ -61,10 +66,6 @@ module TradeTariffBackend
       end
     end
 
-    def secrets
-      @secrets ||= OpenStruct.new(load_secrets)
-    end
-
     # Number of changes to fetch for Commodity/Heading/Chapter
     def change_count
       10
@@ -76,17 +77,12 @@ module TradeTariffBackend
 
     def search_client
       @search_client ||= SearchClient.new(
-        Elasticsearch::Client.new(search_options),
+        Elasticsearch::Client.new,
         namespace: search_namespace,
         indexed_models: indexed_models,
         search_operation_options: search_operation_options
       )
     end
-
-    def search_host
-      @search_host ||= "http://localhost:#{search_port}"
-    end
-    attr_writer :search_host
 
     def search_namespace
       @search_namespace ||= 'tariff'
@@ -100,20 +96,6 @@ module TradeTariffBackend
 
       "#{index_name}Index".constantize.new(search_namespace)
     end
-
-    def search_port
-      @search_port ||= 9200
-    end
-    attr_writer :search_port
-
-    def default_search_options
-      { host: search_host, logger: Rails.logger }
-    end
-
-    def search_options
-      default_search_options.merge(@search_options || {})
-    end
-    attr_writer :search_options
 
     def search_operation_options
       @search_operation_options || {}
@@ -132,20 +114,6 @@ module TradeTariffBackend
 
     def model_serializer_for(model)
       "#{model}Serializer".constantize
-    end
-
-    private
-
-    def load_secrets
-      if File.exists?(secrets_path)
-        YAML.load_file(secrets_path)
-      else
-        {}
-      end
-    end
-
-    def secrets_path
-      File.join(Rails.root, 'config', 'trade_tariff_backend_secrets.yml')
     end
   end
 end

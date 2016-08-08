@@ -31,13 +31,17 @@ module Api
                                                       :full_temporary_stop_regulations,
                                                       :measure_partial_temporary_stops).all, @commodity).validate!
 
+        @commodity_cache_key = "commodity-#{@commodity.goods_nomenclature_sid}-#{actual_date}"
         respond_with @commodity
       end
 
       def changes
-        @changes = ChangeLog.new(@commodity.changes.where { |o|
-          o.operation_date <= actual_date
-        })
+        key = "commodity-#{@commodity.goods_nomenclature_sid}-#{actual_date}/changes"
+        @changes = Rails.cache.fetch(key, expires_at: actual_date.end_of_day) do
+          ChangeLog.new(@commodity.changes.where { |o|
+            o.operation_date <= actual_date
+          })
+        end
 
         render 'api/v1/changes/changes'
       end

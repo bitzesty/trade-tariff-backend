@@ -1,5 +1,3 @@
-require 'formatter'
-
 class MeasureCondition < Sequel::Model
   include Formatter
 

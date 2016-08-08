@@ -1,16 +1,11 @@
 machine:
+  ruby:
+    version: 2.3.1
   services:
     - elasticsearch
     - redis
-    - mysql
   environment:
     GOVUK_APP_DOMAIN: test
-database:
-  pre:
-    - echo "create database circle_ruby_test;" | mysql -u ubuntu -h localhost
-  override:
-    - mv config/database.ci.yml config/database.yml
-    - bundle exec rake db:create db:migrate --trace
 dependencies:
-  bundler:
-    without: [development]
+  post:
+    - sudo service redis-server status || sudo service redis-server start

@@ -18,7 +18,7 @@ class FootnoteValidator < TradeTariffBackend::Validator
     The start date must be less than or equal to the end date of the footnote.}, on: [:create, :update] do |record|
     record.footnote_description_periods.any? &&
     record.footnote_description_periods.first.validity_start_date == record.validity_start_date &&
-    record.footnote_description_periods_dataset.group(:validity_start_date).having{count(validity_start_date) > 1}.none? &&
+    record.footnote_description_periods_dataset.select(:validity_start_date).group(:validity_start_date).having{count(validity_start_date) > 1}.none? &&
     (record.validity_end_date.blank? || record.footnote_description_periods.first.validity_start_date <= record.validity_end_date)
   end
 

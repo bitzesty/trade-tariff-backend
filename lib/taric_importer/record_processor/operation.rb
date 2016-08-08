@@ -1,4 +1,4 @@
-class TaricImporter < TariffImporter
+class TaricImporter
   class RecordProcessor
     class Operation
       attr_reader :record

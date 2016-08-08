@@ -1,5 +1,5 @@
 object @commodity
-cache [ actual_date, @commodity ], expires_in: 1.day
+cache @commodity_cache_key, expires_at: actual_date.end_of_day
 
 attributes :producline_suffix, :description, :number_indents,
            :goods_nomenclature_item_id, :bti_url, :formatted_description,

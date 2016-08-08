@@ -118,7 +118,7 @@ describe Api::V1::ChaptersController, "GET #changes" do
 
   context 'changes happened before requested date' do
     let(:chapter) { create :chapter, :with_section, :with_note,
-                                     operation_date: Date.today }
+                                     operation_date: Date.current }
     let(:heading) { create :heading, goods_nomenclature_item_id: "#{chapter.goods_nomenclature_item_id.first(2)}20000000" }
     let!(:measure) {
       create :measure,
@@ -126,7 +126,7 @@ describe Api::V1::ChaptersController, "GET #changes" do
         goods_nomenclature: heading,
         goods_nomenclature_sid: heading.goods_nomenclature_sid,
         goods_nomenclature_item_id: heading.goods_nomenclature_item_id,
-        operation_date: Date.today
+        operation_date: Date.current
     }
 
     it 'does not include change records' do

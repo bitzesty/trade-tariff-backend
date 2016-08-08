@@ -4,7 +4,7 @@ class SearchReference < Sequel::Model
   plugin :active_model
   plugin :elasticsearch
 
-  many_to_one :referenced, reciprocal: :referenced,
+  many_to_one :referenced, reciprocal: :search_references, reciprocal_type: :many_to_one,
     setter: (proc do |referenced|
       self.set(
         referenced_id: referenced.to_param,
@@ -33,15 +33,33 @@ class SearchReference < Sequel::Model
     end),
     eager_loader: (proc do |eo|
       id_map = {}
-      eo[:rows].each do |referenced|
-        referenced.associations[:referenced] = nil
-        ((id_map[referenced.referenced_class] ||= {})[referenced.referenced_id] ||= []) << referenced
+      eo[:rows].each do |search_reference|
+        search_reference.associations[:referenced] = nil
+        ((id_map[search_reference.referenced_class] ||= {})[search_reference.referenced_id] ||= []) << search_reference
       end
       id_map.each do |klass_name, id_map|
         klass = klass_name.constantize
-        klass.where(klass.primary_key=>id_map.keys).all do |referenced|
-          id_map[rerencedef.pk].each do |ref|
-            ref.associations[:referenced] = referenced
+        if klass_name == 'Section'
+          klass.where(klass.primary_key=>id_map.keys).all do |ref|
+            id_map[ref.pk.to_s].each do |search_reference|
+              search_reference.associations[:referenced] = ref
+            end
+          end
+        else
+
+          pattern = case klass_name
+                    when 'Chapter'
+                      id_map.keys.map{|key| "#{key}________"}.join("|")
+                    when 'Heading'
+                      id_map.keys.map{|key| "#{key}______"}.join("|")
+                    when 'Commodity'
+                      id_map.keys.join("|")
+                    end
+
+          klass.where("goods_nomenclatures.goods_nomenclature_item_id SIMILAR TO '#{pattern}'").all do |ref|
+            id_map[ref.short_code].each do |search_reference|
+              search_reference.associations[:referenced] = ref
+            end
           end
         end
       end

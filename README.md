@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/alphagov/trade-tariff-backend.png?branch=master)](https://travis-ci.org/alphagov/trade-tariff-backend)
+[![Circle CI](https://circleci.com/gh/bitzesty/trade-tariff-backend.svg?style=svg)](https://circleci.com/gh/bitzesty/trade-tariff-backend)
 [![Code Climate](https://codeclimate.com/github/alphagov/trade-tariff-backend/badges/gpa.svg)](https://codeclimate.com/github/alphagov/trade-tariff-backend)
 
 # Trade Tariff Backend
@@ -8,68 +8,44 @@ The API back-end for:
 * [Trade Tariff Frontend](https://github.com/alphagov/trade-tariff-frontend)
 * [Trade Tariff Admin](https://github.com/alphagov/trade-tariff-admin)
 
-Also uses:
+Other related projects:
 
 * [Trade Tariff Suite](https://github.com/alphagov/trade-tariff-suite)
 * [Trade Tariff Oracle](https://github.com/alphagov/trade-tariff-oracle)
 
-## Setup
+## Development
 
-### If using the GOV.UK development Vagrant VM
+### Dependencies
 
-Ensure that you have pulled the latest version of the puppet repo.
+  - Ruby
+  - Postgresql
+  - ElasticSearch
+  - Redis
+  - Memcached (production)
 
-Run the bootstrap command `govuk_puppet`.
+### Setup
 
-### Dependencies (OS X using Homebrew)
+1. Setup your environment.
 
-1. ElasticSearch & MySQL & Redis
+    bin/setup
 
-    ```
-    brew install elasticsearch
-    brew install redis
-    brew install mysql
-    ```
+2. Update `.env` file with valid data.
 
-2. Ruby 2.0.0
+3. Start Foreman.
 
-    ```
-    brew install chruby
-    brew install ruby-install
-    ```
+    foreman start
+
+4. Verify that the app is up and running.
+
+    open http://localhost:3018/healthcheck
 
 ## Load database
 
 Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff-backend/wiki/System-rebuild-procedure), or get a recent database snapshot.
 
-### Load database seeds for development API user
-
-  ```
-  bundle exec rake db:seed
-  ```
-
-## Run Backend
-
-  ```
-  bundle exec ./startup.sh
-  ```
-
 ## Performing daily updates
 
-1. Create config/trade_tariff_backend_secrets.yml file with correct values.
-
-  ```yaml
-  sync_username:
-  sync_password:
-  sync_host:
-  sync_email:
-  ```
-
-2. Run the sync rake task
-
-  ```
-  bundle exec rake tariff:sync:apply
-  ```
+These are run hourly by a background worker UpdatesSynchronizerWorker.
 
 ### Sync process
 
@@ -77,31 +53,44 @@ Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff
 - downloading missing files up to Date.today (check base_update.rb and download methods in taric_update.rb and chief_update.rb)
 - applying downloaded files (applying measures, etc. TARIC first, then CHIEF)
 
-Applying downloaded CSV files is the most confusing and buggy part.
 Updates are performed in portions and protected by redis lock (see TariffSynchronizer#apply).
 
 BaseUpdate#apply is responsible for most of the logging/checking job and running
 `import!` methods located in Taric/ChiefUpdate classes. Then it runs TaricImporter
 and ChiefImporter to parse and store xml/csv files.
 
-Whole process is quite similar for both TARIC and CHIEF, but CHIEF updates also does
-transformation process at the end. Check ChiefTransformer class for more info (and ChiefUpdate#import!).
+Whole process is quite similar for both TARIC and CHIEF, but CHIEF updates undergo a tranformation
+transformation process to convert them into a TARIC format. Check ChiefTransformer class for more info (and ChiefUpdate#import!).
 
-In case of any errors, changes (per single update) are roll-backed and record itself is marked as failed.
+In case of any errors, changes (per single update) are roll-backed and record itself is marked as failed. The sync would need to be rerun after a rollback.
 
-### Manual Rollback
+## Deployment
 
-  Keep in mind that there are two ways of rolling-back, one with keeping the intermediary updates stored in db, and another one without.
-  The default option is to remove TARIC/CHIEF updates and data transformations.
+We deploy to cloud foundry, so you need to have the CLI installed, and the following [cf plugin](https://docs.cloudfoundry.org/cf-cli/use-cli-plugins.html) installed:
 
-  ```
-  DATE='2014-01-30' bundle exec rake tariff:sync:rollback
-  ```
+Download the plugin for your os:  https://github.com/contraband/autopilot/releases
+
+    chmod +x autopilot-(YOUR_OS)
+    cf install-plugin autopilot-(YOUR_OS)
+
+Set the following ENV variables:
+* CF_USER
+* CF_PASSWORD
+* CF_ORG
+* CF_SPACE
+* CF_APP
+* CF_APP_WORKER
+* HEALTHCHECK_URL
+* SLACK_CHANNEL
+* SLACK_WEBHOOK
+
+Then run
+
+    ./bin/deploy
+
+NB: In the newer Diego architecture from CloudFoundry, no-route skips creating and binding a route for the app, but does not specify which type of health check to perform. If your app does not listen on a port, for example the sidekiq worker, then it does not satisfy the port-based health check and Cloud Foundry marks it as crashed. To prevent this, disable the port-based health check with cf set-health-check APP_NAME none.
 
 ## Notes
-
-* Project does __not__ contain schema.rb, do not use rake db:schema:load. Sequel
-does not yet support view creation via schema file.
 
 * When writing validators in `app/validators` please run the rake task
 `audit:verify` which runs the validator against existing data.

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Api::V1::RollbacksController, "POST to #create", sidekiq: :inline do
+describe Api::V1::RollbacksController, "POST to #create" do
   render_views
 
   before { login_as_api_user }
@@ -61,7 +61,7 @@ describe Api::V1::RollbacksController, "GET to #index" do
           id: rollback.id,
           user_id: rollback.user_id,
           reason: rollback.reason,
-          enqueued_at: rollback.enqueued_at,
+          enqueued_at: wildcard_matcher,
           date: rollback.date.to_s,
           keep: rollback.keep
         }.ignore_extra_keys!

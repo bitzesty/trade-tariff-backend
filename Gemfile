@@ -1,65 +1,60 @@
 source "https://rubygems.org"
+ruby "2.3.1"
 
 gem "rails", "4.2.5.2"
 
-gem "addressable", "~> 2.3"
+gem "aws-sdk", "~> 2"
+gem "aws-sdk-rails"
 gem "hashie", "~> 3.4"
 gem "multi_json", "~> 1.11"
-gem "mysql2", "~> 0.3"
+gem "pg"
 gem "sequel-rails", "~> 0.9"
-gem "rabl", "~> 0.11"
+gem "tilt"
+gem "rabl", "~> 0.12"
 gem "ansi", "~> 1.5"
-gem "sequel", "~> 4.3.0"
-gem "sidekiq", "~> 3.4.2"
-gem "elasticsearch", "~> 0.4"
+gem "sequel", "~> 4.32"
+gem "sidekiq", "~> 4.1.1"
+gem "sidekiq-scheduler", "~> 2.0"
+gem "elasticsearch", "~> 1.0"
 gem "elasticsearch-extensions", "~> 0.0"
 gem "yajl-ruby", "~> 1.2", require: "yajl"
-gem "dalli", "~> 2.7"
 gem "builder", "~> 3.2"
 gem "plek", "~> 1.11"
-gem "gds-sso", "~> 11.0"
-
-gem "unicorn", "~> 4.9"
+gem "gds-sso", "~> 12"
+gem "ox", "~> 2.3"
+gem "puma", "~> 3.4"
 gem "curb", "~> 0.8"
-
+gem "dalli", "~> 2.7"
+gem "connection_pool", "~> 2.2"
 gem "nokogiri", "~> 1.6"
-
-gem "whenever", "~> 0.9"
-gem "airbrake", "~> 4.3"
-gem "aws-ses", "~> 0.6", require: "aws/ses" #used for sync emails
-gem "logstasher", "~> 0.6"
 gem "responders", "~> 2.1"
 
-gem "sass", "~> 3.4"
-gem "sass-rails", "~> 5.0"
-gem "therubyracer", "~> 0.12"
-gem "uglifier", "~> 2.7"
+gem "newrelic_rpm"
+gem "logstash-event"
+gem "lograge"
+gem "rack-timeout", "~> 0.4"
+gem "bootscale", "~> 0.5", require: false
 
-group :development do
-  gem "capistrano", "~> 3.4"
-  gem "guard-rspec", "~> 4.6"
-  gem "newrelic_rpm", "~> 3.12"
+group :production do
+  gem "rails_12factor"
+  gem "sentry-raven"
 end
 
 group :development, :test do
-  gem "pry-rails", "~> 0.3"
-  gem "pry-nav"
-  gem "brakeman", "~> 3.0", require: false
+  gem "dotenv-rails"
+  gem "pry-byebug"
+  gem "pry-rails"
 end
 
 group :test do
-  gem "test-unit", "~> 3.1"
-  gem "ci_reporter_rspec"
-  gem "factory_girl_rails"
+  gem "rspec-rails", "~> 3.0"
+  gem "factory_girl_rails", require: false
   gem "fakefs", require: "fakefs/safe"
   gem "forgery"
   gem "json_expressions"
-  gem "minitest", "~> 5.5"
-  gem "rspec-rails", "~> 3.3"
-  gem "shoulda-matchers", "~> 2.8"
   gem "simplecov"
   gem "simplecov-rcov"
   gem "webmock"
-  gem "database_cleaner"
+  gem "database_cleaner", github: "theharq/database_cleaner", branch: "sequel-updates"
   gem "rspec_junit_formatter"
 end

@@ -4,11 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-if Rails.env.test?
-  require 'webmock/rspec'
-  WebMock.allow_net_connect!
-end
-
-require 'ci/reporter/rake/rspec' if Rails.env.development? or Rails.env.test?
-
-TradeTariffBackend::Application.load_tasks
+Rails.application.load_tasks

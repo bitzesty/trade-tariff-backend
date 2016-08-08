@@ -1,10 +1,6 @@
 module TariffSynchronizer
   class BaseUpdate < Sequel::Model(:tariff_updates)
-    include FileService
-
     delegate :instrument, to: ActiveSupport::Notifications
-
-    set_dataset db[:tariff_updates]
 
     one_to_many :conformance_errors, class: TariffUpdateConformanceError, key: :tariff_update_filename
 
@@ -12,7 +8,6 @@ module TariffSynchronizer
     plugin :single_table_inheritance, :update_type
     plugin :validation_class_methods
 
-    class InvalidArgument < StandardError; end
     class InvalidContents < StandardError
       attr_reader :original
 
@@ -22,10 +17,10 @@ module TariffSynchronizer
       end
     end
 
-    APPLIED_STATE = 'A'
-    PENDING_STATE = 'P'
-    FAILED_STATE  = 'F'
-    MISSING_STATE = 'M'
+    APPLIED_STATE = "A".freeze
+    PENDING_STATE = "P".freeze
+    FAILED_STATE  = "F".freeze
+    MISSING_STATE = "M".freeze
 
     self.unrestrict_primary_key
 
@@ -67,7 +62,7 @@ module TariffSynchronizer
       end
 
       def last_pending
-        pending.order(:issue_date).limit(1)
+        pending.order(:issue_date).first
       end
 
       def descending
@@ -75,7 +70,7 @@ module TariffSynchronizer
       end
 
       def latest_applied_of_both_kinds
-        descending.from_self.group(:update_type).applied
+        distinct(:update_type).select(Sequel.expr(:tariff_updates).*).descending.applied.order_prepend(:update_type)
       end
     end
 
@@ -99,10 +94,6 @@ module TariffSynchronizer
       update(state: APPLIED_STATE, applied_at: Time.now, last_error: nil, last_error_at: nil, exception_backtrace: nil, exception_class: nil)
     end
 
-    def update_file_size(file_path)
-      update(filesize: File.size(file_path))
-    end
-
     def mark_as_failed
       update(state: FAILED_STATE)
     end
@@ -116,136 +107,19 @@ module TariffSynchronizer
     end
 
     def file_path
-      File.join(TariffSynchronizer.root_path, self.class.update_type.to_s, filename)
-    end
-
-    def file_exists?
-      # Check if file exists and if it doesn't try redownloading it.
-      # This may be necessary when tariff runs in multiserver environment
-      # where one server downloads updates and another server tries to apply it
-      File.exists?(file_path) || (
-        instrument("not_found_on_file_system.tariff_synchronizer", path: file_path)
-        self.class.download(issue_date) || file_exists?
-      )
+      "#{TariffSynchronizer.root_path}/#{self.class.update_type}/#{filename}"
     end
 
     def import!
       raise NotImplementedError
     end
 
-    def apply
-      # Track latest SQL queries in a ring buffer and with error
-      # email in case it happens
-      # Based on http://goo.gl/vpTFyT (SequelRails LogSubscriber)
-      @database_queries = RingBuffer.new(10)
-
-      sql_subscriber = ActiveSupport::Notifications.subscribe /sql\.sequel/ do |*args|
-        event = ActiveSupport::Notifications::Event.new(*args)
-
-        binds = unless event.payload.fetch(:binds, []).blank?
-          event.payload[:binds].map { |column, value|
-            [column.name, value]
-          }.inspect
-        end
-
-        @database_queries.push(
-          "(%{class_name}) %{sql} %{binds}" % {
-            class_name: event.payload[:name],
-            sql: event.payload[:sql].squeeze(' '),
-            binds: binds
-          }
-        )
-      end
-
-      # Subscribe to conformance errors and save them to DB
-      conformance_errors_subscriber = ActiveSupport::Notifications.subscribe /conformance_error/ do |*args|
-        event = ActiveSupport::Notifications::Event.new(*args)
-        record = event.payload[:record]
-        TariffUpdateConformanceError.create(
-          base_update: self,
-          model_name: record.class.to_s,
-          model_primary_key: record.pk,
-          model_values: record.values,
-          model_conformance_errors: record.conformance_errors
-        )
-      end
-
-      if file_exists?
-
-        Sequel::Model.db.transaction(reraise: true) do
-          # If a error is raised during import, the transaction is roll-backed
-          # we then run this block afterwards to mark the update as failed
-          Sequel::Model.db.after_rollback { mark_as_failed } 
-
-          import!
-        end
-      end
-    rescue => e
-      e = e.original if e.respond_to?(:original) && e.original
-      update(exception_class: e.class.to_s + ": " + e.message.to_s,
-             exception_backtrace: e.backtrace.join("\n"),
-             exception_queries: @database_queries.join("\n"))
-
-      instrument(
-        "failed_update.tariff_synchronizer",
-        exception: e, update: self, database_queries: @database_queries
-      )
-      raise Sequel::Rollback
-    ensure
-      ActiveSupport::Notifications.unsubscribe(sql_subscriber)
-      ActiveSupport::Notifications.unsubscribe(conformance_errors_subscriber)
-    end
-
     class << self
       delegate :instrument, to: ActiveSupport::Notifications
 
       def sync
-        (pending_from..Date.today).each { |date| download(date) }
-
-        notify_about_missing_updates if self.order(Sequel.desc(:issue_date)).last(TariffSynchronizer.warning_day_count).all?(&:missing?)
-      end
-
-      def find_update(local_file_name, date)
-        find(
-          filename: local_file_name,
-          update_type: self.name,
-          issue_date: date
-        )
-      end
-
-      def perform_download(local_file_name, tariff_url, date)
-        if File.exists?(update_file_path(local_file_name))
-          if update = find_update(local_file_name, date)
-            update.update(filesize: File.read(update_file_path(local_file_name)).size)
-          else
-            create_update_entry(
-              date,
-              BaseUpdate::PENDING_STATE,
-              local_file_name,
-              File.read(update_file_path(local_file_name)).size
-            )
-          end
-          instrument("created_tariff.tariff_synchronizer", date: date, filename: local_file_name, type: update_type)
-        else
-          instrument("download_tariff.tariff_synchronizer",
-            date: date,
-            url: tariff_url,
-            filename: local_file_name,
-            type: update_type
-          ) do
-            download_content(tariff_url).tap { |response|
-              create_entry(date, response, local_file_name)
-            }
-          end
-        end
-      end
-
-      def update_file_path(update_file_name)
-        File.join(TariffSynchronizer.root_path, update_type.to_s, update_file_name)
-      end
-
-      def update_file_exists?(filename)
-        dataset.where(filename: filename).present?
+        (pending_from..Date.current).each { |date| download(date) }
+        notify_about_missing_updates if last_updates_are_missing?
       end
 
       def update_type
@@ -254,78 +128,16 @@ module TariffSynchronizer
 
       private
 
-      def create_entry(date, response, file_name)
-        if response.success? && response.content_present?
-          validate_and_create_update(date, response, file_name)
-        elsif response.success? && !response.content_present?
-          create_update_entry(date, FAILED_STATE, file_name)
-          instrument("blank_update.tariff_synchronizer", date: date, url: response.url)
-        elsif response.retry_count_exceeded?
-          create_update_entry(date, FAILED_STATE, file_name)
-          instrument("retry_exceeded.tariff_synchronizer", date: date, url: response.url)
-        elsif response.not_found?
-          if date < Date.today
-            create_update_entry(date, MISSING_STATE, missing_update_name_for(date))
-            instrument("not_found.tariff_synchronizer", date: date, url: response.url)
-          end
-        end
-      end
-
-      def validate_and_create_update(date, response, file_name)
-        begin
-          validate_file!(response)
-        rescue InvalidContents => e
-          instrument("invalid_contents.tariff_synchronizer", date: date, url: response.url)
-          exception = e.original
-          create_update_entry(date, FAILED_STATE, file_name).tap do |entry|
-            entry.update(
-              exception_class: "#{exception.class}: #{exception.message}",
-              exception_backtrace: exception.backtrace.try(:join, "\n")
-            )
-          end
-        else
-          # file is valid
-          create_update_entry(date, PENDING_STATE, file_name, response.content.size)
-          write_update_file(date, response, file_name)
-        end
-      end
-
-      def write_update_file(date, response, file_name)
-        update_path = update_path(date, file_name)
-
-        instrument("update_written.tariff_synchronizer", date: date,
-          path: update_path, size: response.content.size) do
-            write_file(update_path, response.content)
-          end
-      end
-
-      def missing_update_name_for(date)
-        "#{date}_#{update_type}"
-      end
-
-      def create_update_entry(date, state, file_name, filesize = nil)
-        find_or_create(
-          filename: file_name,
-          update_type: self.name,
-          issue_date: date
-        ).update(state: state, filesize: filesize)
-      end
-
-      def update_path(date, file_name)
-        File.join(TariffSynchronizer.root_path, update_type.to_s, file_name)
-      end
-
       def pending_from
-        if last_download = last_pending.first || descending.first
+        if last_download = (last_pending || descending.first)
           last_download.issue_date
         else
-         TariffSynchronizer.initial_update_for(update_type)
+          TariffSynchronizer.initial_update_date_for(update_type)
         end
       end
 
-      def parse_file_path(file_path)
-        filename = Pathname.new(file_path).basename.to_s
-        filename.match(/^(\d{4}-\d{2}-\d{2})_(.*)$/)[1,2]
+      def last_updates_are_missing?
+        order(Sequel.desc(:issue_date)).last(TariffSynchronizer.warning_day_count).all?(&:missing?)
       end
 
       def notify_about_missing_updates

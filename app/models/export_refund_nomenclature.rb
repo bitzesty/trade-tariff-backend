@@ -18,7 +18,7 @@ class ExportRefundNomenclature < Sequel::Model
                                                          end
 
   def export_refund_nomenclature_description
-    export_refund_nomenclature_descriptions.first
+    export_refund_nomenclature_descriptions(true).first
   end
 
   one_to_many :export_refund_nomenclature_indents, key: :export_refund_nomenclature_sid,
@@ -28,7 +28,7 @@ class ExportRefundNomenclature < Sequel::Model
   end
 
   def export_refund_nomenclature_indent
-    export_refund_nomenclature_indents.first
+    export_refund_nomenclature_indents(true).first
   end
 
   delegate :description, to: :export_refund_nomenclature_description
@@ -54,7 +54,9 @@ class ExportRefundNomenclature < Sequel::Model
                  .where("export_refund_nomenclature_indents.number_export_refund_nomenclature_indents < ?", export_refund_nomenclature_indent.number_export_refund_nomenclature_indents)
                  .order(Sequel.desc(:export_refund_nomenclature_indents__validity_start_date),
                         Sequel.desc(:export_refund_nomenclature_indents__goods_nomenclature_item_id))
-                 .group(:export_refund_nomenclature_indents__export_refund_nomenclature_sid),
+                 .group(:export_refund_nomenclature_indents__export_refund_nomenclature_sid, :export_refund_nomenclatures__export_refund_nomenclature_sid,
+                        :export_refund_nomenclature_indents__number_export_refund_nomenclature_indents, :export_refund_nomenclature_indents__validity_start_date,
+                        :export_refund_nomenclatures__goods_nomenclature_item_id, :export_refund_nomenclatures__goods_nomenclature_item_id, :export_refund_nomenclature_indents__goods_nomenclature_item_id),
         { t1__gono_sid: :export_refund_nomenclatures__export_refund_nomenclature_sid,
           t1__max_gono: :export_refund_nomenclatures__goods_nomenclature_item_id })
       .order(Sequel.desc(:export_refund_nomenclatures__goods_nomenclature_item_id))
@@ -74,5 +76,3 @@ class ExportRefundNomenclature < Sequel::Model
     "#{goods_nomenclature_item_id.first(4)}______"
   end
 end
-
-

@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+
+# Set up Ruby dependencies via Bundler
+if ! command -v bundle > /dev/null; then
+  gem install bundler --no-document
+fi
+
+bundle install
+
+# Set up the database
+bundle exec rake db:setup
+
+# Set up configurable environment variables
+if [ ! -f .env ]; then
+  cp .sample.env .env
+fi
+
+# Pick a port for Foreman
+if ! command -v foreman > /dev/null; then
+  printf 'Foreman is not installed.\n'
+  printf 'See https://github.com/ddollar/foreman for install instructions.\n'
+  exit 1
+fi

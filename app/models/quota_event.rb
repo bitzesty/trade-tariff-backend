@@ -1,5 +1,3 @@
-require 'null_object'
-
 class QuotaEvent
   EVENTS = %w(balance exhaustion balance critical reopening unblocking unsuspension)
 

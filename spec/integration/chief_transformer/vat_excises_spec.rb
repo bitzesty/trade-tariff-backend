@@ -120,7 +120,7 @@ describe "CHIEF: VAT and Excises" do
     it "should create measures for 0303030300" do
       m = Measure.where(goods_nomenclature_item_id: "0303030300", validity_start_date: DateTime.parse("2007-11-15 11:00:00")).first
       expect(m.goods_nomenclature_item_id).to eq "0303030300"
-      expect(m.validity_end_date).to eq Time.parse("2007-12-01 00:00:00")
+      expect(m.validity_end_date).to eq DateTime.parse("2007-12-01 00:00:00")
       expect(m.measure_components.first.duty_amount).to eq 0.6007
       expect(m.measure_components.first.monetary_unit_code).to eq 'GBP'
     end
@@ -128,7 +128,7 @@ describe "CHIEF: VAT and Excises" do
     it "should create measures for 0404040400" do
       m = Measure.where(goods_nomenclature_item_id: "0404040400", validity_start_date: DateTime.parse("2007-10-01 00:00:00")).first
       expect(m.goods_nomenclature_item_id).to eq "0404040400"
-      expect(m.validity_end_date).to eq Time.parse("2007-12-31 23:50:00")
+      expect(m.validity_end_date).to eq DateTime.parse("2007-12-31 23:50:00")
       expect(m.measure_components.first.duty_amount).to eq 0.6007
       expect(m.measure_components.first.monetary_unit_code).to eq 'GBP'
     end

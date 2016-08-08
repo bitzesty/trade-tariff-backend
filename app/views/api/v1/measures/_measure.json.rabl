@@ -37,24 +37,16 @@ node(:suspension_legal_act, if: ->(measure) { !measure.national && measure.suspe
   }
 end
 
-child(measure_conditions: :measure_conditions) do
+child(:measure_conditions) do
   attributes :condition, :document_code, :requirement, :action, :duty_expression
 end
 
-child(geographical_area: :geographical_area) do |geographical_area|
-  attributes :id
-
-  node(:description) { |ga|
-    ga.geographical_area_description.description
-  }
+child(:geographical_area) do
+  attributes :id, :description
 
   unless locals[:object].third_country?
     child(contained_geographical_areas: :children_geographical_areas) do
-      attributes :id
-
-      node(:description) { |ga|
-        ga.geographical_area_description.description
-      }
+      attributes :id, :description
     end
   end
 end
