@@ -44,4 +44,33 @@ describe TariffSynchronizer::BaseUpdate do
       expect(result.first.issue_date).to eq(date)
     end
   end
+
+  describe ".sync" do
+    it "Calls the download method for each date since the last issue_date to the current date" do
+      update = create :chief_update, :missing, issue_date: 1.day.ago
+
+      expect(TariffSynchronizer::ChiefUpdate).to receive(:download).with(update.issue_date)
+      expect(TariffSynchronizer::ChiefUpdate).to receive(:download).with(Date.current)
+      TariffSynchronizer::ChiefUpdate.sync
+    end
+
+    it "logs and send email about several missing updates in a row" do
+      create :chief_update, :missing, issue_date: 1.day.ago
+      create :chief_update, :missing, issue_date: 2.days.ago
+      create :chief_update, :missing, issue_date: 3.days.ago
+
+      allow(TariffSynchronizer::ChiefUpdate).to receive(:download)
+      tariff_synchronizer_logger_listener
+
+      TariffSynchronizer::ChiefUpdate.sync
+
+      expect(@logger.logged(:warn).size).to eq(1)
+      expect(@logger.logged(:warn).last).to eq("Missing 3 updates in a row for CHIEF")
+
+      expect(ActionMailer::Base.deliveries).to_not be_empty
+      email = ActionMailer::Base.deliveries.last
+      expect(email.subject).to include("Missing 3 CHIEF updates in a row")
+      expect(email.encoded).to include("Trade Tariff found 3 CHIEF updates in a row to be missing")
+    end
+  end
 end

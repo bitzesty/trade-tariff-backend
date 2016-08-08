@@ -137,7 +137,7 @@ module TariffSynchronizer
       end
 
       def last_updates_are_missing?
-        order(Sequel.desc(:issue_date)).last(TariffSynchronizer.warning_day_count).all?(&:missing?)
+        descending.first(TariffSynchronizer.warning_day_count).all?(&:missing?)
       end
 
       def notify_about_missing_updates
