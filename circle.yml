@@ -7,5 +7,26 @@ machine:
   environment:
     GOVUK_APP_DOMAIN: test
 dependencies:
-  post:
-    - sudo service redis-server status || sudo service redis-server start
+  pre:
+    - curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&version=6.21.0'
+    - sudo dpkg -i cf-cli_amd64.deb
+    - cf -v
+    - curl -v -L -o autopilot https://github.com/contraband/autopilot/releases/download/0.0.2/autopilot-linux
+    - chmod +x autopilot
+    - yes | cf install-plugin autopilot
+deployment:
+  dev:
+    branch: master
+    commands:
+      - CF_SPACE=development CF_APP=tariff-backend-dev CF_APP_WORKER=tariff-backend-worker-dev ./bin/deploy:
+          timeout: 1200
+  staging:
+    branch: staging
+    commands:
+      - CF_SPACE=staging CF_APP=tariff-backend-staging CF_APP_WORKER=tariff-backend-worker-staging ./bin/deploy:
+          timeout: 1200
+  production:
+    branch: production
+    commands:
+      - CF_SPACE=production CF_APP=tariff-backend-production CF_APP_WORKER=tariff-backend-worker-production ./bin/deploy:
+          timeout: 1200
