@@ -1,4 +1,4 @@
-[![Circle CI](https://circleci.com/gh/bitzesty/trade-tariff-backend.svg?style=svg)](https://circleci.com/gh/bitzesty/trade-tariff-backend)
+[![CircleCI](https://circleci.com/gh/bitzesty/trade-tariff-backend/tree/master.svg?style=svg)](https://circleci.com/gh/bitzesty/trade-tariff-backend/tree/master)
 [![Code Climate](https://codeclimate.com/github/alphagov/trade-tariff-backend/badges/gpa.svg)](https://codeclimate.com/github/alphagov/trade-tariff-backend)
 
 # Trade Tariff Backend
