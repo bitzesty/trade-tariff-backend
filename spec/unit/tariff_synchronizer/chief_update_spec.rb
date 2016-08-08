@@ -4,191 +4,16 @@ require 'tariff_synchronizer'
 describe TariffSynchronizer::ChiefUpdate do
   it_behaves_like 'Base Update'
 
-  let(:example_date)      { Date.new(2010,1,1) }
-
-  before do
-    # we assume csv contents are ok unless otherwise specified
-    allow(TariffSynchronizer::ChiefUpdate).to receive(:validate_file!)
-                                          .and_return(true)
-  end
+  let(:example_date) { Date.new(2010,1,1) }
+  let(:chief_file) { ChiefFileNameGenerator.new(example_date) }
 
   describe '.download' do
-    let(:blank_response)     { build :response, content: nil }
-    let(:not_found_response) { build :response, :not_found }
-    let(:success_response)   { build :response, :success, content: 'abc' }
-    let(:update_name)        { "KBT009(10001).txt" }
-    let(:url)                { "#{TariffSynchronizer.host}/taric/#{update_name}" }
-
-
-    context 'has permission to write update file' do
-      context 'single file for the day is found' do
-        before do
-          TariffSynchronizer.host = "http://example.com"
-          prepare_synchronizer_folders
-        end
-
-        context 'file for the day not downloaded yet' do
-          it 'downloads CHIEF file for specific date' do
-            expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
-                                           .with(url)
-                                           .and_return(blank_response)
-
-            TariffSynchronizer::ChiefUpdate.download(example_date)
-          end
-
-          it 'writes CHIEF file contents to file if they are not blank' do
-            expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
-                                           .with(url)
-                                           .and_return(success_response)
-
-            TariffSynchronizer::ChiefUpdate.download(example_date)
-
-            expect(
-              File.exists?("#{TariffSynchronizer.root_path}/chief/#{TariffSynchronizer::ChiefUpdate.file_name_for(example_date)}")
-            ).to be_truthy
-            expect(
-              File.read("#{TariffSynchronizer.root_path}/chief/#{TariffSynchronizer::ChiefUpdate.file_name_for(example_date)}")
-            ).to eq 'abc'
-          end
-
-          it 'creates pending ChiefUpdate entry in the table' do
-            expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
-                                           .with(url)
-                                           .and_return(success_response)
-            TariffSynchronizer::ChiefUpdate.download(example_date)
-            expect(TariffSynchronizer::ChiefUpdate.count).to eq 1
-            expect(TariffSynchronizer::ChiefUpdate.first.issue_date).to eq example_date
-            expect(TariffSynchronizer::ChiefUpdate.first.filesize).to eq success_response.content.size
-          end
-        end
-
-        context 'file for the day already downloaded' do
-          let!(:present_chief_update) {
-            create :chief_update,
-              :applied,
-              issue_date: example_date,
-              filename: TariffSynchronizer::ChiefUpdate.file_name_for(example_date)
-          }
-
-          before {
-            expect(TariffSynchronizer::ChiefUpdate).to receive(
-              :download_content
-            ).with(url).and_return(success_response)
-
-            TariffSynchronizer::ChiefUpdate.download(example_date)
-
-            expect(
-              File.exists?("#{TariffSynchronizer.root_path}/chief/#{TariffSynchronizer::ChiefUpdate.file_name_for(example_date)}")
-            ).to be_truthy
-          }
-
-          it 'does not download CHIEF file for date when it exists' do
-            expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
-                                           .never
-
-            TariffSynchronizer::ChiefUpdate.download(example_date)
-          end
-
-          it 'does not create additional ChiefUpdate entries' do
-            expect {
-              TariffSynchronizer::ChiefUpdate.download(example_date)
-            }.to_not change { TariffSynchronizer::ChiefUpdate.count }
-          end
-        end
-
-        context "invalid csv contents" do
-          let(:success_response) {
-            build :response, :success,
-                             content: '"header1","header2'
-          }
-          let(:update_entry) {
-            TariffSynchronizer::ChiefUpdate.last
-          }
-
-          before {
-            expect(
-              TariffSynchronizer::ChiefUpdate
-            ).to receive(:download_content)
-             .with(url)
-             .and_return(success_response)
-
-            # unstub
-            allow(TariffSynchronizer::ChiefUpdate).to receive(:validate_file!)
-                                                  .and_call_original
-          }
-
-          it {
-            TariffSynchronizer::ChiefUpdate.download(example_date)
-
-            expect(update_entry.exception_class).to include("CSV::MalformedCSVError")
-          }
-        end
-      end
-
-      context 'when file for the day is not found' do
-        let(:not_found_response) { build :response, :not_found }
-
-        before {
-          expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
-                                         .and_return(not_found_response)
-        }
-
-        it 'does not write CHIEF file contents to file' do
-          TariffSynchronizer::ChiefUpdate.download(example_date)
-
-          expect(
-            File.exists?("#{TariffSynchronizer.root_path}/chief/#{example_date}_#{update_name}")
-          ).to be_falsy
-        end
-
-        it 'does not create not found entry if update is still for today' do
-          TariffSynchronizer::ChiefUpdate.download(Date.today)
-
-          expect(
-            TariffSynchronizer::ChiefUpdate.missing
-                                           .with_issue_date(Date.today)
-                                           .present?
-          ).to be_falsy
-        end
-
-        it 'creates not found entry if date has passed' do
-          TariffSynchronizer::ChiefUpdate.download(Date.today)
-
-          expect(
-            TariffSynchronizer::ChiefUpdate.missing
-                                           .with_issue_date(Date.today)
-                                           .present?
-          ).to be_falsy
-        end
-      end
-
-      after  { purge_synchronizer_folders }
-    end
-
-    context 'has no permissions to write update file' do
-      before do
-        TariffSynchronizer.host = "http://example.com"
-        prepare_synchronizer_folders
-
-        File.chmod(0500, File.join(TariffSynchronizer.root_path, 'chief'))
-      end
-
-      it 'logs error about permissions' do
-        expect(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
-                                               .with(url)
-                                               .and_return(success_response)
-
-        TariffSynchronizer::ChiefUpdate.download(example_date)
-
-        expect(
-          File.exists?("#{TariffSynchronizer.root_path}/chief/#{example_date}_#{update_name}")
-        ).to be_falsy
-      end
-
-      after  {
-        File.chmod(0755, File.join(TariffSynchronizer.root_path, 'chief'))
-        purge_synchronizer_folders
-      }
+    it "Calls TariffDownloader perform for a CHIEF update" do
+      downlader = instance_double("TariffSynchronizer::TariffDownloader", perform: true)
+      expect(TariffSynchronizer::TariffDownloader).to receive(:new)
+        .with(chief_file.name, chief_file.url, example_date, TariffSynchronizer::ChiefUpdate)
+        .and_return(downlader)
+      TariffSynchronizer::ChiefUpdate.download(example_date)
     end
   end
 
@@ -200,10 +25,10 @@ describe TariffSynchronizer::ChiefUpdate do
       let!(:chief_update2) { create :chief_update, :missing, issue_date: Date.today.ago(3.days) }
       let!(:stub_logger)   { double.as_null_object }
 
-      before {
-        allow(TariffSynchronizer::ChiefUpdate).to receive(:download_content)
-                                              .and_return(not_found_response)
-      }
+      before do
+        allow(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform)
+                                                       .and_return(not_found_response)
+      end
 
       it 'notifies about several missing updates in a row' do
         expect(TariffSynchronizer::ChiefUpdate).to receive(:notify_about_missing_updates).and_return(true)
@@ -212,84 +37,45 @@ describe TariffSynchronizer::ChiefUpdate do
     end
   end
 
-  describe "#apply", truncation: true do
-    let(:example_date) { Forgery(:date).date }
-    let(:state) { :pending }
-    let!(:example_chief_update) { create :chief_update, example_date: example_date }
+  describe "#import!" do
+
+    let(:chief_update) { create :chief_update}
 
     before do
-      prepare_synchronizer_folders
-      create_chief_file state, example_date
+      # stub the file_path method to return a valid path of a real file.
+      allow(chief_update).to receive(:file_path)
+                              .and_return("spec/fixtures/chief_samples/KBT009(12044).txt")
+
     end
 
-    it 'sets applied_at' do
-      TariffSynchronizer::ChiefUpdate.first.apply
-      expect(example_chief_update.reload.applied_at).to_not be_nil
+    it "Calls the ChiefImporter import method and send instance as argument" do
+      chief_importer = instance_double("ChiefImporter")
+      expect(ChiefImporter).to receive(:new).with(chief_update)
+                                                  .and_return(chief_importer)
+      expect(chief_importer).to receive(:import)
+      chief_update.import!
     end
 
-    it 'executes importer' do
-      mock_importer = double
-      expect(mock_importer).to receive(:import).and_return(true)
-      expect(TariffImporter).to receive(:new).and_return(mock_importer)
-
-      TariffSynchronizer::ChiefUpdate.first.apply
+    it "Mark the Chief update as applied" do
+      allow_any_instance_of(ChiefImporter).to receive(:import)
+      chief_update.import!
+      expect(chief_update.reload).to be_applied
     end
 
-    it 'updates file entry state to processed' do
-      mock_importer = double('importer').as_null_object
-      expect(TariffImporter).to receive(:new).and_return(mock_importer)
-
-      expect(TariffSynchronizer::ChiefUpdate.pending.count).to eq 1
-      TariffSynchronizer::ChiefUpdate.first.apply
-      expect(TariffSynchronizer::ChiefUpdate.pending.count).to eq 0
-      expect(TariffSynchronizer::ChiefUpdate.applied.count).to eq 1
+    it "logs an info event" do
+      tariff_synchronizer_logger_listener
+      allow_any_instance_of(ChiefImporter).to receive(:import)
+      chief_update.import!
+      expect(@logger.logged(:info).size).to eq 1
+      expect(@logger.logged(:info).last).to match /Applied CHIEF update/
     end
 
-    it 'does not move file to processed if import fails' do
-      mock_importer = double
-      expect(mock_importer).to receive(:import).and_raise(ChiefImporter::ImportException)
-      expect(TariffImporter).to receive(:new).and_return(mock_importer)
-
-      expect(TariffSynchronizer::ChiefUpdate.pending.count).to eq 1
-      rescuing { TariffSynchronizer::ChiefUpdate.first.apply }
-      expect(TariffSynchronizer::ChiefUpdate.pending.count).to eq 0
-      expect(TariffSynchronizer::ChiefUpdate.applied.count).to eq 0
-      expect(TariffSynchronizer::ChiefUpdate.failed.count).to eq 1
+    it "ChiefTransformer is called" do
+      chief_transformer = instance_double("ChiefTransformer")
+      expect(ChiefTransformer).to receive(:instance).and_return(chief_transformer)
+      expect(chief_transformer).to receive(:invoke)
+      allow_any_instance_of(ChiefImporter).to receive(:import)
+      chief_update.import!
     end
-
-    after  { purge_synchronizer_folders }
-  end
-
-  describe '.rebuild' do
-    before {
-      prepare_synchronizer_folders
-      create_chief_file :pending, example_date
-    }
-
-    context 'entry for the day/update does not exist yet' do
-      it 'creates db record from available file name' do
-        expect(TariffSynchronizer::BaseUpdate.count).to eq 0
-
-        TariffSynchronizer::ChiefUpdate.rebuild
-
-        expect(TariffSynchronizer::BaseUpdate.count).to eq 1
-        first_update = TariffSynchronizer::BaseUpdate.first
-        expect(first_update.issue_date).to eq example_date
-      end
-    end
-
-    context 'entry for the day/update exists already' do
-      let!(:example_chief_update) { create :chief_update, example_date: example_date }
-
-      it 'does not create db record if it is already available for the day/update type combo' do
-        expect(TariffSynchronizer::BaseUpdate.count).to eq 1
-
-        TariffSynchronizer::ChiefUpdate.rebuild
-
-        expect(TariffSynchronizer::BaseUpdate.count).to eq 1
-      end
-    end
-
-    after  { purge_synchronizer_folders }
   end
 end

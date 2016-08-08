@@ -4,7 +4,7 @@ module TradeTariffBackend
   class Mailer < ActionMailer::Base
     include MailerEnvironment
 
-    default from: "DO NOT REPLY <trade-tariff-alerts@digital.cabinet-office.gov.uk>",
+    default from: TradeTariffBackend.from_email,
             to: TradeTariffBackend.admin_email
 
     def reindex_exception(exception)

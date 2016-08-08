@@ -15,7 +15,7 @@ common: &default_settings
   # You must specify the license key associated with your New Relic
   # account.  This key binds your Agent's data to your account in the
   # New Relic service.
-  license_key: '6905bed36494aea7671c05ba4100128608a9ba03'
+  license_key: "<%= ENV['NEWRELIC'] %>"
 
   # Agent Enabled (Ruby/Rails Only)
   # Use this setting to force the agent to run or not run.
@@ -42,7 +42,7 @@ common: &default_settings
   #       - Ajax Service
   #       - All Services
   #
-  app_name: Tariff Backend
+  app_name: "<%= ENV['GOVUK_APP_DOMAIN']%>"
 
   # When "true", the agent collects performance data about your
   # application and reports this data to the New Relic service at
@@ -209,6 +209,7 @@ test:
   # It almost never makes sense to turn on the agent when running
   # unit, functional or integration tests or the like.
   monitor_mode: false
+  agent_enabled: false
 
 # Turn on the agent in production for 24x7 monitoring. NewRelic
 # testing shows an average performance impact of < 5 ms per
@@ -216,7 +217,6 @@ test:
 # incurring any user-visible performance degradation.
 production:
   <<: *default_settings
-  monitor_mode: false
 
 # Many applications have a staging environment which behaves
 # identically to production. Support for that environment is provided

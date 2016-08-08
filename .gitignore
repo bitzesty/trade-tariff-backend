@@ -1,27 +1,24 @@
-*.rbc
-*.sassc
-.sass-cache
-capybara-*.html
-.rspec
+# Ignore bundler config.
 /.bundle
-/vendor/bundle
-/log/*.log
+
+# Ignore all logfiles and tempfiles.
+/log/*
+!/log/.keep
 /tmp/*
-/db/*.sqlite3
-/public/system/*
-/coverage/
-/spec/tmp/*
-**.orig
-rerun.txt
-pickle-email-*.html
-.DS_Store
-ERD.pdf
+.byebug_history
+
+# Local tariff files
 data/*/*.xml
 data/*/*.txt
-*.sql
-/config/trade_tariff_backend_secrets.yml
-*.sql.bz2
-db/schema.rb
-spec/coverage
-.rbenv-version
-/spec/reports
+
+# Environment files
+.env
+
+# Cloud Foundry manifest files
+*manifest.yml
+cf-ssh.yml
+
+# Other files
+config/trade_tariff_backend_secrets.yml
+*.DS_Store
+/coverage/*

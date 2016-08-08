@@ -11,7 +11,7 @@ FactoryGirl.define do
     # do not allow zeroes in the goods item id as it causes unpredictable
     # results
     goods_nomenclature_item_id { 10.times.map{ Random.rand(9) + 1 }.join }
-    producline_suffix   { 80 }
+    producline_suffix   { "80" }
     validity_start_date { Date.today.ago(2.years) }
     validity_end_date   { nil }
 
@@ -32,7 +32,7 @@ FactoryGirl.define do
     end
 
     trait :declarable do
-      producline_suffix 80
+      producline_suffix "80"
     end
 
     trait :expired do
@@ -57,11 +57,11 @@ FactoryGirl.define do
 
   factory :commodity, parent: :goods_nomenclature, class: Commodity do
     trait :declarable do
-      producline_suffix { 80 }
+      producline_suffix { "80" }
     end
 
     trait :non_declarable do
-      producline_suffix { 10 }
+      producline_suffix { "10" }
     end
 
     trait :with_chapter do
@@ -83,11 +83,11 @@ FactoryGirl.define do
     goods_nomenclature_item_id { "#{4.times.map{ Random.rand(8)+1 }.join}000000" }
 
     trait :declarable do
-      producline_suffix { 80 }
+      producline_suffix { "80" }
     end
 
     trait :non_grouping do
-      producline_suffix { 80 }
+      producline_suffix { "80" }
     end
 
     trait :non_declarable do

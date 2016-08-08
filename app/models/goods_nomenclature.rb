@@ -1,5 +1,3 @@
-require 'time_machine'
-
 class GoodsNomenclature < Sequel::Model
   extend ActiveModel::Naming
 
@@ -34,7 +32,7 @@ class GoodsNomenclature < Sequel::Model
   end
 
   def goods_nomenclature_indent
-    goods_nomenclature_indents.first
+    goods_nomenclature_indents(true).first
   end
 
   many_to_many :goods_nomenclature_descriptions, join_table: :goods_nomenclature_description_periods,
@@ -47,7 +45,7 @@ class GoodsNomenclature < Sequel::Model
   end
 
   def goods_nomenclature_description
-    goods_nomenclature_descriptions.first || NullGoodsNomenclature.new
+    goods_nomenclature_descriptions(true).first || NullGoodsNomenclature.new
   end
 
   many_to_many :footnotes, join_table: :footnote_association_goods_nomenclatures,
@@ -59,7 +57,7 @@ class GoodsNomenclature < Sequel::Model
   end
 
   def footnote
-    footnotes.first
+    footnotes(true).first
   end
 
   one_to_one :national_measurement_unit_set, key: :cmdty_code,
@@ -92,7 +90,7 @@ class GoodsNomenclature < Sequel::Model
 
   dataset_module do
     def declarable
-      filter(producline_suffix: 80)
+      filter(producline_suffix: "80")
     end
 
     def non_hidden
@@ -106,6 +104,10 @@ class GoodsNomenclature < Sequel::Model
 
   def id
     goods_nomenclature_sid
+  end
+
+  def to_s
+    "#{number_indents}: #{goods_nomenclature_item_id}: #{description}"
   end
 
   def heading_id
@@ -124,7 +126,3 @@ class GoodsNomenclature < Sequel::Model
     "http://ec.europa.eu/taxation_customs/dds2/ebti/ebti_consultation.jsp?Lang=en&nomenc=#{code}&Expand=true"
   end
 end
-
-require 'heading'
-require 'chapter'
-require 'commodity'

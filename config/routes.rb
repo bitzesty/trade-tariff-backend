@@ -1,6 +1,6 @@
 require 'api_constraints'
 
-TradeTariffBackend::Application.routes.draw do
+Rails.application.routes.draw do
   get "healthcheck" => "healthcheck#index"
 
   namespace :api, defaults: {format: 'json'}, path: "/" do
@@ -63,7 +63,7 @@ TradeTariffBackend::Application.routes.draw do
     end
   end
 
-  root to: 'home#show'
+  root to: 'application#nothing'
 
-  get '*path', to: 'home#not_found'
+  get '*path', to: 'application#render_not_found'
 end

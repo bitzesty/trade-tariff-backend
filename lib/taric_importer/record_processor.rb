@@ -1,6 +1,5 @@
 require 'forwardable'
 
-require 'taric_importer/helpers/string_helper'
 require 'taric_importer/record_processor/record'
 require 'taric_importer/record_processor/operation'
 require 'taric_importer/record_processor/update_operation'
@@ -26,7 +25,7 @@ Dir[File.join(Rails.root, 'lib', 'taric_importer', 'record_processor', 'operatio
   require file
 }
 
-class TaricImporter < TariffImporter
+class TaricImporter
   class RecordProcessor
     extend Forwardable
 
@@ -39,17 +38,17 @@ class TaricImporter < TariffImporter
     }
 
     # Instance of Record, containing extracted primary key, attributes etc
-    attr_accessor :record
+    attr_reader :record
 
     # Operation Class
-    attr_accessor :operation_class
+    attr_reader :operation_class
 
     # The date of the update. NB not necessarily the current date.
     attr_accessor :operation_date
 
     def initialize(record_hash, operation_date = nil)
       self.record = record_hash
-      self.operation_class = record_hash['update.type']
+      self.operation_class = record_hash['update_type']
       self.operation_date = operation_date
     end
 
@@ -72,9 +71,10 @@ class TaricImporter < TariffImporter
     private
 
     def processor_for(record_class, operation_class)
-      begin
-        "TaricImporter::RecordProcessor::#{record_class}#{operation_class.to_s.demodulize}".constantize
-      rescue NameError
+      operation_override_class = "TaricImporter::RecordProcessor::#{record_class}#{operation_class.to_s.demodulize}"
+      if Object.const_defined?(operation_override_class)
+        operation_override_class.constantize
+      else
         operation_class
       end
     end

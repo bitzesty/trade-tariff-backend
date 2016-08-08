@@ -1,7 +1,5 @@
 module Chief
-  class Tame < Sequel::Model
-    set_dataset db[:chief_tame].
-                order(Sequel.asc(:audit_tsmp), Sequel.asc(:fe_tsmp))
+  class Tame < Sequel::Model(Sequel::Model.db[:chief_tame].order(Sequel.asc(:audit_tsmp), Sequel.asc(:fe_tsmp)))
 
     set_primary_key [:msrgp_code,
                      :msr_type,
@@ -50,10 +48,10 @@ module Chief
       end
     end
 
-    def adval1_rate; 1; end
-    def adval2_rate; 0; end
-    def spfc1_rate; 0; end
-    def spfc2_rate; 0; end
+    def adval1_rate; true; end
+    def adval2_rate; false; end
+    def spfc1_rate; false; end
+    def spfc2_rate; false; end
 
     def mark_as_processed!
       self.this.unlimited.update(processed: true)
@@ -74,5 +72,3 @@ module Chief
     end
   end
 end
-
-

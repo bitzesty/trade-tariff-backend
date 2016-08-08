@@ -13,7 +13,7 @@ Dir[File.join(Rails.root, 'lib', 'taric_importer', 'record_processor', 'attribut
   require file
 }
 
-class TaricImporter < TariffImporter
+class TaricImporter
   class RecordProcessor
     class Record
       include TaricImporter::Helpers::StringHelper
@@ -31,42 +31,32 @@ class TaricImporter < TariffImporter
       attr_accessor :transaction_id
 
       def initialize(record_hash)
-        self.transaction_id = record_hash['transaction.id']
-        self.klass = as_strategy(record_hash.keys.last).constantize
+        self.transaction_id = record_hash['transaction_id']
+        self.klass = fast_classify(record_hash.keys.last).constantize
         self.primary_key = [klass.primary_key].flatten.map(&:to_s)
-        self.attributes = sanitize_attributes(record_hash.values.last)
+        self.attributes = record_hash.values.last
       end
 
-      def attributes=(attributes)
-        attributes = mutate_attributes(attributes)
-
-        @attributes = default_attributes.merge(attributes)
+      def attributes=(attrs)
+        attrs = mutate_attributes(attrs)
+        @attributes = default_attributes.merge(attrs)
       end
 
       private
 
       def default_attributes
-        klass.columns.inject({}) { |memo, column_name|
-          memo.merge!(Hash[column_name.to_s, nil])
-          memo
-        }
+        klass.columns.reduce({}) do |memo, column_name|
+          memo.merge!({column_name.to_s => nil})
+        end
       end
 
       def mutate_attributes(attributes)
-        mutator_class = begin
-                          "TaricImporter::RecordProcessor::#{klass}AttributeMutator".constantize
-                        rescue NameError
-                          TaricImporter::RecordProcessor::AttributeMutator
-                        end
-
-        mutator_class.mutate(attributes)
-      end
-
-      def sanitize_attributes(attributes)
-        attributes.inject({}) { |memo, (key, value)|
-          memo.merge!(Hash[as_param(key), value.strip]) unless value.blank?
-          memo
-        }
+        mutator_class = "TaricImporter::RecordProcessor::#{klass}AttributeMutator"
+        if Object.const_defined?(mutator_class)
+          mutator_class.constantize.mutate(attributes)
+        else
+          TaricImporter::RecordProcessor::AttributeMutator.mutate(attributes)
+        end
       end
     end
   end

@@ -15,10 +15,10 @@ class SearchService
   autoload :FuzzySearch, 'search_service/fuzzy_search'
   autoload :NullSearch,  'search_service/null_search'
 
-  INDEX_SIZE_MAX = 1000000 # ElasticSearch does default pagination for 10 entries
-                           # per page. We do not do pagination when displaying
-                           # results so have a constant much bigger than possible
-                           # index size for size value.
+  INDEX_SIZE_MAX = 10000 # ElasticSearch does default pagination for 10 entries
+                         # per page. We do not do pagination when displaying
+                         # results so have a constant much bigger than possible
+                         # index size for size value.
 
   include ActiveModel::Validations
   include ActiveModel::Conversion

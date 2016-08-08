@@ -5,7 +5,7 @@ class Rollback < Sequel::Model
       order(Sequel.desc(:id))
     end
   end
-  
+
   private
 
   def validate
@@ -30,7 +30,7 @@ class Rollback < Sequel::Model
   end
 
   def before_create
-    self.enqueued_at = Time.now
+    self.enqueued_at = Time.current
     super
   end
 end

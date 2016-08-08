@@ -38,13 +38,24 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def nothing
+    render nothing: true
+  end
+
+  protected
+
+  def append_info_to_payload(payload)
+    super
+    payload[:user_agent] = request.headers["HTTP_X_ORIGINAL_USER_AGENT"].presence || request.env["HTTP_USER_AGENT"]
+  end
+
   private
 
   def actual_date
     Date.parse(params[:as_of].to_s)
 
     rescue ArgumentError # empty as_of param means today
-      Date.today
+      Date.current
   end
   helper_method :actual_date
 

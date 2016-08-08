@@ -21,8 +21,8 @@ describe Api::V1::SearchReferencesController, "GET to #index"do
   context 'with letter param provided' do
     let(:pattern) {
       [
-        {id: Integer, title: String, referenced: Hash, referenced_class: 'Section', referenced_id: String },
-        {id: Integer, title: String, referenced: Hash, referenced_class: 'Chapter', referenced_id: String }
+        {id: Integer, title: String, referenced_class: 'Section', referenced_id: String },
+        {id: Integer, title: String, referenced_class: 'Chapter', referenced_id: String }
       ]
     }
 
@@ -36,7 +36,7 @@ describe Api::V1::SearchReferencesController, "GET to #index"do
   context 'with no letter param provided' do
     let(:pattern) {
       [
-        {id: Integer, title: String, referenced: Hash, referenced_class: 'Heading', referenced_id: String }
+        {id: Integer, title: String, referenced_class: 'Heading', referenced_id: String }
       ]
     }
 

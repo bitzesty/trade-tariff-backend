@@ -6,14 +6,14 @@ require 'taric_importer/record_processor/create_operation'
 
 describe TaricImporter::RecordProcessor do
   let(:record_hash) {
-    {"transaction.id"=>"31946",
-     "record.code"=>"130",
-     "subrecord.code"=>"05",
-     "record.sequence.number"=>"1",
-     "update.type"=>"3",
-     "language.description"=>
-      {"language.code.id"=>"FR",
-       "language.id"=>"EN",
+    {"transaction_id"=>"31946",
+     "record_code"=>"130",
+     "subrecord_code"=>"05",
+     "record_sequence_number"=>"1",
+     "update_type"=>"3",
+     "language_description"=>
+      {"language_code_id"=>"FR",
+       "language_id"=>"EN",
        "description"=>"French"}}
   }
 
@@ -63,42 +63,28 @@ describe TaricImporter::RecordProcessor do
 
   describe '#process!' do
     context 'with default processor' do
-      let(:fake_create_operation_class)   { double('CreateOperation', new: fake_operation_instance) }
-      let(:fake_operation_instance) { double('instance of CreateOperation', call: true) }
-
-      before {
-        stub_const(
-          "TaricImporter::RecordProcessor::OPERATION_MAP",
-          { "3" => fake_create_operation_class }
-        )
-      }
-
       it 'performs default create operation' do
-        record_processor = TaricImporter::RecordProcessor.new(record_hash, Date.new(2013,8,1))
-        record_processor.process!
 
-        expect(fake_create_operation_class).to have_received :new
-        expect(fake_operation_instance).to     have_received :call
+        create_operation_intance = instance_double(TaricImporter::RecordProcessor::CreateOperation, call: true)
+        expect(TaricImporter::RecordProcessor::CreateOperation).to receive(:new)
+                                                                   .and_return(create_operation_intance)
+        expect(create_operation_intance).to receive(:call)
+        record_processor.process!
       end
     end
 
     context 'with custom processor' do
-      let(:fake_create_operation_class)   { double('LanguageDescriptionCreateOperation', new: fake_operation_instance) }
-      let(:fake_operation_instance) { double('instance of LanguageDescriptionCreateOperation', call: true) }
-
-      before {
-        stub_const(
-          "TaricImporter::RecordProcessor::LanguageDescriptionCreateOperation",
-          fake_create_operation_class
-        )
-      }
-
       it 'performs model type specific create operation' do
+
+        custom_operation_instance = double('instance of LanguageDescriptionCreateOperation', call: true)
+        custom_create_operation_class = double('LanguageDescriptionCreateOperation', new: custom_operation_instance)
+        stub_const("TaricImporter::RecordProcessor::LanguageDescriptionCreateOperation", custom_create_operation_class)
+
         record_processor = TaricImporter::RecordProcessor.new(record_hash, Date.new(2013,8,1))
         record_processor.process!
 
-        expect(fake_create_operation_class).to have_received :new
-        expect(fake_operation_instance).to     have_received :call
+        expect(custom_create_operation_class).to have_received :new
+        expect(custom_operation_instance).to     have_received :call
       end
     end
   end

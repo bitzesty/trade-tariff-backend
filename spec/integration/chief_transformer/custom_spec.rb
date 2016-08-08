@@ -1,7 +1,6 @@
 require 'rails_helper'
 require 'goods_nomenclature'
 require 'chief_transformer'
-require 'tariff_importer'
 
 describe 'CHIEF: Custom scenarios' do
   before(:all) { preload_standing_data }
@@ -15,7 +14,7 @@ describe 'CHIEF: Custom scenarios' do
                                                             :with_indent,
                                                             goods_nomenclature_item_id: '1604141620',
                                                             goods_nomenclature_sid: 70180,
-                                                            producline_suffix: 80,
+                                                            producline_suffix: "80",
                                                             validity_start_date: DateTime.parse("1998-07-14 00:00:00 -0700"),
                                                             validity_end_date: nil }
     let!(:goods_nomenclature_indent) { create :goods_nomenclature_indent, number_indents: 10,
@@ -40,18 +39,18 @@ describe 'CHIEF: Custom scenarios' do
       # As goods_nomenclature now does not span the validity period of national_measure (ME8)
       def perform_transaction()
         transaction_record = {
-          'transaction.id' => transaction_id,
-          'record.code' => '400',
-          'subrecord.code' => '00',
-          'record.sequence.number' => '199',
-          'update.type' => '1',
-          'goods.nomenclature' => {
-            'goods.nomenclature.sid' => '70180',
-            'goods.nomenclature.item.id' => '1604141620',
-            'producline.suffix' => '80',
-            'validity.start.date' => '1998-07-14',
-            'validity.end.date' => '2011-12-31',
-            'statistical.indicator' => '0'
+          'transaction_id' => transaction_id,
+          'record_code' => '400',
+          'subrecord_code' => '00',
+          'record_sequence_number' => '199',
+          'update_type' => '1',
+          'goods_nomenclature' => {
+            'goods_nomenclature_sid' => '70180',
+            'goods_nomenclature_item_id' => '1604141620',
+            'producline_suffix' => '80',
+            'validity_start_date' => '1998-07-14',
+            'validity_end_date' => '2011-12-31',
+            'statistical_indicator' => '0'
           }
 
         }
@@ -113,17 +112,17 @@ describe 'CHIEF: Custom scenarios' do
       # Goods Nomenclature deletion Makes national measures invalid.
       def perform_transaction()
         transaction_record = {
-          'transaction.id' => transaction_id,
-          'record.code' => '400',
-          'subrecord.code' => '00',
-          'record.sequence.number' => '00',
-          'update.type' => '2',
-          'goods.nomenclature' => {
-            'goods.nomenclature.sid' => '96196',
-            'goods.nomenclature.item.id' => '0305720040',
-            'producline.suffix' => '80',
-            'validity.start.date' => '2012-01-01',
-            'statistical.indicator' => '0'
+          'transaction_id' => transaction_id,
+          'record_code' => '400',
+          'subrecord_code' => '00',
+          'record_sequence_number' => '00',
+          'update_type' => '2',
+          'goods_nomenclature' => {
+            'goods_nomenclature_sid' => '96196',
+            'goods_nomenclature_item_id' => '0305720040',
+            'producline_suffix' => '80',
+            'validity_start_date' => '2012-01-01',
+            'statistical_indicator' => '0'
           }
         }
 
@@ -161,7 +160,7 @@ describe 'CHIEF: Custom scenarios' do
     let!(:gono) { create :goods_nomenclature, :with_indent,
                                              goods_nomenclature_sid: 86487,
                                              goods_nomenclature_item_id: '1211908500',
-                                             producline_suffix: 80,
+                                             producline_suffix: "80",
                                              validity_start_date: Date.new(2007,1,1),
                                              validity_end_date: Date.new(2012,12,13) }
     let!(:measure) { create :measure, :national, measure_sid: -262016,
@@ -194,7 +193,7 @@ describe 'CHIEF: Custom scenarios' do
     let!(:gono) { create :goods_nomenclature, :declarable, :with_indent,
                                              goods_nomenclature_sid: 91900,
                                              goods_nomenclature_item_id: '5607509090',
-                                             producline_suffix: 80,
+                                             producline_suffix: "80",
                                              validity_start_date: Date.new(2010,1,1),
                                              validity_end_date: Date.new(2013,2,28) }
     let!(:measure) { create :measure, :national, measure_sid: -41534,
@@ -240,7 +239,7 @@ describe 'CHIEF: Custom scenarios' do
     let!(:gono) { create :goods_nomenclature, :declarable, :with_indent,
                                              goods_nomenclature_sid: 97701,
                                              goods_nomenclature_item_id: '1104291710',
-                                             producline_suffix: 80,
+                                             producline_suffix: "80",
                                              validity_start_date: Date.new(2013,7,1),
                                              validity_end_date: nil}
 
@@ -330,7 +329,7 @@ describe 'CHIEF: Custom scenarios' do
     let!(:gono) { create :goods_nomenclature, :declarable, :with_indent,
                                              goods_nomenclature_sid: 97701,
                                              goods_nomenclature_item_id: '6111301000',
-                                             producline_suffix: 80,
+                                             producline_suffix: "80",
                                              validity_start_date: Date.new(1999,7,1),
                                              validity_end_date: nil}
     let!(:national_geographical_area)  { create :geographical_area, geographical_area_id: 'B110', validity_start_date: Date.new(1999,7,1),
@@ -355,7 +354,7 @@ describe 'CHIEF: Custom scenarios' do
     let!(:gono) { create :goods_nomenclature, :declarable, :with_indent,
                                              goods_nomenclature_sid: 79289,
                                              goods_nomenclature_item_id: "3902200010",
-                                             producline_suffix: 80,
+                                             producline_suffix: "80",
                                              validity_start_date: Date.new(1999,7,1),
                                              validity_end_date: nil}
     let!(:mfcm) { create :mfcm, msrgp_code: 'EX',

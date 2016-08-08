@@ -46,6 +46,10 @@ class User < Sequel::Model
     remotely_signed_out
   end
 
+  def disabled?
+    disabled
+  end
+
   def update_attribute(attribute, value)
     update({ attribute => value })
   end

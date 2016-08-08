@@ -1,5 +1,3 @@
-require 'formatter'
-
 class MeasureConditionComponent < Sequel::Model
   plugin :time_machine
   plugin :oplog, primary_key: [:measure_condition_sid,

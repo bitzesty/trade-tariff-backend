@@ -1,6 +1,3 @@
-require 'time_machine'
-require 'formatter'
-
 class GoodsNomenclatureDescription < Sequel::Model
   include Formatter
 

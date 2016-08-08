@@ -15,11 +15,11 @@ describe Commodity do
       let!(:heading1) { create :heading, goods_nomenclature_item_id: "#{gono1.goods_nomenclature_item_id.first(4)}000000",
                                          validity_start_date: Date.new(1991,1,1),
                                          validity_end_date: Date.new(2002,1,1),
-                                         producline_suffix: 80 }
+                                         producline_suffix: "80" }
       let!(:heading2) { create :heading, goods_nomenclature_item_id: "#{gono1.goods_nomenclature_item_id.first(4)}000000",
                                          validity_start_date: Date.new(2002,1,1),
                                          validity_end_date: Date.new(2014,1,1),
-                                         producline_suffix: 80 }
+                                         producline_suffix: "80" }
 
       context 'fetching actual' do
         it 'fetches correct chapter' do
@@ -135,8 +135,38 @@ describe Commodity do
                                              validity_start_date: Date.today.ago(2.years)  }
 
       it 'groups measures by measure_generating_regulation_id and picks latest one' do
-        expect(commodity.measures.map(&:measure_sid)).to     include measure1.measure_sid
-        expect(commodity.measures.map(&:measure_sid)).to_not include measure2.measure_sid
+        TimeMachine.at(Date.current) do
+          expect(commodity.measures.map(&:measure_sid)).to     include measure1.measure_sid
+          expect(commodity.measures.map(&:measure_sid)).to_not include measure2.measure_sid
+        end
+      end
+    end
+
+    describe 'measure duplication on same date but different goods_nomenclature_item_id' do
+      let(:measure_type) { create :measure_type }
+      let(:commodity)    { create :commodity, :with_indent, validity_start_date: Date.today.ago(3.years), goods_nomenclature_item_id: "2202901919" }
+      let!(:measure1)    { create :measure, measure_sid: 1,
+                                           measure_type_id: measure_type.measure_type_id,
+                                           additional_code_type_id: nil,
+                                           goods_nomenclature_sid: commodity.goods_nomenclature_sid,
+                                           goods_nomenclature_item_id: "2202901900",
+                                           validity_start_date: Date.today.ago(1.year)  }
+      let!(:measure2)    { create :measure,  measure_sid: 2,
+                                            measure_generating_regulation_id: measure1.measure_generating_regulation_id,
+                                            geographical_area_id: measure1.geographical_area_id,
+                                            measure_type_id: measure_type.measure_type_id,
+                                            geographical_area_sid: measure1.geographical_area_sid,
+                                            goods_nomenclature_sid: commodity.goods_nomenclature_sid,
+                                            goods_nomenclature_item_id: "2202901919",
+                                            additional_code_type_id: measure1.additional_code_type_id,
+                                            additional_code_id: measure1.additional_code_id,
+                                            validity_start_date: Date.today.ago(1.years)  }
+
+      it 'groups measures by measure_generating_regulation_id and picks the measure with the highest goods_nomenclature_item_id' do
+        TimeMachine.at(Date.current) do
+          expect(commodity.measures.map(&:measure_sid)).to_not     include measure1.measure_sid
+          expect(commodity.measures.map(&:measure_sid)).to include measure2.measure_sid
+        end
       end
     end
 
@@ -182,7 +212,7 @@ describe Commodity do
       end
     end
 
-    describe 'measures and regulations' do
+    describe 'measures and base_regulations' do
       let!(:commodity)       { create :commodity, :with_indent,
                                                   validity_start_date: Time.now.ago(10.years) }
       let!(:measure_type)    { create :measure_type }
@@ -200,6 +230,48 @@ describe Commodity do
                                                 validity_end_date: Time.now.ago(18.months),
                                                 geographical_area_sid: 2 }
       let!(:measure3)        { create :measure, measure_generating_regulation_id: base_regulation.base_regulation_id,
+                                                goods_nomenclature_sid: commodity.goods_nomenclature_sid,
+                                                measure_type_id: measure_type.measure_type_id,
+                                                validity_start_date: Time.now.ago(10.years),
+                                                validity_end_date: nil,
+                                                geographical_area_sid: 3 }
+
+      it 'measure validity date superseeds regulation validity date' do
+        measures = TimeMachine.at(Time.now.ago(1.year)) { Commodity.actual.first.measures }.map(&:measure_sid)
+        expect(measures).to     include measure3.measure_sid
+        expect(measures).to_not include measure2.measure_sid
+        expect(measures).to_not include measure1.measure_sid
+
+        measures = TimeMachine.at(Time.now.ago(2.years)) { Commodity.actual.first.measures }.map(&:measure_sid)
+        expect(measures).to     include measure3.measure_sid
+        expect(measures).to     include measure2.measure_sid
+        expect(measures).to_not include measure1.measure_sid
+
+        measures = TimeMachine.at(Time.now.ago(3.years)) { Commodity.actual.first.measures }.map(&:measure_sid)
+        expect(measures).to     include measure3.measure_sid
+        expect(measures).to     include measure2.measure_sid
+        expect(measures).to     include measure1.measure_sid
+      end
+    end
+
+    describe 'measures and modification_regulations' do
+      let!(:commodity)       { create :commodity, :with_indent,
+                                                  validity_start_date: Time.now.ago(10.years) }
+      let!(:measure_type)    { create :measure_type }
+      let!(:modification_regulation) { create :modification_regulation, effective_end_date: Time.now.ago(1.month) }
+      let!(:measure1)        { create :measure, measure_generating_regulation_id: modification_regulation.modification_regulation_id,
+                                                validity_end_date: Time.now.ago(30.months),
+                                                goods_nomenclature_sid: commodity.goods_nomenclature_sid,
+                                                validity_start_date: Time.now.ago(10.years),
+                                                measure_type_id: measure_type.measure_type_id,
+                                                geographical_area_sid: 1  }
+      let!(:measure2)        { create :measure, measure_generating_regulation_id: modification_regulation.modification_regulation_id,
+                                                goods_nomenclature_sid: commodity.goods_nomenclature_sid,
+                                                measure_type_id: measure_type.measure_type_id,
+                                                validity_start_date: Time.now.ago(10.years),
+                                                validity_end_date: Time.now.ago(18.months),
+                                                geographical_area_sid: 2 }
+      let!(:measure3)        { create :measure, measure_generating_regulation_id: modification_regulation.modification_regulation_id,
                                                 goods_nomenclature_sid: commodity.goods_nomenclature_sid,
                                                 measure_type_id: measure_type.measure_type_id,
                                                 validity_start_date: Time.now.ago(10.years),
@@ -308,7 +380,7 @@ describe Commodity do
                                 number_indents: 7,
                                 validity_start_date: Date.new(2010,1,1))  }
       let!(:indent2) { create(:goods_nomenclature_indent,
-                                number_indents: 5,
+                                number_indents: 7,
                                 goods_nomenclature_sid: ancestor_commodity.goods_nomenclature_sid,
                                 goods_nomenclature_item_id: ancestor_commodity.goods_nomenclature_item_id,
                                 validity_start_date: Date.new(1995,1,1))  }

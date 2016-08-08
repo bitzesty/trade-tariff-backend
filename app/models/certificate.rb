@@ -13,7 +13,7 @@ class Certificate < Sequel::Model
   end
 
   def certificate_description
-    certificate_descriptions.first
+    certificate_descriptions(true).first
   end
 
   one_to_many :certificate_types, key: :certificate_type_code,
@@ -22,10 +22,8 @@ class Certificate < Sequel::Model
   end
 
   def certificate_type
-    certificate_types.first
+    certificate_types(true).first
   end
 
   delegate :description, to: :certificate_description
 end
-
-

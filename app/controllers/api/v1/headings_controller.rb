@@ -40,13 +40,17 @@ module Api
 
         end
 
+        @heading_cache_key = "heading-#{@heading.goods_nomenclature_sid}-#{actual_date}-#{@heading.declarable?}"
         respond_with @heading
       end
 
       def changes
-        @changes = ChangeLog.new(@heading.changes.where { |o|
-          o.operation_date <= actual_date
-        })
+        key = "heading-#{@heading.goods_nomenclature_sid}-#{actual_date}/changes"
+        @changes = Rails.cache.fetch(key, expires_at: actual_date.end_of_day) do
+          ChangeLog.new(@heading.changes.where { |o|
+            o.operation_date <= actual_date
+          })
+        end
 
         render 'api/v1/changes/changes'
       end

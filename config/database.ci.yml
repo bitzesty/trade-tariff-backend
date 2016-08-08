@@ -1,9 +1,0 @@
-test:
-  adapter: mysql2
-  encoding: utf8
-  reconnect: true
-  database: circle_ruby_test
-  single_threaded: true
-  username: ubuntu
-  host: localhost
-  socket: /var/run/mysqld/mysqld.sock

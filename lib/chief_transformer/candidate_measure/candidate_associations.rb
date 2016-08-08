@@ -1,5 +1,5 @@
 class ChiefTransformer
-  class CandidateMeasure < Sequel::Model
+  class CandidateMeasure < Sequel::Model(:measures_oplog)
     class CandidateAssociations
       attr_reader :map, :measure
 

@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :rollback do
-    date { Date.today }
+    date { Date.current }
     reason { SecureRandom.hex }
     user_id { create(:user).id }
   end

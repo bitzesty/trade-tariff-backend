@@ -3,21 +3,26 @@ require 'tariff_synchronizer'
 
 describe TariffSynchronizer do
   describe '#apply', truncation: true do
-    let(:example_date)  { Date.today }
     let!(:taric_update) { create :taric_update, example_date: example_date }
     let!(:chief_update) { create :chief_update, example_date: example_date }
 
-
-    before {
+    before(:context) do
       prepare_synchronizer_folders
-      create_taric_file :pending, example_date
-      create_chief_file :pending, example_date
-    }
+      create_taric_file example_date
+      create_chief_file example_date
+    end
 
-    after  {
+    after(:context) do
       purge_synchronizer_folders
-    }
+    end
 
+    context "when everything is fine" do
+      it "applies missing updates" do
+        TariffSynchronizer.apply
+        expect(taric_update.reload).to be_applied
+        expect(chief_update.reload).to be_applied
+      end
+    end
 
     context 'when chief fails' do
       before do
@@ -53,14 +58,6 @@ describe TariffSynchronizer do
       end
     end
 
-    context 'when everything is fine' do
-      it 'applies missing updates' do
-        TariffSynchronizer.apply
-        expect(taric_update.reload).to be_applied
-        expect(chief_update.reload).to be_applied
-      end
-    end
-
     context 'but elasticsearch is buggy' do
       before do
         expect_any_instance_of(TaricImporter::Transaction).to receive(
@@ -93,8 +90,8 @@ describe TariffSynchronizer do
   end
 
   describe '.rollback' do
-    let!(:measure) { create :measure, operation_date: Date.today }
-    let!(:update)  { create :chief_update, :applied, issue_date: Date.today }
+    let!(:measure) { create :measure, operation_date: Date.current }
+    let!(:update)  { create :chief_update, :applied, issue_date: Date.current }
     let!(:mfcm)    { create :mfcm, origin: update.filename }
 
     context 'successful run' do
@@ -178,5 +175,9 @@ describe TariffSynchronizer do
         expect { older_update.reload }.not_to raise_error
       end
     end
+  end
+
+  def example_date
+    @example_date ||= Date.current
   end
 end

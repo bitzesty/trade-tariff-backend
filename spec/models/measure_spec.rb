@@ -19,6 +19,43 @@ describe Measure do
     end
   end
 
+  describe '#measures with different dates' do
+    it 'returns all measures that are relevant to the modification regulation' do
+      Sequel::Model.db.run(%{
+        INSERT INTO measures_oplog (measure_sid, measure_type_id, geographical_area_id, goods_nomenclature_item_id, validity_start_date, validity_end_date, measure_generating_regulation_role, measure_generating_regulation_id, justification_regulation_role, justification_regulation_id, stopped_flag, geographical_area_sid, goods_nomenclature_sid, ordernumber, additional_code_type_id, additional_code_id, additional_code_sid, reduction_indicator, export_refund_nomenclature_sid, national, tariff_measure_number, invalidated_by, invalidated_at, oid, operation, operation_date)
+        VALUES
+        (3445395, '103', '1011', '0805201000', '2016-01-01 00:00:00', '2016-02-29 00:00:00', 4, 'R1517542', 4, 'R1517542', false, 400, 68304, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3071870, 'U', '2015-11-26'),
+        (3445396, '103', '1011', '0805201000', '2016-03-01 00:00:00', '2016-10-31 00:00:00', 4, 'R1517542', 4, 'R1517542', false, 400, 68304, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3071871, 'U', '2015-11-26'),
+        (3445397, '103', '1011', '0805201000', '2016-11-01 00:00:00', '2016-12-31 00:00:00', 4, 'R1517542', 4, 'R1517542', false, 400, 68304, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3071872, 'U', '2015-11-26');
+      })
+      Sequel::Model.db.run(%{
+        INSERT INTO modification_regulations_oplog (modification_regulation_role, modification_regulation_id, validity_start_date, validity_end_date, published_date, officialjournal_number, officialjournal_page, base_regulation_role, base_regulation_id, replacement_indicator, stopped_flag, information_text, approved_flag, explicit_abrogation_regulation_role, explicit_abrogation_regulation_id, effective_end_date, complete_abrogation_regulation_role, complete_abrogation_regulation_id, oid, operation, operation_date)
+        VALUES
+        (4, 'R1517542', '2016-01-01 00:00:00', NULL, '2015-10-30', 'L 285', 1, 1, 'R8726580', 0, false, 'CN 2016 (Entry prices)', true, NULL, NULL, NULL, NULL, NULL, 26064, 'C', '2015-11-26');
+      })
+      Sequel::Model.db.run(%{
+        INSERT INTO goods_nomenclatures_oplog (goods_nomenclature_sid, goods_nomenclature_item_id, producline_suffix, validity_start_date, validity_end_date, statistical_indicator, created_at, oid, operation, operation_date)
+        VALUES
+	      (68304, '0805201000', '80', '1998-01-01 00:00:00', NULL, 0, '2013-08-02 20:03:55', 37691, 'C', NULL),
+        (70329, '0805201005', '80', '1999-01-01 00:00:00', NULL, 0, '2013-08-02 20:04:48', 39237, 'C', NULL);
+
+        INSERT INTO goods_nomenclature_indents_oplog (goods_nomenclature_indent_sid, goods_nomenclature_sid, validity_start_date, number_indents, goods_nomenclature_item_id, productline_suffix, created_at, validity_end_date, oid, operation, operation_date)
+        VALUES
+	      (67883, 68304, '1998-01-01 00:00:00', 2, '0805201000', '80', '2013-08-02 20:03:55', NULL, 38832, 'C', NULL),
+	      (69920, 70329, '1999-01-01 00:00:00', 3, '0805201005', '80', '2013-08-02 20:04:48', NULL, 40421, 'C', NULL);
+      })
+
+      expect(Measure.with_modification_regulations.all.count).to eq 3
+      # Measures on a parent code should also be present (e.g. 0805201000 on 0805201005)
+      expect(Commodity.by_code('0805201005').first.measures.count).to eq 3
+      # In TimeMachine we should only see vaild/the correct measure (with start date within the time range)
+      # expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Measure.with_modification_regulations.with_actual(ModificationRegulation).all.count }).to eq 1
+      expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Measure.with_modification_regulations.with_actual(ModificationRegulation).all.first.measure_sid }).to eq 3445396
+      expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Commodity.by_code('0805201005').first.measures.count }).to eq 1
+      expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Commodity.by_code('0805201005').first.measures.first.measure_sid }).to eq 3445396
+    end
+  end
+
   # According to Taric guide
   describe '#validity_end_date' do
     let(:base_regulation) { create :base_regulation, effective_end_date: Date.yesterday }
@@ -286,7 +323,7 @@ describe Measure do
                           .eager(:footnotes)
                           .all
                           .first
-                          .footnotes.map(&:pk)
+                          .footnotes(true).map(&:pk)
             ).to include footnote1.pk
           end
 
@@ -296,7 +333,7 @@ describe Measure do
                           .eager(:footnotes)
                           .all
                           .first
-                          .footnotes.map(&:pk)
+                          .footnotes(true).map(&:pk)
             ).to include footnote2.pk
           end
         end
@@ -983,9 +1020,8 @@ describe Measure do
 
   describe '.changes_for' do
     context 'measure validity start date lower than requested date' do
-      let!(:measure) { create :measure, validity_start_date: Date.new(2014,2,1) }
-
       it 'incudes measure' do
+        create :measure, validity_start_date: Date.new(2014,2,1)
         TimeMachine.at(Date.new(2014,1,30)) do
           expect(Measure.changes_for).to be_empty
         end
@@ -993,12 +1029,22 @@ describe Measure do
     end
 
     context 'measure validity start date higher than requested date' do
-      let!(:measure) { create :measure, validity_start_date: Date.new(2014,2,1) }
-
       it 'does not include measure' do
+        measure = create :measure, validity_start_date: Date.new(2014,2,1)
         TimeMachine.at(Date.new(2014,2,1)) do
           expect(Measure.changes_for).not_to be_empty
           expect(Measure.changes_for.first.oid).to eq measure.source.oid
+        end
+      end
+
+      it 'returns records with NULL operation_date last' do
+        create :measure, validity_start_date: Date.new(2014,2,1), operation_date: Date.new(2014,2,1)
+        create :measure, validity_start_date: Date.new(2014,2,1)
+        TimeMachine.at(Date.new(2014,2,1)) do
+          changes_for = Measure.changes_for
+          expect(changes_for.count).to eq(2)
+          expect(changes_for.first.operation_date).to be_truthy
+          expect(changes_for.last.operation_date).to be_falsey
         end
       end
     end

@@ -1,17 +1,17 @@
-development:
-  adapter: mysql2
+default: &default
+  adapter: postgresql
   encoding: utf8
-  reconnect: true
+  pool: 5
+
+development:
+  <<: *default
   database: tariff_development
-  single_threaded: true
-  username: tariff
-  password: tariff
 
 test:
-  adapter: mysql2
-  encoding: utf8
-  reconnect: true
+  <<: *default
   database: tariff_test
-  single_threaded: true
-  username: tariff
-  password: tariff
+
+production:
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
+  pool: <%= ENV['DB_POOL'] || ENV['MAX_THREADS'] || 5 %>

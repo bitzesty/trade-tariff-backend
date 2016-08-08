@@ -42,6 +42,7 @@ class Measure < Sequel::Model
                                              left_primary_key: :measure_sid,
                                              right_key: :excluded_geographical_area,
                                              right_primary_key: :geographical_area_id,
+                                             order: Sequel.asc(:geographical_area_id),
                                              class_name: 'GeographicalArea'
 
   many_to_many :footnotes, join_table: :footnote_association_measures,
@@ -143,17 +144,47 @@ class Measure < Sequel::Model
 
   dataset_module do
     def with_base_regulations
-      select(Sequel.expr(:measures).*).
-      select_append(Sequel.as(Sequel.function(:if, Sequel.lit('measures.validity_start_date IS NOT NULL'), Sequel.lit('measures.validity_start_date'), Sequel.lit('base_regulations.validity_start_date')), :effective_start_date)).
-      select_append(Sequel.as(Sequel.function(:if, Sequel.lit('measures.validity_end_date IS NOT NULL'), Sequel.lit('measures.validity_end_date'), Sequel.lit('base_regulations.effective_end_date')), :effective_end_date)).
-      join_table(:inner, :base_regulations, base_regulations__base_regulation_id: :measures__measure_generating_regulation_id)
+      query = if model.point_in_time.present?
+        distinct(:measure_generating_regulation_id, :measure_type_id, :goods_nomenclature_sid, :geographical_area_id, :geographical_area_sid, :additional_code_type_id, :additional_code_id).select(Sequel.expr(:measures).*)
+      else
+        select(Sequel.expr(:measures).*)
+      end
+      query.
+        select_append(Sequel.as(Sequel.case({{Sequel.qualify(:measures, :validity_start_date)=>nil}=>Sequel.lit('base_regulations.validity_start_date')}, Sequel.lit('measures.validity_start_date')), :effective_start_date)).
+        select_append(Sequel.as(Sequel.case({{Sequel.qualify(:measures, :validity_end_date)=>nil}=>Sequel.lit('base_regulations.effective_end_date')}, Sequel.lit('measures.validity_end_date')), :effective_end_date)).
+        join_table(:inner, :base_regulations, base_regulations__base_regulation_id: :measures__measure_generating_regulation_id).
+        actual_for_base_regulations
     end
 
     def with_modification_regulations
-      select(Sequel.expr(:measures).*).
-      select_append(Sequel.as(Sequel.function(:if, Sequel.lit('measures.validity_start_date IS NOT NULL'), Sequel.lit('measures.validity_start_date'), Sequel.lit('modification_regulations.validity_start_date')), :effective_start_date)).
-      select_append(Sequel.as(Sequel.function(:if, Sequel.lit('measures.validity_end_date IS NOT NULL'), Sequel.lit('measures.validity_end_date'), Sequel.lit('modification_regulations.effective_end_date')), :effective_end_date)).
-      join_table(:inner, :modification_regulations, modification_regulations__modification_regulation_id: :measures__measure_generating_regulation_id)
+      query = if model.point_in_time.present?
+        distinct(:measure_generating_regulation_id, :measure_type_id, :goods_nomenclature_sid, :geographical_area_id, :geographical_area_sid, :additional_code_type_id, :additional_code_id).select(Sequel.expr(:measures).*)
+      else
+        select(Sequel.expr(:measures).*)
+      end
+      query.
+        select_append(Sequel.as(Sequel.case({{Sequel.qualify(:measures, :validity_start_date)=>nil}=>Sequel.lit('modification_regulations.validity_start_date')}, Sequel.lit('measures.validity_start_date')), :effective_start_date)).
+        select_append(Sequel.as(Sequel.case({{Sequel.qualify(:measures, :validity_end_date)=>nil}=>Sequel.lit('modification_regulations.effective_end_date')}, Sequel.lit('measures.validity_end_date')), :effective_end_date)).
+        join_table(:inner, :modification_regulations, modification_regulations__modification_regulation_id: :measures__measure_generating_regulation_id).
+        actual_for_modifications_regulations
+    end
+
+    def actual_for_base_regulations
+      if model.point_in_time.present?
+        filter{|o| o.<=(Sequel.case({{Sequel.qualify(:measures, :validity_start_date)=>nil}=>Sequel.lit('base_regulations.validity_start_date')}, Sequel.lit('measures.validity_start_date')), model.point_in_time) &
+        (o.>=(Sequel.case({{Sequel.qualify(:measures, :validity_end_date)=>nil}=>Sequel.lit('base_regulations.effective_end_date')}, Sequel.lit('measures.validity_end_date')), model.point_in_time) | ({Sequel.case({{Sequel.qualify(:measures, :validity_end_date)=>nil}=>Sequel.lit('base_regulations.effective_end_date')}, Sequel.lit('measures.validity_end_date')) => nil})) }
+      else
+        self
+      end
+    end
+
+    def actual_for_modifications_regulations
+      if model.point_in_time.present?
+        filter{|o| o.<=(Sequel.case({{Sequel.qualify(:measures, :validity_start_date)=>nil}=>Sequel.lit('modification_regulations.validity_start_date')}, Sequel.lit('measures.validity_start_date')), model.point_in_time) &
+        (o.>=(Sequel.case({{Sequel.qualify(:measures, :validity_end_date)=>nil}=>Sequel.lit('modification_regulations.effective_end_date')}, Sequel.lit('measures.validity_end_date')), model.point_in_time) | ({Sequel.case({{Sequel.qualify(:measures, :validity_end_date)=>nil}=>Sequel.lit('modification_regulations.effective_end_date')}, Sequel.lit('measures.validity_end_date')) => nil})) }
+      else
+        self
+      end
     end
 
     def with_measure_type(condition_measure_type)
@@ -363,7 +394,7 @@ class Measure < Sequel::Model
 
   def self.changes_for(depth = 1, conditions = {})
     operation_klass.select(
-      Sequel.as('Measure', :model),
+      Sequel.as(Sequel.cast_string("Measure"), :model),
       :oid,
       :operation_date,
       :operation,
@@ -371,6 +402,6 @@ class Measure < Sequel::Model
     ).where(conditions)
      .where { |o| o.<=(:validity_start_date, point_in_time) }
      .limit(TradeTariffBackend.change_count)
-     .order(Sequel.function(:isnull, :operation_date), Sequel.desc(:operation_date))
+     .order(Sequel.desc(:operation_date, nulls: :last))
   end
 end

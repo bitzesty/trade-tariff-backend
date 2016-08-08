@@ -10,7 +10,7 @@ shared_examples_for 'search references controller' do
   describe "GET #index" do
     let(:pattern) {
       [
-        {id: Integer, title: String, referenced: Hash, referenced_class: String, referenced_id: String }
+        {id: Integer, title: String, referenced_class: String, referenced_id: String }
       ]
     }
 

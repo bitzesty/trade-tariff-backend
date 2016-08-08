@@ -23,7 +23,12 @@ sections = [
 ]
 
 sections.each do |sec|
-  Section.insert(position: sec[:position], numeral: sec[:numeral], title: sec[:title])
+  Section.insert(
+    title: sec[:title],
+    numeral: sec[:numeral],
+    position: sec[:position],
+    created_at: Time.now
+  )
 end
 
 # Map chapters to sections
