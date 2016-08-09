@@ -1,1 +1,30 @@
-.gitignore
+# Ignore bundler config.
+/.bundle
+
+# Ignore bundler circle ci cache.
+vendor/bundle/*
+
+# Ignore all logfiles and tempfiles.
+/log/*
+!/log/.keep
+/tmp/*
+.byebug_history
+
+# Local tariff files
+data/*/*.xml
+data/*/*.txt
+
+# Environment files
+.env
+
+# Cloud Foundry manifest files
+*manifest.yml
+cf-ssh.yml
+
+# Other files
+config/trade_tariff_backend_secrets.yml
+*.DS_Store
+/coverage/*
+
+# Ignore git
+.git
