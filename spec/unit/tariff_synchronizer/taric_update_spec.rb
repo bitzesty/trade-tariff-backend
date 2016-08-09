@@ -16,25 +16,6 @@ describe TariffSynchronizer::TaricUpdate do
     end
   end
 
-  describe ".sync" do
-    let(:not_found_response) { build :response, :not_found }
-
-    it "notifies about several missing updates in a row" do
-      allow(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform).and_return(not_found_response)
-      expect(TariffSynchronizer::TaricUpdate).to receive(:notify_about_missing_updates)
-      create :taric_update, :missing, issue_date: Date.today.ago(2.days)
-      create :taric_update, :missing, issue_date: Date.today.ago(3.days)
-      TariffSynchronizer::TaricUpdate.sync
-    end
-
-    it "Calls the difference from the intial update to the current time, the donwload method" do
-      expect(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform).and_return(not_found_response).exactly(3).times
-      travel_to TariffSynchronizer.taric_initial_update_date + 2 do
-        TariffSynchronizer::TaricUpdate.sync
-      end
-    end
-  end
-
   describe "#import!" do
 
     let(:taric_update) { create :taric_update}
