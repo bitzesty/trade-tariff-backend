@@ -141,9 +141,12 @@ module TariffSynchronizer
       end
 
       def notify_about_missing_updates
+        return if Rails.cache.read("missing_updates_notification_sent")
+
         instrument("missing_updates.tariff_synchronizer",
                    update_type: update_type,
                    count: TariffSynchronizer.warning_day_count)
+        Rails.cache.write("missing_updates_notification_sent", true, expires_in: DateTime.current.seconds_until_end_of_day)
       end
     end
   end
