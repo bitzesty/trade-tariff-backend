@@ -44,10 +44,8 @@ end
 child(:geographical_area) do
   attributes :id, :description
 
-  unless locals[:object].third_country?
-    child(contained_geographical_areas: :children_geographical_areas) do
-      attributes :id, :description
-    end
+  child(contained_geographical_areas: :children_geographical_areas) do
+    attributes :id, :description
   end
 end
 
