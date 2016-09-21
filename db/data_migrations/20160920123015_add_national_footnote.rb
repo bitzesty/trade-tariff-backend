@@ -42,10 +42,12 @@ TradeTariffBackend::DataMigrator.migration do
     Footnote::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).delete
     FootnoteDescription::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).delete
     FootnoteDescriptionPeriod::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).delete
+    FootnoteAssociationGoodsNomenclature::Operation.where(footnote_type: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).delete
   end
 
   up do
     applicable {
+      FootnoteAssociationGoodsNomenclature.where(footnote_type: FOOTNOTE_TYPE_ID,footnote_id: FOOTNOTE_ID).none? ||
       Footnote::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).none? ||
       FootnoteDescription::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID, description: FOOTNOTE_DESCRIPTION).none? ||
       FootnoteDescriptionPeriod::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).none?
@@ -81,6 +83,18 @@ TradeTariffBackend::DataMigrator.migration do
         fd.description = FOOTNOTE_DESCRIPTION
         fd.operation_date = nil # as it came from initial import
       }.save
+
+      Commodity.where(goods_nomenclature_item_id: GOODS_NOMENCLATURE_ITEM_IDS).each { |commodity|
+       FootnoteAssociationGoodsNomenclature.new { |fa_gn|
+         fa_gn.goods_nomenclature_sid = commodity.goods_nomenclature_sid
+         fa_gn.goods_nomenclature_item_id = commodity.goods_nomenclature_item_id
+         fa_gn.footnote_type = FOOTNOTE_TYPE_ID
+         fa_gn.footnote_id = FOOTNOTE_ID
+         fa_gn.national = true
+         fa_gn.validity_start_date = VALIDITY_START_DATE
+         fa_gn.operation_date = nil # as it came from initial import
+       }.save
+     }
     }
   end
 
@@ -89,7 +103,7 @@ TradeTariffBackend::DataMigrator.migration do
       Footnote::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).any? ||
       FootnoteDescription::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).any? ||
       FootnoteDescriptionPeriod::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).any? ||
-      FootnoteAssociationMeasure::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).any?
+      FootnoteAssociationGoodsNomenclature::Operation.where(footnote_type: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).any?
     }
 
     apply {
