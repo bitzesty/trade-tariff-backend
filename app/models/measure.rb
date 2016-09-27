@@ -46,6 +46,7 @@ class Measure < Sequel::Model
                                              class_name: 'GeographicalArea'
 
   many_to_many :footnotes, join_table: :footnote_association_measures,
+                           order: Sequel.asc(:national, nulls: :first),
                            left_key: :measure_sid,
                            right_key: [:footnote_type_id, :footnote_id] do |ds|
                              ds.with_actual(Footnote)
