@@ -131,9 +131,7 @@ describe AdditionalCodeType do
     end
 
     describe 'CT11' do
-      pending 'The additional code type cannot be deleted if it is related with an Export Refund for Processed Agricultural Goods additional code.' do
-        raise "pending - to do"
-      end
+      pending 'The additional code type cannot be deleted if it is related with an Export Refund for Processed Agricultural Goods additional code.'
     end
   end
 end
