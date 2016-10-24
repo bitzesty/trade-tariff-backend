@@ -350,7 +350,7 @@ describe 'CHIEF: Custom scenarios' do
   end
 
   describe 'Scenario: Excise Measure with duty type 30 and tty code 570, 571, created measure' do
-    let!(:geographical_area)           { create :geographical_area, :erga_omnes }
+    let!(:geographical_area)           { create :geographical_area, :erga_omnes, validity_start_date: DateTime.new(2013,10,1) }
     let!(:gono) { create :goods_nomenclature, :declarable, :with_indent,
                                              goods_nomenclature_sid: 79289,
                                              goods_nomenclature_item_id: "3902200010",
