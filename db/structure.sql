@@ -381,7 +381,7 @@ CREATE TABLE audits (
     auditable_id integer NOT NULL,
     auditable_type text NOT NULL,
     action text NOT NULL,
-    changes text NOT NULL,
+    changes json NOT NULL,
     version integer NOT NULL
 );
 
