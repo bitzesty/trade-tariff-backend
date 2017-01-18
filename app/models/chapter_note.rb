@@ -1,6 +1,7 @@
 class ChapterNote < Sequel::Model
   plugin :json_serializer
   plugin :active_model
+  plugin :auditable
 
   many_to_one :chapter, dataset: -> {
     Chapter.where(goods_nomenclature_item_id: chapter_goods_id)
