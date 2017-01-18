@@ -1,6 +1,6 @@
 class Audit < Sequel::Model
 
-  many_to_one :auditable, reciprocal: :audits,
+  many_to_one :auditable, reciprocal: :audits, reciprocal_type: :many_to_one,
                           setter: (proc do |auditable|
                               self[:auditable_id] = (auditable.pk if auditable)
                               self[:auditable_type] = (auditable.class.name if auditable)
@@ -24,4 +24,15 @@ class Audit < Sequel::Model
                                 end
                               end
                             end)
+
+
+  def before_create
+    set_version_number
+    super
+  end
+
+  def set_version_number
+    max = Audit.where(auditable_id: auditable_id, auditable_type: auditable_type).reverse(:version).first.try(:version) || 0
+    self.version = max + 1
+  end
 end
