@@ -7,7 +7,7 @@ class Audit < Sequel::Model
                             end),
                             dataset: (proc do
                               klass = auditable_type.constantize
-                              klass.where(klassprimary_key: auditable_id)
+                              klass.where(klass.primary_key => auditable_id)
                             end),
                             eager_loader: (proc do |eo|
                               id_map = {}
@@ -17,7 +17,7 @@ class Audit < Sequel::Model
                               end
                               id_map.each do |klass_name, id_map|
                                 klass = klass_name.constantize
-                                klass.where(klassprimary_key: id_map.keys).all do |attach|
+                                klass.where(klass.primary_key => id_map.keys).all do |attach|
                                   id_map[attach.pk].each do |asset|
                                     asset.associations[:auditable] = attach
                                   end
