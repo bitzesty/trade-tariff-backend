@@ -7,6 +7,7 @@ Sequel.migration do
       String :action, null: false
       json :changes, null: false
       integer :version, null: false
+      DateTime :created_at, null: false
     end
   end
 end

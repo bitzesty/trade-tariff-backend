@@ -382,7 +382,8 @@ CREATE TABLE audits (
     auditable_type text NOT NULL,
     action text NOT NULL,
     changes json NOT NULL,
-    version integer NOT NULL
+    version integer NOT NULL,
+    created_at timestamp without time zone NOT NULL
 );
 
 
