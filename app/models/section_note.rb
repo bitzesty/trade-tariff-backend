@@ -1,6 +1,7 @@
 class SectionNote < Sequel::Model
   plugin :json_serializer
   plugin :active_model
+  plugin :auditable
 
   many_to_one :section
 
