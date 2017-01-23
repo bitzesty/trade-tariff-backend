@@ -373,6 +373,40 @@ ALTER SEQUENCE additional_codes_oid_seq OWNED BY additional_codes_oplog.oid;
 
 
 --
+-- Name: audits; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE audits (
+    id integer NOT NULL,
+    auditable_id integer NOT NULL,
+    auditable_type text NOT NULL,
+    action text NOT NULL,
+    changes json NOT NULL,
+    version integer NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: audits_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE audits_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: audits_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE audits_id_seq OWNED BY audits.id;
+
+
+--
 -- Name: base_regulations_oplog; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -6267,6 +6301,13 @@ ALTER TABLE ONLY additional_codes_oplog ALTER COLUMN oid SET DEFAULT nextval('ad
 
 
 --
+-- Name: audits id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY audits ALTER COLUMN id SET DEFAULT nextval('audits_id_seq'::regclass);
+
+
+--
 -- Name: base_regulations_oplog oid; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -7033,6 +7074,14 @@ ALTER TABLE ONLY additional_code_types_oplog
 
 ALTER TABLE ONLY additional_codes_oplog
     ADD CONSTRAINT additional_codes_pkey PRIMARY KEY (oid);
+
+
+--
+-- Name: audits audits_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY audits
+    ADD CONSTRAINT audits_pkey PRIMARY KEY (id);
 
 
 --
@@ -9961,3 +10010,4 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20150507133620_add_organis
 INSERT INTO "schema_migrations" ("filename") VALUES ('20151214224024_add_model_views_reloaded.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20151214230831_quota_critical_events_view_reloaded.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20161209195324_alter_footnotes_foonote_id_lenght.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20170117212158_create_audits.rb');
