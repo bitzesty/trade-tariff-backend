@@ -53,7 +53,7 @@ class Footnote < Sequel::Model
                                   right_key: [:meursing_table_plan_id, :meursing_heading_number]
 
 
-  delegate :description, :formatted_description, to: :footnote_description, allow_nil: true
+  delegate :description, :formatted_description, to: :footnote_description
 
   dataset_module do
     def national
