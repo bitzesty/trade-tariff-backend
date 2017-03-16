@@ -4,7 +4,7 @@ module Api
       before_filter :authenticate_user!
 
       def index
-        @footnotes = Footnote.eager(:footnote_descriptions).national.all
+        @footnotes = Footnote.actual.eager(:footnote_descriptions).national.all
 
         respond_with @footnotes
       end
