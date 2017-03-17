@@ -23,8 +23,11 @@ cf create-app-manifest $CF_APP
 cf create-app-manifest $CF_APP_WORKER
 
 # Database migrations
-cf push "$CF_APP"-migrations -f "$CF_APP_WORKER"_manifest.yml -c "rake db:migrate" -i 1
-cf push "$CF_APP"-migrations -f "$CF_APP_WORKER"_manifest.yml -c "rake db:data:migrate" -i 1
+cf run-task $CF_APP "bundle exec rake db:migrate" --name "$CF_APP"-db-migrate
+cf run-task $CF_APP "bundle exec rake db:data:migrate" --name "$CF_APP"-db-data-migrate
+
+# cf push "$CF_APP"-migrations -f "$CF_APP_WORKER"_manifest.yml -c "rake db:migrate" -i 1
+# cf push "$CF_APP"-migrations -f "$CF_APP_WORKER"_manifest.yml -c "rake db:data:migrate" -i 1
 
 # Deploy Worker
 cf push $CF_APP_WORKER -f "$CF_APP_WORKER"_manifest.yml
