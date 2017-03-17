@@ -22,3 +22,7 @@ cf-ssh.yml
 config/trade_tariff_backend_secrets.yml
 *.DS_Store
 /coverage/*
+.idea/*
+
+# RVM
+.ruby-gemset
