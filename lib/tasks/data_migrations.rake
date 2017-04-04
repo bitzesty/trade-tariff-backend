@@ -21,5 +21,16 @@ namespace :db do
     task redo: :environment do
       TradeTariffBackend::DataMigrator.redo
     end
+
+    desc "Load old data migrations (run this task once)"
+    task init_migrations_table: :environment do
+      TradeTariffBackend::DataMigrator.send(:migration_files).each do |file|
+        if TradeTariffBackend::DataMigration::LogEntry.where(filename: file).last.nil?
+          l = TradeTariffBackend::DataMigration::LogEntry.new
+          l.filename = file
+          l.save
+        end
+      end
+    end
   end
 end
