@@ -1,7 +1,12 @@
 require 'rails_helper'
 
 describe TradeTariffBackend::DataMigrator do
-  before { TradeTariffBackend::DataMigrator.migrations = [] }
+  before do
+    TradeTariffBackend::DataMigrator.migrations = []
+    allow(TradeTariffBackend).to receive(:data_migration_path).and_return(
+      File.join(Rails.root, 'spec', 'fixtures', 'data_migration_samples')
+    )
+  end
 
   describe '#migration' do
     it 'defines a new migration' do
@@ -32,86 +37,79 @@ describe TradeTariffBackend::DataMigrator do
   end
 
   describe '#migrate' do
-    let(:migration) { double("Migration", can_rollup?: true).as_null_object }
-    let(:applied_migration) { double("Applied Migration", can_rollup?: false).as_null_object }
+    let(:migration) {
+      File.join(Rails.root, 'spec', 'fixtures', 'data_migration_samples', '3_not_applied.rb')
+    }
+
+    let(:applied_migration) {
+      File.join(Rails.root, 'spec', 'fixtures', 'data_migration_samples', '1_applied.rb')
+    }
 
     before {
-      TradeTariffBackend::DataMigrator.migrations = [migration, applied_migration]
+      TradeTariffBackend::DataMigrator.migrate
+      TradeTariffBackend::DataMigration::LogEntry.last.destroy
     }
 
     it 'applies all pending migrations' do
-      TradeTariffBackend::DataMigrator.migrate
-
-      expect(migration).to have_received :up
-      expect(migration).to have_received :apply
+      expect{ TradeTariffBackend::DataMigrator.migrate }.to change(TradeTariffBackend::DataMigration::LogEntry, :count).by(1)
     end
 
     it 'does not apply applied migrations' do
-      TradeTariffBackend::DataMigrator.migrate
-
-      expect(applied_migration).not_to have_received :up
-      expect(applied_migration).not_to have_received :apply
+      expect(TradeTariffBackend::DataMigrator.pending_migration_files).to_not include(applied_migration)
     end
   end
 
   describe '#rollback' do
-    let(:migration) {
-      double("Migration", can_rollup?: true).as_null_object
-    }
-
     let(:applied_migration) {
-      double("Applied Migration", can_rollup?: false).as_null_object
+      File.join(Rails.root, 'spec', 'fixtures', 'data_migration_samples', '1_applied.rb')
     }
 
     let(:other_applied_migration) {
-      double("Other Applied Migration", can_rollup?: false).as_null_object
+      File.join(Rails.root, 'spec', 'fixtures', 'data_migration_samples', '2_applied.rb')
     }
 
-    it 'rolls back last applied migration' do
-      TradeTariffBackend::DataMigrator.migrations = [migration, applied_migration]
-      TradeTariffBackend::DataMigrator.rollback
+    let(:migration) {
+      File.join(Rails.root, 'spec', 'fixtures', 'data_migration_samples', '3_not_applied.rb')
+    }
 
-      expect(applied_migration).to have_received :down
-      expect(applied_migration).to have_received :apply
+    before do
+      allow(TradeTariffBackend::DataMigrator).to receive(:pending_migration_files).and_return(
+        [applied_migration, other_applied_migration]
+      )
+      TradeTariffBackend::DataMigrator.migrate
+    end
+
+    it 'rolls back last applied migration' do
+      expect{ TradeTariffBackend::DataMigrator.rollback }.to change(TradeTariffBackend::DataMigration::LogEntry, :count).by(-1)
+      expect(
+        TradeTariffBackend::DataMigration::LogEntry.where(filename: other_applied_migration).last
+      ).to be_nil
     end
 
     it 'does not rollback two applied migrations' do
-      TradeTariffBackend::DataMigrator.migrations = [
-        migration, other_applied_migration, applied_migration
-      ]
-      TradeTariffBackend::DataMigrator.rollback
-
-      expect(other_applied_migration).not_to have_received :down
-      expect(other_applied_migration).not_to have_received :apply
+      expect(
+        TradeTariffBackend::DataMigration::LogEntry.where(filename: applied_migration).last
+      ).to_not be_nil
     end
 
     it 'does not rollback non applied migrations' do
-      TradeTariffBackend::DataMigrator.migrations = [applied_migration, migration]
-      TradeTariffBackend::DataMigrator.rollback
-
-      expect(migration).to have_received :down
-      expect(migration).to have_received :apply
+      expect(TradeTariffBackend::DataMigrator.pending_migration_files).to_not include(migration)
     end
   end
 
   describe '#redo' do
+    before do
+      allow(TradeTariffBackend::DataMigrator).to receive(:rollback).and_return(nil)
+      allow(TradeTariffBackend::DataMigrator).to receive(:migrate).and_return(nil)
+    end
+
     it 'rolls back last applied migration' do
-      applied_migration = double("Applied Migration", can_rollup?: false).as_null_object
-      TradeTariffBackend::DataMigrator.migrations = [applied_migration]
-
-      expect(applied_migration).to receive :down
-      expect(applied_migration).to receive :apply
-
+      expect_any_instance_of(TradeTariffBackend::DataMigrator).to receive(:rollback)
       TradeTariffBackend::DataMigrator.redo
     end
 
     it 'migrates rolled back migration' do
-      applied_migration = double("Applied Migration", can_rollup?: true).as_null_object
-      TradeTariffBackend::DataMigrator.migrations = [applied_migration]
-
-      expect(applied_migration).to receive :up
-      expect(applied_migration).to receive(:apply).twice
-
+      expect_any_instance_of(TradeTariffBackend::DataMigrator).to receive(:migrate)
       TradeTariffBackend::DataMigrator.redo
     end
   end

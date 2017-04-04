@@ -67,7 +67,6 @@ module TradeTariffBackend
       # get last applied migration
       entry = TradeTariffBackend::DataMigration::LogEntry.last
       return unless entry
-
       # clear migrations array before loading
       @migrations = nil
       # load last migration for rollback
