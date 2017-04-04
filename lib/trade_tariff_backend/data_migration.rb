@@ -4,6 +4,7 @@ require 'trade_tariff_backend/data_migration/block_accessor'
 require 'trade_tariff_backend/data_migration/dependency'
 require 'trade_tariff_backend/data_migration/runner'
 require 'trade_tariff_backend/data_migration/null_runner'
+require 'trade_tariff_backend/data_migration/log_entry'
 
 module TradeTariffBackend
   class DataMigration
