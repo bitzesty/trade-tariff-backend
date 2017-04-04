@@ -1,22 +1,20 @@
 require 'rails_helper'
 
 describe TradeTariffBackend::DataMigrator do
-  before { TradeTariffBackend::DataMigrator.migrations = [] }
+  before do
+    allow(TradeTariffBackend).to receive(:data_migration_path).and_return(
+      File.join(Rails.root, 'spec', 'fixtures', 'data_migration_samples')
+    )
+    TradeTariffBackend::DataMigrator.migrations = []
+  end
 
   describe '#migrate' do
     context 'successful run' do
-      before {
-        TradeTariffBackend::DataMigrator.migration do
-          up do
-            applicable   { Language.dataset.none? }
-            apply        {
-              Language.unrestrict_primary_key
-              Language.create(language_id: 'GB')
-            }
-          end
-        end
-      }
-
+      before do
+        allow(TradeTariffBackend::DataMigrator).to receive(:pending_migration_files).and_return(
+          [File.join(Rails.root, 'spec', 'fixtures', 'data_migration_samples', '1_migrate.rb')]
+        )
+      end
       it 'executes pending migrations' do
         TradeTariffBackend::DataMigrator.migrate
 
@@ -25,19 +23,11 @@ describe TradeTariffBackend::DataMigrator do
     end
 
     context 'run with errors' do
-      before {
-        TradeTariffBackend::DataMigrator.migration do
-          up do
-            applicable   { Language.dataset.none? }
-            apply        {
-              Language.unrestrict_primary_key
-              Language.create(language_id: 'GB')
-              Language.create(language_id: 'ES')
-              Language.restrict_primary_key
-            }
-          end
-        end
-      }
+      before do
+        allow(TradeTariffBackend::DataMigrator).to receive(:pending_migration_files).and_return(
+          [File.join(Rails.root, 'spec', 'fixtures', 'data_migration_samples', '2_migrate_with_errors.rb')]
+        )
+      end
 
       it 'executes migrations in transactions' do
         allow(Language).to receive(:restrict_primary_key).and_raise(ArgumentError.new)
@@ -51,24 +41,12 @@ describe TradeTariffBackend::DataMigrator do
 
   describe '#rollback' do
     context 'successful run' do
-      before {
-        TradeTariffBackend::DataMigrator.migration do
-          up do
-            applicable   { Language.dataset.none? }
-            apply        {
-              Language.unrestrict_primary_key
-              Language.create(language_id: 'GB')
-            }
-          end
-
-          down do
-            applicable { Language.dataset.where(language_id: 'GB').any? }
-            apply { Language.dataset.where(language_id: 'GB').destroy }
-          end
-        end
-
+      before do
+        allow(TradeTariffBackend::DataMigrator).to receive(:pending_migration_files).and_return(
+          [File.join(Rails.root, 'spec', 'fixtures', 'data_migration_samples', '3_rollback.rb')]
+        )
         TradeTariffBackend::DataMigrator.migrate
-      }
+      end
 
       it 'rolls back applied migration' do
         TradeTariffBackend::DataMigrator.rollback
@@ -78,27 +56,12 @@ describe TradeTariffBackend::DataMigrator do
     end
 
     context 'run with errors' do
-      before {
-        TradeTariffBackend::DataMigrator.migration do
-          up do
-            applicable   { Language.dataset.none? }
-            apply        {
-              Language.unrestrict_primary_key
-              Language.create(language_id: 'GB')
-            }
-          end
-
-          down do
-            applicable { Language.dataset.where(language_id: 'GB').any? }
-            apply {
-              Language.dataset.where(language_id: 'GB').destroy
-              Language.restrict_primary_key
-            }
-          end
-        end
-
+      before do
+        allow(TradeTariffBackend::DataMigrator).to receive(:pending_migration_files).and_return(
+          [File.join(Rails.root, 'spec', 'fixtures', 'data_migration_samples', '4_rollback_with_errors.rb')]
+        )
         TradeTariffBackend::DataMigrator.migrate
-      }
+      end
 
       it 'executes migrations in transactions' do
         allow(Language).to receive(:restrict_primary_key).and_raise(StandardError)
