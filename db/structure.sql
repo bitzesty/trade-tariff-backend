@@ -1195,6 +1195,15 @@ ALTER SEQUENCE complete_abrogation_regulations_oid_seq OWNED BY complete_abrogat
 
 
 --
+-- Name: data_migrations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE data_migrations (
+    filename text NOT NULL
+);
+
+
+--
 -- Name: duty_expression_descriptions_oplog; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -7173,6 +7182,14 @@ ALTER TABLE ONLY complete_abrogation_regulations_oplog
 
 
 --
+-- Name: data_migrations data_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY data_migrations
+    ADD CONSTRAINT data_migrations_pkey PRIMARY KEY (filename);
+
+
+--
 -- Name: duty_expression_descriptions_oplog duty_expression_descriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8216,6 +8233,13 @@ CREATE INDEX ctdo_certypdesopl_ateypeonslog_operation_date ON certificate_type_d
 --
 
 CREATE INDEX cto_certypopl_atepeslog_operation_date ON certificate_types_oplog USING btree (operation_date);
+
+
+--
+-- Name: data_migrations_filename_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX data_migrations_filename_index ON data_migrations USING btree (filename);
 
 
 --
@@ -10011,3 +10035,4 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20151214224024_add_model_v
 INSERT INTO "schema_migrations" ("filename") VALUES ('20151214230831_quota_critical_events_view_reloaded.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20161209195324_alter_footnotes_foonote_id_lenght.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20170117212158_create_audits.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20170331125740_create_data_migrations.rb');
