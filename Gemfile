@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 ruby "2.3.3"
 
-gem "rails", "4.2.7.1"
+gem "rails", "4.2.8"
 
 gem "aws-sdk", "~> 2"
 gem "aws-sdk-rails"
