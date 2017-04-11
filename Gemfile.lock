@@ -284,8 +284,8 @@ DEPENDENCIES
   dalli (~> 2.7)
   database_cleaner!
   dotenv-rails
-  elasticsearch
-  elasticsearch-extensions
+  elasticsearch (= 5.0.4)
+  elasticsearch-extensions (= 0.0.26)
   factory_girl_rails
   fakefs
   forgery
