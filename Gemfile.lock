@@ -70,15 +70,16 @@ GEM
     dotenv-rails (2.1.1)
       dotenv (= 2.1.1)
       railties (>= 4.0, < 5.1)
-    elasticsearch (1.0.17)
-      elasticsearch-api (= 1.0.17)
-      elasticsearch-transport (= 1.0.17)
-    elasticsearch-api (1.0.17)
+    elasticsearch (1.1.2)
+      elasticsearch-api (= 1.1.2)
+      elasticsearch-transport (= 1.1.2)
+    elasticsearch-api (1.1.2)
       multi_json
-    elasticsearch-extensions (0.0.21)
+    elasticsearch-extensions (0.0.26)
       ansi
+      elasticsearch
       ruby-prof
-    elasticsearch-transport (1.0.17)
+    elasticsearch-transport (1.1.2)
       faraday
       multi_json
     erubis (2.7.0)
@@ -219,7 +220,7 @@ GEM
     rspec_junit_formatter (0.2.3)
       builder (< 4)
       rspec-core (>= 2, < 4, != 2.12.0)
-    ruby-prof (0.15.9)
+    ruby-prof (0.16.2)
     rufus-scheduler (3.1.10)
     safe_yaml (1.0.4)
     sentry-raven (2.4.0)
