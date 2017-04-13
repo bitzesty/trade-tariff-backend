@@ -1,12 +1,15 @@
 machine:
+  java:
+    version: oraclejdk8
   ruby:
     version: 2.3.3
   services:
-    - elasticsearch
     - redis
   environment:
     GOVUK_APP_DOMAIN: test
 dependencies:
+  cache_directories:
+    - elasticsearch-5.3.0
   pre:
     - curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&version=6.21.0'
     - sudo dpkg -i cf-cli_amd64.deb
@@ -14,6 +17,11 @@ dependencies:
     - curl -v -L -o autopilot https://github.com/contraband/autopilot/releases/download/0.0.2/autopilot-linux
     - chmod +x autopilot
     - yes | cf install-plugin autopilot
+  post:
+    - if [[ ! -e elasticsearch-5.3.0 ]]; then wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.3.0.tar.gz && tar -xvf elasticsearch-5.3.0.tar.gz; fi
+    - elasticsearch-5.3.0/bin/elasticsearch: {background: true}
+    # Make sure that Elasticsearch is up before running tests:
+    - sleep 10 && wget --waitretry=5 --retry-connrefused -v http://127.0.0.1:9200/
 deployment:
   dev:
     branch: master
