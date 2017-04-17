@@ -3,7 +3,7 @@ require "rails_helper"
 describe TariffSynchronizer::TariffUpdatesRequester do
 
   describe ".perform" do
-    let(:url) { "http://username:password@example/test" }
+    let(:url) { "http://example/test" }
 
     context "partial content received" do
       it "raises DownloadException" do
@@ -43,7 +43,8 @@ describe TariffSynchronizer::TariffUpdatesRequester do
     end
 
     it "returns response object if the request is successful" do
-      stub_request(:get, url).to_return(body: "abc")
+      stub_request(:get, url).to_return(status: 200, body: "abc")
+
       response = described_class.perform("http://example/test")
       expect(response.content).to eq("abc")
       expect(response.response_code).to eq(200)
