@@ -47,14 +47,14 @@ group :development, :test do
 end
 
 group :test do
-  gem "rspec-rails", "~> 3.0"
-  gem "factory_girl_rails", require: false
-  gem "fakefs", require: "fakefs/safe"
+  gem "rspec-rails", "~> 3.5.2"
+  gem "factory_girl_rails", "~> 4.8.0", require: false
+  gem "fakefs", "~> 0.11.0", require: "fakefs/safe"
   gem "forgery"
-  gem "json_expressions"
-  gem "simplecov"
+  gem "json_expressions", "~> 0.9.0"
+  gem "simplecov", "~> 0.14.1"
   gem "simplecov-rcov"
-  gem "webmock"
+  gem "webmock", "~> 3.0.1"
   gem "database_cleaner", github: "theharq/database_cleaner", branch: "sequel-updates"
   gem "rspec_junit_formatter"
 end
