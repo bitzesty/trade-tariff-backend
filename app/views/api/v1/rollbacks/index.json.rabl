@@ -1,6 +1,6 @@
 object false
 
-child @collection do
+child @collection => :rollbacks do
   extends("api/v1/rollbacks/rollback_job")
 end
 

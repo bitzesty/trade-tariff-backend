@@ -7,8 +7,8 @@ class SearchService
           type: 'search_reference',
           search: {
             query: {
-              filtered: {
-                query: {
+              bool: {
+                must: {
                   multi_match: {
                     query: query_string,
                     fields: ['title'],
@@ -16,73 +16,55 @@ class SearchService
                   }
                 },
                 filter: {
-                  and: [
-                    {
-                      term: { reference_class: index.type }
-                    },
-                    {
-                      nested: {
-                        path: "reference",
-                        query: {
-                          filtered: {
-                            query: { match_all: {} },
-                            filter: {
-                              or: [
-                                # actual date is either between item's (validity_start_date..validity_end_date)
-                                {
-                                  and: [
-                                    range: {
-                                      "reference.validity_start_date" => { lte: date }
-                                    },
-                                    range: {
-                                      "reference.validity_end_date" => { gte: date }
-                                    }
-                                  ]
-                                },
-                                # or is greater than item's validity_start_date
-                                # and item has blank validity_end_date (is unbounded)
-                                {
-                                  and: [
+                  bool: {
+                    must: [
+                      { term: { reference_class: index.type } },
+                      {
+                        nested: {
+                          path: "reference",
+                          query: {
+                            bool: {
+                              must: { match_all: {} },
+                              filter: {
+                                bool: {
+                                  should: [
+                                    # actual date is either between item's (validity_start_date..validity_end_date)
                                     {
-                                      range: {
-                                        "reference.validity_start_date" => { lte: date }
+                                      bool: {
+                                        must: [
+                                          { range: { "reference.validity_start_date" => { lte: date } } },
+                                          { range: { "reference.validity_end_date" => { gte: date } } }
+                                        ]
                                       }
                                     },
+                                    # or is greater than item's validity_start_date
+                                    # and item has blank validity_end_date (is unbounded)
                                     {
-                                      missing: {
-                                        field: "reference.validity_end_date",
-                                        null_value: true,
-                                        existence: true
-                                      }
-                                    }
-                                  ]
-                                },
-                                # Sections do not have validity start/end dates
-                                {
-                                  and: [
-                                    {
-                                      missing: {
-                                        field: "reference.validity_start_date",
-                                        null_value: true,
-                                        existence: true
+                                      bool: {
+                                        must: [
+                                          { range: { "reference.validity_start_date" => { lte: date } } },
+                                          { bool: { must_not: { exists: { field: "reference.validity_end_date" } } } }
+                                        ]
                                       }
                                     },
+                                    # or item has blank validity_start_date and validity_end_date
                                     {
-                                      missing: {
-                                        field: "reference.validity_end_date",
-                                        null_value: true,
-                                        existence: true
+                                      bool: {
+                                        must: [
+                                          { bool: { must_not: { exists: { field: "reference.validity_start_date" } } } },
+                                          { bool: { must_not: { exists: { field: "reference.validity_end_date" } } } }
+                                        ]
                                       }
                                     }
                                   ]
                                 }
-                              ]
+                              }
                             }
                           }
                         }
                       }
-                    }
-                  ]
+                    ]
+                  }
                 }
                },
              },
