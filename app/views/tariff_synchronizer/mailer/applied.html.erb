@@ -4,7 +4,7 @@
   Trade Tariff successfully applied <%= @update_names.size %> update(s) at <%= Time.now %>.
 </p>
 
-<p>Following updates were applied:</p>
+<h3>The following updates were applied:</h3>
 
 <ul>
   <% @update_names.each do |update_name| %>
@@ -13,6 +13,8 @@
 </ul>
 
 <% if @conformance_errors.any? %>
+  <h3>Conformance errors:</h3>
+
   <table>
     <thead>
       <tr>

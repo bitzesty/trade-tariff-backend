@@ -220,8 +220,10 @@ module TariffSynchronizer
 
   def check_tariff_updates_failures
     if BaseUpdate.failed.any?
-      instrument("failed_updates_present.tariff_synchronizer",
-                 file_names: BaseUpdate.failed.map(&:filename))
+      unless Rails.cache.read("failed_updates_present_notification_sent")
+        instrument("failed_updates_present.tariff_synchronizer", file_names: BaseUpdate.failed.map(&:filename))
+        Rails.cache.write("failed_updates_present_notification_sent", true, expires_in: DateTime.current.seconds_until_end_of_day)
+      end
       raise FailedUpdatesError
     end
   end
