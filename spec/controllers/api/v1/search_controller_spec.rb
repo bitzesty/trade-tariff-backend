@@ -14,14 +14,14 @@ describe Api::V1::SearchController, "POST #search" do
     }
 
     it 'returns exact match endpoint and indetifier if query for exact record' do
-      post :search, { t: chapter.to_param, as_of: chapter.validity_start_date }
+      post :search, { q: chapter.to_param, as_of: chapter.validity_start_date }
       expect(response.status).to eq(200)
       expect(response.body).to match_json_expression pattern
     end
   end
 
   describe 'fuzzy matching' do
-    let(:chapter) { create :chapter, :with_description, description: "horse", validity_start_date: Date.today }
+    let(:chapter) { create :chapter, :with_description, description: 'horse', validity_start_date: Date.today }
     let(:pattern) {
       {
         type: 'fuzzy_match',
@@ -41,7 +41,7 @@ describe Api::V1::SearchController, "POST #search" do
     }
 
     it 'returns records grouped by type' do
-      post :search, { t: chapter.description,  as_of: chapter.validity_start_date }
+      post :search, { q: chapter.description,  as_of: chapter.validity_start_date }
       expect(response.status).to eq(200)
       expect(response.body).to match_json_expression pattern
     end
@@ -50,7 +50,8 @@ describe Api::V1::SearchController, "POST #search" do
   describe 'errors' do
     let(:pattern) {
       {
-        t: Array,
+        # TODO: uncomment after staging deploy
+        # q: Array,
         as_of: Array
       }
     }
