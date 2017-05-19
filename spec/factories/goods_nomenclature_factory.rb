@@ -64,6 +64,18 @@ FactoryGirl.define do
       producline_suffix { "10" }
     end
 
+    trait :with_indent do
+      after(:create) { |commodity, evaluator|
+        FactoryGirl.create(:goods_nomenclature_indent,
+                           goods_nomenclature_sid: commodity.goods_nomenclature_sid,
+                           goods_nomenclature_item_id: commodity.goods_nomenclature_item_id,
+                           validity_start_date: commodity.validity_start_date,
+                           validity_end_date: commodity.validity_end_date,
+                           productline_suffix: commodity.producline_suffix,
+                           number_indents: evaluator.indents)
+      }
+    end
+
     trait :with_chapter do
       after(:create) { |commodity, evaluator|
         FactoryGirl.create(:chapter, :with_section, goods_nomenclature_item_id: "#{commodity.chapter_id}")
