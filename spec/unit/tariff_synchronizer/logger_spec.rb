@@ -2,6 +2,8 @@ require 'rails_helper'
 require 'tariff_synchronizer'
 
 describe TariffSynchronizer::Logger, truncation: true do
+  include BankHolidaysHelper
+
   before(:all) { WebMock.disable_net_connect! }
   after(:all)  { WebMock.allow_net_connect! }
 
@@ -10,6 +12,7 @@ describe TariffSynchronizer::Logger, truncation: true do
   describe '#missing_updates' do
     let(:not_found_response) { build :response, :not_found }
     before {
+      stub_bank_holidays_get_request
       create :chief_update, :missing, issue_date: Date.today.ago(2.days)
       create :chief_update, :missing, issue_date: Date.today.ago(3.days)
       allow(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform)
