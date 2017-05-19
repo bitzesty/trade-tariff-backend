@@ -386,7 +386,98 @@ describe Commodity do
                                 validity_start_date: Date.new(1995,1,1))  }
 
       it 'does not pick ancestor_commodity as ancestor (indent number is not lower (same level))' do
-        expect(commodity.ancestors).to be_empty
+        expect(commodity.ancestors).to eq([])
+      end
+    end
+
+    describe 'nested commodities' do
+      let!(:chapter) { create :chapter, goods_nomenclature_item_id: "8500000000",
+                              validity_start_date: Date.new(2010,1,1),
+                              producline_suffix: "80" }
+      let!(:heading) { create :heading, goods_nomenclature_item_id: "8504000000",
+                               validity_start_date: Date.new(2010,1,1),
+                               producline_suffix: "80" }
+      let!(:commodity0) { create :commodity, :with_indent, :with_description,
+                                indents: 4,
+                                goods_nomenclature_item_id: '8504909990',
+                                producline_suffix: '80',
+                                validity_start_date: Date.new(2010,1,1) }
+      let!(:commodity1) { create :commodity, :with_indent, :with_description,
+                                indents: 3,
+                                goods_nomenclature_item_id: '8504909900',
+                                producline_suffix: '80',
+                                validity_start_date: Date.new(2010,1,1) }
+      let!(:commodity2) { create :commodity, :with_indent, :with_description,
+                                indents: 2,
+                                goods_nomenclature_item_id: '8504909100',
+                                producline_suffix: '80',
+                                validity_start_date: Date.new(2010,1,1) }
+      let!(:commodity3) { create :commodity, :with_indent, :with_description,
+                                indents: 1,
+                                goods_nomenclature_item_id: '8504900000',
+                                producline_suffix: '80',
+                                validity_start_date: Date.new(2010,1,1) }
+      let!(:commodity4) { create :commodity, :with_indent, :with_description,
+                                indents: 2,
+                                goods_nomenclature_item_id: '8504900500',
+                                producline_suffix: '80',
+                                validity_start_date: Date.new(2010,1,1) }
+      let!(:commodity5) { create :commodity, :with_indent, :with_description,
+                                indents: 3,
+                                goods_nomenclature_item_id: '8504901100',
+                                producline_suffix: '80',
+                                validity_start_date: Date.new(2010,1,1) }
+      let!(:commodity6) { create :commodity, :with_indent, :with_description,
+                                indents: 4,
+                                goods_nomenclature_item_id: '8504901100',
+                                producline_suffix: '80',
+                                validity_start_date: Date.new(2010,1,1) }
+      let!(:commodity7) { create :commodity, :with_indent, :with_description,
+                                indents: 5,
+                                goods_nomenclature_item_id: '8504901190',
+                                producline_suffix: '80',
+                                validity_start_date: Date.new(2010,1,1) }
+      let!(:commodity8) { create :commodity, :with_indent, :with_description,
+                                indents: 3,
+                                goods_nomenclature_item_id: '8504900500',
+                                producline_suffix: '80',
+                                validity_start_date: Date.new(2010,1,1) }
+      let!(:commodity9) { create :commodity, :with_indent, :with_description,
+                                indents: 4,
+                                goods_nomenclature_item_id: '8504901800',
+                                producline_suffix: '80',
+                                validity_start_date: Date.new(2010,1,1) }
+      let!(:commodity10) { create :commodity, :with_indent, :with_description,
+                                indents: 5,
+                                goods_nomenclature_item_id: '8504901899',
+                                producline_suffix: '80',
+                                validity_start_date: Date.new(2010,1,1) }
+      let!(:commodity11) { create :commodity, :with_indent, :with_description,
+                                indents: 3,
+                                goods_nomenclature_item_id: '8504909100',
+                                producline_suffix: '80',
+                                validity_start_date: Date.new(2010,1,1) }
+      let!(:commodity12) { create :commodity, :with_indent, :with_description,
+                                indents: 5,
+                                goods_nomenclature_item_id: '8504901110',
+                                producline_suffix: '80',
+                                validity_start_date: Date.new(2010,1,1) }
+      let!(:commodity13) { create :commodity, :with_indent, :with_description,
+                                indents: 5,
+                                goods_nomenclature_item_id: '8504901120',
+                                producline_suffix: '80',
+                                validity_start_date: Date.new(2010,1,1) }
+
+      around do |example|
+        TimeMachine.at(Date.new(2011,2,1)) do
+          example.run
+        end
+      end
+
+      it 'should return valid ancestors' do
+        expect(commodity0.ancestors.map(&:goods_nomenclature_item_id)).to eq(['8504900000', '8504909100', '8504909900'])
+        expect(commodity7.ancestors.map(&:goods_nomenclature_item_id)).to eq(['8504900000', '8504900500', '8504901100', '8504901100'])
+        expect(commodity10.ancestors.map(&:goods_nomenclature_item_id)).to eq(['8504900000', '8504900500', '8504901100', '8504901800'])
       end
     end
   end

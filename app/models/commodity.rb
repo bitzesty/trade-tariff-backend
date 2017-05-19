@@ -41,6 +41,9 @@ class Commodity < GoodsNomenclature
   end
 
   def ancestors
+    # TODO: we need to create more efficient and unambiguous way to get ancestors
+    # because getting Commodities with goods_nomenclature_item_id LIKE 'something'
+    # can fetch Commodities not from ancestors tree.
     Commodity.select(Sequel.expr(:goods_nomenclatures).*)
       .eager(:goods_nomenclature_indents,
              :goods_nomenclature_descriptions)
@@ -68,6 +71,7 @@ class Commodity < GoodsNomenclature
       .map(&:first)
       .reverse
       .sort_by(&:number_indents)
+      .select{ |a| a.number_indents < goods_nomenclature_indent.number_indents }
   end
 
   def declarable?
