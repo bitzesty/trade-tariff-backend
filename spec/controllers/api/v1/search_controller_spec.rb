@@ -50,7 +50,8 @@ describe Api::V1::SearchController, "POST #search" do
   describe 'errors' do
     let(:pattern) {
       {
-        q: Array,
+        # TODO: uncomment after staging deploy
+        # q: Array,
         as_of: Array
       }
     }

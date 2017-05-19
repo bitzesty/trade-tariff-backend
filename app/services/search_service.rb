@@ -26,10 +26,13 @@ class SearchService
   class EmptyQuery < StandardError
   end
 
+  # TODO: remove :t after staging deploy
+  attr_accessor :t
   attr_accessor :q
   attr_reader :result, :as_of
 
-  validates :q, presence: true
+  # TODO: uncomment after staging deploy
+  # validates :q, presence: true
   validates :as_of, presence: true
 
   delegate :serializable_hash, to: :result
@@ -59,6 +62,20 @@ class SearchService
            # ignore [ and ] characters to avoid range searches
            term.to_s.gsub(/(\[|\])/,'')
          end
+    @t = @q
+  end
+
+  # TODO: remove t= after staging deploy
+  def t=(term)
+    # if search term has no letters extract the digits
+    # and perform search with just the digits
+    @t = if term =~ /^(?!.*[A-Za-z]+).*$/
+           term.scan(/\d+/).join
+         else
+           # ignore [ and ] characters to avoid range searches
+           term.to_s.gsub(/(\[|\])/,'')
+         end
+    @q = @t
   end
 
   def exact_match?
