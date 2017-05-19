@@ -26,10 +26,10 @@ class SearchService
   class EmptyQuery < StandardError
   end
 
-  attr_accessor :t
+  attr_accessor :q
   attr_reader :result, :as_of
 
-  validates :t, presence: true
+  validates :q, presence: true
   validates :as_of, presence: true
 
   delegate :serializable_hash, to: :result
@@ -50,10 +50,10 @@ class SearchService
              end
   end
 
-  def t=(term)
+  def q=(term)
     # if search term has no letters extract the digits
     # and perform search with just the digits
-    @t = if term =~ /^(?!.*[A-Za-z]+).*$/
+    @q = if term =~ /^(?!.*[A-Za-z]+).*$/
            term.scan(/\d+/).join
          else
            # ignore [ and ] characters to avoid range searches
@@ -82,8 +82,8 @@ class SearchService
   private
 
   def perform
-    @result = ExactSearch.new(t, as_of).search!.presence ||
-              FuzzySearch.new(t, as_of).search!.presence ||
-              NullSearch.new(t, as_of)
+    @result = ExactSearch.new(q, as_of).search!.presence ||
+              FuzzySearch.new(q, as_of).search!.presence ||
+              NullSearch.new(q, as_of)
   end
 end
