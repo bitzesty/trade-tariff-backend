@@ -390,14 +390,13 @@ describe Commodity do
       end
     end
 
-    describe 'breaking spec' do
+    describe 'nested commodities' do
       let!(:chapter) { create :chapter, goods_nomenclature_item_id: "8500000000",
                               validity_start_date: Date.new(2010,1,1),
                               producline_suffix: "80" }
       let!(:heading) { create :heading, goods_nomenclature_item_id: "8504000000",
                                validity_start_date: Date.new(2010,1,1),
                                producline_suffix: "80" }
-
       let!(:commodity0) { create :commodity, :with_indent, :with_description,
                                 indents: 4,
                                 goods_nomenclature_item_id: '8504909990',
