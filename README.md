@@ -3,7 +3,7 @@
 
 # Trade Tariff Backend
 
-__Now maintained at https://github.com/bitzesty/trade-tariff-frontend__
+__Now maintained at https://github.com/bitzesty/trade-tariff-backend__
 
 The API back-end for:
 
