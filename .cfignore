@@ -3,6 +3,7 @@
 
 # Ignore bundler circle ci cache.
 vendor/bundle/*
+elasticsearch-5.3.0/*
 
 # Ignore all logfiles and tempfiles.
 /log/*
