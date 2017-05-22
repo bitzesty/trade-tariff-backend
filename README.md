@@ -7,12 +7,12 @@ __Now maintained at https://github.com/bitzesty/trade-tariff-backend__
 
 The API back-end for:
 
-* [Trade Tariff Frontend](https://github.com/alphagov/trade-tariff-frontend)
-* [Trade Tariff Admin](https://github.com/alphagov/trade-tariff-admin)
+* [Trade Tariff Frontend](https://github.com/bitzesty/trade-tariff-frontend)
+* [Trade Tariff Admin](https://github.com/bitzesty/trade-tariff-admin)
 
 Other related projects:
 
-* [Trade Tariff Oracle](https://github.com/alphagov/trade-tariff-oracle)
+* [Trade Tariff Oracle](https://github.com/bitzesty/trade-tariff-oracle)
 
 ## Development
 
@@ -42,7 +42,7 @@ Other related projects:
 
 ## Load database
 
-Check out [wiki article on the subject](https://github.com/alphagov/trade-tariff-backend/wiki/System-rebuild-procedure), or get a [recent database snapshot](mailto:support@bitzesty.com).
+Check out [wiki article on the subject](https://github.com/bitzesty/trade-tariff-backend/wiki/System-rebuild-procedure), or get a [recent database snapshot](mailto:support@bitzesty.com).
 
 ## Performing daily updates
 
@@ -98,8 +98,8 @@ NB: In the newer Diego architecture from CloudFoundry, no-route skips creating a
 
 ## Contributing
 
-Please check out the [Contributing guide](https://github.com/alphagov/trade-tariff-backend/blob/master/CONTRIBUTING.md)
+Please check out the [Contributing guide](https://github.com/bitzesty/trade-tariff-backend/blob/master/CONTRIBUTING.md)
 
 ## Licence
 
-Trade Tariff is licenced under the [MIT licence](https://github.com/alphagov/trade-tariff-backend/blob/master/LICENCE.txt)
+Trade Tariff is licenced under the [MIT licence](https://github.com/bitzesty/trade-tariff-backend/blob/master/LICENCE.txt)
