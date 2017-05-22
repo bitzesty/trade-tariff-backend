@@ -30,6 +30,10 @@ describe BankHolidays do
         travel_to Date.parse('17-05-2017')
       end
 
+      after do
+        travel_back
+      end
+
       it 'should order holidays asc' do
         res = BankHolidays.last(3)
         # see stub_bank_holidays_get_request json example
@@ -41,6 +45,10 @@ describe BankHolidays do
     context 'with weekends' do
       before do
         travel_to Date.parse('22-05-2017')
+      end
+
+      after do
+        travel_back
       end
 
       it 'should order holidays and weekends asc' do
