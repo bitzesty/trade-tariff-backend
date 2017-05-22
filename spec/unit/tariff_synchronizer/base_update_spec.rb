@@ -85,6 +85,10 @@ describe TariffSynchronizer::BaseUpdate do
         travel_to Date.parse('21-05-2017')
       end
 
+      after do
+        travel_back
+      end
+
       let!(:chief_update1) { create :chief_update, :missing, example_date: Date.today }
       let!(:chief_update2) { create :chief_update, example_date: Date.yesterday }
 
@@ -96,6 +100,10 @@ describe TariffSynchronizer::BaseUpdate do
     context 'without weekends' do
       before do
         travel_to Date.parse('17-05-2017')
+      end
+
+      after do
+        travel_back
       end
 
       let!(:chief_update1) { create :chief_update, :missing, example_date: Date.today }
