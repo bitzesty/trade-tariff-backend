@@ -11,7 +11,7 @@ dependencies:
   cache_directories:
     - elasticsearch-5.3.0
   pre:
-    - curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&version=6.21.0'
+    - curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&version=6.26.0'
     - sudo dpkg -i cf-cli_amd64.deb
     - cf -v
     - curl -v -L -o autopilot https://github.com/contraband/autopilot/releases/download/0.0.2/autopilot-linux
