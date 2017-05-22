@@ -16,7 +16,7 @@ require 'tariff_synchronizer/tariff_downloader'
 
 # How TariffSynchronizer works
 #
-# See https://github.com/alphagov/trade-tariff-backend/wiki/Synchronization-process
+# See https://github.com/bitzesty/trade-tariff-backend/wiki/Synchronization-process
 #
 
 module TariffSynchronizer
