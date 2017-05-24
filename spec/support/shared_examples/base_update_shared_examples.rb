@@ -12,7 +12,7 @@ shared_examples_for 'Base Update' do
       let!(:example_chief_update) { create :chief_update, example_date: Date.yesterday }
       let!(:example_taric_update) { create :taric_update, example_date: Date.yesterday }
 
-      it 'should_receive download to be invoed' do
+      it 'should_receive download to be invoked' do
         expect(described_class).to receive(:download).at_least(1)
 
         described_class.sync

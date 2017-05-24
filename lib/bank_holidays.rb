@@ -10,6 +10,8 @@ module BankHolidays
       Net::HTTP.get(URI(URL))
     end
     dates = JSON.parse(response)['events'].map{ |e| Date.parse(e['date']) }
-    dates.select{ |d| d <= Date.today }.sort.last(n)
+    dates.select!{ |d| d <= Date.today }
+    dates += ((Date.today - n + 1)..Date.today).to_a.select{ |d| d.saturday? || d.sunday? }
+    dates.sort.last(n)
   end
 end

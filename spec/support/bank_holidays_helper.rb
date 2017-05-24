@@ -8,6 +8,8 @@ module BankHolidaysHelper
         {"title" => "Day 3","date" => "2016-10-09","notes" => "","bunting" => true}
       ]
     }.to_json
-    allow(Net::HTTP).to receive(:get).with(URI(BankHolidays::URL)).and_return(json)
+    stub_request(:get, BankHolidays::URL).
+      with(headers: {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Host'=>'www.gov.uk', 'User-Agent'=>'Ruby'}).
+      to_return(status: 200, body: json, headers: {})
   end
 end

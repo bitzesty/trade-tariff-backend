@@ -139,8 +139,7 @@ module TariffSynchronizer
       def last_updates_are_missing?
         holidays = BankHolidays.last(TariffSynchronizer.warning_day_count)
         descending.exclude(issue_date: holidays)
-                  .first(TariffSynchronizer.warning_day_count)
-                  .all?(&:missing?)
+                  .first.try(:missing?)
       end
 
       def notify_about_missing_updates

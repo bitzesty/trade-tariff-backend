@@ -4,11 +4,11 @@ ruby "2.3.3"
 gem "rails", "4.2.8"
 
 gem "aws-sdk", "~> 2"
-gem "aws-sdk-rails"
+gem "aws-sdk-rails", ">= 1.0.1"
 gem "hashie", "~> 3.4"
 gem "multi_json", "~> 1.11"
 gem "pg"
-gem "sequel-rails", "~> 0.9"
+gem "sequel-rails", "~> 0.9", ">= 0.9.12"
 gem "tilt"
 gem "rabl", "~> 0.12"
 gem "ansi", "~> 1.5"
@@ -20,18 +20,18 @@ gem "elasticsearch-extensions", "0.0.26"
 gem "yajl-ruby", "~> 1.2", require: "yajl"
 gem "builder", "~> 3.2"
 gem "plek", "~> 1.11"
-gem "gds-sso", "~> 12"
+gem "gds-sso", "~> 12", ">= 12.1.0"
 gem "ox", "~> 2.3"
 gem "puma", "~> 3.4"
 gem "curb", "~> 0.8"
 gem "dalli", "~> 2.7"
 gem "connection_pool", "~> 2.2"
-gem "nokogiri", "~> 1.6"
-gem "responders", "~> 2.1"
+gem "nokogiri", "~> 1.7", ">= 1.7.2"
+gem "responders", "~> 2.1", ">= 2.1.0"
 
 gem "newrelic_rpm"
 gem "logstash-event"
-gem "lograge"
+gem "lograge", ">= 0.3.6"
 gem "rack-timeout", "~> 0.4"
 gem "bootscale", "~> 0.5", require: false
 
@@ -41,7 +41,7 @@ group :production do
 end
 
 group :development, :test do
-  gem "dotenv-rails"
+  gem "dotenv-rails", ">= 2.1.1"
   gem "pry-byebug"
   gem "pry-rails"
 end
