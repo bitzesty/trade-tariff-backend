@@ -46,6 +46,12 @@ module Api
         render 'api/v1/changes/changes'
       end
 
+      def codes
+        @commodities = Commodity.actual.select(:goods_nomenclature_item_id).all
+
+        respond_with @commodities
+      end
+
       private
 
       def find_commodity
