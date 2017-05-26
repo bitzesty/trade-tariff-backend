@@ -134,4 +134,43 @@ describe AdditionalCodeType do
       pending 'The additional code type cannot be deleted if it is related with an Export Refund for Processed Agricultural Goods additional code.'
     end
   end
+
+  describe '#export_refund_agricultural?' do
+    let!(:ern_agricultural) { create :additional_code_type, :ern_agricultural }
+    let!(:non_ern_agricultural) { create :additional_code_type, application_code: '1' }
+
+    it 'should return true for ern_agricultural (code 4)' do
+      expect(ern_agricultural.export_refund_agricultural?).to be_truthy
+    end
+
+    it 'should return false for other' do
+      expect(non_ern_agricultural.export_refund_agricultural?).to be_falsey
+    end
+  end
+
+  describe '#export_refund?' do
+    let!(:ern) { create :additional_code_type, :ern }
+    let!(:non_ern) { create :additional_code_type, application_code: '1' }
+
+    it 'should return true for ern (code 0)' do
+      expect(ern.export_refund?).to be_truthy
+    end
+
+    it 'should return false for other' do
+      expect(non_ern.export_refund?).to be_falsey
+    end
+  end
+
+  describe '#meursing?' do
+    let!(:meursing) { create :additional_code_type, :meursing }
+    let!(:non_meursing) { create :additional_code_type, application_code: '1' }
+
+    it 'should return true for meursing (code 3)' do
+      expect(meursing.meursing?).to be_truthy
+    end
+
+    it 'should return false for other' do
+      expect(non_meursing.meursing?).to be_falsey
+    end
+  end
 end

@@ -323,7 +323,7 @@ describe Measure do
                           .eager(:footnotes)
                           .all
                           .first
-                          .footnotes(true).map(&:pk)
+                          .footnotes(reload: true).map(&:pk)
             ).to include footnote1.pk
           end
 
@@ -333,7 +333,7 @@ describe Measure do
                           .eager(:footnotes)
                           .all
                           .first
-                          .footnotes(true).map(&:pk)
+                          .footnotes(reload: true).map(&:pk)
             ).to include footnote2.pk
           end
         end

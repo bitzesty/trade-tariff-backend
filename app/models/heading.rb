@@ -84,7 +84,7 @@ class Heading < GoodsNomenclature
       Sequel.as(depth, :depth)
     ).where(pk_hash)
      .union(Commodity.changes_for(depth + 1, ["goods_nomenclature_item_id LIKE ? AND goods_nomenclature_item_id NOT LIKE ?", relevant_commodities, '____000000']))
-     .union(Measure.changes_for(depth +1, ["goods_nomenclature_item_id LIKE ?", relevant_commodities]))
+     .union(Measure.changes_for(depth + 1, ["goods_nomenclature_item_id LIKE ?", relevant_commodities]))
      .from_self
      .where(Sequel.~(operation_date: nil))
      .tap! { |criteria|
