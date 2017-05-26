@@ -13,7 +13,7 @@ class AdditionalCode < Sequel::Model
                                               end
 
   def additional_code_description
-    additional_code_descriptions(true).first
+    additional_code_descriptions(reload: true).first
   end
 
   one_to_one :meursing_additional_code, key: :additional_code,

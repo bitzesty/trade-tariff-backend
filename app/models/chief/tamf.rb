@@ -51,7 +51,7 @@ module Chief
     end
 
     def measure_components
-      if duty_expression(true).present?
+      if duty_expression(reload: true).present?
         duty_expression_components
       else
         duty_type_components

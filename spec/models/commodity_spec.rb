@@ -479,6 +479,10 @@ describe Commodity do
         expect(commodity7.ancestors.map(&:goods_nomenclature_item_id)).to eq(['8504900000', '8504900500', '8504901100', '8504901100'])
         expect(commodity10.ancestors.map(&:goods_nomenclature_item_id)).to eq(['8504900000', '8504900500', '8504901100', '8504901800'])
       end
+
+      it 'should return ancestors with indent less then current commodity indent' do
+        expect(commodity0.ancestors.map(&:number_indents)).to all( be < commodity0.number_indents )
+      end
     end
   end
 
@@ -519,6 +523,61 @@ describe Commodity do
           }
         ).to be_present
       end
+    end
+  end
+
+  describe '#declarable?' do
+    let(:commodity_80) { create(:commodity, producline_suffix: '80') }
+    let(:commodity_10) { create(:commodity, producline_suffix: '10') }
+
+    context 'with children' do
+      before do
+        allow_any_instance_of(Commodity).to receive(:children).and_return([1])
+      end
+
+      it "should return true for producline_suffix == '80'" do
+        expect(commodity_80.declarable?).to be_falsey
+      end
+
+      it "should return false for other producline_suffix" do
+        expect(commodity_10.declarable?).to be_falsey
+      end
+    end
+
+    context 'without children' do
+      before do
+        allow_any_instance_of(Commodity).to receive(:children).and_return([])
+      end
+
+      it "should return true for producline_suffix == '80'" do
+        expect(commodity_80.declarable?).to be_truthy
+      end
+
+      it "should return false for other producline_suffix" do
+        expect(commodity_10.declarable?).to be_falsey
+      end
+    end
+  end
+
+  describe '.declarable' do
+    let(:commodity_80) { create(:commodity, producline_suffix: '80') }
+    let(:commodity_10) { create(:commodity, producline_suffix: '10') }
+
+    it "should return commodities ony with producline_suffix == '80'" do
+      commodities = described_class.declarable
+      expect(commodities).to include(commodity_80)
+      expect(commodities).to_not include(commodity_10)
+    end
+  end
+
+  describe '.by_code' do
+    let(:commodity1) { create(:commodity, goods_nomenclature_item_id: '123') }
+    let(:commodity2) { create(:commodity, goods_nomenclature_item_id: '456') }
+
+    it 'should return commodities filtered by goods_nomenclature_item_id' do
+      commodities = described_class.by_code('123')
+      expect(commodities).to include(commodity1)
+      expect(commodities).to_not include(commodity2)
     end
   end
 end
