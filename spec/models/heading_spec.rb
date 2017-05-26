@@ -121,11 +121,11 @@ describe Heading do
       end
 
       it 'returns chapter matched by part of own goods nomenclature item id' do
-        expect(heading.chapter(true)).to eq chapter1
+        expect(heading.chapter(reload: true)).to eq chapter1
       end
 
       it 'does not return commodity that is irrelevant to given time' do
-        expect(heading.chapter(true)).not_to eq chapter2
+        expect(heading.chapter(reload: true)).not_to eq chapter2
       end
     end
   end
@@ -260,6 +260,36 @@ describe Heading do
           ).to be_present
         end
       end
+    end
+  end
+
+  describe '#short_code' do
+    let!(:heading)  { create :heading, goods_nomenclature_item_id: '1234000000' }
+
+    it 'should return first 4 chars of goods_nomenclature_item_id' do
+      expect(heading.short_code).to eq('1234')
+    end
+  end
+
+  describe '.declarable' do
+    let(:heading_80) { create(:heading, producline_suffix: '80') }
+    let(:heading_10) { create(:heading, producline_suffix: '10') }
+
+    it "should return headings ony with producline_suffix == '80'" do
+      headings = described_class.declarable
+      expect(headings).to include(heading_80)
+      expect(headings).to_not include(heading_10)
+    end
+  end
+
+  describe '.by_code' do
+    let!(:heading1) { create(:heading, goods_nomenclature_item_id: '1234000000') }
+    let!(:heading2) { create(:heading, goods_nomenclature_item_id: '4321000000') }
+
+    it 'should return headings filtered by goods_nomenclature_item_id' do
+      headings = described_class.by_code('1234')
+      expect(headings).to include(heading1)
+      expect(headings).to_not include(heading2)
     end
   end
 end

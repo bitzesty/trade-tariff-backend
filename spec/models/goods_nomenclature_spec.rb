@@ -366,4 +366,31 @@ describe GoodsNomenclature do
     # NIG4 The start date of the goods nomenclature must be less than or equal to the end date.
     it { is_expected.to validate_validity_dates }
   end
+
+  describe '.declarable' do
+    let(:gono_80) { create(:goods_nomenclature, producline_suffix: '80') }
+    let(:gono_10) { create(:goods_nomenclature, producline_suffix: '10') }
+
+    it "should return goods_nomenclatures ony with producline_suffix == '80'" do
+      gonos = described_class.declarable
+      expect(gonos).to include(gono_80)
+      expect(gonos).to_not include(gono_10)
+    end
+  end
+
+  describe '#code' do
+    let(:gono) { create(:goods_nomenclature, goods_nomenclature_item_id: '8056116321') }
+
+    it 'should return goods_nomenclature_item_id' do
+      expect(gono.code).to eq('8056116321')
+    end
+  end
+
+  describe '#bti_url' do
+    let(:gono) { create(:goods_nomenclature, goods_nomenclature_item_id: '8056116321') }
+
+    it 'should include gono code' do
+      expect(gono.bti_url).to include(gono.code)
+    end
+  end
 end
