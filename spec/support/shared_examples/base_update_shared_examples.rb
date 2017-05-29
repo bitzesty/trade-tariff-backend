@@ -2,11 +2,17 @@ require 'rails_helper'
 
 shared_examples_for 'Base Update' do
   describe '.sync' do
+    include BankHolidaysHelper
+
+    before do
+      stub_bank_holidays_get_request
+    end
+
     context 'when last update is out of date' do
       let!(:example_chief_update) { create :chief_update, example_date: Date.yesterday }
       let!(:example_taric_update) { create :taric_update, example_date: Date.yesterday }
 
-      it 'should_receive download to be invoed' do
+      it 'should_receive download to be invoked' do
         expect(described_class).to receive(:download).at_least(1)
 
         described_class.sync

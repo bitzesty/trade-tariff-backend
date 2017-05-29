@@ -2,6 +2,11 @@ require 'rails_helper'
 require 'tariff_synchronizer'
 
 describe TariffSynchronizer::BaseUpdate do
+  include BankHolidaysHelper
+
+  before do
+    stub_bank_holidays_get_request
+  end
 
   describe "#file_path" do
     before do
@@ -71,6 +76,42 @@ describe TariffSynchronizer::BaseUpdate do
       email = ActionMailer::Base.deliveries.last
       expect(email.subject).to include("Missing 3 CHIEF updates in a row")
       expect(email.encoded).to include("Trade Tariff found 3 CHIEF updates in a row to be missing")
+    end
+  end
+
+  describe '#last_updates_are_missing?' do
+    context 'with weekends' do
+      before do
+        travel_to Date.parse('21-05-2017')
+      end
+
+      after do
+        travel_back
+      end
+
+      let!(:chief_update1) { create :chief_update, :missing, example_date: Date.today }
+      let!(:chief_update2) { create :chief_update, example_date: Date.yesterday }
+
+      it 'should return false' do
+        expect(described_class.send(:last_updates_are_missing?)).to be_falsey
+      end
+    end
+
+    context 'without weekends' do
+      before do
+        travel_to Date.parse('17-05-2017')
+      end
+
+      after do
+        travel_back
+      end
+
+      let!(:chief_update1) { create :chief_update, :missing, example_date: Date.today }
+      let!(:chief_update2) { create :chief_update, example_date: Date.yesterday }
+
+      it 'should return true' do
+        expect(described_class.send(:last_updates_are_missing?)).to be_truthy
+      end
     end
   end
 end
