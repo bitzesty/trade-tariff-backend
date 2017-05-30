@@ -12,7 +12,8 @@ describe TariffSynchronizer::Logger, truncation: true do
   describe '#missing_updates' do
     let(:not_found_response) { build :response, :not_found }
     before {
-      stub_bank_holidays_get_request
+      stub_govuk_holidays_get_request
+      stub_holidays_gem_between_call
       create :chief_update, :missing, issue_date: Date.today.ago(2.days)
       create :chief_update, :missing, issue_date: Date.today.ago(3.days)
       allow(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform)

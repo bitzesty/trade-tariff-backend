@@ -5,7 +5,8 @@ shared_examples_for 'Base Update' do
     include BankHolidaysHelper
 
     before do
-      stub_bank_holidays_get_request
+      stub_govuk_holidays_get_request
+      stub_holidays_gem_between_call
     end
 
     context 'when last update is out of date' do
