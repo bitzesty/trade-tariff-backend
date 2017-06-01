@@ -46,6 +46,7 @@ module Api
         render 'api/v1/changes/changes'
       end
 
+      # TODO: remove after suggestions deploy
       def codes
         @commodities = Commodity.actual.select(:goods_nomenclature_item_id).all
 

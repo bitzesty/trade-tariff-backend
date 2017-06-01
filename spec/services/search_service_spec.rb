@@ -505,4 +505,10 @@ describe SearchService do
       end
     end
   end
+
+  describe '#persisted?' do
+    it 'should return false' do
+      expect(SearchService.new(q: '123').persisted?).to be_falsey
+    end
+  end
 end
