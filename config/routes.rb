@@ -40,6 +40,7 @@ Rails.application.routes.draw do
           get :changes
         }
 
+        # TODO: remove after suggestions deploy
         collection {
           get :codes
         }
@@ -60,6 +61,7 @@ Rails.application.routes.draw do
       resources :search_references, only: [:index]
 
       post "search" => "search#search", via: :post, as: :search
+      get "search_suggestions" => "search#suggestions", as: :search_suggestions
 
       resources :rollbacks, only: [:create, :index]
       resources :footnotes, only: [:index, :show, :update]
