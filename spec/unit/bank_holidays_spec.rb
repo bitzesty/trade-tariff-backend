@@ -5,7 +5,7 @@ describe BankHolidays do
   include BankHolidaysHelper
 
   before do
-    stub_govuk_holidays_get_request
+    # stub_govuk_holidays_get_request
     stub_holidays_gem_between_call
   end
 
@@ -24,6 +24,21 @@ describe BankHolidays do
 
     it 'should return Date type records' do
       expect(BankHolidays.last(2)[0]).to be_a(Date)
+    end
+
+    it 'should invoke weekends checker method' do
+      expect(BankHolidays).to receive(:weekends).with(2)
+      BankHolidays.last(2)
+    end
+
+    # it 'should invoke gov_uk checker method' do
+    #   expect(BankHolidays).to receive(:gov_uk).with(2)
+    #   BankHolidays.last(2)
+    # end
+
+    it 'should invoke other checker method' do
+      expect(BankHolidays).to receive(:other).with(2)
+      BankHolidays.last(2)
     end
 
     context 'without weekends' do

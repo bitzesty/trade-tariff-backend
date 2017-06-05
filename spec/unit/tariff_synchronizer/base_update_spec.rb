@@ -5,7 +5,7 @@ describe TariffSynchronizer::BaseUpdate do
   include BankHolidaysHelper
 
   before do
-    stub_govuk_holidays_get_request
+    # stub_govuk_holidays_get_request
     stub_holidays_gem_between_call
   end
 

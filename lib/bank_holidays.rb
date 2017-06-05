@@ -5,7 +5,7 @@ module BankHolidays
   URL = 'https://www.gov.uk/bank-holidays/england-and-wales.json'
 
   def self.last(n)
-    [weekends(n), gov_uk(n), other(n)].flatten.compact.uniq.sort.last(n)
+    [weekends(n), other(n)].flatten.compact.uniq.sort.last(n)
   end
 
   private
@@ -25,7 +25,7 @@ module BankHolidays
   end
 
   def self.other(n)
-    Holidays.between(Date.today - n, Date.today, :be_nl, :be_fr, :gb)
+    Holidays.between(Date.today - n, Date.today, :be_nl, :gb)
             .map{ |h| h[:date] }
   end
 end
