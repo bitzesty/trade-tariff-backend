@@ -29,6 +29,8 @@ gem "connection_pool", "~> 2.2"
 gem "nokogiri", "~> 1.7", ">= 1.7.2"
 gem "responders", "~> 2.1", ">= 2.1.0"
 
+gem 'holidays'
+
 gem "newrelic_rpm"
 gem "logstash-event"
 gem "lograge", ">= 0.3.6"
