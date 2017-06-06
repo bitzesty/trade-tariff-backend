@@ -5,7 +5,7 @@ describe BankHolidays do
   include BankHolidaysHelper
 
   before do
-    stub_bank_holidays_get_request
+    stub_holidays_gem_between_call
   end
 
   describe ".last(n)" do
@@ -25,6 +25,16 @@ describe BankHolidays do
       expect(BankHolidays.last(2)[0]).to be_a(Date)
     end
 
+    it 'should invoke weekends checker method' do
+      expect(BankHolidays).to receive(:weekends).with(2)
+      BankHolidays.last(2)
+      end
+
+    it 'should invoke holidays checker method' do
+      expect(BankHolidays).to receive(:holidays).with(2)
+      BankHolidays.last(2)
+    end
+
     context 'without weekends' do
       before do
         travel_to Date.parse('17-05-2017')
@@ -36,7 +46,7 @@ describe BankHolidays do
 
       it 'should order holidays asc' do
         res = BankHolidays.last(3)
-        # see stub_bank_holidays_get_request json example
+        # see stub_holidays_gem_between_call example
         expect(res[0]).to eq(Date.parse("2015-10-07"))
         expect(res[2]).to eq(Date.parse("2016-11-30"))
       end
@@ -53,7 +63,7 @@ describe BankHolidays do
 
       it 'should order holidays and weekends asc' do
         res = BankHolidays.last(3)
-        # see stub_bank_holidays_get_request json example
+        # see stub_holidays_gem_between_call example
         expect(res[0]).to eq(Date.parse("2016-11-30"))
         expect(res[1]).to eq(Date.parse("2017-05-20"))
         expect(res[2]).to eq(Date.parse("2017-05-21"))
