@@ -154,4 +154,38 @@ describe MeasureCondition do
       end
     end
   end
+
+  describe '#document_code' do
+    let(:measure_condition) { create :measure_condition, condition_code: 'L', certificate_type_code: '1' }
+
+    it 'should contain certificate_type_code' do
+      expect(measure_condition.document_code).to include(measure_condition.certificate_type_code)
+    end
+
+    it 'should contain certificate_code' do
+      expect(measure_condition.certificate_code).to include(measure_condition.certificate_code)
+    end
+  end
+
+  describe '#action' do
+    let(:measure_condition) { create :measure_condition, measure_action: create(:measure_action) }
+
+    it 'should return measure_action_description' do
+      expect(measure_condition.measure_action).to receive(:description).at_least(1)
+      expect(measure_condition.action).to eq(measure_condition.measure_action_description)
+    end
+  end
+
+  describe '#condition' do
+    let(:measure_condition) { create :measure_condition, condition_code: '123',
+                                     component_sequence_number: 456}
+
+    it 'should contain condition_code' do
+      expect(measure_condition.condition).to include(measure_condition.condition_code)
+    end
+
+    it 'should contain component_sequence_number' do
+      expect(measure_condition.condition).to include(measure_condition.component_sequence_number.to_s)
+    end
+  end
 end
