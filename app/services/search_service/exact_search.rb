@@ -64,7 +64,7 @@ class SearchService
 
     def find_search_reference(query)
       item = SearchReference.where(title: query).first.try(:referenced)
-      return nil if item && item.validity_end_date && item.validity_end_date < date
+      return nil if item && item.try(:validity_end_date) && item.validity_end_date < date
       item
     end
   end
