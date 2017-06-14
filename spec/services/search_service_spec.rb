@@ -403,8 +403,8 @@ describe SearchService do
 
       let(:synonym) { "synonym 1" }
       let(:resources) { %w(section chapter heading commodity) }
-      let(:reference_match) {
-        SearchService.new(q: synonym, as_of: Date.today).send(:perform).results[:reference_match]
+      let(:exact_match) {
+        SearchService.new(q: synonym, as_of: Date.today).send(:perform).results
       }
 
       before {
@@ -419,11 +419,8 @@ describe SearchService do
       }
 
       # there shouldn't be duplicates
-      # TODO: idk how to fix now, do it later
-      it "shouldn't have duplicates" do
-        # resources.each do |r|
-        #   expect(reference_match[r.pluralize].count).to eq(1)
-        # end
+      it "should return first created search reference" do
+        expect(exact_match).to be_a(Section)
       end
     end
   end
