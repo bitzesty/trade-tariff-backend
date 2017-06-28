@@ -393,28 +393,4 @@ describe GoodsNomenclature do
       expect(gono.bti_url).to include(gono.code)
     end
   end
-  
-  describe '#chapter_id' do
-    let(:gono) { create(:goods_nomenclature, goods_nomenclature_item_id: '8056116321') }
-
-    it 'should include first to chars' do
-      expect(gono.chapter_id).to include(gono.goods_nomenclature_item_id.first(2))
-    end
-
-    it 'should include eight 0' do
-      expect(gono.chapter_id).to include('0' * 8)
-    end
-  end
-
-  describe '#to_s' do
-    let(:gono) { create(:commodity, goods_nomenclature_item_id: '8056116321', indents: 4) }
-
-    it 'should include number_indents' do
-      expect(gono.to_s).to include(gono.number_indents.to_s)
-    end
-
-    it 'should include goods_nomenclature_item_id' do
-      expect(gono.to_s).to include(gono.goods_nomenclature_item_id)
-    end
-  end
 end
