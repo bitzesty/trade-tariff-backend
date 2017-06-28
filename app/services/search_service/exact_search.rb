@@ -12,6 +12,9 @@ class SearchService
                    find_commodity(query_string) || find_heading(query_string)
                  when /^[0-9]{11,12}$/
                    find_commodity(query_string)
+                 else
+                   # exact match for search references
+                   find_search_reference(query_string)
                  end
 
       self
@@ -57,6 +60,12 @@ class SearchService
              .by_code(query.to_s.rjust(2, '0'))
              .non_hidden
              .first
+    end
+
+    def find_search_reference(query)
+      item = SearchReference.where(title: query).first.try(:referenced)
+      return nil if item && item.try(:validity_end_date) && item.validity_end_date < date
+      item
     end
   end
 end

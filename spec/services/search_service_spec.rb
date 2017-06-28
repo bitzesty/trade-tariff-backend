@@ -403,8 +403,8 @@ describe SearchService do
 
       let(:synonym) { "synonym 1" }
       let(:resources) { %w(section chapter heading commodity) }
-      let(:reference_match) {
-        SearchService.new(q: synonym, as_of: Date.today).send(:perform).results[:reference_match]
+      let(:exact_match) {
+        SearchService.new(q: synonym, as_of: Date.today).send(:perform).results
       }
 
       before {
@@ -419,10 +419,8 @@ describe SearchService do
       }
 
       # there shouldn't be duplicates
-      it "shouldn't have duplicates" do
-        resources.each do |r|
-          expect(reference_match[r.pluralize].count).to eq(1)
-        end
+      it "should return first created search reference" do
+        expect(exact_match).to be_a(Section)
       end
     end
   end
@@ -440,18 +438,21 @@ describe SearchService do
 
       let(:heading_pattern) {
         {
-          type: 'fuzzy_match',
-          reference_match: {
-            headings: [
-              {
-                "_source" => {
-                   reference: { "goods_nomenclature_item_id"=>"2851000000" }.ignore_extra_keys!
-                }.ignore_extra_keys!
-              }.ignore_extra_keys!
-            ].ignore_extra_values!
-          }.ignore_extra_keys!
+            type: 'exact_match',
+            entry: {
+                endpoint: 'headings',
+                id: heading.goods_nomenclature_item_id.first(4)
+            }.ignore_extra_keys!
         }.ignore_extra_keys!
       }
+
+      before do
+        travel_to Date.parse('17-05-2006')
+      end
+
+      after do
+        travel_back
+      end
 
       it 'returns goods code if search date falls within validity period' do
         @result = SearchService.new(q: "water",
@@ -484,15 +485,10 @@ describe SearchService do
 
       let(:heading_pattern) {
         {
-          type: 'fuzzy_match',
-          reference_match: {
-            headings: [
-              {
-                "_source" => {
-                   reference: { "goods_nomenclature_item_id"=> heading1.goods_nomenclature_item_id }.ignore_extra_keys!
-                }.ignore_extra_keys!
-              }.ignore_extra_keys!
-            ]
+          type: 'exact_match',
+          entry: {
+            endpoint: 'headings',
+            id: heading1.goods_nomenclature_item_id.first(4)
           }.ignore_extra_keys!
         }.ignore_extra_keys!
       }
@@ -503,6 +499,12 @@ describe SearchService do
 
         expect(@result).to match_json_expression heading_pattern
       end
+    end
+  end
+
+  describe '#persisted?' do
+    it 'should return false' do
+      expect(SearchService.new(q: '123').persisted?).to be_falsey
     end
   end
 end

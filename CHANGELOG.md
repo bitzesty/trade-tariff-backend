@@ -1,5 +1,27 @@
 # Change Log
 
+## [May 27, 2017]
+
+Maintained at now at the Bit Zesty repo - not the alphagov one.
+
+### Added
+- Snyk
+- Sentry (Error tracking)
+- Data migrations table
+- api/v1/commodities/codes
+- Holidays checker
+
+### Changed
+- Travis to CircleCI
+- Updated ElasticSearch to 5.3.0
+- Search term form :t to :q
+- Data migrations flow - each data migration runs only once
+- Upgraded rails to 4.2.8
+- Upgraded test group gems
+
+### Removed
+- End national footnote 05 014
+
 ## [August 01, 2016]
 
 ### Added
