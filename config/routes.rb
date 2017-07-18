@@ -40,11 +40,6 @@ Rails.application.routes.draw do
           get :changes
         }
 
-        # TODO: remove after suggestions deploy
-        collection {
-          get :codes
-        }
-
         scope module: 'commodities', constraints: { commodity_id: /\d{10}/, id: /\d+/ } do
           resources :search_references, only: [:show, :index, :destroy, :create, :update]
         end
