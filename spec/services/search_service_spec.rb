@@ -1,6 +1,17 @@
 require 'rails_helper'
 
 describe SearchService do
+  def commodity_pattern(item)
+    {
+      type: 'exact_match',
+      entry: {
+        endpoint: 'commodities',
+        id: item.goods_nomenclature_item_id.first(10)
+      }
+    }
+  end
+
+
   describe 'initialization' do
     let(:query) { Forgery(:basic).text }
 
@@ -130,15 +141,7 @@ describe SearchService do
       context 'declarable' do
         let(:commodity) { create :commodity, :declarable, :with_heading, :with_indent }
         let(:heading)   { commodity.heading }
-        let(:commodity_pattern) {
-          {
-            type: 'exact_match',
-            entry: {
-              endpoint: 'commodities',
-              id: commodity.goods_nomenclature_item_id.first(10)
-            }
-          }
-        }
+
         let(:heading_pattern) {
           {
             type: 'exact_match',
@@ -153,7 +156,7 @@ describe SearchService do
           result = SearchService.new(q: commodity.goods_nomenclature_item_id.first(10),
                                      as_of: Date.today).to_json
 
-          expect(result).to match_json_expression commodity_pattern
+          expect(result).to match_json_expression commodity_pattern(commodity)
         end
 
         it 'returns endpoint and identifier if provided with 10 symbol commodity code separated by spaces' do
@@ -165,7 +168,7 @@ describe SearchService do
           result = SearchService.new(q: code,
                                      as_of: Date.today).to_json
 
-          expect(result).to match_json_expression commodity_pattern
+          expect(result).to match_json_expression commodity_pattern(commodity)
         end
 
         it 'returns endpoint and identifier if provided with 10 digits separated by whitespace of varying length' do
@@ -178,7 +181,7 @@ describe SearchService do
           result = SearchService.new(q: code,
                                      as_of: Date.today).to_json
 
-          expect(result).to match_json_expression commodity_pattern
+          expect(result).to match_json_expression commodity_pattern(commodity)
         end
 
         it 'returns endpoint and identifier if provided with 10 symbol commodity code separated by dots' do
@@ -190,7 +193,7 @@ describe SearchService do
           result = SearchService.new(q: code,
                                      as_of: Date.today).to_json
 
-          expect(result).to match_json_expression commodity_pattern
+          expect(result).to match_json_expression commodity_pattern(commodity)
         end
 
         it 'returns endpoint and identifier if provided with 10 digits separated by various non number characters' do
@@ -203,14 +206,14 @@ describe SearchService do
           result = SearchService.new(q: code,
                                      as_of: Date.today).to_json
 
-          expect(result).to match_json_expression commodity_pattern
+          expect(result).to match_json_expression commodity_pattern(commodity)
         end
 
         it 'returns endpoint and identifier if provided with matching 12 symbol commodity code' do
           result = SearchService.new(q: commodity.goods_nomenclature_item_id + commodity.producline_suffix,
                                      as_of: Date.today).to_json
 
-          expect(result).to match_json_expression commodity_pattern
+          expect(result).to match_json_expression commodity_pattern(commodity)
         end
       end
 
@@ -246,21 +249,23 @@ describe SearchService do
           expect(result).to match_json_expression heading_pattern
         end
       end
+
+      context 'codes mapping' do
+        let!(:commodity1) { create :commodity, :declarable, :with_heading, :with_indent, goods_nomenclature_item_id: '1010111255' }
+        let!(:commodity2) { create :commodity, :declarable, :with_heading, :with_indent, goods_nomenclature_item_id: '2210113355' }
+
+        it 'should return mapped commodity' do
+          result = SearchService.new(q: '1010111255',
+                                     as_of: Date.today).to_json
+
+          expect(result).to match_json_expression commodity_pattern(commodity2)
+        end
+      end
     end
 
     context 'hidden commodities' do
       let!(:commodity)    { create :commodity, :declarable }
       let!(:hidden_gono)  { create :hidden_goods_nomenclature, goods_nomenclature_item_id: commodity.goods_nomenclature_item_id }
-
-      let(:commodity_pattern) {
-        {
-          type: 'exact_match',
-          entry: {
-            endpoint: 'commodities',
-            id: commodity.goods_nomenclature_item_id.first(10)
-          }
-        }
-      }
 
       before {
         @result = SearchService.new(q: commodity.goods_nomenclature_item_id.first(10),
@@ -268,7 +273,7 @@ describe SearchService do
       }
 
       it 'does not return hidden commodity as exact match' do
-        expect(@result).to_not match_json_expression commodity_pattern
+        expect(@result).to_not match_json_expression commodity_pattern(commodity)
       end
     end
   end
