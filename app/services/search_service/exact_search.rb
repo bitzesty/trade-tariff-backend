@@ -37,6 +37,8 @@ class SearchService
     private
 
     def find_heading(query)
+      query = SearchService::CodesMapping.check(query) || query
+
       Heading.actual
              .by_code(query)
              .non_hidden
@@ -44,6 +46,8 @@ class SearchService
     end
 
     def find_commodity(query)
+      query = SearchService::CodesMapping.check(query) || query
+
       commodity = Commodity.actual
                            .by_code(query)
                            .non_hidden
