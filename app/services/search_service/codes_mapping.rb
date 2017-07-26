@@ -18,7 +18,9 @@ class SearchService
     def self.data
       Rails.cache.fetch('codes-mapping-2016-to-2017', expires_in: 24.hours) do
         file = File.join(Rails.root, 'db', 'codes-mapping-2016-to-2017.csv')
-        CSV.read(file, col_sep: ';').to_h
+        lines = CSV.read(file, col_sep: ';')
+        # O(n) solution
+        lines.group_by{ |l| l[0] }.select{ |_, v| v.length == 1 }.map{ |_, v| v[0] }.to_h
       end
     end
   end
