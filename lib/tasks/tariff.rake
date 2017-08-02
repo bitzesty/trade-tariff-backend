@@ -87,6 +87,11 @@ namespace :tariff do
       ImportSearchReferences.reload
     end
 
+    desc "Load CAS numbers (CasNumber) entities from reference file"
+    task cas_numbers: :environment do
+      ImportCasNumbers.reload
+    end
+
     namespace :taric do
       desc "Add Sections and associate to Chapters"
       task sections: :environment do

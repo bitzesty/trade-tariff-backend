@@ -1,10 +1,10 @@
 class SearchService
   class FuzzySearch < BaseSearch
-    class ReferenceQuery < FuzzyQuery
+    class CasNumberQuery < FuzzyQuery
       def query(*)
         {
-          index: "#{TradeTariffBackend.search_namespace}-search_references",
-          type: 'search_reference',
+          index: "#{TradeTariffBackend.search_namespace}-cas_numbers",
+          type: 'cas_number',
           search: {
             query: {
               bool: {
@@ -18,10 +18,9 @@ class SearchService
                 filter: {
                   bool: {
                     must: [
-                      { term: { reference_class: index.type } },
                       {
                         nested: {
-                          path: "reference",
+                          path: "references",
                           query: {
                             bool: {
                               must: { match_all: {} },
@@ -32,8 +31,8 @@ class SearchService
                                     {
                                       bool: {
                                         must: [
-                                          { range: { "reference.validity_start_date" => { lte: date } } },
-                                          { range: { "reference.validity_end_date" => { gte: date } } }
+                                          { range: { "references.validity_start_date" => { lte: date } } },
+                                          { range: { "references.validity_end_date" => { gte: date } } }
                                         ]
                                       }
                                     },
@@ -42,8 +41,8 @@ class SearchService
                                     {
                                       bool: {
                                         must: [
-                                          { range: { "reference.validity_start_date" => { lte: date } } },
-                                          { bool: { must_not: { exists: { field: "reference.validity_end_date" } } } }
+                                          { range: { "references.validity_start_date" => { lte: date } } },
+                                          { bool: { must_not: { exists: { field: "references.validity_end_date" } } } }
                                         ]
                                       }
                                     },
@@ -51,8 +50,8 @@ class SearchService
                                     {
                                       bool: {
                                         must: [
-                                          { bool: { must_not: { exists: { field: "reference.validity_start_date" } } } },
-                                          { bool: { must_not: { exists: { field: "reference.validity_end_date" } } } }
+                                          { bool: { must_not: { exists: { field: "references.validity_start_date" } } } },
+                                          { bool: { must_not: { exists: { field: "references.validity_end_date" } } } }
                                         ]
                                       }
                                     }
