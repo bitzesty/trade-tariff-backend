@@ -7,7 +7,7 @@ class SearchService
       reference_match: {
         sections: [], chapters: [], headings: [], commodities: []
       },
-      cas_numbers_match: {
+      cas_number_match: {
         cas_numbers: []
       }
     }
