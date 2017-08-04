@@ -15,7 +15,8 @@ class SearchService
                         # match the search phrase
                         multi_match: {
                           query: query_string,
-                          fields: ['description']
+                          fields: ['description'],
+                          operator: operator
                         }.merge(query_opts)
                       },
                       {
@@ -60,6 +61,16 @@ class SearchService
            size: INDEX_SIZE_MAX
          }
        }
+      end
+
+      private
+
+      def operator
+        if query_string.include?("-")
+          "and"
+        else
+          "or"
+        end
       end
     end
   end
