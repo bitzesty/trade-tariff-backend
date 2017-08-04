@@ -51,10 +51,11 @@ class SearchService
   end
 
   def q=(term)
-    # if search term has no letters extract the digits
-    # and perform search with just the digits
+    # if search term has no letters extract the digits and dashes
+    # and perform search with just the digits and dashes
+    # dashes used for searching cas numbers
     @q = if term =~ /^(?!.*[A-Za-z]+).*$/
-           term.scan(/\d+/).join
+           term.scan(/\d+|\-/).join
          else
            # ignore [ and ] characters to avoid range searches
            term.to_s.gsub(/(\[|\])/,'')

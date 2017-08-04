@@ -59,6 +59,17 @@ class SearchService
                   )
           end
         end
+
+        # process cas numbers index and query saparately
+        search_index = TradeTariffBackend.search_index_for(CasNumber)
+        search_query = CasNumberQuery.new(@query_string, @date, search_index)
+        yield search_query.match_type,
+              search_query.index,
+              search_query.query(
+                  query_options.fetch(search_query.match_type, {}).fetch(search_query.index.name, {})
+              )
+
+        true
       end
     end
   end

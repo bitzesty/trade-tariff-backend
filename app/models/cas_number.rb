@@ -5,10 +5,18 @@ class CasNumber < Sequel::Model
   plugin :elasticsearch
   plugin :auditable
 
+  def chapter
+    Chapter.by_code(reference).first
+  end
 
-  def references
-    Chapter.where("goods_nomenclature_item_id LIKE ?", reference.ljust(10, "_")).all +
-    Heading.where("goods_nomenclature_item_id LIKE ?", reference.ljust(10, "_")).all +
-    Commodity.where("goods_nomenclature_item_id LIKE ?", reference.ljust(10, "_")).all
+  def heading
+    Heading.by_code(reference).first
+  end
+
+  def commodities
+    code6 = reference.first(6).ljust(10, "0")
+    code8 = reference.first(8).ljust(10, "0")
+    code10 = reference.first(10).ljust(10, "0")
+    Commodity.where(goods_nomenclature_item_id: [code6, code8, code10]).all.sort_by(&:number_indents)
   end
 end

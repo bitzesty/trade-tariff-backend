@@ -14,6 +14,11 @@ class SuggestionsService
     b = SearchReference.select(:title)
                        .order(Sequel.desc(:title))
                        .map{ |i| { value: i.title } }
-    [a, b].flatten.compact
+
+    c = CasNumber.select(:title)
+                 .order(Sequel.desc(:title))
+                 .map{ |i| { value: i.title } }
+
+    [a, b, c].flatten.compact.uniq
   end
 end

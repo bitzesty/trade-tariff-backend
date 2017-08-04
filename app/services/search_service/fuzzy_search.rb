@@ -4,6 +4,7 @@ class SearchService
     autoload :FuzzySearchResult,      'search_service/fuzzy_search/fuzzy_search_result'
     autoload :GoodsNomenclatureQuery, 'search_service/fuzzy_search/goods_nomenclature_query'
     autoload :ReferenceQuery,         'search_service/fuzzy_search/reference_query'
+    autoload :CasNumberQuery,         'search_service/fuzzy_search/cas_number_query'
 
     def search!
       begin
