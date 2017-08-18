@@ -229,8 +229,8 @@ GEM
     safe_yaml (1.0.4)
     sentry-raven (2.4.0)
       faraday (>= 0.7.6, < 1.0)
-    sequel (4.46.0)
-    sequel-rails (0.9.15)
+    sequel (4.49.0)
+    sequel-rails (0.9.17)
       actionpack (>= 3.2.0)
       activemodel
       railties (>= 3.2.0)
@@ -317,8 +317,8 @@ DEPENDENCIES
   rspec-rails (~> 3.5.2)
   rspec_junit_formatter
   sentry-raven
-  sequel (~> 4.32)
-  sequel-rails (~> 0.9, >= 0.9.12)
+  sequel (~> 4.49)
+  sequel-rails (~> 0.9, >= 0.9.17)
   sidekiq (~> 4.1.1)
   sidekiq-scheduler (~> 2.0)
   simplecov (~> 0.14.1)
