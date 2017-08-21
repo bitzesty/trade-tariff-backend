@@ -5,7 +5,7 @@ attributes :producline_suffix, :description, :number_indents,
            :goods_nomenclature_item_id, :bti_url, :formatted_description,
            :description_plain, :consigned, :consigned_from, :basic_duty_rate
 
-extends "api/v1/declarables/declarable", object: @commodity, locals: { measures: @measures }
+extends "api/v1/declarables/declarable", object: @commodity, locals: { measures: @measures, geo_areas: @geographical_areas }
 
 child @commodity.heading do
   attributes :goods_nomenclature_item_id, :description, :formatted_description,
