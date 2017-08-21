@@ -41,11 +41,21 @@ child(:measure_conditions) do
   attributes :condition, :document_code, :requirement, :action, :duty_expression
 end
 
-child(:geographical_area) do
-  attributes :id, :description
-
-  child(contained_geographical_areas: :children_geographical_areas) do
+if locals[:geo_areas]
+  node(:geographical_area) do |measure|
+    {
+      id: locals[:geo_areas].select{ |g| g.geographical_area_sid == measure.geographical_area_sid }.last.id,
+      description: locals[:geo_areas].select{ |g| g.geographical_area_sid == measure.geographical_area_sid }.last.description,
+      children_geographical_areas: locals[:geo_areas].select{ |g| g.geographical_area_sid == measure.geographical_area_sid }.last.contained_geographical_areas.map{|c| {id: c.id, description: c.description} }
+    }
+  end
+else
+  child(:geographical_area) do
     attributes :id, :description
+
+    child(contained_geographical_areas: :children_geographical_areas) do
+      attributes :id, :description
+    end
   end
 end
 

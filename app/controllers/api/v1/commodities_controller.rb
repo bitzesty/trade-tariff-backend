@@ -34,6 +34,9 @@ module Api
           ).all, @commodity
         ).validate!
 
+        @geographical_areas = GeographicalArea.actual.where("geographical_area_sid IN ?", @measures.map(&:geographical_area_sid)).
+            eager(:geographical_area_descriptions, { contained_geographical_areas: :geographical_area_descriptions }).all
+
         @commodity_cache_key = "commodity-#{@commodity.goods_nomenclature_sid}-#{actual_date}"
         respond_with @commodity
       end
