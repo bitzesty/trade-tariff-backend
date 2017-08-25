@@ -9,6 +9,9 @@ Rails.application.configure do
   # Do not eager load code on boot.
   config.eager_load = false
 
+  # Show full error reports.
+  config.consider_all_requests_local = true
+
   # Log error messages when you accidentally call methods on nil.
   config.whiny_nils = true
 
@@ -18,8 +21,10 @@ Rails.application.configure do
 
   # config.cache_store = :memory_store, { size: 20.megabytes }
 
-  # Don't care if the mailer can't send
+  # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
+
+  config.action_mailer.perform_caching = false
 
   # Mailcatcher configuration.
   config.action_mailer.delivery_method = :smtp
@@ -28,14 +33,20 @@ Rails.application.configure do
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
-  # Only use best-standards-support built into browsers
+  # Only use best-standards-support built into browsers.
   config.action_dispatch.best_standards_support = :builtin
 
-  # Do not compress assets
+  # Do not compress assets.
   config.assets.compress = false
 
-  # Expands the lines which load the assets
+  # Suppress logger output for asset requests.
+  config.assets.quiet = true
+
+  # Expands the lines which load the assets.
   config.assets.debug = true
+
+  # Raises error for missing translations
+  # config.action_view.raise_on_missing_translations = true
 
   # Configure Rails.logger to log to both STDOUT and development.log file.
   config.log_level = :info

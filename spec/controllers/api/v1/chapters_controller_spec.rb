@@ -20,7 +20,7 @@ describe Api::V1::ChaptersController, "GET #show" do
 
   context 'when record is present' do
     it 'returns rendered record' do
-      get :show, id: chapter, format: :json
+      get :show, params: { id: chapter }, format: :json
 
       expect(response.body).to match_json_expression pattern
     end
@@ -28,7 +28,7 @@ describe Api::V1::ChaptersController, "GET #show" do
 
   context 'when record is not present' do
     it 'returns not found if record was not found' do
-      get :show, id: "55", format: :json
+      get :show, params: { id: "55" }, format: :json
 
       expect(response.status).to eq 404
     end
@@ -38,7 +38,7 @@ describe Api::V1::ChaptersController, "GET #show" do
     let!(:hidden_goods_nomenclature) { create :hidden_goods_nomenclature, goods_nomenclature_item_id: chapter.goods_nomenclature_item_id }
 
     it 'returns not found' do
-      get :show, id: chapter.goods_nomenclature_item_id.first(2), format: :json
+      get :show, params: { id: chapter.goods_nomenclature_item_id.first(2) }, format: :json
 
       expect(response.status).to eq 404
     end
@@ -110,7 +110,7 @@ describe Api::V1::ChaptersController, "GET #changes" do
     }
 
     it 'returns chapter changes' do
-      get :changes, id: chapter, format: :json
+      get :changes, params: { id: chapter }, format: :json
 
       expect(response.body).to match_json_expression pattern
     end
@@ -130,7 +130,7 @@ describe Api::V1::ChaptersController, "GET #changes" do
     }
 
     it 'does not include change records' do
-      get :changes, id: chapter, as_of: Date.yesterday, format: :json
+      get :changes, params: { id: chapter, as_of: Date.yesterday }, format: :json
 
       expect(response.body).to match_json_expression []
     end
@@ -181,7 +181,7 @@ describe Api::V1::ChaptersController, "GET #changes" do
     before { measure.destroy }
 
     it 'renders record attributes' do
-      get :changes, id: chapter, format: :json
+      get :changes, params: { id: chapter }, format: :json
 
       expect(response.body).to match_json_expression pattern
     end
