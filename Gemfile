@@ -39,7 +39,7 @@ gem "elasticsearch-extensions", "0.0.26"
 
 
 gem "plek", "~> 1.11"
-gem "gds-sso", "~> 12", ">= 12.1.0"
+gem "gds-sso", "~> 13", ">= 12.1.0"
 
 gem "curb", "~> 0.8"
 gem "dalli", "~> 2.7"
