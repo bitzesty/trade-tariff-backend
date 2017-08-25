@@ -1,8 +1,8 @@
 module Api
   module V1
     class RollbacksController < ApiController
-      before_filter :authenticate_user!
-      before_filter :collection, only: :index
+      before_action :authenticate_user!
+      before_action :collection, only: :index
 
       def index
       end

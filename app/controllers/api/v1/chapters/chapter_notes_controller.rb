@@ -2,7 +2,7 @@ module Api
   module V1
     module Chapters
       class ChapterNotesController < ApiController
-        before_filter :authenticate_user!
+        before_action :authenticate_user!
 
         rescue_from Sequel::RecordNotFound do |exception|
           render json: {}, status: 404
