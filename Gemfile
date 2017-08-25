@@ -4,7 +4,7 @@ ruby "2.3.3"
 gem "rails", "5.0.0"
 
 
-gem "pg"
+gem "pg", "0.18.4"
 gem "sequel", "~> 4.32"
 gem "sequel-rails", "~> 0.9", ">= 0.9.12"
 

@@ -307,7 +307,7 @@ DEPENDENCIES
   newrelic_rpm
   nokogiri (~> 1.7, >= 1.7.2)
   ox (~> 2.3)
-  pg
+  pg (= 0.18.4)
   plek (~> 1.11)
   pry-byebug
   pry-rails
