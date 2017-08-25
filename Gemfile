@@ -3,32 +3,51 @@ ruby "2.3.3"
 
 gem "rails", "5.0.0"
 
+
+gem "pg"
+gem "sequel", "~> 4.32"
+gem "sequel-rails", "~> 0.9", ">= 0.9.12"
+
+
+gem "puma", "~> 3.4"
+
+
 gem "aws-sdk", "~> 2"
 gem "aws-sdk-rails", ">= 1.0.1"
+
+
 gem "hashie", "~> 3.4"
 gem "multi_json", "~> 1.11"
-gem "pg"
-gem "sequel-rails", "~> 0.9", ">= 0.9.12"
+gem "yajl-ruby", "~> 1.2", require: "yajl"
+gem "builder", "~> 3.2"
+gem "ox", "~> 2.3"
+gem "nokogiri", "~> 1.7", ">= 1.7.2"
+
+
 gem "tilt"
 gem "rabl", "~> 0.12"
 gem "ansi", "~> 1.5"
-gem "sequel", "~> 4.32"
+gem "responders", "~> 2.1", ">= 2.1.0"
+
+
 gem "sidekiq", "~> 4.1.1"
 gem "sidekiq-scheduler", "~> 2.0"
+
+
 gem "elasticsearch", "5.0.4"
 gem "elasticsearch-extensions", "0.0.26"
-gem "yajl-ruby", "~> 1.2", require: "yajl"
-gem "builder", "~> 3.2"
+
+
 gem "plek", "~> 1.11"
 gem "gds-sso", "~> 12", ">= 12.1.0"
-gem "ox", "~> 2.3"
-gem "puma", "~> 3.4"
+
 gem "curb", "~> 0.8"
 gem "dalli", "~> 2.7"
 gem "connection_pool", "~> 2.2"
-gem "nokogiri", "~> 1.7", ">= 1.7.2"
-gem "responders", "~> 2.1", ">= 2.1.0"
+
+
 gem 'holidays'
+
 
 gem "newrelic_rpm"
 gem "logstash-event"
