@@ -28,7 +28,7 @@ class SearchService
       {
         type: "exact_match",
         entry: {
-          endpoint: results.class.name.parameterize("_").pluralize,
+          endpoint: results.class.name.parameterize(separator: "_").pluralize,
           id: results.to_param
         }
       }

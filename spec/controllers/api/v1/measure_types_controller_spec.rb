@@ -46,13 +46,13 @@ describe Api::V1::MeasureTypesController do
     }
 
     it 'returns national measure types' do
-      get :show, id: national_measure_type.pk, format: :json
+      get :show, params: { id: national_measure_type.pk }, format: :json
 
       expect(response.body).to match_json_expression response_pattern
     end
 
     it 'does not return non-national measure types' do
-      get :show, id: non_national_measure_type.pk, format: :json
+      get :show, params: { id: non_national_measure_type.pk }, format: :json
 
       expect(response.status).to eq 404
     end
@@ -61,13 +61,13 @@ describe Api::V1::MeasureTypesController do
   describe "PUT to #update" do
     it 'updates national measure type' do
       national_measure_type = create :measure_type, :national
-      put :update, id: national_measure_type.pk, measure_type: { description: 'new description' }, format: :json
+      put :update, params: { id: national_measure_type.pk, measure_type: { description: 'new description' } }, format: :json
       expect(parsed_body["description"]).to eq('new description')
     end
 
     it 'does not update non-national measure type' do
       non_national_measure_type = create :measure_type, :non_national
-      put :update, id: non_national_measure_type.pk, measure_type: {}, format: :json
+      put :update, params: { id: non_national_measure_type.pk, measure_type: {} }, format: :json
       expect(response.status).to eq 404
     end
   end

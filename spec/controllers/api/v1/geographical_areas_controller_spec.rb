@@ -70,8 +70,8 @@ describe Api::V1::GeographicalAreasController, "GET #countries" do
 
     before do
       get :countries,
-          format: :json,
-          as_of: "2015-12-04 00:00:00"
+          params: { as_of: "2015-12-04 00:00:00" },
+          format: :json
     end
 
     it "finds one area" do

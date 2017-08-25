@@ -16,7 +16,7 @@ shared_examples_for 'search references controller' do
 
     context 'without pagination' do
       it 'returns rendered records with default pagination values' do
-        get :index, { format: :json }.merge(collection_query)
+        get :index, params: { format: :json }.merge(collection_query)
 
         expect(response.body).to match_json_expression pattern
       end
@@ -26,18 +26,18 @@ shared_examples_for 'search references controller' do
       context 'with odd pagination page/offset values' do
         it 'does not raise exception with offset equal to zero' do
           expect {
-            get(:index, { format: :json, offset: 0 }.merge(collection_query))
+            get(:index, params: { format: :json, offset: 0 }.merge(collection_query))
           }.not_to raise_error
         end
 
         it 'does not raise exception with negative limit' do
           expect {
-            get(:index, { format: :json, limit: -10 }.merge(collection_query))
+            get(:index, params: { format: :json, limit: -10 }.merge(collection_query))
           }.not_to raise_error
         end
 
         it 'defaults to first page' do
-          get(:index, { format: :json }.merge(collection_query))
+          get(:index, params: { format: :json }.merge(collection_query))
 
           expect(response.body).to match_json_expression pattern
         end
@@ -45,7 +45,7 @@ shared_examples_for 'search references controller' do
     end
 
     it 'includes pagination meta data in HTTP meta header' do
-      get(:index, { format: :json }.merge(collection_query))
+      get(:index, params: { format: :json }.merge(collection_query))
 
       expect(response.headers).to have_key 'X-Meta'
       expect(JSON.parse(response.headers['X-Meta'])).to have_key 'pagination'
@@ -58,7 +58,7 @@ shared_examples_for 'search references controller' do
     }
 
     it 'returns rendered search reference record' do
-      get :show, {
+      get :show, params: {
         format: :json
       }.merge(resource_query)
 
@@ -75,7 +75,7 @@ shared_examples_for 'search references controller' do
       }
 
       before {
-        post :create, {
+        post :create, params: {
             search_reference: {
               title: search_reference.title
             },
@@ -98,7 +98,7 @@ shared_examples_for 'search references controller' do
       }
 
       before {
-        post :create, {
+        post :create, params: {
           search_reference: { title: '' },
           format: :json
         }.merge(collection_query)
@@ -121,7 +121,7 @@ shared_examples_for 'search references controller' do
 
       it 'destroys SearchReference entry' do
         expect {
-          delete :destroy, {
+          delete :destroy, params: {
             format: :json
           }.merge(resource_query)
         }.to change { SearchReference.count }.by(-1)
@@ -133,7 +133,7 @@ shared_examples_for 'search references controller' do
 
       it 'does not destroy SearchReference entry' do
         expect {
-          delete :destroy, {
+          delete :destroy, params: {
             id: bogus_search_ref_id,
             format: :json
           }.merge(collection_query)
@@ -141,7 +141,7 @@ shared_examples_for 'search references controller' do
       end
 
       it 'returns 404 response' do
-        delete :destroy, {
+        delete :destroy, params: {
           id: bogus_search_ref_id,
           format: :json
         }.merge(collection_query)
@@ -156,7 +156,7 @@ shared_examples_for 'search references controller' do
 
     context 'valid params provided' do
       before {
-        put :update, {
+        put :update, params: {
           search_reference: {
             title: new_title
           },
@@ -183,7 +183,7 @@ shared_examples_for 'search references controller' do
       }
 
       before {
-        put :update, {
+        put :update, params: {
           search_reference: {
             title: '',
           },
