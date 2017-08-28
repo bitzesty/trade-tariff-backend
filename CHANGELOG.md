@@ -1,6 +1,29 @@
 # Change Log
 
-## [May 27, 2017]
+
+## [August 28, 2017]
+
+### Added
+- Search Suggestions api and service
+- `holidays` gem
+- SearchReference to exact match to redirect on frontend
+- CodesMapping
+- Separately preload geo areas
+
+### Changed
+- `Rails` upgraded to 5.1.3
+- `gds-sso` upgraded to 13.2
+
+### Removed
+- Gov UK holidays checker
+- HMRC request to remove Litre of Alcohol description
+- Commodity codes api
+- Removed geo areas from eager loading for fetching commodity measures
+- ActionDispatch::ParamsParser::DEFAULT_PARSERS was deprecated and `remove_parsers.rb` initializer was removed
+
+[August 28, 2017]: https://github.com/bitzesty/trade-tariff-backend/compare/f435635...ce68659
+
+## [August 28, 2017]
 
 Maintained at now at the Bit Zesty repo - not the alphagov one.
 
@@ -21,6 +44,8 @@ Maintained at now at the Bit Zesty repo - not the alphagov one.
 
 ### Removed
 - End national footnote 05 014
+
+[May 27, 2017]: https://github.com/bitzesty/trade-tariff-backend/compare/37f6244...e2691fc
 
 ## [August 01, 2016]
 
