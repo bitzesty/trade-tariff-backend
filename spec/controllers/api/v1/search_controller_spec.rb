@@ -14,7 +14,7 @@ describe Api::V1::SearchController, "POST #search" do
     }
 
     it 'returns exact match endpoint and indetifier if query for exact record' do
-      post :search, { q: chapter.to_param, as_of: chapter.validity_start_date }
+      post :search, params: { q: chapter.to_param, as_of: chapter.validity_start_date }
       expect(response.status).to eq(200)
       expect(response.body).to match_json_expression pattern
     end
@@ -41,7 +41,7 @@ describe Api::V1::SearchController, "POST #search" do
     }
 
     it 'returns records grouped by type' do
-      post :search, { q: chapter.description,  as_of: chapter.validity_start_date }
+      post :search, params: { q: chapter.description,  as_of: chapter.validity_start_date }
       expect(response.status).to eq(200)
       expect(response.body).to match_json_expression pattern
     end
@@ -96,7 +96,7 @@ describe Api::V1::SearchController, "GET #suggestions" do
     }
 
     before do
-      get :suggestions, format: :json, as_of: "2015-12-04 00:00:00"
+      get :suggestions, params: { as_of: "2015-12-04 00:00:00" }, format: :json
     end
 
     it "returns rendered records" do

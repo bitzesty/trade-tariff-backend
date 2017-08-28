@@ -3,7 +3,7 @@ require 'goods_nomenclature_mapper'
 module Api
   module V1
     class ChaptersController < ApiController
-      before_filter :find_chapter, only: [:show, :changes]
+      before_action :find_chapter, only: [:show, :changes]
 
       def index
         @chapters = Chapter.eager(:chapter_note).all
