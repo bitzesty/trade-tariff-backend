@@ -57,13 +57,13 @@ describe Api::V1::FootnotesController, "GET to #show" do
   }
 
   specify 'returns national footnote' do
-    get :show, id: national_footnote.pk.join, format: :json
+    get :show, params: { id: national_footnote.pk.join }, format: :json
 
     expect(response.body).to match_json_expression response_pattern
   end
 
   specify 'does not return non-national footnote' do
-    get :show, id: non_national_footnote.pk.join, format: :json
+    get :show, params: { id: non_national_footnote.pk.join }, format: :json
 
     expect(response.status).to eq 404
   end
@@ -79,12 +79,12 @@ describe Api::V1::FootnotesController, "PUT to #update" do
 
   specify 'updates national footnote' do
     expect {
-      put :update, id: national_footnote.pk.join, footnote: { description: 'new description' }, format: :json
+      put :update, params: { id: national_footnote.pk.join, footnote: { description: 'new description' } }, format: :json
     }.to change { national_footnote.reload.description }.to('new description')
   end
 
   specify 'does not update non-national footnote' do
-    put :update, id: non_national_footnote.pk.join, footnote: {}, format: :json
+    put :update, params: { id: non_national_footnote.pk.join, footnote: {} }, format: :json
 
     expect(response.status).to eq 404
   end

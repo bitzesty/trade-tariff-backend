@@ -14,7 +14,7 @@ describe Api::V1::RollbacksController, 'POST to #create' do
     before { record }
 
     it 'responds with success + redirect' do
-      post :create, rollback: rollback_attributes
+      post :create, params: { rollback: rollback_attributes }
 
       expect(response.status).to eq 201
       expect(response.location).to eq api_rollbacks_url
@@ -37,7 +37,7 @@ describe Api::V1::RollbacksController, 'POST to #create' do
     }
 
     it 'returns errors for rollback' do
-      post :create, rollback: { date: '', keep: '' }
+      post :create, params: { rollback: { date: '', keep: '' } }
 
       expect(response.status).to eq 422
       expect(response.body).to match_json_expression response_pattern

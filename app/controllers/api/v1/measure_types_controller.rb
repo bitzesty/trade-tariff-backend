@@ -1,7 +1,7 @@
 module Api
   module V1
     class MeasureTypesController < ApiController
-      before_filter :authenticate_user!
+      before_action :authenticate_user!
 
       def index
         @measure_types = MeasureType.eager(:measure_type_description).national.all
