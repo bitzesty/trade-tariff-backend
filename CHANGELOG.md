@@ -12,6 +12,7 @@
 
 ### Changed
 - `Rails` upgraded to 5.1.3
+- Update `ruby` version to 2.4.1
 - `gds-sso` upgraded to 13.2
 
 ### Removed

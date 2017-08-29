@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/mtunjic/forgery.git
+  revision: e20e92abf738a2f0941b774938829b3bb3d102e7
+  branch: master
+  specs:
+    forgery (0.6.0)
+
+GIT
   remote: git://github.com/theharq/database_cleaner.git
   revision: 0492595ea22901f9facd05f94586c9a0c29b5766
   branch: sequel-updates
@@ -95,7 +102,6 @@ GEM
     fakefs (0.11.0)
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
-    forgery (0.6.0)
     gds-sso (13.2.0)
       multi_json (~> 1.0)
       oauth2 (~> 1.0)
@@ -151,7 +157,7 @@ GEM
     omniauth-oauth2 (1.3.1)
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
-    ox (2.3.0)
+    ox (2.6.0)
     pg (0.18.4)
     plek (1.11.0)
     pry (0.10.1)
@@ -276,7 +282,7 @@ GEM
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
-    yajl-ruby (1.2.1)
+    yajl-ruby (1.3.0)
 
 PLATFORMS
   ruby
@@ -296,7 +302,7 @@ DEPENDENCIES
   elasticsearch-extensions (= 0.0.26)
   factory_girl_rails (~> 4.8.0)
   fakefs (~> 0.11.0)
-  forgery
+  forgery!
   gds-sso (~> 13, >= 12.1.0)
   hashie (~> 3.4)
   holidays
@@ -306,7 +312,7 @@ DEPENDENCIES
   multi_json (~> 1.11)
   newrelic_rpm
   nokogiri (~> 1.7, >= 1.7.2)
-  ox (~> 2.3)
+  ox (~> 2.6)
   pg (= 0.18.4)
   plek (~> 1.11)
   pry-byebug
@@ -328,10 +334,10 @@ DEPENDENCIES
   simplecov-rcov
   tilt
   webmock (~> 3.0.1)
-  yajl-ruby (~> 1.2)
+  yajl-ruby (~> 1.3)
 
 RUBY VERSION
-   ruby 2.3.3p222
+   ruby 2.4.1p111
 
 BUNDLED WITH
-   1.14.5
+   1.15.4

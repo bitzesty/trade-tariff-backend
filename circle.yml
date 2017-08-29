@@ -2,7 +2,7 @@ machine:
   java:
     version: oraclejdk8
   ruby:
-    version: 2.3.3
+    version: 2.4.1
   services:
     - redis
   environment:

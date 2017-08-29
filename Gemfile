@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "2.3.3"
+ruby "2.4.1"
 
 gem "rails", "5.1.3"
 
@@ -18,9 +18,9 @@ gem "aws-sdk-rails", ">= 1.0.1"
 
 gem "hashie", "~> 3.4"
 gem "multi_json", "~> 1.11"
-gem "yajl-ruby", "~> 1.2", require: "yajl"
+gem "yajl-ruby", "~> 1.3", require: "yajl"
 gem "builder", "~> 3.2"
-gem "ox", "~> 2.3"
+gem "ox", "~> 2.6"
 gem "nokogiri", "~> 1.7", ">= 1.7.2"
 
 
@@ -70,7 +70,7 @@ group :test do
   gem "rspec-rails", "~> 3.5.2"
   gem "factory_girl_rails", "~> 4.8.0", require: false
   gem "fakefs", "~> 0.11.0", require: "fakefs/safe"
-  gem "forgery"
+  gem "forgery", github: "mtunjic/forgery", branch: "master"
   gem "json_expressions", "~> 0.9.0"
   gem "simplecov", "~> 0.14.1"
   gem "simplecov-rcov"
