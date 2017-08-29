@@ -8,9 +8,9 @@
 module Api
   module V1
     class SearchReferencesBaseController < ApiController
-      before_filter :authenticate_user!
+      before_action :authenticate_user!
 
-      after_filter :set_pagination_headers, only: [:index]
+      after_action :set_pagination_headers, only: [:index]
 
       def index
         @search_references = begin

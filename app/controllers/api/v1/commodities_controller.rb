@@ -1,7 +1,7 @@
 module Api
   module V1
     class CommoditiesController < ApiController
-      before_filter :find_commodity, only: [:show, :changes]
+      before_action :find_commodity, only: [:show, :changes]
 
       def show
         @measures = MeasurePresenter.new(

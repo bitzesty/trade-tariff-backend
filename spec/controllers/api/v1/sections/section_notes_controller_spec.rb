@@ -17,7 +17,7 @@ describe Api::V1::Sections::SectionNotesController, "GET #show" do
     let(:section) { create :section, :with_note }
 
     it 'returns rendered record' do
-      get :show, section_id: section.id, format: :json
+      get :show, params: { section_id: section.id }, format: :json
 
       expect(response.body).to match_json_expression pattern
     end
@@ -27,7 +27,7 @@ describe Api::V1::Sections::SectionNotesController, "GET #show" do
     let(:section) { create :section }
 
     it 'returns not found if record was not found' do
-      get :show, section_id: section.id, format: :json
+      get :show, params: { section_id: section.id }, format: :json
 
       expect(response.status).to eq 404
     end
@@ -41,7 +41,7 @@ describe Api::V1::Sections::SectionNotesController, "POST to #create" do
 
   context 'save succeeded' do
     before {
-      post :create, section_id: section.id, section_note: { content: 'test string' }, format: :json
+      post :create, params: { section_id: section.id, section_note: { content: 'test string' } }, format: :json
     }
 
     it 'responds with success' do
@@ -65,7 +65,7 @@ describe Api::V1::Sections::SectionNotesController, "POST to #create" do
 
   context 'save failed' do
     before {
-      post :create, section_id: section.id, section_note: { content: '' }, format: :json
+      post :create, params: { section_id: section.id, section_note: { content: '' } }, format: :json
     }
 
     it 'responds with 406 unacceptable' do
@@ -93,27 +93,27 @@ describe Api::V1::Sections::SectionNotesController, "PUT to #update" do
 
   context 'save succeeded' do
     it 'responds with success (204 no content)' do
-      put :update, section_id: section.id, section_note: { content: 'test string' }, format: :json
+      put :update, params: { section_id: section.id, section_note: { content: 'test string' } }, format: :json
 
       expect(response.status).to eq 204
     end
 
     it 'changes section_note content' do
       expect {
-        put :update, section_id: section.id, section_note: { content: 'test string' }, format: :json
+        put :update, params: { section_id: section.id, section_note: { content: 'test string' } }, format: :json
       }.to change{ section.reload.section_note.content }
     end
   end
 
   context 'save failed' do
     it 'responds with 422 not acceptable' do
-      put :update, section_id: section.id, section_note: { content: '' }, format: :json
+      put :update, params: { section_id: section.id, section_note: { content: '' } }, format: :json
 
       expect(response.status).to eq 422
     end
 
     it 'returns section_note validation errors' do
-      put :update, section_id: section.id, section_note: { content: '' }, format: :json
+      put :update, params: { section_id: section.id, section_note: { content: '' } }, format: :json
 
       pattern = {
         errors: Hash,
@@ -124,7 +124,7 @@ describe Api::V1::Sections::SectionNotesController, "PUT to #update" do
 
     it 'does not change section_note content' do
       expect {
-        put :update, section_id: section.id, section_note: { content: '' }, format: :json
+        put :update, params: { section_id: section.id, section_note: { content: '' } }, format: :json
       }.not_to change{ section.reload.section_note.content }
     end
   end
@@ -137,14 +137,14 @@ describe Api::V1::Sections::SectionNotesController, "DELETE to #destroy" do
     let(:section) { create :section, :with_note }
 
     it 'responds with success (204 no content)' do
-      delete :destroy, section_id: section.id, format: :json
+      delete :destroy, params: { section_id: section.id }, format: :json
 
       expect(response.status).to eq 204
     end
 
     it 'deletes section note' do
       expect {
-        delete :destroy, section_id: section.id, format: :json
+        delete :destroy, params: { section_id: section.id }, format: :json
       }.to change { section.reload.section_note }
     end
   end
@@ -153,7 +153,7 @@ describe Api::V1::Sections::SectionNotesController, "DELETE to #destroy" do
     let(:section) { create :section }
 
     it 'responds with 404 not found' do
-      delete :destroy, section_id: section.id, format: :json
+      delete :destroy, params: { section_id: section.id }, format: :json
 
       expect(response.status).to eq 404
     end

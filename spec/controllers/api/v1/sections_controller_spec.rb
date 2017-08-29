@@ -21,7 +21,7 @@ describe Api::V1::SectionsController, "GET #show" do
 
   context 'when record is present' do
     it 'returns rendered record' do
-      get :show, id: section.position, format: :json
+      get :show, params: { id: section.position }, format: :json
 
       expect(response.body).to match_json_expression pattern
     end
@@ -29,7 +29,7 @@ describe Api::V1::SectionsController, "GET #show" do
 
   context 'when record is not present' do
     it 'returns not found if record was not found' do
-      get :show, id: "5", format: :json
+      get :show, params: { id: "5" }, format: :json
 
       expect(response.status).to eq 404
     end
