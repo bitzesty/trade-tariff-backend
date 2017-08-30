@@ -30,8 +30,8 @@ gem "ansi", "~> 1.5"
 gem "responders", "~> 2.1", ">= 2.1.0"
 
 
-gem "sidekiq", "~> 4.1.1"
-gem "sidekiq-scheduler", "~> 2.0"
+gem "sidekiq", "~> 4.1.4"
+gem "sidekiq-scheduler", "~> 2.1.8"
 
 
 gem "elasticsearch", "5.0.4"
