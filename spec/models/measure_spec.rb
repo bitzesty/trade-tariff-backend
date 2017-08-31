@@ -303,6 +303,36 @@ describe Measure do
         end
       end
 
+      context 'order' do
+        it 'loads items in alphabetical order by footnote_type_id asc' do
+          TimeMachine.now do
+            f1 = create(:footnote, validity_start_date: 2.years.ago, footnote_type_id: "02")
+            create(:footnote_association_measure, measure_sid: measure.measure_sid,
+                   footnote_id: f1.footnote_id,
+                   footnote_type_id: f1.footnote_type_id)
+            f2 = create(:footnote, validity_start_date: 2.years.ago, footnote_type_id: "00")
+            create(:footnote_association_measure, measure_sid: measure.measure_sid,
+                   footnote_id: f2.footnote_id,
+                   footnote_type_id: f2.footnote_type_id)
+            expect(measure.reload.footnotes.first).to eq(f2)
+          end
+        end
+
+        it 'loads items in alphabetical order by footnote_id asc' do
+          TimeMachine.now do
+            f1 = create(:footnote, validity_start_date: 2.years.ago, footnote_type_id: "02", footnote_id: "123")
+            create(:footnote_association_measure, measure_sid: measure.measure_sid,
+                   footnote_id: f1.footnote_id,
+                   footnote_type_id: f1.footnote_type_id)
+            f2 = create(:footnote, validity_start_date: 2.years.ago, footnote_type_id: "02", footnote_id: "124")
+            create(:footnote_association_measure, measure_sid: measure.measure_sid,
+                   footnote_id: f2.footnote_id,
+                   footnote_type_id: f2.footnote_type_id)
+            expect(measure.reload.footnotes.first).to eq(f1)
+          end
+        end
+      end
+
       context 'eager loading' do
         it 'loads correct indent respecting given actual time' do
           TimeMachine.now do
