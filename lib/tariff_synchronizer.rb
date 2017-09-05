@@ -7,6 +7,7 @@ require 'active_support/notifications'
 require 'active_support/log_subscriber'
 
 require 'bank_holidays'
+require 'taric_importer'
 require 'tariff_synchronizer/base_update'
 require 'tariff_synchronizer/base_update_importer'
 require 'tariff_synchronizer/chief_file_name_generator'
