@@ -1,6 +1,7 @@
 require 'date'
 require 'logger'
 require 'fileutils'
+require 'ring_buffer'
 require 'redis_lock'
 require 'active_support/notifications'
 require 'active_support/log_subscriber'
