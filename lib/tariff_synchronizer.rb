@@ -14,6 +14,7 @@ require 'tariff_synchronizer/taric_file_name_generator'
 require 'tariff_synchronizer/taric_update_downloader'
 require 'tariff_synchronizer/tariff_downloader'
 require 'tariff_synchronizer/tariff_updates_requester'
+require 'tariff_synchronizer/response'
 
 # How TariffSynchronizer works
 #
