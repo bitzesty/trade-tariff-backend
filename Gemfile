@@ -26,7 +26,7 @@ gem "puma", "~> 3.4"
 gem "curb", "~> 0.8"
 gem "dalli", "~> 2.7"
 gem "connection_pool", "~> 2.2"
-gem "nokogiri", "~> 1.7", ">= 1.7.2"
+gem "nokogiri", "~> 1.8.1"
 gem "responders", "~> 2.1", ">= 2.1.0"
 gem 'holidays'
 
