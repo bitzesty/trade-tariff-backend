@@ -21,7 +21,7 @@ gem "multi_json", "~> 1.11"
 gem "yajl-ruby", "~> 1.3", require: "yajl"
 gem "builder", "~> 3.2"
 gem "ox", "~> 2.6"
-gem "nokogiri", "~> 1.7", ">= 1.7.2"
+gem "nokogiri", "~> 1.8.1"
 
 
 gem "tilt"
