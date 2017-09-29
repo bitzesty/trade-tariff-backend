@@ -105,8 +105,7 @@ describe ChiefTransformer::Processor::TameInsert do
             measure: measure,
             measure_sid: measure.measure_sid,
             geographical_area_sid: iq.geographical_area_sid,
-            excluded_geographical_area: iq.geographical_area_id,
-            excluded_geographical_area: iq
+            excluded_geographical_area: iq.geographical_area_id
         }
 
         before { ChiefTransformer::Processor::TameInsert.new(tame).process }

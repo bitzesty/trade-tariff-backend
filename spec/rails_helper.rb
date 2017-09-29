@@ -39,6 +39,7 @@ RSpec.configure do |config|
   config.include LoggerHelper
   config.include RescueHelper
   config.include ChiefDataHelper
+  config.include CodesMappingHelper
   config.include ActiveSupport::Testing::TimeHelpers
 
   redis = Redis.new(:db => 15)
@@ -53,6 +54,7 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do
+    stub_codes_mapping_data
     Rails.cache.clear
     Sidekiq::Worker.clear_all
   end
