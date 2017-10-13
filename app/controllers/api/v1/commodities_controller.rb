@@ -31,6 +31,10 @@ module Api
             :additional_code,
             :full_temporary_stop_regulations,
             :measure_partial_temporary_stops
+          ).join_table(
+            :inner, :geographical_areas, geographical_areas__geographical_area_sid: :measures__geographical_area_sid
+          ).order(
+            Sequel.asc(:measures__national, nulls: :last), Sequel.asc(:measures__geographical_area_id)
           ).all, @commodity
         ).validate!
 
