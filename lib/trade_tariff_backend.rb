@@ -103,7 +103,7 @@ module TradeTariffBackend
     attr_writer :search_operation_options
 
     def indexed_models
-      [Chapter, Commodity, Heading, SearchReference, Section]
+      [CasNumber, Chapter, Commodity, Heading, SearchReference, Section]
     end
 
     def search_indexes

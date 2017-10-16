@@ -36,6 +36,9 @@ describe Api::V1::SearchController, "POST #search" do
           headings: Array,
           chapters: Array,
           sections: Array
+        },
+        cas_number_match: {
+          cas_numbers: Array
         }
       }
     }

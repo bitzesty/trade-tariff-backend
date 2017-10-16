@@ -494,6 +494,36 @@ ALTER SEQUENCE base_regulations_oid_seq OWNED BY base_regulations_oplog.oid;
 
 
 --
+-- Name: cas_numbers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE cas_numbers (
+    id integer NOT NULL,
+    title text,
+    reference character varying(10)
+);
+
+
+--
+-- Name: cas_numbers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE cas_numbers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: cas_numbers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE cas_numbers_id_seq OWNED BY cas_numbers.id;
+
+
+--
 -- Name: certificate_description_periods_oplog; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -6324,6 +6354,13 @@ ALTER TABLE ONLY base_regulations_oplog ALTER COLUMN oid SET DEFAULT nextval('ba
 
 
 --
+-- Name: cas_numbers id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY cas_numbers ALTER COLUMN id SET DEFAULT nextval('cas_numbers_id_seq'::regclass);
+
+
+--
 -- Name: certificate_description_periods_oplog oid; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -7099,6 +7136,14 @@ ALTER TABLE ONLY audits
 
 ALTER TABLE ONLY base_regulations_oplog
     ADD CONSTRAINT base_regulations_pkey PRIMARY KEY (oid);
+
+
+--
+-- Name: cas_numbers cas_numbers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY cas_numbers
+    ADD CONSTRAINT cas_numbers_pkey PRIMARY KEY (id);
 
 
 --
@@ -10036,3 +10081,4 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20151214230831_quota_criti
 INSERT INTO "schema_migrations" ("filename") VALUES ('20161209195324_alter_footnotes_foonote_id_lenght.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20170117212158_create_audits.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20170331125740_create_data_migrations.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20170727201613_create_cas_numbers.rb');
