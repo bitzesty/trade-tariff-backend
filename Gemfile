@@ -1,4 +1,10 @@
 source "https://rubygems.org"
+
+git_source(:github) do |repo_name|
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  "https://github.com/#{repo_name}.git"
+end
+
 ruby "2.4.1"
 
 gem "rails", "5.1.3"
@@ -21,7 +27,7 @@ gem "multi_json", "~> 1.11"
 gem "yajl-ruby", "~> 1.3", require: "yajl"
 gem "builder", "~> 3.2"
 gem "ox", "~> 2.6"
-gem "nokogiri", "~> 1.7", ">= 1.7.2"
+gem "nokogiri", "~> 1.8.1"
 
 
 gem "tilt"
