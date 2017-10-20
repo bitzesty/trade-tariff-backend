@@ -60,6 +60,12 @@ module TariffSynchronizer
   mattr_accessor :chief_initial_update_date
   self.chief_initial_update_date = Date.new(2012,6,30)
 
+  # TODO:
+  # set initial update date
+  # Initial dump date + 1 day
+  mattr_accessor :cds_initial_update_date
+  self.cds_initial_update_date = Date.new(2017,11,11)
+
   # Times to retry downloading update before giving up
   mattr_accessor :retry_count
   self.retry_count = 20
@@ -89,13 +95,15 @@ module TariffSynchronizer
   # Download pending updates for TARIC and CHIEF data
   # Gets latest downloaded file present in (inbox/failbox/processed) and tries
   # to download any further updates to current day.
+  # Since October 2017 we don't need TARIC and CHIEF data
   def download
     return instrument("config_error.tariff_synchronizer") unless sync_variables_set?
 
     TradeTariffBackend.with_redis_lock do
       instrument("download.tariff_synchronizer") do
         begin
-          [TaricUpdate, ChiefUpdate].map(&:sync)
+          # [TaricUpdate, ChiefUpdate].map(&:sync)
+          CdsUpdate.sync
         rescue TariffUpdatesRequester::DownloadException => exception
           instrument("failed_download.tariff_synchronizer", exception: exception)
           raise exception.original
@@ -124,8 +132,9 @@ module TariffSynchronizer
 
       date_range_since_last_pending_update.each do |day|
         # TARIC updates should be applied before CHIEF
-        applied_updates << perform_update(TaricUpdate, day)
-        applied_updates << perform_update(ChiefUpdate, day)
+        # applied_updates << perform_update(TaricUpdate, day)
+        # applied_updates << perform_update(ChiefUpdate, day)
+        applied_updates << perform_update(CdsUpdate, day)
       end
 
       applied_updates.flatten!

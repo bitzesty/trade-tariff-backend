@@ -84,9 +84,19 @@ module TariffSynchronizer
       info "Applied TARIC update #{event.payload[:filename]}"
     end
 
+    # Apply CDS update
+    def apply_cds(event)
+      info "Applied TARIC update #{event.payload[:filename]}"
+    end
+
     # Query for TARIC update path
     def get_taric_update_name(event)
       info "Checking for TARIC update for #{event.payload[:date]} at #{event.payload[:url]}"
+    end
+
+    # Query for CDS update path
+    def get_cds_update_name(event)
+      info "Checking for CDS update for #{event.payload[:date]} at #{event.payload[:url]}"
     end
 
     def downloaded_tariff_update(event)
