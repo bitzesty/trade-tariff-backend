@@ -5,8 +5,6 @@ class CdsImporter
       MAPPING = {
         "regulationRoleType.regulationRoleTypeId" => :base_regulation_role,
         "baseRegulationId" => :base_regulation_id,
-        "validityStartDate" => :validity_start_date,
-        "validityEndDate" => :validity_end_date,
         "communityCode" => :community_code,
         "regulationGroup.regulationGroupId" => :regulation_group_id,
         "replacementIndicator" => :replacement_indicator,
@@ -22,11 +20,8 @@ class CdsImporter
         "completeAbrogationRegulation.regulationRoleType.regulationRoleTypeId" => :complete_abrogation_regulation_role,
         "completeAbrogationRegulation.completeAbrogationRegulationId" => :complete_abrogation_regulation_id,
         "explicitAbrogationRegulation.regulationRoleType.regulationRoleTypeId" => :explicit_abrogation_regulation_role,
-        "explicitAbrogationRegulation.explicitAbrogationRegulationId" => :explicit_abrogation_regulation_id,
-        "metainfo.origin" => :national,
-        "metainfo.opType" => :operation,
-        "metainfo.transactionDate" => :operation_date
-      }.freeze
+        "explicitAbrogationRegulation.explicitAbrogationRegulationId" => :explicit_abrogation_regulation_id
+      }.merge(BASE_MAPPING).freeze
     end
   end
 end
