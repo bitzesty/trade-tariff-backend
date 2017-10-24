@@ -1,8 +1,8 @@
 class CdsImporter
   class EntityMapper
     class BaseRegulationMapper < BaseMapper
-      KLASS = "BaseRegulation".freeze
-      MAPPING = {
+      self.entity_class = "BaseRegulation".freeze
+      self.entity_mapping = BASE_MAPPING.merge(
         "regulationRoleType.regulationRoleTypeId" => :base_regulation_role,
         "baseRegulationId" => :base_regulation_id,
         "communityCode" => :community_code,
@@ -21,7 +21,7 @@ class CdsImporter
         "completeAbrogationRegulation.completeAbrogationRegulationId" => :complete_abrogation_regulation_id,
         "explicitAbrogationRegulation.regulationRoleType.regulationRoleTypeId" => :explicit_abrogation_regulation_role,
         "explicitAbrogationRegulation.explicitAbrogationRegulationId" => :explicit_abrogation_regulation_id
-      }.merge(BASE_MAPPING).freeze
+      ).freeze
     end
   end
 end
