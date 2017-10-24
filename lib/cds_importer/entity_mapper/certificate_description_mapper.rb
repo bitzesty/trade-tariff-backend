@@ -10,17 +10,6 @@
 class CdsImporter
   class EntityMapper
     class CertificateDescriptionMapper < BaseMapper
-      class << self
-        attr_accessor :exclude_mapping, :mapping_path
-
-        def base_mapping
-          BASE_MAPPING.except(exclude_mapping).keys.inject({}) do |memo, key|
-            memo["#{mapping_path}.#{key}"] = BASE_MAPPING[key]
-            memo
-          end
-        end
-      end
-
       self.mapping_path = "certificateDescriptionPeriod.certificateDescription".freeze
 
       self.exclude_mapping = ["validityStartDate", "validityEndDate"].freeze

@@ -2,7 +2,14 @@ class CdsImporter
   class EntityMapper
     class BaseMapper
       class << self
-        attr_accessor :entity_class, :entity_mapping
+        attr_accessor :entity_class, :entity_mapping, :mapping_path, :exclude_mapping
+
+        def base_mapping
+          BASE_MAPPING.except(*exclude_mapping).keys.inject({}) do |memo, key|
+             memo["#{mapping_path}.#{key}"] = BASE_MAPPING[key]
+             memo
+           end
+         end
       end
 
       NATIONAL = "N".freeze

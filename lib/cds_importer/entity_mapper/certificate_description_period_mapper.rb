@@ -7,15 +7,6 @@
 class CdsImporter
   class EntityMapper
     class CertificateDescriptionPeriodMapper < BaseMapper
-      class << self
-        def base_mapping
-          BASE_MAPPING.keys.inject({}) do |memo, key|
-            memo["#{mapping_path}.#{key}"] = BASE_MAPPING[key]
-            memo
-          end
-        end
-      end
-
       self.mapping_path = "certificateDescriptionPeriod".freeze
 
       self.entity_class = "CertificateDescriptionPeriod".freeze

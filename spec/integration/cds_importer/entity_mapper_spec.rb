@@ -3,9 +3,12 @@ require "cds_importer/entity_mapper"
 
 describe CdsImporter::EntityMapper do
   describe "#process!" do
-    it "additional code sample" do
+    before do
       # allow setting primary keys
       Sequel::Model.subclasses.each(&:unrestrict_primary_key)
+    end
+
+    it "AdditionalCode sample" do
       hash_double = double(
         :hash_from_node,
         name: "AdditionalCode",
@@ -34,6 +37,42 @@ describe CdsImporter::EntityMapper do
       expect(entity.national).to be_falsey
       expect(entity.operation).to eq(:update)
       expect(entity.operation_date).to eq(Date.parse(hash_double.values["metainfo"]["transactionDate"]))
+    end
+
+    it "AdditionalCodeDescription sample" do
+      # NB AdditionalCodeDescription is nested inside AdditionalCode
+      #   so following hash is a double from AdditionalCode hash
+      hash_double = double(
+        :hash_from_node,
+        name: "AdditionalCodeDescription",
+        values: {
+          "sid" => 3084,
+          "additionalCodeCode" => "169",
+          "additionalCodeType" => {
+            "additionalCodeTypeId" => 8
+          },
+          "additionalCodeDescriptionPeriod" => {
+            "sid" => 536,
+            "additionalCodeDescription" => {
+              "description" => "Other.",
+              "language" => {
+                "languageId" => "EN"
+              },
+              "metainfo" => {
+                "origin" => "T",
+                "opType" => "C",
+                "transactionDate" => "2016-07-27T09:20:14"
+              }
+            }
+          }
+        }
+      )
+      # TODO instruct AdditionalCodeMapper on how to parse
+      # children AdditionalCodeDescription
+      klass = CdsImporter::EntityMapper::AdditionalCodeDescriptionMapper
+      entity = klass.new(hash_double.values).parse
+      expect(entity.additional_code_description_period_sid).to eq(hash_double.values["additionalCodeDescriptionPeriod"]["sid"])
+      expect(entity.language_id).to eq(hash_double.values["additionalCodeDescriptionPeriod"]["additionalCodeDescription"]["language"]["languageId"])
     end
   end
 end
