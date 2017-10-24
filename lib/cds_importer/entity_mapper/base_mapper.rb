@@ -6,10 +6,11 @@ class CdsImporter
 
         def base_mapping
           BASE_MAPPING.except(*exclude_mapping).keys.inject({}) do |memo, key|
-             memo["#{mapping_path}.#{key}"] = BASE_MAPPING[key]
-             memo
-           end
-         end
+            mapped_key = mapping_path.present? ? "#{mapping_path}.#{key}" : key
+            memo[mapped_key] = BASE_MAPPING[key]
+            memo
+          end
+        end
       end
 
       NATIONAL = "N".freeze
