@@ -49,7 +49,7 @@ describe CdsImporter::EntityMapper do
           "sid" => 3084,
           "additionalCodeCode" => "169",
           "additionalCodeType" => {
-            "additionalCodeTypeId" => 8
+            "additionalCodeTypeId" => "8"
           },
           "additionalCodeDescriptionPeriod" => {
             "sid" => 536,
@@ -73,6 +73,13 @@ describe CdsImporter::EntityMapper do
       entity = klass.new(hash_double.values).parse
       expect(entity.additional_code_description_period_sid).to eq(hash_double.values["additionalCodeDescriptionPeriod"]["sid"])
       expect(entity.language_id).to eq(hash_double.values["additionalCodeDescriptionPeriod"]["additionalCodeDescription"]["language"]["languageId"])
+      expect(entity.additional_code_sid).to eq(hash_double.values["sid"])
+      expect(entity.additional_code_type_id).to eq(hash_double.values["additionalCodeType"]["additionalCodeTypeId"])
+      expect(entity.additional_code).to eq(hash_double.values["additionalCodeCode"])
+      expect(entity.description).to eq(hash_double.values["additionalCodeDescriptionPeriod"]["additionalCodeDescription"]["description"])
+      expect(entity.national).to be_falsey
+      expect(entity.operation).to eq(:create)
+      expect(entity.operation_date).to eq(Date.parse(hash_double.values["additionalCodeDescriptionPeriod"]["additionalCodeDescription"]["metainfo"]["transactionDate"]))
     end
   end
 end
