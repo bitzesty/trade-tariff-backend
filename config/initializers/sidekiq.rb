@@ -1,7 +1,7 @@
 require "sidekiq"
 
 # PaaS Redis is not ready for prod
-redis_url = if Rails.env.production?
+redis_url = if TradeTariffBackend.production?
   ENV["REDIS_URL"]
 else
   begin
