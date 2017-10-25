@@ -167,5 +167,31 @@ describe CdsImporter::EntityMapper do
       expect(entity.approved_flag).to eq(values["approvedFlag"])
       expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
     end
+
+    it "AdditionalCodeType sample" do
+      values = {
+        "applicationCode" => "1",
+        "additionalCodeTypeId" => "3",
+        "validityStartDate" => "1970-01-01T00:00:00",
+        "meursingTablePlan" => {
+          "meursingTablePlanId" => "01"
+        },
+        "metainfo" => {
+          "origin" => "T",
+          "opType" => "U",
+          "transactionDate" => "2016-07-27T09:18:51"
+        }
+      }
+      subject = CdsImporter::EntityMapper::AdditionalCodeTypeMapper.new(values)
+      entity = subject.parse
+      expect(entity).to be_a(AdditionalCodeType)
+      expect(entity.additional_code_type_id).to eq(values["additionalCodeTypeId"])
+      expect(entity.validity_start_date).to eq(values["validityStartDate"])
+      expect(entity.application_code).to eq(values["applicationCode"])
+      expect(entity.meursing_table_plan_id).to eq(values["meursingTablePlan"]["meursingTablePlanId"])
+      expect(entity.national).to be_falsey
+      expect(entity.operation).to eq(:update)
+      expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+    end
   end
 end
