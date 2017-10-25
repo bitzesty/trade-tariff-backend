@@ -136,5 +136,36 @@ describe CdsImporter::EntityMapper do
       expect(entity.producline_suffix).to eq(values["produclineSuffix"])
       expect(entity.statistical_indicator.to_s).to eq(values["statisticalIndicator"])
     end
+
+    it "CompleteAbrogationRegulation sample" do
+      values = {
+        "regulationRoleType" => {
+          "regulationRoleTypeId" => "6"
+        },
+        "completeAbrogationRegulationId" => "R9808461",
+        "publishedDate" => "2017-08-27T10:11:12",
+        "officialjournalNumber" => "L 120",
+        "officialjournalPage" => "13",
+        "replacementIndicator" => "0",
+        "informationText" => "TR",
+        "approvedFlag" => true,
+        "metainfo" => {
+          "opType" => "C",
+          "transactionDate" => "2017-09-22T17:26:25"
+        }
+      }
+      subject = CdsImporter::EntityMapper::CompleteAbrogationRegulationMapper.new(values)
+      entity = subject.parse
+      expect(entity).to be_a(CompleteAbrogationRegulation)
+      expect(entity.complete_abrogation_regulation_role.to_s).to eq(values["regulationRoleType"]["regulationRoleTypeId"])
+      expect(entity.complete_abrogation_regulation_id).to eq(values["completeAbrogationRegulationId"])
+      expect(entity.published_date).to eq(Date.parse(values["publishedDate"]))
+      expect(entity.officialjournal_number).to eq(values["officialjournalNumber"])
+      expect(entity.officialjournal_page.to_s).to eq(values["officialjournalPage"])
+      expect(entity.replacement_indicator.to_s).to eq(values["replacementIndicator"])
+      expect(entity.information_text).to eq(values["informationText"])
+      expect(entity.approved_flag).to eq(values["approvedFlag"])
+      expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+    end
   end
 end
