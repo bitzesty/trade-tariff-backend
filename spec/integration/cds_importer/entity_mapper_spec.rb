@@ -193,5 +193,31 @@ describe CdsImporter::EntityMapper do
       expect(entity.operation).to eq(:update)
       expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
     end
+
+    it "AdditionalCodeTypeDescription sample" do
+      values = {
+        "additionalCodeTypeId" => "3",
+        "additionalCodeTypeDescription" => {
+          "description" => "Prohibition/Restriction/Surveillance",
+          "language" => {
+            "languageId" => "EN"
+          },
+          "metainfo" => {
+            "origin" => "T",
+            "opType" => "C",
+            "transactionDate" => "2016-07-27T09:18:51"
+          }
+        }
+      }
+      subject = CdsImporter::EntityMapper::AdditionalCodeTypeDescriptionMapper.new(values)
+      entity = subject.parse
+      expect(entity).to be_a(AdditionalCodeTypeDescription)
+      expect(entity.additional_code_type_id).to eq(values["additionalCodeTypeId"])
+      expect(entity.language_id).to eq(values["additionalCodeTypeDescription"]["language"]["languageId"])
+      expect(entity.description).to eq(values["additionalCodeTypeDescription"]["description"])
+      expect(entity.national).to be_falsey
+      expect(entity.operation).to eq(:create)
+      expect(entity.operation_date).to eq(Date.parse(values["additionalCodeTypeDescription"]["metainfo"]["transactionDate"]))
+    end
   end
 end
