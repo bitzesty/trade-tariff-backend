@@ -5,7 +5,7 @@ class CdsImporter
 
       self.mapping_path = "additionalCodeTypeDescription".freeze
 
-      self.exclude_mapping = ["validityStartDate", "validityEndDate"]
+      self.exclude_mapping = ["validityStartDate", "validityEndDate"].freeze
 
       self.entity_mapping = base_mapping.merge(
         "additionalCodeTypeId" => :additional_code_type_id,

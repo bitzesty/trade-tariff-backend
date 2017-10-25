@@ -1,7 +1,7 @@
 class CdsImporter
   class EntityMapper
     class GoodsNomenclatureMapper < BaseMapper
-      self.exclude_mapping = ["metainfo.origin"]
+      self.exclude_mapping = ["metainfo.origin"].freeze
 
       self.entity_class = "GoodsNomenclature".freeze
 
