@@ -114,5 +114,27 @@ describe CdsImporter::EntityMapper do
       expect(entity.operation).to eq(:update)
       expect(entity.operation_date).to eq(Date.parse(hash_double.values["additionalCodeDescriptionPeriod"]["metainfo"]["transactionDate"]))
     end
+
+    it "GoodsNomenclature sample" do
+      values = {
+        "sid" => 1234,
+        "goodsNomenclatureItemId" => "9950000000",
+        "produclineSuffix" => "80",
+        "statisticalIndicator" => "2",
+        "validityStartDate" => "2017-10-01T00:00:00",
+        "validityEndDate" => "2020-09-01T00:00:00",
+        "metainfo" => {
+          "opType" => "C",
+          "transactionDate" => "2017-09-27T07:26:25"
+        }
+      }
+      subject = CdsImporter::EntityMapper::GoodsNomenclatureMapper.new(values)
+      entity = subject.parse
+      expect(entity).to be_a(GoodsNomenclature)
+      expect(entity.goods_nomenclature_sid).to eq(values["sid"])
+      expect(entity.goods_nomenclature_item_id).to eq(values["goodsNomenclatureItemId"])
+      expect(entity.producline_suffix).to eq(values["produclineSuffix"])
+      expect(entity.statistical_indicator.to_s).to eq(values["statisticalIndicator"])
+    end
   end
 end
