@@ -4,7 +4,7 @@
 # and certificateDescriptionPeriod is nested in to Certificate xml object.
 # also CertificateDescription has attributes which are not present in CertificateDescription xml object
 # e.g. 'certificate_description_period_sid' - present in parent object
-# So we will pass @values CertificateDescription the same as for Certificate
+# So we will pass @values for CertificateDescription the same as for Certificate
 #
 
 class CdsImporter

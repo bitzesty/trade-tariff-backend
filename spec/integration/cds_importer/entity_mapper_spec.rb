@@ -247,5 +247,71 @@ describe CdsImporter::EntityMapper do
       expect(entity.national).to be_truthy
       expect(entity.operation_date).to  eq(Date.parse(values["additionalCodeTypeMeasureType"]["metainfo"]["transactionDate"]))
     end
+
+    it "DutyExpressionDescription sample" do
+      values = {
+        "sid" => 123456,
+        "dutyExpressionId" => "1234",
+        "validityStartDate" => "2017-10-01T00:00:00",
+        "validityEndDate" => "2020-09-01T00:00:00",
+        "dutyExpressionDescription" => {
+          "description" => "Some description",
+          "language" => {
+            "languageId" => "EN"
+          },
+          "metainfo" => {
+            "origin" => "T",
+            "opType" => "C",
+            "transactionDate" => "2016-07-27T09:20:14"
+          }
+        },
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2017-09-27T07:26:25"
+        }
+      }
+      subject = CdsImporter::EntityMapper::DutyExpressionDescriptionMapper.new(values)
+      entity = subject.parse
+      expect(entity).to be_a(DutyExpressionDescription)
+      expect(entity.duty_expression_id).to eq(values["dutyExpressionId"])
+      expect(entity.language_id).to eq(values["dutyExpressionDescription"]["language"]["languageId"])
+      expect(entity.description).to eq(values["dutyExpressionDescription"]["description"])
+      expect(entity.operation_date).to eq(Date.parse(values["dutyExpressionDescription"]["metainfo"]["transactionDate"]))
+      expect(entity.operation).to eq(:create)
+    end
+
+    it "CompleteAbrogationRegulation sample" do
+      values = {
+        "regulationRoleType" => {
+          "sid" => 4321,
+          "regulationRoleTypeId" => "7"
+        },
+        "completeAbrogationRegulationId" => "R9808461",
+        "publishedDate" => "2017-08-27T10:11:12",
+        "officialjournalNumber" => "L 120",
+        "officialjournalPage" => "13",
+        "replacementIndicator" => "0",
+        "abrogationDate" => "2017-09-21T10:07:31",
+        "informationText" => "TR",
+        "approvedFlag" => true,
+        "metainfo" => {
+          "opType" => "C",
+          "transactionDate" => "2017-09-22T17:26:25"
+        }
+      }
+      subject = CdsImporter::EntityMapper::ExplicitAbrogationRegulationMapper.new(values)
+      entity = subject.parse
+      expect(entity).to be_a(ExplicitAbrogationRegulation)
+      expect(entity.explicit_abrogation_regulation_role.to_s).to eq(values["regulationRoleType"]["regulationRoleTypeId"])
+      expect(entity.explicit_abrogation_regulation_id).to eq(values["explicitAbrogationRegulationId"])
+      expect(entity.published_date).to eq(Date.parse(values["publishedDate"]))
+      expect(entity.officialjournal_number).to eq(values["officialjournalNumber"])
+      expect(entity.officialjournal_page.to_s).to eq(values["officialjournalPage"])
+      expect(entity.replacement_indicator.to_s).to eq(values["replacementIndicator"])
+      expect(entity.abrogation_date).to eq(Date.parse(values["abrogationDate"]))
+      expect(entity.information_text).to eq(values["informationText"])
+      expect(entity.approved_flag).to eq(values["approvedFlag"])
+      expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+    end
   end
 end

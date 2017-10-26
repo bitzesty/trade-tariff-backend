@@ -1,9 +1,8 @@
-
 #
 # CertificateTypeDescription is nested in to CertificateType
 # CertificateTypeDescription has attributes which are not present in CertificateTypeDescription xml object
 # e.g. 'certificate_type_code' - present in parent object
-# So we will pass @values CertificateTypeDescription the same as for CertificateType
+# So we will pass @values for CertificateTypeDescription the same as for CertificateType
 #
 
 class CdsImporter
