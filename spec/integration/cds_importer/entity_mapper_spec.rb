@@ -427,5 +427,31 @@ describe CdsImporter::EntityMapper do
       expect(entity.operation).to eq(:update)
       expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
     end
+
+    it "Footnote sample" do
+      values = {
+        "footnoteId" => "133",
+        "validityStartDate" => "1972-01-01T00:00:00",
+        "validityEndDate" => "1973-01-01T00:00:00",
+        "footnoteType" => {
+          "footnoteTypeId" => "TM"
+        },
+        "metainfo" => {
+          "opType" => "U",
+          "origin" => "T",
+          "transactionDate" => "2016-07-27T09:18:57"
+        }
+      }
+      subject = CdsImporter::EntityMapper::FootnoteMapper.new(values)
+      entity = subject.parse
+      expect(entity).to be_a(Footnote)
+      expect(entity.footnote_id).to eq(values["footnoteId"])
+      expect(entity.footnote_type_id).to eq(values["footnoteType"]["footnoteTypeId"])
+      expect(entity.validity_start_date).to eq(values["validityStartDate"])
+      expect(entity.validity_end_date).to eq(values["validityEndDate"])
+      expect(entity.national).to be_falsey
+      expect(entity.operation).to eq(:update)
+      expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+    end
   end
 end
