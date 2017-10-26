@@ -401,5 +401,31 @@ describe CdsImporter::EntityMapper do
       expect(entity.validity_start_date).to eq(Date.parse(values["exportRefundNomenclatureIndents"]["validityStartDate"]))
       expect(entity.validity_end_date).to eq(Date.parse(values["exportRefundNomenclatureIndents"]["validityEndDate"]))
     end
+
+    it "DutyExpression sample" do
+      values = {
+        "dutyExpressionId" => "14",
+        "validityEndDate" => "1995-06-30T23:59:59",
+        "validityStartDate" => "1972-01-01T00:00:00",
+        "dutyAmountApplicabilityCode" => 2,
+        "measurementUnitApplicabilityCode" => 0,
+        "monetaryUnitApplicabilityCode" => 0,
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2016-07-27T09:20:10"
+        }
+      }
+      subject = CdsImporter::EntityMapper::DutyExpressionMapper.new(values)
+      entity = subject.parse
+      expect(entity).to be_a(DutyExpression)
+      expect(entity.duty_expression_id).to eq(values["dutyExpressionId"])
+      expect(entity.validity_end_date).to eq(values["validityEndDate"])
+      expect(entity.validity_start_date).to eq(values["validityStartDate"])
+      expect(entity.duty_amount_applicability_code).to eq(values["dutyAmountApplicabilityCode"])
+      expect(entity.measurement_unit_applicability_code).to eq(values["measurementUnitApplicabilityCode"])
+      expect(entity.monetary_unit_applicability_code).to eq(values["monetaryUnitApplicabilityCode"])
+      expect(entity.operation).to eq(:update)
+      expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+    end
   end
 end
