@@ -313,5 +313,93 @@ describe CdsImporter::EntityMapper do
       expect(entity.approved_flag).to eq(values["approvedFlag"])
       expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
     end
+
+    it "ExportRefundNomenclature sample" do
+      values = {
+        "sid" => 1233,
+        "exportRefundCode" => "700",
+        "productLine" => "80",
+        "additionalCodeType" => {
+          "additionalCodeTypeId" => "8"
+        },
+        "goodsNomenclature" => {
+          "sid" => 1234,
+          "goodsNomenclatureItemId" => "9950000000",
+          "produclineSuffix" => "80",
+          "statisticalIndicator" => "2",
+          "validityStartDate" => "2017-10-01T00:00:00",
+          "validityEndDate" => "2020-09-01T00:00:00",
+          "metainfo" => {
+            "opType" => "U",
+            "transactionDate" => "2017-09-27T07:26:25"
+          }
+        },
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2017-08-21T17:21:35"
+        }
+      }
+      subject = CdsImporter::EntityMapper::ExportRefundNomenclatureMapper.new(values)
+      entity = subject.parse
+      expect(entity).to be_a(ExportRefundNomenclature)
+      expect(entity.export_refund_nomenclature_sid).to eq(values["sid"])
+      expect(entity.goods_nomenclature_item_id).to eq(values["goodsNomenclature"]["goodsNomenclatureItemId"])
+      expect(entity.goods_nomenclature_sid).to eq(values["goodsNomenclature"]["sid"])
+      expect(entity.additional_code_type).to eq(values["additionalCodeType"]["additionalCodeTypeId"])
+      expect(entity.export_refund_code).to eq(values["exportRefundCode"])
+      expect(entity.productline_suffix).to eq(values["productLine"])
+      expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+      expect(entity.operation).to eq(:update)
+    end
+
+    it "ExportRefundNomenclatureIndent sample" do
+      values = {
+        "sid" => 1233,
+        "exportRefundCode" => "700",
+        "productLine" => "80",
+        "exportRefundNomenclatureIndents" => {
+          "sid" => 3322,
+          "numberExportRefundNomenclatureIndents" => 2,
+          "validityStartDate" => "2015-06-11T00:00:00",
+          "validityEndDate" => "2020-04-03T00:00:00",
+          "metainfo" => {
+            "opType" => "C",
+            "transactionDate" => "2017-07-22T15:22:15"
+          }
+        },
+        "additionalCodeType" => {
+          "additionalCodeTypeId" => "8"
+        },
+        "goodsNomenclature" => {
+          "sid" => 1234,
+          "goodsNomenclatureItemId" => "9950000000",
+          "produclineSuffix" => "80",
+          "statisticalIndicator" => "2",
+          "validityStartDate" => "2017-10-01T00:00:00",
+          "validityEndDate" => "2020-09-01T00:00:00",
+          "metainfo" => {
+            "opType" => "U",
+            "transactionDate" => "2017-09-27T07:26:25"
+          }
+        },
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2017-08-21T17:21:35"
+        }
+      }
+      subject = CdsImporter::EntityMapper::ExportRefundNomenclatureIndentMapper.new(values)
+      entity = subject.parse
+      expect(entity).to be_a(ExportRefundNomenclatureIndent)
+      expect(entity.export_refund_nomenclature_indents_sid).to eq(values["exportRefundNomenclatureIndents"]["sid"])
+      expect(entity.goods_nomenclature_item_id).to eq(values["goodsNomenclature"]["goodsNomenclatureItemId"])
+      expect(entity.number_export_refund_nomenclature_indents).to eq(values["exportRefundNomenclatureIndents"]["numberExportRefundNomenclatureIndents"])
+      expect(entity.additional_code_type).to eq(values["additionalCodeType"]["additionalCodeTypeId"])
+      expect(entity.export_refund_code).to eq(values["exportRefundCode"])
+      expect(entity.productline_suffix).to eq(values["productLine"])
+      expect(entity.operation_date).to eq(Date.parse(values["exportRefundNomenclatureIndents"]["metainfo"]["transactionDate"]))
+      expect(entity.operation).to eq(:create)
+      expect(entity.validity_start_date).to eq(Date.parse(values["exportRefundNomenclatureIndents"]["validityStartDate"]))
+      expect(entity.validity_end_date).to eq(Date.parse(values["exportRefundNomenclatureIndents"]["validityEndDate"]))
+    end
   end
 end
