@@ -219,5 +219,33 @@ describe CdsImporter::EntityMapper do
       expect(entity.operation).to eq(:create)
       expect(entity.operation_date).to eq(Date.parse(values["additionalCodeTypeDescription"]["metainfo"]["transactionDate"]))
     end
+
+    it "AdditionalCodeTypeMeasureType sample" do
+      values = {
+        "additionalCodeTypeMeasureType" => {
+          "validityStartDate" => "1999-09-01T00:00:00",
+          "measureType" => {
+            "measureTypeId" => "468"
+          },
+          "additionalCodeType" => {
+            "additionalCodeTypeId" => "3"
+          },
+          "metainfo" => {
+            "opType" => "C",
+            "origin" => "N",
+            "transactionDate" => "2016-07-22T20:03:35"
+          }
+        }
+      }
+      subject = CdsImporter::EntityMapper::AdditionalCodeTypeMeasureTypeMapper.new(values)
+      entity = subject.parse
+      expect(entity).to be_a(AdditionalCodeTypeMeasureType)
+      expect(entity.measure_type_id).to eq(values["additionalCodeTypeMeasureType"]["measureType"]["measureTypeId"])
+      expect(entity.additional_code_type_id).to eq(values["additionalCodeTypeMeasureType"]["additionalCodeType"]["additionalCodeTypeId"])
+      expect(entity.validity_start_date).to eq(values["additionalCodeTypeMeasureType"]["validityStartDate"])
+      expect(entity.operation).to eq(:create)
+      expect(entity.national).to be_truthy
+      expect(entity.operation_date).to  eq(Date.parse(values["additionalCodeTypeMeasureType"]["metainfo"]["transactionDate"]))
+    end
   end
 end
