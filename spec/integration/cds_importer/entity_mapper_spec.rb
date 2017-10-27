@@ -823,4 +823,27 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:create)
     expect(entity.operation_date).to eq(Date.parse(values["footnoteTypeDescription"]["metainfo"]["transactionDate"]))
   end
+
+  it "GeographicalArea sample" do
+    values = {
+      "sid" => 234,
+      "validityStartDate" => "1984-01-01T00:00:00",
+      "geographicalCode" => "1",
+      "geographicalAreaId" => "1032",
+      "metainfo" => {
+        "opType" => "U",
+        "origin" => "N",
+        "transactionDate" => "2017-06-29T20:04:37"
+      }
+    }
+    subject = CdsImporter::EntityMapper::GeographicalAreaMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(GeographicalArea)
+    expect(entity.geographical_area_sid).to eq(values["sid"])
+    expect(entity.geographical_code).to eq(values["geographicalCode"])
+    expect(entity.geographical_area_id).to eq(values["geographicalAreaId"])
+    expect(entity.national).to be_truthy
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+  end
 end
