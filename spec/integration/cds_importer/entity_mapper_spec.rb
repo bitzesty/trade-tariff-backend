@@ -953,4 +953,32 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["goodsNomenclatureGroupDescription"]["metainfo"]["transactionDate"]))
   end
+
+  it "GoodsNomenclatureIndent sample" do
+    values = {
+      "sid" => 27652,
+      "goodsNomenclatureItemId" => "0102901019",
+      "produclineSuffix" => "80",
+      "goodsNomenclatureIndents" => {
+        "sid" => 28131,
+        "validityStartDate" => "1992-03-01T00:00:00",
+        "numberIndents" => 5,
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2017-06-29T20:04:37"
+        }
+      }
+    }
+    subject = CdsImporter::EntityMapper::GoodsNomenclatureIndentMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(GoodsNomenclatureIndent)
+    expect(entity.goods_nomenclature_indent_sid).to eq(values["goodsNomenclatureIndents"]["sid"])
+    expect(entity.goods_nomenclature_sid).to eq(values["sid"])
+    expect(entity.validity_start_date).to eq(values["goodsNomenclatureIndents"]["validityStartDate"])
+    expect(entity.number_indents).to eq(values["goodsNomenclatureIndents"]["numberIndents"])
+    expect(entity.goods_nomenclature_item_id).to eq(values["goodsNomenclatureItemId"])
+    expect(entity.productline_suffix).to eq(values["produclineSuffix"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["goodsNomenclatureIndents"]["metainfo"]["transactionDate"]))
+  end
 end
