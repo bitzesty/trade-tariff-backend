@@ -8,9 +8,9 @@ class CdsImporter
       self.exclude_mapping = ["metainfo.origin"].freeze
 
       self.entity_mapping = base_mapping.merge(
-        "additionalCodeDescriptionPeriod.sid" => :additional_code_description_period_sid,
+        "#{mapping_path}.sid" => :additional_code_description_period_sid,
         "sid" => :additional_code_sid,
-        "additionalCodeDescriptionPeriod.additionalCodeType.additionalCodeTypeId" => :additional_code_type_id,
+        "#{mapping_path}.additionalCodeType.additionalCodeTypeId" => :additional_code_type_id,
         "additionalCodeCode" => :additional_code
       ).freeze
     end

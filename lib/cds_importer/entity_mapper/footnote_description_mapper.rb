@@ -11,8 +11,8 @@ class CdsImporter
         "footnoteDescriptionPeriod.footnoteDescriptionPeriodSid" => :footnote_description_period_sid,
         "footnoteType.footnoteTypeId" => :footnote_type_id,
         "footnoteId" => :footnote_id,
-        "footnoteDescriptionPeriod.footnoteDescription.language.languageId" => :language_id,
-        "footnoteDescriptionPeriod.footnoteDescription.description" => :description
+        "#{mapping_path}.language.languageId" => :language_id,
+        "#{mapping_path}.description" => :description
       ).freeze
     end
   end

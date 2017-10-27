@@ -9,11 +9,11 @@ class CdsImporter
 
       self.entity_mapping = base_mapping.merge(
         "additionalCodeDescriptionPeriod.sid" => :additional_code_description_period_sid,
-        "additionalCodeDescriptionPeriod.additionalCodeDescription.language.languageId" => :language_id,
+        "#{mapping_path}.language.languageId" => :language_id,
         "sid" => :additional_code_sid,
         "additionalCodeType.additionalCodeTypeId" => :additional_code_type_id,
         "additionalCodeCode" => :additional_code,
-        "additionalCodeDescriptionPeriod.additionalCodeDescription.description" => :description
+        "#{mapping_path}.description" => :description
       ).freeze
     end
   end

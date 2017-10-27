@@ -9,10 +9,10 @@ class CdsImporter
 
       self.entity_mapping = base_mapping.merge(
         "geographicalAreaDescriptionPeriod.sid" => :geographical_area_description_period_sid,
-        "geographicalAreaDescriptionPeriod.geographicalAreaDescription.language.languageId" => :language_id,
+        "#{mapping_path}.language.languageId" => :language_id,
         "sid" => :geographical_area_sid,
         "geographicalAreaId" => :geographical_area_id,
-        "geographicalAreaDescriptionPeriod.geographicalAreaDescription.description" => :description
+        "#{mapping_path}.description" => :description
       ).freeze
     end
   end

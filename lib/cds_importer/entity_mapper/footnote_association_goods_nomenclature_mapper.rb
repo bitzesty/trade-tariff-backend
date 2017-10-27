@@ -9,7 +9,7 @@ class CdsImporter
         "sid" => :goods_nomenclature_sid,
         "produclineSuffix" => :productline_suffix,
         "goodsNomenclatureItemId" => :goods_nomenclature_item_id,
-        "footnoteAssociationGoodsNomenclature.footnote.footnoteId" => :footnote_id
+        "#{mapping_path}.footnote.footnoteId" => :footnote_id
       ).freeze
     end
   end

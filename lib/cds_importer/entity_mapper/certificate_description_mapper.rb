@@ -18,10 +18,10 @@ class CdsImporter
 
       self.entity_mapping = base_mapping.merge(
         "certificateDescriptionPeriod.sid" => :certificate_description_period_sid,
-        "certificateDescriptionPeriod.certificateDescription.language.languageId" => :language_id,
+        "#{mapping_path}.language.languageId" => :language_id,
         "certificateType.certificateTypeCode" => :certificate_type_code,
         "certificateCode" => :certificate_code,
-        "certificateDescriptionPeriod.certificateDescription.description" => :description
+        "#{mapping_path}.description" => :description
       ).freeze
     end
   end

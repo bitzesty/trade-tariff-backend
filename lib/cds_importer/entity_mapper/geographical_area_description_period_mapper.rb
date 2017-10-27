@@ -6,7 +6,7 @@ class CdsImporter
       self.mapping_path = "geographicalAreaDescriptionPeriod".freeze
 
       self.entity_mapping = base_mapping.merge(
-        "geographicalAreaDescriptionPeriod.sid" => :geographical_area_description_period_sid,
+        "#{mapping_path}.sid" => :geographical_area_description_period_sid,
         "sid" => :geographical_area_sid,
         "geographicalAreaId" => :geographical_area_id
       ).freeze

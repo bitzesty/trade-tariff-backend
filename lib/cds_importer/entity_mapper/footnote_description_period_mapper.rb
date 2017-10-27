@@ -6,7 +6,7 @@ class CdsImporter
       self.mapping_path = "footnoteDescriptionPeriod".freeze
 
       self.entity_mapping = base_mapping.merge(
-        "footnoteDescriptionPeriod.sid" => :footnote_description_period_sid,
+        "#{mapping_path}.sid" => :footnote_description_period_sid,
         "footnoteType.footnoteTypeId" => :footnote_type_id
       ).freeze
     end

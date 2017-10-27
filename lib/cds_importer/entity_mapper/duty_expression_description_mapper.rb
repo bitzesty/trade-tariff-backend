@@ -15,8 +15,8 @@ class CdsImporter
 
       self.entity_mapping = base_mapping.merge(
         "dutyExpressionId" => :duty_expression_id,
-        "dutyExpressionDescription.language.languageId" => :language_id,
-        "dutyExpressionDescription.description" => :description
+        "#{mapping_path}.language.languageId" => :language_id,
+        "#{mapping_path}.description" => :description
       ).freeze
     end
   end
