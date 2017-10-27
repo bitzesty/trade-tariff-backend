@@ -928,4 +928,29 @@ describe CdsImporter::EntityMapper do
     expect(entity.national).to be_truthy
     expect(entity.operation_date).to eq(Date.parse(values["geographicalAreaMembership"]["metainfo"]["transactionDate"]))
   end
+
+  it "GoodsNomenclatureGroupDescription sample" do
+    values = {
+      "goodsNomenclatureGroupId" => "125000",
+      "goodsNomenclatureGroupType" => "T",
+      "goodsNomenclatureGroupDescription" => {
+        "language" => {
+          "languageId" => "EN"
+        },
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2017-06-29T20:04:37"
+        }
+      }
+    }
+    subject = CdsImporter::EntityMapper::GoodsNomenclatureGroupDescriptionMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(GoodsNomenclatureGroupDescription)
+    expect(entity.goods_nomenclature_group_type).to eq(values["goodsNomenclatureGroupType"])
+    expect(entity.goods_nomenclature_group_id).to eq(values["goodsNomenclatureGroupId"])
+    expect(entity.language_id).to eq(values["goodsNomenclatureGroupDescription"]["language"]["languageId"])
+    expect(entity.description).to eq(values["goodsNomenclatureGroupDescription"]["description"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["goodsNomenclatureGroupDescription"]["metainfo"]["transactionDate"]))
+  end
 end
