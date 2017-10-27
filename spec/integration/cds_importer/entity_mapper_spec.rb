@@ -485,5 +485,39 @@ describe CdsImporter::EntityMapper do
       expect(entity.operation).to eq(:create)
       expect(entity.operation_date).to eq(Date.parse(values["footnoteAssociationGoodsNomenclature"]["metainfo"]["transactionDate"]))
     end
+
+    it "FootnoteDescription sample" do
+      values = {
+        "footnoteId" => "133",
+        "footnoteType" => {
+          "footnoteTypeId" => "TM"
+        },
+        "footnoteDescriptionPeriod" => {
+          "footnoteDescriptionPeriodSid" => 1355,
+          "footnoteDescription" => {
+            "description" => "The rate of duty is applicable to the net free-at-Community",
+            "language" => {
+              "languageId" => "EN"
+            },
+            "metainfo" => {
+              "origin" => "T",
+              "opType" => "C",
+              "transactionDate" => "2016-07-27T09:18:57"
+            }
+          }
+        }
+      }
+      subject = CdsImporter::EntityMapper::FootnoteDescriptionMapper.new(values)
+      entity = subject.parse
+      expect(entity).to be_a(FootnoteDescription)
+      expect(entity.footnote_description_period_sid).to eq(values["footnoteDescriptionPeriod"]["footnoteDescriptionPeriodSid"])
+      expect(entity.footnote_type_id).to eq(values["footnoteType"]["footnoteTypeId"])
+      expect(entity.footnote_id).to eq(values["footnoteId"])
+      expect(entity.language_id).to eq(values["footnoteDescriptionPeriod"]["footnoteDescription"]["language"]["languageId"])
+      expect(entity.description).to eq(values["footnoteDescriptionPeriod"]["footnoteDescription"]["description"])
+      expect(entity.national).to be_falsey
+      expect(entity.operation).to eq(:create)
+      expect(entity.operation_date).to eq(Date.parse(values["footnoteDescriptionPeriod"]["footnoteDescription"]["metainfo"]["transactionDate"]))
+    end
   end
 end
