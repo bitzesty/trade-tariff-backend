@@ -135,6 +135,47 @@ describe CdsImporter::EntityMapper do
       expect(entity.goods_nomenclature_item_id).to eq(values["goodsNomenclatureItemId"])
       expect(entity.producline_suffix).to eq(values["produclineSuffix"])
       expect(entity.statistical_indicator.to_s).to eq(values["statisticalIndicator"])
+      expect(entity.operation).to eq(:create)
+      expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+
+    end
+
+    it "GoodsNomenclatureDescription sample" do
+      values = {
+        "sid" => 1234,
+        "goodsNomenclatureItemId" => "9950000000",
+        "produclineSuffix" => "80",
+        "statisticalIndicator" => "2",
+        "validityStartDate" => "2017-10-01T00:00:00",
+        "validityEndDate" => "2020-09-01T00:00:00",
+        "goodsNomenclatureDescriptionPeriod" => {
+          "sid" => 1155,
+          "goodsNomenclatureDescription" => {
+            "description" => "Some description.",
+            "language" => {
+              "languageId" => "EN"
+            },
+            "metainfo" => {
+              "opType" => "U",
+              "transactionDate" => "2017-08-24T04:21:16"
+            }
+          }
+        },
+        "metainfo" => {
+          "opType" => "C",
+          "transactionDate" => "2017-09-28T09:23:15"
+        }
+      }
+      subject = CdsImporter::EntityMapper::GoodsNomenclatureDescriptionMapper.new(values)
+      entity = subject.parse
+      expect(entity).to be_a(GoodsNomenclatureDescription)
+      expect(entity.goods_nomenclature_description_period_sid).to eq(values["goodsNomenclatureDescriptionPeriod"]["sid"])
+      expect(entity.goods_nomenclature_sid).to eq(values["sid"])
+      expect(entity.goods_nomenclature_item_id).to eq(values["goodsNomenclatureItemId"])
+      expect(entity.productline_suffix).to eq(values["produclineSuffix"])
+      expect(entity.description).to eq(values["goodsNomenclatureDescriptionPeriod"]["goodsNomenclatureDescription"]["description"])
+      expect(entity.operation).to eq(:update)
+      expect(entity.operation_date).to eq(Date.parse(values["goodsNomenclatureDescriptionPeriod"]["goodsNomenclatureDescription"]["metainfo"]["transactionDate"]))
     end
 
     it "CompleteAbrogationRegulation sample" do

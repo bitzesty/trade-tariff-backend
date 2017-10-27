@@ -1,7 +1,7 @@
 #
 # There is no collection with ExportRefundNomenclatureDescriptionPeriod in new xml.
 # ExportRefundNomenclatureDescriptionPeriod is nested in to ExportRefundNomenclature.
-# We will pass @values for ExportRefundNomenclatureDescriptionPeriod the same as for ExportRefundNomenclature
+# We will pass @values for ExportRefundNomenclatureDescriptionPeriod the same as for ExportRefundNomenclature.
 #
 
 class CdsImporter

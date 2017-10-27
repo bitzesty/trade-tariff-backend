@@ -1,7 +1,7 @@
 #
 # There is no collection with ExportRefundNomenclatureIndent in new xml.
 # ExportRefundNomenclatureIndent is nested in to ExportRefundNomenclature.
-# We will pass @values for ExportRefundNomenclatureIndent the same as for ExportRefundNomenclature
+# We will pass @values for ExportRefundNomenclatureIndent the same as for ExportRefundNomenclature.
 #
 
 class CdsImporter
