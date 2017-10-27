@@ -14,9 +14,9 @@ class CdsImporter
       self.entity_class = "ExportRefundNomenclatureIndent".freeze
 
       self.entity_mapping = base_mapping.merge(
-        "exportRefundNomenclatureIndents.sid" => :export_refund_nomenclature_indents_sid,
+        "#{mapping_path}.sid" => :export_refund_nomenclature_indents_sid,
         "sid" => :export_refund_nomenclature_sid,
-        "exportRefundNomenclatureIndents.numberExportRefundNomenclatureIndents" => :number_export_refund_nomenclature_indents,
+        "#{mapping_path}.numberExportRefundNomenclatureIndents" => :number_export_refund_nomenclature_indents,
         "goodsNomenclature.goodsNomenclatureItemId" => :goods_nomenclature_item_id,
         "additionalCodeType.additionalCodeTypeId" => :additional_code_type,
         "exportRefundCode" => :export_refund_code,
