@@ -846,4 +846,36 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end
+
+  it "GeographicalAreaDescription sample" do
+    values = {
+      "sid" => 234,
+      "geographicalAreaId" => "1032",
+      "geographicalAreaDescriptionPeriod" => {
+        "sid" => 1239,
+        "geographicalAreaDescription" => {
+          "description" => "Economic Partnership Agreements",
+          "language" => {
+            "languageId" => "EN"
+          },
+          "metainfo" => {
+            "opType" => "U",
+            "origin" => "N",
+            "transactionDate" => "2016-07-27T09:21:40"
+          }
+        }
+      }
+    }
+    subject = CdsImporter::EntityMapper::GeographicalAreaDescriptionMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(GeographicalAreaDescription)
+    expect(entity.geographical_area_description_period_sid).to eq(values["geographicalAreaDescriptionPeriod"]["sid"])
+    expect(entity.language_id).to eq(values["geographicalAreaDescriptionPeriod"]["geographicalAreaDescription"]["language"]["languageId"])
+    expect(entity.geographical_area_sid).to eq(values["sid"])
+    expect(entity.geographical_area_id).to eq(values["geographicalAreaId"])
+    expect(entity.description).to eq(values["geographicalAreaDescriptionPeriod"]["geographicalAreaDescription"]["description"])
+    expect(entity.national).to be_truthy
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["geographicalAreaDescriptionPeriod"]["geographicalAreaDescription"]["metainfo"]["transactionDate"]))
+  end
 end
