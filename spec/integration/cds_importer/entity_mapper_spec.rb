@@ -1007,4 +1007,30 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["goodsNomenclatureOrigin"]["metainfo"]["transactionDate"]))
   end
+
+  it "GoodsNomenclatureSuccessor sample" do
+    values = {
+      "sid" => 27652,
+      "goodsNomenclatureItemId" => "0102903131",
+      "produclineSuffix" => "10",
+      "goodsNomenclatureSuccessor" => {
+        "absorbedGoodsNomenclatureItemId" => "0101901100",
+        "absorbedProductlineSuffix" => "80",
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2017-06-29T20:04:37"
+        }
+      }
+    }
+    subject = CdsImporter::EntityMapper::GoodsNomenclatureSuccessorMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(GoodsNomenclatureSuccessor)
+    expect(entity.goods_nomenclature_sid).to eq(values["sid"])
+    expect(entity.absorbed_goods_nomenclature_item_id).to eq(values["goodsNomenclatureSuccessor"]["absorbedGoodsNomenclatureItemId"])
+    expect(entity.absorbed_productline_suffix).to eq(values["goodsNomenclatureSuccessor"]["absorbedProductlineSuffix"])
+    expect(entity.goods_nomenclature_item_id).to eq(values["goodsNomenclatureItemId"])
+    expect(entity.productline_suffix).to eq(values["produclineSuffix"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["goodsNomenclatureSuccessor"]["metainfo"]["transactionDate"]))
+  end
 end
