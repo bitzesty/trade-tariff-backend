@@ -519,5 +519,33 @@ describe CdsImporter::EntityMapper do
       expect(entity.operation).to eq(:create)
       expect(entity.operation_date).to eq(Date.parse(values["footnoteDescriptionPeriod"]["footnoteDescription"]["metainfo"]["transactionDate"]))
     end
+
+    it "FootnoteDescriptionPeriod sample" do
+      values = {
+        "footnoteType" => {
+          "footnoteTypeId" => "TM"
+        },
+        "footnoteDescriptionPeriod" => {
+          "sid" => 1355,
+          "validityStartDate" => "1972-01-01T00:00:00",
+          "validityEndDate" => "1973-01-01T00:00:00",
+          "metainfo" => {
+            "opType" => "C",
+            "origin" => "T",
+            "transactionDate" => "2016-07-27T09:18:57"
+          }
+        }
+      }
+      subject = CdsImporter::EntityMapper::FootnoteDescriptionPeriodMapper.new(values)
+      entity = subject.parse
+      expect(entity).to be_a(FootnoteDescriptionPeriod)
+      expect(entity.footnote_description_period_sid).to eq(values["footnoteDescriptionPeriod"]["sid"])
+      expect(entity.footnote_type_id).to eq(values["footnoteType"]["footnoteTypeId"])
+      expect(entity.validity_start_date).to eq(values["footnoteDescriptionPeriod"]["validityStartDate"])
+      expect(entity.validity_end_date).to eq(values["footnoteDescriptionPeriod"]["validityEndDate"])
+      expect(entity.national).to be_falsey
+      expect(entity.operation).to eq(:create)
+      expect(entity.operation_date).to eq(Date.parse(values["footnoteDescriptionPeriod"]["metainfo"]["transactionDate"]))
+    end
   end
 end
