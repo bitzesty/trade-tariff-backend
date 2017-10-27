@@ -453,5 +453,37 @@ describe CdsImporter::EntityMapper do
       expect(entity.operation).to eq(:update)
       expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
     end
+
+    it "FootnoteAssociationGoodsNomenclature sample" do
+      values = {
+        "sid" => 27652,
+        "produclineSuffix" => "80",
+        "goodsNomenclatureItemId" => "0102903131",
+        "footnoteAssociationGoodsNomenclature" => {
+          "validityEndDate" => "1992-12-31T23:59:59",
+          "validityStartDate" => "1991-01-01T00:00:00",
+          "footnote" => {
+            "footnoteId" => "001"
+          },
+          "metainfo" => {
+            "opType" => "C",
+            "origin" => "T",
+            "transactionDate" => "2016-07-25T11:07:56"
+          }
+        }
+      }
+      subject = CdsImporter::EntityMapper::FootnoteAssociationGoodsNomenclatureMapper.new(values)
+      entity = subject.parse
+      expect(entity).to be_a(FootnoteAssociationGoodsNomenclature)
+      expect(entity.goods_nomenclature_sid).to eq(values["sid"])
+      expect(entity.footnote_id).to eq(values["footnoteAssociationGoodsNomenclature"]["footnote"]["footnoteId"])
+      expect(entity.goods_nomenclature_item_id).to eq(values["goodsNomenclatureItemId"])
+      expect(entity.productline_suffix).to eq(values["produclineSuffix"])
+      expect(entity.validity_start_date).to eq(values["footnoteAssociationGoodsNomenclature"]["validityStartDate"])
+      expect(entity.validity_end_date).to eq(values["footnoteAssociationGoodsNomenclature"]["validityEndDate"])
+      expect(entity.national).to be_falsey
+      expect(entity.operation).to eq(:create)
+      expect(entity.operation_date).to eq(Date.parse(values["footnoteAssociationGoodsNomenclature"]["metainfo"]["transactionDate"]))
+    end
   end
 end
