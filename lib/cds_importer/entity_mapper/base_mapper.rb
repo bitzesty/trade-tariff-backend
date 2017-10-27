@@ -52,6 +52,7 @@ class CdsImporter
 
       def normalize(values)
         values[:national] = values[:national] == NATIONAL if values.key?(:national)
+        values[:approved_flag] = values[:approved_flag] == '1' if values.key?(:approved_flag)
         values
       end
     end

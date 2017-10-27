@@ -148,7 +148,7 @@ describe CdsImporter::EntityMapper do
         "officialjournalPage" => "13",
         "replacementIndicator" => "0",
         "informationText" => "TR",
-        "approvedFlag" => true,
+        "approvedFlag" => "0",
         "metainfo" => {
           "opType" => "C",
           "transactionDate" => "2017-09-22T17:26:25"
@@ -164,7 +164,7 @@ describe CdsImporter::EntityMapper do
       expect(entity.officialjournal_page.to_s).to eq(values["officialjournalPage"])
       expect(entity.replacement_indicator.to_s).to eq(values["replacementIndicator"])
       expect(entity.information_text).to eq(values["informationText"])
-      expect(entity.approved_flag).to eq(values["approvedFlag"])
+      expect(entity.approved_flag).to eq(false)
       expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
     end
 
@@ -293,7 +293,7 @@ describe CdsImporter::EntityMapper do
         "replacementIndicator" => "0",
         "abrogationDate" => "2017-09-21T10:07:31",
         "informationText" => "TR",
-        "approvedFlag" => true,
+        "approvedFlag" => "1",
         "metainfo" => {
           "opType" => "C",
           "transactionDate" => "2017-09-22T17:26:25"
@@ -310,7 +310,7 @@ describe CdsImporter::EntityMapper do
       expect(entity.replacement_indicator.to_s).to eq(values["replacementIndicator"])
       expect(entity.abrogation_date).to eq(Date.parse(values["abrogationDate"]))
       expect(entity.information_text).to eq(values["informationText"])
-      expect(entity.approved_flag).to eq(values["approvedFlag"])
+      expect(entity.approved_flag).to eq(true)
       expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
     end
 
@@ -673,6 +673,85 @@ describe CdsImporter::EntityMapper do
       expect(entity.validity_start_date).to eq(values["validityStartDate"])
       expect(entity.validity_end_date).to eq(values["validityEndDate"])
       expect(entity.national).to be_falsey
+      expect(entity.operation).to eq(:create)
+      expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+    end
+
+    it "FtsRegulationAction sample" do
+      values = {
+        "sid" => 1277,
+        "approvedFlag" => "1",
+        "fullTemporaryStopRegulationId" => "11122",
+        "regulationRoleType" => {
+          "regulationRoleTypeId" => "6"
+        },
+        "ftsRegulationAction" => {
+          "sid" => 1127,
+          "stoppedRegulationId" => "112233",
+          "stoppedRegulationRole" => "5",
+          "metainfo" => {
+            "opType" => "U",
+            "transactionDate" => "2017-07-27T19:18:31"
+          }
+        },
+        "metainfo" => {
+          "opType" => "C",
+          "transactionDate" => "2016-07-27T09:18:51"
+        }
+      }
+      subject = CdsImporter::EntityMapper::FtsRegulationActionMapper.new(values)
+      entity = subject.parse
+      expect(entity).to be_a(FtsRegulationAction)
+      expect(entity.fts_regulation_role.to_s).to eq(values["regulationRoleType"]["regulationRoleTypeId"])
+      expect(entity.fts_regulation_id).to eq(values["fullTemporaryStopRegulationId"])
+      expect(entity.stopped_regulation_role.to_s).to eq(values["ftsRegulationAction"]["stoppedRegulationRole"])
+      expect(entity.stopped_regulation_id).to eq(values["ftsRegulationAction"]["stoppedRegulationId"])
+      expect(entity.operation).to eq(:update)
+      expect(entity.operation_date).to eq(Date.parse(values["ftsRegulationAction"]["metainfo"]["transactionDate"]))
+    end
+
+    it "FtsRegulationAction sample" do
+      values = {
+        "sid" => 1277,
+        "approvedFlag" => "1",
+        "fullTemporaryStopRegulationId" => "22113",
+        "publishedDate" => "2017-08-25T07:41:22",
+        "effectiveEndDate" => "2018-08-20T09:42:12",
+        "officialjournalNumber" => "K 320",
+        "officialjournalPage" => "12",
+        "replacementIndicator" => "2",
+        "informationText" => "ER",
+        "explicitAbrogationRegulation" => {
+          "explicitAbrogationRegulationId" => "11226",
+          "regulationRoleType" => {
+            "regulationRoleTypeId" => "7"
+          },
+        },
+        "regulationRoleType" => {
+          "regulationRoleTypeId" => "6"
+        },
+        "ftsRegulationAction" => {
+          "sid" => 1127
+        },
+        "metainfo" => {
+          "opType" => "C",
+          "transactionDate" => "2016-07-27T09:18:51"
+        }
+      }
+      subject = CdsImporter::EntityMapper::FullTemporaryStopRegulationMapper.new(values)
+      entity = subject.parse
+      expect(entity).to be_a(FullTemporaryStopRegulation)
+      expect(entity.full_temporary_stop_regulation_role.to_s).to eq(values["regulationRoleType"]["regulationRoleTypeId"])
+      expect(entity.full_temporary_stop_regulation_id).to eq(values["fullTemporaryStopRegulationId"])
+      expect(entity.explicit_abrogation_regulation_role.to_s).to eq(values["explicitAbrogationRegulation"]["regulationRoleType"]["regulationRoleTypeId"])
+      expect(entity.explicit_abrogation_regulation_id).to eq(values["explicitAbrogationRegulation"]["explicitAbrogationRegulationId"])
+      expect(entity.published_date).to eq(Date.parse(values["publishedDate"]))
+      expect(entity.effective_enddate).to eq(Date.parse(values["effectiveEndDate"]))
+      expect(entity.officialjournal_number).to eq(values["officialjournalNumber"])
+      expect(entity.officialjournal_page.to_s).to eq(values["officialjournalPage"])
+      expect(entity.replacement_indicator.to_s).to eq(values["replacementIndicator"])
+      expect(entity.information_text).to eq(values["informationText"])
+      expect(entity.approved_flag).to eq(true)
       expect(entity.operation).to eq(:create)
       expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
     end
