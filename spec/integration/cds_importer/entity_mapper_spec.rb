@@ -904,4 +904,28 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["geographicalAreaDescriptionPeriod"]["metainfo"]["transactionDate"]))
   end
+
+  it "GeographicalAreaMembership sample" do
+    values = {
+      "sid" => 234,
+      "geographicalAreaMembership" => {
+        "geographicalAreaGroupSid" => 461273,
+        "validityStartDate" => "2008-01-01T00:00:00",
+        "metainfo" => {
+          "opType" => "U",
+          "origin" => "N",
+          "transactionDate" => "2017-06-29T20:04:37"
+        }
+      }
+    }
+    subject = CdsImporter::EntityMapper::GeographicalAreaMembershipMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(GeographicalAreaMembership)
+    expect(entity.geographical_area_sid).to eq(values["sid"])
+    expect(entity.geographical_area_group_sid).to eq(values["geographicalAreaMembership"]["geographicalAreaGroupSid"])
+    expect(entity.validity_start_date).to eq(values["geographicalAreaMembership"]["validityStartDate"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.national).to be_truthy
+    expect(entity.operation_date).to eq(Date.parse(values["geographicalAreaMembership"]["metainfo"]["transactionDate"]))
+  end
 end
