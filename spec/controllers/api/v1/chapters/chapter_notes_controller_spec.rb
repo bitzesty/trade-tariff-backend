@@ -18,7 +18,7 @@ describe Api::V1::Chapters::ChapterNotesController, "GET #show" do
     let(:chapter) { create :chapter, :with_note }
 
     it 'returns rendered record' do
-      get :show, chapter_id: chapter.to_param, format: :json
+      get :show, params: { chapter_id: chapter.to_param }, format: :json
 
       expect(response.body).to match_json_expression pattern
     end
@@ -28,7 +28,7 @@ describe Api::V1::Chapters::ChapterNotesController, "GET #show" do
     let(:chapter) { create :chapter }
 
     it 'returns not found if record was not found' do
-      get :show, chapter_id: chapter.to_param, format: :json
+      get :show, params: { chapter_id: chapter.to_param }, format: :json
 
       expect(response.status).to eq 404
     end
@@ -42,7 +42,7 @@ describe Api::V1::Chapters::ChapterNotesController, "POST to #create" do
 
   context 'save succeeded' do
     before {
-      post :create, chapter_id: chapter.to_param, chapter_note: { content: 'test string' }, format: :json
+      post :create, params: { chapter_id: chapter.to_param, chapter_note: { content: 'test string' } }, format: :json
     }
 
     it 'responds with success' do
@@ -67,7 +67,7 @@ describe Api::V1::Chapters::ChapterNotesController, "POST to #create" do
 
   context 'save failed' do
     before {
-      post :create, chapter_id: chapter.to_param, chapter_note: { content: '' }, format: :json
+      post :create, params: { chapter_id: chapter.to_param, chapter_note: { content: '' } }, format: :json
     }
 
     it 'responds with 406 unacceptable' do
@@ -95,27 +95,27 @@ describe Api::V1::Chapters::ChapterNotesController, "PUT to #update" do
 
   context 'save succeeded' do
     it 'responds with success (204 no content)' do
-      put :update, chapter_id: chapter.to_param, chapter_note: { content: 'test string' }, format: :json
+      put :update, params: {  chapter_id: chapter.to_param, chapter_note: { content: 'test string' } }, format: :json
 
       expect(response.status).to eq 204
     end
 
     it 'changes chapter_note content' do
       expect {
-        put :update, chapter_id: chapter.to_param, chapter_note: { content: 'test string' }, format: :json
+        put :update, params: { chapter_id: chapter.to_param, chapter_note: { content: 'test string' } }, format: :json
       }.to change{ chapter.reload.chapter_note.content }
     end
   end
 
   context 'save failed' do
     it 'responds with 422 not acceptable' do
-      put :update, chapter_id: chapter.to_param, chapter_note: { content: '' }, format: :json
+      put :update, params: { chapter_id: chapter.to_param, chapter_note: { content: '' } }, format: :json
 
       expect(response.status).to eq 422
     end
 
     it 'returns chapter_note validation errors' do
-      put :update, chapter_id: chapter.to_param, chapter_note: { content: '' }, format: :json
+      put :update, params: { chapter_id: chapter.to_param, chapter_note: { content: '' } }, format: :json
 
       pattern = {
         errors: Hash,
@@ -126,7 +126,7 @@ describe Api::V1::Chapters::ChapterNotesController, "PUT to #update" do
 
     it 'does not change chapter_note content' do
       expect {
-        put :update, chapter_id: chapter.to_param, chapter_note: { content: '' }, format: :json
+        put :update, params: { chapter_id: chapter.to_param, chapter_note: { content: '' } }, format: :json
       }.not_to change{ chapter.reload.chapter_note.content }
     end
   end
@@ -139,14 +139,14 @@ describe Api::V1::Chapters::ChapterNotesController, "DELETE to #destroy" do
     let(:chapter) { create :chapter, :with_note }
 
     it 'responds with success (204 no content)' do
-      delete :destroy, chapter_id: chapter.to_param, format: :json
+      delete :destroy, params: { chapter_id: chapter.to_param }, format: :json
 
       expect(response.status).to eq 204
     end
 
     it 'deletes chapter note' do
       expect {
-        delete :destroy, chapter_id: chapter.to_param, format: :json
+        delete :destroy, params: { chapter_id: chapter.to_param }, format: :json
       }.to change { chapter.reload.chapter_note }
     end
   end
@@ -155,7 +155,7 @@ describe Api::V1::Chapters::ChapterNotesController, "DELETE to #destroy" do
     let(:chapter) { create :chapter }
 
     it 'responds with 404 not found' do
-      delete :destroy, chapter_id: chapter.to_param, format: :json
+      delete :destroy, params: { chapter_id: chapter.to_param }, format: :json
 
       expect(response.status).to eq 404
     end

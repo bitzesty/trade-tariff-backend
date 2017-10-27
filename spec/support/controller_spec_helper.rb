@@ -3,8 +3,8 @@ module ControllerSpecHelper
     { pagination:
       {
         page: 1,
-        per_page: Fixnum,
-        total_count: Fixnum
+        per_page: Integer,
+        total_count: Integer
       }
     }.ignore_extra_keys!
   end

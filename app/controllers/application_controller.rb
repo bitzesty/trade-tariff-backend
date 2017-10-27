@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 
   respond_to :json, :html
 
-  around_filter :configure_time_machine
+  around_action :configure_time_machine
 
   unless Rails.application.config.consider_all_requests_local
     rescue_from Exception,                           with: :render_error

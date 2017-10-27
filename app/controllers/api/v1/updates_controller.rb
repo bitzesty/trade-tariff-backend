@@ -1,7 +1,7 @@
 module Api
   module V1
     class UpdatesController < ApiController
-      before_filter :collection, only: :index
+      before_action :collection, only: :index
 
       def index
       end

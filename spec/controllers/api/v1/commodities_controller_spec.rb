@@ -22,7 +22,7 @@ describe Api::V1::CommoditiesController, "GET #show" do
 
   context 'when record is present' do
     it 'returns rendered record' do
-      get :show, id: commodity, format: :json
+      get :show, params: { id: commodity }, format: :json
 
       expect(response.body).to match_json_expression pattern
     end
@@ -30,7 +30,7 @@ describe Api::V1::CommoditiesController, "GET #show" do
 
   context 'when record is not present' do
     it 'returns not found if record was not found' do
-      get :show, id: "1234567890", format: :json
+      get :show, params: { id: "1234567890" }, format: :json
 
       expect(response.status).to eq 404
     end
@@ -40,7 +40,7 @@ describe Api::V1::CommoditiesController, "GET #show" do
     let!(:hidden_goods_nomenclature) { create :hidden_goods_nomenclature, goods_nomenclature_item_id: commodity.goods_nomenclature_item_id }
 
     it 'returns not found' do
-      get :show, id: commodity.goods_nomenclature_item_id, format: :json
+      get :show, params: { id: commodity.goods_nomenclature_item_id }, format: :json
 
       expect(response.status).to eq 404
     end
@@ -63,7 +63,7 @@ describe Api::V1::CommoditiesController, "GET #show" do
                                                 producline_suffix: '80'}
 
     it 'returns not found (is not declarable)' do
-      get :show, id: parent_commodity.goods_nomenclature_item_id, format: :json
+      get :show, params: { id: parent_commodity.goods_nomenclature_item_id }, format: :json
 
       expect(response.status).to eq 404
     end
@@ -99,7 +99,7 @@ describe Api::V1::CommoditiesController, "GET #changes" do
     }
 
     it 'returns commodity changes' do
-      get :changes, id: commodity, format: :json
+      get :changes, params: { id: commodity }, format: :json
 
       expect(response.body).to match_json_expression pattern
     end
@@ -114,7 +114,7 @@ describe Api::V1::CommoditiesController, "GET #changes" do
                                           operation_date: Date.current }
 
     it 'does not include change records' do
-      get :changes, id: commodity, as_of: Date.yesterday, format: :json
+      get :changes, params: { id: commodity, as_of: Date.yesterday }, format: :json
 
       expect(response.body).to match_json_expression []
     end
@@ -167,7 +167,7 @@ describe Api::V1::CommoditiesController, "GET #changes" do
     before { measure.destroy }
 
     it 'renders record attributes' do
-      get :changes, id: commodity, format: :json
+      get :changes, params: { id: commodity }, format: :json
 
       expect(response.body).to match_json_expression pattern
     end

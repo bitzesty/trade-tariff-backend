@@ -1,10 +1,15 @@
 require 'date'
 require 'logger'
 require 'fileutils'
+require 'ring_buffer'
 require 'redis_lock'
 require 'active_support/notifications'
 require 'active_support/log_subscriber'
 
+require 'bank_holidays'
+require 'taric_importer'
+require 'chief_importer'
+require 'chief_transformer'
 require 'tariff_synchronizer/base_update'
 require 'tariff_synchronizer/base_update_importer'
 require 'tariff_synchronizer/chief_file_name_generator'
@@ -13,6 +18,8 @@ require 'tariff_synchronizer/logger'
 require 'tariff_synchronizer/taric_file_name_generator'
 require 'tariff_synchronizer/taric_update_downloader'
 require 'tariff_synchronizer/tariff_downloader'
+require 'tariff_synchronizer/tariff_updates_requester'
+require 'tariff_synchronizer/response'
 
 # How TariffSynchronizer works
 #
