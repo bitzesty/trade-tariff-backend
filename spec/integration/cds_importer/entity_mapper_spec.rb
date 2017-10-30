@@ -1097,4 +1097,48 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["goodsNomenclatureDescriptionPeriod"]["metainfo"]["transactionDate"]))
   end
+
+  it "MeasureAction sample" do
+    values = {
+      "actionCode" => "29",
+      "validityStartDate" => "1970-01-01T00:00:00",
+      "validityEndDate" => "1972-01-01T00:00:00",
+      "metainfo" => {
+        "opType" => "U",
+        "transactionDate" => "2017-06-29T20:04:37"
+      }
+    }
+    subject = CdsImporter::EntityMapper::MeasureActionMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(MeasureAction)
+    expect(entity.action_code).to eq(values["actionCode"])
+    expect(entity.validity_start_date).to eq(values["validityStartDate"])
+    expect(entity.validity_end_date).to eq(values["validityEndDate"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+  end
+
+  it "MeasureActionDescription sample" do
+    values = {
+      "actionCode" => "29",
+      "measureActionDescription" => {
+        "description" => "Import/export allowed after control",
+        "language" => {
+          "languageId" => "EN"
+        },
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2017-06-29T20:04:37"
+        }
+      }
+    }
+    subject = CdsImporter::EntityMapper::MeasureActionDescriptionMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(MeasureActionDescription)
+    expect(entity.action_code).to eq(values["actionCode"])
+    expect(entity.language_id).to eq(values["measureActionDescription"]["language"]["languageId"])
+    expect(entity.description).to eq(values["measureActionDescription"]["description"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["measureActionDescription"]["metainfo"]["transactionDate"]))
+  end
 end
