@@ -1071,4 +1071,30 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:create)
     expect(entity.operation_date).to eq(Date.parse(values["languageDescription"]["metainfo"]["transactionDate"]))
   end
+
+  it "GoodsNomenclatureDescriptionPeriod sample" do
+    values = {
+      "sid" => 27652,
+      "goodsNomenclatureItemId" => "0102901019",
+      "produclineSuffix" => "80",
+      "goodsNomenclatureDescriptionPeriod" => {
+        "sid" => 30993,
+        "validityStartDate" => "1992-03-01T00:00:00",
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2017-06-29T20:04:37"
+        }
+      }
+    }
+    subject = CdsImporter::EntityMapper::GoodsNomenclatureDescriptionPeriodMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(GoodsNomenclatureDescriptionPeriod)
+    expect(entity.goods_nomenclature_description_period_sid).to eq(values["goodsNomenclatureDescriptionPeriod"]["sid"])
+    expect(entity.goods_nomenclature_sid).to eq(values["sid"])
+    expect(entity.validity_start_date).to eq(values["goodsNomenclatureDescriptionPeriod"]["validityStartDate"])
+    expect(entity.goods_nomenclature_item_id).to eq(values["goodsNomenclatureItemId"])
+    expect(entity.productline_suffix).to eq(values["produclineSuffix"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["goodsNomenclatureDescriptionPeriod"]["metainfo"]["transactionDate"]))
+  end
 end
