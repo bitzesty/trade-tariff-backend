@@ -1188,4 +1188,30 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["regulationGroupDescription"]["metainfo"]["transactionDate"]))
   end
+
+  it "RegulationReplacement sample" do
+    values = {
+      "replacedRegulationRole" => 1,
+      "replacingRegulationRole" => 1,
+      "replacedRegulationId" => "C9600110",
+      "replacingRegulationId" => "R9608580",
+      "geographicalArea" => {
+        "geographicalAreaId" => "1011"
+      },
+      "metainfo" => {
+        "opType" => "U",
+        "transactionDate" => "2017-06-29T20:04:37"
+      }
+    }
+    subject = CdsImporter::EntityMapper::RegulationReplacementMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(RegulationReplacement)
+    expect(entity.geographical_area_id).to eq(values["geographicalArea"]["geographicalAreaId"])
+    expect(entity.replacing_regulation_role).to eq(values["replacingRegulationRole"])
+    expect(entity.replacing_regulation_id).to eq(values["replacingRegulationId"])
+    expect(entity.replaced_regulation_role).to eq(values["replacedRegulationRole"])
+    expect(entity.replaced_regulation_id).to eq(values["replacedRegulationId"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+  end
 end
