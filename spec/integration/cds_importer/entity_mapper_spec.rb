@@ -1051,4 +1051,24 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end
+
+  it "LanguageDescription sample" do
+    values = {
+      "languageId" => "EN",
+      "languageDescription" => {
+        "description" => "English",
+        "metainfo" => {
+          "opType" => "C",
+          "transactionDate" => "2017-06-29T20:04:37"
+        }
+      }
+    }
+    subject = CdsImporter::EntityMapper::LanguageDescriptionMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(LanguageDescription)
+    expect(entity.language_id).to eq(values["languageId"])
+    expect(entity.description).to eq(values["languageDescription"]["description"])
+    expect(entity.operation).to eq(:create)
+    expect(entity.operation_date).to eq(Date.parse(values["languageDescription"]["metainfo"]["transactionDate"]))
+  end
 end
