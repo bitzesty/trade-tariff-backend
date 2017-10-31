@@ -1169,6 +1169,7 @@ describe CdsImporter::EntityMapper do
   it "RegulationGroup sample" do
     values = {
       "hjid" => "440103",
+      "regulationGroupId" => "123",
       "validityStartDate" => "1970-01-01T00:00:00",
       "validityEndDate" => "1972-01-01T00:00:00",
       "metainfo" => {
@@ -1180,7 +1181,7 @@ describe CdsImporter::EntityMapper do
     subject = CdsImporter::EntityMapper::RegulationGroupMapper.new(values)
     entity = subject.parse
     expect(entity).to be_a(RegulationGroup)
-    expect(entity.regulation_group_id).to eq(values["hjid"])
+    expect(entity.regulation_group_id).to eq(values["regulationGroupId"])
     expect(entity.validity_start_date).to eq(values["validityStartDate"])
     expect(entity.validity_end_date).to eq(values["validityEndDate"])
     expect(entity.national).to be_falsey
@@ -1191,6 +1192,7 @@ describe CdsImporter::EntityMapper do
   it "RegulationGroupDescription sample" do
     values = {
       "hjid" => "440103",
+      "regulationGroupId" => "123",
       "regulationGroupDescription" => {
         "language" => {
           "languageId" => "EN"
@@ -1205,7 +1207,7 @@ describe CdsImporter::EntityMapper do
     subject = CdsImporter::EntityMapper::RegulationGroupDescriptionMapper.new(values)
     entity = subject.parse
     expect(entity).to be_a(RegulationGroupDescription)
-    expect(entity.regulation_group_id).to eq(values["hjid"])
+    expect(entity.regulation_group_id).to eq(values["regulationGroupId"])
     expect(entity.language_id).to eq(values["regulationGroupDescription"]["language"]["languageId"])
     expect(entity.description).to eq(values["regulationGroupDescription"]["description"])
     expect(entity.national).to be_truthy
