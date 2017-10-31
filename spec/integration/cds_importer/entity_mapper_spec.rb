@@ -1222,6 +1222,10 @@ describe CdsImporter::EntityMapper do
       "geographicalArea" => {
         "geographicalAreaId" => "1011"
       },
+      "measureType" => {
+        "measureTypeId" => "2"
+      },
+      "chapterHeading" => "123",
       "metainfo" => {
         "opType" => "U",
         "transactionDate" => "2017-06-29T20:04:37"
@@ -1235,6 +1239,8 @@ describe CdsImporter::EntityMapper do
     expect(entity.replacing_regulation_id).to eq(values["replacingRegulationId"])
     expect(entity.replaced_regulation_role).to eq(values["replacedRegulationRole"])
     expect(entity.replaced_regulation_id).to eq(values["replacedRegulationId"])
+    expect(entity.chapter_heading).to eq(values["chapterHeading"])
+    expect(entity.measure_type_id).to eq(values["measureType"]["measureTypeId"])
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end

@@ -5,10 +5,12 @@ class CdsImporter
       self.entity_class = "RegulationReplacement".freeze
       self.entity_mapping = base_mapping.merge(
         "geographicalArea.geographicalAreaId" => :geographical_area_id,
+        "chapterHeading" => :chapter_heading,
         "replacingRegulationRole" => :replacing_regulation_role,
         "replacingRegulationId" => :replacing_regulation_id,
         "replacedRegulationRole" => :replaced_regulation_role,
-        "replacedRegulationId" => :replaced_regulation_id
+        "replacedRegulationId" => :replaced_regulation_id,
+        "measureType.measureTypeId" => :measure_type_id
       ).freeze
     end
   end
