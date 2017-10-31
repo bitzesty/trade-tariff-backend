@@ -1278,4 +1278,28 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end
+
+  it "MonetaryUnitDescription sample" do
+    values = {
+      "monetaryUnitCode" => "IEP",
+      "monetaryUnitDescription" => {
+        "description" => "Irish pound",
+        "language" => {
+          "languageId" => "EN"
+        },
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2017-06-29T20:04:37"
+        }
+      }
+    }
+    subject = CdsImporter::EntityMapper::MonetaryUnitDescriptionMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(MonetaryUnitDescription)
+    expect(entity.monetary_unit_code).to eq(values["monetaryUnitCode"])
+    expect(entity.language_id).to eq(values["monetaryUnitDescription"]["language"]["languageId"])
+    expect(entity.description).to eq(values["monetaryUnitDescription"]["description"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["monetaryUnitDescription"]["metainfo"]["transactionDate"]))
+  end
 end
