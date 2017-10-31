@@ -1214,4 +1214,24 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end
+
+  it "RegulationRoleType sample" do
+    values = {
+      "regulationRoleTypeId" => 1,
+      "validityStartDate" => "1970-01-01T00:00:00",
+      "metainfo" => {
+        "opType" => "U",
+        "origin" => "N",
+        "transactionDate" => "2017-06-29T20:04:37"
+      }
+    }
+    subject = CdsImporter::EntityMapper::RegulationRoleTypeMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(RegulationRoleType)
+    expect(entity.regulation_role_type_id).to eq(values["regulationRoleTypeId"])
+    expect(entity.validity_start_date).to eq(values["validityStartDate"])
+    expect(entity.national).to be_truthy
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+  end
 end
