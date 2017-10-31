@@ -1588,5 +1588,29 @@ describe CdsImporter::EntityMapper do
     expect(entity.validity_start_date).to eq(values["validityStartDate"])
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
-    end
   end
+
+  it "MeasureConditionCodeDescription sample" do
+    values = {
+      "conditionCode" => "A",
+      "measureConditionCodeDescription" => {
+        "description" => "Presentation of an anti-dumping/countervailing document",
+        "language" => {
+          "languageId" => "EN"
+        },
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2017-06-29T20:04:37"
+        }
+      }
+    }
+    subject = CdsImporter::EntityMapper::MeasureConditionCodeDescriptionMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(MeasureConditionCodeDescription)
+    expect(entity.condition_code).to eq(values["conditionCode"])
+    expect(entity.language_id).to eq(values["measureConditionCodeDescription"]["language"]["languageId"])
+    expect(entity.description).to eq(values["measureConditionCodeDescription"]["description"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["measureConditionCodeDescription"]["metainfo"]["transactionDate"]))
+  end
+end
