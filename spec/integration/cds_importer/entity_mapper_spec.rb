@@ -1122,6 +1122,72 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation_date).to eq(Date.parse(values["goodsNomenclatureDescriptionPeriod"]["metainfo"]["transactionDate"]))
   end
 
+  it "Measure sample" do
+    values = {
+      "sid" => "12348",
+      "validityStartDate" => "1970-01-01T00:00:00",
+      "validityEndDate" => "1972-01-01T00:00:00",
+      "measureType" => {
+        "measureTypeId" => "468"
+      },
+      "geographicalArea" => {
+        "sid" => "11881",
+        "geographicalAreaId" => "1011"
+      },
+      "goodsNomenclature" => {
+        "sid" => "22118",
+        "goodsNomenclatureItemId" => "0102900500"
+      },
+      "measureGeneratingRegulationRole" => "1",
+      "measureGeneratingRegulationId" => "IYY99990",
+      "justificationRegulationRole" => "1",
+      "justificationRegulationId" => "IYY99990",
+      "stoppedFlag" => "0",
+      "ordernumber" => "094281",
+      "additionalCode" => {
+        "sid" => "11822",
+        "additionalCodeCode" => "912",
+        "additionalCodeType" => {
+          "additionalCodeTypeId" => "8"
+        }
+      },
+      "reductionIndicator" => "35",
+      "exportRefundNomenclature" => {
+        "sid" => "19911"
+      },
+      "metainfo" => {
+        "opType" => "U",
+        "origin" => "N",
+        "transactionDate" => "2017-06-29T20:04:37"
+      }
+    }
+    subject = CdsImporter::EntityMapper::MeasureMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(Measure)
+    expect(entity.measure_sid.to_s).to eq(values["sid"])
+    expect(entity.measure_type_id).to eq(values["measureType"]["measureTypeId"])
+    expect(entity.geographical_area_id).to eq(values["geographicalArea"]["geographicalAreaId"])
+    expect(entity.geographical_area_sid.to_s).to eq(values["geographicalArea"]["sid"])
+    expect(entity.goods_nomenclature_item_id).to eq(values["goodsNomenclature"]["goodsNomenclatureItemId"])
+    expect(entity.goods_nomenclature_sid.to_s).to eq(values["goodsNomenclature"]["sid"])
+    expect(entity.measure_generating_regulation_role.to_s).to eq(values["measureGeneratingRegulationRole"])
+    expect(entity.measure_generating_regulation_id).to eq(values["measureGeneratingRegulationId"])
+    expect(entity.justification_regulation_role.to_s).to eq(values["justificationRegulationRole"])
+    expect(entity.justification_regulation_id).to eq(values["justificationRegulationId"])
+    expect(entity.ordernumber).to eq(values["ordernumber"])
+    expect(entity.additional_code_type_id).to eq(values["additionalCode"]["additionalCodeType"]["additionalCodeTypeId"])
+    expect(entity.additional_code_id).to eq(values["additionalCode"]["additionalCodeCode"])
+    expect(entity.additional_code_sid.to_s).to eq(values["additionalCode"]["sid"])
+    expect(entity.reduction_indicator.to_s).to eq(values["reductionIndicator"])
+    expect(entity.export_refund_nomenclature_sid.to_s).to eq(values["exportRefundNomenclature"]["sid"])
+    expect(entity.validity_start_date).to eq(values["validityStartDate"])
+    expect(entity.validity_end_date).to eq(values["validityEndDate"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.stopped_flag).to eq(false)
+    expect(entity.national).to eq(true)
+    expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+  end
+
   it "MeasureAction sample" do
     values = {
       "actionCode" => "29",
