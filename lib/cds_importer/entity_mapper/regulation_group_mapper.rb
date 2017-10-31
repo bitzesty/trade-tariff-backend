@@ -3,7 +3,7 @@ class CdsImporter
     class RegulationGroupMapper < BaseMapper
       self.entity_class = "RegulationGroup".freeze
       self.entity_mapping = base_mapping.merge(
-        "hjid" => :regulation_group_id
+        "regulationGroupId" => :regulation_group_id
       ).freeze
     end
   end
