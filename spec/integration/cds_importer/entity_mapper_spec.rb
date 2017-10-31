@@ -929,6 +929,30 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation_date).to eq(Date.parse(values["geographicalAreaMembership"]["metainfo"]["transactionDate"]))
   end
 
+  it "GoodsNomenclatureGroup sample" do
+    values = {
+      "goodsNomenclatureGroupId" => "125000",
+      "goodsNomenclatureGroupType" => "T",
+      "nomenclatureGroupFacilityCode" => "123",
+      "validityEndDate" => "2019-12-31T23:59:59",
+      "validityStartDate" => "1991-01-01T00:00:00",
+      "metainfo" => {
+        "opType" => "U",
+        "transactionDate" => "2017-06-29T20:04:37"
+      }
+    }
+    subject = CdsImporter::EntityMapper::GoodsNomenclatureGroupMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(GoodsNomenclatureGroup)
+    expect(entity.goods_nomenclature_group_type).to eq(values["goodsNomenclatureGroupType"])
+    expect(entity.goods_nomenclature_group_id).to eq(values["goodsNomenclatureGroupId"])
+    expect(entity.nomenclature_group_facility_code.to_s).to eq(values["nomenclatureGroupFacilityCode"])
+    expect(entity.validity_start_date).to eq(values["validityStartDate"])
+    expect(entity.validity_end_date).to eq(values["validityEndDate"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+  end
+
   it "GoodsNomenclatureGroupDescription sample" do
     values = {
       "goodsNomenclatureGroupId" => "125000",
