@@ -1349,4 +1349,32 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end
+
+  it "ProrogationRegulation sample" do
+    values = {
+      "approvedFlag" => "1",
+      "publishedDate" => "1998-04-01T00:00:00",
+      "informationText" => "474 LPQ-TEXT-RU",
+      "officialjournalPage" => 52,
+      "replacementIndicator" => 0,
+      "officialjournalNumber" => "L 100",
+      "prorogationRegulationId" => "R9807290",
+      "metainfo" => {
+        "opType" => "U",
+        "transactionDate" => "2017-06-29T20:04:37"
+      }
+    }
+    subject = CdsImporter::EntityMapper::ProrogationRegulationMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(ProrogationRegulation)
+    expect(entity.prorogation_regulation_id).to eq(values["prorogationRegulationId"])
+    expect(entity.published_date).to eq(Date.parse(values["publishedDate"]))
+    expect(entity.officialjournal_number).to eq(values["officialjournalNumber"])
+    expect(entity.officialjournal_page).to eq(values["officialjournalPage"])
+    expect(entity.replacement_indicator).to eq(values["replacementIndicator"])
+    expect(entity.information_text).to eq(values["informationText"])
+    expect(entity.approved_flag).to be_truthy
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+  end
 end
