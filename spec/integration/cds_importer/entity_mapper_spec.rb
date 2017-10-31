@@ -1571,4 +1571,22 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:create)
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end
-end
+
+  it "MeasureConditionCode sample" do
+    values = {
+      "conditionCode" => "A",
+      "validityStartDate" => "1970-01-01T00:00:00",
+      "metainfo" => {
+        "opType" => "U",
+        "transactionDate" => "2017-06-29T20:04:37"
+      }
+    }
+    subject = CdsImporter::EntityMapper::MeasureConditionCodeMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(MeasureConditionCode)
+    expect(entity.condition_code).to eq(values["conditionCode"])
+    expect(entity.validity_start_date).to eq(values["validityStartDate"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+    end
+  end
