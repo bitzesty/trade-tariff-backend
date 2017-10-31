@@ -1499,4 +1499,41 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["prorogationRegulationAction"]["metainfo"]["transactionDate"]))
   end
+
+  it "QuotaDefinition sample" do
+    values = {
+      "sid" => 12,
+      "volume" => "30.000",
+      "initialVolume" => "30.000",
+      "maximumPrecision" => 3,
+      "criticalThreshold" => 75,
+      "criticalState" => "N",
+      "quotaOrderNumber" => {
+        "sid" => 1485,
+        "quotaOrderNumberId" => "092607"
+      },
+      "measurementUnit" => {
+        "measurementUnitCode" => "KGM"
+      },
+      "metainfo" => {
+        "opType" => "U",
+        "transactionDate" => "2017-06-29T20:04:37"
+      }
+    }
+    subject = CdsImporter::EntityMapper::QuotaDefinitionMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(QuotaDefinition)
+    expect(entity.quota_definition_sid).to eq(values["sid"])
+    expect(entity.quota_order_number_id).to eq(values["quotaOrderNumber"]["quotaOrderNumberId"])
+    expect(entity.validity_start_date).to eq(values["validityStartDate"])
+    expect(entity.quota_order_number_sid).to eq(values["quotaOrderNumber"]["sid"])
+    expect(entity.volume).to eq(30)
+    expect(entity.initial_volume).to eq(30)
+    expect(entity.measurement_unit_code).to eq(values["measurementUnit"]["measurementUnitCode"])
+    expect(entity.maximum_precision).to eq(values["maximumPrecision"])
+    expect(entity.critical_state).to eq(values["criticalState"])
+    expect(entity.critical_threshold).to eq(values["criticalThreshold"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+  end
 end
