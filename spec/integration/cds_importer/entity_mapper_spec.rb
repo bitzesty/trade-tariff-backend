@@ -1302,4 +1302,33 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["monetaryUnitDescription"]["metainfo"]["transactionDate"]))
   end
+
+  it "NomenclatureGroupMembership sample" do
+    values = {
+      "sid" => 27640,
+      "produclineSuffix" => "80",
+      "goodsNomenclatureItemId" => "0102900500",
+      "nomenclatureGroupMembership" => {
+        "goodsNomenclatureGroup" => {
+          "goodsNomenclatureGroupId" => "010000",
+          "goodsNomenclatureGroupType" => "B"
+        },
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2017-06-29T20:04:37"
+        }
+      }
+    }
+    subject = CdsImporter::EntityMapper::NomenclatureGroupMembershipMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(NomenclatureGroupMembership)
+    expect(entity.goods_nomenclature_sid).to eq(values["sid"])
+    expect(entity.goods_nomenclature_group_type).to eq(values["nomenclatureGroupMembership"]["goodsNomenclatureGroup"]["goodsNomenclatureGroupType"])
+    expect(entity.goods_nomenclature_group_id).to eq(values["nomenclatureGroupMembership"]["goodsNomenclatureGroup"]["goodsNomenclatureGroupId"])
+    expect(entity.validity_start_date).to eq(values["nomenclatureGroupMembership"]["validityStartDate"])
+    expect(entity.goods_nomenclature_item_id).to eq(values["goodsNomenclatureItemId"])
+    expect(entity.productline_suffix).to eq(values["produclineSuffix"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["nomenclatureGroupMembership"]["metainfo"]["transactionDate"]))
+  end
 end
