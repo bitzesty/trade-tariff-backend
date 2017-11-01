@@ -1695,4 +1695,28 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end
+
+  it "MeasureTypeSeriesDescription sample" do
+    values = {
+      "measureTypeSeriesId" => "N",
+      "measureTypeSeriesDescription" => {
+        "description" => "Posterior surveillance",
+        "language" => {
+          "languageId" => "EN"
+        },
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2017-06-29T20:04:37"
+        }
+      }
+    }
+    subject = CdsImporter::EntityMapper::MeasureTypeSeriesDescriptionMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(MeasureTypeSeriesDescription)
+    expect(entity.measure_type_series_id).to eq(values["measureTypeSeriesId"])
+    expect(entity.language_id).to eq(values["measureTypeSeriesDescription"]["language"]["languageId"])
+    expect(entity.description).to eq(values["measureTypeSeriesDescription"]["description"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["measureTypeSeriesDescription"]["metainfo"]["transactionDate"]))
+  end
 end
