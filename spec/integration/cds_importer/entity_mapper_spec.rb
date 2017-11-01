@@ -1782,4 +1782,59 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["measureComponent"]["metainfo"]["transactionDate"]))
   end
+
+  it "MeasureCondition sample" do
+    values = {
+      "sid" => "12348",
+      "validityStartDate" => "1970-01-01T00:00:00",
+      "validityEndDate" => "1972-01-01T00:00:00",
+      "measureCondition" => {
+        "sid" => "3321",
+        "conditionDutyAmount" => "12.34",
+        "conditionSequenceNumber" => "123",
+        "monetaryUnit" => {
+          "monetaryUnitCode" => "EUR"
+        },
+        "measurementUnit" => {
+          "measurementUnitCode" => "DTN"
+        },
+        "measurementUnitQualifier" => {
+          "measurementUnitQualifierCode" => "56"
+        },
+        "measureAction" => {
+          "actionCode" => "36"
+        },
+        "certificate" => {
+          "certificateCode" => "03",
+          "certificateType" => {
+            "certificateTypeCode" => "05"
+          }
+        },
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2017-06-29T20:04:37"
+        }
+      },
+      "metainfo" => {
+        "opType" => "U",
+        "origin" => "N",
+        "transactionDate" => "2017-06-29T20:04:37"
+      }
+    }
+    subject = CdsImporter::EntityMapper::MeasureConditionMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(MeasureCondition)
+    expect(entity.measure_sid.to_s).to eq(values["sid"])
+    expect(entity.measure_condition_sid.to_s).to eq(values["measureCondition"]["sid"])
+    expect(entity.component_sequence_number.to_s).to eq(values["measureCondition"]["conditionSequenceNumber"])
+    expect(entity.condition_duty_amount.to_s).to eq(values["measureCondition"]["conditionDutyAmount"])
+    expect(entity.condition_monetary_unit_code).to eq(values["measureCondition"]["monetaryUnit"]["monetaryUnitCode"])
+    expect(entity.condition_measurement_unit_code).to eq(values["measureCondition"]["measurementUnit"]["measurementUnitCode"])
+    expect(entity.condition_measurement_unit_qualifier_code).to eq(values["measureCondition"]["measurementUnitQualifier"]["measurementUnitQualifierCode"])
+    expect(entity.action_code).to eq(values["measureCondition"]["measureAction"]["actionCode"])
+    expect(entity.certificate_type_code).to eq(values["measureCondition"]["certificate"]["certificateType"]["certificateTypeCode"])
+    expect(entity.certificate_code).to eq(values["measureCondition"]["certificate"]["certificateCode"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["measureCondition"]["metainfo"]["transactionDate"]))
+  end
 end
