@@ -1649,4 +1649,30 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end
+
+  it "MeasureTypeDescription sample" do
+    values = {
+      "measureTypeId" => "487",
+      "measureTypeDescription" => {
+        "description" => "Representative price (poultry)",
+        "language" => {
+          "languageId" => "EN"
+        },
+        "metainfo" => {
+          "opType" => "U",
+          "origin" => "N",
+          "transactionDate" => "2017-06-29T20:04:37"
+        }
+      }
+    }
+    subject = CdsImporter::EntityMapper::MeasureTypeDescriptionMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(MeasureTypeDescription)
+    expect(entity.measure_type_id).to eq(values["measureTypeId"])
+    expect(entity.language_id).to eq(values["measureTypeDescription"]["language"]["languageId"])
+    expect(entity.description).to eq(values["measureTypeDescription"]["description"])
+    expect(entity.national).to be_truthy
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["measureTypeDescription"]["metainfo"]["transactionDate"]))
+  end
 end
