@@ -1739,4 +1739,47 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end
+
+  it "MeasureComponent sample" do
+    values = {
+      "sid" => "12348",
+      "validityStartDate" => "1970-01-01T00:00:00",
+      "validityEndDate" => "1972-01-01T00:00:00",
+      "measureComponent" => {
+        "dutyAmount" => "12.34",
+        "dutyExpression" => {
+          "dutyExpressionId" => "01"
+        },
+        "monetaryUnit" => {
+          "monetaryUnitCode" => "EUR"
+        },
+        "measurementUnit" => {
+          "measurementUnitCode" => "DTN"
+        },
+        "measurementUnitQualifier" => {
+          "measurementUnitQualifierCode" => "56"
+        },
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2017-06-29T20:04:37"
+        }
+      },
+      "metainfo" => {
+        "opType" => "U",
+        "origin" => "N",
+        "transactionDate" => "2017-06-29T20:04:37"
+      }
+    }
+    subject = CdsImporter::EntityMapper::MeasureComponentMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(MeasureComponent)
+    expect(entity.measure_sid.to_s).to eq(values["sid"])
+    expect(entity.duty_expression_id).to eq(values["measureComponent"]["dutyExpression"]["dutyExpressionId"])
+    expect(entity.duty_amount.to_s).to eq(values["measureComponent"]["dutyAmount"])
+    expect(entity.monetary_unit_code).to eq(values["measureComponent"]["monetaryUnit"]["monetaryUnitCode"])
+    expect(entity.measurement_unit_code).to eq(values["measureComponent"]["measurementUnit"]["measurementUnitCode"])
+    expect(entity.measurement_unit_qualifier_code).to eq(values["measureComponent"]["measurementUnitQualifier"]["measurementUnitQualifierCode"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["measureComponent"]["metainfo"]["transactionDate"]))
+  end
 end
