@@ -837,7 +837,7 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation_date).to eq(Date.parse(values["footnoteAssociationAdditionalCode"]["metainfo"]["transactionDate"]))
   end
 
-  it "FootnoteAssociationAdditionalCode sample" do
+  it "FootnoteAssociationMeasure sample" do
     values = {
       "sid" => "3084",
       "additionalCodeCode" => "169",
@@ -871,6 +871,54 @@ describe CdsImporter::EntityMapper do
     expect(entity.national).to eq(true)
     expect(entity.operation).to eq(:create)
     expect(entity.operation_date).to eq(Date.parse(values["footnoteAssociationMeasure"]["metainfo"]["transactionDate"]))
+  end
+
+  it "FootnoteAssociationErn sample" do
+    values = {
+      "sid" => "3084",
+      "additionalCodeCode" => "169",
+      "validityEndDate" => "1996-06-14T23:59:59",
+      "validityStartDate" => "1991-06-01T00:00:00",
+      "footnoteAssociationErn" => {
+        "validityEndDate" => "1995-07-10T20:59:59",
+        "validityStartDate" => "2018-06-03T00:00:00",
+        "footnote" => {
+          "footnoteId" => "08",
+          "footnoteType" => {
+            "footnoteTypeId" => "06"
+          }
+        },
+        "metainfo" => {
+          "opType" => "C",
+          "transactionDate" => "2017-08-27T19:23:57"
+        }
+      },
+      "goodsNomenclature" => {
+        "goodsNomenclatureItemId" => "0102901019"
+      },
+      "additionalCodeType" => {
+        "additionalCodeTypeId" => "06"
+      },
+      "metainfo" => {
+        "origin" => "T",
+        "opType" => "U",
+        "transactionDate" => "2016-07-27T09:20:15"
+      }
+    }
+    subject = CdsImporter::EntityMapper::FootnoteAssociationErnMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(FootnoteAssociationErn)
+    expect(entity.export_refund_nomenclature_sid.to_s).to eq(values["sid"])
+    expect(entity.footnote_type).to eq(values["footnoteAssociationErn"]["footnote"]["footnoteType"]["footnoteTypeId"])
+    expect(entity.footnote_id).to eq(values["footnoteAssociationErn"]["footnote"]["footnoteId"])
+    expect(entity.validity_start_date).to eq(values["footnoteAssociationErn"]["validityStartDate"])
+    expect(entity.validity_end_date).to eq(values["footnoteAssociationErn"]["validityEndDate"])
+    expect(entity.goods_nomenclature_item_id).to eq(values["goodsNomenclature"]["goodsNomenclatureItemId"])
+    expect(entity.additional_code_type).to eq(values["additionalCodeType"]["additionalCodeTypeId"])
+    expect(entity.export_refund_code).to eq(values["exportRefundCode"])
+    expect(entity.productline_suffix).to eq(values["productLine"])
+    expect(entity.operation).to eq(:create)
+    expect(entity.operation_date).to eq(Date.parse(values["footnoteAssociationErn"]["metainfo"]["transactionDate"]))
   end
 
   it "FootnoteTypeDescription sample" do
