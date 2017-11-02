@@ -798,13 +798,12 @@ describe CdsImporter::EntityMapper do
     end
   end
 
-  it "FootnoteTypeDescription sample" do
+  it "FootnoteAssociationAdditionalCode sample" do
     values = {
       "sid" => "3084",
       "additionalCodeCode" => "169",
       "validityEndDate" => "1996-06-14T23:59:59",
       "validityStartDate" => "1991-06-01T00:00:00",
-
       "additionalCodeType" => {
         "additionalCodeTypeId" => "8"
       },
@@ -836,6 +835,42 @@ describe CdsImporter::EntityMapper do
     expect(entity.footnote_id).to eq(values["footnoteAssociationAdditionalCode"]["footnote"]["footnoteId"])
     expect(entity.operation).to eq(:create)
     expect(entity.operation_date).to eq(Date.parse(values["footnoteAssociationAdditionalCode"]["metainfo"]["transactionDate"]))
+  end
+
+  it "FootnoteAssociationAdditionalCode sample" do
+    values = {
+      "sid" => "3084",
+      "additionalCodeCode" => "169",
+      "validityEndDate" => "1996-06-14T23:59:59",
+      "validityStartDate" => "1991-06-01T00:00:00",
+      "footnoteAssociationMeasure" => {
+        "footnote" => {
+          "footnoteId" => "08",
+          "footnoteType" => {
+              "footnoteTypeId" => "06"
+          }
+        },
+        "metainfo" => {
+          "opType" => "C",
+          "origin" => "N",
+          "transactionDate" => "2017-08-27T19:23:57"
+        }
+      },
+      "metainfo" => {
+        "origin" => "T",
+        "opType" => "U",
+        "transactionDate" => "2016-07-27T09:20:15"
+      }
+    }
+    subject = CdsImporter::EntityMapper::FootnoteAssociationMeasureMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(FootnoteAssociationMeasure)
+    expect(entity.measure_sid.to_s).to eq(values["sid"])
+    expect(entity.footnote_type_id).to eq(values["footnoteAssociationMeasure"]["footnote"]["footnoteType"]["footnoteTypeId"])
+    expect(entity.footnote_id).to eq(values["footnoteAssociationMeasure"]["footnote"]["footnoteId"])
+    expect(entity.national).to eq(true)
+    expect(entity.operation).to eq(:create)
+    expect(entity.operation_date).to eq(Date.parse(values["footnoteAssociationMeasure"]["metainfo"]["transactionDate"]))
   end
 
   it "FootnoteTypeDescription sample" do
@@ -1658,12 +1693,12 @@ describe CdsImporter::EntityMapper do
     values = {
       "measureTypeId" => "487",
       "validityStartDate" => "1970-01-01T00:00:00",
-      "tradeMovementCode" => 0,
-      "priorityCode" => 1,
-      "measureComponentApplicableCode" => 1,
-      "originDestCode" => 0,
-      "orderNumberCaptureCode" => 2,
-      "measureExplosionLevel" => 10,
+      "tradeMovementCode" => "0",
+      "priorityCode" => "1",
+      "measureComponentApplicableCode" => "1",
+      "originDestCode" => "0",
+      "orderNumberCaptureCode" => "2",
+      "measureExplosionLevel" => "10",
       "measureTypeSeries" => {
         "measureTypeSeriesId" => "M"
       },
@@ -1678,12 +1713,12 @@ describe CdsImporter::EntityMapper do
     expect(entity).to be_a(MeasureType)
     expect(entity.measure_type_id).to eq(values["measureTypeId"])
     expect(entity.validity_start_date).to eq(values["validityStartDate"])
-    expect(entity.trade_movement_code).to eq(values["tradeMovementCode"])
-    expect(entity.priority_code).to eq(values["priorityCode"])
-    expect(entity.measure_component_applicable_code).to eq(values["measureComponentApplicableCode"])
-    expect(entity.origin_dest_code).to eq(values["originDestCode"])
-    expect(entity.order_number_capture_code).to eq(values["orderNumberCaptureCode"])
-    expect(entity.measure_explosion_level).to eq(values["measureExplosionLevel"])
+    expect(entity.trade_movement_code.to_s).to eq(values["tradeMovementCode"])
+    expect(entity.priority_code.to_s).to eq(values["priorityCode"])
+    expect(entity.measure_component_applicable_code.to_s).to eq(values["measureComponentApplicableCode"])
+    expect(entity.origin_dest_code.to_s).to eq(values["originDestCode"])
+    expect(entity.order_number_capture_code.to_s).to eq(values["orderNumberCaptureCode"])
+    expect(entity.measure_explosion_level.to_s).to eq(values["measureExplosionLevel"])
     expect(entity.measure_type_series_id).to eq(values["measureTypeSeries"]["measureTypeSeriesId"])
     expect(entity.national).to be_truthy
     expect(entity.operation).to eq(:update)
@@ -1720,7 +1755,7 @@ describe CdsImporter::EntityMapper do
     values = {
       "measureTypeSeriesId" => "N",
       "validityStartDate" => "1970-01-01T00:00:00",
-      "measureTypeCombination" => 1,
+      "measureTypeCombination" => "1",
       "metainfo" => {
         "opType" => "U",
         "transactionDate" => "2017-06-29T20:04:37"
@@ -1731,7 +1766,7 @@ describe CdsImporter::EntityMapper do
     expect(entity).to be_a(MeasureTypeSeries)
     expect(entity.measure_type_series_id).to eq(values["measureTypeSeriesId"])
     expect(entity.validity_start_date).to eq(values["validityStartDate"])
-    expect(entity.measure_type_combination).to eq(values["measureTypeCombination"])
+    expect(entity.measure_type_combination.to_s).to eq(values["measureTypeCombination"])
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end
@@ -1885,10 +1920,16 @@ describe CdsImporter::EntityMapper do
         "description" => "1000 kilowatt hours",
         "language" => {
           "languageId" => "EN"
+        },
+        "metainfo" => {
+          "opType" => "C",
+          "transactionDate" => "2017-06-29T20:04:37"
+        }
       },
       "metainfo" => {
         "opType" => "U",
         "transactionDate" => "2017-06-29T20:04:37"
+      }
     }
     subject = CdsImporter::EntityMapper::MeasurementUnitDescriptionMapper.new(values)
     entity = subject.parse
@@ -1896,7 +1937,7 @@ describe CdsImporter::EntityMapper do
     expect(entity.measurement_unit_code).to eq(values["measurementUnitCode"])
     expect(entity.language_id).to eq(values["measurementUnitDescription"]["language"]["languageId"])
     expect(entity.description).to eq(values["measurementUnitDescription"]["description"])
-    expect(entity.operation).to eq(:update)
+    expect(entity.operation).to eq(:create)
     expect(entity.operation_date).to eq(Date.parse(values["measurementUnitDescription"]["metainfo"]["transactionDate"]))
   end
 end
