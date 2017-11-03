@@ -2092,4 +2092,46 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:create)
     expect(entity.operation_date).to eq(Date.parse(values["measurementUnitDescription"]["metainfo"]["transactionDate"]))
   end
+
+  it "MeasureExcludedGeographicalArea sample" do
+    values = {
+      "sid" => "12348",
+      "validityStartDate" => "1970-01-01T00:00:00",
+      "validityEndDate" => "1972-01-01T00:00:00",
+      "measureType" => {
+        "measureTypeId" => "468"
+      },
+      "measureExcludedGeographicalArea" => {
+        "geographicalArea" => {
+          "sid" => "11993",
+          "geographicalAreaId" => "1101",
+          "metainfo" => {
+            "opType" => "U",
+            "transactionDate" => "2017-07-15T22:27:51"
+          }
+        },
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2017-07-14T21:34:15"
+        }
+      },
+      "geographicalArea" => {
+        "sid" => "11881",
+        "geographicalAreaId" => "1011"
+      },
+      "metainfo" => {
+        "opType" => "U",
+        "origin" => "N",
+        "transactionDate" => "2017-06-29T20:04:37"
+      }
+    }
+    subject = CdsImporter::EntityMapper::MeasureExcludedGeographicalAreaMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(MeasureExcludedGeographicalArea)
+    expect(entity.measure_sid.to_s).to eq(values["sid"])
+    expect(entity.excluded_geographical_area).to eq(values["measureExcludedGeographicalArea"]["geographicalArea"]["geographicalAreaId"])
+    expect(entity.geographical_area_sid.to_s).to eq(values["measureExcludedGeographicalArea"]["geographicalArea"]["sid"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["measureExcludedGeographicalArea"]["metainfo"]["transactionDate"]))
+  end
 end
