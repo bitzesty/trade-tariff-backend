@@ -2134,4 +2134,53 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["measureExcludedGeographicalArea"]["metainfo"]["transactionDate"]))
   end
+
+  it "MeursingAdditionalCode sample" do
+    values = {
+      "sid" => "3084",
+      "additionalCodeCode" => "169",
+      "validityEndDate" => "1996-06-14T23:59:59",
+      "validityStartDate" => "1991-06-01T00:00:00",
+      "metainfo" => {
+        "opType" => "C",
+        "transactionDate" => "2016-07-27T09:20:15"
+      }
+    }
+    subject = CdsImporter::EntityMapper::MeursingAdditionalCodeMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(MeursingAdditionalCode)
+    expect(entity.meursing_additional_code_sid.to_s).to eq(values["sid"])
+    expect(entity.additional_code).to eq(values["additionalCodeCode"])
+    expect(entity.validity_start_date).to eq(values["validityStartDate"])
+    expect(entity.validity_end_date).to eq(values["validityEndDate"])
+    expect(entity.operation).to eq(:create)
+    expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+  end
+
+  it "MeursingHeading sample" do
+    values = {
+      "sid" => "3084",
+      "validityEndDate" => "1996-06-14T23:59:59",
+      "validityStartDate" => "1991-06-01T00:00:00",
+      "meursingHeadingNumber" => "20",
+      "rowColumnCode" => "1",
+      "meursingTablePlan" => {
+        "meursingTablePlanId" => "01"
+      },
+      "metainfo" => {
+        "opType" => "C",
+        "transactionDate" => "2016-07-27T09:20:15"
+      }
+    }
+    subject = CdsImporter::EntityMapper::MeursingHeadingMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(MeursingHeading)
+    expect(entity.meursing_table_plan_id).to eq(values["meursingTablePlan"]["meursingTablePlanId"])
+    expect(entity.meursing_heading_number).to eq(values["meursingHeadingNumber"])
+    expect(entity.row_column_code.to_s).to eq(values["rowColumnCode"])
+    expect(entity.validity_start_date).to eq(values["validityStartDate"])
+    expect(entity.validity_end_date).to eq(values["validityEndDate"])
+    expect(entity.operation).to eq(:create)
+    expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+  end
 end
