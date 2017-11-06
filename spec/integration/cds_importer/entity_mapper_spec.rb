@@ -2391,4 +2391,32 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end
+
+  it "QuotaBlockingPeriod sample" do
+    values = {
+      "sid" => 12,
+      "quotaBlockingPeriod" => {
+        "quotaBlockingPeriodSid" => 168,
+        "blockingStartDate" => "2004-01-09T00:00:00",
+        "blockingEndDate" => "2004-01-30T00:00:00",
+        "blockingPeriodType" => 1,
+        "description" => "Council adoption anticipated 10.2.2004",
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2016-07-27T09:20:17"
+        }
+      }
+    }
+    subject = CdsImporter::EntityMapper::QuotaBlockingPeriodMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(QuotaBlockingPeriod)
+    expect(entity.quota_blocking_period_sid).to eq(values["quotaBlockingPeriod"]["quotaBlockingPeriodSid"])
+    expect(entity.quota_definition_sid).to eq(values["sid"])
+    expect(entity.blocking_start_date).to eq(Date.parse(values["quotaBlockingPeriod"]["blockingStartDate"]))
+    expect(entity.blocking_end_date).to eq(Date.parse(values["quotaBlockingPeriod"]["blockingEndDate"]))
+    expect(entity.blocking_period_type).to eq(values["quotaBlockingPeriod"]["blockingPeriodType"])
+    expect(entity.description).to eq(values["quotaBlockingPeriod"]["description"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["quotaBlockingPeriod"]["metainfo"]["transactionDate"]))
+  end
 end
