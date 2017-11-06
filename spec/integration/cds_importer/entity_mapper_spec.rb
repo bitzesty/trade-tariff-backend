@@ -1738,6 +1738,39 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end
 
+  it "QuotaBalanceEvent sample" do
+    values = {
+      "sid" => "12113",
+      "quotaBalanceEvent" => {
+        "hjid" => "1485",
+        "occurrenceTimestamp" => "2005-12-15T16:37:59",
+        "lastImportDateInAllocation" => "4712-12-31T23:59:59",
+        "oldBalance" => "12.2",
+        "newBalance" => "13.4",
+        "importedAmount" => "57173433.0",
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2017-04-11T10:05:31"
+        }
+      },
+      "metainfo" => {
+        "opType" => "U",
+        "transactionDate" => "2017-06-29T20:04:37"
+      }
+    }
+    subject = CdsImporter::EntityMapper::QuotaBalanceEventMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(QuotaBalanceEvent)
+    expect(entity.quota_definition_sid.to_s).to eq(values["sid"])
+    expect(entity.occurrence_timestamp).to eq(values["quotaBalanceEvent"]["occurrenceTimestamp"])
+    expect(entity.last_import_date_in_allocation).to eq(Date.parse(values["quotaBalanceEvent"]["lastImportDateInAllocation"]))
+    expect(entity.old_balance.to_s).to eq(values["quotaBalanceEvent"]["oldBalance"])
+    expect(entity.new_balance.to_s).to eq(values["quotaBalanceEvent"]["newBalance"])
+    expect(entity.imported_amount.to_s).to eq(values["quotaBalanceEvent"]["importedAmount"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["quotaBalanceEvent"]["metainfo"]["transactionDate"]))
+  end
+
   it "MeasureConditionCode sample" do
     values = {
       "conditionCode" => "A",
