@@ -2293,4 +2293,22 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end
+
+  it "MeasurementUnitQualifier sample" do
+    values = {
+      "measurementUnitQualifierCode" => "B",
+      "validityStartDate" => "1970-01-01T00:00:00",
+      "metainfo" => {
+        "opType" => "U",
+        "transactionDate" => "2016-07-27T09:20:17"
+      }
+    }
+    subject = CdsImporter::EntityMapper::MeasurementUnitQualifierMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(MeasurementUnitQualifier)
+    expect(entity.measurement_unit_qualifier_code).to eq(values["measurementUnitQualifierCode"])
+    expect(entity.validity_start_date).to eq(values["validityStartDate"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+  end
 end
