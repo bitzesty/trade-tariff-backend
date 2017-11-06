@@ -2311,4 +2311,28 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end
+
+  it "MeasurementUnitQualifierDescription sample" do
+    values = {
+      "measurementUnitQualifierCode" => "B",
+      "measurementUnitQualifierDescription" => {
+        "description" => "per flask",
+        "language" => {
+          "languageId" => "EN"
+        },
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2016-07-27T09:20:17"
+        }
+      }
+    }
+    subject = CdsImporter::EntityMapper::MeasurementUnitQualifierDescriptionMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(MeasurementUnitQualifierDescription)
+    expect(entity.measurement_unit_qualifier_code).to eq(values["measurementUnitQualifierCode"])
+    expect(entity.language_id).to eq(values["measurementUnitQualifierDescription"]["language"]["languageId"])
+    expect(entity.description).to eq(values["measurementUnitQualifierDescription"]["description"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["measurementUnitQualifierDescription"]["metainfo"]["transactionDate"]))
+  end
 end
