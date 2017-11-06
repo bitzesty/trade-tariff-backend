@@ -2335,4 +2335,22 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["measurementUnitQualifierDescription"]["metainfo"]["transactionDate"]))
   end
+
+  it "MeursingTablePlan sample" do
+    values = {
+      "meursingTablePlanId" => "01",
+      "validityStartDate" => "1988-01-01T00:00:00",
+      "metainfo" => {
+        "opType" => "U",
+        "transactionDate" => "2016-07-27T09:20:17"
+      }
+    }
+    subject = CdsImporter::EntityMapper::MeursingTablePlanMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(MeursingTablePlan)
+    expect(entity.meursing_table_plan_id).to eq(values["meursingTablePlanId"])
+    expect(entity.validity_start_date).to eq(values["validityStartDate"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+  end
 end
