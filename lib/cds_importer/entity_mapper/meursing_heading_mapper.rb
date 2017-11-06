@@ -1,7 +1,7 @@
 #
-# MeursingHeading is nested in to meursingTablePlan.
-# BUT also meursingTablePlan is nested in to MeursingHeading.
-# SO it's not clear which api call will retrun MeursingHeading records
+# MeursingHeading is nested in to MeursingTablePlan.
+# BUT also MeursingTablePlan is nested in to MeursingHeading.
+# SO it's not clear which api call will return MeursingHeading records
 #
 
 class CdsImporter

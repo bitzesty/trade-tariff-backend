@@ -2184,6 +2184,43 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end
 
+  it "MeursingHeadingText sample" do
+    values = {
+      "sid" => "3084",
+      "validityEndDate" => "1996-06-14T23:59:59",
+      "validityStartDate" => "1991-06-01T00:00:00",
+      "meursingHeadingNumber" => "20",
+      "rowColumnCode" => "1",
+      "meursingTablePlan" => {
+        "meursingTablePlanId" => "01"
+      },
+      "meursingHeadingText" => {
+        "language" => {
+          "languageId" => "EN"
+        },
+        "description" => "qwerty",
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2016-08-21T19:21:46"
+        }
+      },
+      "metainfo" => {
+        "opType" => "C",
+        "transactionDate" => "2016-07-27T09:20:15"
+      }
+    }
+    subject = CdsImporter::EntityMapper::MeursingHeadingTextMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(MeursingHeadingText)
+    expect(entity.meursing_table_plan_id).to eq(values["meursingTablePlan"]["meursingTablePlanId"])
+    expect(entity.meursing_heading_number.to_s).to eq(values["meursingHeadingNumber"])
+    expect(entity.row_column_code.to_s).to eq(values["rowColumnCode"])
+    expect(entity.language_id).to eq(values["meursingHeadingText"]["language"]["languageId"])
+    expect(entity.description).to eq(values["meursingHeadingText"]["description"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["meursingHeadingText"]["metainfo"]["transactionDate"]))
+  end
+
   it "MeursingSubheading sample" do
     values = {
       "sid" => "3084",
