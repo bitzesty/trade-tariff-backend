@@ -2353,4 +2353,42 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end
+
+  it "ModificationRegulation sample" do
+    values = {
+      "modificationRegulationId" => "R9617341",
+      "validityStartDate" => "1997-01-01T00:00:00",
+      "publishedDate" => "1996-09-19T00:00:00",
+      "officialjournalNumber" => "L 238",
+      "officialjournalPage" => 1,
+      "replacementIndicator" => 0,
+      "stoppedFlag" => "1",
+      "approvedFlag" => "1",
+      "informationText" => "NC - 01.01.1997 (mes. 110/111)",
+      "effectiveEndDate" => "1996-06-30T23:59:59",
+      "baseRegulation" => {
+        "baseRegulationId" => "R8726581"
+      },
+      "metainfo" => {
+        "opType" => "U",
+        "transactionDate" => "2016-07-27T09:20:17"
+      }
+    }
+    subject = CdsImporter::EntityMapper::ModificationRegulationMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(ModificationRegulation)
+    expect(entity.modification_regulation_id).to eq(values["modificationRegulationId"])
+    expect(entity.validity_start_date).to eq(values["validityStartDate"])
+    expect(entity.published_date).to eq(Date.parse(values["publishedDate"]))
+    expect(entity.officialjournal_number).to eq(values["officialjournalNumber"])
+    expect(entity.officialjournal_page).to eq(values["officialjournalPage"])
+    expect(entity.base_regulation_id).to eq(values["baseRegulation"]["baseRegulationId"])
+    expect(entity.replacement_indicator).to eq(values["replacementIndicator"])
+    expect(entity.stopped_flag).to be_truthy
+    expect(entity.information_text).to eq(values["informationText"])
+    expect(entity.approved_flag).to be_truthy
+    expect(entity.effective_end_date).to eq(values["effectiveEndDate"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+  end
 end
