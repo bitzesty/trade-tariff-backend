@@ -2590,4 +2590,23 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["quotaBlockingPeriod"]["metainfo"]["transactionDate"]))
   end
+
+  it "QuotaOrderNumber sample" do
+    values = {
+      "sid" => 218,
+      "quotaOrderNumberId" => "090718",
+      "metainfo" => {
+        "opType" => "U",
+        "transactionDate" => "2016-07-27T09:20:17"
+      }
+    }
+    subject = CdsImporter::EntityMapper::QuotaOrderNumberMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(QuotaOrderNumber)
+    expect(entity.quota_order_number_sid).to eq(values["sid"])
+    expect(entity.quota_order_number_id).to eq(values["quotaOrderNumberId"])
+    expect(entity.validity_start_date).to eq(values["validityStartDate"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+  end
 end
