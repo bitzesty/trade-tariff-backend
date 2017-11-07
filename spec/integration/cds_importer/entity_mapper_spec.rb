@@ -1908,6 +1908,40 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation_date).to eq(Date.parse(values["quotaUnsuspensionEvent"]["metainfo"]["transactionDate"]))
   end
 
+  it "QuotaOrderNumberOrigin sample" do
+    values = {
+      "sid" => "12113",
+      "quotaOrderNumberOrigin" => {
+        "sid" => "1485",
+        "geographicalArea" => {
+          "sid" => "11993",
+          "geographicalAreaId" => "1101",
+          "metainfo" => {
+             "opType" => "U",
+            "transactionDate" => "2017-07-15T22:27:51"
+          }
+        },
+        "metainfo" => {
+          "opType" => "C",
+          "transactionDate" => "2017-04-11T10:05:31"
+        }
+      },
+      "metainfo" => {
+        "opType" => "U",
+        "transactionDate" => "2017-06-29T20:04:37"
+      }
+    }
+    subject = CdsImporter::EntityMapper::QuotaOrderNumberOriginMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(QuotaOrderNumberOrigin)
+    expect(entity.quota_order_number_sid.to_s).to eq(values["sid"])
+    expect(entity.quota_order_number_origin_sid.to_s).to eq(values["quotaOrderNumberOrigin"]["sid"])
+    expect(entity.geographical_area_id).to eq(values["quotaOrderNumberOrigin"]["geographicalArea"]["geographicalAreaId"])
+    expect(entity.geographical_area_sid.to_s).to eq(values["quotaOrderNumberOrigin"]["geographicalArea"]["sid"])
+    expect(entity.operation).to eq(:create)
+    expect(entity.operation_date).to eq(Date.parse(values["quotaOrderNumberOrigin"]["metainfo"]["transactionDate"]))
+  end
+
   it "MeasureConditionCode sample" do
     values = {
       "conditionCode" => "A",
