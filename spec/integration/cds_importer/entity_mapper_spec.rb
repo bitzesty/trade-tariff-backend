@@ -1614,6 +1614,33 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end
 
+  it "MonetaryExchangeRate sample" do
+    values = {
+      "sid" => 2927,
+      "validityStartDate" => "2015-03-01T00:00:00",
+      "monetaryExchangeRate" => {
+        "childMonetaryUnitCode" => "SEK",
+        "exchangeRate" => "0.9123",
+        "metainfo" => {
+          "opType" => "C",
+          "transactionDate" => "2017-07-29T21:14:33"
+        }
+      },
+      "metainfo" => {
+        "opType" => "U",
+        "transactionDate" => "2017-06-29T20:04:37"
+      }
+    }
+    subject = CdsImporter::EntityMapper::MonetaryExchangeRateMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(MonetaryExchangeRate)
+    expect(entity.monetary_exchange_period_sid).to eq(values["sid"])
+    expect(entity.child_monetary_unit_code).to eq(values["monetaryExchangeRate"]["childMonetaryUnitCode"])
+    expect(entity.exchange_rate.to_s).to eq(values["monetaryExchangeRate"]["exchangeRate"])
+    expect(entity.operation).to eq(:create)
+    expect(entity.operation_date).to eq(Date.parse(values["monetaryExchangeRate"]["metainfo"]["transactionDate"]))
+  end
+
   it "ProrogationRegulation sample" do
     values = {
       "approvedFlag" => "1",
