@@ -1946,6 +1946,54 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation_date).to eq(Date.parse(values["quotaOrderNumberOrigin"]["metainfo"]["transactionDate"]))
   end
 
+  it "QuotaOrderNumberOriginExclusion sample" do
+    values = {
+      "sid" => "12113",
+      "quotaOrderNumberOrigin" => {
+        "sid" => "1485",
+        "geographicalArea" => {
+          "sid" => "11993",
+          "geographicalAreaId" => "1101",
+          "metainfo" => {
+             "opType" => "U",
+            "transactionDate" => "2017-07-15T22:27:51"
+          }
+        },
+        "quotaOrderNumberOriginExclusion" => {
+          "geographicalArea" => {
+            "sid" => "11993",
+            "geographicalAreaId" => "1101",
+            "metainfo" => {
+              "opType" => "U",
+              "transactionDate" => "2017-07-15T22:27:51"
+            }
+          },
+          "metainfo" => {
+            "opType" => "C",
+            "transactionDate" => "2017-10-14T11:55:34"
+          }
+        },
+        "validityStartDate" => "1970-01-01T00:00:00",
+        "validityEndDate" => "1971-01-01T00:00:00",
+        "metainfo" => {
+          "opType" => "C",
+          "transactionDate" => "2017-04-11T10:05:31"
+        }
+      },
+      "metainfo" => {
+        "opType" => "U",
+        "transactionDate" => "2017-06-29T20:04:37"
+      }
+    }
+    subject = CdsImporter::EntityMapper::QuotaOrderNumberOriginExclusionMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(QuotaOrderNumberOriginExclusion)
+    expect(entity.quota_order_number_origin_sid.to_s).to eq(values["quotaOrderNumberOrigin"]["sid"])
+    expect(entity.excluded_geographical_area_sid.to_s).to eq(values["quotaOrderNumberOrigin"]["quotaOrderNumberOriginExclusion"]["geographicalArea"]["sid"])
+    expect(entity.operation).to eq(:create)
+    expect(entity.operation_date).to eq(Date.parse(values["quotaOrderNumberOrigin"]["quotaOrderNumberOriginExclusion"]["metainfo"]["transactionDate"]))
+  end
+
   it "QuotaSuspensionPeriod sample" do
     values = {
       "sid" => "12113",
