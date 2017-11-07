@@ -1854,6 +1854,33 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation_date).to eq(Date.parse(values["quotaReopeningEvent"]["metainfo"]["transactionDate"]))
   end
 
+  it "QuotaUnsuspensionEvent sample" do
+    values = {
+      "sid" => "12113",
+      "quotaUnsuspensionEvent" => {
+        "hjid" => "1485",
+        "occurrenceTimestamp" => "2005-12-15T16:37:59",
+        "unsuspensionDate" => "2004-02-16T00:00:00",
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2017-04-11T10:05:31"
+        }
+      },
+      "metainfo" => {
+        "opType" => "U",
+        "transactionDate" => "2017-06-29T20:04:37"
+      }
+    }
+    subject = CdsImporter::EntityMapper::QuotaUnsuspensionEventMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(QuotaUnsuspensionEvent)
+    expect(entity.quota_definition_sid.to_s).to eq(values["sid"])
+    expect(entity.occurrence_timestamp).to eq(values["quotaUnsuspensionEvent"]["occurrenceTimestamp"])
+    expect(entity.unsuspension_date).to eq(Date.parse(values["quotaUnsuspensionEvent"]["unsuspensionDate"]))
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["quotaUnsuspensionEvent"]["metainfo"]["transactionDate"]))
+  end
+
   it "MeasureConditionCode sample" do
     values = {
       "conditionCode" => "A",
