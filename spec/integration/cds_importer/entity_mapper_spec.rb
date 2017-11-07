@@ -2609,4 +2609,26 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end
+
+  it "QuotaUnblockingEvent sample" do
+    values = {
+      "sid" => 12,
+      "quotaUnblockingEvent" => {
+        "occurrenceTimestamp" => "2004-02-16T14:10:40+0000",
+        "unblockingDate" => "2004-02-16T00:00:00",
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2016-07-27T09:20:17"
+        }
+      }
+    }
+    subject = CdsImporter::EntityMapper::QuotaUnblockingEventMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(QuotaUnblockingEvent)
+    expect(entity.quota_definition_sid).to eq(values["sid"])
+    expect(entity.occurrence_timestamp).to eq(Time.parse(values["quotaUnblockingEvent"]["occurrenceTimestamp"]))
+    expect(entity.unblocking_date).to eq(Date.parse(values["quotaUnblockingEvent"]["unblockingDate"]))
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["quotaUnblockingEvent"]["metainfo"]["transactionDate"]))
+  end
 end
