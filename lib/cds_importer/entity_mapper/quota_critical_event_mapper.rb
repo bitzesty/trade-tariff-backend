@@ -1,5 +1,5 @@
 #
-# QuotaBalanceEvent is nested in to QuotaDefinition.
+# QuotaCriticalEvent is nested in to QuotaDefinition.
 #
 
 class CdsImporter
