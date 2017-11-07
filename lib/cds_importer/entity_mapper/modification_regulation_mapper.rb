@@ -16,12 +16,12 @@ class CdsImporter
         "effectiveEndDate" => :effective_end_date,
         "approvedFlag" => :approved_flag,
         "stoppedFlag" => :stopped_flag,
-        # "" => :modification_regulation_role,
-        # "" => :base_regulation_role,
-        # "" => :explicit_abrogation_regulation_role,
-        # "" => :explicit_abrogation_regulation_id,
-        # "" => :complete_abrogation_regulation_role,
-        # "" => :complete_abrogation_regulation_id
+        "regulationRoleType.regulationRoleTypeId" => :modification_regulation_role,
+        "baseRegulation.regulationRoleType.regulationRoleTypeId" => :base_regulation_role,
+        "explicitAbrogationRegulation.regulationRoleType.regulationRoleTypeId" => :explicit_abrogation_regulation_role,
+        "explicitAbrogationRegulation.explicitAbrogationRegulationId" => :explicit_abrogation_regulation_id,
+        "completeAbrogationRegulation.regulationRoleType.regulationRoleTypeId" => :complete_abrogation_regulation_role,
+        "completeAbrogationRegulation.completeAbrogationRegulationId" => :complete_abrogation_regulation_id
       )
     end
   end

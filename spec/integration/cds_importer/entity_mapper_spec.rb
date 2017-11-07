@@ -2619,8 +2619,28 @@ describe CdsImporter::EntityMapper do
       "approvedFlag" => "1",
       "informationText" => "NC - 01.01.1997 (mes. 110/111)",
       "effectiveEndDate" => "1996-06-30T23:59:59",
+      "validityStartDate" => "1970-01-01T00:00:00",
+      "validityEndDate" => "2019-03-03T00:00:00",
+      "regulationRoleType" => {
+        "regulationRoleTypeId" => "5"
+      },
       "baseRegulation" => {
-        "baseRegulationId" => "R8726581"
+        "baseRegulationId" => "R8726581",
+        "regulationRoleType" => {
+          "regulationRoleTypeId" => "8"
+        }
+      },
+      "explicitAbrogationRegulation" => {
+        "explicitAbrogationRegulationId" => "321",
+        "regulationRoleType" => {
+          "regulationRoleTypeId" => "7"
+        }
+      },
+      "completeAbrogationRegulation" => {
+        "completeAbrogationRegulationId" => "123",
+        "regulationRoleType" => {
+          "regulationRoleTypeId" => "6"
+        }
       },
       "metainfo" => {
         "opType" => "U",
@@ -2641,6 +2661,14 @@ describe CdsImporter::EntityMapper do
     expect(entity.information_text).to eq(values["informationText"])
     expect(entity.approved_flag).to be_truthy
     expect(entity.effective_end_date).to eq(values["effectiveEndDate"])
+    expect(entity.validity_end_date).to eq(values["validityEndDate"])
+    expect(entity.validity_start_date).to eq(values["validityStartDate"])
+    expect(entity.modification_regulation_role.to_s).to eq(values["regulationRoleType"]["regulationRoleTypeId"])
+    expect(entity.base_regulation_role.to_s).to eq(values["baseRegulation"]["regulationRoleType"]["regulationRoleTypeId"])
+    expect(entity.explicit_abrogation_regulation_role.to_s).to eq(values["explicitAbrogationRegulation"]["regulationRoleType"]["regulationRoleTypeId"])
+    expect(entity.explicit_abrogation_regulation_id).to eq(values["explicitAbrogationRegulation"]["explicitAbrogationRegulationId"])
+    expect(entity.complete_abrogation_regulation_role.to_s).to eq(values["completeAbrogationRegulation"]["regulationRoleType"]["regulationRoleTypeId"])
+    expect(entity.complete_abrogation_regulation_id).to eq(values["completeAbrogationRegulation"]["completeAbrogationRegulationId"])
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end
