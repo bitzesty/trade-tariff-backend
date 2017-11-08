@@ -1728,6 +1728,9 @@ describe CdsImporter::EntityMapper do
   it "ProrogationRegulationAction sample" do
     values = {
       "prorogationRegulationId" => "C123X324",
+      "regulationRoleType" => {
+        "regulationRoleTypeId" => "4"
+      },
       "prorogationRegulationAction" => {
         "prorogatedDate" => "1998-04-01T00:00:00",
         "prorogatedRegulationId" => "P423X824",
@@ -1741,6 +1744,7 @@ describe CdsImporter::EntityMapper do
     subject = CdsImporter::EntityMapper::ProrogationRegulationActionMapper.new(values)
     entity = subject.parse
     expect(entity).to be_a(ProrogationRegulationAction)
+    expect(entity.prorogation_regulation_role.to_s).to eq(values["regulationRoleType"]["regulationRoleTypeId"])
     expect(entity.prorogation_regulation_id).to eq(values["prorogationRegulationId"])
     expect(entity.prorogated_regulation_role.to_s).to eq(values["prorogationRegulationAction"]["prorogatedRegulationRole"])
     expect(entity.prorogated_regulation_id).to eq(values["prorogationRegulationAction"]["prorogatedRegulationId"])
