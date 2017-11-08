@@ -1646,8 +1646,11 @@ describe CdsImporter::EntityMapper do
 
   it "MonetaryExchangePeriod sample" do
     values = {
-      "sid" => 2927,
+      "sid" => "2927",
       "validityStartDate" => "2015-03-01T00:00:00",
+      "monetaryUnit" => {
+        "monetaryUnitCode" => "EUR"
+      },
       "metainfo" => {
         "opType" => "U",
         "transactionDate" => "2017-06-29T20:04:37"
@@ -1656,7 +1659,8 @@ describe CdsImporter::EntityMapper do
     subject = CdsImporter::EntityMapper::MonetaryExchangePeriodMapper.new(values)
     entity = subject.parse
     expect(entity).to be_a(MonetaryExchangePeriod)
-    expect(entity.monetary_exchange_period_sid).to eq(values["sid"])
+    expect(entity.monetary_exchange_period_sid.to_s).to eq(values["sid"])
+    expect(entity.parent_monetary_unit_code).to eq(values["monetaryUnit"]["monetaryUnitCode"])
     expect(entity.validity_start_date).to eq(values["validityStartDate"])
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
@@ -1698,6 +1702,9 @@ describe CdsImporter::EntityMapper do
       "replacementIndicator" => "0",
       "officialjournalNumber" => "L 100",
       "prorogationRegulationId" => "R9807290",
+      "regulationRoleType" => {
+        "regulationRoleTypeId" => "5"
+      },
       "metainfo" => {
         "opType" => "U",
         "transactionDate" => "2017-06-29T20:04:37"
@@ -1707,6 +1714,7 @@ describe CdsImporter::EntityMapper do
     entity = subject.parse
     expect(entity).to be_a(ProrogationRegulation)
     expect(entity.prorogation_regulation_id).to eq(values["prorogationRegulationId"])
+    expect(entity.prorogation_regulation_role.to_s).to eq(values["regulationRoleType"]["regulationRoleTypeId"])
     expect(entity.published_date).to eq(Date.parse(values["publishedDate"]))
     expect(entity.officialjournal_number).to eq(values["officialjournalNumber"])
     expect(entity.officialjournal_page.to_s).to eq(values["officialjournalPage"])
@@ -2661,8 +2669,8 @@ describe CdsImporter::EntityMapper do
       "validityStartDate" => "1997-01-01T00:00:00",
       "publishedDate" => "1996-09-19T00:00:00",
       "officialjournalNumber" => "L 238",
-      "officialjournalPage" => 1,
-      "replacementIndicator" => 0,
+      "officialjournalPage" => "1",
+      "replacementIndicator" => "0",
       "stoppedFlag" => "1",
       "approvedFlag" => "1",
       "informationText" => "NC - 01.01.1997 (mes. 110/111)",
@@ -2702,9 +2710,9 @@ describe CdsImporter::EntityMapper do
     expect(entity.validity_start_date).to eq(values["validityStartDate"])
     expect(entity.published_date).to eq(Date.parse(values["publishedDate"]))
     expect(entity.officialjournal_number).to eq(values["officialjournalNumber"])
-    expect(entity.officialjournal_page).to eq(values["officialjournalPage"])
+    expect(entity.officialjournal_page.to_s).to eq(values["officialjournalPage"])
     expect(entity.base_regulation_id).to eq(values["baseRegulation"]["baseRegulationId"])
-    expect(entity.replacement_indicator).to eq(values["replacementIndicator"])
+    expect(entity.replacement_indicator.to_s).to eq(values["replacementIndicator"])
     expect(entity.stopped_flag).to be_truthy
     expect(entity.information_text).to eq(values["informationText"])
     expect(entity.approved_flag).to be_truthy
@@ -2723,9 +2731,9 @@ describe CdsImporter::EntityMapper do
 
   it "QuotaBlockingPeriod sample" do
     values = {
-      "sid" => 12,
+      "sid" => "13321",
       "quotaBlockingPeriod" => {
-        "quotaBlockingPeriodSid" => 168,
+        "quotaBlockingPeriodSid" => "16811",
         "blockingStartDate" => "2004-01-09T00:00:00",
         "blockingEndDate" => "2004-01-30T00:00:00",
         "blockingPeriodType" => 1,
@@ -2739,8 +2747,8 @@ describe CdsImporter::EntityMapper do
     subject = CdsImporter::EntityMapper::QuotaBlockingPeriodMapper.new(values)
     entity = subject.parse
     expect(entity).to be_a(QuotaBlockingPeriod)
-    expect(entity.quota_blocking_period_sid).to eq(values["quotaBlockingPeriod"]["quotaBlockingPeriodSid"])
-    expect(entity.quota_definition_sid).to eq(values["sid"])
+    expect(entity.quota_blocking_period_sid.to_s).to eq(values["quotaBlockingPeriod"]["quotaBlockingPeriodSid"])
+    expect(entity.quota_definition_sid.to_s).to eq(values["sid"])
     expect(entity.blocking_start_date).to eq(Date.parse(values["quotaBlockingPeriod"]["blockingStartDate"]))
     expect(entity.blocking_end_date).to eq(Date.parse(values["quotaBlockingPeriod"]["blockingEndDate"]))
     expect(entity.blocking_period_type).to eq(values["quotaBlockingPeriod"]["blockingPeriodType"])
@@ -2751,7 +2759,7 @@ describe CdsImporter::EntityMapper do
 
   it "QuotaOrderNumber sample" do
     values = {
-      "sid" => 218,
+      "sid" => "21811",
       "quotaOrderNumberId" => "090718",
       "metainfo" => {
         "opType" => "U",
@@ -2761,7 +2769,7 @@ describe CdsImporter::EntityMapper do
     subject = CdsImporter::EntityMapper::QuotaOrderNumberMapper.new(values)
     entity = subject.parse
     expect(entity).to be_a(QuotaOrderNumber)
-    expect(entity.quota_order_number_sid).to eq(values["sid"])
+    expect(entity.quota_order_number_sid.to_s).to eq(values["sid"])
     expect(entity.quota_order_number_id).to eq(values["quotaOrderNumberId"])
     expect(entity.validity_start_date).to eq(values["validityStartDate"])
     expect(entity.operation).to eq(:update)
@@ -2770,7 +2778,7 @@ describe CdsImporter::EntityMapper do
 
   it "QuotaUnblockingEvent sample" do
     values = {
-      "sid" => 12,
+      "sid" => "13412",
       "quotaUnblockingEvent" => {
         "occurrenceTimestamp" => "2004-02-16T14:10:40+0000",
         "unblockingDate" => "2004-02-16T00:00:00",
@@ -2783,7 +2791,7 @@ describe CdsImporter::EntityMapper do
     subject = CdsImporter::EntityMapper::QuotaUnblockingEventMapper.new(values)
     entity = subject.parse
     expect(entity).to be_a(QuotaUnblockingEvent)
-    expect(entity.quota_definition_sid).to eq(values["sid"])
+    expect(entity.quota_definition_sid.to_s).to eq(values["sid"])
     expect(entity.occurrence_timestamp).to eq(Time.parse(values["quotaUnblockingEvent"]["occurrenceTimestamp"]))
     expect(entity.unblocking_date).to eq(Date.parse(values["quotaUnblockingEvent"]["unblockingDate"]))
     expect(entity.operation).to eq(:update)
