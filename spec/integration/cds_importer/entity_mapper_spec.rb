@@ -613,7 +613,10 @@ describe CdsImporter::EntityMapper do
           "validityEndDate" => "1992-12-31T23:59:59",
           "validityStartDate" => "1991-01-01T00:00:00",
           "footnote" => {
-            "footnoteId" => "001"
+            "footnoteId" => "001",
+            "footnoteType" => {
+              "footnoteTypeId" => "5"
+            }
           },
           "metainfo" => {
             "opType" => "C",
@@ -627,6 +630,7 @@ describe CdsImporter::EntityMapper do
       expect(entity).to be_a(FootnoteAssociationGoodsNomenclature)
       expect(entity.goods_nomenclature_sid.to_s).to eq(values["sid"])
       expect(entity.footnote_id).to eq(values["footnoteAssociationGoodsNomenclature"]["footnote"]["footnoteId"])
+      expect(entity.footnote_type).to eq(values["footnoteAssociationGoodsNomenclature"]["footnote"]["footnoteType"]["footnoteTypeId"])
       expect(entity.goods_nomenclature_item_id).to eq(values["goodsNomenclatureItemId"])
       expect(entity.productline_suffix).to eq(values["produclineSuffix"])
       expect(entity.validity_start_date).to eq(values["footnoteAssociationGoodsNomenclature"]["validityStartDate"])

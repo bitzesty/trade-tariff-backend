@@ -1,3 +1,7 @@
+#
+# FootnoteAssociationGoodsNomenclature is nested in to GoodsNomenclature.
+#
+
 class CdsImporter
   class EntityMapper
     class FootnoteAssociationGoodsNomenclatureMapper < BaseMapper
@@ -9,7 +13,8 @@ class CdsImporter
         "sid" => :goods_nomenclature_sid,
         "produclineSuffix" => :productline_suffix,
         "goodsNomenclatureItemId" => :goods_nomenclature_item_id,
-        "#{mapping_path}.footnote.footnoteId" => :footnote_id
+        "#{mapping_path}.footnote.footnoteId" => :footnote_id,
+        "#{mapping_path}.footnote.footnoteType.footnoteTypeId" => :footnote_type
       ).freeze
     end
   end
