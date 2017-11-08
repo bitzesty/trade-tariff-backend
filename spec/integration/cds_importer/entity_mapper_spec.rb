@@ -757,7 +757,7 @@ describe CdsImporter::EntityMapper do
       expect(entity.operation_date).to eq(Date.parse(values["ftsRegulationAction"]["metainfo"]["transactionDate"]))
     end
 
-    it "FtsRegulationAction sample" do
+    it "FullTemporaryStopRegulation sample" do
       values = {
         "sid" => "1277",
         "approvedFlag" => "1",
