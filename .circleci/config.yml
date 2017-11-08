@@ -1,0 +1,61 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.4.1
+      - image: circleci/postgres:9.6.2
+      - image: redis:3.2.11
+    environment:
+      - GOVUK_APP_DOMAIN: test
+    steps:
+      - checkout
+      - run:
+          name: Install openjdk
+          command: sudo apt-get update -qq && sudo apt-get install -qqy openjdk-7-jdk
+      - run:
+          name: Install bundler
+          command: gem install bundler
+      - restore_cache:
+          key: elasticsearch-cache
+      - run:
+          name: Install ES
+          command: |
+            if [[ ! -e elasticsearch-5.3.0 ]]
+              then wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.3.0.tar.gz && tar -xvf elasticsearch-5.3.0.tar.gz
+            fi
+      - run:
+          name: Start ES
+          command: elasticsearch-5.3.0/bin/elasticsearch
+          background: true
+      - run:
+          name: Wait for ES
+          command: sleep 10 && wget --waitretry=5 --retry-connrefused -v http://127.0.0.1:9200/
+      - save_cache:
+          key: elasticsearch-cache
+          paths:
+            - elasticsearch-5.3.0
+      - deploy:
+          command: |
+            curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
+            sudo dpkg -i cf-cli_amd64.deb
+            cf -v
+      - deploy:
+          command: |
+            curl -v -L -o autopilot https://github.com/contraband/autopilot/releases/download/0.0.3/autopilot-linux
+            chmod +x autopilot
+            cf install-plugin autopilot -f
+      - deploy:
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ];
+              then CF_SPACE=development CF_APP=tariff-backend-dev CF_APP_WORKER=tariff-backend-worker-dev ./bin/deploy
+            fi
+      - deploy:
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "staging" ];
+              then CF_SPACE=staging CF_APP=tariff-backend-staging CF_APP_WORKER=tariff-backend-worker-staging ./bin/deploy
+            fi
+      - deploy:
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "production" ];
+              then CF_SPACE=production CF_APP=tariff-backend-production CF_APP_WORKER=tariff-backend-worker-production ./bin/deploy
+            fi
