@@ -1356,6 +1356,48 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
   end
 
+  it "MeasurePartialTemporaryStop sample" do
+    values = {
+      "sid" => "12348",
+      "validityStartDate" => "1970-01-01T00:00:00",
+      "validityEndDate" => "1972-01-01T00:00:00",
+      "measurePartialTemporaryStop" => {
+        "sid" => "22134",
+        "validityStartDate" => "1971-03-03T00:00:00",
+        "validityEndDate" => "2018-02-01T00:00:00",
+        "partialTemporaryStopRegulationId" => "R1312020",
+        "partialTemporaryStopRegulationOfficialjournalNumber" => "L 321",
+        "partialTemporaryStopRegulationOfficialjournalPage" => "1",
+        "abrogationRegulationId" => "R1312021",
+        "abrogationRegulationOfficialjournalNumber" => "L 323",
+        "abrogationRegulationOfficialjournalPage" => "2",
+        "metainfo" => {
+          "opType" => "U",
+          "transactionDate" => "2017-07-25T21:03:21"
+        }
+      },
+      "metainfo" => {
+        "opType" => "U",
+        "origin" => "N",
+        "transactionDate" => "2017-06-29T20:04:37"
+      }
+    }
+    subject = CdsImporter::EntityMapper::MeasurePartialTemporaryStopMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(MeasurePartialTemporaryStop)
+    expect(entity.measure_sid.to_s).to eq(values["sid"])
+    expect(entity.validity_start_date).to eq(values["measurePartialTemporaryStop"]["validityStartDate"])
+    expect(entity.validity_end_date).to eq(values["measurePartialTemporaryStop"]["validityEndDate"])
+    expect(entity.partial_temporary_stop_regulation_id).to eq(values["measurePartialTemporaryStop"]["partialTemporaryStopRegulationId"])
+    expect(entity.partial_temporary_stop_regulation_officialjournal_number).to eq(values["measurePartialTemporaryStop"]["partialTemporaryStopRegulationOfficialjournalNumber"])
+    expect(entity.partial_temporary_stop_regulation_officialjournal_page.to_s).to eq(values["measurePartialTemporaryStop"]["partialTemporaryStopRegulationOfficialjournalPage"])
+    expect(entity.abrogation_regulation_id).to eq(values["measurePartialTemporaryStop"]["abrogationRegulationId"])
+    expect(entity.abrogation_regulation_officialjournal_number).to eq(values["measurePartialTemporaryStop"]["abrogationRegulationOfficialjournalNumber"])
+    expect(entity.abrogation_regulation_officialjournal_page.to_s).to eq(values["measurePartialTemporaryStop"]["abrogationRegulationOfficialjournalPage"])
+    expect(entity.operation).to eq(:update)
+    expect(entity.operation_date).to eq(Date.parse(values["measurePartialTemporaryStop"]["metainfo"]["transactionDate"]))
+  end
+
   it "MeasureAction sample" do
     values = {
       "actionCode" => "29",
