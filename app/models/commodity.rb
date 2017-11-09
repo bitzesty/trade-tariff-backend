@@ -35,7 +35,7 @@ class Commodity < GoodsNomenclature
       filter(goods_nomenclature_item_id: code.to_s.first(10))
     end
 
-   def declarable
+    def declarable
       filter(producline_suffix: "80")
     end
   end
