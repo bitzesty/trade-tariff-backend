@@ -31,7 +31,7 @@ jobs:
           command: bundle install
       - run:
           name: Set up DB
-          command: bundle exec rake db:create db:schema:load --trace
+          command: bundle exec rake db:create db:structure:load --trace
       - run:
           name: "Run Rspec"
           command: |
