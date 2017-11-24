@@ -24,7 +24,7 @@ gem "aws-sdk-rails", ">= 1.0.1"
 
 gem "hashie", "~> 3.4"
 gem "multi_json", "~> 1.11"
-gem "yajl-ruby", "~> 1.3", require: "yajl"
+gem "yajl-ruby", "~> 1.3.1", require: "yajl"
 gem "builder", "~> 3.2"
 gem "ox", ">= 2.8.1"
 gem "nokogiri", "~> 1.8.1"
