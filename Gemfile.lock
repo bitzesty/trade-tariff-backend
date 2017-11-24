@@ -345,7 +345,7 @@ DEPENDENCIES
   simplecov-rcov
   tilt
   webmock (~> 3.0.1)
-  yajl-ruby (~> 1.3)
+  yajl-ruby (~> 1.3.1)
 
 RUBY VERSION
    ruby 2.4.1p111
