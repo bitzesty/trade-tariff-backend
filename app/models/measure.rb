@@ -266,10 +266,6 @@ class Measure < Sequel::Model
     national
   end
 
-  def invalidated?
-    invalidated_at.present?
-  end
-
   def validate!
     model.validate(self)
   end
