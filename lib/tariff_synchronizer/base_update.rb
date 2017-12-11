@@ -110,6 +110,10 @@ module TariffSynchronizer
       "#{TariffSynchronizer.root_path}/#{self.class.update_type}/#{filename}"
     end
 
+    def file_presigned_url
+      TariffSynchronizer::FileService.file_presigned_url(file_path)
+    end
+
     def import!
       raise NotImplementedError
     end
