@@ -10,6 +10,7 @@
 # Local tariff files
 data/*/*.xml
 data/*/*.txt
+data/measures/*
 
 # Environment files
 .env

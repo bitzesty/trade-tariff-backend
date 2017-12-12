@@ -1,6 +1,12 @@
 module TariffSynchronizer
   class FileService
     class << self
+      def upload_file(src_path, dst_path)
+        if Rails.env.production?
+          bucket.object(dst_path).upload_file(src_path)
+        end
+      end
+
       def write_file(file_path, body)
         if Rails.env.production?
           bucket.object(file_path).put(body: body)
