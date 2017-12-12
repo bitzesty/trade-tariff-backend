@@ -36,6 +36,9 @@ module TariffSynchronizer
 
   extend self
 
+  mattr_accessor :measures_logger_enabled
+  self.measures_logger_enabled = (ENV["TARIFF_MEASURES_LOGGER"].to_i == 1)
+
   mattr_accessor :username
   self.username = ENV["TARIFF_SYNC_USERNAME"]
 
