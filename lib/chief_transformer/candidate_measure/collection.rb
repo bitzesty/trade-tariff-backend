@@ -46,7 +46,9 @@ class ChiefTransformer
           @measures.each do |candidate_measure|
             if candidate_measure.valid?
               candidate_measure.save
-              ChiefTransformer::MeasuresLogger.add_created(candidate_measure)
+              if candidate_measure.operation == :create
+                ChiefTransformer::MeasuresLogger.add_created(candidate_measure)
+              end
             else
               ChiefTransformer::MeasuresLogger.add_failed(candidate_measure)
             end
