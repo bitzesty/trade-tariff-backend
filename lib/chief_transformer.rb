@@ -11,6 +11,7 @@ require 'active_support/log_subscriber'
 
 require 'chief_transformer/logger'
 require 'chief_transformer/mailer'
+require 'chief_transformer/measures_logger'
 
 class ChiefTransformer
   include Singleton
