@@ -33,6 +33,8 @@ class ChiefTransformer
         end
       end
       ChiefTransformer::MeasuresLogger.upload_to_s3
+
+      operations
     end
 
     private
