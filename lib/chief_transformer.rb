@@ -59,6 +59,14 @@ class ChiefTransformer
       )
     end
 
+    # Before run:
+    # deleting local version of logs
+    ChiefTransformer::MeasuresLogger.delete_tmp_file(chief.try(:filename))
+
     processor.process
+
+    # After run:
+    # re-uploading logs to S3 after each processor run
+    ChiefTransformer::MeasuresLogger.upload_to_s3(chief.try(:filename))
   end
 end
