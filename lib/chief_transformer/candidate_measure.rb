@@ -138,7 +138,10 @@ class ChiefTransformer
       errors.add(:goods_nomenclature_item_id, 'commodity code should have 10 symbol length') if goods_nomenclature_item_id.present? && goods_nomenclature_item_id.size != 10
       errors.add(:measure_type_id, 'measure_type must be present') if measure_type_id.blank?
       errors.add(:measure_type_id, 'must have national measure type') if measure_type_id.present? && !measure_type_id.in?(NATIONAL_MEASURE_TYPES)
-      errors.add(:goods_nomenclature_sid, 'must be present') if goods_nomenclature_sid.blank?
+      if goods_nomenclature_sid.blank?
+        gonos = GoodsNomenclature.where(goods_nomenclature_item_id: goods_nomenclature_item_id).declarable.select_map([:goods_nomenclature_sid, :validity_start_date, :validity_end_date])
+        errors.add(:goods_nomenclature_sid, "not found within validity dates, others found #{gonos.inspect} ")
+      end
       errors.add(:geographical_area_sid, 'must be present') if geographical_area_sid.blank?
       errors.add(:validity_end_date, 'start date greater than end date') if validity_end_date.present? && validity_start_date >= validity_end_date
       errors.add(:measure_sid, 'measure must be unique') if Measure.where(measure_type_id: measure_type_id,
