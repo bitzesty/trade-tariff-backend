@@ -15,7 +15,10 @@ class ChiefTransformer
         return unless TariffSynchronizer.measures_logger_enabled
 
         File.open(tmp_file_path(Date.today, :failed), "a+") do |f|
-          f.puts(candidate.values.merge(errors: candidate.errors).to_json)
+          f.puts(candidate.values.merge(errors: candidate.errors,
+            mfcm: candidate.mfcm.values,
+            tame: candidate.tame.values,
+            tamf: candidate.tamf.values).to_json)
         end
       end
 

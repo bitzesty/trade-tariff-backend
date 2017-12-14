@@ -138,7 +138,10 @@ class ChiefTransformer
       errors.add(:goods_nomenclature_item_id, 'commodity code should have 10 symbol length') if goods_nomenclature_item_id.present? && goods_nomenclature_item_id.size != 10
       errors.add(:measure_type_id, 'measure_type must be present') if measure_type_id.blank?
       errors.add(:measure_type_id, 'must have national measure type') if measure_type_id.present? && !measure_type_id.in?(NATIONAL_MEASURE_TYPES)
-      errors.add(:goods_nomenclature_sid, 'must be present') if goods_nomenclature_sid.blank?
+      if goods_nomenclature_sid.blank?
+        gonos = GoodsNomenclature.where(goods_nomenclature_item_id: goods_nomenclature_item_id).declarable.select_map([:goods_nomenclature_sid, :validity_start_date, :validity_end_date])
+        errors.add(:goods_nomenclature_sid, "not found within validity dates, others found #{gonos.inspect} ")
+      end
       errors.add(:geographical_area_sid, 'must be present') if geographical_area_sid.blank?
       errors.add(:validity_end_date, 'start date greater than end date') if validity_end_date.present? && validity_start_date >= validity_end_date
       errors.add(:measure_sid, 'measure must be unique') if Measure.where(measure_type_id: measure_type_id,
@@ -169,33 +172,11 @@ class ChiefTransformer
     end
 
     def assign_validity_start_date
-      self.validity_start_date =  if tamf.present?
-                                    if Time.after(tamf.fe_tsmp, mfcm.fe_tsmp)
-                                      tamf.fe_tsmp
-                                    else
-                                      mfcm.fe_tsmp
-                                    end
-                                  elsif tame.present?
-                                    if Time.after(tame.fe_tsmp, mfcm.fe_tsmp)
-                                      tame.fe_tsmp
-                                    else
-                                      mfcm.fe_tsmp
-                                    end
-                                  else
-                                    mfcm.fe_tsmp
-                                  end
+      self.validity_start_date = [tame.try(:fe_tsmp), tamf.try(:fe_tsmp), mfcm.try(:fe_tsmp)].compact.max
     end
 
     def assign_validity_end_date
-      self.validity_end_date =  if tame.present?
-                                  if Time.after(tame.le_tsmp, mfcm.le_tsmp)
-                                    mfcm.le_tsmp
-                                  elsif tame.le_tsmp.present?
-                                    tame.le_tsmp
-                                  end
-                                else
-                                  mfcm.le_tsmp
-                                end
+      self.validity_end_date = [tame.try(:le_tsmp), tamf.try(:le_tsmp), mfcm.try(:le_tsmp)].compact.min
 
       if self.validity_end_date.present?
         self.justification_regulation_role = DEFAULT_REGULATION_ROLE_TYPE_ID
