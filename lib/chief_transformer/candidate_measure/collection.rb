@@ -47,10 +47,10 @@ class ChiefTransformer
             if candidate_measure.valid?
               candidate_measure.save
               if candidate_measure.operation == :create
-                ChiefTransformer::MeasuresLogger.add_created(candidate_measure)
+                ChiefTransformer::MeasuresLogger.created(candidate_measure)
               end
             else
-              ChiefTransformer::MeasuresLogger.add_failed(candidate_measure)
+              ChiefTransformer::MeasuresLogger.failed(candidate_measure)
             end
           end
         end
