@@ -60,6 +60,5 @@ class ChiefTransformer
     end
 
     processor.process
-
   end
 end
