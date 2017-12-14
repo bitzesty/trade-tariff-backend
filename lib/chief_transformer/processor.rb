@@ -2,6 +2,11 @@ Dir[File.join(Rails.root, 'lib', 'chief_transformer/operations/*.rb')].each{|f| 
 
 class ChiefTransformer
   class Processor
+    # Is used when single processor run takes more than 1 day
+    # e.g. if started at 23:50:00 and finished at next day 02:10:00
+    mattr_accessor :started_at
+    self.started_at = Date.today
+
     attr_reader :operations
 
     def initialize(*operations)
@@ -9,6 +14,8 @@ class ChiefTransformer
     end
 
     def process
+      self.class.started_at = Date.today
+
       operations.each do |operation|
         ActiveSupport::Notifications.instrument("process.chief_transformer", operation: operation) do
           Sequel::Model.db.transaction do
@@ -32,6 +39,7 @@ class ChiefTransformer
           end
         end
       end
+
       ChiefTransformer::MeasuresLogger.upload_to_s3
 
       operations

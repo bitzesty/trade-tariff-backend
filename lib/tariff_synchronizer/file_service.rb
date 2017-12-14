@@ -1,8 +1,9 @@
 module TariffSynchronizer
   class FileService
     class << self
+      # Uploads local file to S3 bucket
       def upload_file(src_path, dst_path)
-        if Rails.env.production?
+        if Rails.env.production? && File.exist?(src_path)
           bucket.object(dst_path).upload_file(src_path)
         end
       end
