@@ -16,9 +16,9 @@ class ChiefTransformer
 
         File.open(tmp_file_path(Date.today, :failed), "a+") do |f|
           f.puts(candidate.values.merge(errors: candidate.errors,
-            mfcm: candidate.mfcm.values,
-            tame: candidate.tame.values,
-            tamf: candidate.tamf.values).to_json)
+            mfcm: if candidate.mfcm ? candidate.mfcm.values : nil,
+            tame: if candidate.tame ? candidate.tame.values : nil,
+            tamf: if candidate.tamf ? candidate.tamf.values : nil).to_json)
         end
       end
 
