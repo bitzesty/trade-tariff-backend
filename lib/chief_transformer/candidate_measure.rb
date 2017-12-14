@@ -172,33 +172,11 @@ class ChiefTransformer
     end
 
     def assign_validity_start_date
-      self.validity_start_date =  if tamf.present?
-                                    if Time.after(tamf.fe_tsmp, mfcm.fe_tsmp)
-                                      tamf.fe_tsmp
-                                    else
-                                      mfcm.fe_tsmp
-                                    end
-                                  elsif tame.present?
-                                    if Time.after(tame.fe_tsmp, mfcm.fe_tsmp)
-                                      tame.fe_tsmp
-                                    else
-                                      mfcm.fe_tsmp
-                                    end
-                                  else
-                                    mfcm.fe_tsmp
-                                  end
+      self.validity_start_date = [tame.try(:fe_tsmp), tamf.try(:fe_tsmp), mfcm.try(:fe_tsmp)].compact.max
     end
 
     def assign_validity_end_date
-      self.validity_end_date =  if tame.present?
-                                  if Time.after(tame.le_tsmp, mfcm.le_tsmp)
-                                    mfcm.le_tsmp
-                                  elsif tame.le_tsmp.present?
-                                    tame.le_tsmp
-                                  end
-                                else
-                                  mfcm.le_tsmp
-                                end
+      self.validity_end_date = [tame.try(:le_tsmp), tamf.try(:le_tsmp), mfcm.try(:le_tsmp)].compact.min
 
       if self.validity_end_date.present?
         self.justification_regulation_role = DEFAULT_REGULATION_ROLE_TYPE_ID
