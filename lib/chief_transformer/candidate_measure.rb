@@ -212,7 +212,7 @@ class ChiefTransformer
     end
 
     def origin
-      [mfcm.try(:origin), tame.try(:origin), tamf.try(:origin)].reject!(&:blank?).first
+      [mfcm.try(:origin), tame.try(:origin), tamf.try(:origin)].find{ |e| e.present? }
     end
 
     private
