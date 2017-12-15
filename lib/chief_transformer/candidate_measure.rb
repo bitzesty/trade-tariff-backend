@@ -211,6 +211,10 @@ class ChiefTransformer
       mfcm.present? && (mfcm.msrgp_code.in?(RESTRICTION_GROUP_CODES))
     end
 
+    def origin
+      [mfcm.try(:origin), tame.try(:origin), tamf.try(:origin)].reject!(&:blank?).first
+    end
+
     private
 
     def build_conditions
