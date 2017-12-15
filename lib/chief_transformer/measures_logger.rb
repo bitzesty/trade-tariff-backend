@@ -3,6 +3,8 @@ require 'fileutils'
 # each line in *.json.txt files is a json object of measure candidate
 class ChiefTransformer
   class MeasuresLogger
+    LOG_TYPES = [:created, :failed]
+
     class << self
       def created(candidate)
         return unless TariffSynchronizer.measures_logger_enabled
@@ -30,7 +32,7 @@ class ChiefTransformer
       def upload_to_s3(origin)
         return unless TariffSynchronizer.measures_logger_enabled
 
-        [:created, :failed].each do |type|
+        LOG_TYPES.each do |type|
           TariffSynchronizer::FileService.upload_file(
             tmp_file_path(origin, type), file_path(origin, type)
           )
@@ -40,7 +42,7 @@ class ChiefTransformer
       def delete_tmp_file(origin)
         return if origin.nil?
 
-        [:created, :failed].each do |type|
+        LOG_TYPES.each do |type|
           FileUtils.rm_f(tmp_file_path(origin, type))
         end
       end
