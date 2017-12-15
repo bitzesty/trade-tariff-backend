@@ -1,43 +1,61 @@
-# each line in *.json.txt files is a json object of measure candidate
+require 'fileutils'
 
+# each line in *.json.txt files is a json object of measure candidate
 class ChiefTransformer
   class MeasuresLogger
+    LOG_TYPES = [:created, :failed]
+
     class << self
-      def add_created(candidate)
+      def created(candidate)
         return unless TariffSynchronizer.measures_logger_enabled
 
-        File.open(tmp_file_path(Date.today, :created), "a+") do |f|
+        File.open(tmp_file_path(candidate.origin, :created), "a+") do |f|
           f.puts(candidate.values.to_json)
         end
       end
 
-      def add_failed(candidate)
+      def failed(candidate)
         return unless TariffSynchronizer.measures_logger_enabled
 
-        File.open(tmp_file_path(Date.today, :failed), "a+") do |f|
-          f.puts(candidate.values.merge(errors: candidate.errors,
-            mfcm: candidate.mfcm ? candidate.mfcm.values : nil,
-            tame: candidate.tame ? candidate.tame.values : nil,
-            tamf: candidate.tamf ? candidate.tamf.values : nil).to_json)
+        File.open(tmp_file_path(candidate.origin, :failed), "a+") do |f|
+          f.puts(
+            candidate.values.merge(
+              errors: candidate.errors,
+              mfcm: candidate.mfcm.try(:values),
+              tame: candidate.tame.try(:values),
+              tamf: candidate.tamf.try(:values)
+            ).to_json
+          )
         end
       end
 
-      def upload_to_s3
+      def upload_to_s3(origin)
         return unless TariffSynchronizer.measures_logger_enabled
 
-        [:created, :failed].each do |type|
-          # we also need to upload all previous files in case process started not today
-          dates = (ChiefTransformer::Processor.started_at..Date.today).to_a
-
-          dates.each do |date|
-            path = File.join(TariffSynchronizer.root_path, "measures", "#{date}-#{type}.json.txt")
-            TariffSynchronizer::FileService.upload_file(tmp_file_path(date, type), path)
-          end
+        LOG_TYPES.each do |type|
+          TariffSynchronizer::FileService.upload_file(
+            tmp_file_path(origin, type), file_path(origin, type)
+          )
         end
       end
 
-      def tmp_file_path(date, type)
-        File.join(Rails.root, "data", "measures", "#{date}-#{type}.json.txt")
+      def delete_tmp_file(origin)
+        return if origin.nil?
+
+        LOG_TYPES.each do |type|
+          FileUtils.rm_f(tmp_file_path(origin, type))
+        end
+      end
+
+      # local tmp file path
+      def tmp_file_path(origin, type)
+        File.join(Rails.root, file_path(origin, type))
+      end
+
+      # file path on S3
+      def file_path(origin, type)
+        origin = File.basename(origin.to_s, ".*")
+        File.join(TariffSynchronizer.root_path, "measures", "#{origin}-#{type}.json.txt")
       end
     end
   end
