@@ -212,7 +212,6 @@ namespace :tariff do
 
   namespace :support do
     desc 'Fix CHIEF initial seed last effective dates'
-
     task fix_chief: :environment do
       Chief::Tame.unprocessed
                  .order(:msrgp_code, :msr_type, :tty_code)
@@ -231,6 +230,31 @@ namespace :tariff do
             Chief::Tame.filter(blank_tame.pk_hash).update(le_tsmp: tames[tames.index(blank_tame)+1].fe_tsmp) unless blank_tame == tames.last
           end
         end
+      end
+    end
+
+    desc "Create feiled measures report"
+    task failed_measures_report: %w[environment] do
+      require "csv"
+      CSV.open("data/failed-measures-report.csv", "wb", { col_sep: ";" }) do |csv|
+        items = []
+        csv << ["Goods Nomenclature", "Measure Type", "Update File", "Errors", "Candidate Measure", "Notes"]
+        Dir["data/measures/*"].select{|f| f.include?("failed")}.sort.each do |path|
+          puts "Processing #{path}"
+          file = File.open(path, "r")
+          origin = path.sub("-failed.json.txt", ".txt").split("/").last
+          file.each_line do |line|
+            line = JSON.parse(line)
+            items << [
+              line["goods_nomenclature_item_id"],
+              line["measure_type_id"],
+              origin,
+              line["errors"],
+              line
+            ]
+          end
+        end
+        items.uniq{ |i| [i[0], i[1], i[3]] }.each { |item| csv << item }
       end
     end
   end
