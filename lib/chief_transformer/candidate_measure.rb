@@ -69,12 +69,20 @@ class ChiefTransformer
       end
 
       # needs to throw errors about invalid goods nomenclature item found
-      self.goods_nomenclature_sid = GoodsNomenclature.where(goods_nomenclature_item_id: goods_nomenclature_item_id)
-                                                     .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
-                                                     .declarable
-                                                     .order(Sequel.desc(:validity_start_date))
-                                                     .first
-                                                     .try(:goods_nomenclature_sid)
+      # we should check previous months in case CHIEF changes come before TARIC
+      gono_sid = nil
+      [0, 1, 2, 3].each do |num|
+        gono_sid = GoodsNomenclature.where(goods_nomenclature_item_id: goods_nomenclature_item_id)
+                                    .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)",
+                                           validity_start_date ? validity_start_date + num.month : validity_start_date,
+                                           validity_end_date ? validity_end_date + num.month : validity_end_date)
+                                    .declarable
+                                    .order(Sequel.desc(:validity_start_date))
+                                    .first
+                                    .try(:goods_nomenclature_sid)
+        break if gono_sid.present?
+      end
+      self.goods_nomenclature_sid = gono_sid
 
       # assign negative, National sid before saving record
       self.measure_sid = self.class.next_national_sid

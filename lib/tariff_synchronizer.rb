@@ -125,9 +125,12 @@ module TariffSynchronizer
         unconformant_records << event.payload[:record]
       end
 
+      # TARIC updates should be applied before CHIEF
       date_range_since_last_pending_update.each do |day|
-        # TARIC updates should be applied before CHIEF
         applied_updates << perform_update(TaricUpdate, day)
+      end
+
+      date_range_since_last_pending_update.each do |day|
         applied_updates << perform_update(ChiefUpdate, day)
       end
 
