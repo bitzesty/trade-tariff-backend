@@ -11,6 +11,7 @@
 data/*/*.xml
 data/*/*.txt
 data/measures/*
+data/failed-measures-report*
 
 # Environment files
 .env
