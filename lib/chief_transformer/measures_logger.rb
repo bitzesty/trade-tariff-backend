@@ -39,11 +39,16 @@ class ChiefTransformer
         end
       end
 
-      def delete_tmp_file(origin)
+      def delete_logs(origin)
         return if origin.nil?
 
         LOG_TYPES.each do |type|
+          # delete local version
           FileUtils.rm_f(tmp_file_path(origin, type))
+          # delete from S3
+          TariffSynchronizer::FileService.delete_file(
+            file_path(origin, type)
+          )
         end
       end
 

@@ -8,6 +8,13 @@ module TariffSynchronizer
         end
       end
 
+      # Deletes file by path
+      def delete_file(file_path)
+        if Rails.env.production? && file_exists?(file_path)
+          bucket.object(file_path).delete
+        end
+      end
+
       def write_file(file_path, body)
         if Rails.env.production?
           bucket.object(file_path).put(body: body)
