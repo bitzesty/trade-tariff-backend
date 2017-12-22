@@ -71,7 +71,7 @@ class ChiefTransformer
       # needs to throw errors about invalid goods nomenclature item found
       # we should check previous months in case CHIEF changes come before TARIC
       gono_sid = nil
-      [0, 1, 2, 3].each do |num|
+      [0, 1, 2, 3, 4].each do |num|
         gono_sid = GoodsNomenclature.where(goods_nomenclature_item_id: goods_nomenclature_item_id)
                                     .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)",
                                            validity_start_date ? validity_start_date + num.month : validity_start_date,

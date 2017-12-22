@@ -171,6 +171,9 @@ module TariffSynchronizer
 
               chief_update.mark_as_pending
               chief_update.clear_applied_at
+
+              # need to delete measure logs
+              ChiefTransformer::MeasuresLogger.delete_logs(chief_update.filename)
             end
           else
             TariffSynchronizer::TaricUpdate.where { issue_date > date }.delete
@@ -180,6 +183,9 @@ module TariffSynchronizer
               end
 
               chief_update.delete
+
+              # need to delete measure logs
+              ChiefTransformer::MeasuresLogger.delete_logs(chief_update.filename)
             end
           end
         end
