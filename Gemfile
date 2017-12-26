@@ -66,6 +66,10 @@ group :production do
   gem "sentry-raven"
 end
 
+group :development do
+  gem "foreman"
+end
+
 group :development, :test do
   gem "dotenv-rails", ">= 2.1.1"
   gem "pry-byebug"
