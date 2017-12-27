@@ -4,6 +4,7 @@ jobs:
     docker:
       - image: circleci/ruby:2.4.1
         environment:
+          - TARIFF_MEASURES_LOGGER: 0
           - RAILS_ENV: test
           - PG_HOST: localhost
           - PG_USER: ubuntu
