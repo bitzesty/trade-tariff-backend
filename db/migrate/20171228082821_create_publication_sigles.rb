@@ -5,10 +5,10 @@ Sequel.migration do
 
   up do
     create_table(table_name, ignore_index_errors: false) do
-      String :code_type_id, size: 2
-      String :code, size: 3
+      String :code_type_id, size: 4
+      String :code, size: 10
       String :publication_code, size: 1
-      String :publication_sigle, text: true
+      String :publication_sigle, size: 20
 
       DateTime :validity_end_date
       DateTime :validity_start_date

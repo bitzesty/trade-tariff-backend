@@ -4,8 +4,4 @@ class PublicationSigle < Sequel::Model
   plugin :conformance_validator
 
   set_primary_key [:code, :code_type_id]
-
-  def national?
-    national
-  end
 end
