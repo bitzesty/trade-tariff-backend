@@ -5010,10 +5010,10 @@ ALTER SEQUENCE prorogation_regulations_oid_seq OWNED BY prorogation_regulations_
 
 CREATE TABLE publication_sigles_oplog (
     oid integer NOT NULL,
-    code_type_id character varying(2),
-    code character varying(3),
+    code_type_id character varying(4),
+    code character varying(10),
     publication_code character varying(1),
-    publication_sigle text,
+    publication_sigle character varying(20),
     validity_end_date timestamp without time zone,
     validity_start_date timestamp without time zone,
     created_at timestamp without time zone,
