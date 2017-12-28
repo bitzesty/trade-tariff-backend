@@ -9,7 +9,6 @@ Sequel.migration do
       String :code, size: 3
       String :publication_code, size: 1
       String :publication_sigle, text: true
-      TrueClass :national
 
       DateTime :validity_end_date
       DateTime :validity_start_date
