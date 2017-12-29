@@ -5005,6 +5005,63 @@ ALTER SEQUENCE prorogation_regulations_oid_seq OWNED BY prorogation_regulations_
 
 
 --
+-- Name: publication_sigles_oplog; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE publication_sigles_oplog (
+    oid integer NOT NULL,
+    code_type_id character varying(4),
+    code character varying(10),
+    publication_code character varying(1),
+    publication_sigle character varying(20),
+    validity_end_date timestamp without time zone,
+    validity_start_date timestamp without time zone,
+    created_at timestamp without time zone,
+    operation character varying(1) DEFAULT 'C'::character varying,
+    operation_date date
+);
+
+
+--
+-- Name: publication_sigles; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW publication_sigles AS
+ SELECT publication_sigles1.oid,
+    publication_sigles1.code_type_id,
+    publication_sigles1.code,
+    publication_sigles1.publication_code,
+    publication_sigles1.publication_sigle,
+    publication_sigles1.validity_end_date,
+    publication_sigles1.validity_start_date,
+    publication_sigles1.operation,
+    publication_sigles1.operation_date
+   FROM publication_sigles_oplog publication_sigles1
+  WHERE ((publication_sigles1.oid IN ( SELECT max(publication_sigles2.oid) AS max
+           FROM publication_sigles_oplog publication_sigles2
+          WHERE (((publication_sigles1.code)::text = (publication_sigles2.code)::text) AND ((publication_sigles1.code_type_id)::text = (publication_sigles2.code_type_id)::text)))) AND ((publication_sigles1.operation)::text <> 'D'::text));
+
+
+--
+-- Name: publication_sigles_oplog_oid_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE publication_sigles_oplog_oid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: publication_sigles_oplog_oid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE publication_sigles_oplog_oid_seq OWNED BY publication_sigles_oplog.oid;
+
+
+--
 -- Name: quota_associations_oplog; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -6860,6 +6917,13 @@ ALTER TABLE ONLY prorogation_regulation_actions_oplog ALTER COLUMN oid SET DEFAU
 --
 
 ALTER TABLE ONLY prorogation_regulations_oplog ALTER COLUMN oid SET DEFAULT nextval('prorogation_regulations_oid_seq'::regclass);
+
+
+--
+-- Name: publication_sigles_oplog oid; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY publication_sigles_oplog ALTER COLUMN oid SET DEFAULT nextval('publication_sigles_oplog_oid_seq'::regclass);
 
 
 --
@@ -10036,3 +10100,4 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20151214230831_quota_criti
 INSERT INTO "schema_migrations" ("filename") VALUES ('20161209195324_alter_footnotes_foonote_id_lenght.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20170117212158_create_audits.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20170331125740_create_data_migrations.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20171228082821_create_publication_sigles.rb');
