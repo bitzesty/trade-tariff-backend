@@ -185,6 +185,12 @@ class ChiefTransformer
     def assign_validity_end_date
       self.validity_end_date = [tame.try(:le_tsmp), tamf.try(:le_tsmp), mfcm.try(:le_tsmp)].compact.min
 
+      # We sometimes get rubbish data and the MFCM has a le_tsmp that is before the start date
+      # Overwite the validity_end_date in this case
+      if self.validity_start_date.present? && self.validity_end_date.present? && self.validity_end_date < self.validity_start_date
+        self.validity_end_date = nil
+      end
+
       if self.validity_end_date.present?
         self.justification_regulation_role = DEFAULT_REGULATION_ROLE_TYPE_ID
         self.justification_regulation_id = DEFAULT_REGULATION_ID

@@ -68,7 +68,7 @@ describe ChiefTransformer::CandidateMeasure::Collection do
                                   msrgp_code: 'VT',
                                   msr_type: 'S',
                                   tty_code: 'B00',
-                                  fe_tsmp: DateTime.new(2012,1,1) }
+                                  fe_tsmp: DateTime.new(2006,1,1) }
 
       let!(:tame1) { create :tame, :unprocessed,
                                    fe_tsmp: DateTime.new(2007,10,1),
