@@ -18,15 +18,14 @@ class ChiefTransformer
     VAT_GROUP_CODES = %w[VT]
     RESTRICTION_GROUP_CODES = %w[DL PR DP DO HO]
     NATIONAL_MEASURE_TYPES = %w[AIL DPO EXA EXB EXC EXD DAA DAB DAC DAE DAI
-                                    DBA DBB DBC DBE DBI DCA DCC DCE DCH DDJ DDA
-                                    DDB DDC DDD DDE DDF DDG DEA DFA DFB DFC DGC
-                                    DHA DHC DHE EAA EAE EBJ EBA EBB EBE EDJ EDA
-                                    EDB EDE EEA EEF EFJ EFA EGJ EGA EGB EHI EIJ
-                                    EIA EIB EIC EID EIE FAA FAE FAI FBC FBG LAA
-                                    LAE LBJ LBA LBB LBE LDA LEA LEF LFA LGJ COE
-                                    PRE AHC ATT CEX CHM COI CVD ECM EHC EQC EWP
-                                    HOP HSE IWP PHC PRT QRC SFS VTA VTA VTE VTE
-                                    VTS VTS VTZ VTZ]
+                                DBA DBB DBC DBE DBI DCA DCC DCE DCH DDJ DDA
+                                DDB DDC DDD DDE DDF DDG DEA DFA DFB DFC DGC
+                                DHA DHC DHE EAA EAE EBJ EBA EBB EBE EDJ EDA
+                                EDB EDE EEA EEF EFJ EFA EGJ EGA EGB EHI EIJ
+                                EIA EIB EIC EID EIE FAA FAE FAI FBC FBG LAA
+                                LAE LBJ LBA LBB LBE LDA LEA LEF LFA LGJ COE
+                                PRE AHC ATT CEX CHM COI CVD ECM EHC EQC EWP
+                                HOP HSE IWP PHC PRT QRC SFS VTA VTE VTS VTZ]
 
     attr_accessor :mfcm, :tame, :tamf, :candidate_associations, :initiator, :operation
     attr_reader :chief_geographical_area
