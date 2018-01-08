@@ -172,6 +172,16 @@ describe ChiefTransformer::CandidateMeasure do
     end
 
     describe 'assigning validity end date' do
+      context 'validity end date equal or less than start date' do
+        let(:mfcm) { create :mfcm, fe_tsmp: DateTime.parse("2016-12-12"), le_tsmp: DateTime.parse("2016-12-12") }
+        subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm,
+                                                                             tame: mfcm.tame) }
+        it "should set end date to nil" do
+          expect(candidate_measure.validity_end_date).to be_nil
+        end
+      end
+
+
       context 'tame end date is after the mfcm' do
         let(:mfcm) { create :mfcm, :with_tame_end_date_after }
         subject(:candidate_measure) { ChiefTransformer::CandidateMeasure.new(mfcm: mfcm,

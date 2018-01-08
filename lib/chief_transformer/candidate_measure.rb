@@ -187,7 +187,7 @@ class ChiefTransformer
 
       # We sometimes get rubbish data and the MFCM has a le_tsmp that is before the start date
       # Overwite the validity_end_date in this case
-      if self.validity_start_date.present? && self.validity_end_date.present? && self.validity_end_date < self.validity_start_date
+      if self.validity_start_date.present? && self.validity_end_date.present? && self.validity_end_date <= self.validity_start_date
         self.validity_end_date = nil
       end
 
