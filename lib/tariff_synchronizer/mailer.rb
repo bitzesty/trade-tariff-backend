@@ -27,12 +27,6 @@ module TariffSynchronizer
       mail subject: "#{subject_prefix(:error)} Trade Tariff download failure"
     end
 
-    def failures_reminder(file_names)
-      @file_names = file_names
-
-      mail subject: "#{subject_prefix(:error)} Update application failed: failed Trade Tariff updates present"
-    end
-
     def file_not_found_on_filesystem(path)
       @path = path
 
