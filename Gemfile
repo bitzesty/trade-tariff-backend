@@ -68,6 +68,7 @@ end
 
 group :development do
   gem "foreman"
+  gem "letter_opener"
 end
 
 group :development, :test do
