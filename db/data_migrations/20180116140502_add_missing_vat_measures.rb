@@ -2,29 +2,29 @@ TradeTariffBackend::DataMigrator.migration do
   name 'Add missing VAT measures'
 
   MISSING_VAT_MEASURES = [
-    [ "20079939 03", "VT Z", "01.10.2014" ],
-    [ "39071000 90", "VT S", "01.07.2016" ],
-    [ "72142000 10", "VT S", "01.01.2016" ],
-    [ "72254012 20", "VT S", "01.02.2017" ],
-    [ "72254012 95", "VT S", "01.01.2017" ],
-    [ "72254015 20", "VT S", "01.02.2017" ],
-    [ "72254015 95", "VT S", "01.02.2017" ],
-    [ "72262000 20", "VT S", "01.02.2017" ],
-    [ "72262000 95", "VT S", "01.02.2017" ],
-    [ "72283020 10", "VT S", "01.01.2016" ],
-    [ "72283020 90", "VT S", "01.01.2016" ],
-    [ "72283041 10", "VT S", "01.01.2016" ],
-    [ "72283041 90", "VT S", "01.01.2016" ],
-    [ "72283049 10", "VT S", "01.01.2016" ],
-    [ "72283049 90", "VT S", "01.01.2016" ],
-    [ "72283061 10", "VT S", "01.01.2016" ],
-    [ "72283061 90", "VT S", "01.01.2016" ],
-    [ "72283069 10", "VT S", "01.01.2016" ],
-    [ "72283069 90", "VT S", "01.01.2016" ],
-    [ "72283070 10", "VT S", "01.01.2016" ],
-    [ "72283070 90", "VT S", "01.01.2016" ],
-    [ "72283089 10", "VT S", "01.01.2016" ],
-    [ "72283089 90", "VT S", "01.01.2016" ]
+    [ "2007993903", "VT Z", "01.10.2014" ],
+    [ "3907100090", "VT S", "01.07.2016" ],
+    [ "7214200010", "VT S", "01.01.2016" ],
+    [ "7225401220", "VT S", "01.02.2017" ],
+    [ "7225401295", "VT S", "01.01.2017" ],
+    [ "7225401520", "VT S", "01.02.2017" ],
+    [ "7225401595", "VT S", "01.02.2017" ],
+    [ "7226200020", "VT S", "01.02.2017" ],
+    [ "7226200095", "VT S", "01.02.2017" ],
+    [ "7228302010", "VT S", "01.01.2016" ],
+    [ "7228302090", "VT S", "01.01.2016" ],
+    [ "7228304110", "VT S", "01.01.2016" ],
+    [ "7228304190", "VT S", "01.01.2016" ],
+    [ "7228304910", "VT S", "01.01.2016" ],
+    [ "7228304990", "VT S", "01.01.2016" ],
+    [ "7228306110", "VT S", "01.01.2016" ],
+    [ "7228306190", "VT S", "01.01.2016" ],
+    [ "7228306910", "VT S", "01.01.2016" ],
+    [ "7228306990", "VT S", "01.01.2016" ],
+    [ "7228307010", "VT S", "01.01.2016" ],
+    [ "7228307090", "VT S", "01.01.2016" ],
+    [ "7228308910", "VT S", "01.01.2016" ],
+    [ "7228308990", "VT S", "01.01.2016" ]
   ]
 
   up do
@@ -94,7 +94,7 @@ TradeTariffBackend::DataMigrator.migration do
           debug_it("  https://www.trade-tariff.service.gov.uk/trade-tariff/commodities/#{clean_up_whitespaces(item)}")
         end
 
-        debug_it("  - skipped: #{skipped_list.join(', ')}")
+        debug_it("  - skipped (#{skipped_list.size}): #{skipped_list.join(', ')}")
       else
         debug_it("No any measure candidates found!")
       end
@@ -124,15 +124,13 @@ TradeTariffBackend::DataMigrator.migration do
 
           existing_record.destroy
           deleted_list << measure_candidate_ops[0]
-
-          debug_it("[#{measure_candidate_ops}] measure detected! Removing...")
         else
           debug_it("[#{measure_candidate_ops}] measure is missing! Skipping...")
         end
       end
 
       debug_it("Script completed!")
-      debug_it("  - deleted_list: #{deleted_list.join(', ')}")
+      debug_it("  - deleted_list (#{deleted_list.size}): #{deleted_list.join(', ')}")
     }
   end
 
@@ -178,7 +176,7 @@ TradeTariffBackend::DataMigrator.migration do
 
   def find_measure_by(measure_candidate_ops)
     Measure.find(
-      goods_nomenclature_item_id: clean_up_whitespaces(measure_candidate_ops[0]),
+      goods_nomenclature_item_id: measure_candidate_ops[0],
       measure_type_id: clean_up_whitespaces(measure_candidate_ops[1])
     )
   end
