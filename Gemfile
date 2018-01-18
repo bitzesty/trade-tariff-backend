@@ -68,10 +68,7 @@ end
 
 group :development do
   gem "foreman"
-<<<<<<< HEAD
-=======
   gem "letter_opener"
->>>>>>> staging
 end
 
 group :development, :test do
