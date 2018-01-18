@@ -145,10 +145,6 @@ describe TariffSynchronizer, truncation: true do
 
       it "sends email with the error" do
         expect { TariffSynchronizer.apply }.to raise_error(TariffSynchronizer::FailedUpdatesError)
-
-        expect(ActionMailer::Base.deliveries).to_not be_empty
-        expect(ActionMailer::Base.deliveries.last.subject).to include("Update application failed: failed Trade Tariff updates present")
-        expect(ActionMailer::Base.deliveries.last.encoded).to include("There are failed updates for Trade Tariff that cannot be applied.")
       end
     end
   end
