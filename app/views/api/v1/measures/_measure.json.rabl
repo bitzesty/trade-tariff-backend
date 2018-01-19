@@ -36,7 +36,7 @@ end
 node(:suspension_legal_act, if: ->(measure) { !measure.national && measure.suspended? }) do |measure|
   {
     generating_regulation_code: measure.generating_regulation_code(measure.suspending_regulation.regulation_id),
-    url: measure.generating_regulation_url(measure.suspending_regulation.regulation_id),
+    url: measure.generating_regulation_url(true),
     validity_end_date: measure.suspending_regulation.effective_end_date,
     validity_start_date: measure.suspending_regulation.effective_start_date
   }
