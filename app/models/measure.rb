@@ -299,6 +299,8 @@ class Measure < Sequel::Model
   end
 
   def generating_regulation_url(for_suspending_regulation=false)
+    return false if national?
+
     target_regulation = for_suspending_regulation ? suspending_regulation : generating_regulation
 
     oj_seria, oj_number = target_regulation.officialjournal_number
