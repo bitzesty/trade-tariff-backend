@@ -83,27 +83,9 @@ class Commodity < GoodsNomenclature
   end
 
   def children
-    # some commodities have more than 1 GoodsNomenclatureIndent record
-    # e.g. c1 has 3 and 4 number_indents, c2 has 4 and 5
-    #      if we are looking for sibling for commodity with number_indents == 4
-    #      result should be c1 only
-    # issue was reproduced for commodity 8536501100
     next_sibling = heading.commodities_dataset
-      .join(
-          GoodsNomenclatureIndent.unordered
-              .select(:goods_nomenclature_sid)
-              .select_append{ max(number_indents).as(number_indents_max) }
-              .group(:goods_nomenclature_sid),
-          goods_nomenclature_sid: :goods_nomenclature_sid
-      )
-      .join(
-          :goods_nomenclature_indents,
-          {
-              t1__number_indents_max: :goods_nomenclature_indents__number_indents,
-              t1__goods_nomenclature_sid: :goods_nomenclature_indents__goods_nomenclature_sid
-          }
-      )
-      .where("t1.number_indents_max = ?", goods_nomenclature_indent.number_indents)
+      .join(:goods_nomenclature_indents, goods_nomenclature_sid: :goods_nomenclature_sid)
+      .where("goods_nomenclature_indents.number_indents = ?", goods_nomenclature_indent.number_indents)
       .where("goods_nomenclatures.goods_nomenclature_sid != ?", goods_nomenclature_sid)
       .where("goods_nomenclatures.goods_nomenclature_item_id > ?", goods_nomenclature_item_id)
       .where("goods_nomenclature_indents.validity_start_date <= ? AND (goods_nomenclature_indents.validity_end_date >= ? OR goods_nomenclature_indents.validity_end_date IS NULL)", point_in_time, point_in_time)
@@ -123,9 +105,10 @@ class Commodity < GoodsNomenclature
     else
       # commodity is last in the list, check if there are any commodities
       # under it
+
       heading.commodities_dataset
              .join(:goods_nomenclature_indents, goods_nomenclature_sid: :goods_nomenclature_sid)
-             .where("goods_nomenclature_indents.number_indents > ?", goods_nomenclature_indent.number_indents)
+             .where("goods_nomenclature_indents.number_indents >= ?", goods_nomenclature_indent.number_indents + 1)
              .where("goods_nomenclatures.goods_nomenclature_sid != ?", goods_nomenclature_sid)
              .where("goods_nomenclature_indents.validity_start_date <= ? AND (goods_nomenclature_indents.validity_end_date >= ? OR goods_nomenclature_indents.validity_end_date IS NULL)", point_in_time, point_in_time)
              .where("goods_nomenclatures.goods_nomenclature_item_id >= ?", goods_nomenclature_item_id)
