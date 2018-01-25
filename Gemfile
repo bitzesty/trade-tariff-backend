@@ -53,7 +53,7 @@ gem "connection_pool", "~> 2.2"
 
 
 gem 'holidays'
-
+gem 'rest-client'
 
 gem "newrelic_rpm"
 gem "logstash-event"
