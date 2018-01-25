@@ -27,7 +27,7 @@ module UsefullCheckers
       queue_number = 1
       offset = 0
 
-      while (queue_number * limit) <= total_number_of_commodities do
+      while ((queue_number - 1) * limit) <= total_number_of_commodities do
         log_it("QUEUE #{queue_number} #{offset} - #{offset + 250}", "STARTED")
 
         commodities = Commodity.actual
