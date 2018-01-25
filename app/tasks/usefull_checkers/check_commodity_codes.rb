@@ -35,20 +35,37 @@ module UsefullCheckers
                                .limit(limit, offset)
 
         commodities.map do |commodity|
+          status = nil
+          max_attempts = 5
           commodity_code = commodity.goods_nomenclature_item_id
-          response = RestClient.get '#{host}/trade-tariff/commodities/#{commodity_code}.json'
+          url = "#{host}/trade-tariff/commodities/#{commodity_code}.json"
 
-          if response.code == 200
-            log_it(commodity_code, "OK")
-          else
-            log_it(commodity_code, "NOT FOUND")
+          log_it("   #{commodity_code}, #{url}", "STARTED")
+
+          begin
+            response = RestClient.get(url)
+            status = response.code
+            log_it("  #{commodity_code}", response.code)
+
+          rescue RestClient::NotFound
+            status = "404"
+            log_it("  #{commodity_code}", "NOT FOUND")
+
+          rescue SocketError
+            log_it("  #{commodity_code}", "CLOUDFLARE ISSUE")
+
+            if (max_attempts -= 1) > 0
+              retry
+            else
+              log_it("  #{commodity_code}", "   -> RETRY attempts remaining: #{max_attempts}")
+            end
           end
 
           CommodityCheck.insert(
             commodity_code: commodity_code,
             goods_nomenclature_sid: commodity.goods_nomenclature_sid,
             producline_suffix: commodity.producline_suffix,
-            status: response.code.to_s
+            status: status
           )
 
           sleep 1
@@ -67,7 +84,7 @@ module UsefullCheckers
       def log_it(commodity_code, status)
         p ""
         p "-" * 100
-        p "[#{commodity_code}] #{status}"
+        p "#{commodity_code} #{status}"
         p "-" * 100
         p ""
       end
