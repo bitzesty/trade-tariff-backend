@@ -53,6 +53,7 @@ module UsefullCheckers
 
           rescue SocketError
             log_it("  #{commodity_code}", "CLOUDFLARE ISSUE")
+            sleep 1
 
             if (max_attempts -= 1) > 0
               retry
