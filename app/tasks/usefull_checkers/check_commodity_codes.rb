@@ -28,7 +28,7 @@ module UsefullCheckers
       offset = 0
 
       while ((queue_number - 1) * limit) <= total_number_of_commodities do
-        log_it("QUEUE #{queue_number} #{offset} - #{offset + 250}", "STARTED")
+        log_it("QUEUE #{queue_number}", "#{offset} - #{offset + 250}")
 
         commodities = Commodity.actual
                                .declarable
@@ -40,25 +40,25 @@ module UsefullCheckers
           commodity_code = commodity.goods_nomenclature_item_id
           url = "#{host}/trade-tariff/commodities/#{commodity_code}.json"
 
-          log_it("   #{commodity_code}, #{url}", "STARTED")
+          log_it("   #{commodity_code},", url)
 
           begin
             response = RestClient.get(url)
             status = response.code
-            log_it("  #{commodity_code}", response.code)
+            log_it("    ->", response.code)
 
           rescue RestClient::NotFound
             status = "404"
-            log_it("  #{commodity_code}", "NOT FOUND")
+            log_it("    ->", "NOT FOUND")
 
           rescue SocketError
-            log_it("  #{commodity_code}", "CLOUDFLARE ISSUE")
+            log_it("    ->", "CLOUDFLARE ISSUE")
             sleep 1
 
             if (max_attempts -= 1) > 0
               retry
             else
-              log_it("  #{commodity_code}", "   -> RETRY attempts remaining: #{max_attempts}")
+              log_it("    ->", "RETRY attempts remaining: #{max_attempts}")
             end
           end
 
