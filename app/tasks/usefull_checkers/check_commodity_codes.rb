@@ -62,12 +62,12 @@ module UsefullCheckers
             end
           end
 
-          CommodityCheck.insert(
-            commodity_code: commodity_code,
-            goods_nomenclature_sid: commodity.goods_nomenclature_sid,
-            producline_suffix: commodity.producline_suffix,
-            status: status
-          )
+          # CommodityCheck.insert(
+          #   commodity_code: commodity_code,
+          #   goods_nomenclature_sid: commodity.goods_nomenclature_sid,
+          #   producline_suffix: commodity.producline_suffix,
+          #   status: status
+          # )
 
           sleep 1
         end

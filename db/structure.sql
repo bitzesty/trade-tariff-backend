@@ -1162,38 +1162,6 @@ CREATE TABLE chief_tbl9 (
 
 
 --
--- Name: commodity_checks; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE commodity_checks (
-    id integer NOT NULL,
-    commodity_code text,
-    goods_nomenclature_sid text,
-    producline_suffix text,
-    status text
-);
-
-
---
--- Name: commodity_checks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE commodity_checks_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: commodity_checks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE commodity_checks_id_seq OWNED BY commodity_checks.id;
-
-
---
 -- Name: complete_abrogation_regulations_oplog; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -6504,13 +6472,6 @@ ALTER TABLE ONLY chief_measurement_unit ALTER COLUMN id SET DEFAULT nextval('chi
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY commodity_checks ALTER COLUMN id SET DEFAULT nextval('commodity_checks_id_seq'::regclass);
-
-
---
 -- Name: oid; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -7302,14 +7263,6 @@ ALTER TABLE ONLY chief_measure_type_footnote
 
 ALTER TABLE ONLY chief_measurement_unit
     ADD CONSTRAINT chief_measurement_unit_pkey PRIMARY KEY (id);
-
-
---
--- Name: commodity_checks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY commodity_checks
-    ADD CONSTRAINT commodity_checks_pkey PRIMARY KEY (id);
 
 
 --
@@ -10192,4 +10145,3 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20161209195324_alter_footn
 INSERT INTO "schema_migrations" ("filename") VALUES ('20170117212158_create_audits.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20170331125740_create_data_migrations.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20171228082821_create_publication_sigles.rb');
-INSERT INTO "schema_migrations" ("filename") VALUES ('20180125145803_create_commodity_checks.rb');
