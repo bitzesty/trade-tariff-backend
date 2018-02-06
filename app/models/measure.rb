@@ -301,31 +301,9 @@ class Measure < Sequel::Model
   def generating_regulation_url(for_suspending_regulation=false)
     return false if national?
 
-    target_regulation = for_suspending_regulation ? suspending_regulation : generating_regulation
-
-    oj_seria, oj_number = target_regulation.officialjournal_number
-                                           .split(" ")
-
-    oj_page = target_regulation.officialjournal_page
-                               .to_s
-                               .rjust(4, "0")
-
-    url_ops = if target_regulation.is_a?(MeasurePartialTemporaryStop)
-      #
-      # If MeasurePartialTemporaryStop, we do not pass year into the search params
-      # as there are no published_date for partial stop
-      #
-      "whOJ=NO_OJ%3D#{oj_number},PAGE_FIRST%3D#{oj_page}&DB_COLL_OJ=oj-#{oj_seria.downcase}&type=advanced&lang=en"
-    else
-      #
-      # If general regulation or FullTemporaryStopRegulation, then
-      # we are providing 'published_date' year to the search parameters
-      #
-      oj_year = target_regulation.published_date.year
-      "whOJ=NO_OJ%3D#{oj_number},YEAR_OJ%3D#{oj_year},PAGE_FIRST%3D#{oj_page}&DB_COLL_OJ=oj-#{oj_seria.downcase}&type=advanced&lang=en"
-    end
-
-    "http://eur-lex.europa.eu/search.html?#{url_ops}"
+    MeasureService::CouncilRegulationUrlGenerator.new(
+      for_suspending_regulation ? suspending_regulation : generating_regulation
+    ).generate
   end
 
   def origin
