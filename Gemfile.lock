@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:jarl-borg/simplecov-rcov.git
+  remote: git@github.com:bitzesty/simplecov-rcov.git
   revision: 5761838cf0357e560d1dfe5669d945f9c0cb22d0
   specs:
     simplecov-rcov (0.2.3)
