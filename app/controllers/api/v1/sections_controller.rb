@@ -13,6 +13,10 @@ module Api
 
         respond_with @section
       end
+
+      def tree
+        @sections = Section.eager({ chapters: [:headings] }).all
+      end
     end
   end
 end
