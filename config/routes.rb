@@ -8,6 +8,9 @@ Rails.application.routes.draw do
     # the choice until we need to expose the API to clients which we don't control.
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
       resources :sections, only: [:index, :show], constraints: { id: /\d{1,2}/ } do
+        collection do
+          get :tree
+        end
         scope module: 'sections', constraints: { section_id: /\d{1,2}/, id: /\d+/ } do
           resource :section_note, only: [:show, :create, :update, :destroy]
           resources :search_references, only: [:show, :index, :destroy, :create, :update]
@@ -57,6 +60,7 @@ Rails.application.routes.draw do
 
       post "search" => "search#search", via: :post, as: :search
       get "search_suggestions" => "search#suggestions", as: :search_suggestions
+      get '/headings/:id/tree' => 'headings#tree'
 
       resources :rollbacks, only: [:create, :index]
       resources :footnotes, only: [:index, :show, :update]

@@ -5,7 +5,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-ruby "2.4.3"
+ruby "2.5.0"
 
 gem "rails", "5.1.3"
 
@@ -84,7 +84,7 @@ group :test do
   gem "forgery", github: "mtunjic/forgery", branch: "master"
   gem "json_expressions", "~> 0.9.0"
   gem "simplecov", "~> 0.14.1"
-  gem "simplecov-rcov"
+  gem "simplecov-rcov", git: 'git@github.com:bitzesty/simplecov-rcov.git' # monkey patch for ruby 2.5.0
   gem "webmock", "~> 3.0.1"
   gem "database_cleaner", github: "theharq/database_cleaner", branch: "sequel-updates"
   gem "rspec_junit_formatter"
