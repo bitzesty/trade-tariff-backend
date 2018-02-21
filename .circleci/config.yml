@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/ruby:2.4.3
+      - image: circleci/ruby:2.5.0
         environment:
           - TARIFF_MEASURES_LOGGER: 0
           - RAILS_ENV: test

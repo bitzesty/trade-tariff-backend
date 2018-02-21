@@ -1,5 +1,10 @@
 # Change Log
 
+## [February 18, 2018]
+
+### Changed
+
+- Update `ruby` version to 2.5.0
 
 ## [August 28, 2017]
 
