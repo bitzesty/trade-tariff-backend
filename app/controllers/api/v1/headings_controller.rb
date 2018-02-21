@@ -55,6 +55,14 @@ module Api
         render 'api/v1/changes/changes'
       end
 
+      def tree
+        @heading = Heading.actual
+                          .non_grouping
+                          .where(goods_nomenclatures__goods_nomenclature_item_id: params[:id])
+                          .take
+        @commodities = GoodsNomenclatureMapper.new(@heading.commodities_dataset.eager(:goods_nomenclature_indents, :goods_nomenclature_descriptions).all).all
+      end
+
       private
 
       def find_heading
