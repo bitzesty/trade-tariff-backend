@@ -17,10 +17,16 @@ if @heading.declarable?
 else
   child :chapter do
     attributes :goods_nomenclature_item_id, :description, :formatted_description
+    node(:chapter_note, if: lambda {|chapter| chapter.chapter_note.present? }) do |chapter|
+      chapter.chapter_note.content
+    end
   end
 
   child :section do
     attributes :title, :numeral, :position
+    node(:section_note, if: lambda { |section| section.section_note.present? }) do |section|
+      section.section_note.content
+    end
   end
 
   child(@commodities) {
