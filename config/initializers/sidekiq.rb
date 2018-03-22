@@ -7,7 +7,7 @@ if TradeTariffBackend.production?
   redis_db = 0
 else
   redis_url = begin
-    JSON.parse(ENV["VCAP_SERVICES"])["user-provided"].select{ |s| s["name"] == "redis-alpha" }[0]["credentials"]["uri"]
+    JSON.parse(ENV["VCAP_SERVICES"])["redis"][0]["credentials"]["uri"]
   rescue
     ENV["REDIS_URL"]
   end
