@@ -11,10 +11,10 @@ Sequel.migration do
     Heading.where(goods_nomenclatures__goods_nomenclature_item_id: heading_ids).each do |heading|
       next if heading.footnotes.include?(footnote)
       puts "Associating footnote #{footnote.inspect} with heading #{heading.inspect}"
-      associate_footnote_with_goods_nomenclature(heading, footnote)
+      FootnoteAssociationGoodsNomenclature.associate_footnote_with_goods_nomenclature(heading, footnote)
 
       heading.commodities.each do |commodity|
-        associate_footnote_with_goods_nomenclature(commodity, footnote)
+        FootnoteAssociationGoodsNomenclature.associate_footnote_with_goods_nomenclature(commodity, footnote)
         puts "Associating footnote #{footnote.inspect} with Commodity #{commodity.inspect}"
       end
     end
