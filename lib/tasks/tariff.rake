@@ -64,20 +64,6 @@ namespace :tariff do
     end
   end
 
-  def associate_footnote_with_goods_nomenclature(source, footnote)
-    f = FootnoteAssociationGoodsNomenclature.new
-    f.values[:goods_nomenclature_sid] = source.values[:goods_nomenclature_sid]
-    f.values[:goods_nomenclature_item_id] = source.values[:goods_nomenclature_item_id]
-    f.values[:productline_suffix] = source.values[:producline_suffix]
-    f.values[:validity_start_date] = source.values[:validity_start_date]
-    f.values[:validity_end_date] = source.values[:validity_end_date]
-    f.values[:operation] = source.values[:operation]
-    f.values[:footnote_id] = footnote.values[:footnote_id]
-    f.values[:footnote_type] = footnote.values[:footnote_type_id]
-    f.values[:national] = footnote.values[:national]
-    f.save
-  end
-
   desc 'Download and apply Taric and CHIEF data'
   task sync: %w[environment sync:apply]
 
