@@ -5,10 +5,10 @@ attributes :goods_nomenclature_item_id, :description, :bti_url,
            :formatted_description
 
 unless @heading.footnote.nil?
-  child :footnote do
+  child(@heading.footnotes) {
     attributes :code, :description, :formatted_description
-  end           
-end  
+  }
+end
 
 if @heading.declarable?
   attributes :basic_duty_rate
