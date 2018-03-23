@@ -12,11 +12,7 @@ namespace :tariff do
     TradeTariffBackend.reindex
   end
 
-  desc %{
-    Assign footnote_id/footnote_type_id to list of heading ids and their comodities. Id is 10 digits.
-    Seperate heading ids with spaces.
-    ex: rake tariff:assign_footnote_id_to_headings['002','05','8702000000 8705000000']
-  }
+
   task :assign_footnote_id_to_headings, [:footnote_id, :footnote_type_id, :heading_ids] => :environment do |t, args|
     footnote_id = args[:footnote_id]
     footnote_type_id = args[:footnote_type_id]
@@ -63,7 +59,7 @@ namespace :tariff do
     }
     GoodsNomenclature.fetch(sql).all.each do |c|
       if c.footnote != footnote
-        associate_footnote_with_goods_nomenclature(c, footnote)
+        FootnoteAssociationGoodsNomenclature.associate_footnote_with_goods_nomenclature(c, footnote)
       end
     end
   end
@@ -381,4 +377,3 @@ namespace :tariff do
     end
   end
 end
-
