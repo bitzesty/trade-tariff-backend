@@ -12,6 +12,36 @@ namespace :tariff do
     TradeTariffBackend.reindex
   end
 
+  desc %{
+    Assign footnote_id/footnote_type_id to list of heading ids and their comodities. Id is 10 digits.
+    Seperate heading ids with spaces.
+    ex: rake tariff:assign_footnote_id_to_headings['002','05','8702000000 8705000000']
+  }
+  task :assign_footnote_id_to_headings, [:footnote_id, :footnote_type_id, :heading_ids] => :environment do |t, args|
+    footnote_id = args[:footnote_id]
+    footnote_type_id = args[:footnote_type_id]
+    heading_ids = args[:heading_ids].split(' ')
+    puts "Arguments: "
+    puts "Footnote id #{footnote_id}"
+    puts "Footnote type id #{footnote_type_id}"
+    puts "Heading ids #{heading_ids.join(', ')}"
+
+    footnote = Footnote.where(footnote_id: footnote_id, footnote_type_id: footnote_type_id).first
+
+    Heading.where(goods_nomenclatures__goods_nomenclature_item_id: heading_ids).each do |heading|
+      next if heading.footnotes.include?(footnote)
+      puts "Associating footnote #{footnote.inspect} with heading #{heading.inspect}"
+      associate_footnote_with_goods_nomenclature(heading, footnote)
+
+      heading.commodities.each do |commodity|
+        associate_footnote_with_goods_nomenclature(commodity, footnote)
+        puts "Associating footnote #{footnote.inspect} with Commodity #{commodity.inspect}"
+      end
+    end
+
+    puts "SUCCESS"
+  end
+
   desc 'Add commodity footnotes for ECO licences where these is an export restriction'
   task add_missing_commodity_footnote: :environment do
     measure_type_id = MeasureType.all.detect { |mt| mt.description == 'Export authorization (Dual use)' }.values[:measure_type_id]
@@ -33,19 +63,23 @@ namespace :tariff do
     }
     GoodsNomenclature.fetch(sql).all.each do |c|
       if c.footnote != footnote
-        f = FootnoteAssociationGoodsNomenclature.new
-        f.values[:goods_nomenclature_sid] = c.values[:goods_nomenclature_sid]
-        f.values[:goods_nomenclature_item_id] = c.values[:goods_nomenclature_item_id]
-        f.values[:productline_suffix] = c.values[:producline_suffix]
-        f.values[:validity_start_date] = c.values[:validity_start_date]
-        f.values[:validity_end_date] = c.values[:validity_end_date]
-        f.values[:operation] = c.values[:operation]
-        f.values[:footnote_id] = footnote.values[:footnote_id]
-        f.values[:footnote_type] = footnote.values[:footnote_type_id]
-        f.values[:national] = footnote.values[:national]
-        f.save
+        associate_footnote_with_goods_nomenclature(c, footnote)
       end
-    end  
+    end
+  end
+
+  def associate_footnote_with_goods_nomenclature(source, footnote)
+    f = FootnoteAssociationGoodsNomenclature.new
+    f.values[:goods_nomenclature_sid] = source.values[:goods_nomenclature_sid]
+    f.values[:goods_nomenclature_item_id] = source.values[:goods_nomenclature_item_id]
+    f.values[:productline_suffix] = source.values[:producline_suffix]
+    f.values[:validity_start_date] = source.values[:validity_start_date]
+    f.values[:validity_end_date] = source.values[:validity_end_date]
+    f.values[:operation] = source.values[:operation]
+    f.values[:footnote_id] = footnote.values[:footnote_id]
+    f.values[:footnote_type] = footnote.values[:footnote_type_id]
+    f.values[:national] = footnote.values[:national]
+    f.save
   end
 
   desc 'Download and apply Taric and CHIEF data'
@@ -347,3 +381,4 @@ namespace :tariff do
     end
   end
 end
+
