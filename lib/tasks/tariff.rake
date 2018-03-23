@@ -12,32 +12,6 @@ namespace :tariff do
     TradeTariffBackend.reindex
   end
 
-
-  task :assign_footnote_id_to_headings, [:footnote_id, :footnote_type_id, :heading_ids] => :environment do |t, args|
-    footnote_id = args[:footnote_id]
-    footnote_type_id = args[:footnote_type_id]
-    heading_ids = args[:heading_ids].split(' ')
-    puts "Arguments: "
-    puts "Footnote id #{footnote_id}"
-    puts "Footnote type id #{footnote_type_id}"
-    puts "Heading ids #{heading_ids.join(', ')}"
-
-    footnote = Footnote.where(footnote_id: footnote_id, footnote_type_id: footnote_type_id).first
-
-    Heading.where(goods_nomenclatures__goods_nomenclature_item_id: heading_ids).each do |heading|
-      next if heading.footnotes.include?(footnote)
-      puts "Associating footnote #{footnote.inspect} with heading #{heading.inspect}"
-      associate_footnote_with_goods_nomenclature(heading, footnote)
-
-      heading.commodities.each do |commodity|
-        associate_footnote_with_goods_nomenclature(commodity, footnote)
-        puts "Associating footnote #{footnote.inspect} with Commodity #{commodity.inspect}"
-      end
-    end
-
-    puts "SUCCESS"
-  end
-
   desc 'Add commodity footnotes for ECO licences where these is an export restriction'
   task add_missing_commodity_footnote: :environment do
     measure_type_id = MeasureType.all.detect { |mt| mt.description == 'Export authorization (Dual use)' }.values[:measure_type_id]
