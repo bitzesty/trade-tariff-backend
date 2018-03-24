@@ -16,11 +16,6 @@ TradeTariffBackend::DataMigrator.migration do
       next if heading.footnotes.include?(footnote)
       puts "Associating footnote #{footnote.inspect} with heading #{heading.inspect}"
       FootnoteAssociationGoodsNomenclature.associate_footnote_with_goods_nomenclature(heading, footnote)
-
-      heading.commodities.each do |commodity|
-        FootnoteAssociationGoodsNomenclature.associate_footnote_with_goods_nomenclature(commodity, footnote)
-        puts "Associating footnote #{footnote.inspect} with Commodity #{commodity.inspect}"
-      end
     end
 
     }
