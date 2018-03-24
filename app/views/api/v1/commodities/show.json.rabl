@@ -5,6 +5,13 @@ attributes :producline_suffix, :description, :number_indents,
            :goods_nomenclature_item_id, :bti_url, :formatted_description,
            :description_plain, :consigned, :consigned_from, :basic_duty_rate
 
+  footnotes = (@commodity.footnotes + @commodity.heading.footnotes).uniq
+  if footnotes.any?
+    child(footnotes) {
+    attributes :code, :description, :formatted_description
+  }
+end
+
 extends "api/v1/declarables/declarable", object: @commodity, locals: { measures: @measures, geo_areas: @geographical_areas }
 
 child @commodity.heading do

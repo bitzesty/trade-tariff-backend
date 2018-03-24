@@ -4,17 +4,18 @@ cache @heading_cache_key, expires_at: actual_date.end_of_day
 attributes :goods_nomenclature_item_id, :description, :bti_url,
            :formatted_description
 
-if @heading.declarable?
-  attributes :basic_duty_rate
-
-  extends "api/v1/declarables/declarable", object: @heading, locals: { measures: @measures }
-else
   footnotes = @heading.footnotes
   if footnotes.any?
     child(footnotes) {
       attributes :code, :description, :formatted_description
     }
   end
+
+if @heading.declarable?
+  attributes :basic_duty_rate
+
+  extends "api/v1/declarables/declarable", object: @heading, locals: { measures: @measures }
+else
   child :chapter do
     attributes :goods_nomenclature_item_id, :description, :formatted_description
     node(:chapter_note, if: lambda {|chapter| chapter.chapter_note.present? }) do |chapter|
