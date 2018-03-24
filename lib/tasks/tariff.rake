@@ -33,19 +33,9 @@ namespace :tariff do
     }
     GoodsNomenclature.fetch(sql).all.each do |c|
       if c.footnote != footnote
-        f = FootnoteAssociationGoodsNomenclature.new
-        f.values[:goods_nomenclature_sid] = c.values[:goods_nomenclature_sid]
-        f.values[:goods_nomenclature_item_id] = c.values[:goods_nomenclature_item_id]
-        f.values[:productline_suffix] = c.values[:producline_suffix]
-        f.values[:validity_start_date] = c.values[:validity_start_date]
-        f.values[:validity_end_date] = c.values[:validity_end_date]
-        f.values[:operation] = c.values[:operation]
-        f.values[:footnote_id] = footnote.values[:footnote_id]
-        f.values[:footnote_type] = footnote.values[:footnote_type_id]
-        f.values[:national] = footnote.values[:national]
-        f.save
+        FootnoteAssociationGoodsNomenclature.associate_footnote_with_goods_nomenclature(c, footnote)
       end
-    end  
+    end
   end
 
   desc 'Download and apply Taric and CHIEF data'

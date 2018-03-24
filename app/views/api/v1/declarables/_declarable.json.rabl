@@ -18,10 +18,6 @@ child :chapter do
   end
 end
 
-child :footnote do
-  attributes :code, :description, :formatted_description
-end
-
 node(:import_measures) { |declarable|
   locals[:measures].select(&:import).map do |import_measure|
     partial "api/v1/measures/measure", object: import_measure, locals: { declarable: declarable, geo_areas: locals[:geo_areas] }
