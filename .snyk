@@ -8,5 +8,5 @@ ignore:
         expires: '2017-06-21T12:12:22.642Z'
     - '* > nokogiri@1.8.2':
         reason: None given
-        expires: '2018-03-14T12:12:22.642Z'
+        expires: '2018-04-14T12:12:22.642Z'
 patch: {}
