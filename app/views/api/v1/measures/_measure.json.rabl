@@ -96,7 +96,7 @@ child(order_number: :order_number) do
   node(:number) { |qon| qon.quota_order_number_id }
 
   child(quota_definition: :definition) do
-    attributes :initial_volume, :validity_start_date, :validity_end_date, :status
+    attributes :initial_volume, :validity_start_date, :validity_end_date, :status, :description
 
     node(:measurement_unit) { |qd| qd.measurement_unit_code }
     node(:monetary_unit) { |qd| qd.monetary_unit_code }
