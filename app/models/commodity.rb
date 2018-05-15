@@ -35,7 +35,7 @@ class Commodity < GoodsNomenclature
       filter(goods_nomenclature_item_id: code.to_s.first(10))
     end
 
-   def declarable
+    def declarable
       filter(producline_suffix: "80")
     end
   end
@@ -83,37 +83,27 @@ class Commodity < GoodsNomenclature
   end
 
   def children
-    next_sibling = heading.commodities_dataset
-      .join(:goods_nomenclature_indents, goods_nomenclature_sid: :goods_nomenclature_sid)
-      .where("goods_nomenclature_indents.number_indents = ?", goods_nomenclature_indent.number_indents)
-      .where("goods_nomenclatures.goods_nomenclature_sid != ?", goods_nomenclature_sid)
-      .where("goods_nomenclatures.goods_nomenclature_item_id > ?", goods_nomenclature_item_id)
-      .where("goods_nomenclature_indents.validity_start_date <= ? AND (goods_nomenclature_indents.validity_end_date >= ? OR goods_nomenclature_indents.validity_end_date IS NULL)", point_in_time, point_in_time)
-      .order(:goods_nomenclatures__goods_nomenclature_item_id)
-      .first
+    func = Proc.new {
+      GoodsNomenclatureMapper.new(
+        heading.commodities_dataset.
+                eager(:goods_nomenclature_indents, :goods_nomenclature_descriptions).
+                all
+      ).all.
+        detect do |item|
+        item.goods_nomenclature_sid == goods_nomenclature_sid
+      end.try(:children) || []
+    }
 
-    if next_sibling.present?
-      heading.commodities_dataset
-             .join(:goods_nomenclature_indents, goods_nomenclature_sid: :goods_nomenclature_sid)
-             .where("goods_nomenclature_indents.number_indents > ?", goods_nomenclature_indent.number_indents)
-             .where("goods_nomenclatures.goods_nomenclature_sid != ?", goods_nomenclature_sid)
-             .where("goods_nomenclatures.producline_suffix >= ?", producline_suffix)
-             .where("goods_nomenclature_indents.validity_start_date <= ? AND (goods_nomenclature_indents.validity_end_date >= ? OR goods_nomenclature_indents.validity_end_date IS NULL)", point_in_time, point_in_time)
-             .where("goods_nomenclatures.goods_nomenclature_item_id >= ? AND goods_nomenclatures.goods_nomenclature_item_id < ?", goods_nomenclature_item_id, next_sibling.goods_nomenclature_item_id)
-             .order(nil)
-             .all
+    if Rails.env.test? || Rails.env.development?
+      # Do not cache it in Test and Development environments.
+      #
+      func.call
     else
-      # commodity is last in the list, check if there are any commodities
-      # under it
-
-      heading.commodities_dataset
-             .join(:goods_nomenclature_indents, goods_nomenclature_sid: :goods_nomenclature_sid)
-             .where("goods_nomenclature_indents.number_indents >= ?", goods_nomenclature_indent.number_indents + 1)
-             .where("goods_nomenclatures.goods_nomenclature_sid != ?", goods_nomenclature_sid)
-             .where("goods_nomenclature_indents.validity_start_date <= ? AND (goods_nomenclature_indents.validity_end_date >= ? OR goods_nomenclature_indents.validity_end_date IS NULL)", point_in_time, point_in_time)
-             .where("goods_nomenclatures.goods_nomenclature_item_id >= ?", goods_nomenclature_item_id)
-             .order(nil)
-             .all
+      # Cache for 3 hours
+      #
+      Rails.cache.fetch("commodity_#{goods_nomenclature_sid}_children", expires_in: 3.hours) do
+        func.call
+      end
     end
   end
 

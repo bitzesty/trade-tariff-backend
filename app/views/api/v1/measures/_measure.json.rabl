@@ -24,14 +24,19 @@ node(:legal_act, if: ->(measure) { !measure.national && measure.generating_regul
   {
     generating_regulation_code: measure.generating_regulation_code,
     url: measure.generating_regulation_url,
-    suspended: measure.suspended?
+    suspended: measure.suspended?,
+    validity_end_date: measure.generating_regulation.validity_end_date,
+    validity_start_date: measure.generating_regulation.validity_start_date,
+    officialjournal_number: measure.generating_regulation.officialjournal_number,
+    officialjournal_page: measure.generating_regulation.officialjournal_page,
+    published_date: measure.generating_regulation.published_date
   }
 end
 
 node(:suspension_legal_act, if: ->(measure) { !measure.national && measure.suspended? }) do |measure|
   {
     generating_regulation_code: measure.generating_regulation_code(measure.suspending_regulation.regulation_id),
-    url: measure.generating_regulation_url(measure.suspending_regulation.regulation_id),
+    url: measure.generating_regulation_url(true),
     validity_end_date: measure.suspending_regulation.effective_end_date,
     validity_start_date: measure.suspending_regulation.effective_start_date
   }

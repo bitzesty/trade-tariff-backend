@@ -36,6 +36,9 @@ module TariffSynchronizer
 
   extend self
 
+  mattr_accessor :measures_logger_enabled
+  self.measures_logger_enabled = (ENV["TARIFF_MEASURES_LOGGER"].to_i == 1)
+
   mattr_accessor :username
   self.username = ENV["TARIFF_SYNC_USERNAME"]
 
@@ -130,9 +133,12 @@ module TariffSynchronizer
         unconformant_records << event.payload[:record]
       end
 
+      # TARIC updates should be applied before CHIEF
       date_range_since_last_pending_update.each do |day|
-        # TARIC updates should be applied before CHIEF
         applied_updates << perform_update(TaricUpdate, day)
+      end
+
+      date_range_since_last_pending_update.each do |day|
         applied_updates << perform_update(ChiefUpdate, day)
         # applied_updates << perform_update(CdsUpdate, day)
       end
@@ -174,6 +180,9 @@ module TariffSynchronizer
 
               chief_update.mark_as_pending
               chief_update.clear_applied_at
+
+              # need to delete measure logs
+              ChiefTransformer::MeasuresLogger.delete_logs(chief_update.filename)
             end
           else
             TariffSynchronizer::TaricUpdate.where { issue_date > date }.delete
@@ -183,6 +192,9 @@ module TariffSynchronizer
               end
 
               chief_update.delete
+
+              # need to delete measure logs
+              ChiefTransformer::MeasuresLogger.delete_logs(chief_update.filename)
             end
           end
         end

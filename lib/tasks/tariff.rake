@@ -12,6 +12,32 @@ namespace :tariff do
     TradeTariffBackend.reindex
   end
 
+  desc 'Add commodity footnotes for ECO licences where these is an export restriction'
+  task add_missing_commodity_footnote: :environment do
+    measure_type_id = MeasureType.all.detect { |mt| mt.description == 'Export authorization (Dual use)' }.values[:measure_type_id]
+    footnote = Footnote.filter(footnote_id: '002', footnote_type_id: '05').first
+    sql = %Q{
+      SELECT DISTINCT goods_nomenclatures.goods_nomenclature_sid, goods_nomenclatures.goods_nomenclature_item_id,
+      goods_nomenclatures.validity_start_date, producline_suffix,
+      goods_nomenclatures.validity_end_date, goods_nomenclatures.operation
+      FROM goods_nomenclatures
+      LEFT JOIN measures ON (measures.goods_nomenclature_item_id = goods_nomenclatures.goods_nomenclature_item_id)
+         WHERE ((measures.measure_type_id = '#{measure_type_id}')
+        )
+      AND NOT EXISTS (
+      select 1 from footnote_association_goods_nomenclatures
+      where footnote_association_goods_nomenclatures.footnote_type = '05'
+      and footnote_association_goods_nomenclatures.footnote_id = '002'
+      and goods_nomenclature_item_id = goods_nomenclatures.goods_nomenclature_item_id
+      )
+    }
+    GoodsNomenclature.fetch(sql).all.each do |c|
+      if c.footnote != footnote
+        FootnoteAssociationGoodsNomenclature.associate_footnote_with_goods_nomenclature(c, footnote)
+      end
+    end
+  end
+
   desc 'Download and apply Taric and CHIEF data'
   task sync: %w[environment sync:apply]
 
@@ -212,7 +238,6 @@ namespace :tariff do
 
   namespace :support do
     desc 'Fix CHIEF initial seed last effective dates'
-
     task fix_chief: :environment do
       Chief::Tame.unprocessed
                  .order(:msrgp_code, :msr_type, :tty_code)
@@ -232,6 +257,74 @@ namespace :tariff do
           end
         end
       end
+    end
+
+    desc "Create feiled measures report"
+    task failed_measures_report: %w[environment] do
+      require "csv"
+      items = []
+      CSV.open("data/failed-measures-report.csv", "wb", { col_sep: ";" }) do |csv|
+        csv << ["Goods Nomenclature", "Measure Type", "Update File", "Errors", "Candidate Measure", "Notes"]
+        Dir["data/measures/*"].select{|f| f.include?("failed")}.sort.each do |path|
+          puts "Processing #{path}"
+          file = File.open(path, "r")
+          origin = path.sub("-failed.json.txt", ".txt").split("/").last
+          file.each_line do |line|
+            line = JSON.parse(line)
+            items << [
+              line["goods_nomenclature_item_id"],
+              line["measure_type_id"],
+              origin,
+              line["errors"],
+              line
+            ]
+          end
+        end
+        items.uniq{ |i| [i[0], i[1], i[3]] }.each { |item| csv << item }
+      end
+
+      extra_namespaces = {
+        'xmlns:oub' => 'urn:publicid:-:DGTAXUD:TARIC:MESSAGE:1.0',
+        'xmlns:env' => "urn:publicid:-:DGTAXUD:GENERAL:ENVELOPE:1.0"
+      }
+
+      items = items.map{ |i| i[0] }.uniq.sort
+
+      CSV.open("data/failed-measures-report-taric.csv", "wb", { col_sep: ";" }) do |csv|
+        Dir["data/taric/*"].select{ |path| path > "data/taric/2017-05-31_TGB17101.xml" }.sort.each do |path|
+          items.each do |item|
+            puts "Processing #{item} #{path}"
+            origin = path.split("/").last
+            doc = Nokogiri::XML(File.open(path))
+            matches = doc.xpath(
+              "//oub:goods.nomenclature/oub:goods.nomenclature.item.id[contains(text(), '#{item}')]",
+              extra_namespaces
+            )
+
+            matches.each do |m|
+              start_date = m.parent.children.select{ |c| c.name == 'validity.start.date' }.first.try(:text)
+              end_date = m.parent.children.select{ |c| c.name == 'validity.end.date' }.first.try(:text)
+              csv << [item, origin, start_date, end_date]
+            end
+          end
+        end
+      end
+    end
+
+    desc "Check codes on EU website, put your codes in `codes` array"
+    task check_codes_on_eu: %w[environment] do
+      require 'net/http'
+      codes = []
+      not_on_eu = []
+      codes.each do |code|
+        puts "checking #{code}"
+        url = "http://ec.europa.eu/taxation_customs/dds2/taric/measures.jsp?Lang=en&SimDate=20180105&Area=&MeasType=&StartPub=&EndPub=&MeasText=&GoodsText=&Taric=#{code}&search_text=goods&textSearch=&LangDescr=en&OrderNum=&Regulation=&measStartDat=&measEndDat="
+        uri = URI(url)
+        s = Net::HTTP.get(uri)
+        not_on_eu << code unless s.include? "TARIC measure information"
+      end
+      puts "compeled"
+      puts not_on_eu
     end
   end
 

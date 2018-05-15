@@ -266,10 +266,6 @@ class Measure < Sequel::Model
     national
   end
 
-  def invalidated?
-    invalidated_at.present?
-  end
-
   def validate!
     model.validate(self)
   end
@@ -302,17 +298,12 @@ class Measure < Sequel::Model
     "#{regulation_code.first}#{regulation_code[3..6]}/#{regulation_code[1..2]}"
   end
 
-  def generating_regulation_url(regulation_code = measure_generating_regulation_id)
-    year = regulation_code[1..2]
-    # When we get to 2071 assume that we don't care about the 1900's
-    # or the EU has a better way to search
-    if year.to_i > 70
-      full_year = "19#{year}"
-    else
-      full_year = "20#{year}"
-    end
-    code = "3#{full_year}#{regulation_code.first}#{regulation_code[3..6]}"
-    "http://eur-lex.europa.eu/search.html?instInvStatus=ALL&or0=DN%3D#{code}*,DN-old%3D#{code}*&DTC=false&type=advanced"
+  def generating_regulation_url(for_suspending_regulation=false)
+    return false if national?
+
+    MeasureService::CouncilRegulationUrlGenerator.new(
+      for_suspending_regulation ? suspending_regulation : generating_regulation
+    ).generate
   end
 
   def origin

@@ -1,0 +1,67 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.5.0
+        environment:
+          - TARIFF_MEASURES_LOGGER: 0
+          - RAILS_ENV: test
+          - PG_HOST: localhost
+          - PG_USER: ubuntu
+          - RACK_ENV: test
+      - image: circleci/postgres:9.6.2
+        environment:
+          - POSTGRES_USER: ubuntu
+          - POSTGRES_DB: circleci_test
+      - image: elasticsearch:5.3
+      - image: redis:3.2.11
+    environment:
+      - GOVUK_APP_DOMAIN: test
+      - DATABASE_URL: "postgres://ubuntu@localhost:5432/circleci_test"
+    steps:
+      - checkout
+      - run:
+          name: Install System Dependencies
+          command: sudo apt-get update -qq && sudo apt-get install -y build-essential postgresql libpq-dev nodejs rake
+      - run:
+          name: Install bundler
+          command: gem install bundler
+      - run:
+          name: Install gems
+          command: bundle install
+      - run:
+          name: Set up DB
+          command: bundle exec rake db:create db:structure:load --trace
+      - run:
+          name: "Run Rspec"
+          command: |
+            bundle exec rspec --profile 10 \
+                              --format RspecJunitFormatter \
+                              --out test_results/rspec.xml \
+                              --format progress \
+                              $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+      - deploy:
+          command: |
+            curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
+            sudo dpkg -i cf-cli_amd64.deb
+            cf -v
+      - deploy:
+          command: |
+            curl -v -L -o autopilot https://github.com/contraband/autopilot/releases/download/0.0.3/autopilot-linux
+            chmod +x autopilot
+            cf install-plugin autopilot -f
+      - deploy:
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ];
+              then CF_SPACE=development CF_APP=tariff-backend-dev CF_APP_WORKER=tariff-backend-worker-dev ./bin/deploy
+            fi
+      - deploy:
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "staging" ];
+              then CF_SPACE=staging CF_APP=tariff-backend-staging CF_APP_WORKER=tariff-backend-worker-staging ./bin/deploy
+            fi
+      - deploy:
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "production" ];
+              then CF_SPACE=production CF_APP=tariff-backend-production CF_APP_WORKER=tariff-backend-worker-production ./bin/deploy
+            fi

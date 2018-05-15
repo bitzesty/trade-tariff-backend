@@ -87,9 +87,9 @@ describe Api::V1::SearchController, "GET #suggestions" do
   end
 
   describe "machine timed" do
-    let!(:commodity1) { create :commodity, validity_end_date: "2015-12-31 00:00:00" }
-    let!(:commodity2) { create :commodity, validity_end_date: "2015-12-01 00:00:00" }
-    let!(:commodity3) { create :commodity, validity_end_date: "2015-12-31 00:00:00" }
+    let!(:commodity1) { create :commodity, validity_end_date: "2015-12-31", validity_start_date: "2000-12-31" }
+    let!(:commodity2) { create :commodity, validity_end_date: "2015-12-01", validity_start_date: "2000-12-31" }
+    let!(:commodity3) { create :commodity, validity_end_date: "2015-12-31", validity_start_date: "2000-12-31" }
 
     let(:pattern) {
       [ { value: String }, { value: String } ]

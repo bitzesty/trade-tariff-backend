@@ -47,6 +47,14 @@ module TradeTariffBackend
       ENV["GOVUK_APP_NAME"]
     end
 
+    def production?
+      ENV["GOVUK_APP_DOMAIN"] == "tariff-backend-production.cloudapps.digital"
+    end
+
+    def gbp?
+      ENV["CURRENCY"] == "GBP"
+    end
+
     def data_migration_path
       File.join(Rails.root, 'db', 'data_migrations')
     end

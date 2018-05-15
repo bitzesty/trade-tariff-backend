@@ -5,9 +5,9 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-ruby "2.4.1"
+ruby "~> 2.5.0"
 
-gem "rails", "5.1.3"
+gem "rails", "5.1.5"
 
 
 gem "pg", "0.18.4"
@@ -24,9 +24,9 @@ gem "aws-sdk-rails", ">= 1.0.1"
 
 gem "hashie", "~> 3.4"
 gem "multi_json", "~> 1.11"
-gem "yajl-ruby", "~> 1.3", require: "yajl"
+gem "yajl-ruby", "~> 1.3.1", require: "yajl"
 gem "builder", "~> 3.2"
-gem "ox", "~> 2.6"
+gem "ox", ">= 2.8.1"
 gem "nokogiri", "~> 1.8.1"
 
 
@@ -66,6 +66,11 @@ group :production do
   gem "sentry-raven"
 end
 
+group :development do
+  gem "foreman"
+  gem "letter_opener"
+end
+
 group :development, :test do
   gem "dotenv-rails", ">= 2.1.1"
   gem "pry-byebug"
@@ -79,7 +84,7 @@ group :test do
   gem "forgery", github: "mtunjic/forgery", branch: "master"
   gem "json_expressions", "~> 0.9.0"
   gem "simplecov", "~> 0.14.1"
-  gem "simplecov-rcov"
+  gem "simplecov-rcov", git: 'git@github.com:bitzesty/simplecov-rcov.git' # monkey patch for ruby 2.5.0
   gem "webmock", "~> 3.0.1"
   gem "database_cleaner", github: "theharq/database_cleaner", branch: "sequel-updates"
   gem "rspec_junit_formatter"

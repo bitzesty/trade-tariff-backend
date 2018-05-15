@@ -18,15 +18,14 @@ class ChiefTransformer
     VAT_GROUP_CODES = %w[VT]
     RESTRICTION_GROUP_CODES = %w[DL PR DP DO HO]
     NATIONAL_MEASURE_TYPES = %w[AIL DPO EXA EXB EXC EXD DAA DAB DAC DAE DAI
-                                    DBA DBB DBC DBE DBI DCA DCC DCE DCH DDJ DDA
-                                    DDB DDC DDD DDE DDF DDG DEA DFA DFB DFC DGC
-                                    DHA DHC DHE EAA EAE EBJ EBA EBB EBE EDJ EDA
-                                    EDB EDE EEA EEF EFJ EFA EGJ EGA EGB EHI EIJ
-                                    EIA EIB EIC EID EIE FAA FAE FAI FBC FBG LAA
-                                    LAE LBJ LBA LBB LBE LDA LEA LEF LFA LGJ COE
-                                    PRE AHC ATT CEX CHM COI CVD ECM EHC EQC EWP
-                                    HOP HSE IWP PHC PRT QRC SFS VTA VTA VTE VTE
-                                    VTS VTS VTZ VTZ]
+                                DBA DBB DBC DBE DBI DCA DCC DCE DCH DDJ DDA
+                                DDB DDC DDD DDE DDF DDG DEA DFA DFB DFC DGC
+                                DHA DHC DHE EAA EAE EBJ EBA EBB EBE EDJ EDA
+                                EDB EDE EEA EEF EFJ EFA EGJ EGA EGB EHI EIJ
+                                EIA EIB EIC EID EIE FAA FAE FAI FBC FBG LAA
+                                LAE LBJ LBA LBB LBE LDA LEA LEF LFA LGJ COE
+                                PRE AHC ATT CEX CHM COI CVD ECM EHC EQC EWP
+                                HOP HSE IWP PHC PRT QRC SFS VTA VTE VTS VTZ]
 
     attr_accessor :mfcm, :tame, :tamf, :candidate_associations, :initiator, :operation
     attr_reader :chief_geographical_area
@@ -69,12 +68,20 @@ class ChiefTransformer
       end
 
       # needs to throw errors about invalid goods nomenclature item found
-      self.goods_nomenclature_sid = GoodsNomenclature.where(goods_nomenclature_item_id: goods_nomenclature_item_id)
-                                                     .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)", validity_start_date, validity_end_date)
-                                                     .declarable
-                                                     .order(Sequel.desc(:validity_start_date))
-                                                     .first
-                                                     .try(:goods_nomenclature_sid)
+      # we should check previous months in case CHIEF changes come before TARIC
+      gono_sid = nil
+      [0, 1, 2, 3, 4].each do |num|
+        gono_sid = GoodsNomenclature.where(goods_nomenclature_item_id: goods_nomenclature_item_id)
+                                    .where("validity_start_date <= ? AND (validity_end_date >= ? OR validity_end_date IS NULL)",
+                                           validity_start_date ? validity_start_date + num.month : validity_start_date,
+                                           validity_end_date ? validity_end_date + num.month : validity_end_date)
+                                    .declarable
+                                    .order(Sequel.desc(:validity_start_date))
+                                    .first
+                                    .try(:goods_nomenclature_sid)
+        break if gono_sid.present?
+      end
+      self.goods_nomenclature_sid = gono_sid
 
       # assign negative, National sid before saving record
       self.measure_sid = self.class.next_national_sid
@@ -138,7 +145,10 @@ class ChiefTransformer
       errors.add(:goods_nomenclature_item_id, 'commodity code should have 10 symbol length') if goods_nomenclature_item_id.present? && goods_nomenclature_item_id.size != 10
       errors.add(:measure_type_id, 'measure_type must be present') if measure_type_id.blank?
       errors.add(:measure_type_id, 'must have national measure type') if measure_type_id.present? && !measure_type_id.in?(NATIONAL_MEASURE_TYPES)
-      errors.add(:goods_nomenclature_sid, 'must be present') if goods_nomenclature_sid.blank?
+      if goods_nomenclature_sid.blank?
+        gonos = GoodsNomenclature.where(goods_nomenclature_item_id: goods_nomenclature_item_id).declarable.select_map([:goods_nomenclature_sid, :validity_start_date, :validity_end_date])
+        errors.add(:goods_nomenclature_sid, "not found within validity dates, others found #{gonos.inspect} ")
+      end
       errors.add(:geographical_area_sid, 'must be present') if geographical_area_sid.blank?
       errors.add(:validity_end_date, 'start date greater than end date') if validity_end_date.present? && validity_start_date >= validity_end_date
       errors.add(:measure_sid, 'measure must be unique') if Measure.where(measure_type_id: measure_type_id,
@@ -169,33 +179,17 @@ class ChiefTransformer
     end
 
     def assign_validity_start_date
-      self.validity_start_date =  if tamf.present?
-                                    if Time.after(tamf.fe_tsmp, mfcm.fe_tsmp)
-                                      tamf.fe_tsmp
-                                    else
-                                      mfcm.fe_tsmp
-                                    end
-                                  elsif tame.present?
-                                    if Time.after(tame.fe_tsmp, mfcm.fe_tsmp)
-                                      tame.fe_tsmp
-                                    else
-                                      mfcm.fe_tsmp
-                                    end
-                                  else
-                                    mfcm.fe_tsmp
-                                  end
+      self.validity_start_date = [tame.try(:fe_tsmp), tamf.try(:fe_tsmp), mfcm.try(:fe_tsmp)].compact.max
     end
 
     def assign_validity_end_date
-      self.validity_end_date =  if tame.present?
-                                  if Time.after(tame.le_tsmp, mfcm.le_tsmp)
-                                    mfcm.le_tsmp
-                                  elsif tame.le_tsmp.present?
-                                    tame.le_tsmp
-                                  end
-                                else
-                                  mfcm.le_tsmp
-                                end
+      self.validity_end_date = [tame.try(:le_tsmp), tamf.try(:le_tsmp), mfcm.try(:le_tsmp)].compact.min
+
+      # We sometimes get rubbish data and the MFCM has a le_tsmp that is before the start date
+      # Overwite the validity_end_date in this case
+      if self.validity_start_date.present? && self.validity_end_date.present? && self.validity_end_date <= self.validity_start_date
+        self.validity_end_date = nil
+      end
 
       if self.validity_end_date.present?
         self.justification_regulation_role = DEFAULT_REGULATION_ROLE_TYPE_ID
@@ -228,6 +222,10 @@ class ChiefTransformer
 
     def is_prohibition_or_restriction?
       mfcm.present? && (mfcm.msrgp_code.in?(RESTRICTION_GROUP_CODES))
+    end
+
+    def origin
+      [mfcm.try(:origin), tame.try(:origin), tamf.try(:origin)].find{ |e| e.present? }
     end
 
     private

@@ -11,6 +11,7 @@ require 'active_support/log_subscriber'
 
 require 'chief_transformer/logger'
 require 'chief_transformer/mailer'
+require 'chief_transformer/measures_logger'
 
 class ChiefTransformer
   include Singleton
@@ -58,7 +59,14 @@ class ChiefTransformer
       )
     end
 
+    # Before run:
+    # deleting local and S3 version of logs
+    ChiefTransformer::MeasuresLogger.delete_logs(chief.try(:filename))
+
     processor.process
 
+    # After run:
+    # upload logs to S3 after each processor run
+    ChiefTransformer::MeasuresLogger.upload_to_s3(chief.try(:filename))
   end
 end

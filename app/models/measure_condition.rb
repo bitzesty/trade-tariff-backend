@@ -85,7 +85,8 @@ class MeasureCondition < Sequel::Model
       monetary_unit: condition_monetary_unit_code,
       monetary_unit_abbreviation: monetary_unit_abbreviation,
       measurement_unit: measurement_unit_description,
-      formatted_measurement_unit_qualifier: formatted_measurement_unit_qualifier
+      formatted_measurement_unit_qualifier: formatted_measurement_unit_qualifier,
+      convert_currency: TradeTariffBackend.gbp?
     })
   end
 
