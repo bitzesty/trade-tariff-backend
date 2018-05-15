@@ -1,7 +1,7 @@
 require "rails_helper"
-require 'cds_importer/entity_mapper/additional_code_mapper'
+require "cds_importer/entity_mapper/additional_code_mapper"
 require "cds_importer/entity_mapper"
-require_dependency 'cds_importer/entity_mapper/goods_nomenclature_mapper'
+require_dependency "cds_importer/entity_mapper/goods_nomenclature_mapper"
 
 describe CdsImporter::EntityMapper do
   describe "#process!" do
@@ -29,7 +29,7 @@ describe CdsImporter::EntityMapper do
           }
         }
       )
-      subject = described_class.new(hash_double)
+      subject = CdsImporter::EntityMapper::AdditionalCodeMapper.new(hash_double.values)
       entity = subject.parse
       expect(entity.additional_code_sid.to_s).to eq(hash_double.values["sid"])
       expect(entity.additional_code).to eq(hash_double.values["additionalCodeCode"])
@@ -2670,7 +2670,6 @@ describe CdsImporter::EntityMapper do
   it "ModificationRegulation sample" do
     values = {
       "modificationRegulationId" => "R9617341",
-      "validityStartDate" => "1997-01-01T00:00:00",
       "publishedDate" => "1996-09-19T00:00:00",
       "officialjournalNumber" => "L 238",
       "officialjournalPage" => "1",
