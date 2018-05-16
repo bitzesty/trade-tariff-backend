@@ -2232,6 +2232,40 @@ describe CdsImporter::EntityMapper do
     expect(entity.operation_date).to eq(Date.parse(values["measureTypeSeriesDescription"]["metainfo"]["transactionDate"]))
   end
 
+  it "Measurement sample" do
+    values = {
+      "measurementUnitCode" => "DDS",
+      "validityStartDate" => "1971-02-11T00:00:00",
+      "validityEndDate" => "1972-01-04T00:00:00",
+      "metainfo" => {
+        "opType" => "C",
+        "transactionDate" => "2017-07-29T20:04:37"
+      },
+      "measurementUnitDescription" => {
+        "description" => "1200 kilowatt hours",
+        "language" => {
+          "languageId" => "EN"
+        },
+        "metainfo" => {
+          "opType" => "C",
+          "transactionDate" => "2017-06-29T20:04:37"
+        }
+      },
+      "measurementUnitQualifier" => {
+        "measurementUnitQualifierCode" => "X"
+      }
+    }
+    subject = CdsImporter::EntityMapper::MeasurementMapper.new(values)
+    entity = subject.parse
+    expect(entity).to be_a(Measurement)
+    expect(entity.measurement_unit_code).to eq(values["measurementUnitCode"])
+    expect(entity.measurement_unit_qualifier_code).to eq(values["measurementUnitQualifier"]["measurementUnitQualifierCode"])
+    expect(entity.validity_start_date).to eq(values["validityStartDate"])
+    expect(entity.validity_end_date).to eq(values["validityEndDate"])
+    expect(entity.operation).to eq(:create)
+    expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+  end
+
   it "MeasurementUnit sample" do
     values = {
       "measurementUnitCode" => "MWH",
