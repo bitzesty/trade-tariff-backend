@@ -3,6 +3,8 @@ class CdsImporter
     class GeographicalAreaDescriptionMapper < BaseMapper
       self.entity_class = "GeographicalAreaDescription".freeze
 
+      self.mapping_root = "GeographicalArea".freeze
+
       self.mapping_path = "geographicalAreaDescriptionPeriod.geographicalAreaDescription".freeze
 
       self.exclude_mapping = ["validityStartDate", "validityEndDate"].freeze

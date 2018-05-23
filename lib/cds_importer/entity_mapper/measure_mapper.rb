@@ -3,6 +3,8 @@ class CdsImporter
     class MeasureMapper < BaseMapper
       self.entity_class = "Measure".freeze
 
+      self.mapping_root = "Measure".freeze
+
       self.entity_mapping = base_mapping.merge(
         "sid" => :measure_sid,
         "measureType.measureTypeId" => :measure_type_id,

@@ -3,6 +3,8 @@ class CdsImporter
     class MonetaryExchangePeriodMapper < BaseMapper
       self.entity_class = "MonetaryExchangePeriod".freeze
 
+      self.mapping_root = "MonetaryExchangePeriod".freeze
+
       self.exclude_mapping = ["metainfo.origin"].freeze
 
       self.entity_mapping = base_mapping.merge(

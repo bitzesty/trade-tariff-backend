@@ -1,9 +1,11 @@
 class CdsImporter
   class EntityMapper
     class GoodsNomenclatureMapper < BaseMapper
-      self.exclude_mapping = ["metainfo.origin"].freeze
-
       self.entity_class = "GoodsNomenclature".freeze
+
+      self.mapping_root = "GoodsNomenclature".freeze
+
+      self.exclude_mapping = ["metainfo.origin"].freeze
 
       self.entity_mapping = base_mapping.merge(
         "sid" => :goods_nomenclature_sid,

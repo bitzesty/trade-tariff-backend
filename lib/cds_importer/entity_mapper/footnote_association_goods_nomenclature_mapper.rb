@@ -7,6 +7,8 @@ class CdsImporter
     class FootnoteAssociationGoodsNomenclatureMapper < BaseMapper
       self.entity_class = "FootnoteAssociationGoodsNomenclature".freeze
 
+      self.mapping_root = "GoodsNomenclature".freeze
+
       self.mapping_path = "footnoteAssociationGoodsNomenclature".freeze
 
       self.entity_mapping = base_mapping.merge(

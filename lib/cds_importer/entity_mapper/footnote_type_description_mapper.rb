@@ -3,6 +3,8 @@ class CdsImporter
     class FootnoteTypeDescriptionMapper < BaseMapper
       self.entity_class = "FootnoteTypeDescription".freeze
 
+      self.mapping_root = "FootnoteType".freeze
+
       self.mapping_path = "footnoteTypeDescription".freeze
 
       self.exclude_mapping = ["validityStartDate", "validityEndDate"].freeze

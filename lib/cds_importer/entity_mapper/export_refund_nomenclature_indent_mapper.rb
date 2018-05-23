@@ -7,11 +7,13 @@
 class CdsImporter
   class EntityMapper
     class ExportRefundNomenclatureIndentMapper < BaseMapper
+      self.entity_class = "ExportRefundNomenclatureIndent".freeze
+
+      self.mapping_root = "ExportRefundNomenclature".freeze
+
       self.mapping_path = "exportRefundNomenclatureIndents".freeze
 
       self.exclude_mapping = ["metainfo.origin"].freeze
-
-      self.entity_class = "ExportRefundNomenclatureIndent".freeze
 
       self.entity_mapping = base_mapping.merge(
         "#{mapping_path}.sid" => :export_refund_nomenclature_indents_sid,

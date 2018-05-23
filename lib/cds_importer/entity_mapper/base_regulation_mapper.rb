@@ -2,6 +2,9 @@ class CdsImporter
   class EntityMapper
     class BaseRegulationMapper < BaseMapper
       self.entity_class = "BaseRegulation".freeze
+
+      self.mapping_root = "BaseRegulation".freeze
+
       self.entity_mapping = BASE_MAPPING.merge(
         "regulationRoleType.regulationRoleTypeId" => :base_regulation_role,
         "baseRegulationId" => :base_regulation_id,

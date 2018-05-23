@@ -7,11 +7,13 @@
 class CdsImporter
   class EntityMapper
     class ExportRefundNomenclatureDescriptionPeriodMapper < BaseMapper
+      self.entity_class = "ExportRefundNomenclatureDescriptionPeriod".freeze
+
+      self.mapping_root = "ExportRefundNomenclature".freeze
+
       self.mapping_path = "exportRefundNomenclatureDescriptionPeriod".freeze
 
       self.exclude_mapping = ["metainfo.origin"].freeze
-
-      self.entity_class = "ExportRefundNomenclatureDescriptionPeriod".freeze
 
       self.entity_mapping = base_mapping.merge(
         "#{mapping_path}.sid" => :export_refund_nomenclature_description_period_sid,

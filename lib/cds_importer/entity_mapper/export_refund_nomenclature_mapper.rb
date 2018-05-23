@@ -1,9 +1,11 @@
 class CdsImporter
   class EntityMapper
     class ExportRefundNomenclatureMapper < BaseMapper
-      self.exclude_mapping = ["metainfo.origin"].freeze
-
       self.entity_class = "ExportRefundNomenclature".freeze
+
+      self.mapping_root = "ExportRefundNomenclature".freeze
+
+      self.exclude_mapping = ["metainfo.origin"].freeze
 
       self.entity_mapping = base_mapping.merge(
         "sid" => :export_refund_nomenclature_sid,

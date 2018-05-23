@@ -3,6 +3,8 @@ class CdsImporter
     class GeographicalAreaDescriptionPeriodMapper < BaseMapper
       self.entity_class = "GeographicalAreaDescriptionPeriod".freeze
 
+      self.mapping_root = "GeographicalArea".freeze
+
       self.mapping_path = "geographicalAreaDescriptionPeriod".freeze
 
       self.entity_mapping = base_mapping.merge(

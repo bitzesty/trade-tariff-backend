@@ -3,6 +3,8 @@ class CdsImporter
     class GeographicalAreaMembershipMapper < BaseMapper
       self.entity_class = "GeographicalAreaMembership".freeze
 
+      self.mapping_root = "GeographicalArea".freeze
+
       self.mapping_path = "geographicalAreaMembership".freeze
 
       self.entity_mapping = base_mapping.merge(

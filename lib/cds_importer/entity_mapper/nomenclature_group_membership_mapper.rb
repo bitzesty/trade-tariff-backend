@@ -2,8 +2,13 @@ class CdsImporter
   class EntityMapper
     class NomenclatureGroupMembershipMapper < BaseMapper
       self.entity_class = "NomenclatureGroupMembership".freeze
+
+      self.mapping_root = "GoodsNomenclature".freeze
+
       self.mapping_path = "nomenclatureGroupMembership".freeze
+
       self.exclude_mapping = ["metainfo.origin"].freeze
+
       self.entity_mapping = base_mapping.merge(
         "sid" => :goods_nomenclature_sid,
         "produclineSuffix" => :productline_suffix,

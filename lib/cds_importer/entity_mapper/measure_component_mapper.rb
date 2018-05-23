@@ -6,11 +6,13 @@
 class CdsImporter
   class EntityMapper
     class MeasureComponentMapper < BaseMapper
-      self.exclude_mapping = ["validityStartDate", "validityEndDate", "metainfo.origin"].freeze
+      self.entity_class = "MeasureComponent".freeze
+
+      self.mapping_root = "Measure".freeze
 
       self.mapping_path = "measureComponent".freeze
 
-      self.entity_class = "MeasureComponent".freeze
+      self.exclude_mapping = ["validityStartDate", "validityEndDate", "metainfo.origin"].freeze
 
       self.entity_mapping = base_mapping.merge(
         "sid" => :measure_sid,

@@ -3,6 +3,8 @@ class CdsImporter
     class ModificationRegulationMapper < BaseMapper
       self.entity_class = "ModificationRegulation".freeze
 
+      self.mapping_root = "ModificationRegulation".freeze
+
       self.exclude_mapping = ["metainfo.origin"].freeze
 
       self.entity_mapping = base_mapping.merge(

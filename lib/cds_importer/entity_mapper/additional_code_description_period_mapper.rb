@@ -3,6 +3,8 @@ class CdsImporter
     class AdditionalCodeDescriptionPeriodMapper < BaseMapper
       self.entity_class = "AdditionalCodeDescriptionPeriod".freeze
 
+      self.mapping_root = "AdditionalCode".freeze
+
       self.mapping_path = "additionalCodeDescriptionPeriod".freeze
 
       self.exclude_mapping = ["metainfo.origin"].freeze

@@ -7,6 +7,8 @@ class CdsImporter
     class MeasureExcludedGeographicalAreaMapper < BaseMapper
       self.entity_class = "MeasureExcludedGeographicalArea".freeze
 
+      self.entity_class = "Measure".freeze
+
       self.mapping_path = "measureExcludedGeographicalArea".freeze
 
       self.exclude_mapping = ["validityStartDate", "validityEndDate", "metainfo.origin"].freeze

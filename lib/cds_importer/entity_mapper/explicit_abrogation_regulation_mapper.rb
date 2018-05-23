@@ -1,9 +1,11 @@
 class CdsImporter
   class EntityMapper
     class ExplicitAbrogationRegulationMapper < BaseMapper
-      self.exclude_mapping = ["metainfo.origin", "validityStartDate", "validityEndDate"].freeze
-
       self.entity_class = "ExplicitAbrogationRegulation".freeze
+
+      self.mapping_root = "ExplicitAbrogationRegulation".freeze
+
+      self.exclude_mapping = ["metainfo.origin", "validityStartDate", "validityEndDate"].freeze
 
       self.entity_mapping = base_mapping.merge(
         "regulationRoleType.regulationRoleTypeId" => :explicit_abrogation_regulation_role,

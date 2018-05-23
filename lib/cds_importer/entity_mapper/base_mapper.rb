@@ -2,7 +2,12 @@ class CdsImporter
   class EntityMapper
     class BaseMapper
       class << self
-        attr_accessor :entity_class, :entity_mapping, :mapping_path, :exclude_mapping
+        # entity_class    - model
+        # entity_mapping  - attributes mapping
+        # mapping_path    - path to attributes in xml
+        # mapping_root    - node name in xml that provides data for mapping
+        # exclude_mapping - list of excluded attributes
+        attr_accessor :entity_class, :entity_mapping, :mapping_path, :mapping_root, :exclude_mapping
 
         def base_mapping
           BASE_MAPPING.except(*exclude_mapping).keys.inject({}) do |memo, key|

@@ -1,15 +1,18 @@
 #
 # FootnoteAssociationAdditionalCode is nested in to AdditionalCode.
+# Can't find it in xml examples, but it should be there.
 #
 
 class CdsImporter
   class EntityMapper
     class FootnoteAssociationAdditionalCodeMapper < BaseMapper
-      self.exclude_mapping = ["metainfo.origin"].freeze
-
       self.entity_class = "FootnoteAssociationAdditionalCode".freeze
 
+      self.mapping_root = "AdditionalCode".freeze
+
       self.mapping_path = "footnoteAssociationAdditionalCode".freeze
+
+      self.exclude_mapping = ["metainfo.origin"].freeze
 
       self.entity_mapping = base_mapping.merge(
         "sid" => :additional_code_sid,

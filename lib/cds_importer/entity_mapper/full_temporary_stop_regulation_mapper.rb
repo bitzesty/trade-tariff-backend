@@ -1,9 +1,11 @@
 class CdsImporter
   class EntityMapper
     class FullTemporaryStopRegulationMapper < BaseMapper
-      self.exclude_mapping = ["metainfo.origin"].freeze
-
       self.entity_class = "FullTemporaryStopRegulation".freeze
+
+      self.mapping_root = "FullTemporaryStopRegulation".freeze
+
+      self.exclude_mapping = ["metainfo.origin"].freeze
 
       self.entity_mapping = base_mapping.merge(
         "regulationRoleType.regulationRoleTypeId" => :full_temporary_stop_regulation_role,

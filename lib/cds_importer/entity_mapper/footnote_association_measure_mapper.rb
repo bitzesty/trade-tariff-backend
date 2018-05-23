@@ -1,15 +1,18 @@
 #
 # FootnoteAssociationMeasure is nested in to Measure.
+# Can't find it in xml examples, but it should be there.
 #
 
 class CdsImporter
   class EntityMapper
     class FootnoteAssociationMeasureMapper < BaseMapper
-      self.exclude_mapping = ["validityStartDate", "validityEndDate"].freeze
-
       self.entity_class = "FootnoteAssociationMeasure".freeze
 
+      self.mapping_root = "Measure"
+
       self.mapping_path = "footnoteAssociationMeasure".freeze
+
+      self.exclude_mapping = ["validityStartDate", "validityEndDate"].freeze
 
       self.entity_mapping = base_mapping.merge(
         "sid" => :measure_sid,

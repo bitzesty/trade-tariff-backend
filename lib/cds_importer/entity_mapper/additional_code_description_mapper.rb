@@ -3,6 +3,8 @@ class CdsImporter
     class AdditionalCodeDescriptionMapper < BaseMapper
       self.entity_class = "AdditionalCodeDescription".freeze
 
+      self.mapping_root = "AdditionalCode".freeze
+
       self.mapping_path = "additionalCodeDescriptionPeriod.additionalCodeDescription".freeze
 
       self.exclude_mapping = ["validityStartDate", "validityEndDate"].freeze
