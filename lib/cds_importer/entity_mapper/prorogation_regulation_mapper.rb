@@ -1,9 +1,11 @@
 class CdsImporter
   class EntityMapper
     class ProrogationRegulationMapper < BaseMapper
-      self.exclude_mapping = ["validityStartDate", "validityEndDate", "metainfo.origin"].freeze
-
       self.entity_class = "ProrogationRegulation".freeze
+
+      self.mapping_root = "ProrogationRegulation".freeze
+
+      self.exclude_mapping = ["validityStartDate", "validityEndDate", "metainfo.origin"].freeze
 
       self.entity_mapping = base_mapping.merge(
         "prorogationRegulationId" => :prorogation_regulation_id,

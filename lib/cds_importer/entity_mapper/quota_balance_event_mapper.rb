@@ -5,11 +5,13 @@
 class CdsImporter
   class EntityMapper
     class QuotaBalanceEventMapper < BaseMapper
+      self.entity_class = "QuotaBalanceEvent".freeze
+
+      self.mapping_root = "QuotaDefinition".freeze
+
       self.mapping_path = "quotaBalanceEvent".freeze
 
       self.exclude_mapping = ["metainfo.origin", "validityStartDate", "validityEndDate"].freeze
-
-      self.entity_class = "QuotaBalanceEvent".freeze
 
       self.entity_mapping = base_mapping.merge(
         "sid" => :quota_definition_sid,

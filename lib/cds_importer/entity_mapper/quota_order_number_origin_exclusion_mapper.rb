@@ -6,11 +6,13 @@
 class CdsImporter
   class EntityMapper
     class QuotaOrderNumberOriginExclusionMapper < BaseMapper
+      self.entity_class = "QuotaOrderNumberOriginExclusion".freeze
+
+      self.mapping_root = "QuotaOrderNumber".freeze
+
       self.mapping_path = "quotaOrderNumberOrigin.quotaOrderNumberOriginExclusion".freeze
 
       self.exclude_mapping = ["metainfo.origin", "validityStartDate", "validityEndDate"].freeze
-
-      self.entity_class = "QuotaOrderNumberOriginExclusion".freeze
 
       self.entity_mapping = base_mapping.merge(
         "quotaOrderNumberOrigin.sid" => :quota_order_number_origin_sid,

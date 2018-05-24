@@ -11,6 +11,8 @@ class CdsImporter
 
       self.entity_class = "QuotaSuspensionPeriod".freeze
 
+      self.mapping_root = "QuotaDefinition".freeze
+
       self.entity_mapping = base_mapping.merge(
         "#{mapping_path}.sid" => :quota_suspension_period_sid,
         "sid" => :quota_definition_sid,
