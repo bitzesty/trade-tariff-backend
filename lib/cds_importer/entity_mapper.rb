@@ -1,20 +1,15 @@
 class CdsImporter
   class EntityMapper
-    def self.exist?(mapper_name)
-      klass = "#{mapper_name.camelize}Mapper"
-      !!CdsImporter::EntityMapper.const_get("#{klass}") rescue false
+    def initialize(key, values)
+      @key = key
+      @values = values
     end
 
-    def initialize(entity)
-      @entity = entity
-    end
-
-    def parse
-      klass = "#{self.name}::#{@entity.name}Mapper"
-      if Object.const_defined?(klass)
-        klass.constantize.new(@entity.values).parse
-      else
-        raise ArgumentError.new("Mapper class is undefined: #{klass}")
+    def import
+      mappers = CdsImporter::EntityMapper::BaseMapper.descendants.select{ |k| k.mapping_root == @key }
+      mappers.each do |mapper|
+        instance = mapper.new(@values).parse
+        instance.save
       end
     end
   end

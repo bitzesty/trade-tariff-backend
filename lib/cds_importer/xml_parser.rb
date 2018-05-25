@@ -5,10 +5,11 @@
 class CdsImporter
   module XmlParser
     class Reader < ::Ox::Sax
-      def initialize(stringio, target, target_handler)
+      def initialize(stringio, target_handler)
         @stringio = stringio
-        @target = target
+        @targets = CdsImporter::EntityMapper::BaseMapper.descendants.map{ |k| k.mapping_root }.compact.uniq
         @target_handler = target_handler
+        @target_depth = 3
         @in_target = false
         @stack = []
         @depth = 0
@@ -19,15 +20,11 @@ class CdsImporter
       end
 
       def start_element(key)
-        puts "Key: start #{key}, depth #{@depth}" if @depth == 3
+        if @depth == @target_depth && @targets.include?(key)
+          @in_target = true
+        end
         @depth += 1
-
-        # TODO: if depth == 3 and key is in mapping_root list
-        # mapping_root list is mapping_root attr for CdsImporter::EntityMapper.constants
-
-        @in_target = true if key == @target
         return unless @in_target
-
         @stack << @node = {}
       end
 
@@ -38,17 +35,10 @@ class CdsImporter
 
       def end_element(key)
         @depth -= 1
-        puts "Key: end #{key}, depth #{@depth}" if @depth == 3
-
-        # TODO: if depth == 3 and key is in mapping_root list
-        # mapping_root list is mapping_root attr for CdsImporter::EntityMapper.constants
-
-
-        if key == @target
-          @target_handler.process_xml_node @stack[-1]
+        if @depth == @target_depth && @targets.include?(key)
+          @target_handler.process_xml_node(key, @stack[-1])
           @in_target = false
         end
-
         return unless @in_target
 
         child = @stack.pop

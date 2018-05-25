@@ -19,6 +19,8 @@ class CdsImporter
       end
 
       NATIONAL = "N".freeze
+      APPROVED_FLAG = "1".freeze
+      STOPPED_FLAG = "1".freeze
       BASE_MAPPING = {
         "validityStartDate" => :validity_start_date,
         "validityEndDate" => :validity_end_date,
@@ -56,9 +58,9 @@ class CdsImporter
       end
 
       def normalize(values)
-        values[:national] = values[:national] == NATIONAL if values.key?(:national)
-        values[:approved_flag] = values[:approved_flag] == '1' if values.key?(:approved_flag)
-        values[:stopped_flag] = values[:stopped_flag] == '1' if values.key?(:approved_flag)
+        values[:national] = (values[:national] == NATIONAL) if values.key?(:national)
+        values[:approved_flag] = (values[:approved_flag] == APPROVED_FLAG) if values.key?(:approved_flag)
+        values[:stopped_flag] = (values[:stopped_flag] == STOPPED_FLAG) if values.key?(:approved_flag)
         values
       end
     end
