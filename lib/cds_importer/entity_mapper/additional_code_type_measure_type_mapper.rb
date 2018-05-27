@@ -9,7 +9,7 @@ class CdsImporter
 
       self.entity_mapping = base_mapping.merge(
         "#{mapping_path}.measureType.measureTypeId" => :measure_type_id,
-        "#{mapping_path}.additionalCodeType.additionalCodeTypeId" => :additional_code_type_id
+        "additionalCodeTypeId" => :additional_code_type_id
       )
     end
   end

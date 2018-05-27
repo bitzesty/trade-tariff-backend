@@ -10,6 +10,7 @@ class CdsImporter
       self.exclude_mapping = ["validityStartDate", "validityEndDate", "metainfo.origin"].freeze
 
       self.entity_mapping = base_mapping.merge(
+        "#{mapping_path}.language" => :language_code_id,
         "languageId" => :language_id,
         "#{mapping_path}.description" => :description
       ).freeze
