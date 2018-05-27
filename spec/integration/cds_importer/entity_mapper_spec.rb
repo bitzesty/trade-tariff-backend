@@ -30,7 +30,7 @@ describe CdsImporter::EntityMapper do
         }
       )
       subject = CdsImporter::EntityMapper::AdditionalCodeMapper.new(hash_double.values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity.additional_code_sid.to_s).to eq(hash_double.values["sid"])
       expect(entity.additional_code).to eq(hash_double.values["additionalCodeCode"])
       expect(entity.additional_code_type_id).to eq(hash_double.values["additionalCodeType"]["additionalCodeTypeId"])
@@ -72,7 +72,7 @@ describe CdsImporter::EntityMapper do
       # TODO instruct AdditionalCodeMapper on how to parse
       # children AdditionalCodeDescription
       klass = CdsImporter::EntityMapper::AdditionalCodeDescriptionMapper
-      entity = klass.new(hash_double.values).parse
+      entity = klass.new(hash_double.values).parse[0]
       expect(entity.additional_code_description_period_sid.to_s).to eq(hash_double.values["additionalCodeDescriptionPeriod"]["sid"])
       expect(entity.language_id).to eq(hash_double.values["additionalCodeDescriptionPeriod"]["additionalCodeDescription"]["language"]["languageId"])
       expect(entity.additional_code_sid.to_s).to eq(hash_double.values["sid"])
@@ -106,7 +106,7 @@ describe CdsImporter::EntityMapper do
         }
       )
       klass = CdsImporter::EntityMapper::AdditionalCodeDescriptionPeriodMapper
-      entity = klass.new(hash_double.values).parse
+      entity = klass.new(hash_double.values).parse[0]
       expect(entity.additional_code_description_period_sid.to_s).to eq(hash_double.values["additionalCodeDescriptionPeriod"]["sid"])
       expect(entity.additional_code_sid.to_s).to eq(hash_double.values["sid"])
       expect(entity.additional_code_type_id).to eq(hash_double.values["additionalCodeDescriptionPeriod"]["additionalCodeType"]["additionalCodeTypeId"])
@@ -131,7 +131,7 @@ describe CdsImporter::EntityMapper do
         }
       }
       subject = CdsImporter::EntityMapper::GoodsNomenclatureMapper.new(values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity).to be_a(GoodsNomenclature)
       expect(entity.goods_nomenclature_sid.to_s).to eq(values["sid"])
       expect(entity.goods_nomenclature_item_id).to eq(values["goodsNomenclatureItemId"])
@@ -169,7 +169,7 @@ describe CdsImporter::EntityMapper do
         }
       }
       subject = CdsImporter::EntityMapper::GoodsNomenclatureDescriptionMapper.new(values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity).to be_a(GoodsNomenclatureDescription)
       expect(entity.goods_nomenclature_description_period_sid.to_s).to eq(values["goodsNomenclatureDescriptionPeriod"]["sid"])
       expect(entity.goods_nomenclature_sid.to_s).to eq(values["sid"])
@@ -198,7 +198,7 @@ describe CdsImporter::EntityMapper do
         }
       }
       subject = CdsImporter::EntityMapper::CompleteAbrogationRegulationMapper.new(values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity).to be_a(CompleteAbrogationRegulation)
       expect(entity.complete_abrogation_regulation_role.to_s).to eq(values["regulationRoleType"]["regulationRoleTypeId"])
       expect(entity.complete_abrogation_regulation_id).to eq(values["completeAbrogationRegulationId"])
@@ -226,7 +226,7 @@ describe CdsImporter::EntityMapper do
         }
       }
       subject = CdsImporter::EntityMapper::AdditionalCodeTypeMapper.new(values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity).to be_a(AdditionalCodeType)
       expect(entity.additional_code_type_id).to eq(values["additionalCodeTypeId"])
       expect(entity.validity_start_date).to eq(values["validityStartDate"])
@@ -253,7 +253,7 @@ describe CdsImporter::EntityMapper do
         }
       }
       subject = CdsImporter::EntityMapper::AdditionalCodeTypeDescriptionMapper.new(values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity).to be_a(AdditionalCodeTypeDescription)
       expect(entity.additional_code_type_id).to eq(values["additionalCodeTypeId"])
       expect(entity.language_id).to eq(values["additionalCodeTypeDescription"]["language"]["languageId"])
@@ -265,13 +265,11 @@ describe CdsImporter::EntityMapper do
 
     it "AdditionalCodeTypeMeasureType sample" do
       values = {
+        "additionalCodeTypeId" => "3",
         "additionalCodeTypeMeasureType" => {
           "validityStartDate" => "1999-09-01T00:00:00",
           "measureType" => {
             "measureTypeId" => "468"
-          },
-          "additionalCodeType" => {
-            "additionalCodeTypeId" => "3"
           },
           "metainfo" => {
             "opType" => "C",
@@ -281,10 +279,10 @@ describe CdsImporter::EntityMapper do
         }
       }
       subject = CdsImporter::EntityMapper::AdditionalCodeTypeMeasureTypeMapper.new(values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity).to be_a(AdditionalCodeTypeMeasureType)
       expect(entity.measure_type_id).to eq(values["additionalCodeTypeMeasureType"]["measureType"]["measureTypeId"])
-      expect(entity.additional_code_type_id).to eq(values["additionalCodeTypeMeasureType"]["additionalCodeType"]["additionalCodeTypeId"])
+      expect(entity.additional_code_type_id).to eq(values["additionalCodeTypeId"])
       expect(entity.validity_start_date).to eq(values["additionalCodeTypeMeasureType"]["validityStartDate"])
       expect(entity.operation).to eq(:create)
       expect(entity.national).to be_truthy
@@ -314,7 +312,7 @@ describe CdsImporter::EntityMapper do
         }
       }
       subject = CdsImporter::EntityMapper::DutyExpressionDescriptionMapper.new(values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity).to be_a(DutyExpressionDescription)
       expect(entity.duty_expression_id).to eq(values["dutyExpressionId"])
       expect(entity.language_id).to eq(values["dutyExpressionDescription"]["language"]["languageId"])
@@ -343,7 +341,7 @@ describe CdsImporter::EntityMapper do
         }
       }
       subject = CdsImporter::EntityMapper::ExplicitAbrogationRegulationMapper.new(values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity).to be_a(ExplicitAbrogationRegulation)
       expect(entity.explicit_abrogation_regulation_role.to_s).to eq(values["regulationRoleType"]["regulationRoleTypeId"])
       expect(entity.explicit_abrogation_regulation_id).to eq(values["explicitAbrogationRegulationId"])
@@ -383,7 +381,7 @@ describe CdsImporter::EntityMapper do
         }
       }
       subject = CdsImporter::EntityMapper::ExportRefundNomenclatureMapper.new(values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity).to be_a(ExportRefundNomenclature)
       expect(entity.export_refund_nomenclature_sid.to_s).to eq(values["sid"])
       expect(entity.goods_nomenclature_item_id).to eq(values["goodsNomenclature"]["goodsNomenclatureItemId"])
@@ -431,7 +429,7 @@ describe CdsImporter::EntityMapper do
         }
       }
       subject = CdsImporter::EntityMapper::ExportRefundNomenclatureIndentMapper.new(values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity).to be_a(ExportRefundNomenclatureIndent)
       expect(entity.export_refund_nomenclature_indents_sid.to_s).to eq(values["exportRefundNomenclatureIndents"]["sid"])
       expect(entity.goods_nomenclature_item_id).to eq(values["goodsNomenclature"]["goodsNomenclatureItemId"])
@@ -480,7 +478,7 @@ describe CdsImporter::EntityMapper do
         }
       }
       subject = CdsImporter::EntityMapper::ExportRefundNomenclatureDescriptionPeriodMapper.new(values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity).to be_a(ExportRefundNomenclatureDescriptionPeriod)
       expect(entity.export_refund_nomenclature_description_period_sid.to_s).to eq(values["exportRefundNomenclatureDescriptionPeriod"]["sid"])
       expect(entity.export_refund_nomenclature_sid.to_s).to eq(values["sid"])
@@ -539,7 +537,7 @@ describe CdsImporter::EntityMapper do
         }
       }
       subject = CdsImporter::EntityMapper::ExportRefundNomenclatureDescriptionMapper.new(values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity).to be_a(ExportRefundNomenclatureDescription)
       expect(entity.export_refund_nomenclature_description_period_sid.to_s).to eq(values["exportRefundNomenclatureDescriptionPeriod"]["sid"])
       expect(entity.export_refund_nomenclature_sid.to_s).to eq(values["sid"])
@@ -566,7 +564,7 @@ describe CdsImporter::EntityMapper do
         }
       }
       subject = CdsImporter::EntityMapper::DutyExpressionMapper.new(values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity).to be_a(DutyExpression)
       expect(entity.duty_expression_id).to eq(values["dutyExpressionId"])
       expect(entity.validity_end_date).to eq(values["validityEndDate"])
@@ -593,7 +591,7 @@ describe CdsImporter::EntityMapper do
         }
       }
       subject = CdsImporter::EntityMapper::FootnoteMapper.new(values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity).to be_a(Footnote)
       expect(entity.footnote_id).to eq(values["footnoteId"])
       expect(entity.footnote_type_id).to eq(values["footnoteType"]["footnoteTypeId"])
@@ -626,7 +624,7 @@ describe CdsImporter::EntityMapper do
         }
       }
       subject = CdsImporter::EntityMapper::FootnoteAssociationGoodsNomenclatureMapper.new(values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity).to be_a(FootnoteAssociationGoodsNomenclature)
       expect(entity.goods_nomenclature_sid.to_s).to eq(values["sid"])
       expect(entity.footnote_id).to eq(values["footnoteAssociationGoodsNomenclature"]["footnote"]["footnoteId"])
@@ -662,7 +660,7 @@ describe CdsImporter::EntityMapper do
         }
       }
       subject = CdsImporter::EntityMapper::FootnoteDescriptionMapper.new(values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity).to be_a(FootnoteDescription)
       expect(entity.footnote_description_period_sid.to_s).to eq(values["footnoteDescriptionPeriod"]["footnoteDescriptionPeriodSid"])
       expect(entity.footnote_type_id).to eq(values["footnoteType"]["footnoteTypeId"])
@@ -691,7 +689,7 @@ describe CdsImporter::EntityMapper do
         }
       }
       subject = CdsImporter::EntityMapper::FootnoteDescriptionPeriodMapper.new(values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity).to be_a(FootnoteDescriptionPeriod)
       expect(entity.footnote_description_period_sid.to_s).to eq(values["footnoteDescriptionPeriod"]["sid"])
       expect(entity.footnote_type_id).to eq(values["footnoteType"]["footnoteTypeId"])
@@ -713,7 +711,7 @@ describe CdsImporter::EntityMapper do
         }
       }
       subject = CdsImporter::EntityMapper::FootnoteTypeMapper.new(values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity).to be_a(FootnoteType)
       expect(entity.footnote_type_id).to eq(values["footnoteTypeId"])
       expect(entity.application_code.to_s).to eq(values["applicationCode"])
@@ -747,7 +745,7 @@ describe CdsImporter::EntityMapper do
         }
       }
       subject = CdsImporter::EntityMapper::FtsRegulationActionMapper.new(values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity).to be_a(FtsRegulationAction)
       expect(entity.fts_regulation_role.to_s).to eq(values["regulationRoleType"]["regulationRoleTypeId"])
       expect(entity.fts_regulation_id).to eq(values["fullTemporaryStopRegulationId"])
@@ -786,7 +784,7 @@ describe CdsImporter::EntityMapper do
         }
       }
       subject = CdsImporter::EntityMapper::FullTemporaryStopRegulationMapper.new(values)
-      entity = subject.parse
+      entity = subject.parse[0]
       expect(entity).to be_a(FullTemporaryStopRegulation)
       expect(entity.full_temporary_stop_regulation_role.to_s).to eq(values["regulationRoleType"]["regulationRoleTypeId"])
       expect(entity.full_temporary_stop_regulation_id).to eq(values["fullTemporaryStopRegulationId"])
@@ -832,7 +830,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::FootnoteAssociationAdditionalCodeMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(FootnoteAssociationAdditionalCode)
     expect(entity.additional_code_sid.to_s).to eq(values["sid"])
     expect(entity.additional_code_type_id).to eq(values["additionalCodeType"]["additionalCodeTypeId"])
@@ -868,7 +866,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::FootnoteAssociationMeasureMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(FootnoteAssociationMeasure)
     expect(entity.measure_sid.to_s).to eq(values["sid"])
     expect(entity.footnote_type_id).to eq(values["footnoteAssociationMeasure"]["footnote"]["footnoteType"]["footnoteTypeId"])
@@ -910,7 +908,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::FootnoteAssociationErnMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(FootnoteAssociationErn)
     expect(entity.export_refund_nomenclature_sid.to_s).to eq(values["sid"])
     expect(entity.footnote_type).to eq(values["footnoteAssociationErn"]["footnote"]["footnoteType"]["footnoteTypeId"])
@@ -957,7 +955,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::FootnoteAssociationMeursingHeadingMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(FootnoteAssociationMeursingHeading)
     expect(entity.meursing_table_plan_id).to eq(values["meursingTablePlan"]["meursingTablePlanId"])
     expect(entity.meursing_heading_number).to eq(values["meursingHeadingNumber"])
@@ -986,7 +984,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::FootnoteTypeDescriptionMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(FootnoteTypeDescription)
     expect(entity.footnote_type_id).to eq(values["footnoteTypeId"])
     expect(entity.language_id).to eq(values["footnoteTypeDescription"]["language"]["languageId"])
@@ -1009,7 +1007,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::GeographicalAreaMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(GeographicalArea)
     expect(entity.geographical_area_sid.to_s).to eq(values["sid"])
     expect(entity.geographical_code).to eq(values["geographicalCode"])
@@ -1039,7 +1037,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::GeographicalAreaDescriptionMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(GeographicalAreaDescription)
     expect(entity.geographical_area_description_period_sid.to_s).to eq(values["geographicalAreaDescriptionPeriod"]["sid"])
     expect(entity.language_id).to eq(values["geographicalAreaDescriptionPeriod"]["geographicalAreaDescription"]["language"]["languageId"])
@@ -1066,7 +1064,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::GeographicalAreaDescriptionPeriodMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(GeographicalAreaDescriptionPeriod)
     expect(entity.geographical_area_description_period_sid.to_s).to eq(values["geographicalAreaDescriptionPeriod"]["sid"])
     expect(entity.geographical_area_sid.to_s).to eq(values["sid"])
@@ -1091,7 +1089,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::GeographicalAreaMembershipMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(GeographicalAreaMembership)
     expect(entity.geographical_area_sid.to_s).to eq(values["sid"])
     expect(entity.geographical_area_group_sid.to_s).to eq(values["geographicalAreaMembership"]["geographicalAreaGroupSid"])
@@ -1114,7 +1112,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::GoodsNomenclatureGroupMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(GoodsNomenclatureGroup)
     expect(entity.goods_nomenclature_group_type).to eq(values["goodsNomenclatureGroupType"])
     expect(entity.goods_nomenclature_group_id).to eq(values["goodsNomenclatureGroupId"])
@@ -1140,7 +1138,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::GoodsNomenclatureGroupDescriptionMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(GoodsNomenclatureGroupDescription)
     expect(entity.goods_nomenclature_group_type).to eq(values["goodsNomenclatureGroupType"])
     expect(entity.goods_nomenclature_group_id).to eq(values["goodsNomenclatureGroupId"])
@@ -1166,7 +1164,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::GoodsNomenclatureIndentMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(GoodsNomenclatureIndent)
     expect(entity.goods_nomenclature_indent_sid.to_s).to eq(values["goodsNomenclatureIndents"]["sid"])
     expect(entity.goods_nomenclature_sid.to_s).to eq(values["sid"])
@@ -1193,7 +1191,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::GoodsNomenclatureOriginMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(GoodsNomenclatureOrigin)
     expect(entity.goods_nomenclature_sid.to_s).to eq(values["sid"])
     expect(entity.derived_goods_nomenclature_item_id).to eq(values["goodsNomenclatureOrigin"]["derivedGoodsNomenclatureItemId"])
@@ -1219,7 +1217,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::GoodsNomenclatureSuccessorMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(GoodsNomenclatureSuccessor)
     expect(entity.goods_nomenclature_sid.to_s).to eq(values["sid"])
     expect(entity.absorbed_goods_nomenclature_item_id).to eq(values["goodsNomenclatureSuccessor"]["absorbedGoodsNomenclatureItemId"])
@@ -1240,7 +1238,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::LanguageMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(Language)
     expect(entity.language_id).to eq(values["languageId"])
     expect(entity.validity_start_date).to eq(values["validityStartDate"])
@@ -1253,6 +1251,7 @@ describe CdsImporter::EntityMapper do
       "languageId" => "EN",
       "languageDescription" => {
         "description" => "English",
+        "language" => "EN",
         "metainfo" => {
           "opType" => "C",
           "transactionDate" => "2017-06-29T20:04:37"
@@ -1260,8 +1259,9 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::LanguageDescriptionMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(LanguageDescription)
+    expect(entity.language_code_id).to eq(values["languageDescription"]["language"])
     expect(entity.language_id).to eq(values["languageId"])
     expect(entity.description).to eq(values["languageDescription"]["description"])
     expect(entity.operation).to eq(:create)
@@ -1283,7 +1283,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::GoodsNomenclatureDescriptionPeriodMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(GoodsNomenclatureDescriptionPeriod)
     expect(entity.goods_nomenclature_description_period_sid.to_s).to eq(values["goodsNomenclatureDescriptionPeriod"]["sid"])
     expect(entity.goods_nomenclature_sid.to_s).to eq(values["sid"])
@@ -1334,7 +1334,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeasureMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(Measure)
     expect(entity.measure_sid.to_s).to eq(values["sid"])
     expect(entity.measure_type_id).to eq(values["measureType"]["measureTypeId"])
@@ -1387,7 +1387,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeasurePartialTemporaryStopMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeasurePartialTemporaryStop)
     expect(entity.measure_sid.to_s).to eq(values["sid"])
     expect(entity.validity_start_date).to eq(values["measurePartialTemporaryStop"]["validityStartDate"])
@@ -1413,7 +1413,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeasureActionMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeasureAction)
     expect(entity.action_code).to eq(values["actionCode"])
     expect(entity.validity_start_date).to eq(values["validityStartDate"])
@@ -1437,7 +1437,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeasureActionDescriptionMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeasureActionDescription)
     expect(entity.action_code).to eq(values["actionCode"])
     expect(entity.language_id).to eq(values["measureActionDescription"]["language"]["languageId"])
@@ -1459,7 +1459,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::RegulationGroupMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(RegulationGroup)
     expect(entity.regulation_group_id).to eq(values["regulationGroupId"])
     expect(entity.validity_start_date).to eq(values["validityStartDate"])
@@ -1485,7 +1485,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::RegulationGroupDescriptionMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(RegulationGroupDescription)
     expect(entity.regulation_group_id).to eq(values["regulationGroupId"])
     expect(entity.language_id).to eq(values["regulationGroupDescription"]["language"]["languageId"])
@@ -1514,7 +1514,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::RegulationReplacementMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(RegulationReplacement)
     expect(entity.geographical_area_id).to eq(values["geographicalArea"]["geographicalAreaId"])
     expect(entity.replacing_regulation_role.to_s).to eq(values["replacingRegulationRole"])
@@ -1538,7 +1538,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::RegulationRoleTypeMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(RegulationRoleType)
     expect(entity.regulation_role_type_id.to_s).to eq(values["regulationRoleTypeId"])
     expect(entity.validity_start_date).to eq(values["validityStartDate"])
@@ -1563,7 +1563,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::RegulationRoleTypeDescriptionMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(RegulationRoleTypeDescription)
     expect(entity.regulation_role_type_id).to eq(values["regulationRoleTypeId"])
     expect(entity.language_id).to eq(values["regulationRoleTypeDescription"]["language"]["languageId"])
@@ -1583,7 +1583,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MonetaryUnitMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MonetaryUnit)
     expect(entity.monetary_unit_code).to eq(values["monetaryUnitCode"])
     expect(entity.validity_start_date).to eq(values["validityStartDate"])
@@ -1606,7 +1606,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MonetaryUnitDescriptionMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MonetaryUnitDescription)
     expect(entity.monetary_unit_code).to eq(values["monetaryUnitCode"])
     expect(entity.language_id).to eq(values["monetaryUnitDescription"]["language"]["languageId"])
@@ -1632,7 +1632,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::NomenclatureGroupMembershipMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(NomenclatureGroupMembership)
     expect(entity.goods_nomenclature_sid).to eq(values["sid"])
     expect(entity.goods_nomenclature_group_type).to eq(values["nomenclatureGroupMembership"]["goodsNomenclatureGroup"]["goodsNomenclatureGroupType"])
@@ -1657,7 +1657,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MonetaryExchangePeriodMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MonetaryExchangePeriod)
     expect(entity.monetary_exchange_period_sid.to_s).to eq(values["sid"])
     expect(entity.parent_monetary_unit_code).to eq(values["monetaryUnit"]["monetaryUnitCode"])
@@ -1684,7 +1684,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MonetaryExchangeRateMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MonetaryExchangeRate)
     expect(entity.monetary_exchange_period_sid).to eq(values["sid"])
     expect(entity.child_monetary_unit_code).to eq(values["monetaryExchangeRate"]["childMonetaryUnitCode"])
@@ -1711,7 +1711,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::ProrogationRegulationMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(ProrogationRegulation)
     expect(entity.prorogation_regulation_id).to eq(values["prorogationRegulationId"])
     expect(entity.prorogation_regulation_role.to_s).to eq(values["regulationRoleType"]["regulationRoleTypeId"])
@@ -1742,7 +1742,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::ProrogationRegulationActionMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(ProrogationRegulationAction)
     expect(entity.prorogation_regulation_role.to_s).to eq(values["regulationRoleType"]["regulationRoleTypeId"])
     expect(entity.prorogation_regulation_id).to eq(values["prorogationRegulationId"])
@@ -1774,7 +1774,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::QuotaDefinitionMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(QuotaDefinition)
     expect(entity.quota_definition_sid.to_s).to eq(values["sid"])
     expect(entity.quota_order_number_id).to eq(values["quotaOrderNumber"]["quotaOrderNumberId"])
@@ -1815,7 +1815,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::QuotaAssociationMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(QuotaAssociation)
     expect(entity.main_quota_definition_sid.to_s).to eq(values["sid"])
     expect(entity.sub_quota_definition_sid.to_s).to eq(values["quotaAssociation"]["subQuotaDefinition"]["sid"])
@@ -1846,7 +1846,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::QuotaBalanceEventMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(QuotaBalanceEvent)
     expect(entity.quota_definition_sid.to_s).to eq(values["sid"])
     expect(entity.occurrence_timestamp).to eq(values["quotaBalanceEvent"]["occurrenceTimestamp"])
@@ -1877,7 +1877,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::QuotaCriticalEventMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(QuotaCriticalEvent)
     expect(entity.quota_definition_sid.to_s).to eq(values["sid"])
     expect(entity.occurrence_timestamp).to eq(values["quotaCriticalEvent"]["occurrenceTimestamp"])
@@ -1905,7 +1905,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::QuotaExhaustionEventMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(QuotaExhaustionEvent)
     expect(entity.quota_definition_sid.to_s).to eq(values["sid"])
     expect(entity.occurrence_timestamp).to eq(values["quotaExhaustionEvent"]["occurrenceTimestamp"])
@@ -1932,7 +1932,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::QuotaReopeningEventMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(QuotaReopeningEvent)
     expect(entity.quota_definition_sid.to_s).to eq(values["sid"])
     expect(entity.occurrence_timestamp).to eq(values["quotaReopeningEvent"]["occurrenceTimestamp"])
@@ -1959,7 +1959,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::QuotaUnsuspensionEventMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(QuotaUnsuspensionEvent)
     expect(entity.quota_definition_sid.to_s).to eq(values["sid"])
     expect(entity.occurrence_timestamp).to eq(values["quotaUnsuspensionEvent"]["occurrenceTimestamp"])
@@ -1994,7 +1994,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::QuotaOrderNumberOriginMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(QuotaOrderNumberOrigin)
     expect(entity.quota_order_number_sid.to_s).to eq(values["sid"])
     expect(entity.quota_order_number_origin_sid.to_s).to eq(values["quotaOrderNumberOrigin"]["sid"])
@@ -2046,7 +2046,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::QuotaOrderNumberOriginExclusionMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(QuotaOrderNumberOriginExclusion)
     expect(entity.quota_order_number_origin_sid.to_s).to eq(values["quotaOrderNumberOrigin"]["sid"])
     expect(entity.excluded_geographical_area_sid.to_s).to eq(values["quotaOrderNumberOrigin"]["quotaOrderNumberOriginExclusion"]["geographicalArea"]["sid"])
@@ -2073,7 +2073,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::QuotaSuspensionPeriodMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(QuotaSuspensionPeriod)
     expect(entity.quota_definition_sid.to_s).to eq(values["sid"])
     expect(entity.quota_suspension_period_sid.to_s).to eq(values["quotaSuspensionPeriod"]["sid"])
@@ -2094,7 +2094,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeasureConditionCodeMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeasureConditionCode)
     expect(entity.condition_code).to eq(values["conditionCode"])
     expect(entity.validity_start_date).to eq(values["validityStartDate"])
@@ -2117,7 +2117,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeasureConditionCodeDescriptionMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeasureConditionCodeDescription)
     expect(entity.condition_code).to eq(values["conditionCode"])
     expect(entity.language_id).to eq(values["measureConditionCodeDescription"]["language"]["languageId"])
@@ -2146,7 +2146,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeasureTypeMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeasureType)
     expect(entity.measure_type_id).to eq(values["measureTypeId"])
     expect(entity.validity_start_date).to eq(values["validityStartDate"])
@@ -2178,7 +2178,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeasureTypeDescriptionMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeasureTypeDescription)
     expect(entity.measure_type_id).to eq(values["measureTypeId"])
     expect(entity.language_id).to eq(values["measureTypeDescription"]["language"]["languageId"])
@@ -2199,7 +2199,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeasureTypeSeriesMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeasureTypeSeries)
     expect(entity.measure_type_series_id).to eq(values["measureTypeSeriesId"])
     expect(entity.validity_start_date).to eq(values["validityStartDate"])
@@ -2223,7 +2223,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeasureTypeSeriesDescriptionMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeasureTypeSeriesDescription)
     expect(entity.measure_type_series_id).to eq(values["measureTypeSeriesId"])
     expect(entity.language_id).to eq(values["measureTypeSeriesDescription"]["language"]["languageId"])
@@ -2256,7 +2256,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeasurementMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(Measurement)
     expect(entity.measurement_unit_code).to eq(values["measurementUnitCode"])
     expect(entity.measurement_unit_qualifier_code).to eq(values["measurementUnitQualifier"]["measurementUnitQualifierCode"])
@@ -2277,7 +2277,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeasurementUnitMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeasurementUnit)
     expect(entity.measurement_unit_code).to eq(values["measurementUnitCode"])
     expect(entity.validity_start_date).to eq(values["validityStartDate"])
@@ -2317,7 +2317,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeasureComponentMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeasureComponent)
     expect(entity.measure_sid.to_s).to eq(values["sid"])
     expect(entity.duty_expression_id).to eq(values["measureComponent"]["dutyExpression"]["dutyExpressionId"])
@@ -2368,7 +2368,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeasureConditionMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeasureCondition)
     expect(entity.measure_sid.to_s).to eq(values["sid"])
     expect(entity.measure_condition_sid.to_s).to eq(values["measureCondition"]["sid"])
@@ -2433,7 +2433,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeasureConditionComponentMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeasureConditionComponent)
     expect(entity.measure_condition_sid.to_s).to eq(values["measureCondition"]["sid"])
     expect(entity.duty_expression_id).to eq(values["measureCondition"]["measureConditionComponent"]["dutyExpression"]["dutyExpressionId"])
@@ -2464,7 +2464,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeasurementUnitDescriptionMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeasurementUnitDescription)
     expect(entity.measurement_unit_code).to eq(values["measurementUnitCode"])
     expect(entity.language_id).to eq(values["measurementUnitDescription"]["language"]["languageId"])
@@ -2506,7 +2506,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeasureExcludedGeographicalAreaMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeasureExcludedGeographicalArea)
     expect(entity.measure_sid.to_s).to eq(values["sid"])
     expect(entity.excluded_geographical_area).to eq(values["measureExcludedGeographicalArea"]["geographicalArea"]["geographicalAreaId"])
@@ -2527,7 +2527,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeursingAdditionalCodeMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeursingAdditionalCode)
     expect(entity.meursing_additional_code_sid.to_s).to eq(values["sid"])
     expect(entity.additional_code).to eq(values["additionalCodeCode"])
@@ -2553,7 +2553,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeursingHeadingMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeursingHeading)
     expect(entity.meursing_table_plan_id).to eq(values["meursingTablePlan"]["meursingTablePlanId"])
     expect(entity.meursing_heading_number).to eq(values["meursingHeadingNumber"])
@@ -2590,7 +2590,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeursingHeadingTextMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeursingHeadingText)
     expect(entity.meursing_table_plan_id).to eq(values["meursingTablePlan"]["meursingTablePlanId"])
     expect(entity.meursing_heading_number.to_s).to eq(values["meursingHeadingNumber"])
@@ -2628,7 +2628,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeursingSubheadingMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeursingSubheading)
     expect(entity.meursing_table_plan_id).to eq(values["meursingHeading"]["meursingTablePlan"]["meursingTablePlanId"])
     expect(entity.meursing_heading_number.to_s).to eq(values["meursingHeading"]["meursingHeadingNumber"])
@@ -2651,7 +2651,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeasurementUnitQualifierMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeasurementUnitQualifier)
     expect(entity.measurement_unit_qualifier_code).to eq(values["measurementUnitQualifierCode"])
     expect(entity.validity_start_date).to eq(values["validityStartDate"])
@@ -2674,7 +2674,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeasurementUnitQualifierDescriptionMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeasurementUnitQualifierDescription)
     expect(entity.measurement_unit_qualifier_code).to eq(values["measurementUnitQualifierCode"])
     expect(entity.language_id).to eq(values["measurementUnitQualifierDescription"]["language"]["languageId"])
@@ -2693,7 +2693,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeursingTablePlanMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(MeursingTablePlan)
     expect(entity.meursing_table_plan_id).to eq(values["meursingTablePlanId"])
     expect(entity.validity_start_date).to eq(values["validityStartDate"])
@@ -2741,7 +2741,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::ModificationRegulationMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(ModificationRegulation)
     expect(entity.modification_regulation_id).to eq(values["modificationRegulationId"])
     expect(entity.validity_start_date).to eq(values["validityStartDate"])
@@ -2782,7 +2782,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::QuotaBlockingPeriodMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(QuotaBlockingPeriod)
     expect(entity.quota_blocking_period_sid.to_s).to eq(values["quotaBlockingPeriod"]["quotaBlockingPeriodSid"])
     expect(entity.quota_definition_sid.to_s).to eq(values["sid"])
@@ -2804,7 +2804,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::QuotaOrderNumberMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(QuotaOrderNumber)
     expect(entity.quota_order_number_sid.to_s).to eq(values["sid"])
     expect(entity.quota_order_number_id).to eq(values["quotaOrderNumberId"])
@@ -2826,7 +2826,7 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::QuotaUnblockingEventMapper.new(values)
-    entity = subject.parse
+    entity = subject.parse[0]
     expect(entity).to be_a(QuotaUnblockingEvent)
     expect(entity.quota_definition_sid.to_s).to eq(values["sid"])
     expect(entity.occurrence_timestamp).to eq(Time.parse(values["quotaUnblockingEvent"]["occurrenceTimestamp"]))

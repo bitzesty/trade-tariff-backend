@@ -6,10 +6,12 @@ class CdsImporter
     end
 
     def import
-      mappers = CdsImporter::EntityMapper::BaseMapper.descendants.select{ |k| k.mapping_root == @key }
+      mappers = CdsImporter::EntityMapper::BaseMapper.descendants
+                                                     .select  { |m| m.mapping_root == @key }
+                                                     .sort_by { |m| m.to_s.length }
       mappers.each do |mapper|
-        instance = mapper.new(@values).parse
-        instance.save
+        instances = mapper.new(@values).parse
+        instances.each { |i| i.save }
       end
     end
   end
