@@ -36,19 +36,34 @@ class CdsImporter
       # sometimes we have array as a mapping path value,
       # so need to iterate through it and import each item separately
       def parse
-        instances = []
-        if mapping_path.present? && (mapping_path_value = @values.dig(*mapping_path.split("."))).is_a?(Array)
-          mapping_path_value.each do |item|
-            tmp = item
-            mapping_path.split(".").reverse.each do |key|
-              tmp = { key => tmp }
+        expanded = [@values]
+        # iterating through all the mapping keys to expand Arrays
+        entity_mapping.keys.each do |path|
+          current_path = []
+          path.to_s.split(".").each do |key|
+            current_path << key
+            new_expanded = []
+            expanded.each do |values|
+              value = values.dig(*current_path)
+              if value.is_a?(Array)
+                # iterating through all items in Array and creating @values copy
+                value.each do |v|
+                  # [1,2,3] => {1=>{2=>{3=>value}}
+                  tmp = current_path.reverse.inject(v) { |memo, i| memo = { i => memo }; memo }
+                  new_expanded << values.deep_merge(tmp)
+                end
+              else
+                new_expanded << values
+              end
             end
-            instances << create_instance(@values.deep_merge(tmp))
+            expanded = new_expanded
           end
-        else
-          instances << create_instance(@values)
         end
-        instances
+        # creating instances for all expanded values
+        if mapping_path.present?
+          expanded = expanded.select{ |values| values.dig(*mapping_path.split(".")).present? }
+        end
+        expanded.map { |values| create_instance(values) }
       end
 
       private

@@ -16,6 +16,10 @@ class CdsImporter
         "measurementUnitCode" => :measurement_unit_code,
         "measurementUnitQualifier.measurementUnitQualifierCode" => :measurement_unit_qualifier_code
       ).freeze
+
+      def parse
+        []
+      end
     end
   end
 end
