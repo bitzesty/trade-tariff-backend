@@ -184,6 +184,10 @@ module TariffSynchronizer
               # need to delete measure logs
               ChiefTransformer::MeasuresLogger.delete_logs(chief_update.filename)
             end
+            TariffSynchronizer::CdsUpdate.applied_or_failed.where { issue_date > date_for_rollback }.each do |cds_update|
+              cds_update.mark_as_pending
+              cds_update.clear_applied_at
+            end
           else
             TariffSynchronizer::TaricUpdate.where { issue_date > date }.delete
             TariffSynchronizer::ChiefUpdate.where { issue_date > date }.each do |chief_update|
@@ -196,6 +200,7 @@ module TariffSynchronizer
               # need to delete measure logs
               ChiefTransformer::MeasuresLogger.delete_logs(chief_update.filename)
             end
+            TariffSynchronizer::CdsUpdate.where { issue_date > date }.delete
           end
         end
       end

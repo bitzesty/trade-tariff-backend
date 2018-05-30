@@ -17,8 +17,8 @@ class CdsImporter
         instances = mapper.new(@values).parse
         instances.each do |i|
           i.save(validate: false, transaction: false)
-        rescue StandardError => _e
-          puts "Failed: #{mapper}"
+        rescue StandardError => e
+          puts "Failed: #{mapper}, #{e.message}"
           failed.puts("#{i.class}: #{i.to_json}")
           failed.puts(@values)
           failed.puts("--------------------------")

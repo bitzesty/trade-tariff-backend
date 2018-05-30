@@ -16,6 +16,10 @@ class CdsImporter
         "#{mapping_path}.goodsNomenclatureGroup.goodsNomenclatureGroupId" => :goods_nomenclature_group_id,
         "#{mapping_path}.goodsNomenclatureGroup.goodsNomenclatureGroupType" => :goods_nomenclature_group_type
       ).freeze
+
+      def parse
+        []
+      end
     end
   end
 end
