@@ -3,7 +3,7 @@ class CdsImporter
     class MeasureConditionCodeMapper < BaseMapper
       self.entity_class = "MeasureConditionCode".freeze
 
-      self.entity_class = "MeasureConditionCode".freeze
+      self.mapping_root = "MeasureConditionCode".freeze
 
       self.exclude_mapping = ["metainfo.origin"].freeze
 

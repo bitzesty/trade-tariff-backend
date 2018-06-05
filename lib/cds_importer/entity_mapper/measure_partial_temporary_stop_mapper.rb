@@ -5,11 +5,11 @@
 class CdsImporter
   class EntityMapper
     class MeasurePartialTemporaryStopMapper < BaseMapper
+      self.entity_class = "MeasurePartialTemporaryStop".freeze
+
       self.mapping_path = "measurePartialTemporaryStop".freeze
 
       self.exclude_mapping = ["metainfo.origin"].freeze
-
-      self.entity_class = "MeasurePartialTemporaryStop".freeze
 
       self.entity_mapping = base_mapping.merge(
         "sid" => :measure_sid,

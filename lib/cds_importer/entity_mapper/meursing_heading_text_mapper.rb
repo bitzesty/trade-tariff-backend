@@ -7,9 +7,9 @@
 class CdsImporter
   class EntityMapper
     class MeursingHeadingTextMapper < BaseMapper
-      self.mapping_path = "meursingHeadingText"
-
       self.entity_class = "MeursingHeadingText".freeze
+
+      self.mapping_path = "meursingHeadingText"
 
       self.exclude_mapping = ["metainfo.origin", "validityStartDate", "validityEndDate"].freeze
 
