@@ -94,7 +94,6 @@ class Commodity < GoodsNomenclature
       end.try(:children) || []
     }
 
-
     if Rails.env.test? || Rails.env.development?
       # Do not cache it in Test and Development environments.
       #
