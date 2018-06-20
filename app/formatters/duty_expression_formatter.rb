@@ -20,6 +20,17 @@ class DutyExpressionFormatter
       measurement_unit_abbreviation = measurement_unit.try :abbreviation,
                                                            measurement_unit_qualifier: measurement_unit_qualifier
 
+
+      if opts[:convert_currency].present?
+        if monetary_unit == "EUR" && duty_amount.present?
+          period = MonetaryExchangePeriod.actual.last(parent_monetary_unit_code: "EUR")
+          gbp = MonetaryExchangeRate.last(monetary_exchange_period_sid: period.monetary_exchange_period_sid, child_monetary_unit_code: "GBP")
+          eur_duty_amount = duty_amount
+          duty_amount = (gbp.exchange_rate * duty_amount.to_d).to_f
+          monetary_unit = "GBP"
+        end
+      end
+
       output = []
       case duty_expression_id
       when "99"
@@ -41,7 +52,11 @@ class DutyExpressionFormatter
           output << duty_expression_description
         end
         if duty_amount.present?
-          output << prettify(duty_amount).to_s
+          if opts[:formatted]
+            output << "<span title='#{eur_duty_amount} EUR'>#{prettify(duty_amount).to_s}</span>"
+          else
+            output << prettify(duty_amount).to_s
+          end
         end
         if monetary_unit.present?
           output << monetary_unit
@@ -57,7 +72,11 @@ class DutyExpressionFormatter
         end
       else
         if duty_amount.present?
-          output << prettify(duty_amount).to_s
+          if opts[:formatted]
+            output << "<span title='#{eur_duty_amount} EUR'>#{prettify(duty_amount).to_s}</span>"
+          else
+            output << prettify(duty_amount).to_s
+          end
         end
         if duty_expression_abbreviation.present? && !monetary_unit.present?
           output << duty_expression_abbreviation
