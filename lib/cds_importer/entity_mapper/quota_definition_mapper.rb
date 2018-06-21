@@ -13,10 +13,13 @@ class CdsImporter
         "quotaOrderNumber.quotaOrderNumberId" => :quota_order_number_id,
         "volume" => :volume,
         "initialVolume" => :initial_volume,
-        "measurementUnit.measurementUnitCode" => :measurement_unit_code,
         "maximumPrecision" => :maximum_precision,
         "criticalState" => :critical_state,
-        "criticalThreshold" => :critical_threshold
+        "criticalThreshold" => :critical_threshold,
+        "monetaryUnit.monetaryUnitCode" => :monetary_unit_code,
+        "measurementUnit.measurementUnitCode" => :measurement_unit_code,
+        "measurementUnit.measurementUnitQualifierCode" => :measurement_unit_qualifier_code,
+        "description" => :description
       ).freeze
     end
   end
