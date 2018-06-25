@@ -14,6 +14,7 @@ class CdsImporter
         "orderNumberCaptureCode" => :order_number_capture_code,
         "measureExplosionLevel" => :measure_explosion_level,
         "measureTypeSeries.measureTypeSeriesId" => :measure_type_series_id
+        # measure_type_acronym will be skipped
       ).freeze
     end
   end

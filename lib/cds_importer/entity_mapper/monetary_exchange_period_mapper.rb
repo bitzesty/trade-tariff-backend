@@ -9,7 +9,6 @@ class CdsImporter
 
       self.entity_mapping = base_mapping.merge(
         "sid" => :monetary_exchange_period_sid,
-        # TODO: need to clarify
         "monetaryUnit.monetaryUnitCode" => :parent_monetary_unit_code
       ).freeze
     end

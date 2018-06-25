@@ -2703,43 +2703,44 @@ describe CdsImporter::EntityMapper do
 
   it "MeursingSubheading sample" do
     values = {
-      "sid" => "3084",
-      "validityEndDate" => "1996-06-14T23:59:59",
-      "validityStartDate" => "1991-06-01T00:00:00",
-      "subheadingSequenceNumber" => "11",
-      "description" => "Some text.",
+      "meursingTablePlanId" => "01",
+      "validityStartDate" => "1988-01-01T00:00:00",
       "meursingHeading" => {
         "sid" => "1054",
         "validityEndDate" => "1997-07-11T22:59:59",
         "validityStartDate" => "1999-09-04T00:00:00",
         "meursingHeadingNumber" => "20",
         "rowColumnCode" => "1",
-        "meursingTablePlan" => {
-          "meursingTablePlanId" => "01"
-        },
         "metainfo" => {
           "opType" => "C",
           "transactionDate" => "2016-08-27T10:20:15"
+        },
+        "meursingSubheading" => {
+          "sid" => "3084",
+          "validityEndDate" => "1996-06-14T23:59:59",
+          "validityStartDate" => "1991-06-01T00:00:00",
+          "subheadingSequenceNumber" => "11",
+          "description" => "Some text.",
+          "metainfo" => {
+            "opType" => "U",
+            "transactionDate" => "2016-07-27T09:20:17"
+          }
         }
-      },
-      "metainfo" => {
-        "opType" => "U",
-        "transactionDate" => "2016-07-27T09:20:17"
       }
     }
     subject = CdsImporter::EntityMapper::MeursingSubheadingMapper.new(values)
     entity = subject.parse[0]
     expect(entity).to be_a(MeursingSubheading)
     expect(entity).to be_valid
-    expect(entity.meursing_table_plan_id).to eq(values["meursingHeading"]["meursingTablePlan"]["meursingTablePlanId"])
+    expect(entity.meursing_table_plan_id).to eq(values["meursingTablePlanId"])
     expect(entity.meursing_heading_number.to_s).to eq(values["meursingHeading"]["meursingHeadingNumber"])
     expect(entity.row_column_code.to_s).to eq(values["meursingHeading"]["rowColumnCode"])
-    expect(entity.subheading_sequence_number.to_s).to eq(values["subheadingSequenceNumber"])
-    expect(entity.description).to eq(values["description"])
-    expect(entity.validity_start_date).to eq(values["validityStartDate"])
-    expect(entity.validity_end_date).to eq(values["validityEndDate"])
+    expect(entity.subheading_sequence_number.to_s).to eq(values["meursingHeading"]["meursingSubheading"]["subheadingSequenceNumber"])
+    expect(entity.description).to eq(values["meursingHeading"]["meursingSubheading"]["description"])
+    expect(entity.validity_start_date).to eq(values["meursingHeading"]["meursingSubheading"]["validityStartDate"])
+    expect(entity.validity_end_date).to eq(values["meursingHeading"]["meursingSubheading"]["validityEndDate"])
     expect(entity.operation).to eq(:update)
-    expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
+    expect(entity.operation_date).to eq(Date.parse(values["meursingHeading"]["meursingSubheading"]["metainfo"]["transactionDate"]))
   end
 
   it "MeasurementUnitQualifier sample" do
