@@ -957,50 +957,48 @@ describe CdsImporter::EntityMapper do
   end
 
   it "FootnoteAssociationMeursingHeading sample" do
-    skip
     values = {
-      "sid" => "3084",
-      "additionalCodeCode" => "169",
-      "validityEndDate" => "1996-06-14T23:59:59",
-      "validityStartDate" => "1991-06-01T00:00:00",
-      "footnoteAssociationMeursingHeading" => {
-        "validityEndDate" => "1995-07-10T20:59:59",
-        "validityStartDate" => "2018-06-03T00:00:00",
-        "footnote" => {
-          "footnoteId" => "08",
-          "footnoteType" => {
-            "footnoteTypeId" => "06"
+      "meursingTablePlanId" => "2",
+      "meursingHeading" => {
+        "sid" => "3084",
+        "meursingHeadingNumber" => "6",
+        "rowColumnCode" => "1",
+        "validityEndDate" => "1996-06-14T23:59:59",
+        "validityStartDate" => "1991-06-01T00:00:00",
+        "footnoteAssociationMeursingHeading" => {
+          "validityEndDate" => "1995-07-10T20:59:59",
+          "validityStartDate" => "2018-06-03T00:00:00",
+          "footnote" => {
+            "footnoteId" => "08",
+            "footnoteType" => {
+              "footnoteTypeId" => "06"
+            }
+          },
+          "metainfo" => {
+            "opType" => "C",
+            "transactionDate" => "2017-08-27T19:23:57"
           }
         },
         "metainfo" => {
-          "opType" => "C",
-          "transactionDate" => "2017-08-27T19:23:57"
+          "origin" => "T",
+          "opType" => "U",
+          "transactionDate" => "2016-07-27T09:20:15"
         }
-      },
-      "meursingHeadingNumber" => "6",
-      "rowColumnCode" => "1",
-      "meursingTablePlan" => {
-        "meursingTablePlanId" => "2"
-      },
-      "metainfo" => {
-        "origin" => "T",
-        "opType" => "U",
-        "transactionDate" => "2016-07-27T09:20:15"
       }
     }
     subject = CdsImporter::EntityMapper::FootnoteAssociationMeursingHeadingMapper.new(values)
     entity = subject.parse[0]
     expect(entity).to be_a(FootnoteAssociationMeursingHeading)
     expect(entity).to be_valid
-    expect(entity.meursing_table_plan_id).to eq(values["meursingTablePlan"]["meursingTablePlanId"])
-    expect(entity.meursing_heading_number).to eq(values["meursingHeadingNumber"])
-    expect(entity.row_column_code.to_s).to eq(values["rowColumnCode"])
-    expect(entity.footnote_type).to eq(values["footnoteAssociationMeursingHeading"]["footnote"]["footnoteType"]["footnoteTypeId"])
-    expect(entity.footnote_id).to eq(values["footnoteAssociationMeursingHeading"]["footnote"]["footnoteId"])
-    expect(entity.validity_start_date).to eq(values["footnoteAssociationMeursingHeading"]["validityStartDate"])
-    expect(entity.validity_end_date).to eq(values["footnoteAssociationMeursingHeading"]["validityEndDate"])
+    expect(entity.meursing_table_plan_id).to eq(values["meursingTablePlanId"])
+    expect(entity.meursing_heading_number).to eq(values["meursingHeading"]["meursingHeadingNumber"])
+    expect(entity.row_column_code.to_s).to eq(values["meursingHeading"]["rowColumnCode"])
+    expect(entity.footnote_type).to eq(values["meursingHeading"]["footnoteAssociationMeursingHeading"]["footnote"]["footnoteType"]["footnoteTypeId"])
+    expect(entity.footnote_id).to eq(values["meursingHeading"]["footnoteAssociationMeursingHeading"]["footnote"]["footnoteId"])
+    expect(entity.validity_start_date).to eq(values["meursingHeading"]["footnoteAssociationMeursingHeading"]["validityStartDate"])
+    expect(entity.validity_end_date).to eq(values["meursingHeading"]["footnoteAssociationMeursingHeading"]["validityEndDate"])
     expect(entity.operation).to eq(:create)
-    expect(entity.operation_date).to eq(Date.parse(values["footnoteAssociationMeursingHeading"]["metainfo"]["transactionDate"]))
+    expect(entity.operation_date).to eq(Date.parse(values["meursingHeading"]["footnoteAssociationMeursingHeading"]["metainfo"]["transactionDate"]))
   end
 
   it "FootnoteTypeDescription sample" do
