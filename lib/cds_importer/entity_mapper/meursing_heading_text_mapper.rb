@@ -1,7 +1,5 @@
 #
-# MeursingHeadingText is nested in to MeursingHeading.
-# AND also MeursingHeading is nested in to MeursingTablePlan.
-# SO it's not clear which api call will return MeursingHeadingText records
+# MeursingTablePlan -> meursingHeading -> meursingHeadingText
 #
 
 class CdsImporter
@@ -9,14 +7,16 @@ class CdsImporter
     class MeursingHeadingTextMapper < BaseMapper
       self.entity_class = "MeursingHeadingText".freeze
 
-      self.mapping_path = "meursingHeadingText"
+      self.mapping_root = "MeursingTablePlan".freeze
+
+      self.mapping_path = "meursingHeading.meursingHeadingText".freeze
 
       self.exclude_mapping = ["metainfo.origin", "validityStartDate", "validityEndDate"].freeze
 
       self.entity_mapping = base_mapping.merge(
-        "meursingTablePlan.meursingTablePlanId" => :meursing_table_plan_id,
-        "meursingHeadingNumber" => :meursing_heading_number,
-        "rowColumnCode" => :row_column_code,
+        "meursingTablePlanId" => :meursing_table_plan_id,
+        "meursingHeading.meursingHeadingNumber" => :meursing_heading_number,
+        "meursingHeading.rowColumnCode" => :row_column_code,
         "#{mapping_path}.language.languageId" => :language_id,
         "#{mapping_path}.description" => :description
       ).freeze

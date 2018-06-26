@@ -2665,40 +2665,40 @@ describe CdsImporter::EntityMapper do
 
   it "MeursingHeadingText sample" do
     values = {
-      "sid" => "3084",
-      "validityEndDate" => "1996-06-14T23:59:59",
-      "validityStartDate" => "1991-06-01T00:00:00",
-      "meursingHeadingNumber" => "20",
-      "rowColumnCode" => "1",
-      "meursingTablePlan" => {
-        "meursingTablePlanId" => "01"
-      },
-      "meursingHeadingText" => {
-        "language" => {
-          "languageId" => "EN"
+      "meursingTablePlanId" => "01",
+      "meursingHeading" => {
+        "sid" => "3084",
+        "validityEndDate" => "1996-06-14T23:59:59",
+        "validityStartDate" => "1991-06-01T00:00:00",
+        "meursingHeadingNumber" => "20",
+        "rowColumnCode" => "1",
+        "meursingHeadingText" => {
+          "language" => {
+            "languageId" => "EN"
+          },
+          "description" => "qwerty",
+          "metainfo" => {
+            "opType" => "U",
+            "transactionDate" => "2016-08-21T19:21:46"
+          }
         },
-        "description" => "qwerty",
         "metainfo" => {
-          "opType" => "U",
-          "transactionDate" => "2016-08-21T19:21:46"
+          "opType" => "C",
+          "transactionDate" => "2016-07-27T09:20:15"
         }
-      },
-      "metainfo" => {
-        "opType" => "C",
-        "transactionDate" => "2016-07-27T09:20:15"
       }
     }
     subject = CdsImporter::EntityMapper::MeursingHeadingTextMapper.new(values)
     entity = subject.parse[0]
     expect(entity).to be_a(MeursingHeadingText)
     expect(entity).to be_valid
-    expect(entity.meursing_table_plan_id).to eq(values["meursingTablePlan"]["meursingTablePlanId"])
-    expect(entity.meursing_heading_number.to_s).to eq(values["meursingHeadingNumber"])
-    expect(entity.row_column_code.to_s).to eq(values["rowColumnCode"])
-    expect(entity.language_id).to eq(values["meursingHeadingText"]["language"]["languageId"])
-    expect(entity.description).to eq(values["meursingHeadingText"]["description"])
+    expect(entity.meursing_table_plan_id).to eq(values["meursingTablePlanId"])
+    expect(entity.meursing_heading_number.to_s).to eq(values["meursingHeading"]["meursingHeadingNumber"])
+    expect(entity.row_column_code.to_s).to eq(values["meursingHeading"]["rowColumnCode"])
+    expect(entity.language_id).to eq(values["meursingHeading"]["meursingHeadingText"]["language"]["languageId"])
+    expect(entity.description).to eq(values["meursingHeading"]["meursingHeadingText"]["description"])
     expect(entity.operation).to eq(:update)
-    expect(entity.operation_date).to eq(Date.parse(values["meursingHeadingText"]["metainfo"]["transactionDate"]))
+    expect(entity.operation_date).to eq(Date.parse(values["meursingHeading"]["meursingHeadingText"]["metainfo"]["transactionDate"]))
   end
 
   it "MeursingSubheading sample" do
