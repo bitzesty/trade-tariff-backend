@@ -1,6 +1,5 @@
 #
 # FootnoteAssociationMeasure is nested in to Measure.
-# Can't find it in xml examples, but it should be there.
 #
 
 class CdsImporter
@@ -19,10 +18,6 @@ class CdsImporter
         "#{mapping_path}.footnote.footnoteType.footnoteTypeId" => :footnote_type_id,
         "#{mapping_path}.footnote.footnoteId" => :footnote_id
       ).freeze
-
-      def parse
-        []
-      end
     end
   end
 end

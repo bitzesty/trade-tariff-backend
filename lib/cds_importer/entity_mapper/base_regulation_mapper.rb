@@ -5,7 +5,7 @@ class CdsImporter
 
       self.mapping_root = "BaseRegulation".freeze
 
-      self.entity_mapping = BASE_MAPPING.merge(
+      self.entity_mapping = base_mapping.merge(
         "regulationRoleType.regulationRoleTypeId" => :base_regulation_role,
         "baseRegulationId" => :base_regulation_id,
         "communityCode" => :community_code,

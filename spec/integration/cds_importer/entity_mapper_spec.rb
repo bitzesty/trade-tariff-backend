@@ -831,7 +831,6 @@ describe CdsImporter::EntityMapper do
   end
 
   it "FootnoteAssociationAdditionalCode sample" do
-    skip
     values = {
       "sid" => "3084",
       "additionalCodeCode" => "169",
@@ -872,7 +871,6 @@ describe CdsImporter::EntityMapper do
   end
 
   it "FootnoteAssociationMeasure sample" do
-    skip
     values = {
       "sid" => "3084",
       "validityEndDate" => "1996-06-14T23:59:59",
@@ -881,7 +879,7 @@ describe CdsImporter::EntityMapper do
         "footnote" => {
           "footnoteId" => "08",
           "footnoteType" => {
-              "footnoteTypeId" => "06"
+            "footnoteTypeId" => "06"
           }
         },
         "metainfo" => {
@@ -1673,7 +1671,6 @@ describe CdsImporter::EntityMapper do
   end
 
   it "NomenclatureGroupMembership sample" do
-    skip
     values = {
       "sid" => 27640,
       "produclineSuffix" => "80",
@@ -2055,7 +2052,7 @@ describe CdsImporter::EntityMapper do
           "sid" => "11993",
           "geographicalAreaId" => "1101",
           "metainfo" => {
-             "opType" => "U",
+            "opType" => "U",
             "transactionDate" => "2017-07-15T22:27:51"
           }
         },
@@ -2320,7 +2317,6 @@ describe CdsImporter::EntityMapper do
   end
 
   it "Measurement sample" do
-    skip
     values = {
       "measurementUnitCode" => "DDS",
       "validityStartDate" => "1971-02-11T00:00:00",
@@ -2739,6 +2735,46 @@ describe CdsImporter::EntityMapper do
     expect(entity.validity_end_date).to eq(values["meursingHeading"]["meursingSubheading"]["validityEndDate"])
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["meursingHeading"]["meursingSubheading"]["metainfo"]["transactionDate"]))
+  end
+
+  it "MeursingTableCellComponent sample" do
+    values = {
+      "sid" => "359",
+      "additionalCodeCode" => "475",
+      "validityStartDate" => "1988-01-01T00:00:00",
+      "meursingCellComponent" => {
+        "metainfo" => {
+          "opType" => "C",
+          "origin" => "T",
+          "transactionDate" => "2016-06-22T10:20:13"
+        },
+        "validityStartDate" => "2016-08-22T11:30:13",
+        "validityEndtDate" => "2026-08-22T11:30:13",
+        "meursingSubheading" => {
+          "hjid" => "508826",
+          "subheadingSequenceNumber" => "150",
+          "meursingHeading" => {
+            "meursingHeadingNumber" => "10",
+            "rowColumnCode" => "1",
+            "meursingTablePlan" => {
+              "meursingTablePlanId" => "01"
+            }
+          }
+        }
+      }
+    }
+    subject = CdsImporter::EntityMapper::MeursingTableCellComponentMapper.new(values)
+    entity = subject.parse[0]
+    expect(entity).to be_a(MeursingTableCellComponent)
+    expect(entity).to be_valid
+    expect(entity.meursing_additional_code_sid.to_s).to eq(values["sid"])
+    expect(entity.additional_code).to eq(values["additionalCodeCode"])
+    expect(entity.meursing_table_plan_id).to eq(values["meursingCellComponent"]["meursingSubheading"]["meursingHeading"]["meursingTablePlan"]["meursingTablePlanId"])
+    expect(entity.heading_number.to_s).to eq(values["meursingCellComponent"]["meursingSubheading"]["meursingHeading"]["meursingHeadingNumber"])
+    expect(entity.row_column_code.to_s).to eq(values["meursingCellComponent"]["meursingSubheading"]["meursingHeading"]["rowColumnCode"])
+    expect(entity.subheading_sequence_number.to_s).to eq(values["meursingCellComponent"]["meursingSubheading"]["subheadingSequenceNumber"])
+    expect(entity.operation).to eq(:create)
+    expect(entity.operation_date).to eq(Date.parse(values["meursingCellComponent"]["metainfo"]["transactionDate"]))
   end
 
   it "MeasurementUnitQualifier sample" do

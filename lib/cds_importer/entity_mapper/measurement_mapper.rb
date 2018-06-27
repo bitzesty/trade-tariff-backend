@@ -1,6 +1,5 @@
 #
-# There is no collection with Measurement in new xml.
-# So we will pass @values for Measurement the same as for MeasurementUnit.
+# Measurement in nested in to MeasurementUnit.
 #
 
 class CdsImporter
@@ -16,10 +15,6 @@ class CdsImporter
         "measurementUnitCode" => :measurement_unit_code,
         "measurementUnitQualifier.measurementUnitQualifierCode" => :measurement_unit_qualifier_code
       ).freeze
-
-      def parse
-        []
-      end
     end
   end
 end
