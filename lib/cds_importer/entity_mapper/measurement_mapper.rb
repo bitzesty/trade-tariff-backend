@@ -9,6 +9,8 @@ class CdsImporter
 
       self.mapping_root = "MeasurementUnit".freeze
 
+      self.mapping_path = "measurementUnitQualifier".freeze
+
       self.exclude_mapping = ["metainfo.origin"].freeze
 
       self.entity_mapping = base_mapping.merge(
