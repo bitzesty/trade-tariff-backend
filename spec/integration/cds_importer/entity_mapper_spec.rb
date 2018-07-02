@@ -2325,16 +2325,6 @@ describe CdsImporter::EntityMapper do
         "opType" => "C",
         "transactionDate" => "2017-07-29T20:04:37"
       },
-      "measurementUnitDescription" => {
-        "description" => "1200 kilowatt hours",
-        "language" => {
-          "languageId" => "EN"
-        },
-        "metainfo" => {
-          "opType" => "C",
-          "transactionDate" => "2017-06-29T20:04:37"
-        }
-      },
       "measurementUnitQualifier" => {
         "measurementUnitQualifierCode" => "X"
       }
