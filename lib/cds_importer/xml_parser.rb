@@ -5,6 +5,8 @@
 class CdsImporter
   module XmlParser
     class Reader < ::Ox::Sax
+      STRIP_NAMESPACE = "*".freeze
+
       def initialize(stringio, target_handler)
         @stringio = stringio
         @targets = CdsImporter::EntityMapper::BaseMapper.descendants.map{ |k| k.mapping_root }.compact.uniq
@@ -16,7 +18,7 @@ class CdsImporter
       end
 
       def parse
-        Ox.sax_parse self, @stringio, symbolize: false, strip_namespace: '*'
+        Ox.sax_parse self, @stringio, symbolize: false, strip_namespace: STRIP_NAMESPACE
       end
 
       def start_element(key)

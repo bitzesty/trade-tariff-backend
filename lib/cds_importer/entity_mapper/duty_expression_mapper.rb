@@ -12,7 +12,7 @@ class CdsImporter
         "dutyAmountApplicabilityCode" => :duty_amount_applicability_code,
         "measurementUnitApplicabilityCode" => :measurement_unit_applicability_code,
         "monetaryUnitApplicabilityCode" => :monetary_unit_applicability_code
-      )
+      ).freeze
     end
   end
 end

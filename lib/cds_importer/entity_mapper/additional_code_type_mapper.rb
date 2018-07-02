@@ -9,7 +9,7 @@ class CdsImporter
         "applicationCode" => :application_code,
         "additionalCodeTypeId" => :additional_code_type_id,
         "meursingTablePlan.meursingTablePlanId" => :meursing_table_plan_id
-      )
+      ).freeze
     end
   end
 end

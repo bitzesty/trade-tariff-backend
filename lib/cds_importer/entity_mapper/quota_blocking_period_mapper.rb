@@ -16,7 +16,7 @@ class CdsImporter
         "#{mapping_path}.blockingPeriodType" => :blocking_period_type,
         "#{mapping_path}.description" => :description,
         "#{mapping_path}.quotaBlockingPeriodSid" => :quota_blocking_period_sid,
-      )
+      ).freeze
     end
   end
 end

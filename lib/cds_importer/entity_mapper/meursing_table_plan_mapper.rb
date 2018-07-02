@@ -9,7 +9,7 @@ class CdsImporter
 
       self.entity_mapping = base_mapping.merge(
         "meursingTablePlanId" => :meursing_table_plan_id
-      )
+      ).freeze
     end
   end
 end

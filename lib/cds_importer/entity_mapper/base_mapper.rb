@@ -21,6 +21,7 @@ class CdsImporter
       NATIONAL = "N".freeze
       APPROVED_FLAG = "1".freeze
       STOPPED_FLAG = "1".freeze
+      PATH_SEPARATOR = ".".freeze
       BASE_MAPPING = {
         "validityStartDate" => :validity_start_date,
         "validityEndDate" => :validity_end_date,
@@ -40,7 +41,7 @@ class CdsImporter
         # iterating through all the mapping keys to expand Arrays
         entity_mapping.keys.each do |path|
           current_path = []
-          path.to_s.split(".").each do |key|
+          path.to_s.split(PATH_SEPARATOR).each do |key|
             current_path << key
             new_expanded = []
             expanded.each do |values|
@@ -61,7 +62,7 @@ class CdsImporter
         end
         # creating instances for all expanded values
         if mapping_path.present?
-          expanded = expanded.select{ |values| values.dig(*mapping_path.split(".")).present? }
+          expanded = expanded.select{ |values| values.dig(*mapping_path.split(PATH_SEPARATOR)).present? }
         end
         expanded.map { |values| create_instance(values) }
       end
@@ -91,7 +92,7 @@ class CdsImporter
       def mapped_values(values)
         entity_mapping.keys.inject({}) do |memo, key|
           mapped_key = entity_mapping.fetch(key)
-          memo[mapped_key] = values.dig(*key.split("."))
+          memo[mapped_key] = values.dig(*key.split(PATH_SEPARATOR))
           memo
         end
       end
