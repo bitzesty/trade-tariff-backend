@@ -39,6 +39,9 @@ module TariffSynchronizer
   mattr_accessor :measures_logger_enabled
   self.measures_logger_enabled = (ENV["TARIFF_MEASURES_LOGGER"].to_i == 1)
 
+  mattr_accessor :ignore_presence_on_destroy
+  self.ignore_presence_on_destroy = (ENV["TARIFF_IGNORE_PRESENCE_ON_DESTROY"].to_i == 1)
+
   mattr_accessor :username
   self.username = ENV["TARIFF_SYNC_USERNAME"]
 
