@@ -4,6 +4,7 @@ class TaricImporter
       attr_reader :record
 
       delegate :primary_key, :klass, to: :record
+      delegate :instrument, to: ActiveSupport::Notifications
 
       def initialize(record, operation_date)
         @record = record
