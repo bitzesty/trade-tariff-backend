@@ -26,14 +26,14 @@ TradeTariffBackend::DataMigrator.migration do
         "8543700000", "8702000000", "8705908000", "8708999700", "8710000000", "8802000000",
         "8906100000", "9005800000", "9013200000", "9014200000", "9015000000", "9022190000",
         "9026200000", "9027800000", "9031100000", "9031800000", "9301000000", "9302000000",
-        "9303000000", "9304000000", "9305000000", "9306000000", "9307000000", "2812160000" ]
+        "9303000000", "9304000000", "9305000000", "9306000000", "9307000000", "2812160000"]
 
-      heading_ids.each do |heading| {
-        goods_nomenclature = GoodsNomenclature.where(goods_nomenclature_item_id: h).first
+      heading_ids.each do |heading|
+        goods_nomenclature = GoodsNomenclature.where(goods_nomenclature_item_id: heading).first
         next if goods_nomenclature.footnotes.include?(footnote)
         puts "Associating footnote #{footnote.inspect} with goods nomenclature #{goods_nomenclature.inspect}"
-        FootnoteAssociationGoodsNomenclature.associate_footnote_with_goods_nomenclature(heading, footnote)
-      }
+        FootnoteAssociationGoodsNomenclature.associate_footnote_with_goods_nomenclature(goods_nomenclature, footnote)
+      end
     }
   end
 
