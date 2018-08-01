@@ -9,7 +9,7 @@ TradeTariffBackend::DataMigrator.migration do
     apply {
 
       footnote = Footnote.where(footnote_id: '002', footnote_type_id: '05').first
-      heading_ids = [ "2811110000", "2812120000", "2812130000", "2812140000", "2812150000",
+      commodities = [ "2811110000", "2812120000", "2812130000", "2812140000", "2812150000",
         "2812170000", "2812199000", "2813901000", "2826191000", "2826199000", "2826908000",
         "2830100000", "2837110000", "2837190000", "2837200000", "2905190000", "2905599800",
         "2914199000", "2918170000", "2918199800", "2920190000", "2920210000", "2920220000",
@@ -25,14 +25,16 @@ TradeTariffBackend::DataMigrator.migration do
         "8532000000", "8535300000", "8540208000", "8540810000", "8540890000", "8543200000",
         "8543700000", "8702000000", "8705908000", "8708999700", "8710000000", "8802000000",
         "8906100000", "9005800000", "9013200000", "9014200000", "9015000000", "9022190000",
-        "9026200000", "9027800000", "9031100000", "9031800000", "9301000000", "9302000000",
-        "9303000000", "9304000000", "9305000000", "9306000000", "9307000000", "2812160000"]
+        "9026200000", "9027800000", "9031100000", "9031800000", "2812160000", "9301100000",
+        "9301200000", "9301900000", "9302000000", "9303100000", "9303300000", "9303900000",
+        "9304000000", "9305100000", "9305200010", "9305200090", "9305910000", "9305990000",
+        "9306210000", "9306301000", "9306901000" ,"9306909000", "9307000000"]
 
-      heading_ids.each do |heading|
-        goods_nomenclature = GoodsNomenclature.where(goods_nomenclature_item_id: heading).first
+      commodities.each do |commodity|
+        goods_nomenclature = GoodsNomenclature.where(goods_nomenclature_item_id: commodity).first
         next if goods_nomenclature.footnotes.include?(footnote)
         puts "Associating footnote #{footnote.inspect} with goods nomenclature #{goods_nomenclature.inspect}"
-        FootnoteAssociationGoodsNomenclature.associate_footnote_with_goods_nomenclature(goods_nomenclature, footnote)
+        FootnoteAssociationGoodsNomenclature.associate_footnote_with_goods_nomenclature(goods_nomenclature , footnote)
       end
     }
   end
