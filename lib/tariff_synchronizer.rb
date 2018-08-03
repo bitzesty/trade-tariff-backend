@@ -39,8 +39,11 @@ module TariffSynchronizer
   mattr_accessor :measures_logger_enabled
   self.measures_logger_enabled = (ENV["TARIFF_MEASURES_LOGGER"].to_i == 1)
 
-  mattr_accessor :ignore_presence_on_destroy
-  self.ignore_presence_on_destroy = (ENV["TARIFF_IGNORE_PRESENCE_ON_DESTROY"].to_i == 1)
+  # 1 - do not raise an exception when record does not exist on DESTROY operation
+  #   - do not raise an exception when record does not exist on UPDATE operation
+  #   - created new record when record does not exist on UPDATE operation
+  mattr_accessor :ignore_presence_errors
+  self.ignore_presence_errors = (ENV["TARIFF_IGNORE_PRESENCE_ERRORS"].to_i == 1)
 
   mattr_accessor :username
   self.username = ENV["TARIFF_SYNC_USERNAME"]
@@ -174,6 +177,8 @@ module TariffSynchronizer
 
               chief_update.mark_as_pending
               chief_update.clear_applied_at
+
+              chief_update.remove_all_presence_errors
 
               # need to delete measure logs
               ChiefTransformer::MeasuresLogger.delete_logs(chief_update.filename)
