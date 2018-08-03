@@ -1,10 +1,10 @@
 Sequel.migration do
   change do
-    create_table :tariff_update_destroy_errors do
+    create_table :tariff_update_presence_errors do
       primary_key :id
       String :tariff_update_filename, null: false
       String :model_name, null: false
-      jsonb :attributes
+      jsonb :details
 
       index :tariff_update_filename
     end

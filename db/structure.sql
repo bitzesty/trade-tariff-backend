@@ -6256,22 +6256,22 @@ ALTER SEQUENCE public.tariff_update_conformance_errors_id_seq OWNED BY public.ta
 
 
 --
--- Name: tariff_update_destroy_errors; Type: TABLE; Schema: public; Owner: -
+-- Name: tariff_update_presence_errors; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE tariff_update_destroy_errors (
+CREATE TABLE tariff_update_presence_errors (
     id integer NOT NULL,
     tariff_update_filename text NOT NULL,
     model_name text NOT NULL,
-    attributes jsonb
+    details jsonb
 );
 
 
 --
--- Name: tariff_update_destroy_errors_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: tariff_update_presence_errors_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE tariff_update_destroy_errors_id_seq
+CREATE SEQUENCE tariff_update_presence_errors_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -6280,10 +6280,10 @@ CREATE SEQUENCE tariff_update_destroy_errors_id_seq
 
 
 --
--- Name: tariff_update_destroy_errors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: tariff_update_presence_errors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE tariff_update_destroy_errors_id_seq OWNED BY tariff_update_destroy_errors.id;
+ALTER SEQUENCE tariff_update_presence_errors_id_seq OWNED BY tariff_update_presence_errors.id;
 
 
 --
@@ -7161,10 +7161,10 @@ ALTER TABLE ONLY public.tariff_update_conformance_errors ALTER COLUMN id SET DEF
 
 
 --
--- Name: tariff_update_destroy_errors id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tariff_update_presence_errors id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY tariff_update_destroy_errors ALTER COLUMN id SET DEFAULT nextval('tariff_update_destroy_errors_id_seq'::regclass);
+ALTER TABLE ONLY tariff_update_presence_errors ALTER COLUMN id SET DEFAULT nextval('tariff_update_presence_errors_id_seq'::regclass);
 
 
 --
@@ -8070,11 +8070,11 @@ ALTER TABLE ONLY public.tariff_update_conformance_errors
 
 
 --
--- Name: tariff_update_destroy_errors tariff_update_destroy_errors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tariff_update_presence_errors tariff_update_presence_errors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY tariff_update_destroy_errors
-    ADD CONSTRAINT tariff_update_destroy_errors_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY tariff_update_presence_errors
+    ADD CONSTRAINT tariff_update_presence_errors_pkey PRIMARY KEY (id);
 
 
 --
@@ -10062,10 +10062,10 @@ CREATE INDEX tariff_update_conformance_errors_tariff_update_filename_index ON pu
 
 
 --
--- Name: tariff_update_destroy_errors_tariff_update_filename_index; Type: INDEX; Schema: public; Owner: -
+-- Name: tariff_update_presence_errors_tariff_update_filename_index; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX tariff_update_destroy_errors_tariff_update_filename_index ON tariff_update_destroy_errors USING btree (tariff_update_filename);
+CREATE INDEX tariff_update_presence_errors_tariff_update_filename_index ON tariff_update_presence_errors USING btree (tariff_update_filename);
 
 
 --
@@ -10213,4 +10213,4 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20170117212158_create_audi
 INSERT INTO "schema_migrations" ("filename") VALUES ('20170331125740_create_data_migrations.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20171228082821_create_publication_sigles.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20180724155759_fix_footnote_id_characters_limit_in_associations.rb');
-INSERT INTO "schema_migrations" ("filename") VALUES ('20180730143329_add_tariff_update_destroy_errors.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20180730143329_add_tariff_update_presence_errors.rb');
