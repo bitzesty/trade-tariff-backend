@@ -37,7 +37,7 @@ describe TariffSynchronizer::BaseUpdateImporter do
       allow(taric_update).to receive(:import!).and_return(true)
       expect(ActiveSupport::Notifications).to receive(:subscribe).with(/sql\.sequel/)
       expect(ActiveSupport::Notifications).to receive(:subscribe).with(/conformance_error/)
-      expect(ActiveSupport::Notifications).to receive(:subscribe).with(/destroy_error/)
+      expect(ActiveSupport::Notifications).to receive(:subscribe).with(/presence_error/)
       base_update_importer.apply
     end
 

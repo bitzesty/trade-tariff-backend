@@ -8,6 +8,12 @@ class TaricImporter
       def to_oplog_operation
         :create
       end
+
+      private
+
+      def get_model_record
+        klass.new
+      end
     end
   end
 end
