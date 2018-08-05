@@ -169,6 +169,9 @@ module TariffSynchronizer
             TariffSynchronizer::TaricUpdate.applied_or_failed.where { issue_date > date_for_rollback }.each do |taric_update|
               taric_update.mark_as_pending
               taric_update.clear_applied_at
+
+              # delete presence errors
+              taric_update.remove_all_presence_errors
             end
             TariffSynchronizer::ChiefUpdate.applied_or_failed.where { issue_date > date_for_rollback }.each do |chief_update|
               [Chief::Comm, Chief::Mfcm, Chief::Tame, Chief::Tamf, Chief::Tbl9].each do |chief_model|
@@ -178,19 +181,28 @@ module TariffSynchronizer
               chief_update.mark_as_pending
               chief_update.clear_applied_at
 
+              # delete presence errors
               chief_update.remove_all_presence_errors
 
               # need to delete measure logs
               ChiefTransformer::MeasuresLogger.delete_logs(chief_update.filename)
             end
           else
-            TariffSynchronizer::TaricUpdate.where { issue_date > date }.delete
+            TariffSynchronizer::TaricUpdate.where { issue_date > date }.each do |taric_update|
+              taric_update.delete
+
+              # delete presence errors
+              taric_update.remove_all_presence_errors
+            end
             TariffSynchronizer::ChiefUpdate.where { issue_date > date }.each do |chief_update|
               [Chief::Comm, Chief::Mfcm, Chief::Tame, Chief::Tamf, Chief::Tbl9].each do |chief_model|
                 chief_model.where(origin: chief_update.filename).delete
               end
 
               chief_update.delete
+
+              # delete presence errors
+              chief_update.remove_all_presence_errors
 
               # need to delete measure logs
               ChiefTransformer::MeasuresLogger.delete_logs(chief_update.filename)
