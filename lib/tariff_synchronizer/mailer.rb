@@ -57,6 +57,10 @@ module TariffSynchronizer
     def applied(update_names, conformance_errors = [])
       @update_names = update_names
       @conformance_errors = conformance_errors
+      # if 'presence errors' are ignored during tariff update then we can display them in email body
+      if TariffSynchronizer.ignore_presence_errors
+        @presence_errors = TariffSynchronizer::TariffUpdatePresenceError.where(tariff_update_filename: update_names)
+      end
 
       mail subject: "#{subject_prefix(:info)} Tariff updates applied"
     end
