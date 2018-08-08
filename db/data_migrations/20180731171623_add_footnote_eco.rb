@@ -9,6 +9,7 @@ TradeTariffBackend::DataMigrator.migration do
     apply {
 
       footnote = Footnote.where(footnote_id: '002', footnote_type_id: '05').first
+
       codes = [ "28111100", "28121200", "28121300", "28121400", "28121500", "28121600",
           "28121700", "28121990", "28139010", "28261910", "28261990", "28269080",
           "28301000", "28371100", "28371900", "28372000", "29051900", "29055998",
@@ -26,9 +27,16 @@ TradeTariffBackend::DataMigrator.migration do
           "901420", "9015", "902219", "902620", "902780", "903110", "903180", "93" ]
 
       codes.each do |code|
-        measures = Measure.where(Sequel.like(:goods_nomenclature_item_id, "#{code}%")).all.uniq do |measure|
+        Sequel::Model.db.fetch("SELECT goods_nomenclature_item_id FROM measures_oplog
+                               WHERE goods_nomenclature_item_id LIKE '#{code}%'
+                               GROUP BY goods_nomenclature_item_id").all do |measure|
           puts "Running code #{code} and measure #{measure[:goods_nomenclature_item_id]}"
           goods_nomenclature = GoodsNomenclature.where(goods_nomenclature_item_id: measure[:goods_nomenclature_item_id]).first
+          if goods_nomenclature == nil then
+            puts "Got null goods nomenclature from #{measure.inspect}"
+            next
+          end
+
           next if goods_nomenclature.footnotes.include?(footnote)
           puts "Associating footnote #{footnote.inspect} with good #{goods_nomenclature.inspect}"
           FootnoteAssociationGoodsNomenclature.associate_footnote_with_goods_nomenclature(goods_nomenclature, footnote)
