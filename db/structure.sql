@@ -6286,6 +6286,7 @@ CREATE SEQUENCE public.tariff_update_presence_errors_id_seq
 ALTER SEQUENCE public.tariff_update_presence_errors_id_seq OWNED BY tariff_update_presence_errors.id;
 
 
+
 --
 -- Name: tariff_updates; Type: TABLE; Schema: public; Owner: -
 --
@@ -7165,6 +7166,7 @@ ALTER TABLE ONLY public.tariff_update_conformance_errors ALTER COLUMN id SET DEF
 --
 
 ALTER TABLE ONLY public.tariff_update_presence_errors ALTER COLUMN id SET DEFAULT nextval('tariff_update_presence_errors_id_seq'::regclass);
+
 
 
 --
