@@ -13,6 +13,7 @@ module TariffSynchronizer
       return unless @base_update.pending?
       track_latest_sql_queries
       keep_record_of_conformance_errors
+      keep_record_of_presence_errors
 
       Sequel::Model.db.transaction(reraise: true) do
         # If a error is raised during import, mark the update as failed
@@ -27,6 +28,7 @@ module TariffSynchronizer
     ensure
       ActiveSupport::Notifications.unsubscribe(@sql_subscriber)
       ActiveSupport::Notifications.unsubscribe(@conformance_errors_subscriber)
+      ActiveSupport::Notifications.unsubscribe(@presence_errors_subscriber)
     end
 
     private
@@ -58,6 +60,19 @@ module TariffSynchronizer
           model_primary_key: record.pk,
           model_values: record.values,
           model_conformance_errors: record.conformance_errors
+        )
+      end
+    end
+
+    def keep_record_of_presence_errors
+      @presence_errors_subscriber = ActiveSupport::Notifications.subscribe(/presence_error/) do |*args|
+        event = ActiveSupport::Notifications::Event.new(*args)
+        klass = event.payload[:klass]
+        details = event.payload[:details]
+        TariffSynchronizer::TariffUpdatePresenceError.create(
+          base_update: @base_update,
+          model_name: klass,
+          details: details.to_json
         )
       end
     end
