@@ -6260,6 +6260,38 @@ ALTER SEQUENCE tariff_update_presence_errors_id_seq OWNED BY tariff_update_prese
 
 
 --
+-- Name: tariff_update_presence_errors; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tariff_update_presence_errors (
+    id integer NOT NULL,
+    tariff_update_filename text NOT NULL,
+    model_name text NOT NULL,
+    details jsonb
+);
+
+
+--
+-- Name: tariff_update_presence_errors_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.tariff_update_presence_errors_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: tariff_update_presence_errors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.tariff_update_presence_errors_id_seq OWNED BY tariff_update_presence_errors.id;
+
+
+
+--
 -- Name: tariff_updates; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -7138,6 +7170,14 @@ ALTER TABLE ONLY tariff_update_conformance_errors ALTER COLUMN id SET DEFAULT ne
 --
 
 ALTER TABLE ONLY tariff_update_presence_errors ALTER COLUMN id SET DEFAULT nextval('tariff_update_presence_errors_id_seq'::regclass);
+
+
+--
+-- Name: tariff_update_presence_errors id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tariff_update_presence_errors ALTER COLUMN id SET DEFAULT nextval('tariff_update_presence_errors_id_seq'::regclass);
+
 
 
 --
@@ -10039,6 +10079,13 @@ CREATE INDEX tariff_update_conformance_errors_tariff_update_filename_index ON ta
 --
 
 CREATE INDEX tariff_update_presence_errors_tariff_update_filename_index ON tariff_update_presence_errors USING btree (tariff_update_filename);
+
+
+--
+-- Name: tariff_update_presence_errors_tariff_update_filename_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX tariff_update_presence_errors_tariff_update_filename_index ON public.tariff_update_presence_errors USING btree (tariff_update_filename);
 
 
 --
