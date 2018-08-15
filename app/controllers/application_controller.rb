@@ -27,6 +27,7 @@ class ApplicationController < ActionController::Base
   def render_error(exception)
     logger.error exception
     logger.error exception.backtrace
+    Raven.capture_exception(exception)
 
     respond_to do |format|
       format.html {
