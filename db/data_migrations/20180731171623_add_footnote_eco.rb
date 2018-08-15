@@ -1,5 +1,5 @@
 TradeTariffBackend::DataMigrator.migration do
-  name 'Assign footnote_id/footnote_type_id 002 05 ECO to list of heading ids and their comodities'
+  name "Assign footnote_id/footnote_type_id 002 05 ECO to list of heading ids and their commodities"
 
   up do
     applicable {
@@ -8,7 +8,7 @@ TradeTariffBackend::DataMigrator.migration do
     }
     apply {
 
-      footnote = Footnote.where(footnote_id: '002', footnote_type_id: '05').first
+      footnote = Footnote.where(footnote_id: "002", footnote_type_id: "05").first
 
       codes = [ "28111100", "28121200", "28121300", "28121400", "28121500", "28121600",
           "28121700", "28121990", "28139010", "28261910", "28261990", "28269080",
@@ -28,18 +28,22 @@ TradeTariffBackend::DataMigrator.migration do
 
       codes.each do |code|
         Sequel::Model.db.fetch("SELECT goods_nomenclature_item_id FROM measures_oplog
-                               WHERE goods_nomenclature_item_id LIKE '#{code}%'
-                               GROUP BY goods_nomenclature_item_id").all do |measure|
-          puts "Running code #{code} and measure #{measure[:goods_nomenclature_item_id]}"
+                                WHERE goods_nomenclature_item_id LIKE '#{code}%'
+                                GROUP BY goods_nomenclature_item_id").all do |measure|
+          puts "Running code #{code} and Measure with gono_item_id #{measure[:goods_nomenclature_item_id]}"
           goods_nomenclature = GoodsNomenclature.where(goods_nomenclature_item_id: measure[:goods_nomenclature_item_id]).first
-          if goods_nomenclature == nil then
-            puts "Got null goods nomenclature from #{measure.inspect}"
+
+          if goods_nomenclature.nil?
+            puts "GoodsNomenclature #{measure.inspect} does not exist"
             next
           end
-
-          next if goods_nomenclature.footnotes.include?(footnote)
-          puts "Associating footnote #{footnote.inspect} with good #{goods_nomenclature.inspect}"
-          FootnoteAssociationGoodsNomenclature.associate_footnote_with_goods_nomenclature(goods_nomenclature, footnote)
+          if goods_nomenclature.footnotes_dataset.where(footnotes__footnote_id: footnote.footnote_id,
+                                                        footnotes__footnote_type_id: footnote.footnote_type_id).empty?
+            puts "Creating association for Footnote #{footnote.inspect} and GoodsNomenclature #{goods_nomenclature.inspect}"
+            FootnoteAssociationGoodsNomenclature.associate_footnote_with_goods_nomenclature(goods_nomenclature, footnote)
+          else
+            puts "Footnote is already associated with GoodsNomenclature #{measure.inspect}"
+          end
         end
       end
     }
