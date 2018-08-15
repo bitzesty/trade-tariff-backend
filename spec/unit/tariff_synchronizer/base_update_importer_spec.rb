@@ -33,6 +33,14 @@ describe TariffSynchronizer::BaseUpdateImporter do
       expect(taric_update.exception_queries).to include("(Sequel::Postgres::Database) ROLLBACK")
     end
 
+    it "subscribes to all events" do
+      allow(taric_update).to receive(:import!).and_return(true)
+      expect(ActiveSupport::Notifications).to receive(:subscribe).with(/sql\.sequel/)
+      expect(ActiveSupport::Notifications).to receive(:subscribe).with(/conformance_error/)
+      expect(ActiveSupport::Notifications).to receive(:subscribe).with(/presence_error/)
+      base_update_importer.apply
+    end
+
     it "logs error message and sends an email" do
       tariff_synchronizer_logger_listener
 

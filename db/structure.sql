@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.1
--- Dumped by pg_dump version 9.6.1
+-- Dumped from database version 10.1
+-- Dumped by pg_dump version 10.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -26,6 +26,20 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+--
+-- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
 
 
 SET search_path = public, pg_catalog;
@@ -1627,7 +1641,7 @@ ALTER SEQUENCE export_refund_nomenclatures_oid_seq OWNED BY export_refund_nomenc
 CREATE TABLE footnote_association_additional_codes_oplog (
     additional_code_sid integer,
     footnote_type_id character varying(2),
-    footnote_id character varying(3),
+    footnote_id character varying(5),
     validity_start_date timestamp without time zone,
     validity_end_date timestamp without time zone,
     additional_code_type_id text,
@@ -1686,7 +1700,7 @@ ALTER SEQUENCE footnote_association_additional_codes_oid_seq OWNED BY footnote_a
 CREATE TABLE footnote_association_erns_oplog (
     export_refund_nomenclature_sid integer,
     footnote_type character varying(2),
-    footnote_id character varying(3),
+    footnote_id character varying(5),
     validity_start_date timestamp without time zone,
     validity_end_date timestamp without time zone,
     goods_nomenclature_item_id character varying(10),
@@ -1749,7 +1763,7 @@ ALTER SEQUENCE footnote_association_erns_oid_seq OWNED BY footnote_association_e
 CREATE TABLE footnote_association_goods_nomenclatures_oplog (
     goods_nomenclature_sid integer,
     footnote_type character varying(2),
-    footnote_id character varying(3),
+    footnote_id character varying(5),
     validity_start_date timestamp without time zone,
     validity_end_date timestamp without time zone,
     goods_nomenclature_item_id character varying(10),
@@ -1810,7 +1824,7 @@ ALTER SEQUENCE footnote_association_goods_nomenclatures_oid_seq OWNED BY footnot
 CREATE TABLE footnote_association_measures_oplog (
     measure_sid integer,
     footnote_type_id character varying(2),
-    footnote_id character varying(3),
+    footnote_id character varying(5),
     created_at timestamp without time zone,
     "national" boolean,
     oid integer NOT NULL,
@@ -1865,7 +1879,7 @@ CREATE TABLE footnote_association_meursing_headings_oplog (
     meursing_heading_number character varying(255),
     row_column_code integer,
     footnote_type character varying(2),
-    footnote_id character varying(3),
+    footnote_id character varying(5),
     validity_start_date timestamp without time zone,
     validity_end_date timestamp without time zone,
     created_at timestamp without time zone,
@@ -6214,6 +6228,70 @@ ALTER SEQUENCE tariff_update_conformance_errors_id_seq OWNED BY tariff_update_co
 
 
 --
+-- Name: tariff_update_presence_errors; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE tariff_update_presence_errors (
+    id integer NOT NULL,
+    tariff_update_filename text NOT NULL,
+    model_name text NOT NULL,
+    details jsonb
+);
+
+
+--
+-- Name: tariff_update_presence_errors_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE tariff_update_presence_errors_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: tariff_update_presence_errors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE tariff_update_presence_errors_id_seq OWNED BY tariff_update_presence_errors.id;
+
+
+--
+-- Name: tariff_update_presence_errors; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tariff_update_presence_errors (
+    id integer NOT NULL,
+    tariff_update_filename text NOT NULL,
+    model_name text NOT NULL,
+    details jsonb
+);
+
+
+--
+-- Name: tariff_update_presence_errors_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.tariff_update_presence_errors_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: tariff_update_presence_errors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.tariff_update_presence_errors_id_seq OWNED BY tariff_update_presence_errors.id;
+
+
+
+--
 -- Name: tariff_updates; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -7088,6 +7166,21 @@ ALTER TABLE ONLY tariff_update_conformance_errors ALTER COLUMN id SET DEFAULT ne
 
 
 --
+-- Name: tariff_update_presence_errors id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY tariff_update_presence_errors ALTER COLUMN id SET DEFAULT nextval('tariff_update_presence_errors_id_seq'::regclass);
+
+
+--
+-- Name: tariff_update_presence_errors id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tariff_update_presence_errors ALTER COLUMN id SET DEFAULT nextval('tariff_update_presence_errors_id_seq'::regclass);
+
+
+
+--
 -- Name: transmission_comments_oplog oid; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -7790,6 +7883,14 @@ ALTER TABLE ONLY prorogation_regulations_oplog
 
 
 --
+-- Name: publication_sigles_oplog publication_sigles_oplog_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY publication_sigles_oplog
+    ADD CONSTRAINT publication_sigles_oplog_pkey PRIMARY KEY (oid);
+
+
+--
 -- Name: quota_associations_oplog quota_associations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7979,6 +8080,14 @@ ALTER TABLE ONLY sections
 
 ALTER TABLE ONLY tariff_update_conformance_errors
     ADD CONSTRAINT tariff_update_conformance_errors_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tariff_update_presence_errors tariff_update_presence_errors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY tariff_update_presence_errors
+    ADD CONSTRAINT tariff_update_presence_errors_pkey PRIMARY KEY (id);
 
 
 --
@@ -9966,6 +10075,20 @@ CREATE INDEX tariff_update_conformance_errors_tariff_update_filename_index ON ta
 
 
 --
+-- Name: tariff_update_presence_errors_tariff_update_filename_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX tariff_update_presence_errors_tariff_update_filename_index ON tariff_update_presence_errors USING btree (tariff_update_filename);
+
+
+--
+-- Name: tariff_update_presence_errors_tariff_update_filename_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX tariff_update_presence_errors_tariff_update_filename_index ON public.tariff_update_presence_errors USING btree (tariff_update_filename);
+
+
+--
 -- Name: tbl_code_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10101,3 +10224,5 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20161209195324_alter_footn
 INSERT INTO "schema_migrations" ("filename") VALUES ('20170117212158_create_audits.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20170331125740_create_data_migrations.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20171228082821_create_publication_sigles.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20180724155759_fix_footnote_id_characters_limit_in_associations.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20180730143329_add_tariff_update_presence_errors.rb');
