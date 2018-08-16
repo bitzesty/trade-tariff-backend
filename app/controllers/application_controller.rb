@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
   def render_not_found
     respond_to do |format|
       format.html {
-        render text: "404 - Not Found", status: 404
+        render html: "404 - Not Found", status: 404
       }
       format.json {
         render json: { error: "404 - Not Found" }, status: 404
@@ -27,11 +27,11 @@ class ApplicationController < ActionController::Base
   def render_error(exception)
     logger.error exception
     logger.error exception.backtrace
-    Raven.capture_exception(exception)
+    ::Raven.capture_exception(exception)
 
     respond_to do |format|
       format.html {
-        render text: "500 - Internal Server Error: #{exception.message}", status: 500
+        render html: "500 - Internal Server Error: #{exception.message}", status: 500
       }
       format.json {
         render json: { error: "500 - Internal Server Error: #{exception.message}" }, status: 500
@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
   end
 
   def nothing
-    render nothing: true
+    head :ok
   end
 
   protected

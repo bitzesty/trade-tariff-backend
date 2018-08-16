@@ -254,7 +254,7 @@ GEM
     rufus-scheduler (3.4.2)
       et-orbi (~> 1.0)
     safe_yaml (1.0.4)
-    sentry-raven (2.4.0)
+    sentry-raven (2.7.4)
       faraday (>= 0.7.6, < 1.0)
     sequel (4.46.0)
     sequel-rails (0.9.15)
