@@ -11,8 +11,8 @@ gem "rails", "5.1.5"
 gem "sinatra", "~> 2.0.2"
 
 gem "pg", "0.18.4"
-gem "sequel", "~> 4.32"
-gem "sequel-rails", "~> 0.9", ">= 0.9.12"
+gem "sequel", "~> 5.11.0"
+gem "sequel-rails", "~> 1.0.1"
 
 
 gem "puma", "~> 3.4"
