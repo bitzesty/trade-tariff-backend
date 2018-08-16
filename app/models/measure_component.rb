@@ -8,22 +8,26 @@ class MeasureComponent < Sequel::Model
   set_primary_key [:measure_sid, :duty_expression_id]
 
   one_to_one :duty_expression, key: :duty_expression_id,
-                               primary_key: :duty_expression_id do |ds|
+                               primary_key: :duty_expression_id,
+                               eager_block: (->(ds) { ds }) do |ds|
     ds.with_actual(DutyExpression)
   end
 
   one_to_one :measurement_unit, key: :measurement_unit_code,
-                                primary_key: :measurement_unit_code do |ds|
+                                primary_key: :measurement_unit_code,
+                                eager_block: (->(ds) { ds }) do |ds|
     ds.with_actual(MeasurementUnit)
   end
 
   one_to_one :monetary_unit, key: :monetary_unit_code,
-                             primary_key: :monetary_unit_code do |ds|
+                             primary_key: :monetary_unit_code,
+                             eager_block: (->(ds) { ds }) do |ds|
     ds.with_actual(MonetaryUnit)
   end
 
   one_to_one :measurement_unit_qualifier, key: :measurement_unit_qualifier_code,
-                                          primary_key: :measurement_unit_qualifier_code do |ds|
+                                          primary_key: :measurement_unit_qualifier_code,
+                                          eager_block: (->(ds) { ds }) do |ds|
     ds.with_actual(MeasurementUnitQualifier)
   end
 
@@ -49,7 +53,8 @@ class MeasureComponent < Sequel::Model
   private
 
   def duty_expression_formatter_options
-    { duty_expression_id: duty_expression_id,
+    {
+      duty_expression_id: duty_expression_id,
       duty_expression_description: duty_expression_description,
       duty_expression_abbreviation: duty_expression_abbreviation,
       duty_amount: duty_amount,
@@ -58,6 +63,6 @@ class MeasureComponent < Sequel::Model
       measurement_unit: measurement_unit,
       measurement_unit_qualifier: measurement_unit_qualifier,
       convert_currency: TradeTariffBackend.gbp?
-     }
+    }
   end
 end
