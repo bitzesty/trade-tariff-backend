@@ -19,6 +19,7 @@ class TaricImporter
     end
 
     def validate
+      return unless @record
       unless @record.conformant_for?(@record.operation)
         instrument("conformance_error.taric_importer", record: @record)
       end
@@ -27,7 +28,7 @@ class TaricImporter
     private
 
     def verify_transaction
-      if @transaction['transaction_id'].blank?
+      if @transaction["transaction_id"].blank?
         raise ArgumentError.new("TARIC transaction does not have required attributes")
       end
     end

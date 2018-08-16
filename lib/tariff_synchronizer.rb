@@ -39,6 +39,12 @@ module TariffSynchronizer
   mattr_accessor :measures_logger_enabled
   self.measures_logger_enabled = (ENV["TARIFF_MEASURES_LOGGER"].to_i == 1)
 
+  # 1 - do not raise an exception when record does not exist on DESTROY operation
+  #   - do not raise an exception when record does not exist on UPDATE operation
+  #   - created new record when record does not exist on UPDATE operation
+  mattr_accessor :ignore_presence_errors
+  self.ignore_presence_errors = (ENV["TARIFF_IGNORE_PRESENCE_ERRORS"].to_i == 1)
+
   mattr_accessor :username
   self.username = ENV["TARIFF_SYNC_USERNAME"]
 
@@ -172,6 +178,9 @@ module TariffSynchronizer
             TariffSynchronizer::TaricUpdate.applied_or_failed.where { issue_date > date_for_rollback }.each do |taric_update|
               taric_update.mark_as_pending
               taric_update.clear_applied_at
+
+              # delete presence errors
+              taric_update.remove_all_presence_errors
             end
             TariffSynchronizer::ChiefUpdate.applied_or_failed.where { issue_date > date_for_rollback }.each do |chief_update|
               [Chief::Comm, Chief::Mfcm, Chief::Tame, Chief::Tamf, Chief::Tbl9].each do |chief_model|
@@ -181,6 +190,9 @@ module TariffSynchronizer
               chief_update.mark_as_pending
               chief_update.clear_applied_at
 
+              # delete presence errors
+              chief_update.remove_all_presence_errors
+
               # need to delete measure logs
               ChiefTransformer::MeasuresLogger.delete_logs(chief_update.filename)
             end
@@ -189,13 +201,21 @@ module TariffSynchronizer
               cds_update.clear_applied_at
             end
           else
-            TariffSynchronizer::TaricUpdate.where { issue_date > date }.delete
+            TariffSynchronizer::TaricUpdate.where { issue_date > date }.each do |taric_update|
+              taric_update.delete
+
+              # delete presence errors
+              taric_update.remove_all_presence_errors
+            end
             TariffSynchronizer::ChiefUpdate.where { issue_date > date }.each do |chief_update|
               [Chief::Comm, Chief::Mfcm, Chief::Tame, Chief::Tamf, Chief::Tbl9].each do |chief_model|
                 chief_model.where(origin: chief_update.filename).delete
               end
 
               chief_update.delete
+
+              # delete presence errors
+              chief_update.remove_all_presence_errors
 
               # need to delete measure logs
               ChiefTransformer::MeasuresLogger.delete_logs(chief_update.filename)

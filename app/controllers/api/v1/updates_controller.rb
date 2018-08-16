@@ -15,7 +15,9 @@ module Api
       private
 
       def collection
-        @collection ||= TariffSynchronizer::BaseUpdate.descending.paginate(current_page, per_page)
+        @collection ||= TariffSynchronizer::BaseUpdate.eager(:conformance_errors, :presence_errors)
+                                                      .descending
+                                                      .paginate(current_page, per_page)
       end
 
       def per_page

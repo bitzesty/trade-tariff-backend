@@ -7,6 +7,10 @@ child @collection => :updates do
   child :conformance_errors => :conformance_errors do
     attributes :model_name, :model_primary_key, :model_values, :model_conformance_errors
   end
+
+  child :presence_errors => :presence_errors do
+    attributes :model_name, :details
+  end
 end
 
 extends "api/v1/shared/pagination"

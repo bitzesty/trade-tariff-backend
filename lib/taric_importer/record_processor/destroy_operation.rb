@@ -2,9 +2,13 @@ class TaricImporter
   class RecordProcessor
     class DestroyOperation < Operation
       def call
-        model = klass.filter(attributes.slice(*primary_key).symbolize_keys).take
-        model.set(attributes.except(*primary_key).symbolize_keys)
-        model.destroy
+        model = get_model_record
+        if model
+          model.set(attributes.except(*primary_key).symbolize_keys)
+          model.destroy
+        else
+          log_presence_error
+        end
         model
       end
 
