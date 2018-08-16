@@ -54,6 +54,7 @@ gem "connection_pool", "~> 2.2"
 
 gem 'holidays'
 
+gem "sentry-raven"
 
 gem "newrelic_rpm"
 gem "logstash-event"
@@ -63,7 +64,6 @@ gem "bootscale", "~> 0.5", require: false
 
 group :production do
   gem "rails_12factor"
-  gem "sentry-raven"
 end
 
 group :development do
