@@ -14,6 +14,7 @@ module TariffSynchronizer
       track_latest_sql_queries
       keep_record_of_conformance_errors
       keep_record_of_presence_errors
+      keep_record_of_cds_errors
 
       Sequel::Model.db.transaction(reraise: true) do
         # If a error is raised during import, mark the update as failed
@@ -29,6 +30,7 @@ module TariffSynchronizer
       ActiveSupport::Notifications.unsubscribe(@sql_subscriber)
       ActiveSupport::Notifications.unsubscribe(@conformance_errors_subscriber)
       ActiveSupport::Notifications.unsubscribe(@presence_errors_subscriber)
+      ActiveSupport::Notifications.unsubscribe(@cds_errors_subscriber)
     end
 
     private
@@ -73,6 +75,20 @@ module TariffSynchronizer
           base_update: @base_update,
           model_name: klass,
           details: details.to_json
+        )
+      end
+    end
+
+    def keep_record_of_cds_errors
+      @cds_errors_subscriber = ActiveSupport::Notifications.subscribe(/cds_error/) do |*args|
+        event = ActiveSupport::Notifications::Event.new(*args)
+        record = event.payload[:record]
+        xml_key = event.payload[:xml_key]
+        xml_node = event.payload[:xml_node]
+        TariffSynchronizer::TariffUpdateCdsError.create(
+          base_update: @base_update,
+          model_name: record.class,
+          details: { errors: record.errors, xml_key: xml_key, xml_node: xml_node }.to_json
         )
       end
     end

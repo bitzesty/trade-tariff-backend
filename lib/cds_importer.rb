@@ -21,9 +21,9 @@ class CdsImporter
 
   # we assume that all updates are valid
   def import
-    handler = XmlProcessor.new(@cds_update.issue_date)
-    # file = TariffSynchronizer::FileService.file_as_stringio(@cds_update)
-    file = File.open(@cds_update.file_path)
+    handler = XmlProcessor.new
+    file = TariffSynchronizer::FileService.file_as_stringio(@cds_update)
+    # file = File.open(@cds_update.file_path)
     # do the xml parsing depending on records root depth
     CdsImporter::XmlParser::Reader.new(file, handler).parse
     ActiveSupport::Notifications.instrument("cds_imported.tariff_importer",
@@ -31,10 +31,6 @@ class CdsImporter
   end
 
   class XmlProcessor
-    def initialize(issue_date)
-      @issue_date = issue_date
-    end
-
     def process_xml_node(key, hash_from_node)
       begin
         CdsImporter::EntityMapper.new(key, hash_from_node).import

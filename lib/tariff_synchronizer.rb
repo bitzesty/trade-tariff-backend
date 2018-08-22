@@ -9,6 +9,7 @@ require 'active_support/log_subscriber'
 require 'bank_holidays'
 require 'taric_importer'
 require 'chief_importer'
+require 'cds_importer'
 require 'chief_transformer'
 require 'tariff_synchronizer/base_update'
 require 'tariff_synchronizer/base_update_importer'
@@ -33,6 +34,7 @@ module TariffSynchronizer
   autoload :ChiefUpdate,   'tariff_synchronizer/chief_update'
   autoload :Mailer,        'tariff_synchronizer/mailer'
   autoload :TaricUpdate,   'tariff_synchronizer/taric_update'
+  autoload :CdsUpdate,     'tariff_synchronizer/cds_update'
 
   extend self
 
@@ -44,6 +46,9 @@ module TariffSynchronizer
   #   - created new record when record does not exist on UPDATE operation
   mattr_accessor :ignore_presence_errors
   self.ignore_presence_errors = (ENV["TARIFF_IGNORE_PRESENCE_ERRORS"].to_i == 1)
+
+  mattr_accessor :cds_logger_enabled
+  self.cds_logger_enabled = (ENV["TARIFF_CDS_LOGGER"].to_i == 1)
 
   mattr_accessor :username
   self.username = ENV["TARIFF_SYNC_USERNAME"]
@@ -57,7 +62,7 @@ module TariffSynchronizer
   mattr_accessor :root_path
   self.root_path = "data"
 
-  # Numer of seconds to sleep between sync retries
+  # Number of seconds to sleep between sync retries
   mattr_accessor :request_throttle
   self.request_throttle = 60
 
@@ -111,7 +116,7 @@ module TariffSynchronizer
     TradeTariffBackend.with_redis_lock do
       instrument("download.tariff_synchronizer") do
         begin
-          # CdsUpdate.sync
+          # TODO: CdsUpdate.sync
           [TaricUpdate, ChiefUpdate].map(&:sync)
         rescue TariffUpdatesRequester::DownloadException => exception
           instrument("failed_download.tariff_synchronizer", exception: exception)
@@ -140,14 +145,18 @@ module TariffSynchronizer
       end
 
       # TARIC updates should be applied before CHIEF
-      date_range_since_last_pending_update.each do |day|
+      date_range = date_range_since_last_pending_update
+      date_range.each do |day|
         applied_updates << perform_update(TaricUpdate, day)
       end
 
-      date_range_since_last_pending_update.each do |day|
+      date_range.each do |day|
         applied_updates << perform_update(ChiefUpdate, day)
-        # applied_updates << perform_update(CdsUpdate, day)
       end
+
+      # date_range.each do |daye|
+        # TODO: applied_updates << perform_update(CdsUpdate, day)
+      # end
 
       applied_updates.flatten!
 
@@ -190,37 +199,40 @@ module TariffSynchronizer
               chief_update.mark_as_pending
               chief_update.clear_applied_at
 
-              # delete presence errors
-              chief_update.remove_all_presence_errors
-
               # need to delete measure logs
               ChiefTransformer::MeasuresLogger.delete_logs(chief_update.filename)
             end
             TariffSynchronizer::CdsUpdate.applied_or_failed.where { issue_date > date_for_rollback }.each do |cds_update|
               cds_update.mark_as_pending
               cds_update.clear_applied_at
+
+              # delete cds errors
+              cds_update.remove_all_cds_errors
             end
           else
             TariffSynchronizer::TaricUpdate.where { issue_date > date }.each do |taric_update|
-              taric_update.delete
-
               # delete presence errors
               taric_update.remove_all_presence_errors
+
+              taric_update.delete
             end
             TariffSynchronizer::ChiefUpdate.where { issue_date > date }.each do |chief_update|
               [Chief::Comm, Chief::Mfcm, Chief::Tame, Chief::Tamf, Chief::Tbl9].each do |chief_model|
                 chief_model.where(origin: chief_update.filename).delete
               end
 
-              chief_update.delete
-
-              # delete presence errors
-              chief_update.remove_all_presence_errors
-
               # need to delete measure logs
               ChiefTransformer::MeasuresLogger.delete_logs(chief_update.filename)
+
+              chief_update.delete
             end
             TariffSynchronizer::CdsUpdate.where { issue_date > date }.delete
+            TariffSynchronizer::CdsUpdate.where { issue_date > date }.each do |cds_update|
+              # delete cds errors
+              cds_update.remove_all_presence_errors
+
+              cds_update.delete
+            end
           end
         end
       end
@@ -258,7 +270,7 @@ module TariffSynchronizer
   end
 
   def update_to
-    ENV['DATE'] ? Date.parse(ENV['DATE']) : Date.current
+    ENV["DATE"] ? Date.parse(ENV["DATE"]) : Date.current
   end
 
   def sync_variables_set?

@@ -4,6 +4,7 @@ module TariffSynchronizer
 
     one_to_many :conformance_errors, class: TariffUpdateConformanceError, key: :tariff_update_filename
     one_to_many :presence_errors, class: TariffUpdatePresenceError, key: :tariff_update_filename
+    one_to_many :cds_errors, class: TariffUpdateCdsError, key: :tariff_update_filename
 
     plugin :eager_each
     plugin :timestamps
@@ -113,11 +114,14 @@ module TariffSynchronizer
     end
 
     # can cause a delay as we a requesting S3 bucket for each update
+    # TODO: is it possible to cache it? need to investigate
     def file_presigned_url
       TariffSynchronizer::FileService.file_presigned_url(file_path)
     end
 
     # can cause a delay as we a requesting S3 bucket for each update
+    # TODO: is it possible to cache it? need to investigate
+    # or maybe we need to switch MeasureLogger to db storage
     def log_presigned_urls
       ChiefTransformer::MeasuresLogger::LOG_TYPES.inject({}) do |memo, type|
         log_path = ChiefTransformer::MeasuresLogger.file_path(filename, type)
