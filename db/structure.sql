@@ -6244,7 +6244,6 @@ CREATE TABLE tariff_update_presence_errors (
 --
 
 CREATE SEQUENCE tariff_update_presence_errors_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
