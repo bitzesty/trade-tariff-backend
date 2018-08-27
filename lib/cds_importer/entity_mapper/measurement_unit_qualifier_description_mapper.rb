@@ -14,6 +14,8 @@ class CdsImporter
         "#{mapping_path}.description" => :description,
         "#{mapping_path}.language.languageId" => :language_id
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

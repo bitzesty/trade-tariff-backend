@@ -11,6 +11,8 @@ class CdsImporter
         "measureTypeSeriesId" => :measure_type_series_id,
         "measureTypeCombination" => :measure_type_combination
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

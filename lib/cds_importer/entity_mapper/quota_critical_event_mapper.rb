@@ -19,6 +19,8 @@ class CdsImporter
         "#{mapping_path}.criticalState" => :critical_state,
         "#{mapping_path}.criticalStateChangeDate" => :critical_state_change_date
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

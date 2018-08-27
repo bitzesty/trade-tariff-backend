@@ -22,6 +22,8 @@ class CdsImporter
         "#{mapping_path}.measurementUnit.measurementUnitCode" => :measurement_unit_code,
         "#{mapping_path}.measurementUnitQualifier.measurementUnitQualifierCode" => :measurement_unit_qualifier_code
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

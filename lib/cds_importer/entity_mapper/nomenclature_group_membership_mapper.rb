@@ -20,6 +20,8 @@ class CdsImporter
         "#{mapping_path}.goodsNomenclatureGroup.goodsNomenclatureGroupId" => :goods_nomenclature_group_id,
         "#{mapping_path}.goodsNomenclatureGroup.goodsNomenclatureGroupType" => :goods_nomenclature_group_type
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

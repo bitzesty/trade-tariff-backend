@@ -4,15 +4,23 @@ class CdsImporter
       class << self
         # entity_class    - model
         # entity_mapping  - attributes mapping
+        # entity_mapping_key_as_array  - attributes mapping
         # mapping_path    - path to attributes in xml
         # mapping_root    - node name in xml that provides data for mapping
         # exclude_mapping - list of excluded attributes
-        attr_accessor :entity_class, :entity_mapping, :mapping_path, :mapping_root, :exclude_mapping
+        attr_accessor :entity_class, :entity_mapping, :mapping_path, :mapping_root, :exclude_mapping, :entity_mapping_key_as_array
 
         def base_mapping
           BASE_MAPPING.except(*exclude_mapping).keys.inject({}) do |memo, key|
             mapped_key = mapping_path.present? ? "#{mapping_path}.#{key}" : key
             memo[mapped_key] = BASE_MAPPING[key]
+            memo
+          end
+        end
+
+        def mapping_with_key_as_array
+          entity_mapping.keys.inject({}) do |memo, key|
+            memo[key.split(PATH_SEPARATOR)] = entity_mapping[key]
             memo
           end
         end
@@ -39,9 +47,9 @@ class CdsImporter
       def parse
         expanded = [@values]
         # iterating through all the mapping keys to expand Arrays
-        entity_mapping.keys.each do |path|
+        entity_mapping_key_as_array.keys.each do |path|
           current_path = []
-          path.to_s.split(PATH_SEPARATOR).each do |key|
+          path.each do |key|
             current_path << key
             new_expanded = []
             expanded.each do |values|
@@ -89,10 +97,14 @@ class CdsImporter
         self.class.entity_mapping.presence || raise(ArgumentError.new("entity_mapping has not been defined: #{self.class}"))
       end
 
+      def entity_mapping_key_as_array
+        self.class.entity_mapping_key_as_array.presence || raise(ArgumentError.new("entity_mapping_key_as_array has not been defined: #{self.class}"))
+      end
+
       def mapped_values(values)
-        entity_mapping.keys.inject({}) do |memo, key|
-          mapped_key = entity_mapping.fetch(key)
-          memo[mapped_key] = values.dig(*key.split(PATH_SEPARATOR))
+        entity_mapping_key_as_array.keys.inject({}) do |memo, key|
+          mapped_key = entity_mapping_key_as_array.fetch(key)
+          memo[mapped_key] = values.dig(*key)
           memo
         end
       end

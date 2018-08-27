@@ -12,6 +12,8 @@ class CdsImporter
         "goodsNomenclatureGroupId" => :goods_nomenclature_group_id,
         "nomenclatureGroupFacilityCode" => :nomenclature_group_facility_code
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

@@ -20,6 +20,8 @@ class CdsImporter
         "#{mapping_path}.relationType" => :relation_type,
         "#{mapping_path}.coefficient" => :coefficient
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

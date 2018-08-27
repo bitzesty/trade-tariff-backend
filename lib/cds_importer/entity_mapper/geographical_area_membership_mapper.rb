@@ -11,6 +11,8 @@ class CdsImporter
         "sid" => :geographical_area_sid,
         "#{mapping_path}.geographicalAreaGroupSid" => :geographical_area_group_sid
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

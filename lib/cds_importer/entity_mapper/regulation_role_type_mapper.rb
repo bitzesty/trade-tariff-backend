@@ -8,6 +8,8 @@ class CdsImporter
       self.entity_mapping = base_mapping.merge(
         "regulationRoleTypeId" => :regulation_role_type_id
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

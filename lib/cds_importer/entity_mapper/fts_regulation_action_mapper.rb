@@ -21,6 +21,8 @@ class CdsImporter
         "#{mapping_path}.stoppedRegulationRole" => :stopped_regulation_role,
         "#{mapping_path}.stoppedRegulationId" => :stopped_regulation_id
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

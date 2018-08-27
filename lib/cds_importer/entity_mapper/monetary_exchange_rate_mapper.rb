@@ -18,6 +18,8 @@ class CdsImporter
         "#{mapping_path}.childMonetaryUnitCode" => :child_monetary_unit_code,
         "#{mapping_path}.exchangeRate" => :exchange_rate
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

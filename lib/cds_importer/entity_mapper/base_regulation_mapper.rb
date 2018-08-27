@@ -25,6 +25,8 @@ class CdsImporter
         "explicitAbrogationRegulation.regulationRoleType.regulationRoleTypeId" => :explicit_abrogation_regulation_role,
         "explicitAbrogationRegulation.explicitAbrogationRegulationId" => :explicit_abrogation_regulation_id
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

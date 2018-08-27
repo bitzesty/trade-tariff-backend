@@ -21,6 +21,8 @@ class CdsImporter
         "#{mapping_path}.newBalance" => :new_balance,
         "#{mapping_path}.importedAmount" => :imported_amount
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

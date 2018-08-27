@@ -11,6 +11,8 @@ class CdsImporter
         "sid" => :quota_order_number_sid,
         "quotaOrderNumberId" => :quota_order_number_id
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

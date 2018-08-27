@@ -12,6 +12,8 @@ class CdsImporter
         "footnoteType.footnoteTypeId" => :footnote_type_id,
         "footnoteId" => :footnote_id
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

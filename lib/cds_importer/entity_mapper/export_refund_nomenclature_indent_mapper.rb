@@ -24,6 +24,8 @@ class CdsImporter
         "exportRefundCode" => :export_refund_code,
         "productLine" => :productline_suffix
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

@@ -14,6 +14,8 @@ class CdsImporter
         "#{mapping_path}.occurrenceTimestamp" => :occurrence_timestamp,
         "#{mapping_path}.unblockingDate" => :unblocking_date
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

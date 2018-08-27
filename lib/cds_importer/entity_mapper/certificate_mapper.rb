@@ -9,6 +9,8 @@ class CdsImporter
         "certificateType.certificateTypeCode" => :certificate_type_code,
         "certificateCode" => :certificate_code
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

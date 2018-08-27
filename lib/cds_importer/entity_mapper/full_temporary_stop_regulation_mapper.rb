@@ -20,6 +20,8 @@ class CdsImporter
         "informationText" => :information_text,
         "approvedFlag" => :approved_flag
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

@@ -18,6 +18,8 @@ class CdsImporter
         "#{mapping_path}.meursingHeadingNumber" => :meursing_heading_number,
         "#{mapping_path}.rowColumnCode" => :row_column_code
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

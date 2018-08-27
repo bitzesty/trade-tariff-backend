@@ -18,6 +18,8 @@ class CdsImporter
         "#{mapping_path}.geographicalArea.geographicalAreaId" => :excluded_geographical_area,
         "#{mapping_path}.geographicalArea.sid" => :geographical_area_sid
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

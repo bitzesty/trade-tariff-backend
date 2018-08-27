@@ -11,6 +11,8 @@ class CdsImporter
         "sid" => :monetary_exchange_period_sid,
         "monetaryUnit.monetaryUnitCode" => :parent_monetary_unit_code
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

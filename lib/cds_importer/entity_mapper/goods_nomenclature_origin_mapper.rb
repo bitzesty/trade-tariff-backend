@@ -16,6 +16,8 @@ class CdsImporter
         "goodsNomenclatureItemId" => :goods_nomenclature_item_id,
         "produclineSuffix" => :productline_suffix
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

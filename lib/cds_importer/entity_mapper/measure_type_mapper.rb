@@ -16,6 +16,8 @@ class CdsImporter
         "measureTypeSeries.measureTypeSeriesId" => :measure_type_series_id
         # measure_type_acronym will be skipped
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end

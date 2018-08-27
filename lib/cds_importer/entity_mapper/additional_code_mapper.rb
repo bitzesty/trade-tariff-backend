@@ -10,6 +10,8 @@ class CdsImporter
         "additionalCodeType.additionalCodeTypeId" => :additional_code_type_id,
         "additionalCodeCode" => :additional_code
       ).freeze
+
+      self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze
     end
   end
 end
