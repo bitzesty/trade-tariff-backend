@@ -26,6 +26,8 @@ Other related projects:
 
 ### Setup
 
+Please go through this updated [setup document](https://github.com/bitzesty/trade-tariff-backend/blob/master/SETUP.md)
+
 1. Setup your environment.
 
     bin/setup
