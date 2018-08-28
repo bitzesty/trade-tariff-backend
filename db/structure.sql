@@ -2309,7 +2309,8 @@ CREATE TABLE public.full_temporary_stop_regulations_oplog (
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
     operation_date date,
-    complete_abrogation_regulation_id integer
+    complete_abrogation_regulation_role integer,
+    complete_abrogation_regulation_id character varying(255)
 );
 
 
@@ -2332,6 +2333,7 @@ CREATE VIEW public.full_temporary_stop_regulations AS
     full_temporary_stop_regulations1.information_text,
     full_temporary_stop_regulations1.approved_flag,
     full_temporary_stop_regulations1.complete_abrogation_regulation_id,
+    full_temporary_stop_regulations1.complete_abrogation_regulation_role,
     full_temporary_stop_regulations1.oid,
     full_temporary_stop_regulations1.operation,
     full_temporary_stop_regulations1.operation_date

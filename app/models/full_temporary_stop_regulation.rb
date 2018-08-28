@@ -6,6 +6,9 @@ class FullTemporaryStopRegulation < Sequel::Model
 
   set_primary_key [:full_temporary_stop_regulation_id, :full_temporary_stop_regulation_role]
 
+  one_to_one :complete_abrogation_regulation, key: [:complete_abrogation_regulation_id,
+                                                    :complete_abrogation_regulation_role]
+
   def regulation_id
     full_temporary_stop_regulation_id
   end

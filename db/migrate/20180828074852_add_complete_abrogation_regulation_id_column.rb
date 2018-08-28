@@ -1,11 +1,12 @@
 Sequel.migration do
   up do
 
-    alter_table :full_temporary_stop_regulations_oplog do
-      add_column :complete_abrogation_regulation_id, Integer
-    end
-
     run 'DROP VIEW public.full_temporary_stop_regulations;'
+
+    alter_table :full_temporary_stop_regulations_oplog do
+      add_column :complete_abrogation_regulation_role, Integer
+      add_column :complete_abrogation_regulation_id, String
+    end
 
     run %Q{
 CREATE VIEW public.full_temporary_stop_regulations AS
@@ -23,6 +24,7 @@ CREATE VIEW public.full_temporary_stop_regulations AS
     full_temporary_stop_regulations1.information_text,
     full_temporary_stop_regulations1.approved_flag,
     full_temporary_stop_regulations1.complete_abrogation_regulation_id,
+    full_temporary_stop_regulations1.complete_abrogation_regulation_role,
     full_temporary_stop_regulations1.oid,
     full_temporary_stop_regulations1.operation,
     full_temporary_stop_regulations1.operation_date
@@ -36,11 +38,12 @@ CREATE VIEW public.full_temporary_stop_regulations AS
 
   down do
 
-    alter_table :full_temporary_stop_regulations_oplog do
-      remove_column :complete_abrogation_regulation_id
-    end
-
     run 'DROP VIEW public.full_temporary_stop_regulations;'
+
+    alter_table :full_temporary_stop_regulations_oplog do
+      drop_column :complete_abrogation_regulation_id
+      drop_column :complete_abrogation_regulation_role
+    end
 
     run %Q{
 CREATE VIEW public.full_temporary_stop_regulations AS
