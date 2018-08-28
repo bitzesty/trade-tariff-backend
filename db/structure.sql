@@ -2299,7 +2299,7 @@ CREATE TABLE public.full_temporary_stop_regulations_oplog (
     officialjournal_page integer,
     validity_start_date timestamp without time zone,
     validity_end_date timestamp without time zone,
-    effective_enddate date,
+    effective_end_date date,
     explicit_abrogation_regulation_role integer,
     explicit_abrogation_regulation_id character varying(8),
     replacement_indicator integer,
@@ -2324,7 +2324,7 @@ CREATE VIEW public.full_temporary_stop_regulations AS
     full_temporary_stop_regulations1.officialjournal_page,
     full_temporary_stop_regulations1.validity_start_date,
     full_temporary_stop_regulations1.validity_end_date,
-    full_temporary_stop_regulations1.effective_enddate,
+    full_temporary_stop_regulations1.effective_end_date,
     full_temporary_stop_regulations1.explicit_abrogation_regulation_role,
     full_temporary_stop_regulations1.explicit_abrogation_regulation_id,
     full_temporary_stop_regulations1.replacement_indicator,
@@ -10214,3 +10214,4 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20170331125740_create_data
 INSERT INTO "schema_migrations" ("filename") VALUES ('20171228082821_create_publication_sigles.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20180724155759_fix_footnote_id_characters_limit_in_associations.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20180730143329_add_tariff_update_presence_errors.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20180828070051_rename_effective_end_date_column.rb');
