@@ -5,7 +5,7 @@ Sequel.migration do
 
     alter_table :full_temporary_stop_regulations_oplog do
       add_column :complete_abrogation_regulation_role, Integer
-      add_column :complete_abrogation_regulation_id, String
+      add_column :complete_abrogation_regulation_id, String, size: 8
     end
 
     run %Q{

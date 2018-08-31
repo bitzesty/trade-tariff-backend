@@ -2310,7 +2310,7 @@ CREATE TABLE public.full_temporary_stop_regulations_oplog (
     operation character varying(1) DEFAULT 'C'::character varying,
     operation_date date,
     complete_abrogation_regulation_role integer,
-    complete_abrogation_regulation_id character varying(255)
+    complete_abrogation_regulation_id character varying(8)
 );
 
 
