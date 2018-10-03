@@ -6203,7 +6203,8 @@ CREATE TABLE public.sections (
     "position" integer,
     numeral character varying(255),
     title character varying(255),
-    created_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -10219,3 +10220,4 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20171228082821_create_publ
 INSERT INTO "schema_migrations" ("filename") VALUES ('20180724155759_fix_footnote_id_characters_limit_in_associations.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20180730143329_add_tariff_update_presence_errors.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20180828074852_add_complete_abrogation_regulation_id_column.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20181003140819_add_updated_at_to_sections.rb');
