@@ -27,7 +27,8 @@ sections.each do |sec|
     title: sec[:title],
     numeral: sec[:numeral],
     position: sec[:position],
-    created_at: Time.now
+    created_at: Time.now,
+    updated_at: Time.now
   )
 end
 
