@@ -43,7 +43,7 @@ module TariffSynchronizer
         if Rails.env.production?
           bucket.object(tariff_update.file_path).get.body
         else
-          StringIO.new(File.read(tariff_update.file_path))
+          IO.new(IO.sysopen(tariff_update.file_path))
         end
       end
 
