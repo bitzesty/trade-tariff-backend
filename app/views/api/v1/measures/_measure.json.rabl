@@ -43,7 +43,7 @@ node(:suspension_legal_act, if: ->(measure) { !measure.national && measure.suspe
 end
 
 child(:measure_conditions) do
-  attributes :condition, :document_code, :requirement, :action, :duty_expression
+  attributes :condition_code, :condition, :document_code, :requirement, :action, :duty_expression
 end
 
 if locals[:geo_areas]
