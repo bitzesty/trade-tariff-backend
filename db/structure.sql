@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.9
--- Dumped by pg_dump version 9.6.9
+-- Dumped from database version 9.5.14
+-- Dumped by pg_dump version 10.5
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -250,7 +250,7 @@ ALTER SEQUENCE public.additional_code_type_descriptions_oid_seq OWNED BY public.
 --
 
 CREATE TABLE public.additional_code_type_measure_types_oplog (
-    measure_type_id character varying(3),
+    measure_type_id character varying(6),
     additional_code_type_id character varying(1),
     validity_start_date timestamp without time zone,
     validity_end_date timestamp without time zone,
@@ -970,7 +970,7 @@ CREATE TABLE public.chief_measure_type_adco (
     measure_group_code character varying(2),
     measure_type character varying(3),
     tax_type_code character varying(11),
-    measure_type_id character varying(3),
+    measure_type_id character varying(6),
     adtnl_cd_type_id character varying(1),
     adtnl_cd character varying(3),
     zero_comp integer
@@ -998,7 +998,7 @@ CREATE TABLE public.chief_measure_type_cond (
 
 CREATE TABLE public.chief_measure_type_footnote (
     id integer NOT NULL,
-    measure_type_id character varying(3),
+    measure_type_id character varying(6),
     footn_type_id character varying(2),
     footn_id character varying(3)
 );
@@ -3654,7 +3654,7 @@ ALTER SEQUENCE public.measure_partial_temporary_stops_oid_seq OWNED BY public.me
 --
 
 CREATE TABLE public.measure_type_descriptions_oplog (
-    measure_type_id character varying(3),
+    measure_type_id character varying(6),
     language_id character varying(5),
     description text,
     created_at timestamp without time zone,
@@ -3811,7 +3811,7 @@ ALTER SEQUENCE public.measure_type_series_oid_seq OWNED BY public.measure_type_s
 --
 
 CREATE TABLE public.measure_types_oplog (
-    measure_type_id character varying(3),
+    measure_type_id character varying(6),
     validity_start_date timestamp without time zone,
     validity_end_date timestamp without time zone,
     trade_movement_code integer,
@@ -4169,7 +4169,7 @@ ALTER SEQUENCE public.measurements_oid_seq OWNED BY public.measurements_oplog.oi
 
 CREATE TABLE public.measures_oplog (
     measure_sid integer,
-    measure_type_id character varying(3),
+    measure_type_id character varying(6),
     geographical_area_id character varying(255),
     goods_nomenclature_item_id character varying(10),
     validity_start_date timestamp without time zone,
@@ -5937,7 +5937,7 @@ CREATE TABLE public.regulation_replacements_oplog (
     replacing_regulation_id character varying(255),
     replaced_regulation_role integer,
     replaced_regulation_id character varying(255),
-    measure_type_id character varying(3),
+    measure_type_id character varying(6),
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
@@ -10221,3 +10221,4 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20180724155759_fix_footnot
 INSERT INTO "schema_migrations" ("filename") VALUES ('20180730143329_add_tariff_update_presence_errors.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20180828074852_add_complete_abrogation_regulation_id_column.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20181003140819_add_updated_at_to_sections.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20181029112658_change_size_to_six_for_measure_type_id.rb');
