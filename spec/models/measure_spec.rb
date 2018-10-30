@@ -935,17 +935,6 @@ describe Measure do
     end
   end
 
-  describe '#generating_regulation_code' do
-    let(:measure) {
-      build :measure,
-      measure_generating_regulation_id: '1234567'
-    }
-
-    it 'returns generating regulation code in TARIC format' do
-      expect(measure.generating_regulation_code).to eq '14567/23'
-    end
-  end
-
   describe '#meursing?' do
     let(:measure) { create :measure }
 
