@@ -20,23 +20,16 @@ node(:duty_expression) { |measure|
   }
 }
 
-node(:legal_act, if: ->(measure) { !measure.national && measure.generating_regulation_present? }) do |measure|
-  {
-    generating_regulation_code: measure.generating_regulation_code,
-    url: measure.generating_regulation_url,
-    suspended: measure.suspended?,
-    validity_end_date: measure.generating_regulation.validity_end_date,
-    validity_start_date: measure.generating_regulation.validity_start_date,
-    officialjournal_number: measure.generating_regulation.officialjournal_number,
-    officialjournal_page: measure.generating_regulation.officialjournal_page,
-    published_date: measure.generating_regulation.published_date
-  }
+node(:legal_acts, if: ->(measure) { !measure.national }) do |measure|
+  measure.legal_acts.map do |regulation|
+    partial "api/v1/regulations/regulation", object: regulation
+  end
 end
 
 node(:suspension_legal_act, if: ->(measure) { !measure.national && measure.suspended? }) do |measure|
   {
-    generating_regulation_code: measure.generating_regulation_code(measure.suspending_regulation.regulation_id),
-    url: measure.generating_regulation_url(true),
+    generating_regulation_code: regulation_code(measure.suspending_regulation),
+    url: regulation_url(measure.suspending_regulation),
     validity_end_date: measure.suspending_regulation.effective_end_date,
     validity_start_date: measure.suspending_regulation.effective_start_date
   }

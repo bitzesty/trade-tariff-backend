@@ -139,6 +139,15 @@ class Measure < Sequel::Model
                                end
   end
 
+  def legal_acts
+    return [] if national?
+    result = []
+    result << suspending_regulation
+    result << generating_regulation
+    result << generating_regulation.base_regulation if measure_generating_regulation_role == 4
+    result.compact
+  end
+
   # Soft-deleted
   def invalidated?
     invalidated_at.present?
@@ -292,18 +301,6 @@ class Measure < Sequel::Model
 
   def id
     measure_sid
-  end
-
-  def generating_regulation_code(regulation_code = measure_generating_regulation_id)
-    "#{regulation_code.first}#{regulation_code[3..6]}/#{regulation_code[1..2]}"
-  end
-
-  def generating_regulation_url(for_suspending_regulation=false)
-    return false if national?
-
-    MeasureService::CouncilRegulationUrlGenerator.new(
-      for_suspending_regulation ? suspending_regulation : generating_regulation
-    ).generate
   end
 
   def origin
