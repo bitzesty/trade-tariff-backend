@@ -51,8 +51,14 @@ module TradeTariffBackend
       ENV["GOVUK_APP_DOMAIN"] == "tariff-backend-production.cloudapps.digital"
     end
 
+    THREAD_CURRENCY_KEY = :currency
+
+    def currency=(currency)
+      Thread.current[THREAD_CURRENCY_KEY] = currency || "EUR"
+    end
+
     def gbp?
-      ENV["CURRENCY"] == "GBP"
+      "GBP" == (Thread.current[THREAD_CURRENCY_KEY] || "EUR")
     end
 
     def data_migration_path
