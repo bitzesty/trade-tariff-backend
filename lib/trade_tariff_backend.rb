@@ -54,11 +54,11 @@ module TradeTariffBackend
     THREAD_CURRENCY_KEY = :currency
 
     def currency=(currency)
-      Thread.current[THREAD_CURRENCY_KEY] = currency || "EUR"
+      Thread.current[THREAD_CURRENCY_KEY] = (currency || "EUR")
     end
 
-    def gbp?
-      "GBP" == (Thread.current[THREAD_CURRENCY_KEY] || "EUR")
+    def currency
+      Thread.current[THREAD_CURRENCY_KEY] || "EUR"
     end
 
     def data_migration_path
