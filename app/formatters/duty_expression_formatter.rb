@@ -24,9 +24,13 @@ class DutyExpressionFormatter
       old_monetary_unit = monetary_unit
       if duty_amount.present? && opts[:currency].present? && monetary_unit.present? && monetary_unit != opts[:currency]
         period = MonetaryExchangePeriod.actual.last(parent_monetary_unit_code: 'EUR')
-        rate = MonetaryExchangeRate.last(monetary_exchange_period_sid: period.monetary_exchange_period_sid, child_monetary_unit_code: monetary_unit == 'EUR' ? opts[:currency] : monetary_unit)
-        duty_amount = monetary_unit == 'EUR' ? (rate.exchange_rate * duty_amount.to_d).to_f : (duty_amount.to_d / rate.exchange_rate).to_f
-        monetary_unit = opts[:currency]
+        if period.present?
+          rate = MonetaryExchangeRate.last(monetary_exchange_period_sid: period.monetary_exchange_period_sid, child_monetary_unit_code: monetary_unit == 'EUR' ? opts[:currency] : monetary_unit)
+          if rate.present?
+            duty_amount = monetary_unit == 'EUR' ? (rate.exchange_rate * duty_amount.to_d).to_f : (duty_amount.to_d / rate.exchange_rate).to_f
+            monetary_unit = opts[:currency]
+          end
+        end
       end
 
       output = []
