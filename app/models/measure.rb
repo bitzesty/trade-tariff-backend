@@ -1,9 +1,15 @@
 class Measure < Sequel::Model
+
+  BASE_REGULATION_ROLE = 1
+  PROVISIONAL_ANTIDUMPING_ROLE = 2
+  DEFINITIVE_ANTIDUMPING_ROLE = 3
+  MODIFICATION_REGULATION_ROLE = 4
+
   VALID_ROLE_TYPE_IDS = [
-    1, # Base regulation
-    2, # Modification
-    3, # Provisional anti-dumping/countervailing duty
-    4  # Definitive anti-dumping/countervailing duty
+      BASE_REGULATION_ROLE, # Base regulation
+      PROVISIONAL_ANTIDUMPING_ROLE, # Provisional anti-dumping/countervailing duty
+      DEFINITIVE_ANTIDUMPING_ROLE, # Definitive anti-dumping/countervailing duty
+      MODIFICATION_REGULATION_ROLE # Modification
   ]
 
   set_primary_key [:measure_sid]
@@ -134,8 +140,8 @@ class Measure < Sequel::Model
 
   def generating_regulation
     @generating_regulation ||= case measure_generating_regulation_role
-                               when 1 then base_regulation
-                               when 4 then modification_regulation
+                               when BASE_REGULATION_ROLE then base_regulation
+                               when MODIFICATION_REGULATION_ROLE then modification_regulation
                                else
                                  base_regulation
                                end
@@ -146,7 +152,7 @@ class Measure < Sequel::Model
     result = []
     result << suspending_regulation
     result << generating_regulation
-    result << generating_regulation.base_regulation if measure_generating_regulation_role == 4
+    result << generating_regulation.base_regulation if measure_generating_regulation_role == MODIFICATION_REGULATION_ROLE
     result.compact
   end
 
