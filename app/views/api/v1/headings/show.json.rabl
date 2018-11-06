@@ -40,8 +40,10 @@ else
                :description_plain
 
     node(:parent_sid) { |commodity| commodity.parent.try(:goods_nomenclature_sid) }
-    node(:vat_measure, if: lambda { |commodity| commodity.declarable? }) { |commodity|
-      partial "api/v1/measures/_measure_short", object: commodity.vat_measure
+    node(:additional_info_measures, if: lambda { |commodity| commodity.declarable? }) { |commodity|
+      commodity.additional_info_measures.map do |measure|
+        partial "api/v1/measures/_measure_short", object: measure
+      end
     }
   }
 end

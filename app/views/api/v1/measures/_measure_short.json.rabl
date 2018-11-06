@@ -1,4 +1,8 @@
-attributes :id
+attributes :id,
+           :effective_start_date,
+           :effective_end_date
+
+node(:vat)    { |measure| measure.vat? }
 
 node(:measure_type) { |measure|
   {
