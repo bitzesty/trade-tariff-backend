@@ -35,7 +35,7 @@ module Api
                                                       :measure_partial_temporary_stops).all, @heading).validate!
         else
           @commodities = GoodsNomenclatureMapper.new(@heading.commodities_dataset.eager(:goods_nomenclature_indents,
-                                                                                        :goods_nomenclature_descriptions)
+                                                                                        :goods_nomenclature_descriptions, :vat_measure)
                                                              .all).all
 
         end

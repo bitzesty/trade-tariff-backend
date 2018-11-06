@@ -23,6 +23,16 @@ class Commodity < GoodsNomenclature
            .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
   }
 
+  one_to_one :vat_measure, key: :goods_nomenclature_sid, primary_key: :goods_nomenclature_sid, class_name: Measure do |ds|
+    ds.eager(
+      {measure_components: [{duty_expression: :duty_expression_description},
+                            {measurement_unit: :measurement_unit_description},
+                            :monetary_unit,
+                            :measurement_unit_qualifier]})
+      .filter(measure_type_id: MeasureType::VAT_TYPES)
+      .order(Sequel.desc(:validity_start_date))
+  end
+
   one_to_many :search_references, key: :referenced_id, primary_key: :code, reciprocal: :referenced, conditions: { referenced_class: 'Commodity' },
     adder: proc{ |search_reference| search_reference.update(referenced_id: code, referenced_class: 'Commodity') },
     remover: proc{ |search_reference| search_reference.update(referenced_id: nil, referenced_class: nil)},
