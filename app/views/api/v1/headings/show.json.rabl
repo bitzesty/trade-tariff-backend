@@ -37,7 +37,8 @@ else
                :leaf,
                :goods_nomenclature_sid,
                :formatted_description,
-               :description_plain
+               :description_plain,
+               :producline_suffix
 
     node(:parent_sid) { |commodity| commodity.parent.try(:goods_nomenclature_sid) }
   }
