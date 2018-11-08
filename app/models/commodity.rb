@@ -23,15 +23,36 @@ class Commodity < GoodsNomenclature
            .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
   }
 
+  one_to_many :ancestors, dataset: -> {
+    actual_or_relevant(Commodity)
+           .filter(goods_nomenclature_item_id: possible_ancestor_ids)
+  }, class: Commodity
+
+  def possible_ancestor_ids
+    (5..10).map do |i|
+      goods_nomenclature_item_id[0, i] + ('0' * (10 - i))
+    end.uniq - [goods_nomenclature_item_id]
+  end
+
   one_to_many :additional_info_measures, key: {}, primary_key: {}, dataset: -> {
-    measures_dataset.eager(
-        {measure_type: :measure_type_description},
-        {measure_components: [{duty_expression: :duty_expression_description},
-                              {measurement_unit: :measurement_unit_description},
-                              :monetary_unit,
-                              :measurement_unit_qualifier]}).
-      filter(measures__measure_type_id: MeasureType::VAT_TYPES + MeasureType::SUPPLEMENTARY_TYPES + Array.wrap(MeasureType::THIRD_COUNTRY))
+    measures_dataset
+        .filter(measures__measure_type_id: MeasureType::VAT_TYPES + MeasureType::SUPPLEMENTARY_TYPES + Array.wrap(MeasureType::THIRD_COUNTRY))
   }, class_name: 'Measure'
+
+  def additional_info_measures_indexed
+    search_service = ::CommodityService::AdditionalInfoMeasuresService.new(goods_nomenclature_sid, point_in_time)
+    MeasurePresenter.new(
+        Measure
+        .distinct(:measure_generating_regulation_id, :measure_type_id, :goods_nomenclature_sid, :geographical_area_id, :geographical_area_sid, :additional_code_type_id, :additional_code_id)
+        .select(Sequel.expr(:measures).*)
+        .eager(
+          {measure_type: :measure_type_description},
+          {measure_components: [{duty_expression: :duty_expression_description},
+                                {measurement_unit: :measurement_unit_description},
+                                :monetary_unit,
+                                :measurement_unit_qualifier]})
+        .where(measure_sid: search_service.measure_sids).all, self).validate!
+  end
 
   one_to_many :search_references, key: :referenced_id, primary_key: :code, reciprocal: :referenced, conditions: { referenced_class: 'Commodity' },
     adder: proc{ |search_reference| search_reference.update(referenced_id: code, referenced_class: 'Commodity') },
@@ -48,40 +69,6 @@ class Commodity < GoodsNomenclature
     def declarable
       filter(producline_suffix: "80")
     end
-  end
-
-  def ancestors
-    # TODO: we need to create more efficient and unambiguous way to get ancestors
-    # because getting Commodities with goods_nomenclature_item_id LIKE 'something'
-    # can fetch Commodities not from ancestors tree.
-    Commodity.select(Sequel.expr(:goods_nomenclatures).*)
-      .eager(:goods_nomenclature_indents,
-             :goods_nomenclature_descriptions)
-      .join_table(:inner,
-        GoodsNomenclatureIndent
-                 .select(:goods_nomenclature_indents__goods_nomenclature_sid,
-                         :goods_nomenclature_indents__goods_nomenclature_item_id,
-                         :goods_nomenclature_indents__number_indents)
-                 .with_actual(GoodsNomenclature)
-                 .join(:goods_nomenclatures, goods_nomenclature_indents__goods_nomenclature_sid: :goods_nomenclatures__goods_nomenclature_sid)
-                 .where("goods_nomenclature_indents.goods_nomenclature_item_id LIKE ?", heading_id)
-                 .where("goods_nomenclature_indents.goods_nomenclature_item_id <= ?", goods_nomenclature_item_id)
-                 .order(Sequel.desc(:goods_nomenclature_indents__validity_start_date),
-                        Sequel.desc(:goods_nomenclature_indents__goods_nomenclature_item_id))
-                 .from_self
-                 .group(:goods_nomenclature_sid, :goods_nomenclature_item_id, :number_indents)
-                 .from_self
-                 .where("number_indents < ?", goods_nomenclature_indent.number_indents),
-        { t1__goods_nomenclature_sid: :goods_nomenclatures__goods_nomenclature_sid,
-          t1__goods_nomenclature_item_id: :goods_nomenclatures__goods_nomenclature_item_id })
-      .order(Sequel.desc(:goods_nomenclatures__goods_nomenclature_item_id))
-      .all
-      .group_by(&:number_indents)
-      .map(&:last)
-      .map(&:first)
-      .reverse
-      .sort_by(&:number_indents)
-      .select{ |a| a.number_indents < goods_nomenclature_indent.number_indents }
   end
 
   def declarable?

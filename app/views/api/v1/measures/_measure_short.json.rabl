@@ -1,6 +1,4 @@
-attributes :id,
-           :effective_start_date,
-           :effective_end_date
+attributes :id
 
 node(:vat)    { |measure| measure.vat? }
 

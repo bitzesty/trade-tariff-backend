@@ -44,6 +44,15 @@ class CommodityIndex < SearchIndex
                 goods_nomenclature_sid: { type: "long" },
                 goods_nomenclature_item_id: { type: "string" }
               }
+            },
+            additional_info_measures: {
+              dynamic: true,
+              properties: {
+                measure_sid: {type: "long"},
+                measure_type_id: { type: "string" },
+                effective_start_date: { format: "dateOptionalTime", type: "date" },
+                effective_end_date: { format: "dateOptionalTime", type: "date" },
+              }
             }
           }
         }

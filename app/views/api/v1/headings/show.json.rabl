@@ -41,7 +41,7 @@ else
 
     node(:parent_sid) { |commodity| commodity.parent.try(:goods_nomenclature_sid) }
     node(:additional_info_measures, if: lambda { |commodity| commodity.declarable? }) { |commodity|
-      commodity.additional_info_measures.map do |measure|
+      commodity.additional_info_measures_indexed.map do |measure|
         partial "api/v1/measures/_measure_short", object: measure
       end
     }
