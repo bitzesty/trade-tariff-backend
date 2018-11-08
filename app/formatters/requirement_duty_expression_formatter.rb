@@ -15,13 +15,14 @@ class RequirementDutyExpressionFormatter
       measurement_unit = opts[:measurement_unit]
       measurement_unit_qualifier = opts[:formatted_measurement_unit_qualifier]
 
-      if opts[:convert_currency].present?
-        if monetary_unit == "EUR" && duty_amount.present?
-          period = MonetaryExchangePeriod.actual.last(parent_monetary_unit_code: "EUR")
-          gbp = MonetaryExchangeRate.last(monetary_exchange_period_sid: period.monetary_exchange_period_sid, child_monetary_unit_code: "GBP")
-          eur_duty_amount = duty_amount
-          duty_amount = (gbp.exchange_rate * duty_amount.to_d).to_f
-          monetary_unit = "GBP"
+      if duty_amount.present? && opts[:currency].present? && monetary_unit.present? && monetary_unit != opts[:currency]
+        period = MonetaryExchangePeriod.actual.last(parent_monetary_unit_code: 'EUR')
+        if period.present?
+          rate = MonetaryExchangeRate.last(monetary_exchange_period_sid: period.monetary_exchange_period_sid, child_monetary_unit_code: monetary_unit == 'EUR' ? opts[:currency] : monetary_unit)
+          if rate.present?
+            duty_amount = monetary_unit == 'EUR' ? (rate.exchange_rate * duty_amount.to_d).to_f : (duty_amount.to_d / rate.exchange_rate).to_f
+            monetary_unit = opts[:currency]
+          end
         end
       end
 
