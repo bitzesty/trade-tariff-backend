@@ -95,7 +95,7 @@ class MeasureCondition < Sequel::Model
   end
 
   def condition
-    "#{condition_code}#{component_sequence_number}: #{measure_condition_code_description}"
+    "#{condition_code}: #{measure_condition_code_description}"
   end
 
   def requirement_type
