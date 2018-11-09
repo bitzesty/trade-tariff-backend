@@ -48,8 +48,7 @@ gem "plek", "~> 1.11"
 gem "gds-sso", "~> 13", ">= 12.1.0"
 
 gem "curb", "~> 0.8"
-gem "dalli", "~> 2.7"
-gem "connection_pool", "~> 2.2"
+gem "redis-rails"
 
 
 gem 'holidays'

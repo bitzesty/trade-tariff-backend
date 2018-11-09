@@ -1,5 +1,6 @@
 require 'redis_lock'
 require 'ostruct'
+require "redis_resolver"
 
 module TradeTariffBackend
   autoload :Auditor,         'trade_tariff_backend/auditor'
