@@ -88,16 +88,15 @@ GEM
     dotenv-rails (2.2.1)
       dotenv (= 2.2.1)
       railties (>= 3.2, < 5.2)
-    elasticsearch (5.0.4)
-      elasticsearch-api (= 5.0.4)
-      elasticsearch-transport (= 5.0.4)
-    elasticsearch-api (5.0.4)
+    elasticsearch (6.1.0)
+      elasticsearch-api (= 6.1.0)
+      elasticsearch-transport (= 6.1.0)
+    elasticsearch-api (6.1.0)
       multi_json
-    elasticsearch-extensions (0.0.26)
+    elasticsearch-extensions (0.0.30)
       ansi
       elasticsearch
-      ruby-prof
-    elasticsearch-transport (5.0.4)
+    elasticsearch-transport (6.1.0)
       faraday
       multi_json
     erubi (1.7.1)
@@ -265,7 +264,6 @@ GEM
     rspec_junit_formatter (0.2.3)
       builder (< 4)
       rspec-core (>= 2, < 4, != 2.12.0)
-    ruby-prof (0.16.2)
     rufus-scheduler (3.4.2)
       et-orbi (~> 1.0)
     safe_yaml (1.0.4)
@@ -335,8 +333,8 @@ DEPENDENCIES
   curb (~> 0.8)
   database_cleaner!
   dotenv-rails (>= 2.1.1)
-  elasticsearch (= 5.0.4)
-  elasticsearch-extensions (= 0.0.26)
+  elasticsearch (= 6.1.0)
+  elasticsearch-extensions (= 0.0.30)
   factory_girl_rails (~> 4.8.0)
   fakefs (~> 0.11.0)
   foreman

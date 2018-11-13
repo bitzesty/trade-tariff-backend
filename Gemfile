@@ -40,8 +40,8 @@ gem "sidekiq", "~> 4.1.4"
 gem "sidekiq-scheduler", "~> 2.1.8"
 
 
-gem "elasticsearch", "5.0.4"
-gem "elasticsearch-extensions", "0.0.26"
+gem "elasticsearch", "6.1.0"
+gem "elasticsearch-extensions", "0.0.30"
 
 
 gem "plek", "~> 1.11"
