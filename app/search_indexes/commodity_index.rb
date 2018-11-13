@@ -12,37 +12,37 @@ class CommodityIndex < SearchIndex
             chapter: {
               dynamic: true,
               properties: {
-                description: { type: "string" },
-                validity_start_date: { format: "dateOptionalTime", type: "date" },
-                producline_suffix: { type: "string" },
+                description: { type: "text" },
+                validity_start_date: { type: "date", format: "dateOptionalTime" },
+                producline_suffix: { type: "keyword" },
                 goods_nomenclature_sid: { type: "long" },
-                goods_nomenclature_item_id: { type: "string" }
+                goods_nomenclature_item_id: { type: "keyword" }
               }
             },
             validity_end_date: { format: "dateOptionalTime", type: "date" },
             number_indents: { type: "long" },
-            description: { analyzer: "snowball", type: "string" },
-            validity_start_date: { format: "dateOptionalTime", type: "date" },
-            producline_suffix: { type: "string" },
-            goods_nomenclature_item_id: { type: "string" },
+            description: { type: "text", analyzer: "snowball" },
+            validity_start_date: { type: "date", format: "dateOptionalTime" },
+            producline_suffix: { type: "keyword" },
+            goods_nomenclature_item_id: { type: "keyword" },
             section: {
               dynamic: true,
               properties: {
                 position: { type: "long" },
-                title: { type: "string" },
-                numeral: { type: "string" }
+                title: { type: "text" },
+                numeral: { type: "keyword" }
               }
             },
             heading: {
               dynamic: true,
               properties: {
-                validity_end_date: { format: "dateOptionalTime", type: "date" },
+                validity_end_date: { type: "date" , format: "dateOptionalTime"},
                 number_indents: { type: "long" },
-                description: { type: "string" },
-                validity_start_date: { format: "dateOptionalTime", type: "date" },
-                producline_suffix: { type: "string" },
+                description: { type: "text" },
+                validity_start_date: { type: "date", format: "dateOptionalTime" },
+                producline_suffix: { type: "keyword" },
                 goods_nomenclature_sid: { type: "long" },
-                goods_nomenclature_item_id: { type: "string" }
+                goods_nomenclature_item_id: { type: "keyword" }
               }
             }
           }
