@@ -49,7 +49,7 @@ class CommodityIndex < SearchIndex
               dynamic: true,
               properties: {
                 measure_sid: {type: "long"},
-                measure_type_id: { type: "string" },
+                measure_type_id: { type: "keyword" },
                 effective_start_date: { format: "dateOptionalTime", type: "date" },
                 effective_end_date: { format: "dateOptionalTime", type: "date" },
               }
