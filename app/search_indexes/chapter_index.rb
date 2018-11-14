@@ -9,16 +9,16 @@ class ChapterIndex < SearchIndex
         chapter: {
           properties: {
             id: { type: 'long' },
-            description: { type: 'string', analyzer: 'snowball' },
+            description: { type: 'text', analyzer: 'snowball' },
             validity_start_date: { type: 'date', format: 'dateOptionalTime' },
-            producline_suffix: { type: 'string' },
-            goods_nomenclature_item_id: { type: 'string' },
+            producline_suffix: { type: 'keyword' },
+            goods_nomenclature_item_id: { type: 'keyword' },
             section: {
               dynamic: true,
               properties: {
                 position: { type: 'long' },
-                title: { type: 'string' },
-                numeral: { type: 'string' }
+                title: { type: 'text' },
+                numeral: { type: 'keyword' }
               }
             }
           }

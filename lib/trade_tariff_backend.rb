@@ -1,5 +1,6 @@
 require 'redis_lock'
 require 'ostruct'
+require "paas_resolver"
 
 module TradeTariffBackend
   autoload :Auditor,         'trade_tariff_backend/auditor'
@@ -51,8 +52,14 @@ module TradeTariffBackend
       ENV["GOVUK_APP_DOMAIN"] == "tariff-backend-production.cloudapps.digital"
     end
 
-    def gbp?
-      ENV["CURRENCY"] == "GBP"
+    THREAD_CURRENCY_KEY = :currency
+
+    def currency=(currency)
+      Thread.current[THREAD_CURRENCY_KEY] = (currency || "EUR")
+    end
+
+    def currency
+      Thread.current[THREAD_CURRENCY_KEY] || "EUR"
     end
 
     def data_migration_path

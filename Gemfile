@@ -40,16 +40,15 @@ gem "sidekiq", "~> 4.1.4"
 gem "sidekiq-scheduler", "~> 2.1.8"
 
 
-gem "elasticsearch", "5.0.4"
-gem "elasticsearch-extensions", "0.0.26"
+gem "elasticsearch", "6.1.0"
+gem "elasticsearch-extensions", "0.0.30"
 
 
 gem "plek", "~> 1.11"
 gem "gds-sso", "~> 13", ">= 12.1.0"
 
 gem "curb", "~> 0.8"
-gem "dalli", "~> 2.7"
-gem "connection_pool", "~> 2.2"
+gem "redis-rails"
 
 
 gem 'holidays'

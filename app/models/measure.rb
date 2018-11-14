@@ -1,9 +1,15 @@
 class Measure < Sequel::Model
+
+  BASE_REGULATION_ROLE = 1
+  PROVISIONAL_ANTIDUMPING_ROLE = 2
+  DEFINITIVE_ANTIDUMPING_ROLE = 3
+  MODIFICATION_REGULATION_ROLE = 4
+
   VALID_ROLE_TYPE_IDS = [
-    1, # Base regulation
-    2, # Modification
-    3, # Provisional anti-dumping/countervailing duty
-    4  # Definitive anti-dumping/countervailing duty
+      BASE_REGULATION_ROLE, # Base regulation
+      PROVISIONAL_ANTIDUMPING_ROLE, # Provisional anti-dumping/countervailing duty
+      DEFINITIVE_ANTIDUMPING_ROLE, # Definitive anti-dumping/countervailing duty
+      MODIFICATION_REGULATION_ROLE # Modification
   ]
 
   set_primary_key [:measure_sid]
@@ -92,7 +98,9 @@ class Measure < Sequel::Model
   end
 
   one_to_many :measure_partial_temporary_stops, primary_key: :measure_generating_regulation_id,
-                                                key: :partial_temporary_stop_regulation_id
+                                                key: :partial_temporary_stop_regulation_id do |ds|
+                                                  ds.with_actual(MeasurePartialTemporaryStop)
+                                                end
 
   def measure_partial_temporary_stop
     measure_partial_temporary_stops.first
@@ -132,11 +140,20 @@ class Measure < Sequel::Model
 
   def generating_regulation
     @generating_regulation ||= case measure_generating_regulation_role
-                               when 1 then base_regulation
-                               when 4 then modification_regulation
+                               when BASE_REGULATION_ROLE then base_regulation
+                               when MODIFICATION_REGULATION_ROLE then modification_regulation
                                else
                                  base_regulation
                                end
+  end
+
+  def legal_acts
+    return [] if national?
+    result = []
+    result << suspending_regulation
+    result << generating_regulation
+    result << generating_regulation.base_regulation if measure_generating_regulation_role == MODIFICATION_REGULATION_ROLE
+    result.compact
   end
 
   # Soft-deleted
@@ -292,18 +309,6 @@ class Measure < Sequel::Model
 
   def id
     measure_sid
-  end
-
-  def generating_regulation_code(regulation_code = measure_generating_regulation_id)
-    "#{regulation_code.first}#{regulation_code[3..6]}/#{regulation_code[1..2]}"
-  end
-
-  def generating_regulation_url(for_suspending_regulation=false)
-    return false if national?
-
-    MeasureService::CouncilRegulationUrlGenerator.new(
-      for_suspending_regulation ? suspending_regulation : generating_regulation
-    ).generate
   end
 
   def origin

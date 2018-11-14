@@ -122,7 +122,7 @@ class Commodity < GoodsNomenclature
       # Cache for 3 hours
       #
       time_machine_key = Thread.current[:time_machine_now].strftime("%Y-%m-%d")
-      Rails.cache.fetch("commodity_#{goods_nomenclature_sid}_#{time_machine_key}_children", expires_in: 3.hours) do
+      Rails.cache.fetch("commodity_#{goods_nomenclature_sid}_#{time_machine_key}_#{TradeTariffBackend.currency}_children", expires_in: 3.hours) do
         func.call
       end
     end

@@ -86,7 +86,7 @@ class MeasureCondition < Sequel::Model
       monetary_unit_abbreviation: monetary_unit_abbreviation,
       measurement_unit: measurement_unit_description,
       formatted_measurement_unit_qualifier: formatted_measurement_unit_qualifier,
-      convert_currency: TradeTariffBackend.gbp?
+      currency: TradeTariffBackend.currency
     })
   end
 
@@ -95,7 +95,7 @@ class MeasureCondition < Sequel::Model
   end
 
   def condition
-    "#{condition_code}#{component_sequence_number}: #{measure_condition_code_description}"
+    "#{condition_code}: #{measure_condition_code_description}"
   end
 
   def requirement_type
