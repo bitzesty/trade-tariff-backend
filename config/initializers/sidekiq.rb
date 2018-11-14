@@ -1,6 +1,6 @@
 require "sidekiq"
 
-redis_config = RedisResolver.get_redis_config
+redis_config = PaasResolver.get_redis_config
 
 Sidekiq.configure_server do |config|
   config.redis = redis_config
