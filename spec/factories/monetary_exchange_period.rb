@@ -10,9 +10,5 @@ FactoryGirl.define do
     trait :old do
       validity_start_date { Date.today.at_beginning_of_month - 6.years }
     end
-
-    # after(:create) { |monetary_exchange_period, evaluator|
-    #   FactoryGirl.create :monetary_exchange_rate, operation_date: monetary_exchange_period.operation_date, monetary_exchange_period: monetary_exchange_period
-    # }
   end
 end

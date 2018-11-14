@@ -14,12 +14,6 @@ module Api
           }
         end
       end
-
-      private
-
-      def letter
-        params.fetch(:letter, 'a')
-      end
     end
   end
 end
