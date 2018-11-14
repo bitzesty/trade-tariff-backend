@@ -72,6 +72,7 @@ class Commodity < GoodsNomenclature
                  .select(:goods_nomenclature_indents__goods_nomenclature_sid,
                          :goods_nomenclature_indents__goods_nomenclature_item_id,
                          :goods_nomenclature_indents__number_indents)
+                 .with_actual(GoodsNomenclature)
                  .join(:goods_nomenclatures, goods_nomenclature_indents__goods_nomenclature_sid: :goods_nomenclatures__goods_nomenclature_sid)
                  .where("goods_nomenclature_indents.goods_nomenclature_item_id LIKE ?", heading_id)
                  .where("goods_nomenclature_indents.goods_nomenclature_item_id <= ?", goods_nomenclature_item_id)
