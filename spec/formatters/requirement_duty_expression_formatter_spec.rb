@@ -3,6 +3,19 @@ require 'requirement_duty_expression_formatter'
 
 describe RequirementDutyExpressionFormatter do
   describe '.format' do
+    let(:measurement_unit) {
+      measurement_unit_abbreviation.measurement_unit
+    }
+    let(:unit) {
+      measurement_unit.abbreviation(measurement_unit_qualifier: measurement_unit_qualifier)
+    }
+    let!(:measurement_unit_abbreviation) {
+      create(:measurement_unit_abbreviation, :with_measurement_unit, :include_qualifier)
+    }
+    let!(:measurement_unit_qualifier) {
+      create(:measurement_unit_qualifier, measurement_unit_qualifier_code: measurement_unit_abbreviation.measurement_unit_qualifier)
+    }
+
     context 'duty amount present' do
       it 'result includes duty amount' do
         expect(
@@ -13,34 +26,34 @@ describe RequirementDutyExpressionFormatter do
 
     context 'monetary unit, measurement unit & measurement_unit_qualifier are present ' do
       subject {
-        RequirementDutyExpressionFormatter.format(measurement_unit: 'Tonne',
+        RequirementDutyExpressionFormatter.format(measurement_unit: measurement_unit,
                                                   formatted_measurement_unit_qualifier: 'L',
                                                   monetary_unit: 'EUR')
       }
 
       it 'properly formats output' do
-        expect(subject).to match /EUR\/\(Tonne\/L\)/
+        expect(subject).to match /EUR \/ \(#{measurement_unit.description} \/ L\)/
       end
     end
 
     context 'monetary unit and measurement unit are present' do
       subject {
         RequirementDutyExpressionFormatter.format(monetary_unit: 'EUR',
-                                                  measurement_unit: 'KG')
+                                                  measurement_unit: measurement_unit)
       }
 
       it 'properly formats result' do
-        expect(subject).to match /EUR\/KG/
+        expect(subject).to match /EUR \/ #{measurement_unit.description}/
       end
     end
 
     context 'measurement unit is present' do
       subject {
-        RequirementDutyExpressionFormatter.format(measurement_unit: 'KG')
+        RequirementDutyExpressionFormatter.format(measurement_unit: measurement_unit)
       }
 
       it 'properly formats output' do
-        expect(subject).to match /KG/
+        expect(subject).to match Regexp.new(measurement_unit.description)
       end
     end
   end
