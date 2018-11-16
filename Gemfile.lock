@@ -189,7 +189,7 @@ GEM
     puma (3.11.2)
     rabl (0.13.1)
       activesupport (>= 2.3.14)
-    rack (2.0.5)
+    rack (2.0.6)
     rack-protection (2.0.2)
       rack
     rack-test (1.0.0)
