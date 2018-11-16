@@ -43,6 +43,7 @@ class MeasureConditionComponent < Sequel::Model
       monetary_unit_abbreviation: monetary_unit_abbreviation,
       measurement_unit: measurement_unit,
       measurement_unit_qualifier: measurement_unit_qualifier,
+      currency: TradeTariffBackend.currency,
       formatted: true
     })
   end
