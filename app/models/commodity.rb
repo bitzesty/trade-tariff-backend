@@ -23,12 +23,12 @@ class Commodity < GoodsNomenclature
            .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
   }
 
-  one_to_many :additional_info_measures, key: {}, primary_key: {}, dataset: -> {
+  one_to_many :overview_measures, key: {}, primary_key: {}, dataset: -> {
     measures_dataset
         .filter(measures__measure_type_id: MeasureType::VAT_TYPES + MeasureType::SUPPLEMENTARY_TYPES + Array.wrap(MeasureType::THIRD_COUNTRY))
   }, class_name: 'Measure'
 
-  def additional_info_measures_indexed
+  def overview_measures_indexed
     search_service = ::CommodityService::AdditionalInfoMeasuresService.new(goods_nomenclature_sid, point_in_time)
     MeasurePresenter.new(
         Measure

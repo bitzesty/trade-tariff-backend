@@ -45,7 +45,7 @@ class CommodityIndex < SearchIndex
                 goods_nomenclature_item_id: { type: "keyword" }
               }
             },
-            additional_info_measures: {
+            overview_measures: {
               dynamic: true,
               properties: {
                 measure_sid: {type: "long"},

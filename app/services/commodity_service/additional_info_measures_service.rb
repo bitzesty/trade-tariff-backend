@@ -7,7 +7,7 @@ module CommodityService
     end
 
     def measure_sids
-      commodity&.additional_info_measures&.select do |measure|
+      commodity&.overview_measures&.select do |measure|
         if @as_of.present?
           measure.effective_start_date.to_date <= @as_of &&
               (measure.effective_end_date == nil || measure.effective_end_date.to_date >= @as_of)
