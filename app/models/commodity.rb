@@ -23,6 +23,26 @@ class Commodity < GoodsNomenclature
            .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", chapter_id)
   }
 
+  one_to_many :additional_info_measures, key: {}, primary_key: {}, dataset: -> {
+    measures_dataset
+        .filter(measures__measure_type_id: MeasureType::VAT_TYPES + MeasureType::SUPPLEMENTARY_TYPES + Array.wrap(MeasureType::THIRD_COUNTRY))
+  }, class_name: 'Measure'
+
+  def additional_info_measures_indexed
+    search_service = ::CommodityService::AdditionalInfoMeasuresService.new(goods_nomenclature_sid, point_in_time)
+    MeasurePresenter.new(
+        Measure
+        .distinct(:measure_generating_regulation_id, :measure_type_id, :goods_nomenclature_sid, :geographical_area_id, :geographical_area_sid, :additional_code_type_id, :additional_code_id)
+        .select(Sequel.expr(:measures).*)
+        .eager(
+          {measure_type: :measure_type_description},
+          {measure_components: [{duty_expression: :duty_expression_description},
+                                {measurement_unit: :measurement_unit_description},
+                                :monetary_unit,
+                                :measurement_unit_qualifier]})
+        .where(measure_sid: search_service.measure_sids).all, self).validate!
+  end
+
   one_to_many :search_references, key: :referenced_id, primary_key: :code, reciprocal: :referenced, conditions: { referenced_class: 'Commodity' },
     adder: proc{ |search_reference| search_reference.update(referenced_id: code, referenced_class: 'Commodity') },
     remover: proc{ |search_reference| search_reference.update(referenced_id: nil, referenced_class: nil)},
