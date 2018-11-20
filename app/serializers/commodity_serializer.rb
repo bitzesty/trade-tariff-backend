@@ -45,9 +45,9 @@ class CommoditySerializer < Serializer
           })
         end
 
-        if additional_info_measures.present?
+        if overview_measures.present?
           commodity_attributes.merge!({
-            additional_info_measures: additional_info_measures.map do |measure|
+            overview_measures: overview_measures.map do |measure|
               {
                 measure_sid: measure.measure_sid,
                 measure_type_id: measure.measure_type_id,

@@ -1,5 +1,5 @@
 module CommodityService
-  class AdditionalInfoMeasuresService
+  class OverviewMeasuresService
 
     def initialize(goods_nomenclature_sid, as_of)
       @goods_nomenclature_sid = goods_nomenclature_sid
@@ -7,7 +7,7 @@ module CommodityService
     end
 
     def measure_sids
-      commodity&.additional_info_measures&.select do |measure|
+      commodity&.overview_measures&.select do |measure|
         if @as_of.present?
           measure.effective_start_date.to_date <= @as_of &&
               (measure.effective_end_date == nil || measure.effective_end_date.to_date >= @as_of)
@@ -21,7 +21,7 @@ module CommodityService
 
     def commodity
       search_client = ::TradeTariffBackend.search_client
-      result = search_client.search index: 'tariff-commodities', body: {query: {match: {id: @goods_nomenclature_sid}}}
+      result = search_client.search index: CommodityIndex.new(TradeTariffBackend.search_namespace).name, body: {query: {match: {id: @goods_nomenclature_sid}}}
       result&.hits&.hits&.first&._source
     end
 
