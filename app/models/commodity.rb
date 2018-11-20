@@ -29,7 +29,7 @@ class Commodity < GoodsNomenclature
   }, class_name: 'Measure'
 
   def overview_measures_indexed
-    search_service = ::CommodityService::AdditionalInfoMeasuresService.new(goods_nomenclature_sid, point_in_time)
+    search_service = ::CommodityService::OverviewMeasuresService.new(goods_nomenclature_sid, point_in_time)
     MeasurePresenter.new(
         Measure
         .distinct(:measure_generating_regulation_id, :measure_type_id, :goods_nomenclature_sid, :geographical_area_id, :geographical_area_sid, :additional_code_type_id, :additional_code_id)

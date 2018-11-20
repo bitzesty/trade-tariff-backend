@@ -1,5 +1,5 @@
 module CommodityService
-  class AdditionalInfoMeasuresService
+  class OverviewMeasuresService
 
     def initialize(goods_nomenclature_sid, as_of)
       @goods_nomenclature_sid = goods_nomenclature_sid
