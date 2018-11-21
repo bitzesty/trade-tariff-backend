@@ -40,12 +40,12 @@ module Api
 
         end
 
-        @heading_cache_key = "heading-#{@heading.goods_nomenclature_sid}-#{actual_date}-#{@heading.declarable?}"
+        @heading_cache_key = "heading-#{@heading.goods_nomenclature_sid}-#{actual_date}-#{TradeTariffBackend.currency}-#{@heading.declarable?}"
         respond_with @heading
       end
 
       def changes
-        key = "heading-#{@heading.goods_nomenclature_sid}-#{actual_date}/changes"
+        key = "heading-#{@heading.goods_nomenclature_sid}-#{actual_date}-#{TradeTariffBackend.currency}/changes"
         @changes = Rails.cache.fetch(key, expires_at: actual_date.end_of_day) do
           ChangeLog.new(@heading.changes.where { |o|
             o.operation_date <= actual_date

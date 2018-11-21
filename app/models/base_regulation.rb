@@ -9,6 +9,10 @@ class BaseRegulation < Sequel::Model
   one_to_one :complete_abrogation_regulation, key: [:complete_abrogation_regulation_id,
                                                     :complete_abrogation_regulation_role]
 
+  def regulation_id
+    base_regulation_id
+  end
+
   def not_completely_abrogated?
     complete_abrogation_regulation.blank?
   end

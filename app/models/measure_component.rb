@@ -62,7 +62,7 @@ class MeasureComponent < Sequel::Model
       monetary_unit_abbreviation: monetary_unit_abbreviation,
       measurement_unit: measurement_unit,
       measurement_unit_qualifier: measurement_unit_qualifier,
-      convert_currency: TradeTariffBackend.gbp?
+      currency: TradeTariffBackend.currency
     }
   end
 end

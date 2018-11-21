@@ -5,7 +5,7 @@ FactoryGirl.define do
 
     trait :with_measurement_unit do
       after(:create) do |measurement_unit_abbreviation|
-        FactoryGirl.create(:measurement_unit, measurement_unit_code: measurement_unit_abbreviation.measurement_unit_code)
+        FactoryGirl.create(:measurement_unit, :with_description, measurement_unit_code: measurement_unit_abbreviation.measurement_unit_code)
       end
     end
 

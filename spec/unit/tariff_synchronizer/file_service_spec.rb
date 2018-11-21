@@ -37,11 +37,11 @@ describe TariffSynchronizer::FileService do
     end
 
     describe ".file_as_stringio" do
-      it "returns a string io object with the associated file info" do
+      it "returns a IO object with the associated file info" do
         allow(base_update).to receive(:file_path).and_return("spec/fixtures/hello_world.txt")
         result = described_class.file_as_stringio(base_update)
-        expect(result).to be_kind_of(StringIO)
-        expect(result.string).to eq("hola mundo\n")
+        expect(result).to be_kind_of(IO)
+        expect(result.read).to eq("hola mundo\n")
       end
     end
   end

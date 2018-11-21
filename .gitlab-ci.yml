@@ -1,0 +1,106 @@
+image:
+  name: ruby:2.5.0
+
+variables:
+  POSTGRES_DB: tariff_test
+  DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/$POSTGRES_DB"
+  REDIS_URL: redis://redis:6379
+  ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+  ELASTICSEARCH_URL: 'http://elasticsearch:9200'
+
+services:
+  - name: redis:3.2.11
+  - name: postgres:9.6-alpine
+    alias: postgres
+  - name: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
+    alias: elasticsearch
+    command: [ "bin/elasticsearch", "-Expack.security.enabled=false", "-Ediscovery.type=single-node" ]
+
+stages:
+  - test
+  - deploy
+
+test:
+  stage: test
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan gitlab.bitzesty.com > ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 400 ~/.ssh/id_rsa
+    - apt-get update -qy
+    - apt-get install -y build-essential postgresql libpq-dev nodejs rake
+    - gem install bundler
+    - bundle install --jobs 4 --retry 3 --path vendor
+    - RAILS_ENV=test bundle exec rake db:structure:load --trace
+  script:
+    - curl "http://elasticsearch:9200/_cat/health"
+    - RAILS_ENV=test RAILS_DISABLE_TEST_LOG=true bundle exec rspec spec/ --tag '~skip_ci' --profile 10 --format RspecJunitFormatter --out rspec.xml --format progress
+  artifacts:
+    reports:
+      junit: rspec.xml
+  cache:
+    key: gems-cache
+    paths:
+      - vendor/ruby
+
+code_quality:
+  image: docker:stable
+  variables:
+    DOCKER_DRIVER: overlay2
+  allow_failure: true
+  services:
+    - docker:stable-dind
+  script:
+    - export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
+    - docker run
+        --env SOURCE_CODE="$PWD"
+        --volume "$PWD":/code
+        --volume /var/run/docker.sock:/var/run/docker.sock
+        "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
+  artifacts:
+      paths: [gl-code-quality-report.json]
+
+deploy_dev:
+  stage: deploy
+  script:
+    - curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
+    - dpkg -i cf-cli_amd64.deb
+    - cf -v
+    - curl -v -L -o autopilot https://github.com/contraband/autopilot/releases/download/0.0.3/autopilot-linux
+    - chmod +x autopilot
+    - cf install-plugin autopilot -f
+    - CF_SPACE=development CF_APP=tariff-backend-dev CF_APP_WORKER=tariff-backend-worker-dev ./bin/deploy
+  only:
+    - master
+
+deploy_staging:
+  stage: deploy
+  script:
+    - curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
+    - dpkg -i cf-cli_amd64.deb
+    - cf -v
+    - curl -v -L -o autopilot https://github.com/contraband/autopilot/releases/download/0.0.3/autopilot-linux
+    - chmod +x autopilot
+    - cf install-plugin autopilot -f
+    - CF_SPACE=staging CF_APP=tariff-backend-staging CF_APP_WORKER=tariff-backend-worker-staging ./bin/deploy
+  only:
+    - staging
+
+deploy_production:
+  stage: deploy
+  script:
+    - curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
+    - dpkg -i cf-cli_amd64.deb
+    - cf -v
+    - curl -v -L -o autopilot https://github.com/contraband/autopilot/releases/download/0.0.3/autopilot-linux
+    - chmod +x autopilot
+    - cf install-plugin autopilot -f
+    - CF_SPACE=production CF_APP=tariff-backend-production CF_APP_WORKER=tariff-backend-worker-production ./bin/deploy
+  when: manual
+  only:
+  - production
