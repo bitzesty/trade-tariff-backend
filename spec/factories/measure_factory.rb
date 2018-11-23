@@ -15,7 +15,7 @@ FactoryGirl.define do
     f.measure_type_id { generate(:measure_type_id) }
     f.measure_generating_regulation_id { generate(:base_regulation_sid) }
     f.measure_generating_regulation_role { 1 }
-    f.additional_code_type_id { Forgery(:basic).text(exactly: 1) }
+    f.additional_code_type_id { generate(:additional_code_type_id) }
     f.goods_nomenclature_sid { generate(:goods_nomenclature_sid) }
     f.goods_nomenclature_item_id { 10.times.map{ Random.rand(9) }.join }
     f.geographical_area_sid { generate(:geographical_area_sid) }
@@ -112,7 +112,7 @@ FactoryGirl.define do
     end
 
     measure_type_id        { generate(:measure_type_id) }
-    measure_type_series_id { Forgery(:basic).text(exactly: 1) }
+    sequence(:measure_type_series_id, LoopingSequence.lower_a_to_upper_z, &:value)
     validity_start_date    { Date.today.ago(3.years) }
     validity_end_date      { nil }
     measure_explosion_level { 10 }
@@ -164,9 +164,9 @@ FactoryGirl.define do
     condition_duty_amount     { Forgery(:basic).number }
     condition_monetary_unit_code     { Forgery(:basic).text(exactly: 3) }
     condition_measurement_unit_code     { Forgery(:basic).text(exactly: 3) }
-    condition_measurement_unit_qualifier_code     { Forgery(:basic).text(exactly: 1) }
-    action_code     { Forgery(:basic).text(exactly: 1) }
-    certificate_type_code     { Forgery(:basic).text(exactly: 1) }
+    sequence(:condition_measurement_unit_qualifier_code, LoopingSequence.lower_a_to_upper_z, &:value)
+    sequence(:action_code, LoopingSequence.lower_a_to_upper_z, &:value)
+    sequence(:certificate_type_code, LoopingSequence.lower_a_to_upper_z, &:value)
     certificate_code     { Forgery(:basic).text(exactly: 3) }
   end
 end

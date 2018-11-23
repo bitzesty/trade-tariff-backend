@@ -1,3 +1,4 @@
+require_relative 'looping_sequence'
 require 'factory_girl_rails'
 
 RSpec.configure do |config|
