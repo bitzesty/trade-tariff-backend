@@ -4,48 +4,48 @@ class SearchReferenceIndex < SearchIndex
       mappings: {
         search_reference: {
           properties: {
-            title: { analyzer: "snowball", type: "string" },
-            reference_class: { type: "string" },
+            title: { type: "text", analyzer: "snowball" },
+            reference_class: { type: "keyword" },
             reference: {
               properties: {
                 position: { type: "long" },
-                numeral: { type: "string" },
-                validity_end_date: { format: "dateOptionalTime", type: "date" },
-                class: { type: "string" },
-                validity_start_date: { format: "dateOptionalTime", type: "date" },
-                goods_nomenclature_item_id: { type: "string" },
+                numeral: { type: "keyword" },
+                validity_end_date: { type: "date", format: "dateOptionalTime" },
+                class: { type: "keyword" },
+                validity_start_date: { type: "date", format: "dateOptionalTime" },
+                goods_nomenclature_item_id: { type: "keyword" },
                 section: {
                   dynamic: true,
                   properties: {
                     position: { type: "long" },
-                    title: { type: "string" },
-                    numeral: { type: "string" }
+                    title: { type: "text" },
+                    numeral: { type: "keyword" }
                   }
                 },
                 id: { type: "long" },
                 chapter: {
                   dynamic: true,
                   properties: {
-                    description: { type: "string" },
-                    validity_start_date: { format: "dateOptionalTime", type: "date" },
-                    producline_suffix: { type: "string" },
+                    description: { type: "text" },
+                    validity_start_date: { type: "date", format: "dateOptionalTime" },
+                    producline_suffix: { type: "keyword" },
                     goods_nomenclature_sid: { type: "long" },
-                    goods_nomenclature_item_id: { type: "string" }
+                    goods_nomenclature_item_id: { type: "keyword" }
                   }
                 },
-                title: { type: "string" },
-                description: { type: "string" },
+                title: { type: "text" },
+                description: { type: "text" },
                 number_indents: { type: "long" },
-                producline_suffix: { type: "string" },
+                producline_suffix: { type: "keyword" },
                 heading: {
                   dynamic: true,
                   properties: {
                     number_indents: { type: "long" },
-                    description: { type: "string" },
-                    validity_start_date: { format: "dateOptionalTime", type: "date" },
-                    producline_suffix: { type: "string" },
+                    description: { type: "text" },
+                    validity_start_date: { type: "date", format: "dateOptionalTime" },
+                    producline_suffix: { type: "keyword" },
                     goods_nomenclature_sid: { type: "long" },
-                    goods_nomenclature_item_id: { type: "string" }
+                    goods_nomenclature_item_id: { type: "keyword" }
                   }
                 }
               },

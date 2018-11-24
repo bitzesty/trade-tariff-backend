@@ -40,12 +40,12 @@ module Api
         @geographical_areas = GeographicalArea.actual.where("geographical_area_sid IN ?", @measures.map(&:geographical_area_sid)).
             eager(:geographical_area_descriptions, { contained_geographical_areas: :geographical_area_descriptions }).all
 
-        @commodity_cache_key = "commodity-#{@commodity.goods_nomenclature_sid}-#{actual_date}"
+        @commodity_cache_key = "commodity-#{@commodity.goods_nomenclature_sid}-#{actual_date}-#{TradeTariffBackend.currency}"
         respond_with @commodity
       end
 
       def changes
-        key = "commodity-#{@commodity.goods_nomenclature_sid}-#{actual_date}/changes"
+        key = "commodity-#{@commodity.goods_nomenclature_sid}-#{actual_date}-#{TradeTariffBackend.currency}/changes"
         @changes = Rails.cache.fetch(key, expires_at: actual_date.end_of_day) do
           ChangeLog.new(@commodity.changes.where { |o|
             o.operation_date <= actual_date

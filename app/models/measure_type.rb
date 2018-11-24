@@ -3,6 +3,8 @@ class MeasureType < Sequel::Model
   EXPORT_MOVEMENT_CODES = [1, 2]
   EXCLUDED_TYPES = ['442', 'SPL']
   THIRD_COUNTRY = '103'
+  VAT_TYPES = ['VTA','VTE','VTS','VTZ']
+  SUPPLEMENTARY_TYPES = ['109', '110', '111']
 
   plugin :time_machine, period_start_column: :measure_types__validity_start_date,
                         period_end_column:   :measure_types__validity_end_date

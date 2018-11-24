@@ -21,7 +21,7 @@ module Api
       end
 
       def changes
-        key = "chapter-#{@chapter.goods_nomenclature_sid}-#{actual_date}/changes"
+        key = "chapter-#{@chapter.goods_nomenclature_sid}-#{actual_date}-#{TradeTariffBackend.currency}/changes"
         @changes = Rails.cache.fetch(key, expires_at: actual_date.end_of_day) do
           ChangeLog.new(@chapter.changes.where { |o|
             o.operation_date <= actual_date

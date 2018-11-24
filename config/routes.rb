@@ -52,6 +52,8 @@ Rails.application.routes.draw do
         collection { get :countries }
       end
 
+      resources :monetary_exchange_rates, only: [:index]
+
       resources :updates, only: [:index] do
         collection { get :latest }
       end

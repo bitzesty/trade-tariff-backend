@@ -40,16 +40,15 @@ gem "sidekiq", "~> 4.1.4"
 gem "sidekiq-scheduler", "~> 2.1.8"
 
 
-gem "elasticsearch", "5.0.4"
-gem "elasticsearch-extensions", "0.0.26"
+gem "elasticsearch", "6.1.0"
+gem "elasticsearch-extensions", "0.0.30"
 
 
 gem "plek", "~> 1.11"
 gem "gds-sso", "~> 13", ">= 12.1.0"
 
 gem "curb", "~> 0.8"
-gem "dalli", "~> 2.7"
-gem "connection_pool", "~> 2.2"
+gem "redis-rails"
 
 
 gem 'holidays'
@@ -84,7 +83,7 @@ group :test do
   gem "forgery", github: "mtunjic/forgery", branch: "master"
   gem "json_expressions", "~> 0.9.0"
   gem "simplecov", "~> 0.14.1"
-  gem "simplecov-rcov", git: 'git@github.com:bitzesty/simplecov-rcov.git' # monkey patch for ruby 2.5.0
+  gem "simplecov-rcov", git: 'git@gitlab.bitzesty.com:open-source/simplecov-rcov.git' # monkey patch for ruby 2.5.0
   gem "webmock", "~> 3.0.1"
   gem "database_cleaner", github: "theharq/database_cleaner", branch: "sequel-updates"
   gem "rspec_junit_formatter"
