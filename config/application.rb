@@ -1,4 +1,4 @@
-require_relative 'boot'
+require_relative "boot"
 
 require "action_controller/railtie"
 require "action_mailer/railtie"
@@ -10,7 +10,7 @@ Bundler.require(*Rails.groups)
 
 module TradeTariffBackend
   class Application < Rails::Application
-    require 'trade_tariff_backend'
+    require "trade_tariff_backend"
 
     # lib directory to be autoloadable.
     config.autoload_paths << "#{Rails.root}/lib"
@@ -21,7 +21,7 @@ module TradeTariffBackend
       g.test_framework false
     end
 
-    config.time_zone = 'UTC'
+    config.time_zone = "UTC"
 
     # Enable the asset pipeline
     config.assets.enabled = false

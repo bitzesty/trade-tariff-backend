@@ -1,10 +1,12 @@
 FactoryGirl.define do
+  sequence(:measurement_unit_code, LoopingSequence.lower_a_to_upper_z, &:value)
+
   factory :measurement_unit do
     transient do
       description { Forgery(:basic).text }
     end
 
-    measurement_unit_code { Forgery(:basic).text(exactly: 3) }
+    measurement_unit_code { generate(:measurement_unit_code) }
     validity_start_date { Date.today.ago(3.years) }
     validity_end_date   { nil }
 
@@ -18,7 +20,7 @@ FactoryGirl.define do
   end
 
   factory :measurement_unit_description do
-    measurement_unit_code { Forgery(:basic).text(exactly: 3) }
+    measurement_unit_code { generate(:measurement_unit_code) }
     description { Forgery(:basic).text }
   end
 end

@@ -221,8 +221,8 @@ ALTER SEQUENCE additional_code_type_descriptions_oid_seq OWNED BY additional_cod
 -- Name: additional_code_type_measure_types_oplog; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE additional_code_type_measure_types_oplog (
-    measure_type_id character varying(3),
+CREATE TABLE public.additional_code_type_measure_types_oplog (
+    measure_type_id character varying(6),
     additional_code_type_id character varying(1),
     validity_start_date timestamp without time zone,
     validity_end_date timestamp without time zone,
@@ -942,7 +942,7 @@ CREATE TABLE chief_measure_type_adco (
     measure_group_code character varying(2),
     measure_type character varying(3),
     tax_type_code character varying(11),
-    measure_type_id character varying(3),
+    measure_type_id character varying(6),
     adtnl_cd_type_id character varying(1),
     adtnl_cd character varying(3),
     zero_comp integer
@@ -970,7 +970,7 @@ CREATE TABLE chief_measure_type_cond (
 
 CREATE TABLE chief_measure_type_footnote (
     id integer NOT NULL,
-    measure_type_id character varying(3),
+    measure_type_id character varying(6),
     footn_type_id character varying(2),
     footn_id character varying(3)
 );
@@ -2280,7 +2280,9 @@ CREATE TABLE full_temporary_stop_regulations_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    complete_abrogation_regulation_role integer,
+    complete_abrogation_regulation_id character varying(8)
 );
 
 
@@ -2302,6 +2304,8 @@ CREATE VIEW full_temporary_stop_regulations AS
     full_temporary_stop_regulations1.replacement_indicator,
     full_temporary_stop_regulations1.information_text,
     full_temporary_stop_regulations1.approved_flag,
+    full_temporary_stop_regulations1.complete_abrogation_regulation_id,
+    full_temporary_stop_regulations1.complete_abrogation_regulation_role,
     full_temporary_stop_regulations1.oid,
     full_temporary_stop_regulations1.operation,
     full_temporary_stop_regulations1.operation_date
@@ -3621,8 +3625,8 @@ ALTER SEQUENCE measure_partial_temporary_stops_oid_seq OWNED BY measure_partial_
 -- Name: measure_type_descriptions_oplog; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE measure_type_descriptions_oplog (
-    measure_type_id character varying(3),
+CREATE TABLE public.measure_type_descriptions_oplog (
+    measure_type_id character varying(6),
     language_id character varying(5),
     description text,
     created_at timestamp without time zone,
@@ -3778,8 +3782,8 @@ ALTER SEQUENCE measure_type_series_oid_seq OWNED BY measure_type_series_oplog.oi
 -- Name: measure_types_oplog; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE measure_types_oplog (
-    measure_type_id character varying(3),
+CREATE TABLE public.measure_types_oplog (
+    measure_type_id character varying(6),
     validity_start_date timestamp without time zone,
     validity_end_date timestamp without time zone,
     trade_movement_code integer,
@@ -4137,7 +4141,7 @@ ALTER SEQUENCE measurements_oid_seq OWNED BY measurements_oplog.oid;
 
 CREATE TABLE measures_oplog (
     measure_sid integer,
-    measure_type_id character varying(3),
+    measure_type_id character varying(6),
     geographical_area_id character varying(255),
     goods_nomenclature_item_id character varying(10),
     validity_start_date timestamp without time zone,
@@ -5905,7 +5909,7 @@ CREATE TABLE regulation_replacements_oplog (
     replacing_regulation_id character varying(255),
     replaced_regulation_role integer,
     replaced_regulation_id character varying(255),
-    measure_type_id character varying(3),
+    measure_type_id character varying(6),
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
@@ -6171,7 +6175,8 @@ CREATE TABLE sections (
     "position" integer,
     numeral character varying(255),
     title character varying(255),
-    created_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -10234,3 +10239,6 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20171228082821_create_publ
 INSERT INTO "schema_migrations" ("filename") VALUES ('20180724155759_fix_footnote_id_characters_limit_in_associations.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20180730143329_add_tariff_update_presence_errors.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20180822124608_add_tariff_update_cds_error.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20180828074852_add_complete_abrogation_regulation_id_column.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20181003140819_add_updated_at_to_sections.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20181029112658_change_size_to_six_for_measure_type_id.rb');

@@ -10,6 +10,10 @@ class ModificationRegulation < Sequel::Model
   one_to_one :base_regulation, key: [:base_regulation_id, :base_regulation_role],
                                primary_key: [:base_regulation_id, :base_regulation_role]
 
+  def regulation_id
+    modification_regulation_id
+  end
+
   # TODO confirm this assumption
   # 0 not replaced
   # 1 fully replaced

@@ -38,8 +38,8 @@ curl -X POST \
 $SLACK_WEBHOOK
 
 # Notify GDS about new releases
-curl -X POST -H 'Content-type: application/json' \
--H 'Authorization: Bearer '"$GDS_TOKEN"'' \
--H 'Accept: application/json' \
---data '{"repo": "'"$CIRCLE_REPOSITORY_URL"'", "deployment[version]": "'"$CIRCLE_SHA1"'", "deployment[environment]": "'"$CF_SPACE"'"}' \
-$GDS_WEBHOOK
+# curl -X POST -H 'Content-type: application/json' \
+# -H 'Authorization: Bearer '"$GDS_TOKEN"'' \
+# -H 'Accept: application/json' \
+# --data '{"repo": "'"$CIRCLE_REPOSITORY_URL"'", "deployment[version]": "'"$CIRCLE_SHA1"'", "deployment[environment]": "'"$CF_SPACE"'"}' \
+# $GDS_WEBHOOK

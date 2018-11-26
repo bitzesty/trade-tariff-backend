@@ -150,7 +150,7 @@ describe MeasureCondition do
       }
 
       it 'returns rendered requirement duty expression' do
-        expect(measure_condition.requirement).to eq "108.56 FOO/BAR"
+        expect(measure_condition.requirement).to eq "<span title='108.56 FOO'>108.56</span> FOO / <abbr title='BAR'>BAR</abbr>"
       end
     end
   end
@@ -178,14 +178,20 @@ describe MeasureCondition do
 
   describe '#condition' do
     let(:measure_condition) { create :measure_condition, condition_code: '123',
-                                     component_sequence_number: 456}
+                                     component_sequence_number: 456 }
+    let!(:measure_condition_code) { create :measure_condition_code, condition_code: measure_condition.condition_code }
+    let!(:measure_condition_code_description) { create :measure_condition_code_description, condition_code: measure_condition.condition_code }
 
     it 'should contain condition_code' do
       expect(measure_condition.condition).to include(measure_condition.condition_code)
     end
 
     it 'should contain component_sequence_number' do
-      expect(measure_condition.condition).to include(measure_condition.component_sequence_number.to_s)
+      expect(measure_condition.condition).to_not include(measure_condition.component_sequence_number.to_s)
+    end
+
+    it 'should contain measure_condition_code_description' do
+      expect(measure_condition.condition).to include(measure_condition.measure_condition_code_description.to_s)
     end
   end
 end
