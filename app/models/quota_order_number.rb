@@ -10,6 +10,10 @@ class QuotaOrderNumber < Sequel::Model
     ds.with_actual(QuotaDefinition)
   end
 
+  def quota_definition!
+    quota_definition(reload: true)
+  end
+
   one_to_one :quota_order_number_origin, primary_key: :quota_order_number_sid,
                                          key: :quota_order_number_sid
 

@@ -44,7 +44,7 @@ test:
     reports:
       junit: rspec.xml
   cache:
-    key: gems-cache
+    key: ${CI_JOB_NAME}-v2
     paths:
       - vendor/ruby
 
