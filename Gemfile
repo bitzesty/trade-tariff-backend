@@ -59,7 +59,6 @@ gem "newrelic_rpm"
 gem "logstash-event"
 gem "lograge", ">= 0.3.6"
 gem "rack-timeout", "~> 0.4"
-gem "bootscale", "~> 0.5", require: false
 
 group :production do
   gem "rails_12factor"
