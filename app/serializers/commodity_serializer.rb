@@ -44,6 +44,19 @@ class CommoditySerializer < Serializer
             }
           })
         end
+
+        if overview_measures.present?
+          commodity_attributes.merge!({
+            overview_measures: overview_measures.map do |measure|
+              {
+                measure_sid: measure.measure_sid,
+                measure_type_id: measure.measure_type_id,
+                effective_start_date: measure.effective_start_date,
+                effective_end_date: measure.effective_end_date
+              }
+            end
+          })
+        end
       end
     end
 

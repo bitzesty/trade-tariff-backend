@@ -1,5 +1,8 @@
-class NationalMeasurementUnitSet < Sequel::Model(Sequel::Model.db[:chief_comm].
+dataset = Sequel::Model.db[:chief_comm].
               select(Sequel.as(:tbl91__tbl_code, :first_quantity_code)).
+              select_more(Sequel.qualify(:chief_comm, :cmdty_code)).
+              select_more(Sequel.qualify(:chief_comm, :fe_tsmp)).
+              select_more(Sequel.qualify(:chief_comm, :le_tsmp)).
               select_more(Sequel.as(:tbl92__tbl_code, :second_quantity_code)).
               select_more(Sequel.as(:tbl93__tbl_code, :third_quantity_code)).
               select_more(Sequel.as(:tbl91__tbl_txt, :first_quantity_description)).
@@ -12,7 +15,10 @@ class NationalMeasurementUnitSet < Sequel::Model(Sequel::Model.db[:chief_comm].
               join_table(:left, :chief_tbl9, {tbl93__tbl_code: :chief_comm__uoq_code_cdu3,
                                               tbl93__tbl_type: 'UNOQ'}, table_alias: :tbl93).
               filter{Sequel.~(chief_comm__uoq_code_cdu1: nil) | Sequel.~(chief_comm__uoq_code_cdu2: nil) | Sequel.~(chief_comm__uoq_code_cdu3: nil)}.
-              order(Sequel.desc(:chief_comm__audit_tsmp)))
+              order(Sequel.desc(:chief_comm__audit_tsmp)).
+              from_self(alias: :chief_comm)
+
+class NationalMeasurementUnitSet < Sequel::Model(dataset)
 
   set_primary_key [:tbl_code]
   plugin :time_machine

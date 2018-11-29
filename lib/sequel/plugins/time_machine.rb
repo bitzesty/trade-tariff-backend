@@ -93,7 +93,8 @@ module Sequel
         def with_actual(assoc, parent = nil)
           klass = assoc.to_s.classify.constantize
 
-          if parent && klass.relevant_query?
+          # TODO: to review after sequel upgrade. code: !parent.instance_of?(Class)
+          if parent && !parent.instance_of?(Class) && klass.relevant_query?
             filter{|o| o.<=(klass.period_start_date_column, parent.send(parent.class.period_start_date_column.column)) & (o.>=(klass.period_end_date_column, parent.send(parent.class.period_end_date_column.column)) | ({klass.period_end_date_column => nil})) }
           elsif klass.point_in_time.present?
             filter{|o| o.<=(klass.period_start_date_column, klass.point_in_time) & (o.>=(klass.period_end_date_column, klass.point_in_time) | ({klass.period_end_date_column => nil})) }

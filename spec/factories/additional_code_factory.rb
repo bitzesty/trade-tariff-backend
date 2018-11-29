@@ -5,7 +5,7 @@ FactoryGirl.define do
 
   factory :additional_code do
     additional_code_sid     { generate(:additional_code_sid) }
-    additional_code_type_id { Forgery(:basic).text(exactly: 1) }
+    additional_code_type_id { generate(:additional_code_type_id) }
     additional_code         { Forgery(:basic).text(exactly: 3) }
     validity_start_date     { Date.today.ago(2.years) }
     validity_end_date       { nil }
@@ -20,7 +20,7 @@ FactoryGirl.define do
   factory :additional_code_description_period do
     additional_code_description_period_sid { generate(:additional_code_sid) }
     additional_code_sid                    { generate(:additional_code_sid) }
-    additional_code_type_id                { Forgery(:basic).text(exactly: 1) }
+    additional_code_type_id                { generate(:additional_code_type_id) }
     additional_code                        { Forgery(:basic).text(exactly: 3) }
     validity_start_date                    { Date.today.ago(2.years) }
     validity_end_date                      { nil }
@@ -34,7 +34,7 @@ FactoryGirl.define do
 
     additional_code_description_period_sid { generate(:additional_code_sid) }
     additional_code_sid                    { generate(:additional_code_sid) }
-    additional_code_type_id                { Forgery(:basic).text(exactly: 1) }
+    additional_code_type_id                { generate(:additional_code_type_id) }
     additional_code                        { Forgery(:basic).text(exactly: 3) }
     description                            { Forgery(:lorem_ipsum).sentence }
 
@@ -51,7 +51,7 @@ FactoryGirl.define do
   end
 
   factory :additional_code_type do
-    additional_code_type_id { Forgery(:basic).text(exactly: 1) }
+    additional_code_type_id { generate(:additional_code_type_id) }
     application_code        { "1" }
     validity_start_date     { Date.today.ago(2.years) }
     validity_end_date       { nil }
@@ -79,6 +79,19 @@ FactoryGirl.define do
         create(:meursing_table_plan, meursing_table_plan_id: adco_type.meursing_table_plan_id)
       }
     end
+
+    trait :xml do
+      validity_end_date     { Date.today.ago(1.years) }
+    end
+  end
+
+  factory :additional_code_type_description do
+    additional_code_type_id                { generate(:additional_code_type_id) }
+    description                            { Forgery(:lorem_ipsum).sentence }
+
+    trait :xml do
+      language_id                          { "EN" }
+    end
   end
 
   factory :meursing_additional_code do
@@ -90,7 +103,7 @@ FactoryGirl.define do
 
   factory :additional_code_type_measure_type do |f|
     f.measure_type_id        { Forgery(:basic).text(exactly: 3) }
-    f.additional_code_type_id { Forgery(:basic).text(exactly: 1) }
+    f.additional_code_type_id { generate(:additional_code_type_id) }
     f.validity_start_date     { Date.today.ago(2.years) }
     f.validity_end_date       { nil }
 

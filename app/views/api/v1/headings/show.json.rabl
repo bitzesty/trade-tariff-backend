@@ -41,6 +41,11 @@ else
                :producline_suffix
 
     node(:parent_sid) { |commodity| commodity.parent.try(:goods_nomenclature_sid) }
+    node(:overview_measures, if: lambda { |commodity| commodity.declarable? }) { |commodity|
+      commodity.overview_measures_indexed.map do |measure|
+        partial "api/v1/measures/_measure_short", object: measure
+      end
+    }
   }
 end
 
