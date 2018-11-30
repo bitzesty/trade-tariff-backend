@@ -16,6 +16,17 @@ describe DutyExpressionFormatter do
       create(:measurement_unit_qualifier, measurement_unit_qualifier_code: measurement_unit_abbreviation.measurement_unit_qualifier)
     }
 
+    context 'for excise measure' do
+      it 'does not fetch exchange rates' do
+        expect(MonetaryExchangePeriod).to_not receive(:actual)
+        expect(MonetaryExchangeRate).to_not receive(:last)
+        DutyExpressionFormatter.format(duty_expression_id: '99',
+                                       measurement_unit: measurement_unit,
+                                       measurement_unit_qualifier: measurement_unit_qualifier,
+                                       excise: true)
+      end
+    end
+
     context 'for duty expression 99' do
       describe "with qualifier" do
         it 'return the measurement unit' do

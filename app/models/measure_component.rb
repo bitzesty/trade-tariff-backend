@@ -62,7 +62,8 @@ class MeasureComponent < Sequel::Model
       monetary_unit_abbreviation: monetary_unit_abbreviation,
       measurement_unit: measurement_unit,
       measurement_unit_qualifier: measurement_unit_qualifier,
-      currency: TradeTariffBackend.currency
+      currency: TradeTariffBackend.currency,
+      excise: measure.excise?
     }
   end
 end
