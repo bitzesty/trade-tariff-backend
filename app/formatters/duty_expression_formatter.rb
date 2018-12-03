@@ -20,10 +20,11 @@ class DutyExpressionFormatter
       measurement_unit_abbreviation = measurement_unit.try :abbreviation,
                                                            measurement_unit_qualifier: measurement_unit_qualifier
       currency = opts[:currency] || TradeTariffBackend.currency
+      excise = opts[:excise]
 
       old_duty_amount = duty_amount
       old_monetary_unit = monetary_unit
-      if duty_amount.present? && currency.present? && monetary_unit.present? && monetary_unit != currency
+      if !excise && duty_amount.present? && currency.present? && monetary_unit.present? && monetary_unit != currency
         period = MonetaryExchangePeriod.actual.last(parent_monetary_unit_code: 'EUR')
         if period.present?
           rate = MonetaryExchangeRate.last(monetary_exchange_period_sid: period.monetary_exchange_period_sid, child_monetary_unit_code: monetary_unit == 'EUR' ? currency : monetary_unit)
