@@ -51,7 +51,7 @@ gem "curb", "~> 0.8"
 gem "redis-rails"
 
 
-gem 'holidays'
+gem "holidays"
 
 gem "sentry-raven"
 
@@ -85,6 +85,6 @@ group :test do
   gem "simplecov", "~> 0.14.1"
   gem "simplecov-rcov", git: 'git@gitlab.bitzesty.com:open-source/simplecov-rcov.git' # monkey patch for ruby 2.5.0
   gem "webmock", "~> 3.0.1"
-  gem "database_cleaner", github: "theharq/database_cleaner", branch: "sequel-updates"
+  gem "database_cleaner"
   gem "rspec_junit_formatter"
 end
