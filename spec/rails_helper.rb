@@ -8,7 +8,6 @@ WebMock.disable_net_connect!(allow_localhost: true)
 require 'simplecov'
 
 SimpleCov.start 'rails'
-SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
 
 require File.expand_path("../../config/environment", __FILE__)
 
