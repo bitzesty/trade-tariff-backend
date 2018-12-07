@@ -7,59 +7,52 @@ end
 
 ruby "~> 2.5.0"
 
-gem "rails", "5.1.5"
+# Server
+gem "rails", "5.1.6.1"
 gem "sinatra", "~> 2.0.2"
+gem "puma", "~> 3.4"
 
+# DB
 gem "pg", "0.18.4"
 gem "sequel", "~> 4.32"
 gem "sequel-rails", "~> 0.9", ">= 0.9.12"
 
-
-gem "puma", "~> 3.4"
-
-
+# File uploads and AWS
 gem "aws-sdk", "~> 2"
 gem "aws-sdk-rails", ">= 1.0.1"
 
+# Background jobs
+gem "sidekiq", "~> 4.1.4"
+gem "sidekiq-scheduler", "~> 2.1.8"
+gem "redis-rails"
 
+# Elasticsearch
+gem "elasticsearch", "6.1.0"
+gem "elasticsearch-extensions", "0.0.30"
+
+# Helpers
 gem "hashie", "~> 3.4"
 gem "multi_json", "~> 1.11"
 gem "yajl-ruby", "~> 1.3.1", require: "yajl"
 gem "builder", "~> 3.2"
 gem "ox", ">= 2.8.1"
 gem "nokogiri", "~> 1.8.1"
-
-
-gem "tilt"
-gem "rabl", "~> 0.12"
-gem "ansi", "~> 1.5"
-gem "responders", "~> 2.1", ">= 2.1.0"
-
-
-gem "sidekiq", "~> 4.1.4"
-gem "sidekiq-scheduler", "~> 2.1.8"
-
-
-gem "elasticsearch", "6.1.0"
-gem "elasticsearch-extensions", "0.0.30"
-
-
+gem "holidays"
 gem "plek", "~> 1.11"
 gem "gds-sso", "~> 13", ">= 12.1.0"
-
-gem "curb", "~> 0.8"
-gem "redis-rails"
-
-
-gem "holidays"
-
 gem "sentry-raven"
-
 gem "newrelic_rpm"
 gem "logstash-event"
 gem "lograge", ">= 0.3.6"
 gem "rack-timeout", "~> 0.4"
 gem "bootsnap", require: false
+
+# API related
+gem "curb", "~> 0.8"
+gem "tilt"
+gem "rabl", "~> 0.12"
+gem "ansi", "~> 1.5"
+gem "responders", "~> 2.1", ">= 2.1.0"
 
 group :production do
   gem "rails_12factor"
