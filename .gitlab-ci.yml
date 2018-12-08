@@ -3,7 +3,7 @@ image:
 
 variables:
   POSTGRES_DB: tariff_test
-  DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/$POSTGRES_DB"
+  DATABASE_URL: postgresql://postgres:postgres@localhost:5432/$POSTGRES_DB
   REDIS_URL: redis://redis:6379
   ES_JAVA_OPTS: "-Xms1g -Xmx1g"
   ELASTICSEARCH_URL: 'http://elasticsearch:9200'
