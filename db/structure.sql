@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.14
+-- Dumped from database version 10.5
 -- Dumped by pg_dump version 10.5
 
 SET statement_timeout = 0;
@@ -27,6 +27,20 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+--
+-- Name: postgis; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION postgis; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION postgis IS 'PostGIS geometry, geography, and raster spatial types and functions';
 
 
 --
@@ -810,6 +824,72 @@ CREATE SEQUENCE public.certificates_oid_seq
 --
 
 ALTER SEQUENCE public.certificates_oid_seq OWNED BY public.certificates_oplog.oid;
+
+
+--
+-- Name: chapter_guidances; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chapter_guidances (
+    id integer NOT NULL,
+    title text,
+    url text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: chapter_guidances_chapters; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chapter_guidances_chapters (
+    id integer NOT NULL,
+    chapter_id integer,
+    chapter_guidance_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: chapter_guidances_chapters_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.chapter_guidances_chapters_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: chapter_guidances_chapters_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.chapter_guidances_chapters_id_seq OWNED BY public.chapter_guidances_chapters.id;
+
+
+--
+-- Name: chapter_guidances_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.chapter_guidances_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: chapter_guidances_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.chapter_guidances_id_seq OWNED BY public.chapter_guidances.id;
 
 
 --
@@ -6204,7 +6284,7 @@ CREATE TABLE public.sections (
     numeral character varying(255),
     title character varying(255),
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone
 );
 
 
@@ -6491,6 +6571,20 @@ ALTER TABLE ONLY public.certificate_types_oplog ALTER COLUMN oid SET DEFAULT nex
 --
 
 ALTER TABLE ONLY public.certificates_oplog ALTER COLUMN oid SET DEFAULT nextval('public.certificates_oid_seq'::regclass);
+
+
+--
+-- Name: chapter_guidances id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chapter_guidances ALTER COLUMN id SET DEFAULT nextval('public.chapter_guidances_id_seq'::regclass);
+
+
+--
+-- Name: chapter_guidances_chapters id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chapter_guidances_chapters ALTER COLUMN id SET DEFAULT nextval('public.chapter_guidances_chapters_id_seq'::regclass);
 
 
 --
@@ -7288,6 +7382,22 @@ ALTER TABLE ONLY public.certificate_types_oplog
 
 ALTER TABLE ONLY public.certificates_oplog
     ADD CONSTRAINT certificates_pkey PRIMARY KEY (oid);
+
+
+--
+-- Name: chapter_guidances_chapters chapter_guidances_chapters_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chapter_guidances_chapters
+    ADD CONSTRAINT chapter_guidances_chapters_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chapter_guidances chapter_guidances_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chapter_guidances
+    ADD CONSTRAINT chapter_guidances_pkey PRIMARY KEY (id);
 
 
 --
@@ -10222,3 +10332,4 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20180730143329_add_tariff_
 INSERT INTO "schema_migrations" ("filename") VALUES ('20180828074852_add_complete_abrogation_regulation_id_column.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20181003140819_add_updated_at_to_sections.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20181029112658_change_size_to_six_for_measure_type_id.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20181210121153_create_chapter_guidances.rb');

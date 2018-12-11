@@ -17,6 +17,10 @@ node(:chapter_note, if: lambda {|chapter| chapter.chapter_note.present? }) do |c
   chapter.chapter_note.content
 end
 
+child(:chapter_guidances, if: lambda {|chapter| chapter.chapter_guidances.present? }) do
+  attributes :title, :url
+end
+
 node(:headings) do
   @headings.map do |heading|
     partial("api/v1/headings/heading", object: heading)

@@ -21,6 +21,9 @@ else
     node(:chapter_note, if: lambda {|chapter| chapter.chapter_note.present? }) do |chapter|
       chapter.chapter_note.content
     end
+    child(:chapter_guidances, if: lambda {|chapter| chapter.chapter_guidances.present? }) do
+      attributes :title, :url
+    end
   end
 
   child :section do
