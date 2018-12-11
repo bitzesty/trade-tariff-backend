@@ -1,4 +1,46 @@
-chapter_guidances = [
+def seed_guides(guides)
+  now = Time.now
+  guides.each do |guide|
+    new_guide ||= Guide.create(
+      title: guide[:title],
+      url: guide[:url]
+    )
+    guide[:chapters].each do |chapter_number|
+      chapter = Chapter.filter(
+        "goods_nomenclatures.goods_nomenclature_item_id LIKE ?",
+        imported_id(chapter_number)
+      ).take
+      ChaptersGuides.create(
+        goods_nomenclature_sid: chapter.goods_nomenclature_sid,
+        guide_id: new_guide.id
+      )
+    end
+  end
+  seed_default_for_orphans(now)
+end
+
+def seed_default_for_orphans(now=Time.now)
+  new_default_guide = Guide.create(
+    title: "Classification of goods",
+    url: "https://www.gov.uk/government/collections/classification-of-goods"
+  )
+  unguided_chapters.each do |goods_nomenclature_sid|
+    ChaptersGuides.create(
+      goods_nomenclature_sid: goods_nomenclature_sid,
+      guide_id: new_default_guide.id
+    )
+  end
+end
+
+def imported_id(chapter_number)
+  "#{chapter_number.to_s.rjust(2,'0')}00000000"
+end
+
+def unguided_chapters
+  (Chapter.all.map {|c| c.goods_nomenclature_sid }) - (ChaptersGuides.all.map {|c| c.goods_nomenclature_sid})
+end
+
+guides = [
   {
     title: "Aircraft parts",
     url: "https://www.gov.uk/guidance/classifying-aircraft-parts-and-accessories",
@@ -111,51 +153,4 @@ chapter_guidances = [
   }
 ]
 
-def seed_guidances(chapter_guidances)
-  now = Time.now
-  chapter_guidances.each do |guidance|
-    new_guidance ||= ChapterGuidance.create(
-      title: guidance[:title],
-      url: guidance[:url],
-      created_at: now,
-      updated_at: now
-    )
-    guidance[:chapters].each do |chapter_number|
-      chapter = Chapter.filter(
-        "goods_nomenclatures.goods_nomenclature_item_id LIKE ?",
-        imported_id(chapter_number)
-      ).take
-      ChapterGuidancesChapters.create(
-        chapter_id: chapter.goods_nomenclature_sid,
-        chapter_guidance_id: new_guidance.id,
-        created_at: now,
-        updated_at: now
-      )
-    end
-  end
-  seed_default_for_orphans(now)
-end
-
-def imported_id(chapter_number)
-  "#{chapter_number.to_s.rjust(2,'0')}00000000"
-end
-
-def seed_default_for_orphans(now=Time.now)
-  new_default_guidance = ChapterGuidance.create(
-    title: "Classification of goods",
-    url: "https://www.gov.uk/government/collections/classification-of-goods",
-    created_at: now,
-    updated_at: now
-  )
-  unguided = (Chapter.all.map {|c| c.goods_nomenclature_sid }) - (ChapterGuidancesChapters.all.map {|c| c.chapter_id})
-  unguided.each do |goods_nomenclature_sid|
-    ChapterGuidancesChapters.create(
-      chapter_id: goods_nomenclature_sid,
-      chapter_guidance_id: new_default_guidance.id,
-      created_at: now,
-      updated_at: now
-    )
-  end
-end
-
-seed_guidances(chapter_guidances)
+seed_guides(guides)

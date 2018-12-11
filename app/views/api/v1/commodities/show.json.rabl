@@ -24,7 +24,7 @@ child @commodity.chapter do |chapter|
   node :chapter_note do
     chapter.chapter_note.content
   end
-  child chapter.chapter_guidances do
+  child chapter.guides do
     attributes :title, :url
   end
 end

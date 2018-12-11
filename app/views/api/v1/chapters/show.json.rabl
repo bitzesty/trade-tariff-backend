@@ -17,7 +17,7 @@ node(:chapter_note, if: lambda {|chapter| chapter.chapter_note.present? }) do |c
   chapter.chapter_note.content
 end
 
-child(:chapter_guidances, if: lambda {|chapter| chapter.chapter_guidances.present? }) do
+child(:guides, if: lambda {|chapter| chapter.guides.present? }) do
   attributes :title, :url
 end
 

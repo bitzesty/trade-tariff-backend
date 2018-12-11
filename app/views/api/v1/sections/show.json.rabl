@@ -10,7 +10,7 @@ child(chapters: :chapters) do
   attributes :description, :goods_nomenclature_item_id, :goods_nomenclature_sid,
              :headings_from, :headings_to, :formatted_description
 
-  child(:chapter_guidances, if: lambda {|chapter| chapter.chapter_guidances.present? }) do
+  child(:guides, if: lambda {|chapter| chapter.guides.present? }) do
     attributes :title, :url
   end
 

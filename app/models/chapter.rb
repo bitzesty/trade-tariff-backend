@@ -23,8 +23,8 @@ class Chapter < GoodsNomenclature
     remover: proc{ |search_reference| search_reference.update(referenced_id: nil, referenced_class: nil)},
     clearer: proc{ search_references_dataset.update(referenced_id: nil, referenced_class: nil) }
 
-  many_to_many :chapter_guidances, left_key: :chapter_id,
-                                   join_table: :chapter_guidances_chapters
+  many_to_many :guides, left_key: :goods_nomenclature_sid,
+                        join_table: :chapters_guides
 
   dataset_module do
     def by_code(code = "")

@@ -924,6 +924,37 @@ ALTER SEQUENCE public.chapter_notes_id_seq OWNED BY public.chapter_notes.id;
 
 
 --
+-- Name: chapters_guides; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chapters_guides (
+    id integer NOT NULL,
+    goods_nomenclature_sid integer,
+    guide_id integer
+);
+
+
+--
+-- Name: chapters_guides_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.chapters_guides_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: chapters_guides_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.chapters_guides_id_seq OWNED BY public.chapters_guides.id;
+
+
+--
 -- Name: chapters_sections; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3116,6 +3147,37 @@ CREATE SEQUENCE public.goods_nomenclatures_oid_seq
 --
 
 ALTER SEQUENCE public.goods_nomenclatures_oid_seq OWNED BY public.goods_nomenclatures_oplog.oid;
+
+
+--
+-- Name: guides; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.guides (
+    id integer NOT NULL,
+    title text,
+    url text
+);
+
+
+--
+-- Name: guides_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.guides_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: guides_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.guides_id_seq OWNED BY public.guides.id;
 
 
 --
@@ -6595,6 +6657,13 @@ ALTER TABLE ONLY public.chapter_notes ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
+-- Name: chapters_guides id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chapters_guides ALTER COLUMN id SET DEFAULT nextval('public.chapters_guides_id_seq'::regclass);
+
+
+--
 -- Name: chief_duty_expression id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -6837,6 +6906,13 @@ ALTER TABLE ONLY public.goods_nomenclature_successors_oplog ALTER COLUMN oid SET
 --
 
 ALTER TABLE ONLY public.goods_nomenclatures_oplog ALTER COLUMN oid SET DEFAULT nextval('public.goods_nomenclatures_oid_seq'::regclass);
+
+
+--
+-- Name: guides id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.guides ALTER COLUMN id SET DEFAULT nextval('public.guides_id_seq'::regclass);
 
 
 --
@@ -7409,6 +7485,14 @@ ALTER TABLE ONLY public.chapter_notes
 
 
 --
+-- Name: chapters_guides chapters_guides_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chapters_guides
+    ADD CONSTRAINT chapters_guides_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: chief_duty_expression chief_duty_expression_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7694,6 +7778,14 @@ ALTER TABLE ONLY public.goods_nomenclature_successors_oplog
 
 ALTER TABLE ONLY public.goods_nomenclatures_oplog
     ADD CONSTRAINT goods_nomenclatures_pkey PRIMARY KEY (oid);
+
+
+--
+-- Name: guides guides_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.guides
+    ADD CONSTRAINT guides_pkey PRIMARY KEY (id);
 
 
 --
@@ -10333,3 +10425,4 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20180828074852_add_complet
 INSERT INTO "schema_migrations" ("filename") VALUES ('20181003140819_add_updated_at_to_sections.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20181029112658_change_size_to_six_for_measure_type_id.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20181210121153_create_chapter_guidances.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20181211165412_create_guides.rb');
