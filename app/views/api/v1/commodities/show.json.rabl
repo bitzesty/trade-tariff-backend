@@ -19,6 +19,16 @@ child @commodity.heading do
              :description_plain
 end
 
+child @commodity.chapter do |chapter|
+  attributes :goods_nomenclature_item_id, :description, :formatted_description
+  node :chapter_note do
+    chapter.chapter_note.content
+  end
+  child chapter.guides do
+    attributes :title, :url
+  end
+end
+
 child(@commodity.ancestors => :ancestors) {
     attributes :producline_suffix,
                :description,
