@@ -809,8 +809,8 @@ CREATE SEQUENCE public.certificates_oid_seq
 -- Name: certificates_oid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-
 ALTER SEQUENCE public.certificates_oid_seq OWNED BY public.certificates_oplog.oid;
+
 
 --
 -- Name: chapter_notes; Type: TABLE; Schema: public; Owner: -
@@ -859,7 +859,6 @@ CREATE TABLE public.chapters_guides (
 --
 
 CREATE SEQUENCE public.chapters_guides_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3085,7 +3084,6 @@ CREATE TABLE public.guides (
 --
 
 CREATE SEQUENCE public.guides_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
