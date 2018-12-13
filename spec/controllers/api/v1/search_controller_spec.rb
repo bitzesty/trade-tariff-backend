@@ -96,7 +96,7 @@ describe Api::V1::SearchController, "GET #suggestions" do
     }
 
     before do
-      get :suggestions, params: { as_of: "2015-12-04 00:00:00" }, format: :json
+      get :suggestions, params: { as_of: "2015-12-04" }, format: :json
     end
 
     it "returns rendered records" do
