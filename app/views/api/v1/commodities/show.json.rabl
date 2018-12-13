@@ -46,7 +46,7 @@ node(:_response_info) do
       { rel: 'self', href: api_link(request.fullpath) },
       { rel: 'heading', href: api_link(api_heading_path(@commodity.heading)) },
       { rel: 'chapter', href: api_link(api_chapter_path(@commodity.chapter)) },
-      { rel: 'section', href: api_link(api_section_path(@commodity.section)) }
+      { rel: 'section', href: api_link(api_section_path(@commodity.section.position)) }
     ]
   }
 end

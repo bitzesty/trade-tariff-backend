@@ -85,7 +85,7 @@ FactoryGirl.define do
 
     trait :with_chapter do
       after(:create) { |commodity, evaluator|
-        FactoryGirl.create(:chapter, :with_section, goods_nomenclature_item_id: "#{commodity.chapter_id}")
+        FactoryGirl.create(:chapter, :with_section, :with_note, goods_nomenclature_item_id: "#{commodity.chapter_id}")
       }
     end
 
