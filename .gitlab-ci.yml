@@ -1,12 +1,12 @@
 image:
-  name: ruby:2.5.0
+  name: circleci/ruby:2.5-node-browsers
 
 variables:
   POSTGRES_DB: tariff_test
-  DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/$POSTGRES_DB"
-  REDIS_URL: redis://redis:6379
+  DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/$POSTGRES_DB"
+  REDIS_URL: redis://localhost:6379
   ES_JAVA_OPTS: "-Xms1g -Xmx1g"
-  ELASTICSEARCH_URL: 'http://elasticsearch:9200'
+  ELASTICSEARCH_URL: 'http://localhost:9200'
 
 services:
   - name: redis:3.2.11
@@ -32,13 +32,12 @@ test:
     - chmod 644 ~/.ssh/known_hosts
     - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
     - chmod 400 ~/.ssh/id_rsa
-    - apt-get update -qy
-    - apt-get install -y build-essential postgresql libpq-dev nodejs rake
-    - gem install bundler
-    - bundle install --jobs 4 --retry 3 --path vendor
+    - sudo apt-get update -qq && sudo apt-get install -y postgresql
+    - dockerize -wait tcp://localhost:5432 -timeout 1m
+    - bundle install --path vendor/bundler --jobs=4 --retry=3
     - RAILS_ENV=test bundle exec rake db:structure:load --trace
   script:
-    - curl "http://elasticsearch:9200/_cat/health"
+    - curl "http://localhost:9200/_cat/health"
     - RAILS_ENV=test RAILS_DISABLE_TEST_LOG=true bundle exec rspec spec/ --tag '~skip_ci' --profile 10 --format RspecJunitFormatter --out rspec.xml --format progress
   artifacts:
     reports:
@@ -46,7 +45,7 @@ test:
   cache:
     key: ${CI_JOB_NAME}-v2
     paths:
-      - vendor/ruby
+      - vendor/bundler
 
 code_quality:
   image: docker:stable

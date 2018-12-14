@@ -21,6 +21,9 @@ else
     node(:chapter_note, if: lambda {|chapter| chapter.chapter_note.present? }) do |chapter|
       chapter.chapter_note.content
     end
+    child(:guides, if: lambda {|chapter| chapter.guides.present? }) do
+      attributes :title, :url
+    end
   end
 
   child :section do
@@ -54,7 +57,7 @@ node(:_response_info) do
     links: [
       { rel: 'self', href: api_link(request.fullpath) },
       { rel: 'chapter', href: api_link(api_chapter_path(@heading.chapter)) },
-      { rel: 'section', href: api_link(api_section_path(@heading.section)) }
+      { rel: 'section', href: api_link(api_section_path(@heading.section.position)) }
     ]
   }
 end

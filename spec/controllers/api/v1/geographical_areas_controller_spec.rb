@@ -46,18 +46,21 @@ describe Api::V1::GeographicalAreasController, "GET #countries" do
       create :geographical_area,
              :with_description,
              :country,
+             validity_start_date: "2014-12-31 00:00:00",
              validity_end_date: "2015-12-31 00:00:00"
     }
     let!(:geographical_area2) {
       create :geographical_area,
              :with_description,
              :country,
+             validity_start_date: "2014-12-01 00:00:00",
              validity_end_date: "2015-12-01 00:00:00"
     }
     let!(:geographical_area3) {
       create :geographical_area,
              :with_description,
              geographical_code: "2",
+             validity_start_date: "2014-12-31 00:00:00",
              validity_end_date: "2015-12-31 00:00:00"
     }
 
@@ -70,7 +73,7 @@ describe Api::V1::GeographicalAreasController, "GET #countries" do
 
     before do
       get :countries,
-          params: { as_of: "2015-12-04 00:00:00" },
+          params: { as_of: "2015-12-04" },
           format: :json
     end
 

@@ -23,6 +23,9 @@ class Chapter < GoodsNomenclature
     remover: proc{ |search_reference| search_reference.update(referenced_id: nil, referenced_class: nil)},
     clearer: proc{ search_references_dataset.update(referenced_id: nil, referenced_class: nil) }
 
+  many_to_many :guides, left_key: :goods_nomenclature_sid,
+                        join_table: :chapters_guides
+
   dataset_module do
     def by_code(code = "")
       filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", "#{code.to_s.first(2)}00000000")
