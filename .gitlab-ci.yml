@@ -68,7 +68,7 @@ deploy_dev:
   stage: deploy
   script:
     - curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
-    - dpkg -i cf-cli_amd64.deb
+    - sudo dpkg -i cf-cli_amd64.deb
     - cf -v
     - curl -v -L -o autopilot https://github.com/contraband/autopilot/releases/download/0.0.3/autopilot-linux
     - chmod +x autopilot
@@ -81,7 +81,7 @@ deploy_staging:
   stage: deploy
   script:
     - curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
-    - dpkg -i cf-cli_amd64.deb
+    - sudo dpkg -i cf-cli_amd64.deb
     - cf -v
     - curl -v -L -o autopilot https://github.com/contraband/autopilot/releases/download/0.0.3/autopilot-linux
     - chmod +x autopilot
@@ -94,7 +94,7 @@ deploy_production:
   stage: deploy
   script:
     - curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
-    - dpkg -i cf-cli_amd64.deb
+    - sudo dpkg -i cf-cli_amd64.deb
     - cf -v
     - curl -v -L -o autopilot https://github.com/contraband/autopilot/releases/download/0.0.3/autopilot-linux
     - chmod +x autopilot
