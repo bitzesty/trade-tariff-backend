@@ -6,7 +6,13 @@ class ChapterSerializer < Serializer
       producline_suffix: producline_suffix,
       validity_start_date: validity_start_date,
       validity_end_date: validity_end_date,
-      description: formatted_description
+      description: formatted_description,
+      guides: guides.map do |guide|
+        {
+          title: guide.title,
+          url: guide.url
+        }
+      end
     }
 
     if section.present?
