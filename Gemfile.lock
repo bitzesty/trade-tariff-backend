@@ -157,7 +157,7 @@ GEM
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
     ox (2.8.2)
-    pg (0.18.4)
+    pg (0.21.0)
     plek (1.11.0)
     pry (0.10.1)
       coderay (~> 1.1.0)
@@ -333,7 +333,7 @@ DEPENDENCIES
   newrelic_rpm
   nokogiri (~> 1.8.1)
   ox (>= 2.8.1)
-  pg (= 0.18.4)
+  pg (= 0.21.0)
   plek (~> 1.11)
   pry-byebug
   pry-rails

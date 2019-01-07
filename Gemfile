@@ -13,7 +13,7 @@ gem "sinatra", "~> 2.0.2"
 gem "puma", "~> 3.4"
 
 # DB
-gem "pg", "0.18.4"
+gem "pg", "0.21.0"
 gem "sequel", "~> 4.32"
 gem "sequel-rails", "~> 0.9", ">= 0.9.12"
 
