@@ -24,7 +24,7 @@ module TradeTariffBackend
       end
     end
 
-    private
+  private
 
     def precision_for(number)
       number.to_f.to_s.split('.').last.size

@@ -51,7 +51,7 @@ module TariffSynchronizer
       end
     end
 
-    private
+  private
 
     def send_request
       begin

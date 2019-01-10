@@ -21,7 +21,7 @@ module TariffSynchronizer
       ::ChiefTransformer.instance.invoke(:update, self)
     end
 
-    private
+  private
 
     def self.validate_file!(cvs_string)
       begin

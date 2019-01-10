@@ -19,7 +19,7 @@ module TariffSynchronizer
         if Rails.env.production?
           bucket.object(file_path).put(body: body)
         else
-          File.open(file_path, "wb") {|f| f.write(body) }
+          File.open(file_path, "wb") { |f| f.write(body) }
         end
       end
 

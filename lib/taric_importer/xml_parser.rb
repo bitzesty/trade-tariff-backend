@@ -1,6 +1,5 @@
 module XmlParser
   class Reader < ::Ox::Sax
-
     def initialize(stringio, target, target_handler)
       @stringio = stringio
       @target = target
@@ -22,6 +21,7 @@ module XmlParser
 
     def text(val)
       return unless @in_target
+
       @node[:__content__] = val
     end
 
@@ -44,15 +44,15 @@ module XmlParser
       when Hash
         @node[key] = [@node[key], child]
       else
-        if child.keys == [:__content__]
-          @node[key] = child[:__content__]
-        else
-          @node[key] = child
-        end
+        @node[key] = if child.keys == [:__content__]
+                       child[:__content__]
+                     else
+                       child
+                     end
       end
     end
 
-    private
+  private
 
     def replace_dots(key)
       # Rails requires name attributes with underscore

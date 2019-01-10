@@ -15,11 +15,12 @@ module TariffSynchronizer
 
     def perform
       return if check_date_already_downloaded?
+
       log_request_to_taric_update
       send("create_record_for_#{response.state}_response")
     end
 
-    private
+  private
 
     def response
       @response ||= TariffUpdatesRequester.perform(url)
@@ -48,6 +49,7 @@ module TariffSynchronizer
     def create_record_for_not_found_response
       # Do not create missing record until we are sure until the next day
       return if date >= Date.current
+
       update_or_create(BaseUpdate::MISSING_STATE, missing_filename)
       instrument("not_found.tariff_synchronizer", date: date, url: url)
     end

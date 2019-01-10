@@ -16,7 +16,7 @@ namespace :tariff do
   task add_missing_commodity_footnote: :environment do
     measure_type_id = MeasureType.all.detect { |mt| mt.description == 'Export authorization (Dual use)' }.values[:measure_type_id]
     footnote = Footnote.filter(footnote_id: '002', footnote_type_id: '05').first
-    sql = %Q{
+    sql = %{
       SELECT DISTINCT goods_nomenclatures.goods_nomenclature_sid, goods_nomenclatures.goods_nomenclature_item_id,
       goods_nomenclatures.validity_start_date, producline_suffix,
       goods_nomenclatures.validity_end_date, goods_nomenclatures.operation
@@ -50,7 +50,7 @@ namespace :tariff do
       field && field == "NULL" ? nil : field
     end
 
-    ["comm", "tamf", "tbl9", "mfcm", "tame"].each do |table_name|
+    %w[comm tamf tbl9 mfcm tame].each do |table_name|
       file_path = File.join(Rails.root, "data", "missing_chief_records", "#{table_name}.csv")
 
       rows = CSV.read(file_path, headers: true, header_converters: :symbol, converters: [:null_to_nil])
@@ -71,17 +71,17 @@ namespace :tariff do
 
   namespace :sync do
     desc 'Update database by downloading and then applying CHIEF and TARIC updates via worker'
-    task update: [:environment, :class_eager_load] do
+    task update: %i[environment class_eager_load] do
       UpdatesSynchronizerWorker.perform_async
     end
 
     desc 'Download pending Taric and CHIEF update files, Update tariff_updates table'
-    task download: [:environment, :class_eager_load] do
+    task download: %i[environment class_eager_load] do
       TariffSynchronizer.download
     end
 
     desc 'Apply pending updates Taric and CHIEF'
-    task apply: [:environment, :class_eager_load] do
+    task apply: %i[environment class_eager_load] do
       TariffSynchronizer.apply
     end
 
@@ -136,9 +136,9 @@ namespace :tariff do
 
       desc "Load Section notes into database"
       task section_notes: :environment do
-        Dir[Rails.root.join('db','notes','sections','*')].each do |file|
+        Dir[Rails.root.join('db', 'notes', 'sections', '*')].each do |file|
           begin
-            note = YAML.load(File.read(file))
+            note = YAML.safe_load(File.read(file))
             section_note = SectionNote.find(section_id: note[:section]) || SectionNote.new(section_id: note[:section])
             section_note.content = note[:content]
             section_note.save
@@ -165,9 +165,9 @@ namespace :tariff do
 
       desc "Load Chapter notes into database"
       task chapter_notes: :environment do
-        Dir[Rails.root.join('db','notes','chapters','*')].each do |file|
+        Dir[Rails.root.join('db', 'notes', 'chapters', '*')].each do |file|
           begin
-            note = YAML.load(File.read(file))
+            note = YAML.safe_load(File.read(file))
             chapter_note = ChapterNote.find(section_id: note[:section],
                                             chapter_id: note[:chapter].to_s) || ChapterNote.new(section_id: note[:section], chapter_id: note[:chapter].to_s)
             chapter_note.content = note[:content]
@@ -229,9 +229,7 @@ namespace :tariff do
       desc "Remove CHIEF standing data"
       task standing_data: :environment do
         [Chief::CountryCode, Chief::CountryGroup, Chief::MeasureTypeAdco, Chief::DutyExpression,
-         Chief::MeasureTypeCond, Chief::MeasureTypeFootnote, Chief::MeasurementUnit].each do |chief_model|
-          chief_model.truncate
-        end
+         Chief::MeasureTypeCond, Chief::MeasureTypeFootnote, Chief::MeasurementUnit].each(&:truncate)
       end
     end
   end
@@ -249,11 +247,11 @@ namespace :tariff do
                                   tty_code: ref_tame.tty_code)
                            .order(Sequel.asc(:fe_tsmp))
                            .all
-        blank_tames = tames.select{|tame| tame.le_tsmp.blank? }
+        blank_tames = tames.select { |tame| tame.le_tsmp.blank? }
 
         if blank_tames.size > 1
           blank_tames.each do |blank_tame|
-            Chief::Tame.filter(blank_tame.pk_hash).update(le_tsmp: tames[tames.index(blank_tame)+1].fe_tsmp) unless blank_tame == tames.last
+            Chief::Tame.filter(blank_tame.pk_hash).update(le_tsmp: tames[tames.index(blank_tame) + 1].fe_tsmp) unless blank_tame == tames.last
           end
         end
       end
@@ -263,9 +261,9 @@ namespace :tariff do
     task failed_measures_report: %w[environment] do
       require "csv"
       items = []
-      CSV.open("data/failed-measures-report.csv", "wb", { col_sep: ";" }) do |csv|
+      CSV.open("data/failed-measures-report.csv", "wb", col_sep: ";") do |csv|
         csv << ["Goods Nomenclature", "Measure Type", "Update File", "Errors", "Candidate Measure", "Notes"]
-        Dir["data/measures/*"].select{|f| f.include?("failed")}.sort.each do |path|
+        Dir["data/measures/*"].select { |f| f.include?("failed") }.sort.each do |path|
           puts "Processing #{path}"
           file = File.open(path, "r")
           origin = path.sub("-failed.json.txt", ".txt").split("/").last
@@ -280,7 +278,7 @@ namespace :tariff do
             ]
           end
         end
-        items.uniq{ |i| [i[0], i[1], i[3]] }.each { |item| csv << item }
+        items.uniq { |i| [i[0], i[1], i[3]] }.each { |item| csv << item }
       end
 
       extra_namespaces = {
@@ -288,10 +286,10 @@ namespace :tariff do
         'xmlns:env' => "urn:publicid:-:DGTAXUD:GENERAL:ENVELOPE:1.0"
       }
 
-      items = items.map{ |i| i[0] }.uniq.sort
+      items = items.map { |i| i[0] }.uniq.sort
 
-      CSV.open("data/failed-measures-report-taric.csv", "wb", { col_sep: ";" }) do |csv|
-        Dir["data/taric/*"].select{ |path| path > "data/taric/2017-05-31_TGB17101.xml" }.sort.each do |path|
+      CSV.open("data/failed-measures-report-taric.csv", "wb", col_sep: ";") do |csv|
+        Dir["data/taric/*"].select { |path| path > "data/taric/2017-05-31_TGB17101.xml" }.sort.each do |path|
           items.each do |item|
             puts "Processing #{item} #{path}"
             origin = path.split("/").last
@@ -302,8 +300,8 @@ namespace :tariff do
             )
 
             matches.each do |m|
-              start_date = m.parent.children.select{ |c| c.name == 'validity.start.date' }.first.try(:text)
-              end_date = m.parent.children.select{ |c| c.name == 'validity.end.date' }.first.try(:text)
+              start_date = m.parent.children.select { |c| c.name == 'validity.start.date' }.first.try(:text)
+              end_date = m.parent.children.select { |c| c.name == 'validity.end.date' }.first.try(:text)
               csv << [item, origin, start_date, end_date]
             end
           end
@@ -330,8 +328,8 @@ namespace :tariff do
 
   namespace :audit do
     desc "Traverse all TARIC tables and perform conformance validations on all the records"
-    task verify: [:environment, :class_eager_load] do
-      models = (ENV['MODELS']) ? ENV['MODELS'].split(',') : []
+    task verify: %i[environment class_eager_load] do
+      models = ENV['MODELS'] ? ENV['MODELS'].split(',') : []
 
       TradeTariffBackend::Auditor.new(models, ENV["SINCE"], ENV["AUDIT_LOG"]).run
     end

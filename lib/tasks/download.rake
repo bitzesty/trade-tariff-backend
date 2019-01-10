@@ -6,7 +6,7 @@ namespace :tariff do
       files = s3.bucket('tariff-production')
                 .objects(prefix: 'data/taric/')
                 .collect(&:key)
-                .delete_if {|o| o.to_s !~ /\.xml$/ }
+                .delete_if { |o| o.to_s !~ /\.xml$/ }
       s3 = Aws::S3::Client.new
       files.each do |key|
         File.open(key, 'wb') do |file|
@@ -23,7 +23,7 @@ namespace :tariff do
       files = s3.bucket('tariff-production')
                 .objects(prefix: 'data/chief/')
                 .collect(&:key)
-                .delete_if {|o| o.to_s !~ /\.txt$/ }
+                .delete_if { |o| o.to_s !~ /\.txt$/ }
       s3 = Aws::S3::Client.new
       files.each do |key|
         File.open(key, 'wb') do |file|
@@ -40,7 +40,7 @@ namespace :tariff do
       files = s3.bucket('tariff-dev')
                 .objects(prefix: 'data/measures/')
                 .collect(&:key)
-                .delete_if {|o| o.to_s !~ /\.txt$/ }
+                .delete_if { |o| o.to_s !~ /\.txt$/ }
       s3 = Aws::S3::Client.new
       files.each do |key|
         File.open(key, 'wb') do |file|
