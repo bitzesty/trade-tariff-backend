@@ -7,10 +7,10 @@ FactoryGirl.define do
     end
 
     export_refund_nomenclature_sid { generate(:export_refund_nomenclature_sid) }
-    goods_nomenclature_item_id { 10.times.map{ Random.rand(9) }.join }
-    export_refund_code   { 3.times.map{ Random.rand(9) }.join }
+    goods_nomenclature_item_id { 10.times.map { Random.rand(9) }.join }
+    export_refund_code   { 3.times.map { Random.rand(9) }.join }
     additional_code_type { Random.rand(9) }
-    productline_suffix   { [10,20,80].sample }
+    productline_suffix   { [10, 20, 80].sample }
     validity_start_date  { Date.today.ago(2.years) }
     validity_end_date    { nil }
 
@@ -41,8 +41,8 @@ FactoryGirl.define do
     transient do
       validity_start_date { Date.today.ago(3.years) }
       validity_end_date { nil }
-      valid_at Time.now.ago(2.years)
-      valid_to nil
+      valid_at { Time.now.ago(2.years) }
+      valid_to { nil }
     end
 
     export_refund_nomenclature_sid { generate(:sid) }

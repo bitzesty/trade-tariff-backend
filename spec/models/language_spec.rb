@@ -3,8 +3,8 @@ require 'rails_helper'
 describe Language do
   describe 'validations' do
     # LA1
-    it { should validate_uniqueness.of(:language_id) }
+    it { is_expected.to validate_uniqueness.of(:language_id) }
     # LA3
-    it { should validate_validity_dates }
+    it { is_expected.to validate_validity_dates }
   end
 end

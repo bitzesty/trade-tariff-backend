@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Change do
   let!(:measure) { create :measure }
   let(:change)   {
-    Change.new(
+    described_class.new(
       model: 'Measure',
       oid: measure.source.oid,
       operation_date: measure.source.operation_date,

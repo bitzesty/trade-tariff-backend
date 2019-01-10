@@ -17,13 +17,13 @@ describe SearchService do
 
     it 'assigns search query' do
       expect(
-        SearchService.new(q: query).q
+        described_class.new(q: query).q
       ).to eq query
     end
 
     it 'strips [, ] characters from search query' do
       expect(
-        SearchService.new(q: '[hello] [world]').q
+        described_class.new(q: '[hello] [world]').q
       ).to eq 'hello world'
     end
   end
@@ -31,26 +31,26 @@ describe SearchService do
   describe "#valid?" do
     it 'is not valid if has no t param assigned' do
       expect(
-        SearchService.new(q: nil).valid?
-      ).to be_falsy
+        described_class.new(q: nil)
+      ).not_to be_valid
     end
 
     it 'is not valid if has no as_of param assigned' do
       expect(
-        SearchService.new(q: 'value').valid?
-      ).to be_falsy
+        described_class.new(q: 'value')
+      ).not_to be_valid
     end
 
     it 'is valid if has both t and as_of params provided' do
       expect(
-        SearchService.new(q: 'value', as_of: Date.today).valid?
-      ).to be_truthy
+        described_class.new(q: 'value', as_of: Date.today)
+      ).to be_valid
     end
   end
 
   # Searching in local tables
   describe 'exact search' do
-    around(:each) do |example|
+    around do |example|
       TimeMachine.now { example.run }
     end
 
@@ -68,14 +68,14 @@ describe SearchService do
         }
 
         it 'returns endpoint and identifier if provided with 2 digit chapter code' do
-          result = SearchService.new(q: chapter.goods_nomenclature_item_id.first(2),
+          result = described_class.new(q: chapter.goods_nomenclature_item_id.first(2),
                                      as_of: Date.today).to_json
 
           expect(result).to match_json_expression pattern
         end
 
         it 'returns endpoint and identifier if provided with matching 3 digit chapter code' do
-          result = SearchService.new(q: chapter.goods_nomenclature_item_id.first(2),
+          result = described_class.new(q: chapter.goods_nomenclature_item_id.first(2),
                                      as_of: Date.today).to_json
 
           expect(result).to match_json_expression pattern
@@ -89,13 +89,13 @@ describe SearchService do
             type: 'exact_match',
             entry: {
               endpoint: 'chapters',
-              id: "0#{chapter.goods_nomenclature_item_id[1,1]}"
+              id: "0#{chapter.goods_nomenclature_item_id[1, 1]}"
             }
           }
         }
 
         it 'returns endpoint and identifier if provided with 1 digit chapter code' do
-          result = SearchService.new(q: chapter.goods_nomenclature_item_id.first(2),
+          result = described_class.new(q: chapter.goods_nomenclature_item_id.first(2),
                                      as_of: Date.today).to_json
 
           expect(result).to match_json_expression pattern
@@ -116,21 +116,21 @@ describe SearchService do
       }
 
       it 'returns endpoint and identifier if provided with 4 symbol heading code' do
-        result = SearchService.new(q: heading.goods_nomenclature_item_id.first(4),
+        result = described_class.new(q: heading.goods_nomenclature_item_id.first(4),
                                    as_of: Date.today).to_json
 
         expect(result).to match_json_expression pattern
       end
 
       it 'returns endpoint and identifier if provided with matching 6 (or any between length of 4 to 9) symbol heading code' do
-        result = SearchService.new(q: heading.goods_nomenclature_item_id.first(6),
+        result = described_class.new(q: heading.goods_nomenclature_item_id.first(6),
                                    as_of: Date.today).to_json
 
         expect(result).to match_json_expression pattern
       end
 
       it 'returns endpoint and identifier if provided with matching 10 symbol declarable heading code' do
-        result = SearchService.new(q: heading.goods_nomenclature_item_id,
+        result = described_class.new(q: heading.goods_nomenclature_item_id,
                                    as_of: Date.today).to_json
 
         expect(result).to match_json_expression pattern
@@ -153,7 +153,7 @@ describe SearchService do
         }
 
         it 'returns endpoint and identifier if provided with 10 symbol commodity code' do
-          result = SearchService.new(q: commodity.goods_nomenclature_item_id.first(10),
+          result = described_class.new(q: commodity.goods_nomenclature_item_id.first(10),
                                      as_of: Date.today).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity)
@@ -165,7 +165,7 @@ describe SearchService do
                   commodity.goods_nomenclature_item_id[4..5],
                   commodity.goods_nomenclature_item_id[6..7],
                   commodity.goods_nomenclature_item_id[8..9]].join("")
-          result = SearchService.new(q: code,
+          result = described_class.new(q: code,
                                      as_of: Date.today).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity)
@@ -178,7 +178,7 @@ describe SearchService do
                    commodity.goods_nomenclature_item_id[6..7]].join("     ")
           code << "  " << commodity.goods_nomenclature_item_id[8..9]
 
-          result = SearchService.new(q: code,
+          result = described_class.new(q: code,
                                      as_of: Date.today).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity)
@@ -190,7 +190,7 @@ describe SearchService do
                   commodity.goods_nomenclature_item_id[4..5],
                   commodity.goods_nomenclature_item_id[6..7],
                   commodity.goods_nomenclature_item_id[8..9]].join(".")
-          result = SearchService.new(q: code,
+          result = described_class.new(q: code,
                                      as_of: Date.today).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity)
@@ -203,14 +203,14 @@ describe SearchService do
                    commodity.goods_nomenclature_item_id[6..7]].join("!!  !!!")
           code << "  " << commodity.goods_nomenclature_item_id[8..9]
 
-          result = SearchService.new(q: code,
+          result = described_class.new(q: code,
                                      as_of: Date.today).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity)
         end
 
         it 'returns endpoint and identifier if provided with matching 12 symbol commodity code' do
-          result = SearchService.new(q: commodity.goods_nomenclature_item_id + commodity.producline_suffix,
+          result = described_class.new(q: commodity.goods_nomenclature_item_id + commodity.producline_suffix,
                                      as_of: Date.today).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity)
@@ -218,18 +218,24 @@ describe SearchService do
       end
 
       context 'non declarable' do
-        let!(:heading)    { create :heading, goods_nomenclature_item_id: '8418000000',
-                                             validity_start_date: Date.new(2011,1,1) }
-        let!(:commodity1) { create :commodity, :with_indent,
+        let!(:heading) {
+          create :heading, goods_nomenclature_item_id: '8418000000',
+                                             validity_start_date: Date.new(2011, 1, 1)
+        }
+        let!(:commodity1) {
+          create :commodity, :with_indent,
                                                indents: 3,
                                                goods_nomenclature_item_id: '8418213100',
                                                producline_suffix: '80',
-                                               validity_start_date: Date.new(2011,1,1) }
-        let!(:commodity2) { create :commodity, :with_indent,
+                                               validity_start_date: Date.new(2011, 1, 1)
+        }
+        let!(:commodity2) {
+          create :commodity, :with_indent,
                                                indents: 4,
                                                goods_nomenclature_item_id: '8418215100',
                                                producline_suffix: '80',
-                                               validity_start_date: Date.new(2011,1,1) }
+                                               validity_start_date: Date.new(2011, 1, 1)
+        }
 
         let(:heading_pattern) {
           {
@@ -243,7 +249,7 @@ describe SearchService do
 
         it 'does not exact match commodity with children' do
           # even though productline suffix (80) suggests that it is declarable
-          result = SearchService.new(q: commodity1.goods_nomenclature_item_id,
+          result = described_class.new(q: commodity1.goods_nomenclature_item_id,
                                      as_of: Date.today).to_json
 
           expect(result).to match_json_expression heading_pattern
@@ -254,8 +260,8 @@ describe SearchService do
         let!(:commodity1) { create :commodity, :declarable, :with_heading, :with_indent, goods_nomenclature_item_id: '1010111255' }
         let!(:commodity2) { create :commodity, :declarable, :with_heading, :with_indent, goods_nomenclature_item_id: '2210113355' }
 
-        it 'should return mapped commodity' do
-          result = SearchService.new(q: '1010111255',
+        it 'returns mapped commodity' do
+          result = described_class.new(q: '1010111255',
                                      as_of: Date.today).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity2)
@@ -268,12 +274,12 @@ describe SearchService do
       let!(:hidden_gono)  { create :hidden_goods_nomenclature, goods_nomenclature_item_id: commodity.goods_nomenclature_item_id }
 
       before {
-        @result = SearchService.new(q: commodity.goods_nomenclature_item_id.first(10),
+        @result = described_class.new(q: commodity.goods_nomenclature_item_id.first(10),
                                     as_of: Date.today).to_json
       }
 
       it 'does not return hidden commodity as exact match' do
-        expect(@result).to_not match_json_expression commodity_pattern(commodity)
+        expect(@result).not_to match_json_expression commodity_pattern(commodity)
       end
     end
   end
@@ -282,11 +288,13 @@ describe SearchService do
   describe 'fuzzy search' do
     context 'filtering by date' do
       context 'with goods codes that have bounded validity period' do
-        let!(:heading) { create :heading, :with_description,
+        let!(:heading) {
+          create :heading, :with_description,
                                 goods_nomenclature_item_id: "2851000000",
-                                validity_start_date: Date.new(1972,1,1),
-                                validity_end_date: Date.new(2006,12,31),
-                                description: 'Other inorganic compounds (including distilled or conductivity water and water of similar purity);' }
+                                validity_start_date: Date.new(1972, 1, 1),
+                                validity_end_date: Date.new(2006, 12, 31),
+                                description: 'Other inorganic compounds (including distilled or conductivity water and water of similar purity);'
+        }
 
         # heading that has validity period of 1972-01-01 to 2006-12-31
         let(:heading_pattern) {
@@ -303,26 +311,28 @@ describe SearchService do
         }
 
         it 'returns goods code if search date falls within validity period' do
-          @result = SearchService.new(q: "water",
+          @result = described_class.new(q: "water",
                                       as_of: "2005-01-01").to_json
 
           expect(@result).to match_json_expression heading_pattern
         end
 
         it 'does not return goods code if search date does not fall within validity period' do
-          @result = SearchService.new(q: "water",
+          @result = described_class.new(q: "water",
                                       as_of: "2007-01-01").to_json
 
-          expect(@result).to_not match_json_expression heading_pattern
+          expect(@result).not_to match_json_expression heading_pattern
         end
       end
 
       context 'with goods codes that have unbounded validity period' do
-        let!(:heading) { create :heading, :with_description,
+        let!(:heading) {
+          create :heading, :with_description,
                                 goods_nomenclature_item_id: "0102000000",
-                                validity_start_date: Date.new(1972,1,1),
+                                validity_start_date: Date.new(1972, 1, 1),
                                 validity_end_date: nil,
-                                description: 'Live bovine animals' }
+                                description: 'Live bovine animals'
+        }
 
         # heading that has validity period starting from 1972-01-01
         let(:heading_pattern) {
@@ -332,25 +342,24 @@ describe SearchService do
               headings: [
                 { "_source" => {
                     "goods_nomenclature_item_id" => "0102000000"
-                  }.ignore_extra_keys!
-                }.ignore_extra_keys!
+                  }.ignore_extra_keys! }.ignore_extra_keys!
               ].ignore_extra_values!
             }.ignore_extra_keys!
           }.ignore_extra_keys!
         }
 
         it 'returns goods code if search date is greater than start of validity period' do
-          @result = SearchService.new(q: "animal products",
+          @result = described_class.new(q: "animal products",
                                       as_of: "2007-01-01").to_json
 
           expect(@result).to match_json_expression heading_pattern
         end
 
         it 'does not return goods code if search date is less than start of validity period' do
-          @result = SearchService.new(q: "animal products",
+          @result = described_class.new(q: "animal products",
                                       as_of: "1970-01-01").to_json
 
-          expect(@result).to_not match_json_expression heading_pattern
+          expect(@result).not_to match_json_expression heading_pattern
         end
       end
     end
@@ -361,7 +370,7 @@ describe SearchService do
       # and we don't need these advanced features
 
       let(:result) {
-        SearchService.new(q: "!!! [t_e_s_t][",
+        described_class.new(q: "!!! [t_e_s_t][",
                           as_of: "1970-01-01")
       }
 
@@ -381,7 +390,7 @@ describe SearchService do
       let(:title) { "example title" }
       let!(:section) { create :section, title: title }
       let(:result) {
-        SearchService.new(q: title,
+        described_class.new(q: title,
                           as_of: "1970-01-01")
       }
       let(:response_pattern) {
@@ -391,8 +400,7 @@ describe SearchService do
             sections: [
               { "_source" => {
                   "title" => title
-                }.ignore_extra_keys!
-              }.ignore_extra_keys!
+                }.ignore_extra_keys! }.ignore_extra_keys!
             ].ignore_extra_values!
           }.ignore_extra_keys!
         }.ignore_extra_keys!
@@ -409,13 +417,13 @@ describe SearchService do
       let(:synonym) { "synonym 1" }
       let(:resources) { %w(section chapter heading commodity) }
       let(:exact_match) {
-        SearchService.new(q: synonym, as_of: Date.today).send(:perform).results
+        described_class.new(q: synonym, as_of: Date.today).send(:perform).results
       }
 
       before {
         # create resources with synonyms
         resources.each do |resource|
-          create(resource).tap{ |r|
+          create(resource).tap { |r|
             2.times do
               create_synonym_for(r, synonym)
             end
@@ -424,7 +432,7 @@ describe SearchService do
       }
 
       # there shouldn't be duplicates
-      it "should return first created search reference" do
+      it "returns first created search reference" do
         expect(exact_match).to be_a(Section)
       end
     end
@@ -432,14 +440,18 @@ describe SearchService do
 
   context 'reference search' do
     describe 'validity period function' do
-      let!(:heading) { create :heading, :with_description,
+      let!(:heading) {
+        create :heading, :with_description,
                               goods_nomenclature_item_id: "2851000000",
-                              validity_start_date: Date.new(1972,1,1),
-                              validity_end_date: Date.new(2006,12,31),
-                              description: 'Test' }
-      let!(:search_reference) { create :search_reference,
+                              validity_start_date: Date.new(1972, 1, 1),
+                              validity_end_date: Date.new(2006, 12, 31),
+                              description: 'Test'
+      }
+      let!(:search_reference) {
+        create :search_reference,
                                        referenced: heading,
-                                       title: 'water'  }
+                                       title: 'water'
+      }
 
       let(:heading_pattern) {
         {
@@ -460,33 +472,41 @@ describe SearchService do
       end
 
       it 'returns goods code if search date falls within validity period' do
-        @result = SearchService.new(q: "water",
+        @result = described_class.new(q: "water",
                                     as_of: "2005-01-01").to_json
 
         expect(@result).to match_json_expression heading_pattern
       end
 
       it 'does not return goods code if search date does not fall within validity period' do
-        @result = SearchService.new(q: "water",
+        @result = described_class.new(q: "water",
                                     as_of: "2007-01-01").to_json
 
-        expect(@result).to_not match_json_expression heading_pattern
+        expect(@result).not_to match_json_expression heading_pattern
       end
     end
 
     describe 'reference matching for multi term searches' do
-      let!(:heading1) { create :heading, :with_description,
+      let!(:heading1) {
+        create :heading, :with_description,
                               goods_nomenclature_item_id: "2851000000",
-                              description: 'Test 1' }
-      let!(:search_reference1) { create :search_reference,
+                              description: 'Test 1'
+      }
+      let!(:search_reference1) {
+        create :search_reference,
                                         referenced: heading1,
-                                        title: 'acid oil' }
-      let!(:heading2) { create :heading, :with_description,
+                                        title: 'acid oil'
+      }
+      let!(:heading2) {
+        create :heading, :with_description,
                               goods_nomenclature_item_id: "2920000000",
-                              description: 'Test 2' }
-      let!(:search_reference2) { create :search_reference,
+                              description: 'Test 2'
+      }
+      let!(:search_reference2) {
+        create :search_reference,
                                         referenced: heading2,
-                                        title: 'other kind of oil' } # not 'acid oil'
+                                        title: 'other kind of oil'
+      } # not 'acid oil'
 
       let(:heading_pattern) {
         {
@@ -499,7 +519,7 @@ describe SearchService do
       }
 
       it 'only matches exact phrases' do
-        @result = SearchService.new(q: 'acid oil',
+        @result = described_class.new(q: 'acid oil',
                                     as_of: Date.today).to_json
 
         expect(@result).to match_json_expression heading_pattern
@@ -508,8 +528,8 @@ describe SearchService do
   end
 
   describe '#persisted?' do
-    it 'should return false' do
-      expect(SearchService.new(q: '123').persisted?).to be_falsey
+    it 'returns false' do
+      expect(described_class.new(q: '123')).not_to be_persisted
     end
   end
 end

@@ -16,7 +16,7 @@ FactoryGirl.define do
     description    { Forgery(:basic).text }
 
     trait :xml do
-      language_id  { "EN" }
+      language_id { "EN" }
     end
   end
 end

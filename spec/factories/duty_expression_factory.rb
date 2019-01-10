@@ -7,7 +7,7 @@ FactoryGirl.define do
     validity_end_date   { nil }
 
     trait :with_description do
-      after(:create) do |duty_expression, evaluator|
+      after(:create) do |duty_expression, _evaluator|
         FactoryGirl.create(:duty_expression_description, duty_expression_id: duty_expression.duty_expression_id)
       end
     end

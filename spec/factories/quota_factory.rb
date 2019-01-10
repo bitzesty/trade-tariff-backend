@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  sequence(:quota_order_number_sid) { |n| n}
+  sequence(:quota_order_number_sid) { |n| n }
   sequence(:quota_order_number_id) do
     "09" + Forgery(:basic).number(at_least: 1000, at_most: 9999).to_s
   end
@@ -18,7 +18,7 @@ FactoryGirl.define do
     validity_end_date   { nil }
 
     trait :xml do
-      validity_end_date       { Date.today.ago(1.years) }
+      validity_end_date { Date.today.ago(1.years) }
     end
   end
 
@@ -31,7 +31,7 @@ FactoryGirl.define do
     validity_end_date              { nil }
 
     trait :xml do
-      validity_end_date              { Date.today.ago(1.years) }
+      validity_end_date { Date.today.ago(1.years) }
     end
 
     trait :with_geographical_area do
@@ -44,7 +44,7 @@ FactoryGirl.define do
   end
 
   factory :quota_order_number_origin_exclusion do
-    quota_order_number_origin_sid    { generate(:sid) }
+    quota_order_number_origin_sid { generate(:sid) }
 
     after(:build) do |exclusion|
       if exclusion.excluded_geographical_area_sid.blank?
@@ -73,8 +73,8 @@ FactoryGirl.define do
       validity_end_date   { nil }
     end
 
-   trait :xml do
-      validity_start_date              { Date.today.ago(3.years) }
+    trait :xml do
+      validity_start_date { Date.today.ago(3.years) }
       validity_end_date                { Date.today.ago(1.years) }
       volume                           { Forgery(:basic).number }
       initial_volume                   { Forgery(:basic).number }
@@ -84,7 +84,7 @@ FactoryGirl.define do
       critical_threshold               { Forgery(:basic).number }
       monetary_unit_code               { Forgery(:basic).text(exactly: 2) }
       measurement_unit_qualifier_code { generate(:measurement_unit_qualifier_code) }
-      description                      { Forgery(:lorem_ipsum).sentence }
+      description { Forgery(:lorem_ipsum).sentence }
     end
   end
 
@@ -118,7 +118,7 @@ FactoryGirl.define do
     occurrence_timestamp       { 24.hours.ago }
 
     trait :xml do
-      critical_state           { Forgery(:basic).text(exactly: 2) }
+      critical_state { Forgery(:basic).text(exactly: 2) }
     end
   end
 

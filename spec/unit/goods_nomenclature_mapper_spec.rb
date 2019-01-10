@@ -3,7 +3,6 @@ require 'goods_nomenclature_mapper'
 
 describe GoodsNomenclatureMapper do
   describe 'mapping' do
-
     # E.g.
     # (1) 0101000010 -
     # (2) 0101000030 --
@@ -12,18 +11,24 @@ describe GoodsNomenclatureMapper do
     # (2) should have parent (1)
     # (3) should have parent (2)
     context 'with commodity indents on the same level' do
-      let(:commodity1) { create :commodity, :with_indent,
+      let(:commodity1) {
+        create :commodity, :with_indent,
                                             indents: 1,
-                                            goods_nomenclature_item_id: "0101000010" }
-      let(:commodity2) { create :commodity, :with_indent,
+                                            goods_nomenclature_item_id: "0101000010"
+      }
+      let(:commodity2) {
+        create :commodity, :with_indent,
                                             indents: 2,
-                                            goods_nomenclature_item_id: "0101000030" }
-      let(:commodity3) { create :commodity, :with_indent,
+                                            goods_nomenclature_item_id: "0101000030"
+      }
+      let(:commodity3) {
+        create :commodity, :with_indent,
                                             indents: 2,
-                                            goods_nomenclature_item_id: "0101000040" }
+                                            goods_nomenclature_item_id: "0101000040"
+      }
 
       it 'assigns no parents or children to both commodities' do
-        commodities = GoodsNomenclatureMapper.new([commodity1, commodity2, commodity3])
+        commodities = described_class.new([commodity1, commodity2, commodity3])
         expect(commodity1.children).to include commodity2
         expect(commodity1.children).to include commodity3
         expect(commodity1.ancestors).to be_blank
@@ -35,7 +40,7 @@ describe GoodsNomenclatureMapper do
 
         expect(commodity3.children).to be_blank
         expect(commodity3.ancestors).to include commodity1
-        expect(commodity3.ancestors).to_not include commodity2
+        expect(commodity3.ancestors).not_to include commodity2
         expect(commodity3.parent).to eq commodity1
       end
     end
@@ -48,21 +53,29 @@ describe GoodsNomenclatureMapper do
     # Expect (1) to become the child of (1).
     # Expect (3) to become the child of (4).
     context 'with commodity indents increasing' do
-      let(:commodity1) { create :commodity, :with_indent,
+      let(:commodity1) {
+        create :commodity, :with_indent,
                                             indents: 1,
-                                            goods_nomenclature_item_id: "0101000010" }
-      let(:commodity2) { create :commodity, :with_indent,
+                                            goods_nomenclature_item_id: "0101000010"
+      }
+      let(:commodity2) {
+        create :commodity, :with_indent,
                                             indents: 2,
-                                            goods_nomenclature_item_id: "0101000030" }
-      let(:commodity3) { create :commodity, :with_indent,
+                                            goods_nomenclature_item_id: "0101000030"
+      }
+      let(:commodity3) {
+        create :commodity, :with_indent,
                                             indents: 1,
-                                            goods_nomenclature_item_id: "0101000110" }
-      let(:commodity4) { create :commodity, :with_indent,
+                                            goods_nomenclature_item_id: "0101000110"
+      }
+      let(:commodity4) {
+        create :commodity, :with_indent,
                                             indents: 2,
-                                            goods_nomenclature_item_id: "0101000130" }
+                                            goods_nomenclature_item_id: "0101000130"
+      }
 
       it 'assigns no parents or children to both commodities' do
-        commodities = GoodsNomenclatureMapper.new([commodity1, commodity2, commodity3, commodity4])
+        commodities = described_class.new([commodity1, commodity2, commodity3, commodity4])
         expect(commodity1.children).to include commodity2
         expect(commodity1.ancestors).to be_blank
         expect(commodity1.parent).to be_blank
@@ -93,24 +106,34 @@ describe GoodsNomenclatureMapper do
     # Expect (4) to have no children and ancetors (1) and (2)
     # Expect (5) to have no children and ancestor (1)
     context 'with commodity indents decreasing' do
-      let(:commodity1) { create :commodity, :with_indent,
+      let(:commodity1) {
+        create :commodity, :with_indent,
                                             indents: 1,
-                                            goods_nomenclature_item_id: "0101000010" }
-      let(:commodity2) { create :commodity, :with_indent,
+                                            goods_nomenclature_item_id: "0101000010"
+      }
+      let(:commodity2) {
+        create :commodity, :with_indent,
                                             indents: 2,
-                                            goods_nomenclature_item_id: "0101000020" }
-      let(:commodity3) { create :commodity, :with_indent,
+                                            goods_nomenclature_item_id: "0101000020"
+      }
+      let(:commodity3) {
+        create :commodity, :with_indent,
                                             indents: 3,
-                                            goods_nomenclature_item_id: "0101000030" }
-      let(:commodity4) { create :commodity, :with_indent,
+                                            goods_nomenclature_item_id: "0101000030"
+      }
+      let(:commodity4) {
+        create :commodity, :with_indent,
                                             indents: 3,
-                                            goods_nomenclature_item_id: "0101000040" }
-      let(:commodity5) { create :commodity, :with_indent,
+                                            goods_nomenclature_item_id: "0101000040"
+      }
+      let(:commodity5) {
+        create :commodity, :with_indent,
                                             indents: 2,
-                                            goods_nomenclature_item_id: "0101000050" }
+                                            goods_nomenclature_item_id: "0101000050"
+      }
 
       it 'assigns no parents or children to both commodities' do
-        commodities = GoodsNomenclatureMapper.new([commodity1, commodity2, commodity3, commodity4, commodity5])
+        commodities = described_class.new([commodity1, commodity2, commodity3, commodity4, commodity5])
         expect(commodity1.children).to include commodity2
         expect(commodity1.children).to include commodity5
         expect(commodity1.ancestors).to be_blank
@@ -146,27 +169,35 @@ describe GoodsNomenclatureMapper do
     # (3) should have children (4)
     # (4) should have parent (3)
     context 'with heading indents on the same level' do
-      let(:heading1) { create :heading, :with_indent,
+      let(:heading1) {
+        create :heading, :with_indent,
                                         indents: 0,
                                         goods_nomenclature_item_id: "0101000000",
-                                        producline_suffix: "10" }
-      let(:heading2) { create :heading, :with_indent,
+                                        producline_suffix: "10"
+      }
+      let(:heading2) {
+        create :heading, :with_indent,
                                         indents: 1,
                                         goods_nomenclature_item_id: "0101000000",
-                                        producline_suffix: "80" }
-      let(:heading3) { create :heading, :with_indent,
+                                        producline_suffix: "80"
+      }
+      let(:heading3) {
+        create :heading, :with_indent,
                                         indents: 0,
                                         goods_nomenclature_item_id: "0102000000",
-                                        producline_suffix: "10" }
-      let(:heading4) { create :heading, :with_indent,
+                                        producline_suffix: "10"
+      }
+      let(:heading4) {
+        create :heading, :with_indent,
                                         indents: 0,
                                         goods_nomenclature_item_id: "0102000000",
-                                        producline_suffix: "80" }
+                                        producline_suffix: "80"
+      }
 
       it 'assigns no parents or children to both commodities' do
-        headings = GoodsNomenclatureMapper.new([heading1, heading2, heading3, heading4])
+        headings = described_class.new([heading1, heading2, heading3, heading4])
         expect(heading1.children).to include heading2
-        expect(heading1.children).to_not include heading3
+        expect(heading1.children).not_to include heading3
         expect(heading1.ancestors).to be_blank
         expect(heading1.parent).to be_blank
 
@@ -180,7 +211,7 @@ describe GoodsNomenclatureMapper do
 
         expect(heading4.children).to be_blank
         expect(heading4.ancestors).to include heading3
-        expect(heading4.ancestors).to_not include heading1
+        expect(heading4.ancestors).not_to include heading1
         expect(heading4.parent).to eq heading3
       end
     end

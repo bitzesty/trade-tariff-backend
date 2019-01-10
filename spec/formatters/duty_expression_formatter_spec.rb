@@ -18,9 +18,9 @@ describe DutyExpressionFormatter do
 
     context 'for excise measure' do
       it 'does not fetch exchange rates' do
-        expect(MonetaryExchangePeriod).to_not receive(:actual)
-        expect(MonetaryExchangeRate).to_not receive(:last)
-        DutyExpressionFormatter.format(duty_expression_id: '99',
+        expect(MonetaryExchangePeriod).not_to receive(:actual)
+        expect(MonetaryExchangeRate).not_to receive(:last)
+        described_class.format(duty_expression_id: '99',
                                        measurement_unit: measurement_unit,
                                        measurement_unit_qualifier: measurement_unit_qualifier,
                                        excise: true)
@@ -31,7 +31,7 @@ describe DutyExpressionFormatter do
       describe "with qualifier" do
         it 'return the measurement unit' do
           expect(
-            DutyExpressionFormatter.format(duty_expression_id: '99',
+            described_class.format(duty_expression_id: '99',
                                            measurement_unit: measurement_unit,
                                            measurement_unit_qualifier: measurement_unit_qualifier)
           ).to eq unit
@@ -46,7 +46,7 @@ describe DutyExpressionFormatter do
 
         it "returns unit" do
           expect(
-            DutyExpressionFormatter.format(duty_expression_id: "99",
+            described_class.format(duty_expression_id: "99",
                                            measurement_unit: measurement_unit)
           ).to eq unit
         end
@@ -57,7 +57,7 @@ describe DutyExpressionFormatter do
       context 'duty expression abbreviation present' do
         it 'returns duty expression abbreviation' do
           expect(
-            DutyExpressionFormatter.format(duty_expression_id: '12',
+            described_class.format(duty_expression_id: '12',
                                            duty_expression_abbreviation: 'abc',
                                            duty_expression_description: 'def')
           ).to eq 'abc'
@@ -67,7 +67,7 @@ describe DutyExpressionFormatter do
       context 'duty expression abbreviation missing' do
         it 'returns duty expression description' do
           expect(
-            DutyExpressionFormatter.format(duty_expression_id: '12',
+            described_class.format(duty_expression_id: '12',
                                            duty_expression_description: 'def')
           ).to eq 'def'
         end
@@ -78,7 +78,7 @@ describe DutyExpressionFormatter do
       context 'duty expression abbreviation present' do
         it 'result includes duty expression abbreviation' do
           expect(
-            DutyExpressionFormatter.format(duty_expression_id: '15',
+            described_class.format(duty_expression_id: '15',
                                            duty_expression_abbreviation: 'def')
           ).to match /def/
         end
@@ -87,7 +87,7 @@ describe DutyExpressionFormatter do
       context 'duty expression abbreviation missing' do
         it 'result includes duty expression abbreviation' do
           expect(
-            DutyExpressionFormatter.format(duty_expression_id: '15',
+            described_class.format(duty_expression_id: '15',
                                            duty_expression_description: 'abc')
           ).to match /abc/
         end
@@ -96,7 +96,7 @@ describe DutyExpressionFormatter do
       context 'monetary unit present' do
         it 'result includes monetary unit' do
           expect(
-            DutyExpressionFormatter.format(duty_expression_id: '15',
+            described_class.format(duty_expression_id: '15',
                                            duty_expression_description: 'abc',
                                            monetary_unit: 'EUR')
           ).to match /EUR/
@@ -106,7 +106,7 @@ describe DutyExpressionFormatter do
       context 'monetary unit missing' do
         it 'result includes percent sign' do
           expect(
-            DutyExpressionFormatter.format(duty_expression_id: '15',
+            described_class.format(duty_expression_id: '15',
                                            duty_expression_description: 'abc')
           ).to match /%/
         end
@@ -115,7 +115,7 @@ describe DutyExpressionFormatter do
       context 'measurement unit and measurement unit qualifier present' do
         it 'result includes measurement unit and measurement unit qualifier' do
           expect(
-            DutyExpressionFormatter.format(duty_expression_id: '15',
+            described_class.format(duty_expression_id: '15',
                                            measurement_unit: measurement_unit,
                                            measurement_unit_qualifier: measurement_unit_qualifier,
                                            duty_expression_description: 'abc')
@@ -131,7 +131,7 @@ describe DutyExpressionFormatter do
 
         it 'result includes measurement unit' do
           expect(
-            DutyExpressionFormatter.format(duty_expression_id: '15',
+            described_class.format(duty_expression_id: '15',
                                            measurement_unit: measurement_unit,
                                            duty_expression_description: 'abc')
           ).to match Regexp.new(unit)
@@ -143,7 +143,7 @@ describe DutyExpressionFormatter do
       context 'duty amount present' do
         it 'result includes duty amount' do
           expect(
-            DutyExpressionFormatter.format(duty_expression_id: '66',
+            described_class.format(duty_expression_id: '66',
                                            duty_expression_description: 'abc',
                                            duty_amount: '55')
           ).to match /55/
@@ -153,7 +153,7 @@ describe DutyExpressionFormatter do
       context 'duty expression abbreviation present and monetary unit missing' do
         it 'result includes duty expression abbreviation' do
           expect(
-            DutyExpressionFormatter.format(duty_expression_id: '66',
+            described_class.format(duty_expression_id: '66',
                                            duty_expression_abbreviation: 'abc',
                                            duty_amount: '55')
           ).to match /abc/
@@ -163,7 +163,7 @@ describe DutyExpressionFormatter do
       context 'duty expression description present and monetary unit missing' do
         it 'result includes duty expression abbreviation' do
           expect(
-            DutyExpressionFormatter.format(duty_expression_id: '66',
+            described_class.format(duty_expression_id: '66',
                                            duty_expression_description: 'abc',
                                            duty_amount: '55')
           ).to match /abc/
@@ -173,7 +173,7 @@ describe DutyExpressionFormatter do
       context 'duty expression description missing' do
         it 'result includes duty expression abbreviation' do
           expect(
-            DutyExpressionFormatter.format(duty_expression_id: '66',
+            described_class.format(duty_expression_id: '66',
                                            duty_amount: '55')
           ).to match /%/
         end
@@ -182,7 +182,7 @@ describe DutyExpressionFormatter do
       context 'monetary unit present' do
         it 'result includes monetary unit' do
           expect(
-            DutyExpressionFormatter.format(duty_expression_id: '66',
+            described_class.format(duty_expression_id: '66',
                                            duty_expression_description: 'abc',
                                            monetary_unit: 'EUR')
           ).to match /EUR/
@@ -192,7 +192,7 @@ describe DutyExpressionFormatter do
       context 'measurement unit and measurement unit qualifier present' do
         it 'result includes measurement unit and measurement unit qualifier' do
           expect(
-            DutyExpressionFormatter.format(duty_expression_id: '66',
+            described_class.format(duty_expression_id: '66',
                                            measurement_unit: measurement_unit,
                                            measurement_unit_qualifier: measurement_unit_qualifier,
                                            duty_expression_description: 'abc')
@@ -208,7 +208,7 @@ describe DutyExpressionFormatter do
 
         it 'result includes measurement unit' do
           expect(
-            DutyExpressionFormatter.format(duty_expression_id: '66',
+            described_class.format(duty_expression_id: '66',
                                            measurement_unit: measurement_unit,
                                            duty_expression_description: 'abc')
           ).to match Regexp.new(unit)
@@ -220,13 +220,13 @@ describe DutyExpressionFormatter do
   describe '.prettify' do
     context 'has less than 4 decimal places' do
       it 'returns number with insignificant zeros stripped up to 2 decimal points' do
-        expect(DutyExpressionFormatter.prettify(1.2)).to eq '1.20'
+        expect(described_class.prettify(1.2)).to eq '1.20'
       end
     end
 
     context 'has 4 or more decimal places' do
       it 'returns formatted number with 4 decimal places' do
-        expect(DutyExpressionFormatter.prettify(1.23456)).to eq '1.2346'
+        expect(described_class.prettify(1.23456)).to eq '1.2346'
       end
     end
   end

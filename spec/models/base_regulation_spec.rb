@@ -3,9 +3,9 @@ require 'rails_helper'
 describe BaseRegulation do
   describe 'validations' do
     # ROIMB1
-    it { should validate_uniqueness.of([:base_regulation_id, :base_regulation_role])}
+    it { is_expected.to validate_uniqueness.of(%i[base_regulation_id base_regulation_role]) }
     # ROIMB3
-    it { should validate_validity_dates }
+    it { is_expected.to validate_validity_dates }
 
     context "ROIMB4" do
       let(:base_regulation) {
@@ -16,11 +16,13 @@ describe BaseRegulation do
 
       describe "valid" do
         let(:regulation_group_id) { create(:regulation_group).regulation_group_id }
+
         it { expect(base_regulation.conformance_errors).to be_empty }
       end
 
       describe "invalid" do
         let(:regulation_group_id) { "ACC" }
+
         it {
           expect(base_regulation.conformance_errors).to have_key(:ROIMB4)
         }
