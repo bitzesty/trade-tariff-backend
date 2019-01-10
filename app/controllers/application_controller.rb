@@ -44,20 +44,19 @@ class ApplicationController < ActionController::Base
     head :ok
   end
 
-  protected
+protected
 
   def append_info_to_payload(payload)
     super
     payload[:user_agent] = request.headers["HTTP_X_ORIGINAL_USER_AGENT"].presence || request.env["HTTP_USER_AGENT"]
   end
 
-  private
+private
 
   def actual_date
     Date.parse(params[:as_of].to_s)
-
-    rescue ArgumentError # empty as_of param means today
-      Date.current
+  rescue ArgumentError # empty as_of param means today
+    Date.current
   end
   helper_method :actual_date
 
@@ -70,5 +69,4 @@ class ApplicationController < ActionController::Base
   def configure_currency
     TradeTariffBackend.currency = params[:currency]&.to_s&.upcase
   end
-
 end

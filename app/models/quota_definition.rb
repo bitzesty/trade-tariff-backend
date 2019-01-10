@@ -35,7 +35,7 @@ class QuotaDefinition < Sequel::Model
   end
 
   def balance
-    (last_balance_event.present?) ? last_balance_event.new_balance : volume
+    last_balance_event.present? ? last_balance_event.new_balance : volume
   end
 
   def last_suspension_period
@@ -46,11 +46,9 @@ class QuotaDefinition < Sequel::Model
     @_last_blocking_period ||= quota_blocking_periods.last
   end
 
-  private
+private
 
   def critical_state?
     critical_state == 'Y'
   end
 end
-
-

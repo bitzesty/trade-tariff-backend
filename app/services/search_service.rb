@@ -35,17 +35,19 @@ class SearchService
   delegate :serializable_hash, to: :result
 
   def initialize(attributes = {})
-    attributes.each do |name, value|
-      if self.respond_to?(:"#{name}=")
-        send(:"#{name}=", value)
+    if attributes.present?
+      attributes.each do |name, value|
+        if self.respond_to?(:"#{name}=")
+          send(:"#{name}=", value)
+        end
       end
-    end if attributes.present?
+    end
   end
 
   def as_of=(date)
     @as_of = begin
                Date.parse(date)
-             rescue
+             rescue StandardError
                Date.today
              end
   end
@@ -53,11 +55,11 @@ class SearchService
   def q=(term)
     # if search term has no letters extract the digits
     # and perform search with just the digits
-    @q = if term =~ /^(?!.*[A-Za-z]+).*$/
+    @q = if /^(?!.*[A-Za-z]+).*$/.match?(term)
            term.scan(/\d+/).join
          else
            # ignore [ and ] characters to avoid range searches
-           term.to_s.gsub(/(\[|\])/,'')
+           term.to_s.gsub(/(\[|\])/, '')
          end
   end
 
@@ -65,7 +67,7 @@ class SearchService
     result.is_a?(ExactSearch)
   end
 
-  def to_json(config = {})
+  def to_json(_config = {})
     if valid?
       perform
 
@@ -79,11 +81,11 @@ class SearchService
     false
   end
 
-  private
+private
 
   def perform
     @result = ExactSearch.new(q, as_of).search!.presence ||
-              FuzzySearch.new(q, as_of).search!.presence ||
-              NullSearch.new(q, as_of)
+      FuzzySearch.new(q, as_of).search!.presence ||
+      NullSearch.new(q, as_of)
   end
 end

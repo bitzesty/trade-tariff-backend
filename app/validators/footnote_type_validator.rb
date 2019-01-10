@@ -1,6 +1,6 @@
 ######### Conformance validations 100
 class FootnoteTypeValidator < TradeTariffBackend::Validator
-  validation :FOT1, 'The type of the footnote must be unique.', on: [:create, :update] do
+  validation :FOT1, 'The type of the footnote must be unique.', on: %i[create update] do
     validates :uniqueness, of: :footnote_type_id
   end
 

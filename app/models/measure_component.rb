@@ -2,10 +2,10 @@ class MeasureComponent < Sequel::Model
   include Formatter
 
   plugin :time_machine
-  plugin :oplog, primary_key: [:measure_sid, :duty_expression_id]
+  plugin :oplog, primary_key: %i[measure_sid duty_expression_id]
   plugin :conformance_validator
 
-  set_primary_key [:measure_sid, :duty_expression_id]
+  set_primary_key %i[measure_sid duty_expression_id]
 
   one_to_one :duty_expression, key: :duty_expression_id,
                                primary_key: :duty_expression_id,
@@ -50,7 +50,7 @@ class MeasureComponent < Sequel::Model
     duty_expression_id.in?(DutyExpression::MEURSING_DUTY_EXPRESSION_IDS)
   end
 
-  private
+private
 
   def duty_expression_formatter_options
     {

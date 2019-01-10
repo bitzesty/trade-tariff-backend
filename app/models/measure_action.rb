@@ -10,5 +10,3 @@ class MeasureAction < Sequel::Model
 
   delegate :description, to: :measure_action_description
 end
-
-

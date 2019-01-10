@@ -1,10 +1,9 @@
 class Audit < Sequel::Model
-
   many_to_one :auditable, reciprocal: :audits, reciprocal_type: :many_to_one,
                           setter: (proc do |auditable|
-                              self[:auditable_id] = (auditable.pk if auditable)
-                              self[:auditable_type] = (auditable.class.name if auditable)
-                            end),
+                                     self[:auditable_id] = (auditable.pk if auditable)
+                                     self[:auditable_type] = (auditable.class.name if auditable)
+                                   end),
                             dataset: (proc do
                               klass = auditable_type.constantize
                               klass.where(klass.primary_key => auditable_id)

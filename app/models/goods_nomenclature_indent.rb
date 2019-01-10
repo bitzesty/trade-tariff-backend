@@ -8,5 +8,3 @@ class GoodsNomenclatureIndent < Sequel::Model
 
   set_primary_key [:goods_nomenclature_indent_sid]
 end
-
-

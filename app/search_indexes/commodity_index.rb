@@ -36,7 +36,7 @@ class CommodityIndex < SearchIndex
             heading: {
               dynamic: true,
               properties: {
-                validity_end_date: { type: "date" , format: "dateOptionalTime"},
+                validity_end_date: { type: "date", format: "dateOptionalTime" },
                 number_indents: { type: "long" },
                 description: { type: "text" },
                 validity_start_date: { type: "date", format: "dateOptionalTime" },
@@ -48,7 +48,7 @@ class CommodityIndex < SearchIndex
             overview_measures: {
               dynamic: true,
               properties: {
-                measure_sid: {type: "long"},
+                measure_sid: { type: "long" },
                 measure_type_id: { type: "keyword" },
                 effective_start_date: { format: "dateOptionalTime", type: "date" },
                 effective_end_date: { format: "dateOptionalTime", type: "date" },
