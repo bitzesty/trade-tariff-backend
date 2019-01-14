@@ -15,11 +15,19 @@ BlockAlignment:
 CaseIndentation:
   Description: Indentation of when in a case/when/[else/]end.
   Enabled: true
-  IndentWhenRelativeTo: case
+  EnforcedStyle: case
   SupportedStyles:
     - case
     - end
   IndentOneStep: false
+
+Layout/ClosingParenthesisIndentation:
+  Description: 'Checks the indentation of hanging closing parentheses.'
+  Enabled: false
+
+Style/MutableConstant:
+  Description: 'Freeze mutable objects assigned to constants.'
+  Enabled: true
 
 ElseLayout:
   Description: 'Check for odd code arrangement in an else block.'
@@ -53,10 +61,10 @@ IndentationConsistency:
   Description: Keep indentation straight.
   Enabled: true
 
-# LineLength:
-#   Description: Limit lines to 80 characters.
-#   Enabled: true
-#   Max: 80
+LineLength:
+  Description: Limit lines to 80 characters.
+  Enabled: false
+  Max: 80
 
 # Supports --auto-correct
 SpaceAroundOperators:
@@ -88,8 +96,13 @@ SpaceAfterComma:
   Enabled: true
 
 # Supports --auto-correct
-SpaceInsideBrackets:
-  Description: No spaces after [ or before ].
+SpaceInsideReferenceBrackets:
+  Description: No spaces after array[ or before ].
+  Enabled: true
+
+# Supports --auto-correct
+SpaceInsideArrayLiteralBrackets:
+  Description: No spaces after array = [ or before ].
   Enabled: true
 
 # Supports --auto-correct
@@ -137,14 +150,17 @@ For:
 
 IfUnlessModifier:
   Description: Favor modifier if/unless usage when you have a single-line body.
-  Enabled: true
-  # MaxLineLength: 80
+  Enabled: false
+
+Metrics:
+  LineLength:
+    Max: 80
 
 MethodCalledOnDoEndBlock:
   Description: Avoid chaining a method call on a do...end block.
   Enabled: true
 
-MethodCallParentheses:
+MethodCallWithoutArgsParentheses:
   Description: 'Do not use parentheses for method calls with no arguments.'
   Enabled: true
 
@@ -188,7 +204,8 @@ SpaceAfterMethodName:
 
 # Supports --auto-correct
 SpaceAroundEqualsInParameterDefault:
-  Description: Checks that the equals signs in parameter default assignments have or dont have surrounding space depending on configuration.
+  Description: Checks that the equals signs in parameter default assignments have or
+    don't have surrounding space depending on configuration.
   Enabled: true
   EnforcedStyle: space
   SupportedStyles:
@@ -236,7 +253,7 @@ TrivialAccessors:
   Description: Prefer attr_* methods to trivial readers/writers.
   Enabled: true
   ExactNameMatch: true
-  AllowPredicates: false
+  AllowPredicates: true
   AllowDSLWriters: false
   Whitelist:
     - to_ary
@@ -292,11 +309,25 @@ HashSyntax:
     - ruby19
     - hash_rockets
 
+TrailingCommaInArrayLiteral:
+  Enabled: false
+  EnforcedStyleForMultiline: comma
+
+TrailingCommaInHashLiteral:
+  Enabled: false
+  EnforcedStyleForMultiline: comma
+
+TrailingCommaInArguments:
+  Enabled: false
+
 # Supports --auto-correct
 WordArray:
   Description: Use %w or %W for arrays of words.
   Enabled: true
   MinSize: 0
+
+MultilineMethodCallIndentation:
+  Enabled: false
 
 ## Strings
 
@@ -308,7 +339,7 @@ StringConversionInInterpolation:
 # Supports --auto-correct
 StringLiterals:
   Description: Checks if uses of quotes match the configured preference.
-  Enabled: true
+  Enabled: false
   EnforcedStyle: double_quotes
   SupportedStyles:
     - single_quotes
