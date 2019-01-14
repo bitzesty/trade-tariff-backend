@@ -5,7 +5,6 @@ class Footnote < Sequel::Model
 
   set_primary_key %i[footnote_type_id footnote_id]
 
-
   many_to_many :footnote_descriptions, join_table: :footnote_description_periods,
                                        left_primary_key: %i[footnote_type_id footnote_id],
                                        left_key: %i[footnote_type_id footnote_id],
@@ -52,7 +51,6 @@ class Footnote < Sequel::Model
   many_to_many :meursing_headings, join_table: :footnote_association_meursing_headings,
                                   left_key: %i[footnote_type footnote_id],
                                   right_key: %i[meursing_table_plan_id meursing_heading_number]
-
 
   delegate :description, :formatted_description, to: :footnote_description
 

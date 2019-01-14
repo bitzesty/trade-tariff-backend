@@ -133,7 +133,6 @@ describe Heading do
                                          validity_end_date: 8.years.ago
       }
 
-
       around do |example|
         TimeMachine.at(1.year.ago) do
           example.run

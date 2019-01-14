@@ -133,7 +133,6 @@ namespace :tariff do
         end
       end
 
-
       desc "Load Section notes into database"
       task section_notes: :environment do
         Dir[Rails.root.join('db', 'notes', 'sections', '*')].each do |file|

@@ -11,7 +11,6 @@ describe SearchService do
     }
   end
 
-
   describe 'initialization' do
     let(:query) { Forgery(:basic).text }
 

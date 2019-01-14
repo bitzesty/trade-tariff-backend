@@ -21,7 +21,6 @@ class MeasureCondition < Sequel::Model
     ds.with_actual(Certificate)
   end
 
-
   one_to_one :certificate_type, key: :certificate_type_code,
                                 primary_key: :certificate_type_code do |ds|
     ds.with_actual(CertificateType)

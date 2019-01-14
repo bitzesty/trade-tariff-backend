@@ -24,7 +24,6 @@ class Audit < Sequel::Model
                               end
                             end)
 
-
   def before_create
     set_version_number
     set_created_at

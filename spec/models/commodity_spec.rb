@@ -218,7 +218,6 @@ describe Commodity do
                                                      goods_nomenclature_sid: commodity2.goods_nomenclature_sid
         }
 
-
         it 'fetches measures that have measure type with proper trade movement code' do
           export_measure_type
           export_measure

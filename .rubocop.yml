@@ -4,6 +4,12 @@ require: rubocop-rspec
 Metrics/LineLength:
   Max: 180
 
+Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
 ############
 ## General https://raw.githubusercontent.com/alphagov/styleguides/master/ruby-styleguide/rubocop/gds-ruby-styleguide.yml
 ############
@@ -151,10 +157,6 @@ For:
 IfUnlessModifier:
   Description: Favor modifier if/unless usage when you have a single-line body.
   Enabled: false
-
-Metrics:
-  LineLength:
-    Max: 80
 
 MethodCalledOnDoEndBlock:
   Description: Avoid chaining a method call on a do...end block.
