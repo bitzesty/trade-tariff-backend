@@ -11,5 +11,3 @@ class QuotaUnsuspensionEvent < Sequel::Model
     'unsuspended'
   end
 end
-
-

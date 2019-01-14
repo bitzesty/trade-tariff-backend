@@ -10,5 +10,3 @@ class MeasureConditionCode < Sequel::Model
 
   delegate :description, to: :measure_condition_code_description
 end
-
-

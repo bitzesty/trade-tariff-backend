@@ -144,7 +144,7 @@ module TariffSynchronizer
         raise "Update Type should be specified in inheriting class"
       end
 
-      private
+    private
 
       def pending_from
         if last_download = (last_pending || descending.first)

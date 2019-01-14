@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  sequence(:measure_condition_component) { |n| n}
+  sequence(:measure_condition_component) { |n| n }
 
   factory :measure_condition_component do
     measure_condition_sid           { generate(:measure_condition_component) }

@@ -45,23 +45,25 @@ describe Measure do
 	      (69920, 70329, '1999-01-01 00:00:00', 3, '0805201005', '80', '2013-08-02 20:04:48', NULL, 40421, 'C', NULL);
       })
 
-      expect(Measure.with_modification_regulations.all.count).to eq 3
+      expect(described_class.with_modification_regulations.all.count).to eq 3
       # Measures on a parent code should also be present (e.g. 0805201000 on 0805201005)
       expect(Commodity.by_code('0805201005').first.measures.count).to eq 3
       # In TimeMachine we should only see vaild/the correct measure (with start date within the time range)
       # expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Measure.with_modification_regulations.with_actual(ModificationRegulation).all.count }).to eq 1
-      expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Measure.with_modification_regulations.with_actual(ModificationRegulation).all.first.measure_sid }).to eq 3445396
-      expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Commodity.by_code('0805201005').first.measures.count }).to eq 1
-      expect(TimeMachine.at(DateTime.parse("2016-07-21")){ Commodity.by_code('0805201005').first.measures.first.measure_sid }).to eq 3445396
+      expect(TimeMachine.at(DateTime.parse("2016-07-21")) { described_class.with_modification_regulations.with_actual(ModificationRegulation).all.first.measure_sid }).to eq 3445396
+      expect(TimeMachine.at(DateTime.parse("2016-07-21")) { Commodity.by_code('0805201005').first.measures.count }).to eq 1
+      expect(TimeMachine.at(DateTime.parse("2016-07-21")) { Commodity.by_code('0805201005').first.measures.first.measure_sid }).to eq 3445396
     end
   end
 
   # According to Taric guide
   describe '#validity_end_date' do
     let(:base_regulation) { create :base_regulation, effective_end_date: Date.yesterday }
-    let(:measure) { create :measure, measure_generating_regulation_role: 1,
+    let(:measure) {
+      create :measure, measure_generating_regulation_role: 1,
                                      base_regulation: base_regulation,
-                                     validity_end_date: Date.today }
+                                     validity_end_date: Date.today
+    }
 
     context 'measure end date greater than generating regulation end date' do
       it 'returns validity end date of' do
@@ -71,9 +73,11 @@ describe Measure do
 
     context 'measure end date lesser than generating regulation end date' do
       let(:base_regulation) { create :base_regulation, effective_end_date: Date.today }
-      let(:measure) { create :measure, measure_generating_regulation_role: 1,
+      let(:measure) {
+        create :measure, measure_generating_regulation_role: 1,
                                        base_regulation: base_regulation,
-                                       validity_end_date: Date.yesterday }
+                                       validity_end_date: Date.yesterday
+      }
 
       it 'returns validity end date of the measure' do
         expect(measure.validity_end_date.to_date).to eq measure.validity_end_date.to_date
@@ -82,9 +86,11 @@ describe Measure do
 
     context 'generating regulation effective end date blank, measure end date blank' do
       let(:base_regulation) { create :base_regulation, effective_end_date: nil }
-      let(:measure) { create :measure, measure_generating_regulation_role: 1,
+      let(:measure) {
+        create :measure, measure_generating_regulation_role: 1,
                                        base_regulation: base_regulation,
-                                       validity_end_date: nil }
+                                       validity_end_date: nil
+      }
 
       it 'returns validity end date of the measure' do
         expect(measure.validity_end_date).to be_blank
@@ -93,9 +99,11 @@ describe Measure do
 
     context 'generating regulation effective end date blank, measure end date present' do
       let(:base_regulation) { create :base_regulation, effective_end_date: nil }
-      let(:measure) { create :measure, measure_generating_regulation_role: 1,
+      let(:measure) {
+        create :measure, measure_generating_regulation_role: 1,
                                        base_regulation: base_regulation,
-                                       validity_end_date: Date.today }
+                                       validity_end_date: Date.today
+      }
 
       it 'returns validity end date of the measure' do
         expect(measure.validity_end_date).to be_blank
@@ -103,10 +111,12 @@ describe Measure do
     end
 
     context 'generating regulation effective end date present, measure end date blank' do
-      let(:base_regulation) { create :base_regulation, effective_end_date: Date.today}
-      let(:measure) { create :measure, measure_generating_regulation_role: 1,
+      let(:base_regulation) { create :base_regulation, effective_end_date: Date.today }
+      let(:measure) {
+        create :measure, measure_generating_regulation_role: 1,
                                        base_regulation: base_regulation,
-                                       validity_end_date: nil }
+                                       validity_end_date: nil
+      }
 
       it 'returns validity end date of the measure' do
         expect(measure.validity_end_date.to_date).to eq Date.today
@@ -115,10 +125,12 @@ describe Measure do
 
     context 'measure is national' do
       let(:base_regulation) { create :base_regulation, effective_end_date: Date.yesterday }
-      let(:measure) { create :measure, measure_generating_regulation_role: 1,
+      let(:measure) {
+        create :measure, measure_generating_regulation_role: 1,
                                        base_regulation: base_regulation,
                                        validity_end_date: Date.today,
-                                       national:true }
+                                       national: true
+      }
 
       it 'returns validity end date of the measure' do
         expect(measure.validity_end_date.to_date).to eq Date.today
@@ -129,14 +141,18 @@ describe Measure do
   describe 'associations' do
     describe 'measure type' do
       let!(:measure)         { create :measure }
-      let!(:measure_type1)   { create :measure_type, measure_type_id: measure.measure_type_id,
+      let!(:measure_type1)   {
+        create :measure_type, measure_type_id: measure.measure_type_id,
                                                      validity_start_date: 5.years.ago,
                                                      validity_end_date: 3.years.ago,
-                                                     operation_date: Date.yesterday }
-      let!(:measure_type2)   { create :measure_type, measure_type_id: measure.measure_type_id,
+                                                     operation_date: Date.yesterday
+      }
+      let!(:measure_type2) {
+        create :measure_type, measure_type_id: measure.measure_type_id,
                                                      validity_start_date: 2.years.ago,
                                                      validity_end_date: nil,
-                                                     operation: :update }
+                                                     operation: :update
+      }
 
       context 'direct loading' do
         it 'loads correct description respecting given actual time' do
@@ -156,7 +172,7 @@ describe Measure do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
             expect(
-              Measure.where(measure_sid: measure.measure_sid)
+              described_class.where(measure_sid: measure.measure_sid)
                           .eager(:measure_type)
                           .all
                           .first
@@ -168,7 +184,7 @@ describe Measure do
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
             expect(
-              Measure.where(measure_sid: measure.measure_sid)
+              described_class.where(measure_sid: measure.measure_sid)
                           .eager(:measure_type)
                           .all
                           .first
@@ -190,14 +206,14 @@ describe Measure do
         end
 
         it 'does not load associated measure condition' do
-          expect(measure.measure_conditions).to_not include measure_condition2
+          expect(measure.measure_conditions).not_to include measure_condition2
         end
       end
 
       context 'eager loading' do
         it 'loads associated measure conditions' do
           expect(
-            Measure.where(measure_sid: measure.measure_sid)
+            described_class.where(measure_sid: measure.measure_sid)
                  .eager(:measure_conditions)
                  .all
                  .first
@@ -207,12 +223,12 @@ describe Measure do
 
         it 'does not load associated measure condition' do
           expect(
-            Measure.where(measure_sid: measure.measure_sid)
+            described_class.where(measure_sid: measure.measure_sid)
                  .eager(:measure_conditions)
                  .all
                  .first
                  .measure_conditions
-          ).to_not include measure_condition2
+          ).not_to include measure_condition2
         end
       end
 
@@ -239,14 +255,14 @@ describe Measure do
         end
 
         it 'does not load associated measure condition' do
-          expect(measure.geographical_area.pk).to_not eq geographical_area2.pk
+          expect(measure.geographical_area.pk).not_to eq geographical_area2.pk
         end
       end
 
       context 'eager loading' do
         it 'loads associated measure conditions' do
           expect(
-            Measure.where(measure_sid: measure.measure_sid)
+            described_class.where(measure_sid: measure.measure_sid)
                  .eager(:geographical_area)
                  .all
                  .first
@@ -256,28 +272,36 @@ describe Measure do
 
         it 'does not load associated measure condition' do
           expect(
-            Measure.where(measure_sid: measure.measure_sid)
+            described_class.where(measure_sid: measure.measure_sid)
                  .eager(:geographical_area)
                  .all
                  .first
                  .geographical_area.pk
-          ).to_not eq geographical_area2.pk
+          ).not_to eq geographical_area2.pk
         end
       end
     end
 
     describe 'footnotes' do
       let!(:measure)          { create :measure }
-      let!(:footnote1)        { create :footnote, validity_start_date: 2.years.ago,
-                                                  validity_end_date: nil }
-      let!(:footnote1_assoc)  { create :footnote_association_measure, measure_sid: measure.measure_sid,
+      let!(:footnote1)        {
+        create :footnote, validity_start_date: 2.years.ago,
+                                                  validity_end_date: nil
+      }
+      let!(:footnote1_assoc) {
+        create :footnote_association_measure, measure_sid: measure.measure_sid,
                                                                       footnote_id: footnote1.footnote_id,
-                                                                      footnote_type_id: footnote1.footnote_type_id }
-      let!(:footnote2)        { create :footnote, validity_start_date: 5.years.ago,
-                                                  validity_end_date: 3.years.ago }
-      let!(:footnote2_assoc)  { create :footnote_association_measure, measure_sid: measure.measure_sid,
+                                                                      footnote_type_id: footnote1.footnote_type_id
+      }
+      let!(:footnote2) {
+        create :footnote, validity_start_date: 5.years.ago,
+                                                  validity_end_date: 3.years.ago
+      }
+      let!(:footnote2_assoc) {
+        create :footnote_association_measure, measure_sid: measure.measure_sid,
                                                                       footnote_id: footnote2.footnote_id,
-                                                                      footnote_type_id: footnote2.footnote_type_id }
+                                                                      footnote_type_id: footnote2.footnote_type_id
+      }
 
       context 'direct loading' do
         it 'loads correct indent respecting given actual time' do
@@ -337,7 +361,7 @@ describe Measure do
         it 'loads correct indent respecting given actual time' do
           TimeMachine.now do
             expect(
-              Measure.where(measure_sid: measure.measure_sid)
+              described_class.where(measure_sid: measure.measure_sid)
                           .eager(:footnotes)
                           .all
                           .first
@@ -349,7 +373,7 @@ describe Measure do
         it 'loads correct indent respecting given time' do
           TimeMachine.at(1.year.ago) do
             expect(
-              Measure.where(measure_sid: measure.measure_sid)
+              described_class.where(measure_sid: measure.measure_sid)
                           .eager(:footnotes)
                           .all
                           .first
@@ -359,7 +383,7 @@ describe Measure do
 
           TimeMachine.at(4.years.ago) do
             expect(
-              Measure.where(measure_sid: measure.measure_sid)
+              described_class.where(measure_sid: measure.measure_sid)
                           .eager(:footnotes)
                           .all
                           .first
@@ -381,14 +405,14 @@ describe Measure do
         end
 
         it 'does not load associated measure component' do
-          expect(measure.measure_components).to_not include measure_component2
+          expect(measure.measure_components).not_to include measure_component2
         end
       end
 
       context 'eager loading' do
         it 'loads associated measure components' do
           expect(
-            Measure.where(measure_sid: measure.measure_sid)
+            described_class.where(measure_sid: measure.measure_sid)
                  .eager(:measure_components)
                  .all
                  .first
@@ -398,12 +422,12 @@ describe Measure do
 
         it 'does not load associated measure component' do
           expect(
-            Measure.where(measure_sid: measure.measure_sid)
+            described_class.where(measure_sid: measure.measure_sid)
                  .eager(:measure_components)
                  .all
                  .first
                  .measure_components
-          ).to_not include measure_component2
+          ).not_to include measure_component2
         end
       end
     end
@@ -419,14 +443,14 @@ describe Measure do
         end
 
         it 'does not load associated measure condition' do
-          expect(measure.additional_code).to_not eq additional_code2
+          expect(measure.additional_code).not_to eq additional_code2
         end
       end
 
       context 'eager loading' do
         it 'loads associated measure conditions' do
           expect(
-            Measure.where(measure_sid: measure.measure_sid)
+            described_class.where(measure_sid: measure.measure_sid)
                  .eager(:additional_code)
                  .all
                  .first
@@ -436,12 +460,12 @@ describe Measure do
 
         it 'does not load associated measure condition' do
           expect(
-            Measure.where(measure_sid: measure.measure_sid)
+            described_class.where(measure_sid: measure.measure_sid)
                  .eager(:additional_code)
                  .all
                  .first
                  .additional_code
-          ).to_not eq additional_code2
+          ).not_to eq additional_code2
         end
       end
     end
@@ -457,14 +481,14 @@ describe Measure do
         end
 
         it 'does not load associated measure condition' do
-          expect(measure.quota_order_number).to_not eq quota_order_number2
+          expect(measure.quota_order_number).not_to eq quota_order_number2
         end
       end
 
       context 'eager loading' do
         it 'loads associated measure conditions' do
           expect(
-            Measure.where(measure_sid: measure.measure_sid)
+            described_class.where(measure_sid: measure.measure_sid)
                  .eager(:quota_order_number)
                  .all
                  .first
@@ -474,12 +498,12 @@ describe Measure do
 
         it 'does not load associated measure condition' do
           expect(
-            Measure.where(measure_sid: measure.measure_sid)
+            described_class.where(measure_sid: measure.measure_sid)
                  .eager(:quota_order_number)
                  .all
                  .first
                  .quota_order_number
-          ).to_not eq quota_order_number2
+          ).not_to eq quota_order_number2
         end
       end
     end
@@ -497,14 +521,14 @@ describe Measure do
         end
 
         it 'does not load associated full temporary stop regulation' do
-          expect(measure.full_temporary_stop_regulation.pk).to_not eq fts_regulation2.pk
+          expect(measure.full_temporary_stop_regulation.pk).not_to eq fts_regulation2.pk
         end
       end
 
       context 'eager loading' do
         it 'loads associated full temporary stop regulation' do
           expect(
-            Measure.where(measure_sid: measure.measure_sid)
+            described_class.where(measure_sid: measure.measure_sid)
                  .eager(:full_temporary_stop_regulations)
                  .all
                  .first
@@ -514,12 +538,12 @@ describe Measure do
 
         it 'does not load associated full temporary stop regulation' do
           expect(
-            Measure.where(measure_sid: measure.measure_sid)
+            described_class.where(measure_sid: measure.measure_sid)
                  .eager(:full_temporary_stop_regulations)
                  .all
                  .first
                  .full_temporary_stop_regulation.pk
-          ).to_not eq fts_regulation2.pk
+          ).not_to eq fts_regulation2.pk
         end
       end
     end
@@ -535,14 +559,14 @@ describe Measure do
         end
 
         it 'does not load associated full temporary stop regulation' do
-          expect(measure.measure_partial_temporary_stop.pk).to_not eq mpt_stop2.pk
+          expect(measure.measure_partial_temporary_stop.pk).not_to eq mpt_stop2.pk
         end
       end
 
       context 'eager loading' do
         it 'loads associated full temporary stop regulation' do
           expect(
-            Measure.where(measure_sid: measure.measure_sid)
+            described_class.where(measure_sid: measure.measure_sid)
                  .eager(:measure_partial_temporary_stops)
                  .all
                  .first
@@ -552,12 +576,12 @@ describe Measure do
 
         it 'does not load associated full temporary stop regulation' do
           expect(
-            Measure.where(measure_sid: measure.measure_sid)
+            described_class.where(measure_sid: measure.measure_sid)
                  .eager(:measure_partial_temporary_stops)
                  .all
                  .first
                  .measure_partial_temporary_stop.pk
-          ).to_not eq mpt_stop2.pk
+          ).not_to eq mpt_stop2.pk
         end
       end
     end
@@ -576,14 +600,16 @@ describe Measure do
     # ME1 The combination of measure type + geographical area +
     #     goods nomenclature item id + additional code type + additional code +
     #     order number + reduction indicator + start date must be unique
-    it { is_expected.to validate_uniqueness.of([:measure_type_id,
-                                        :geographical_area_sid,
-                                        :goods_nomenclature_sid,
-                                        :additional_code_type_id,
-                                        :additional_code_id,
-                                        :ordernumber,
-                                        :reduction_indicator,
-                                        :validity_start_date]) }
+    it {
+      expect(subject).to validate_uniqueness.of(%i[measure_type_id
+                                                   geographical_area_sid
+                                                   goods_nomenclature_sid
+                                                   additional_code_type_id
+                                                   additional_code_id
+                                                   ordernumber
+                                                   reduction_indicator
+                                                   validity_start_date])
+    }
     # ME4 ME5
     it { is_expected.to validate_validity_date_span.of(:geographical_area) }
     # ME2 ME3
@@ -601,17 +627,19 @@ describe Measure do
 
       it 'performs validation' do
         expect(measure1).to be_conformant
-        expect(measure2).to_not be_conformant
+        expect(measure2).not_to be_conformant
       end
     end
 
     describe 'ME9' do
       context 'additional_code blank, goods nomenclature code blank' do
-        let(:measure) { create :measure, additional_code_id: nil,
-                                         goods_nomenclature_item_id: nil }
+        let(:measure) {
+          create :measure, additional_code_id: nil,
+                                         goods_nomenclature_item_id: nil
+        }
 
         it 'performs validation' do
-          expect(measure).to_not be_conformant
+          expect(measure).not_to be_conformant
         end
       end
 
@@ -630,8 +658,8 @@ describe Measure do
       let(:measure3) { create :measure, :with_quota_order_number, order_number_capture_code: 1, ordernumber: '123' }
 
       it 'performs validation' do
-        expect(measure1).to_not be_conformant
-        expect(measure2).to_not be_conformant
+        expect(measure1).not_to be_conformant
+        expect(measure2).not_to be_conformant
         expect(measure3).to     be_conformant
       end
     end
@@ -641,44 +669,50 @@ describe Measure do
       let(:measure2) { create :measure, :with_related_additional_code_type }
 
       it 'performs validation' do
-        expect(measure1).to_not be_conformant
+        expect(measure1).not_to be_conformant
         expect(measure2).to be_conformant
       end
     end
 
     describe 'ME13' do
       context 'additional code type meursing and attributes missing' do
-        let(:measure) { create :measure, :with_related_additional_code_type,
+        let(:measure) {
+          create :measure, :with_related_additional_code_type,
                                         additional_code_type_id: 3,
                                         additional_code_id: '123',
                                         goods_nomenclature_item_id: nil,
                                         ordernumber: nil,
-                                        reduction_indicator: nil }
+                                        reduction_indicator: nil
+        }
 
-        it 'should be valid' do
+        it 'is valid' do
           expect(measure).to be_conformant
         end
       end
 
       context 'additional code type meursing and attributes present' do
-        let(:measure) { create :measure, :with_related_additional_code_type,
+        let(:measure) {
+          create :measure, :with_related_additional_code_type,
                                          :with_quota_order_number,
                                         additional_code_type_id: 3,
                                         additional_code_id: '123',
                                         goods_nomenclature_item_id: '1234567890',
                                         ordernumber: '12345',
-                                        reduction_indicator: 1 }
+                                        reduction_indicator: 1
+        }
 
-        it 'should no be valid' do
-          expect(measure).to_not be_conformant
+        it 'noes be valid' do
+          expect(measure).not_to be_conformant
         end
       end
 
       context 'additional code type non meursing' do
-        let(:measure) { create :measure, :with_related_additional_code_type,
-                                        additional_code_type_id: 3 }
+        let(:measure) {
+          create :measure, :with_related_additional_code_type,
+                                        additional_code_type_id: 3
+        }
 
-        it 'should be valid' do
+        it 'is valid' do
           expect(measure).to be_conformant
         end
       end
@@ -687,87 +721,97 @@ describe Measure do
     describe 'ME14' do
       context 'additional code type meursing, additional code is associated to export refund nomenclature' do
         let(:additional_code) { create :additional_code, :with_export_refund_nomenclature }
-        let(:measure) { create :measure, :with_related_additional_code_type,
+        let(:measure) {
+          create :measure, :with_related_additional_code_type,
                                          :with_quota_order_number,
                                         additional_code_type_id: 3,
                                         additional_code_id: additional_code.additional_code,
                                         goods_nomenclature_item_id: '1234567890',
                                         ordernumber: '12345',
                                         reduction_indicator: 1,
-                                        order_number_capture_code: 1 }
+                                        order_number_capture_code: 1
+        }
 
-        it 'should be valid' do
+        it 'is valid' do
           expect(measure).to be_conformant
         end
       end
 
       context 'additional code type meursing, additional code is not associated to export refund nomenclature' do
         let(:additional_code) { create :additional_code }
-        let(:measure) { create :measure, :with_related_additional_code_type,
+        let(:measure) {
+          create :measure, :with_related_additional_code_type,
                                          :with_quota_order_number,
                                         additional_code_type_id: 3,
                                         additional_code_id: additional_code.additional_code,
                                         goods_nomenclature_item_id: '1234567890',
                                         ordernumber: '12345',
-                                        reduction_indicator: 1 }
+                                        reduction_indicator: 1
+        }
 
-        it 'should not be valid' do
-          expect(measure).to_not be_conformant
+        it 'is not valid' do
+          expect(measure).not_to be_conformant
         end
       end
 
       context 'additional code type non meursing' do
-        let(:measure) { create :measure, :with_related_additional_code_type,
-                                        additional_code_type_id: 3 }
+        let(:measure) {
+          create :measure, :with_related_additional_code_type,
+                                        additional_code_type_id: 3
+        }
 
-        it 'should be valid' do
+        it 'is valid' do
           expect(measure).to be_conformant
         end
       end
     end
 
     describe 'ME26' do
-      it { should validate_exclusion.of([:measure_generating_regulation_id, :measure_generating_regulation_role])
-                                    .from(->{ CompleteAbrogationRegulation.select(:complete_abrogation_regulation_id, :complete_abrogation_regulation_role) }) }
+      it {
+        expect(subject).to validate_exclusion.of(%i[measure_generating_regulation_id measure_generating_regulation_role])
+                                    .from(-> { CompleteAbrogationRegulation.select(:complete_abrogation_regulation_id, :complete_abrogation_regulation_role) })
+      }
     end
 
     describe 'ME27' do
       let(:measure) { create :measure }
 
       context 'regulation fully replaced' do
-        before { measure.generating_regulation.update(replacement_indicator: 1)}
+        before { measure.generating_regulation.update(replacement_indicator: 1) }
 
-        it 'should not be valid' do
-          expect(measure.conformant?).to be_falsy
+        it 'is not valid' do
+          expect(measure).not_to be_conformant
         end
       end
 
       context 'regulation partially replaced' do
-        before { measure.generating_regulation.update(replacement_indicator: 2)}
+        before { measure.generating_regulation.update(replacement_indicator: 2) }
 
-        it 'should be valid' do
-          expect(measure.conformant?).to be_truthy
+        it 'is valid' do
+          expect(measure).to be_conformant
         end
       end
 
       context 'regulation not replaced' do
-        before { measure.generating_regulation.update(replacement_indicator: 0)}
+        before { measure.generating_regulation.update(replacement_indicator: 0) }
 
-        it 'should be valid' do
-          expect(measure.conformant?).to be_truthy
+        it 'is valid' do
+          expect(measure).to be_conformant
         end
       end
     end
 
     describe 'ME33' do
-      let(:measure) { create :measure, justification_regulation_id: nil,
-                                      justification_regulation_role: nil }
+      let(:measure) {
+        create :measure, justification_regulation_id: nil,
+                                      justification_regulation_role: nil
+      }
 
       context 'measure validity end date is set' do
         before { measure.validity_end_date = Date.today }
 
         it 'performs validation' do
-          expect(measure).to_not be_conformant
+          expect(measure).not_to be_conformant
         end
       end
 
@@ -785,7 +829,7 @@ describe Measure do
         let(:measure) { create :measure, :with_abrogated_modification_regulation }
 
         it 'performs validation' do
-          expect(measure).to_not be_conformant
+          expect(measure).not_to be_conformant
         end
       end
 
@@ -799,8 +843,10 @@ describe Measure do
     end
 
     describe 'ME34' do
-      let(:measure) { create :measure, justification_regulation_id: 'abc',
-                                      justification_regulation_role: 1 }
+      let(:measure) {
+        create :measure, justification_regulation_id: 'abc',
+                                      justification_regulation_role: 1
+      }
 
       context 'measure validity end date is set' do
         before {
@@ -820,53 +866,57 @@ describe Measure do
         before { measure.validity_end_date = nil }
 
         it 'performs validation' do
-          expect(measure).to_not be_conformant
+          expect(measure).not_to be_conformant
         end
       end
     end
 
     describe 'ME86' do
-      it { should validate_inclusion.of(:measure_generating_regulation_role).in(Measure::VALID_ROLE_TYPE_IDS) }
+      it { is_expected.to validate_inclusion.of(:measure_generating_regulation_role).in(Measure::VALID_ROLE_TYPE_IDS) }
     end
 
     describe 'ME88' do
-      let(:measure1) { create :measure, type_explosion_level: 10,
-                                        gono_number_indents: 1 }
-      let(:measure2) { create :measure, type_explosion_level: 1,
-                                        gono_number_indents: 10 }
+      let(:measure1) {
+        create :measure, type_explosion_level: 10,
+                                        gono_number_indents: 1
+      }
+      let(:measure2) {
+        create :measure, type_explosion_level: 1,
+                                        gono_number_indents: 10
+      }
 
       it 'preforms validation' do
         expect(measure1).to be_conformant
-        expect(measure2).to_not be_conformant
+        expect(measure2).not_to be_conformant
       end
     end
 
     describe 'ME116' do
-      it { should validate_validity_date_span.of(:order_number) }
+      it { is_expected.to validate_validity_date_span.of(:order_number) }
     end
   end
 
   describe '#origin' do
-    before(:all) { Measure.unrestrict_primary_key }
+    before(:all) { described_class.unrestrict_primary_key }
 
-    it 'should be uk' do
-      expect(Measure.new(measure_sid: -1).origin).to eq "uk"
+    it 'is uk' do
+      expect(described_class.new(measure_sid: -1).origin).to eq "uk"
     end
-    it 'should be eu' do
-      expect(Measure.new(measure_sid: 1).origin).to eq "eu"
+    it 'is eu' do
+      expect(described_class.new(measure_sid: 1).origin).to eq "eu"
     end
   end
 
   describe "#measure_generating_regulation_id" do
     it 'reads measure generating regulation id from database' do
       measure = create :measure
-      expect(measure.measure_generating_regulation_id).to_not be_blank
-      expect(measure.measure_generating_regulation_id).to eq Measure.first.measure_generating_regulation_id
+      expect(measure.measure_generating_regulation_id).not_to be_blank
+      expect(measure.measure_generating_regulation_id).to eq described_class.first.measure_generating_regulation_id
     end
 
     it 'measure D9500019 is globally replaced with D9601421' do
       measure = create :measure, measure_generating_regulation_id: "D9500019"
-      expect(measure.measure_generating_regulation_id).to_not be_blank
+      expect(measure.measure_generating_regulation_id).not_to be_blank
       expect(measure.measure_generating_regulation_id).to eq "D9601421"
     end
   end
@@ -876,16 +926,16 @@ describe Measure do
       let(:quota_order_number) { create :quota_order_number }
       let(:measure) { create :measure, ordernumber: quota_order_number.quota_order_number_id }
 
-      it 'should return associated quota order nmber' do
+      it 'returns associated quota order nmber' do
         expect(measure.order_number).to eq quota_order_number
       end
     end
 
     context "quota_order_number missing" do
-      let(:ordernumber) { 6.times.map{ Random.rand(9) }.join }
+      let(:ordernumber) { 6.times.map { Random.rand(9) }.join }
       let(:measure) { create :measure, ordernumber: ordernumber }
 
-      it 'should return a mock quota order number with just the number set' do
+      it 'returns a mock quota order number with just the number set' do
         expect(measure.order_number.quota_order_number_id).to eq ordernumber
       end
 
@@ -965,7 +1015,7 @@ describe Measure do
 
   describe '#national_measurement_units_for' do
     let(:measure_type) { create :measure_type, measure_type_description: measure_type_description }
-    let(:measure)   { create :measure, measure_type_id: measure_type.measure_type_id }
+    let(:measure) { create :measure, measure_type_id: measure_type.measure_type_id }
 
     context 'measure is excise' do
       let(:measure_type_description) { 'EXCISE 111' }
@@ -976,11 +1026,13 @@ describe Measure do
         context 'declarable has national measurement unit set associated' do
           let(:tbl1) { create :tbl9, :unoq }
           let(:tbl2) { create :tbl9, :unoq }
-          let!(:comm1) { create :comm, cmdty_code: commodity.goods_nomenclature_item_id,
+          let!(:comm1) {
+            create :comm, cmdty_code: commodity.goods_nomenclature_item_id,
                                       fe_tsmp: Date.today.ago(2.years),
                                       le_tsmp: nil,
                                       uoq_code_cdu2: tbl1.tbl_code,
-                                      uoq_code_cdu3: tbl2.tbl_code }
+                                      uoq_code_cdu3: tbl2.tbl_code
+          }
 
           it 'returns national measurement unit names as a string array' do
             expect(measure.national_measurement_units_for(commodity).join).to match /#{Regexp.escape(tbl1.tbl_txt)}/i
@@ -1005,7 +1057,7 @@ describe Measure do
     context 'measure is not excise' do
       let(:measure_type_description) { create :measure_type_description, description: 'not really e_x_c_i_s_e' }
       let(:measure_type) { create :measure_type, measure_type_id: measure_type_description.measure_type_id, measure_type_description: measure_type_description }
-      let(:measure)   { create :measure, measure_type_id: measure_type.measure_type_id }
+      let(:measure) { create :measure, measure_type_id: measure_type.measure_type_id }
 
       it 'returns blank result' do
         expect(measure.national_measurement_units_for(nil)).to be_blank
@@ -1016,27 +1068,27 @@ describe Measure do
   describe '.changes_for' do
     context 'measure validity start date lower than requested date' do
       it 'incudes measure' do
-        create :measure, validity_start_date: Date.new(2014,2,1)
-        TimeMachine.at(Date.new(2014,1,30)) do
-          expect(Measure.changes_for).to be_empty
+        create :measure, validity_start_date: Date.new(2014, 2, 1)
+        TimeMachine.at(Date.new(2014, 1, 30)) do
+          expect(described_class.changes_for).to be_empty
         end
       end
     end
 
     context 'measure validity start date higher than requested date' do
       it 'does not include measure' do
-        measure = create :measure, validity_start_date: Date.new(2014,2,1)
-        TimeMachine.at(Date.new(2014,2,1)) do
-          expect(Measure.changes_for).not_to be_empty
-          expect(Measure.changes_for.first.oid).to eq measure.source.oid
+        measure = create :measure, validity_start_date: Date.new(2014, 2, 1)
+        TimeMachine.at(Date.new(2014, 2, 1)) do
+          expect(described_class.changes_for).not_to be_empty
+          expect(described_class.changes_for.first.oid).to eq measure.source.oid
         end
       end
 
       it 'returns records with NULL operation_date last' do
-        create :measure, validity_start_date: Date.new(2014,2,1), operation_date: Date.new(2014,2,1)
-        create :measure, validity_start_date: Date.new(2014,2,1)
-        TimeMachine.at(Date.new(2014,2,1)) do
-          changes_for = Measure.changes_for
+        create :measure, validity_start_date: Date.new(2014, 2, 1), operation_date: Date.new(2014, 2, 1)
+        create :measure, validity_start_date: Date.new(2014, 2, 1)
+        TimeMachine.at(Date.new(2014, 2, 1)) do
+          changes_for = described_class.changes_for
           expect(changes_for.count).to eq(2)
           expect(changes_for.first.operation_date).to be_truthy
           expect(changes_for.last.operation_date).to be_falsey
@@ -1079,11 +1131,13 @@ describe Measure do
     end
 
     context "with national_measurement_unit" do
-      let!(:comm1) { create :comm, cmdty_code: commodity.goods_nomenclature_item_id,
+      let!(:comm1) {
+        create :comm, cmdty_code: commodity.goods_nomenclature_item_id,
                                    fe_tsmp: Date.today.ago(2.years),
                                    le_tsmp: nil,
                                    uoq_code_cdu2: tbl1.tbl_code,
-                                   uoq_code_cdu3: tbl2.tbl_code }
+                                   uoq_code_cdu3: tbl2.tbl_code
+      }
       let(:tbl1) { create :tbl9, :unoq, tbl_code: 'aa1' }
       let(:tbl2) { create :tbl9, :unoq, tbl_code: 'aa2' }
 

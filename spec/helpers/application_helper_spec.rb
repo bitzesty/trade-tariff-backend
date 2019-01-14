@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe ApplicationHelper do
-
   describe '#regulation_url' do
     context "for base_regulation" do
       context "for Official Journal - C (Information and Notices) seria" do
@@ -23,7 +22,7 @@ describe ApplicationHelper do
           measure.reload
         end
 
-        it "should generate council regulation url" do
+        it "generates council regulation url" do
           expect(regulation_url(measure.generating_regulation)).to be_eql("http://eur-lex.europa.eu/search.html?whOJ=NO_OJ%3D353,YEAR_OJ%3D2017,PAGE_FIRST%3D0019&DB_COLL_OJ=oj-c&type=advanced&lang=en")
         end
       end
@@ -32,7 +31,7 @@ describe ApplicationHelper do
         let!(:base_regulation) do
           create(:base_regulation, base_regulation_id: "R1708920",
                  base_regulation_role: 1,
-                 published_date: Date.new(2017, 05, 25),
+                 published_date: Date.new(2017, 0o5, 25),
                  officialjournal_number: "L 138",
                  officialjournal_page: 57)
         end
@@ -47,7 +46,7 @@ describe ApplicationHelper do
           measure.reload
         end
 
-        it "should generate council regulation url" do
+        it "generates council regulation url" do
           expect(regulation_url(measure.generating_regulation)).to be_eql("http://eur-lex.europa.eu/search.html?whOJ=NO_OJ%3D138,YEAR_OJ%3D2017,PAGE_FIRST%3D0057&DB_COLL_OJ=oj-l&type=advanced&lang=en")
         end
       end
@@ -79,9 +78,9 @@ describe ApplicationHelper do
           measure.reload
         end
 
-        it "should generate council regulation url" do
+        it "generates council regulation url" do
           expect(regulation_url(measure.suspending_regulation)).to be_eql(
-                                                                 "http://eur-lex.europa.eu/search.html?whOJ=NO_OJ%3D297,YEAR_OJ%3D1995,PAGE_FIRST%3D0001&DB_COLL_OJ=oj-l&type=advanced&lang=en"
+            "http://eur-lex.europa.eu/search.html?whOJ=NO_OJ%3D297,YEAR_OJ%3D1995,PAGE_FIRST%3D0001&DB_COLL_OJ=oj-l&type=advanced&lang=en"
                                                              )
         end
       end
@@ -113,9 +112,9 @@ describe ApplicationHelper do
           measure.reload
         end
 
-        it "should generate council regulation url" do
+        it "generates council regulation url" do
           expect(regulation_url(measure.suspending_regulation)).to be_eql(
-                                                                 "http://eur-lex.europa.eu/search.html?whOJ=NO_OJ%3D328,PAGE_FIRST%3D0006&DB_COLL_OJ=oj-l&type=advanced&lang=en"
+            "http://eur-lex.europa.eu/search.html?whOJ=NO_OJ%3D328,PAGE_FIRST%3D0006&DB_COLL_OJ=oj-l&type=advanced&lang=en"
                                                              )
         end
       end
@@ -132,5 +131,4 @@ describe ApplicationHelper do
       expect(regulation_code(measure.generating_regulation)).to eq '14567/23'
     end
   end
-
 end

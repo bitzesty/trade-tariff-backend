@@ -1,6 +1,6 @@
 ######### Conformance validations 150
 class RegulationGroupValidator < TradeTariffBackend::Validator
-  validation :RG1, 'The Regulation group id must be unique.', on: [:create, :update] do
+  validation :RG1, 'The Regulation group id must be unique.', on: %i[create update] do
     validates :uniqueness, of: [:regulation_group_id]
   end
 

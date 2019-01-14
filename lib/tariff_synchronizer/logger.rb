@@ -1,13 +1,12 @@
 module TariffSynchronizer
   class Logger < ActiveSupport::LogSubscriber
-
     # Download all pending Taric and Chief updates
-    def download(event)
+    def download(_event)
       info "Finished downloading updates"
     end
 
     # Sync variables were not set correctly
-    def config_error(event)
+    def config_error(_event)
       error "Missing: Tariff sync enviroment variables: TARIFF_SYNC_USERNAME, TARIFF_SYNC_PASSWORD, TARIFF_SYNC_HOST and TARIFF_SYNC_EMAIL."
     end
 
@@ -26,8 +25,8 @@ module TariffSynchronizer
       ).deliver_now
     end
 
-    def apply_lock_error(event)
-     warn "Failed to acquire Redis lock for update application"
+    def apply_lock_error(_event)
+      warn "Failed to acquire Redis lock for update application"
     end
 
     # Update failed to be applied
@@ -52,7 +51,7 @@ module TariffSynchronizer
     # Update download failed
     def failed_download(event)
       exception = event.payload[:exception]
-      error "Download failed: #{exception.original.to_s}, url: #{exception.url}"
+      error "Download failed: #{exception.original}, url: #{exception.url}"
       Mailer.failed_download(exception.original, exception.url).deliver_now
     end
 

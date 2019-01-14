@@ -9,7 +9,7 @@ class RequirementDutyExpressionFormatter
       )
     end
 
-    def format(opts={})
+    def format(opts = {})
       duty_amount = opts[:duty_amount]
       monetary_unit = opts[:monetary_unit_abbreviation].presence || opts[:monetary_unit]
       measurement_unit = opts[:measurement_unit]
@@ -34,31 +34,31 @@ class RequirementDutyExpressionFormatter
       output = []
 
       if duty_amount.present?
-        if opts[:formatted]
-          output << "<span title='#{old_duty_amount} #{old_monetary_unit}'>#{prettify(duty_amount).to_s}</span>"
-        else
-          output << prettify(duty_amount).to_s
-        end
+        output << if opts[:formatted]
+                    "<span title='#{old_duty_amount} #{old_monetary_unit}'>#{prettify(duty_amount)}</span>"
+                  else
+                    prettify(duty_amount).to_s
+                  end
       end
 
       if monetary_unit.present? && measurement_unit_abbreviation.present? && measurement_unit_qualifier.present?
-        if opts[:formatted]
-          output << "#{monetary_unit} / (<abbr title='#{measurement_unit.description}'>#{measurement_unit_abbreviation}</abbr> / #{measurement_unit_qualifier})"
-        else
-          output << "#{monetary_unit} / (#{measurement_unit} / #{measurement_unit_qualifier})"
-        end
+        output << if opts[:formatted]
+                    "#{monetary_unit} / (<abbr title='#{measurement_unit.description}'>#{measurement_unit_abbreviation}</abbr> / #{measurement_unit_qualifier})"
+                  else
+                    "#{monetary_unit} / (#{measurement_unit} / #{measurement_unit_qualifier})"
+                  end
       elsif monetary_unit.present? && measurement_unit_abbreviation.present?
-        if opts[:formatted]
-          output << "#{monetary_unit} / <abbr title='#{measurement_unit.description}'>#{measurement_unit_abbreviation}</abbr>"
-        else
-          output << "#{monetary_unit} / #{measurement_unit}"
-        end
+        output << if opts[:formatted]
+                    "#{monetary_unit} / <abbr title='#{measurement_unit.description}'>#{measurement_unit_abbreviation}</abbr>"
+                  else
+                    "#{monetary_unit} / #{measurement_unit}"
+                  end
       elsif measurement_unit_abbreviation.present?
-        if opts[:formatted]
-          output << "<abbr title='#{measurement_unit.description}'>#{measurement_unit_abbreviation}</abbr>"
-        else
-          output << measurement_unit
-        end
+        output << if opts[:formatted]
+                    "<abbr title='#{measurement_unit.description}'>#{measurement_unit_abbreviation}</abbr>"
+                  else
+                    measurement_unit
+                  end
       end
       output.join(" ").html_safe
     end

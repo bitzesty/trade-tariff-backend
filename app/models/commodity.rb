@@ -31,22 +31,24 @@ class Commodity < GoodsNomenclature
   def overview_measures_indexed
     search_service = ::CommodityService::OverviewMeasuresService.new(goods_nomenclature_sid, point_in_time)
     MeasurePresenter.new(
-        Measure
-        .distinct(:measure_generating_regulation_id, :measure_type_id, :goods_nomenclature_sid, :geographical_area_id, :geographical_area_sid, :additional_code_type_id, :additional_code_id)
-        .select(Sequel.expr(:measures).*)
-        .eager(
-          {measure_type: :measure_type_description},
-          {measure_components: [{duty_expression: :duty_expression_description},
-                                {measurement_unit: :measurement_unit_description},
-                                :monetary_unit,
-                                :measurement_unit_qualifier]})
-        .where(measure_sid: search_service.measure_sids).all, self).validate!
+      Measure
+      .distinct(:measure_generating_regulation_id, :measure_type_id, :goods_nomenclature_sid, :geographical_area_id, :geographical_area_sid, :additional_code_type_id, :additional_code_id)
+      .select(Sequel.expr(:measures).*)
+      .eager(
+        { measure_type: :measure_type_description },
+         measure_components: [{ duty_expression: :duty_expression_description },
+                              { measurement_unit: :measurement_unit_description },
+                              :monetary_unit,
+                              :measurement_unit_qualifier]
+)
+      .where(measure_sid: search_service.measure_sids).all, self
+).validate!
   end
 
   one_to_many :search_references, key: :referenced_id, primary_key: :code, reciprocal: :referenced, conditions: { referenced_class: 'Commodity' },
-    adder: proc{ |search_reference| search_reference.update(referenced_id: code, referenced_class: 'Commodity') },
-    remover: proc{ |search_reference| search_reference.update(referenced_id: nil, referenced_class: nil)},
-    clearer: proc{ search_references_dataset.update(referenced_id: nil, referenced_class: nil) }
+    adder: proc { |search_reference| search_reference.update(referenced_id: code, referenced_class: 'Commodity') },
+    remover: proc { |search_reference| search_reference.update(referenced_id: nil, referenced_class: nil) },
+    clearer: proc { search_references_dataset.update(referenced_id: nil, referenced_class: nil) }
 
   delegate :section, to: :chapter
 
@@ -82,8 +84,8 @@ class Commodity < GoodsNomenclature
                  .group(:goods_nomenclature_sid, :goods_nomenclature_item_id, :number_indents)
                  .from_self
                  .where("number_indents < ?", goods_nomenclature_indent.number_indents),
-        { t1__goods_nomenclature_sid: :goods_nomenclatures__goods_nomenclature_sid,
-          t1__goods_nomenclature_item_id: :goods_nomenclatures__goods_nomenclature_item_id })
+         t1__goods_nomenclature_sid: :goods_nomenclatures__goods_nomenclature_sid,
+          t1__goods_nomenclature_item_id: :goods_nomenclatures__goods_nomenclature_item_id)
       .order(Sequel.desc(:goods_nomenclatures__goods_nomenclature_item_id))
       .all
       .group_by(&:number_indents)
@@ -91,7 +93,7 @@ class Commodity < GoodsNomenclature
       .map(&:first)
       .reverse
       .sort_by(&:number_indents)
-      .select{ |a| a.number_indents < goods_nomenclature_indent.number_indents }
+      .select { |a| a.number_indents < goods_nomenclature_indent.number_indents }
   end
 
   def declarable?
@@ -160,15 +162,16 @@ class Commodity < GoodsNomenclature
      .union(
        Measure.changes_for(
          depth + 1,
-         Sequel.qualify(:measures_oplog, :goods_nomenclature_item_id) => goods_nomenclature_item_id)
+         Sequel.qualify(:measures_oplog, :goods_nomenclature_item_id) => goods_nomenclature_item_id
+)
      )
      .from_self
      .where(Sequel.~(operation_date: nil))
      .tap! { |criteria|
        # if Commodity did not come from initial seed, filter by its
        # create/update date
-       criteria.where { |o| o.>=(:operation_date, operation_date) } unless operation_date.blank?
-      }
+      criteria.where { |o| o.>=(:operation_date, operation_date) } unless operation_date.blank?
+    }
      .limit(TradeTariffBackend.change_count)
      .order(Sequel.desc(:operation_date, nulls: :last), Sequel.desc(:depth))
   end

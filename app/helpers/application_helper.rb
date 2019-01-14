@@ -11,7 +11,7 @@ module ApplicationHelper
 
   def regulation_url(regulation)
     MeasureService::CouncilRegulationUrlGenerator.new(
-        regulation
+      regulation
     ).generate
   end
 
@@ -19,5 +19,4 @@ module ApplicationHelper
     regulation_id = regulation.regulation_id
     "#{regulation_id.first}#{regulation_id[3..6]}/#{regulation_id[1..2]}"
   end
-
 end

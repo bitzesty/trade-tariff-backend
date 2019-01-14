@@ -1,4 +1,3 @@
 class NullSection < NullObject
-  def id
-  end
+  def id; end
 end

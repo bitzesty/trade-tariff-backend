@@ -1,6 +1,6 @@
 ######### Conformance validations 230
 class DutyExpressionValidator < TradeTariffBackend::Validator
-  validation :DE1, 'The code of the duty expression must be unique.', on: [:create, :update] do
+  validation :DE1, 'The code of the duty expression must be unique.', on: %i[create update] do
     validates :uniqueness, of: [:duty_expression_id]
   end
 

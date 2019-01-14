@@ -37,8 +37,8 @@ describe TariffSynchronizer, truncation: true do
       it "does not start sync process" do
         allow(TariffSynchronizer).to receive(:sync_variables_set?).and_return(false)
 
-        expect(TariffSynchronizer::TaricUpdate).to_not receive(:sync)
-        expect(TariffSynchronizer::ChiefUpdate).to_not receive(:sync)
+        expect(TariffSynchronizer::TaricUpdate).not_to receive(:sync)
+        expect(TariffSynchronizer::ChiefUpdate).not_to receive(:sync)
 
         TariffSynchronizer.download
       end
@@ -72,7 +72,7 @@ describe TariffSynchronizer, truncation: true do
         ActionMailer::Base.deliveries.clear
         expect { TariffSynchronizer.download }.to raise_error(Curl::Err::HostResolutionError)
 
-        expect(ActionMailer::Base.deliveries).to_not be_empty
+        expect(ActionMailer::Base.deliveries).not_to be_empty
         expect(ActionMailer::Base.deliveries.last.encoded).to match /Backtrace/
         expect(ActionMailer::Base.deliveries.last.encoded).to match /Curl::Err::HostResolutionError/
       end
@@ -106,7 +106,7 @@ describe TariffSynchronizer, truncation: true do
 
         expect(@logger.logged(:info).size).to eq(1)
         expect(@logger.logged(:info).last).to include("Finished applying updates")
-        expect(ActionMailer::Base.deliveries).to_not be_empty
+        expect(ActionMailer::Base.deliveries).not_to be_empty
         expect(ActionMailer::Base.deliveries.last.subject).to include("Tariff updates applied")
         expect(ActionMailer::Base.deliveries.last.encoded).to include("No conformance errors found.")
       end
@@ -121,7 +121,7 @@ describe TariffSynchronizer, truncation: true do
 
       it "after an error next record is not processed" do
         expect { TariffSynchronizer.apply }.to raise_error(Sequel::Rollback)
-        expect(TariffSynchronizer::BaseUpdateImporter).to_not receive(:perform).with(update_2)
+        expect(TariffSynchronizer::BaseUpdateImporter).not_to receive(:perform).with(update_2)
       end
     end
 
@@ -129,8 +129,8 @@ describe TariffSynchronizer, truncation: true do
       before { create :taric_update, :failed }
 
       it "does not apply pending updates" do
-        expect(TariffSynchronizer::TaricUpdate).to receive(:pending_at).never
-        expect(TariffSynchronizer::ChiefUpdate).to receive(:pending_at).never
+        expect(TariffSynchronizer::TaricUpdate).not_to receive(:pending_at)
+        expect(TariffSynchronizer::ChiefUpdate).not_to receive(:pending_at)
 
         expect { TariffSynchronizer.apply }.to raise_error(TariffSynchronizer::FailedUpdatesError)
       end

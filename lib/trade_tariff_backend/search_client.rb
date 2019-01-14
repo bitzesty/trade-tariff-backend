@@ -2,7 +2,6 @@ require 'hashie'
 
 module TradeTariffBackend
   class SearchClient < SimpleDelegator
-
     # Raised if Elasticsearch returns an error from query
     QueryError = Class.new(StandardError)
 
@@ -73,18 +72,16 @@ module TradeTariffBackend
       end
     end
 
-    private
+  private
 
     def serialize_for(operation, index, entries)
       entries.each_with_object([]) do |model, memo|
         memo.push(
-          {
-            operation => {
-              _index: index.name,
-              _type: index.type,
-              _id: model.id,
-              data: TradeTariffBackend.model_serializer_for(index.model).new(model).as_json
-            }
+          operation => {
+            _index: index.name,
+            _type: index.type,
+            _id: model.id,
+            data: TradeTariffBackend.model_serializer_for(index.model).new(model).as_json
           }
         )
       end

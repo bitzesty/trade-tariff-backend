@@ -1,10 +1,10 @@
 class MeasureType < Sequel::Model
-  IMPORT_MOVEMENT_CODES = [0, 2]
-  EXPORT_MOVEMENT_CODES = [1, 2]
-  EXCLUDED_TYPES = ['442', 'SPL']
-  THIRD_COUNTRY = '103'
-  VAT_TYPES = ['VTA','VTE','VTS','VTZ']
-  SUPPLEMENTARY_TYPES = ['109', '110', '111']
+  IMPORT_MOVEMENT_CODES = [0, 2].freeze
+  EXPORT_MOVEMENT_CODES = [1, 2].freeze
+  EXCLUDED_TYPES = %w[442 SPL].freeze
+  THIRD_COUNTRY = '103'.freeze
+  VAT_TYPES = %w[VTA VTE VTS VTZ].freeze
+  SUPPLEMENTARY_TYPES = %w[109 110 111].freeze
 
   plugin :time_machine, period_start_column: :measure_types__validity_start_date,
                         period_end_column:   :measure_types__validity_end_date

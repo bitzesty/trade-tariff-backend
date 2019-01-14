@@ -9,5 +9,3 @@ class CertificateDescription < Sequel::Model
     description
   end
 end
-
-

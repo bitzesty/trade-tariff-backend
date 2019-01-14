@@ -9,7 +9,7 @@ FactoryGirl.define do
     effective_end_date  { nil }
 
     trait :abrogated do
-      after(:build) { |br, evaluator|
+      after(:build) { |br, _evaluator|
         FactoryGirl.create(:complete_abrogation_regulation, complete_abrogation_regulation_id: br.base_regulation_id,
                                                             complete_abrogation_regulation_role: br.base_regulation_role)
       }

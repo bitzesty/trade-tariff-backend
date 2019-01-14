@@ -4,14 +4,18 @@ describe ExportRefundNomenclature do
   describe 'associations' do
     describe 'export refund nomenclature indent' do
       let!(:export_refund_nomenclature)                { create :export_refund_nomenclature }
-      let!(:export_refund_nomenclature_indent1)        { create :export_refund_nomenclature_indent,
+      let!(:export_refund_nomenclature_indent1)        {
+        create :export_refund_nomenclature_indent,
                                                                   export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid,
                                                                   validity_start_date: 2.years.ago,
-                                                                  validity_end_date: nil }
-      let!(:export_refund_nomenclature_indent2)        { create :export_refund_nomenclature_indent,
+                                                                  validity_end_date: nil
+      }
+      let!(:export_refund_nomenclature_indent2) {
+        create :export_refund_nomenclature_indent,
                                                             export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid,
                                                             validity_start_date: 5.years.ago,
-                                                            validity_end_date: 3.years.ago }
+                                                            validity_end_date: 3.years.ago
+      }
 
       context 'direct loading' do
         it 'loads correct indent respecting given actual time' do
@@ -41,7 +45,7 @@ describe ExportRefundNomenclature do
         it 'loads correct indent respecting given actual time' do
           TimeMachine.now do
             expect(
-              ExportRefundNomenclature.where(export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid)
+              described_class.where(export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid)
                              .eager(:export_refund_nomenclature_indents)
                              .all
                              .first
@@ -53,7 +57,7 @@ describe ExportRefundNomenclature do
         it 'loads correct indent respecting given time' do
           TimeMachine.at(1.year.ago) do
             expect(
-              ExportRefundNomenclature.where(export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid)
+              described_class.where(export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid)
                           .eager(:export_refund_nomenclature_indents)
                           .all
                           .first
@@ -63,7 +67,7 @@ describe ExportRefundNomenclature do
 
           TimeMachine.at(4.years.ago) do
             expect(
-              ExportRefundNomenclature.where(export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid)
+              described_class.where(export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid)
                           .eager(:export_refund_nomenclature_indents)
                           .all
                           .first
@@ -76,14 +80,18 @@ describe ExportRefundNomenclature do
 
     describe 'export refund nomenclature description' do
       let!(:export_refund_nomenclature)                { create :export_refund_nomenclature }
-      let!(:export_refund_nomenclature_description1)   { create :export_refund_nomenclature_description,
+      let!(:export_refund_nomenclature_description1)   {
+        create :export_refund_nomenclature_description,
                                                             export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid,
                                                             valid_at: 2.years.ago,
-                                                            valid_to: nil }
-      let!(:export_refund_nomenclature_description2) { create :export_refund_nomenclature_description,
+                                                            valid_to: nil
+      }
+      let!(:export_refund_nomenclature_description2) {
+        create :export_refund_nomenclature_description,
                                                             export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid,
                                                             valid_at: 5.years.ago,
-                                                            valid_to: 3.years.ago }
+                                                            valid_to: 3.years.ago
+      }
 
       context 'direct loading' do
         it 'loads correct description respecting given actual time' do
@@ -113,7 +121,7 @@ describe ExportRefundNomenclature do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
             expect(
-              ExportRefundNomenclature.where(export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid)
+              described_class.where(export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid)
                           .eager(:export_refund_nomenclature_descriptions)
                           .all
                           .first
@@ -125,7 +133,7 @@ describe ExportRefundNomenclature do
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
             expect(
-              ExportRefundNomenclature.where(export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid)
+              described_class.where(export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid)
                           .eager(:export_refund_nomenclature_descriptions)
                           .all
                           .first
@@ -135,7 +143,7 @@ describe ExportRefundNomenclature do
 
           TimeMachine.at(4.years.ago) do
             expect(
-              ExportRefundNomenclature.where(export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid)
+              described_class.where(export_refund_nomenclature_sid: export_refund_nomenclature.export_refund_nomenclature_sid)
                           .eager(:export_refund_nomenclature_descriptions)
                           .all
                           .first
@@ -159,6 +167,6 @@ describe ExportRefundNomenclature do
 
   describe 'validations' do
     # ERN5 start date of the ERN must be less than or equal to the end date.
-    it { should validate_validity_dates }
+    it { is_expected.to validate_validity_dates }
   end
 end

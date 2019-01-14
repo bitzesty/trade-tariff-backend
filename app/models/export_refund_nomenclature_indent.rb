@@ -10,5 +10,3 @@ class ExportRefundNomenclatureIndent < Sequel::Model
     number_export_refund_nomenclature_indents
   end
 end
-
-
