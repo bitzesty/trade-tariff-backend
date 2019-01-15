@@ -3,27 +3,31 @@ require 'rails_helper'
 describe AdditionalCodeType do
   describe 'validations' do
     # CT1 The additional code type must be unique.
-    it { should validate_uniqueness.of :additional_code_type_id }
+    it { is_expected.to validate_uniqueness.of :additional_code_type_id }
     # CT4 The start date must be less than or equal to the end date.
-    it { should validate_validity_dates }
+    it { is_expected.to validate_validity_dates }
 
     describe 'CT2' do
       context 'meursing table plan id present' do
         context 'application code is meursing table plan additional code type' do
-          let!(:additional_code_type) { build :additional_code_type, :with_meursing_table_plan,
-                                                                     :meursing }
+          let!(:additional_code_type) {
+            build :additional_code_type, :with_meursing_table_plan,
+                                                                     :meursing
+          }
 
-          it 'should be valid' do
-            expect(additional_code_type.conformant?).to be_truthy
+          it 'is valid' do
+            expect(additional_code_type).to be_conformant
           end
         end
 
         context 'application code is not meursing table plan additional code type' do
-          let!(:additional_code_type) { build :additional_code_type, :with_meursing_table_plan,
-                                                                     :adco }
+          let!(:additional_code_type) {
+            build :additional_code_type, :with_meursing_table_plan,
+                                                                     :adco
+          }
 
-          it 'should not be valid' do
-            expect(additional_code_type.conformant?).to be_falsy
+          it 'is not valid' do
+            expect(additional_code_type).not_to be_conformant
           end
         end
       end
@@ -31,18 +35,20 @@ describe AdditionalCodeType do
       context 'meursing table plan id missing' do
         let!(:additional_code_type) { build :additional_code_type, :adco }
 
-        it 'should be valid' do
-          expect(additional_code_type.conformant?).to be_truthy
+        it 'is valid' do
+          expect(additional_code_type).to be_conformant
         end
       end
     end
 
     describe 'CT3' do
       context 'meursing table plan exists' do
-        let!(:additional_code_type) { build :additional_code_type, :with_meursing_table_plan,
-                                                                   :meursing }
+        let!(:additional_code_type) {
+          build :additional_code_type, :with_meursing_table_plan,
+                                                                   :meursing
+        }
 
-        it 'should be valid' do
+        it 'is valid' do
           expect(additional_code_type).to be_valid
         end
       end
@@ -50,8 +56,8 @@ describe AdditionalCodeType do
       context 'meursing table plan does not exist' do
         let!(:additional_code_type) { build :additional_code_type, meursing_table_plan_id: 'XX' }
 
-        it 'should not be valid' do
-          expect(additional_code_type).to_not be_conformant
+        it 'is not valid' do
+          expect(additional_code_type).not_to be_conformant
         end
       end
     end
@@ -117,8 +123,10 @@ describe AdditionalCodeType do
     describe 'CT10' do
       let!(:measure_type)               { create :measure_type }
       let!(:additional_code_type)       { create :additional_code_type }
-      let!(:additional_code_type_measure_type) { create :additional_code_type_measure_type, measure_type_id: measure_type.measure_type_id,
-                                                                                            additional_code_type_id: additional_code_type.additional_code_type_id }
+      let!(:additional_code_type_measure_type) {
+        create :additional_code_type_measure_type, measure_type_id: measure_type.measure_type_id,
+                                                                                            additional_code_type_id: additional_code_type.additional_code_type_id
+      }
 
       before {
         additional_code_type.destroy
@@ -139,12 +147,12 @@ describe AdditionalCodeType do
     let!(:ern_agricultural) { create :additional_code_type, :ern_agricultural }
     let!(:non_ern_agricultural) { create :additional_code_type, application_code: '1' }
 
-    it 'should return true for ern_agricultural (code 4)' do
-      expect(ern_agricultural.export_refund_agricultural?).to be_truthy
+    it 'returns true for ern_agricultural (code 4)' do
+      expect(ern_agricultural).to be_export_refund_agricultural
     end
 
-    it 'should return false for other' do
-      expect(non_ern_agricultural.export_refund_agricultural?).to be_falsey
+    it 'returns false for other' do
+      expect(non_ern_agricultural).not_to be_export_refund_agricultural
     end
   end
 
@@ -152,12 +160,12 @@ describe AdditionalCodeType do
     let!(:ern) { create :additional_code_type, :ern }
     let!(:non_ern) { create :additional_code_type, application_code: '1' }
 
-    it 'should return true for ern (code 0)' do
-      expect(ern.export_refund?).to be_truthy
+    it 'returns true for ern (code 0)' do
+      expect(ern).to be_export_refund
     end
 
-    it 'should return false for other' do
-      expect(non_ern.export_refund?).to be_falsey
+    it 'returns false for other' do
+      expect(non_ern).not_to be_export_refund
     end
   end
 
@@ -165,12 +173,12 @@ describe AdditionalCodeType do
     let!(:meursing) { create :additional_code_type, :meursing }
     let!(:non_meursing) { create :additional_code_type, application_code: '1' }
 
-    it 'should return true for meursing (code 3)' do
-      expect(meursing.meursing?).to be_truthy
+    it 'returns true for meursing (code 3)' do
+      expect(meursing).to be_meursing
     end
 
-    it 'should return false for other' do
-      expect(non_meursing.meursing?).to be_falsey
+    it 'returns false for other' do
+      expect(non_meursing).not_to be_meursing
     end
   end
 end

@@ -1,11 +1,11 @@
 class FootnoteAssociationGoodsNomenclature < Sequel::Model
   plugin :time_machine
-  plugin :oplog, primary_key: [:footnote_id,
-                               :footnote_type,
-                               :goods_nomenclature_sid]
+  plugin :oplog, primary_key: %i[footnote_id
+                                 footnote_type
+                                 goods_nomenclature_sid]
   plugin :conformance_validator
 
-  set_primary_key [:footnote_id, :footnote_type, :goods_nomenclature_sid]
+  set_primary_key %i[footnote_id footnote_type goods_nomenclature_sid]
 
   def self.associate_footnote_with_goods_nomenclature(goods_nomenclature, footnote)
     f = FootnoteAssociationGoodsNomenclature.new

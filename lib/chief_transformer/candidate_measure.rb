@@ -11,12 +11,12 @@ class ChiefTransformer
     plugin :after_initialize
 
     DEFAULT_REGULATION_ROLE_TYPE_ID = 1
-    DEFAULT_REGULATION_ID = "IYY99990"
-    DEFAULT_GEOGRAPHICAL_AREA_ID = "1011" #ERGA OMNES
+    DEFAULT_REGULATION_ID = "IYY99990".freeze
+    DEFAULT_GEOGRAPHICAL_AREA_ID = "1011".freeze #ERGA OMNES
 
-    EXCISE_GROUP_CODES = %w[EX]
-    VAT_GROUP_CODES = %w[VT]
-    RESTRICTION_GROUP_CODES = %w[DL PR DP DO HO]
+    EXCISE_GROUP_CODES = %w[EX].freeze
+    VAT_GROUP_CODES = %w[VT].freeze
+    RESTRICTION_GROUP_CODES = %w[DL PR DP DO HO].freeze
     NATIONAL_MEASURE_TYPES = %w[AIL DPO EXA EXB EXC EXD DAA DAB DAC DAE DAI
                                 DBA DBB DBC DBE DBI DCA DCC DCE DCH DDJ DDA
                                 DDB DDC DDD DDE DDF DDG DEA DFA DFB DFC DGC
@@ -25,7 +25,7 @@ class ChiefTransformer
                                 EIA EIB EIC EID EIE FAA FAE FAI FBC FBG LAA
                                 LAE LBJ LBA LBB LBE LDA LEA LEF LFA LGJ COE
                                 PRE AHC ATT CEX CHM COI CVD ECM EHC EQC EWP
-                                HOP HSE IWP PHC PRT QRC SFS VTA VTE VTS VTZ]
+                                HOP HSE IWP PHC PRT QRC SFS VTA VTE VTS VTZ].freeze
 
     attr_accessor :mfcm, :tame, :tamf, :candidate_associations, :initiator, :operation
     attr_reader :chief_geographical_area
@@ -35,12 +35,12 @@ class ChiefTransformer
 
     def after_initialize
       # set default variables
-      set({measure_generating_regulation_id: DEFAULT_REGULATION_ID,
+      set(measure_generating_regulation_id: DEFAULT_REGULATION_ID,
            measure_generating_regulation_role: DEFAULT_REGULATION_ROLE_TYPE_ID,
            stopped_flag: false,
-           national: true })
+           national: true)
 
-      set({geographical_area_id: DEFAULT_GEOGRAPHICAL_AREA_ID}) if geographical_area_id.blank?
+      set(geographical_area_id: DEFAULT_GEOGRAPHICAL_AREA_ID) if geographical_area_id.blank?
 
       callbacks
     end
@@ -146,7 +146,7 @@ class ChiefTransformer
       errors.add(:measure_type_id, 'measure_type must be present') if measure_type_id.blank?
       errors.add(:measure_type_id, 'must have national measure type') if measure_type_id.present? && !measure_type_id.in?(NATIONAL_MEASURE_TYPES)
       if goods_nomenclature_sid.blank?
-        gonos = GoodsNomenclature.where(goods_nomenclature_item_id: goods_nomenclature_item_id).declarable.select_map([:goods_nomenclature_sid, :validity_start_date, :validity_end_date])
+        gonos = GoodsNomenclature.where(goods_nomenclature_item_id: goods_nomenclature_item_id).declarable.select_map(%i[goods_nomenclature_sid validity_start_date validity_end_date])
         errors.add(:goods_nomenclature_sid, "not found within validity dates, others found #{gonos.inspect} ")
       end
       errors.add(:geographical_area_sid, 'must be present') if geographical_area_sid.blank?
@@ -158,11 +158,10 @@ class ChiefTransformer
                                                                           goods_nomenclature_item_id: goods_nomenclature_item_id,
                                                                           additional_code_type_id: additional_code_type_id,
                                                                           additional_code_id: additional_code_id).national.any?
-
     end
 
     def assign_mfcm_attributes
-      self.goods_nomenclature_item_id = (mfcm.cmdty_code.size == 8) ? "#{mfcm.cmdty_code}00" : mfcm.cmdty_code
+      self.goods_nomenclature_item_id = mfcm.cmdty_code.size == 8 ? "#{mfcm.cmdty_code}00" : mfcm.cmdty_code
       self.measure_type_id = mfcm.measure_type_adco.measure_type_id.presence || mfcm.msr_type
       self.additional_code_id = mfcm.measure_type_adco.adtnl_cd
       self.additional_code_type_id = mfcm.measure_type_adco.adtnl_cd_type_id
@@ -175,7 +174,7 @@ class ChiefTransformer
     end
 
     def audit_tsmp
-      (tame.present?) ? tame.audit_tsmp : mfcm.audit_tsmp
+      tame.present? ? tame.audit_tsmp : mfcm.audit_tsmp
     end
 
     def assign_validity_start_date
@@ -221,14 +220,14 @@ class ChiefTransformer
     end
 
     def is_prohibition_or_restriction?
-      mfcm.present? && (mfcm.msrgp_code.in?(RESTRICTION_GROUP_CODES))
+      mfcm.present? && mfcm.msrgp_code.in?(RESTRICTION_GROUP_CODES)
     end
 
     def origin
-      [mfcm.try(:origin), tame.try(:origin), tamf.try(:origin)].find{ |e| e.present? }
+      [mfcm.try(:origin), tame.try(:origin), tamf.try(:origin)].find(&:present?)
     end
 
-    private
+  private
 
     def build_conditions
       tamf.measure_type_conds.each do |chief_measure_condition|

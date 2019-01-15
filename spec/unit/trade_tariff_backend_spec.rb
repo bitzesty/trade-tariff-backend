@@ -5,7 +5,7 @@ describe TradeTariffBackend do
     context 'when successful' do
       let(:stub_indexer) { double(reindex: true) }
 
-      before { TradeTariffBackend.reindex(stub_indexer) }
+      before { described_class.reindex(stub_indexer) }
 
       it 'reindexes Tariff model contents in the search engine' do
         expect(stub_indexer).to have_received(:reindex)
@@ -18,11 +18,11 @@ describe TradeTariffBackend do
       before {
         expect(mock_indexer).to receive(:reindex).and_raise(StandardError)
 
-        TradeTariffBackend.reindex(mock_indexer)
+        described_class.reindex(mock_indexer)
       }
 
       it 'notified system operator about indexing failure' do
-        expect(ActionMailer::Base.deliveries).to_not be_empty
+        expect(ActionMailer::Base.deliveries).not_to be_empty
         email = ActionMailer::Base.deliveries.last
         expect(email.encoded).to match /Backtrace/
         expect(email.encoded).to match /failed to reindex/
@@ -33,7 +33,7 @@ describe TradeTariffBackend do
   describe '.platform' do
     context 'platform should be Rails.env' do
       it 'defaults to Rails.env' do
-        expect(TradeTariffBackend.platform).to eq Rails.env
+        expect(described_class.platform).to eq Rails.env
       end
     end
   end

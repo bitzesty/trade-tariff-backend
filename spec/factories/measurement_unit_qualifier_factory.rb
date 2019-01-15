@@ -11,10 +11,10 @@ FactoryGirl.define do
 
   factory :measurement_unit_qualifier_description do
     measurement_unit_qualifier_code { generate(:measurement_unit_qualifier_code) }
-    description                      { Forgery(:lorem_ipsum).sentence }
+    description { Forgery(:lorem_ipsum).sentence }
 
     trait :xml do
-      language_id                    { "EN" }
+      language_id { "EN" }
     end
   end
 end

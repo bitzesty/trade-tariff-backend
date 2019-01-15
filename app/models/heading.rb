@@ -14,7 +14,7 @@ class Heading < GoodsNomenclature
   one_to_many :commodities, dataset: -> {
     actual_or_relevant(Commodity)
              .filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", heading_id)
-             .where(Sequel.~(goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes ))
+             .where(Sequel.~(goods_nomenclatures__goods_nomenclature_item_id: HiddenGoodsNomenclature.codes))
   }
 
   one_to_one :chapter, dataset: -> {
@@ -22,9 +22,9 @@ class Heading < GoodsNomenclature
   }
 
   one_to_many :search_references, key: :referenced_id, primary_key: :short_code, reciprocal: :referenced, conditions: { referenced_class: 'Heading' },
-    adder: proc{ |search_reference| search_reference.update(referenced_id: short_code, referenced_class: 'Heading') },
-    remover: proc{ |search_reference| search_reference.update(referenced_id: nil, referenced_class: nil)},
-    clearer: proc{ search_references_dataset.update(referenced_id: nil, referenced_class: nil) }
+    adder: proc { |search_reference| search_reference.update(referenced_id: short_code, referenced_class: 'Heading') },
+    remover: proc { |search_reference| search_reference.update(referenced_id: nil, referenced_class: nil) },
+    clearer: proc { search_references_dataset.update(referenced_id: nil, referenced_class: nil) }
 
   dataset_module do
     def by_code(code = "")
@@ -40,7 +40,7 @@ class Heading < GoodsNomenclature
     end
 
     def non_grouping
-      filter{Sequel.~(producline_suffix: "10") }
+      filter { Sequel.~(producline_suffix: "10") }
     end
   end
 
@@ -90,8 +90,8 @@ class Heading < GoodsNomenclature
      .tap! { |criteria|
        # if Heading did not come from initial seed, filter by its
        # create/update date
-       criteria.where { |o| o.>=(:operation_date, operation_date) } unless operation_date.blank?
-      }
+      criteria.where { |o| o.>=(:operation_date, operation_date) } unless operation_date.blank?
+    }
      .limit(TradeTariffBackend.change_count)
      .order(Sequel.desc(:operation_date, nulls: :last), Sequel.desc(:depth))
   end
@@ -108,7 +108,7 @@ class Heading < GoodsNomenclature
      .order(Sequel.desc(:operation_date, nulls: :last))
   end
 
-  private
+private
 
   def relevant_commodities
     "#{short_code}______"

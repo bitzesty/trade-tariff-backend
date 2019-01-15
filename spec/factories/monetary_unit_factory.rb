@@ -5,7 +5,7 @@ FactoryGirl.define do
     validity_end_date   { nil }
 
     trait :with_description do
-      after(:create) { |monetary_unit, evaluator|
+      after(:create) { |monetary_unit, _evaluator|
         FactoryGirl.create :monetary_unit_description, monetary_unit_code: monetary_unit.monetary_unit_code
       }
     end

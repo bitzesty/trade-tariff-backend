@@ -1,6 +1,6 @@
 ######### Conformance validations 110
 class CertificateTypeValidator < TradeTariffBackend::Validator
-  validation :CET1, 'The type of the certificate must be unique.', on: [:create, :update] do
+  validation :CET1, 'The type of the certificate must be unique.', on: %i[create update] do
     validates :uniqueness, of: [:certificate_type_code]
   end
 

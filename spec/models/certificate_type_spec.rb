@@ -3,9 +3,9 @@ require 'rails_helper'
 describe CertificateType do
   describe 'validations' do
     # CET1: certificate_type_id
-    it { should validate_uniqueness.of :certificate_type_code }
+    it { is_expected.to validate_uniqueness.of :certificate_type_code }
     # CET3: validity_dates
-    it { should validate_validity_dates }
+    it { is_expected.to validate_validity_dates }
 
     describe 'CET2' do
       let!(:certificate_type) { create :certificate_type }

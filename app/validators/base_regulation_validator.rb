@@ -1,14 +1,14 @@
 ######### Conformance validations 285
 class BaseRegulationValidator < TradeTariffBackend::Validator
-  validation :ROIMB1, 'The (regulation id + role id) must be unique.', on: [:create, :update] do
-    validates :uniqueness, of: [:base_regulation_id, :base_regulation_role]
+  validation :ROIMB1, 'The (regulation id + role id) must be unique.', on: %i[create update] do
+    validates :uniqueness, of: %i[base_regulation_id base_regulation_role]
   end
 
   validation :ROIMB3, 'The start date must be less than or equal to the end date' do
     validates :validity_dates
   end
 
-  validation :ROIMB4, 'The referenced regulation group must exist', on: [:create, :update] do |record|
+  validation :ROIMB4, 'The referenced regulation group must exist', on: %i[create update] do |record|
     if record.regulation_group_id.present?
       RegulationGroup.where(regulation_group_id: record.regulation_group_id).any?
     end

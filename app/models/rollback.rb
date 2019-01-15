@@ -1,12 +1,11 @@
 class Rollback < Sequel::Model
-
   dataset_module do
     def descending
       order(Sequel.desc(:id))
     end
   end
 
-  private
+private
 
   def validate
     must_have :reason
@@ -16,9 +15,8 @@ class Rollback < Sequel::Model
 
   def must_have_correct_date
     Date.parse(date) unless date.is_a?(Date)
-
-    rescue ArgumentError, TypeError
-      errors.add(:date, 'Incorrect date provided')
+  rescue ArgumentError, TypeError
+    errors.add(:date, 'Incorrect date provided')
   end
 
   def must_have(attribute)

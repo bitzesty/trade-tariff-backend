@@ -6,4 +6,3 @@ class FootnoteType < Sequel::Model
 
   one_to_many :footnotes
 end
-

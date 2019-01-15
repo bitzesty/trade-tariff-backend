@@ -50,6 +50,7 @@ module TradeTariffBackend
         # migration class will be loaded to @migrations
         migration = @migrations.last
         next unless migration
+
         # apply migration if can be rolled UP
         if migration.can_rollup?
           Sequel::Model.db.transaction(savepoint: true) {
@@ -67,6 +68,7 @@ module TradeTariffBackend
       # get last applied migration
       entry = TradeTariffBackend::DataMigration::LogEntry.last
       return unless entry
+
       # clear migrations array before loading
       @migrations = nil
       # load last migration for rollback
@@ -74,6 +76,7 @@ module TradeTariffBackend
       # migration class will be loaded to @migrations
       migration = @migrations.last
       return unless migration
+
       # apply migration if can be rolled DOWN
       if migration.can_rolldown?
         Sequel::Model.db.transaction(savepoint: true) {
@@ -97,13 +100,15 @@ module TradeTariffBackend
       }
     end
 
-    private
+  private
 
     def self.migration_files
-      files, directory = [], TradeTariffBackend.data_migration_path
+      files = []
+      directory = TradeTariffBackend.data_migration_path
 
       Dir.new(directory).each do |file|
         next unless MIGRATION_FILE_PATTERN.match(file)
+
         files << File.join(directory, file)
       end
 

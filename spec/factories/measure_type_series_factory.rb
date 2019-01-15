@@ -7,17 +7,17 @@ FactoryGirl.define do
     validity_end_date        { nil }
 
     trait :xml do
-      measure_type_combination 0
+      measure_type_combination { 0 }
       validity_end_date        { Date.today.ago(1.years) }
     end
   end
 
   factory :measure_type_series_description do
     measure_type_series_id { generate(:measure_type_series_id) }
-    description    { Forgery(:basic).text }
+    description { Forgery(:basic).text }
 
     trait :xml do
-      language_id  { "EN" }
+      language_id { "EN" }
     end
   end
 end

@@ -1,6 +1,6 @@
 FactoryGirl.define do
-  sequence(:geographical_area_sid) { |n| n}
-  sequence(:geographical_area_id)  { |n| n}
+  sequence(:geographical_area_sid) { |n| n }
+  sequence(:geographical_area_id)  { |n| n }
 
   factory :geographical_area do
     geographical_area_sid { generate(:geographical_area_sid) }
@@ -20,7 +20,7 @@ FactoryGirl.define do
       geographical_code { "0" }
     end
 
-    after(:build) { |geographical_area, evaluator|
+    after(:build) { |geographical_area, _evaluator|
       FactoryGirl.create(:geographical_area_description, :with_period,
                                                          geographical_area_id: geographical_area.geographical_area_id,
                                                          geographical_area_sid: geographical_area.geographical_area_sid,
@@ -43,14 +43,14 @@ FactoryGirl.define do
 
   factory :geographical_area_description do
     transient do
-      valid_at Time.now.ago(2.years)
-      valid_to nil
+      valid_at { Time.now.ago(2.years) }
+      valid_to { nil }
     end
 
     geographical_area_description_period_sid { generate(:geographical_area_sid) }
     geographical_area_sid                    { generate(:geographical_area_sid) }
     geographical_area_id                     { Forgery(:basic).text(exactly: 3) }
-    description                            { Forgery(:lorem_ipsum).sentence }
+    description { Forgery(:lorem_ipsum).sentence }
 
     trait :with_period do
       after(:create) { |ga_description, evaluator|

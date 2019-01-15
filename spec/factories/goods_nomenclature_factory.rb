@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  sequence(:goods_nomenclature_sid) { |n| n}
+  sequence(:goods_nomenclature_sid) { |n| n }
   sequence(:goods_nomenclature_group_id, LoopingSequence.lower_a_to_upper_z, &:value)
   sequence(:goods_nomenclature_group_type, LoopingSequence.lower_a_to_upper_z, &:value)
 
@@ -12,7 +12,7 @@ FactoryGirl.define do
     goods_nomenclature_sid { generate(:goods_nomenclature_sid) }
     # do not allow zeroes in the goods item id as it causes unpredictable
     # results
-    goods_nomenclature_item_id { 10.times.map{ Random.rand(9) + 1 }.join }
+    goods_nomenclature_item_id { 10.times.map { Random.rand(1..9) }.join }
     producline_suffix   { "80" }
     validity_start_date { Date.today.ago(2.years) }
     validity_end_date   { nil }
@@ -34,7 +34,7 @@ FactoryGirl.define do
     end
 
     trait :declarable do
-      producline_suffix "80"
+      producline_suffix { "80" }
     end
 
     trait :expired do
@@ -84,13 +84,13 @@ FactoryGirl.define do
     end
 
     trait :with_chapter do
-      after(:create) { |commodity, evaluator|
-        FactoryGirl.create(:chapter, :with_section, :with_note, goods_nomenclature_item_id: "#{commodity.chapter_id}")
+      after(:create) { |commodity, _evaluator|
+        FactoryGirl.create(:chapter, :with_section, :with_note, goods_nomenclature_item_id: commodity.chapter_id.to_s)
       }
     end
 
     trait :with_heading do
-      after(:create) { |commodity, evaluator|
+      after(:create) { |commodity, _evaluator|
         FactoryGirl.create(:heading, goods_nomenclature_item_id: "#{commodity.goods_nomenclature_item_id.first(4)}000000")
       }
     end
@@ -99,7 +99,7 @@ FactoryGirl.define do
   factory :heading, parent: :goods_nomenclature, class: Heading do
     # +1 is needed to avoid creating heading with gono id in form of
     # xx00xxxxxx which is a Chapter
-    goods_nomenclature_item_id { "#{4.times.map{ Random.rand(8)+1 }.join}000000" }
+    goods_nomenclature_item_id { "#{4.times.map { Random.rand(1..8) }.join}000000" }
 
     trait :declarable do
       producline_suffix { "80" }
@@ -110,15 +110,15 @@ FactoryGirl.define do
     end
 
     trait :non_declarable do
-      after(:create) { |heading, evaluator|
+      after(:create) { |heading, _evaluator|
         FactoryGirl.create(:goods_nomenclature, :with_description,
                                                 :with_indent,
-                                                goods_nomenclature_item_id: "#{heading.short_code}#{6.times.map{ Random.rand(9) }.join}")
+                                                goods_nomenclature_item_id: "#{heading.short_code}#{6.times.map { Random.rand(9) }.join}")
       }
     end
 
     trait :with_chapter do
-      after(:create) { |heading, evaluator|
+      after(:create) { |heading, _evaluator|
         FactoryGirl.create(:goods_nomenclature, :with_description,
                                                 :with_indent,
                                                 goods_nomenclature_item_id: heading.chapter_id)
@@ -186,7 +186,7 @@ FactoryGirl.define do
     nomenclature_group_facility_code     { 0 }
 
     trait :xml do
-      validity_end_date                  { Date.today.ago(1.years) }
+      validity_end_date { Date.today.ago(1.years) }
     end
   end
 

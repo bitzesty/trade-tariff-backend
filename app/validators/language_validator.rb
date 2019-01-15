@@ -1,6 +1,6 @@
 ######### Conformance validations 130
 class LanguageValidator < TradeTariffBackend::Validator
-  validation :LA1, 'language id must be unique', on: [:create, :update] do
+  validation :LA1, 'language id must be unique', on: %i[create update] do
     validates :uniqueness, of: [:language_id]
   end
 

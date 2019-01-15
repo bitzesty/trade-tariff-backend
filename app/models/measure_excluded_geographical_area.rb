@@ -1,8 +1,8 @@
 class MeasureExcludedGeographicalArea < Sequel::Model
-  plugin :oplog, primary_key: [:measure_sid, :geographical_area_sid]
+  plugin :oplog, primary_key: %i[measure_sid geographical_area_sid]
   plugin :conformance_validator
 
-  set_primary_key [:measure_sid, :geographical_area_sid]
+  set_primary_key %i[measure_sid geographical_area_sid]
 
   one_to_one :measure, key: :measure_sid,
                        primary_key: :measure_sid

@@ -1,6 +1,6 @@
 ######### Conformance validations 235
 class MeasureTypeValidator < TradeTariffBackend::Validator
-  validation :MT1, 'The  measure type code must be unique.', on: [:create, :update] do
+  validation :MT1, 'The  measure type code must be unique.', on: %i[create update] do
     validates :uniqueness, of: [:measure_type_id]
   end
 
@@ -8,7 +8,7 @@ class MeasureTypeValidator < TradeTariffBackend::Validator
     validates :validity_dates
   end
 
-  validation :MT4, 'The referenced measure type series must exist.', on: [:create, :update] do
+  validation :MT4, 'The referenced measure type series must exist.', on: %i[create update] do
     validates :presence, of: :measure_type_series
   end
 end

@@ -1,5 +1,4 @@
 class ChiefFileNameGenerator
-
   attr_reader :date
   delegate :chief_update_url_template, :host, to: TariffSynchronizer
 
@@ -15,10 +14,10 @@ class ChiefFileNameGenerator
     format(chief_update_url_template, host: host, file_name: file_name)
   end
 
-  private
+private
 
   def file_name
-    "KBT009(#{date.strftime("%y")}#{year_day_with_3_characters}).txt"
+    "KBT009(#{date.strftime('%y')}#{year_day_with_3_characters}).txt"
   end
 
   def year_day_with_3_characters

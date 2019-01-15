@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  sequence(:certificate_sid) { |n| n}
+  sequence(:certificate_sid) { |n| n }
   sequence(:certificate_type_code, LoopingSequence.lower_a_to_upper_z, &:value)
 
   factory :certificate do
@@ -23,8 +23,8 @@ FactoryGirl.define do
 
   factory :certificate_description do
     transient do
-      valid_at Time.now.ago(2.years)
-      valid_to nil
+      valid_at { Time.now.ago(2.years) }
+      valid_to { nil }
     end
 
     certificate_description_period_sid { generate(:certificate_sid) }

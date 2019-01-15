@@ -4,16 +4,20 @@ describe Certificate do
   describe 'associations' do
     describe 'certificate description' do
       let!(:certificate)                { create :certificate }
-      let!(:certificate_description1)   { create :certificate_description, :with_period,
+      let!(:certificate_description1)   {
+        create :certificate_description, :with_period,
                                                             certificate_type_code: certificate.certificate_type_code,
                                                             certificate_code: certificate.certificate_code,
                                                             valid_at: 2.years.ago,
-                                                            valid_to: nil }
-      let!(:certificate_description2) { create :certificate_description, :with_period,
+                                                            valid_to: nil
+      }
+      let!(:certificate_description2) {
+        create :certificate_description, :with_period,
                                                             certificate_type_code: certificate.certificate_type_code,
                                                             certificate_code: certificate.certificate_code,
                                                             valid_at: 5.years.ago,
-                                                            valid_to: 3.years.ago }
+                                                            valid_to: 3.years.ago
+      }
 
       context 'direct loading' do
         it 'loads correct description respecting given actual time' do
@@ -43,7 +47,7 @@ describe Certificate do
         it 'loads correct description respecting given actual time' do
           TimeMachine.now do
             expect(
-              Certificate.where(certificate_type_code: certificate.certificate_type_code,
+              described_class.where(certificate_type_code: certificate.certificate_type_code,
                               certificate_code: certificate.certificate_code)
                         .eager(:certificate_descriptions)
                         .all
@@ -56,7 +60,7 @@ describe Certificate do
         it 'loads correct description respecting given time' do
           TimeMachine.at(1.year.ago) do
             expect(
-              Certificate.where(certificate_type_code: certificate.certificate_type_code,
+              described_class.where(certificate_type_code: certificate.certificate_type_code,
                               certificate_code: certificate.certificate_code)
                         .eager(:certificate_descriptions)
                         .all
@@ -67,7 +71,7 @@ describe Certificate do
 
           TimeMachine.at(4.years.ago) do
             expect(
-              Certificate.where(certificate_type_code: certificate.certificate_type_code,
+              described_class.where(certificate_type_code: certificate.certificate_type_code,
                               certificate_code: certificate.certificate_code)
                        .eager(:certificate_descriptions)
                        .all

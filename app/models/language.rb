@@ -4,5 +4,3 @@ class Language < Sequel::Model
 
   set_primary_key [:language_id]
 end
-
-
