@@ -33,7 +33,7 @@ class Change
     "changes/#{model_name.underscore}"
   end
 
-  private
+private
 
   def operation_class
     "#{model}::Operation".constantize

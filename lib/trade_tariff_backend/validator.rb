@@ -32,7 +32,7 @@ module TradeTariffBackend
       }
     end
 
-    private
+  private
 
     def relevant_validations_for(record)
       validations.select { |validation|

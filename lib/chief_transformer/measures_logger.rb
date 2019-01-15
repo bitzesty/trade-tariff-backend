@@ -3,7 +3,7 @@ require 'fileutils'
 # each line in *.json.txt files is a json object of measure candidate
 class ChiefTransformer
   class MeasuresLogger
-    LOG_TYPES = [:created, :failed]
+    LOG_TYPES = %i[created failed].freeze
 
     class << self
       def created(candidate)

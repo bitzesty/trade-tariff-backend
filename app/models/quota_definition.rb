@@ -15,6 +15,17 @@ class QuotaDefinition < Sequel::Model
   one_to_many :quota_blocking_periods, key: :quota_definition_sid,
                                        primary_key: :quota_definition_sid
 
+  one_to_one :measurement_unit, primary_key: :measurement_unit_code,
+             key: :measurement_unit_code do |ds|
+    ds.with_actual(MeasurementUnit)
+  end
+
+  delegate :description, :abbreviation, to: :measurement_unit, prefix: true, allow_nil: true
+
+  def formatted_measurement_unit
+    "#{measurement_unit_description} (#{measurement_unit_abbreviation})" if measurement_unit_description.present?
+  end
+
   def status
     QuotaEvent.last_for(quota_definition_sid).status.presence || (critical_state? ? 'Critical' : 'Open')
   end
@@ -24,7 +35,7 @@ class QuotaDefinition < Sequel::Model
   end
 
   def balance
-    (last_balance_event.present?) ? last_balance_event.new_balance : volume
+    last_balance_event.present? ? last_balance_event.new_balance : volume
   end
 
   def last_suspension_period
@@ -35,11 +46,9 @@ class QuotaDefinition < Sequel::Model
     @_last_blocking_period ||= quota_blocking_periods.last
   end
 
-  private
+private
 
   def critical_state?
     critical_state == 'Y'
   end
 end
-
-

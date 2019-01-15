@@ -1,11 +1,11 @@
 require 'csv'
 
 class ImportSearchReferences
-  SPLIT_REGEX = /or|OR/
+  SPLIT_REGEX = /or|OR/.freeze
 
-  HEADING_IDENTITY_REGEX = /(\d{1,2}).(\d{1,2})/
-  CHAPTER_IDENTITY_REGEX = /Chapter (\d{1,2})|Ch (\d{1,2})|^\s{0,}\d{1,2}\s{0,}$/
-  SECTION_IDENTITY_REGEX = /Section\s{1,}(\d{1,2})|section\s{1,}(\d{1,2})/
+  HEADING_IDENTITY_REGEX = /(\d{1,2}).(\d{1,2})/.freeze
+  CHAPTER_IDENTITY_REGEX = /Chapter (\d{1,2})|Ch (\d{1,2})|^\s{0,}\d{1,2}\s{0,}$/.freeze
+  SECTION_IDENTITY_REGEX = /Section\s{1,}(\d{1,2})|section\s{1,}(\d{1,2})/.freeze
 
   def self.reload(from_file = File.join(Rails.root, 'db', 'green-pages.csv'))
     SearchReference.truncate
@@ -18,7 +18,7 @@ class ImportSearchReferences
   end
 
   def run
-    CSV.foreach(@data_file, {col_sep: ";"}) do |line|
+    CSV.foreach(@data_file, col_sep: ";") do |line|
       title, reference = line
 
       if references_multiple_records?(reference)
@@ -29,7 +29,7 @@ class ImportSearchReferences
     end
   end
 
-  private
+private
 
   def create_record(title, reference)
     SearchReference.create({

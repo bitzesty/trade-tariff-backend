@@ -62,7 +62,7 @@ module TradeTariffBackend
       "<#{self.class}: #{@name}>"
     end
 
-    private
+  private
 
     def define_up_runner(&block)
       raise ArgumentError.new("#define_up_runner expects block to be passed in") unless block_given?

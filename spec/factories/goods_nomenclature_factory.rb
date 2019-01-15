@@ -1,5 +1,7 @@
 FactoryGirl.define do
-  sequence(:goods_nomenclature_sid) { |n| n}
+  sequence(:goods_nomenclature_sid) { |n| n }
+  sequence(:goods_nomenclature_group_id, LoopingSequence.lower_a_to_upper_z, &:value)
+  sequence(:goods_nomenclature_group_type, LoopingSequence.lower_a_to_upper_z, &:value)
 
   factory :goods_nomenclature do
     transient do
@@ -10,7 +12,7 @@ FactoryGirl.define do
     goods_nomenclature_sid { generate(:goods_nomenclature_sid) }
     # do not allow zeroes in the goods item id as it causes unpredictable
     # results
-    goods_nomenclature_item_id { 10.times.map{ Random.rand(9) + 1 }.join }
+    goods_nomenclature_item_id { 10.times.map { Random.rand(1..9) }.join }
     producline_suffix   { "80" }
     validity_start_date { Date.today.ago(2.years) }
     validity_end_date   { nil }
@@ -32,7 +34,7 @@ FactoryGirl.define do
     end
 
     trait :declarable do
-      producline_suffix "80"
+      producline_suffix { "80" }
     end
 
     trait :expired do
@@ -52,6 +54,11 @@ FactoryGirl.define do
                                                             validity_end_date: gono.validity_end_date,
                                                             description: evaluator.description)
       }
+    end
+
+    trait :xml do
+      validity_end_date           { Date.today.ago(1.years) }
+      statistical_indicator       { 1 }
     end
   end
 
@@ -77,13 +84,13 @@ FactoryGirl.define do
     end
 
     trait :with_chapter do
-      after(:create) { |commodity, evaluator|
-        FactoryGirl.create(:chapter, :with_section, goods_nomenclature_item_id: "#{commodity.chapter_id}")
+      after(:create) { |commodity, _evaluator|
+        FactoryGirl.create(:chapter, :with_section, :with_note, goods_nomenclature_item_id: commodity.chapter_id.to_s)
       }
     end
 
     trait :with_heading do
-      after(:create) { |commodity, evaluator|
+      after(:create) { |commodity, _evaluator|
         FactoryGirl.create(:heading, goods_nomenclature_item_id: "#{commodity.goods_nomenclature_item_id.first(4)}000000")
       }
     end
@@ -92,7 +99,7 @@ FactoryGirl.define do
   factory :heading, parent: :goods_nomenclature, class: Heading do
     # +1 is needed to avoid creating heading with gono id in form of
     # xx00xxxxxx which is a Chapter
-    goods_nomenclature_item_id { "#{4.times.map{ Random.rand(8)+1 }.join}000000" }
+    goods_nomenclature_item_id { "#{4.times.map { Random.rand(1..8) }.join}000000" }
 
     trait :declarable do
       producline_suffix { "80" }
@@ -103,15 +110,15 @@ FactoryGirl.define do
     end
 
     trait :non_declarable do
-      after(:create) { |heading, evaluator|
+      after(:create) { |heading, _evaluator|
         FactoryGirl.create(:goods_nomenclature, :with_description,
                                                 :with_indent,
-                                                goods_nomenclature_item_id: "#{heading.short_code}#{6.times.map{ Random.rand(9) }.join}")
+                                                goods_nomenclature_item_id: "#{heading.short_code}#{6.times.map { Random.rand(9) }.join}")
       }
     end
 
     trait :with_chapter do
-      after(:create) { |heading, evaluator|
+      after(:create) { |heading, _evaluator|
         FactoryGirl.create(:goods_nomenclature, :with_description,
                                                 :with_indent,
                                                 goods_nomenclature_item_id: heading.chapter_id)
@@ -125,6 +132,12 @@ FactoryGirl.define do
     number_indents { Forgery(:basic).number }
     validity_start_date { Date.today.ago(3.years) }
     validity_end_date   { nil }
+
+    trait :xml do
+      goods_nomenclature_item_id     { Forgery(:basic).text(exactly: 2) }
+      productline_suffix             { Forgery(:basic).text(exactly: 2) }
+      validity_end_date              { Date.today.ago(1.years) }
+    end
   end
 
   factory :goods_nomenclature_description_period do
@@ -132,6 +145,12 @@ FactoryGirl.define do
     goods_nomenclature_description_period_sid { generate(:sid) }
     validity_start_date { Date.today.ago(3.years) }
     validity_end_date   { nil }
+
+    trait :xml do
+      goods_nomenclature_item_id                 { Forgery(:basic).text(exactly: 2) }
+      productline_suffix                         { Forgery(:basic).text(exactly: 2) }
+      validity_end_date                          { Date.today.ago(1.years) }
+    end
   end
 
   factory :goods_nomenclature_description do
@@ -151,5 +170,63 @@ FactoryGirl.define do
                                                               validity_start_date: evaluator.validity_start_date,
                                                               validity_end_date: evaluator.validity_end_date)
     }
+
+    trait :xml do
+      language_id                                { "EN" }
+      goods_nomenclature_item_id                 { Forgery(:basic).text(exactly: 2) }
+      productline_suffix                         { Forgery(:basic).text(exactly: 2) }
+    end
+  end
+
+  factory :goods_nomenclature_group do
+    validity_start_date                  { Date.today.ago(3.years) }
+    validity_end_date                    { nil }
+    goods_nomenclature_group_type        { generate(:goods_nomenclature_group_type) }
+    goods_nomenclature_group_id          { Forgery(:basic).text(exactly: 2) }
+    nomenclature_group_facility_code     { 0 }
+
+    trait :xml do
+      validity_end_date { Date.today.ago(1.years) }
+    end
+  end
+
+  factory :goods_nomenclature_group_description do
+    goods_nomenclature_group_type  { generate(:goods_nomenclature_group_type) }
+    goods_nomenclature_group_id    { generate(:goods_nomenclature_group_id) }
+    description                    { Forgery(:lorem_ipsum).sentence }
+
+    trait :xml do
+      language_id                  { "EN" }
+    end
+  end
+
+  factory :goods_nomenclature_origin do
+    goods_nomenclature_sid              { generate(:sid) }
+    derived_goods_nomenclature_item_id  { Forgery(:basic).text(exactly: 2) }
+    derived_productline_suffix          { Forgery(:basic).text(exactly: 2) }
+    goods_nomenclature_item_id          { Forgery(:basic).text(exactly: 2) }
+    productline_suffix                  { Forgery(:basic).text(exactly: 2) }
+  end
+
+  factory :goods_nomenclature_successor do
+    goods_nomenclature_sid               { generate(:sid) }
+    absorbed_goods_nomenclature_item_id  { Forgery(:basic).text(exactly: 2) }
+    absorbed_productline_suffix          { Forgery(:basic).text(exactly: 2) }
+    goods_nomenclature_item_id           { Forgery(:basic).text(exactly: 2) }
+    productline_suffix                   { Forgery(:basic).text(exactly: 2) }
+  end
+
+  factory :nomenclature_group_membership do
+    goods_nomenclature_sid         { generate(:sid) }
+    goods_nomenclature_group_type  { generate(:goods_nomenclature_group_type) }
+    goods_nomenclature_group_id    { Forgery(:basic).text(exactly: 2) }
+    goods_nomenclature_item_id     { Forgery(:basic).text(exactly: 2) }
+    productline_suffix             { Forgery(:basic).text(exactly: 2) }
+    validity_start_date            { Date.today.ago(3.years) }
+    validity_end_date              { nil }
+
+    trait :xml do
+      validity_end_date            { Date.today.ago(1.years) }
+    end
   end
 end

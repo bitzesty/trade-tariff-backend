@@ -1,5 +1,5 @@
 class SectionSerializer < Serializer
-  def serializable_hash(opts = {})
+  def serializable_hash(_opts = {})
     {
       id: id,
       numeral: numeral,

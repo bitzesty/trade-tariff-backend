@@ -5,5 +5,3 @@ class ExportRefundNomenclatureDescription < Sequel::Model
 
   set_primary_key [:export_refund_nomenclature_description_period_sid]
 end
-
-

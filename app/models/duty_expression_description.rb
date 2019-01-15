@@ -31,5 +31,3 @@ class DutyExpressionDescription < Sequel::Model
     }[duty_expression_id]
   end
 end
-
-

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe RingBuffer do
   describe '#push' do
-    let(:ring_buffer) { RingBuffer.new(2) }
+    let(:ring_buffer) { described_class.new(2) }
 
     context 'with element limit not reached' do
       before {
@@ -11,7 +11,7 @@ describe RingBuffer do
       }
 
       it 'pushes and keeps all elements' do
-        expect(ring_buffer.to_a).to eq ['foo', 'bar']
+        expect(ring_buffer.to_a).to eq %w[foo bar]
       end
     end
 
@@ -23,13 +23,13 @@ describe RingBuffer do
       }
 
       it 'pushes new element, popping out the first one (FIFO)' do
-        expect(ring_buffer.to_a).to eq ['bar', 'baz']
+        expect(ring_buffer.to_a).to eq %w[bar baz]
       end
     end
   end
 
   describe '#full?' do
-    let(:ring_buffer) { RingBuffer.new(1) }
+    let(:ring_buffer) { described_class.new(1) }
 
     context 'element limit reached' do
       before { ring_buffer.push('foo') }

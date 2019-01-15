@@ -1,6 +1,5 @@
 class ChiefTransformer
   class Logger < ActiveSupport::LogSubscriber
-    
     def start_transform(event)
       info "CHIEF Transformer started in #{event.payload[:mode]} mode"
     end
@@ -20,7 +19,7 @@ class ChiefTransformer
                                           event.payload[:errors]).deliver_now
     end
 
-    def transform_lock_error(event)
+    def transform_lock_error(_event)
       warn "Failed to acquire Redis lock for Chief transformation"
     end
   end

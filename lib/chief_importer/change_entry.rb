@@ -18,7 +18,7 @@ class ChiefImporter
       table.in?(ChiefImporter.relevant_tables)
     end
 
-    private
+  private
 
     def strategy_for(table)
       "ChiefImporter::Strategies::#{table}".classify.constantize

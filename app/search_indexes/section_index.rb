@@ -10,7 +10,7 @@ class SectionIndex < SearchIndex
           properties: {
             position: { type: "long" },
             id: { type: "long" },
-            title: { type: "text" , analyzer: "snowball" },
+            title: { type: "text", analyzer: "snowball" },
             numeral: { type: "keyword" }
           }
         }

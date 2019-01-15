@@ -16,6 +16,10 @@ child :chapter do
   node(:chapter_note, if: lambda {|chapter| chapter.chapter_note.present? }) do |chapter|
     chapter.chapter_note.content
   end
+
+  child(:guides, if: lambda {|chapter| chapter.guides.present? }) do
+    attributes :title, :url
+  end
 end
 
 node(:import_measures) { |declarable|

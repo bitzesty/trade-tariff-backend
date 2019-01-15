@@ -1,6 +1,6 @@
 module TariffSynchronizer
   class Response
-    TERMINATING_RESPONSE_CODES = [200, 404]
+    TERMINATING_RESPONSE_CODES = [200, 404].freeze
 
     attr_reader :response_code
 
@@ -37,7 +37,7 @@ module TariffSynchronizer
       end
     end
 
-    private
+  private
 
     def successful?
       response_code == 200 && @content.present?

@@ -1,17 +1,17 @@
 FactoryGirl.define do
-  sequence(:additional_code_sid) { |n| n}
-  sequence(:additional_code_description_period_sid) { |n| n}
+  sequence(:additional_code_sid) { |n| n }
+  sequence(:additional_code_description_period_sid) { |n| n }
   sequence(:meursing_additional_code_sid) { |n| n }
 
   factory :additional_code do
     additional_code_sid     { generate(:additional_code_sid) }
-    additional_code_type_id { Forgery(:basic).text(exactly: 1) }
+    additional_code_type_id { generate(:additional_code_type_id) }
     additional_code         { Forgery(:basic).text(exactly: 3) }
     validity_start_date     { Date.today.ago(2.years) }
     validity_end_date       { nil }
 
     trait :with_export_refund_nomenclature do
-      after(:build) { |adco, evaluator|
+      after(:build) { |adco, _evaluator|
         FactoryGirl.create(:export_refund_nomenclature, export_refund_code: adco.additional_code)
       }
     end
@@ -20,7 +20,7 @@ FactoryGirl.define do
   factory :additional_code_description_period do
     additional_code_description_period_sid { generate(:additional_code_sid) }
     additional_code_sid                    { generate(:additional_code_sid) }
-    additional_code_type_id                { Forgery(:basic).text(exactly: 1) }
+    additional_code_type_id                { generate(:additional_code_type_id) }
     additional_code                        { Forgery(:basic).text(exactly: 3) }
     validity_start_date                    { Date.today.ago(2.years) }
     validity_end_date                      { nil }
@@ -28,13 +28,13 @@ FactoryGirl.define do
 
   factory :additional_code_description do
     transient do
-      valid_at Time.now.ago(2.years)
-      valid_to nil
+      valid_at { Time.now.ago(2.years) }
+      valid_to { nil }
     end
 
     additional_code_description_period_sid { generate(:additional_code_sid) }
     additional_code_sid                    { generate(:additional_code_sid) }
-    additional_code_type_id                { Forgery(:basic).text(exactly: 1) }
+    additional_code_type_id                { generate(:additional_code_type_id) }
     additional_code                        { Forgery(:basic).text(exactly: 3) }
     description                            { Forgery(:lorem_ipsum).sentence }
 
@@ -51,7 +51,7 @@ FactoryGirl.define do
   end
 
   factory :additional_code_type do
-    additional_code_type_id { Forgery(:basic).text(exactly: 1) }
+    additional_code_type_id { generate(:additional_code_type_id) }
     application_code        { "1" }
     validity_start_date     { Date.today.ago(2.years) }
     validity_end_date       { nil }
@@ -75,22 +75,35 @@ FactoryGirl.define do
     trait :with_meursing_table_plan do
       meursing_table_plan_id { Forgery(:basic).number }
 
-      after(:build) { |adco_type, evaluator|
+      after(:build) { |adco_type, _evaluator|
         create(:meursing_table_plan, meursing_table_plan_id: adco_type.meursing_table_plan_id)
       }
+    end
+
+    trait :xml do
+      validity_end_date { Date.today.ago(1.years) }
+    end
+  end
+
+  factory :additional_code_type_description do
+    additional_code_type_id                { generate(:additional_code_type_id) }
+    description                            { Forgery(:lorem_ipsum).sentence }
+
+    trait :xml do
+      language_id { "EN" }
     end
   end
 
   factory :meursing_additional_code do
-    meursing_additional_code_sid     { generate(:meursing_additional_code_sid) }
+    meursing_additional_code_sid { generate(:meursing_additional_code_sid) }
     additional_code         { Forgery(:basic).text(exactly: 3) }
     validity_start_date     { Date.today.ago(2.years) }
     validity_end_date       { nil }
   end
 
   factory :additional_code_type_measure_type do |f|
-    f.measure_type_id        { Forgery(:basic).text(exactly: 3) }
-    f.additional_code_type_id { Forgery(:basic).text(exactly: 1) }
+    f.measure_type_id { Forgery(:basic).text(exactly: 3) }
+    f.additional_code_type_id { generate(:additional_code_type_id) }
     f.validity_start_date     { Date.today.ago(2.years) }
     f.validity_end_date       { nil }
 

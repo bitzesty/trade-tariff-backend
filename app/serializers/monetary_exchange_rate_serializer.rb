@@ -1,5 +1,5 @@
 class MonetaryExchangeRateSerializer < Serializer
-  def serializable_hash(opts = {})
+  def serializable_hash(_opts = {})
     {
       child_monetary_unit_code: child_monetary_unit_code,
       exchange_rate: exchange_rate,

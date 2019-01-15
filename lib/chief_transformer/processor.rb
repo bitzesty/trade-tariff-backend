@@ -1,4 +1,4 @@
-Dir[File.join(Rails.root, 'lib', 'chief_transformer/operations/*.rb')].each{|f| require f }
+Dir[File.join(Rails.root, 'lib', 'chief_transformer/operations/*.rb')].each { |f| require f }
 
 class ChiefTransformer
   class Processor
@@ -23,7 +23,7 @@ class ChiefTransformer
                                                                                              errors: exception.errors)
 
               raise ChiefTransformer::TransformException.new("Could not transform: #{operation.inspect}. \nModel: #{exception.model.inspect}. \nErrors: #{exception.errors.inspect} \nBacktrace: \n#{exception.backtrace.join("\n")}", exception)
-            rescue => exception
+            rescue StandardError => exception
               ActiveSupport::Notifications.instrument("invalid_operation.chief_transformer", operation: operation,
                                                                                              exception: exception)
 
@@ -34,7 +34,7 @@ class ChiefTransformer
       end
     end
 
-    private
+  private
 
     def operator_for(operation)
       ["ChiefTransformer::Processor",
@@ -42,7 +42,7 @@ class ChiefTransformer
     end
 
     def operation_name(operation)
-      operation.class.name.demodulize.tap!{|name|
+      operation.class.name.demodulize.tap! { |name|
         name << case operation.amend_indicator
                 when "I"
                   "Insert"

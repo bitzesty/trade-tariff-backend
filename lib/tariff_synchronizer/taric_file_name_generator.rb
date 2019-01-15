@@ -17,7 +17,7 @@ class TaricFileNameGenerator
       .map { |name| { filename: local_filename(name), url: update_url(name) } }
   end
 
-  private
+private
 
   def update_url(name)
     format(taric_update_url_template, host: host, filename: name)

@@ -5,18 +5,25 @@ describe GoodsNomenclature do
     describe 'goods nomenclature indent' do
       context 'fetching with absolute date' do
         let!(:goods_nomenclature)                { create :goods_nomenclature }
-        let!(:goods_nomenclature_indent1)        { create :goods_nomenclature_indent,
+        let!(:goods_nomenclature_indent1)        {
+          create :goods_nomenclature_indent,
                                                                     goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
                                                                     validity_start_date: 2.years.ago,
-                                                                    validity_end_date: nil }
-        let!(:goods_nomenclature_indent2)        { create :goods_nomenclature_indent,
+                                                                    validity_end_date: nil
+        }
+        let!(:goods_nomenclature_indent2) {
+          create :goods_nomenclature_indent,
                                                               goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
                                                               validity_start_date: 6.years.ago,
-                                                              validity_end_date: 3.years.ago }
-        let!(:goods_nomenclature_indent3)        { create :goods_nomenclature_indent,
+                                                              validity_end_date: 3.years.ago
+        }
+        let!(:goods_nomenclature_indent3) {
+          create :goods_nomenclature_indent,
                                                               goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
                                                               validity_start_date: 5.years.ago,
-                                                              validity_end_date: 3.years.ago }
+                                                              validity_end_date: 3.years.ago
+        }
+
         context 'direct loading' do
           it 'loads correct indent respecting given actual time' do
             TimeMachine.now do
@@ -45,7 +52,7 @@ describe GoodsNomenclature do
           it 'loads correct indent respecting given actual time' do
             TimeMachine.now do
               expect(
-                GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                described_class.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                             .eager(:goods_nomenclature_indents)
                             .all
                             .first
@@ -57,7 +64,7 @@ describe GoodsNomenclature do
           it 'loads correct indent respecting given time' do
             TimeMachine.at(1.year.ago) do
               expect(
-                GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                described_class.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                             .eager(:goods_nomenclature_indents)
                             .all
                             .first
@@ -67,7 +74,7 @@ describe GoodsNomenclature do
 
             TimeMachine.at(4.years.ago) do
               expect(
-                GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                described_class.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                             .eager(:goods_nomenclature_indents)
                             .all
                             .first
@@ -83,14 +90,18 @@ describe GoodsNomenclature do
       context 'fetching with absolute date' do
         context 'at least one end date present' do
           let!(:goods_nomenclature)                { create :goods_nomenclature }
-          let!(:goods_nomenclature_description1)   { create :goods_nomenclature_description,
+          let!(:goods_nomenclature_description1)   {
+            create :goods_nomenclature_description,
                                                                 goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
                                                                 validity_start_date: 2.years.ago,
-                                                                validity_end_date: nil }
-          let!(:goods_nomenclature_description2) { create :goods_nomenclature_description,
+                                                                validity_end_date: nil
+          }
+          let!(:goods_nomenclature_description2) {
+            create :goods_nomenclature_description,
                                                                 goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
                                                                 validity_start_date: 5.years.ago,
-                                                                validity_end_date: 3.years.ago }
+                                                                validity_end_date: 3.years.ago
+          }
 
           context 'direct loading' do
             it 'loads correct description respecting given actual time' do
@@ -120,7 +131,7 @@ describe GoodsNomenclature do
             it 'loads correct description respecting given actual time' do
               TimeMachine.now do
                 expect(
-                  GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                  described_class.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                               .eager(:goods_nomenclature_descriptions)
                               .all
                               .first
@@ -132,7 +143,7 @@ describe GoodsNomenclature do
             it 'loads correct description respecting given time' do
               TimeMachine.at(1.year.ago) do
                 expect(
-                  GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                  described_class.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                               .eager(:goods_nomenclature_descriptions)
                               .all
                               .first
@@ -142,7 +153,7 @@ describe GoodsNomenclature do
 
               TimeMachine.at(4.years.ago) do
                 expect(
-                  GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                  described_class.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                               .eager(:goods_nomenclature_descriptions)
                               .all
                               .first
@@ -155,14 +166,18 @@ describe GoodsNomenclature do
 
         context 'blank end dates' do
           let!(:goods_nomenclature)                { create :goods_nomenclature }
-          let!(:goods_nomenclature_description1)   { create :goods_nomenclature_description,
+          let!(:goods_nomenclature_description1)   {
+            create :goods_nomenclature_description,
                                                                 goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
                                                                 validity_start_date: 3.years.ago,
-                                                                validity_end_date: nil }
-          let!(:goods_nomenclature_description2) { create :goods_nomenclature_description,
+                                                                validity_end_date: nil
+          }
+          let!(:goods_nomenclature_description2) {
+            create :goods_nomenclature_description,
                                                                 goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
                                                                 validity_start_date: 5.years.ago,
-                                                                validity_end_date: nil }
+                                                                validity_end_date: nil
+          }
 
           context 'direct loading' do
             it 'loads correct description respecting given actual time' do
@@ -192,7 +207,7 @@ describe GoodsNomenclature do
             it 'loads correct description respecting given actual time' do
               TimeMachine.now do
                 expect(
-                  GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                  described_class.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                               .eager(:goods_nomenclature_descriptions)
                               .all
                               .first
@@ -204,7 +219,7 @@ describe GoodsNomenclature do
             it 'loads correct description respecting given time' do
               TimeMachine.at(2.years.ago) do
                 expect(
-                  GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                  described_class.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                               .eager(:goods_nomenclature_descriptions)
                               .all
                               .first
@@ -214,7 +229,7 @@ describe GoodsNomenclature do
 
               TimeMachine.at(4.years.ago) do
                 expect(
-                  GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+                  described_class.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                               .eager(:goods_nomenclature_descriptions)
                               .all
                               .first
@@ -227,16 +242,23 @@ describe GoodsNomenclature do
       end
 
       context 'fetching with relevant date' do
-        let!(:goods_nomenclature)                { create :goods_nomenclature, validity_start_date: 1.year.ago,
-                                                                               validity_end_date: nil }
-        let!(:goods_nomenclature_description1)   { create :goods_nomenclature_description,
+        let!(:goods_nomenclature) {
+          create :goods_nomenclature, validity_start_date: 1.year.ago,
+                                                                               validity_end_date: nil
+        }
+        let!(:goods_nomenclature_description1) {
+          create :goods_nomenclature_description,
                                                               goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
                                                               validity_start_date: 2.years.ago,
-                                                              validity_end_date: nil }
-        let!(:goods_nomenclature_description2) { create :goods_nomenclature_description,
+                                                              validity_end_date: nil
+        }
+        let!(:goods_nomenclature_description2) {
+          create :goods_nomenclature_description,
                                                               goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
                                                               validity_start_date: 5.years.ago,
-                                                              validity_end_date: 3.years.ago }
+                                                              validity_end_date: 3.years.ago
+        }
+
         it 'fetches correct description' do
           TimeMachine.with_relevant_validity_periods {
             expect(
@@ -249,14 +271,18 @@ describe GoodsNomenclature do
 
     describe 'footnote' do
       let!(:goods_nomenclature) { create :goods_nomenclature }
-      let!(:footnote1)   { create :footnote, :with_gono_association,
+      let!(:footnote1) {
+        create :footnote, :with_gono_association,
                                               goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
                                               valid_at: 2.years.ago,
-                                              valid_to: nil }
-      let!(:footnote2)   { create :footnote, :with_gono_association,
+                                              valid_to: nil
+      }
+      let!(:footnote2) {
+        create :footnote, :with_gono_association,
                                               goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
                                               valid_at: 5.years.ago,
-                                              valid_to: 3.years.ago }
+                                              valid_to: 3.years.ago
+      }
 
       context 'direct loading' do
         it 'loads correct indent respecting given actual time' do
@@ -286,7 +312,7 @@ describe GoodsNomenclature do
         it 'loads correct indent respecting given actual time' do
           TimeMachine.now do
             expect(
-              GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+              described_class.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                           .eager(:footnotes)
                           .all
                           .first
@@ -298,7 +324,7 @@ describe GoodsNomenclature do
         it 'loads correct indent respecting given time' do
           TimeMachine.at(1.year.ago) do
             expect(
-              GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+              described_class.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                           .eager(:footnotes)
                           .all
                           .first
@@ -308,7 +334,7 @@ describe GoodsNomenclature do
 
           TimeMachine.at(4.years.ago) do
             expect(
-              GoodsNomenclature.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
+              described_class.where(goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid)
                           .eager(:footnotes)
                           .all
                           .first
@@ -324,19 +350,23 @@ describe GoodsNomenclature do
       let(:tbl1) { create :tbl9, :unoq }
       let(:tbl2) { create :tbl9, :unoq }
       let(:tbl3) { create :tbl9, :unoq }
-      let!(:comm1) { create :comm, cmdty_code: gono.goods_nomenclature_item_id,
+      let!(:comm1) {
+        create :comm, cmdty_code: gono.goods_nomenclature_item_id,
                                   fe_tsmp: Date.today.ago(2.years),
                                   le_tsmp: nil,
                                   uoq_code_cdu2: tbl1.tbl_code,
-                                  uoq_code_cdu3: tbl2.tbl_code }
-      let!(:comm2) { create :comm, cmdty_code: gono.goods_nomenclature_item_id,
+                                  uoq_code_cdu3: tbl2.tbl_code
+      }
+      let!(:comm2) {
+        create :comm, cmdty_code: gono.goods_nomenclature_item_id,
                                   fe_tsmp: Date.today.ago(5.years),
                                   le_tsmp: Date.today.ago(3.years),
-                                  uoq_code_cdu2: tbl3.tbl_code }
+                                  uoq_code_cdu2: tbl3.tbl_code
+      }
 
       it 'loads associated national measurement unit set' do
         TimeMachine.at(1.year.ago) do
-          nset = GoodsNomenclature.where(goods_nomenclature_sid: gono.goods_nomenclature_sid)
+          nset = described_class.where(goods_nomenclature_sid: gono.goods_nomenclature_sid)
                         .first
                         .national_measurement_unit_set
 
@@ -348,7 +378,7 @@ describe GoodsNomenclature do
         end
 
         TimeMachine.at(4.year.ago) do
-          nset = GoodsNomenclature.where(goods_nomenclature_sid: gono.goods_nomenclature_sid)
+          nset = described_class.where(goods_nomenclature_sid: gono.goods_nomenclature_sid)
                         .first
                         .national_measurement_unit_set
 
@@ -371,17 +401,17 @@ describe GoodsNomenclature do
     let(:gono_80) { create(:goods_nomenclature, producline_suffix: '80') }
     let(:gono_10) { create(:goods_nomenclature, producline_suffix: '10') }
 
-    it "should return goods_nomenclatures ony with producline_suffix == '80'" do
+    it "returns goods_nomenclatures ony with producline_suffix == '80'" do
       gonos = described_class.declarable
       expect(gonos).to include(gono_80)
-      expect(gonos).to_not include(gono_10)
+      expect(gonos).not_to include(gono_10)
     end
   end
 
   describe '#code' do
     let(:gono) { create(:goods_nomenclature, goods_nomenclature_item_id: '8056116321') }
 
-    it 'should return goods_nomenclature_item_id' do
+    it 'returns goods_nomenclature_item_id' do
       expect(gono.code).to eq('8056116321')
     end
   end
@@ -389,7 +419,7 @@ describe GoodsNomenclature do
   describe '#bti_url' do
     let(:gono) { create(:goods_nomenclature, goods_nomenclature_item_id: '8056116321') }
 
-    it 'should include gono code' do
+    it 'includes gono code' do
       expect(gono.bti_url).to include(gono.code)
     end
   end
@@ -397,11 +427,11 @@ describe GoodsNomenclature do
   describe '#chapter_id' do
     let(:gono) { create(:goods_nomenclature, goods_nomenclature_item_id: '8056116321') }
 
-    it 'should include first to chars' do
+    it 'includes first to chars' do
       expect(gono.chapter_id).to include(gono.goods_nomenclature_item_id.first(2))
     end
 
-    it 'should include eight 0' do
+    it 'includes eight 0' do
       expect(gono.chapter_id).to include('0' * 8)
     end
   end
@@ -409,11 +439,11 @@ describe GoodsNomenclature do
   describe '#to_s' do
     let(:gono) { create(:commodity, goods_nomenclature_item_id: '8056116321', indents: 4) }
 
-    it 'should include number_indents' do
+    it 'includes number_indents' do
       expect(gono.to_s).to include(gono.number_indents.to_s)
     end
 
-    it 'should include goods_nomenclature_item_id' do
+    it 'includes goods_nomenclature_item_id' do
       expect(gono.to_s).to include(gono.goods_nomenclature_item_id)
     end
   end

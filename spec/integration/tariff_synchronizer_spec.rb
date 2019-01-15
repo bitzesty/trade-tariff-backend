@@ -19,7 +19,7 @@ describe TariffSynchronizer do
 
     context "when everything is fine" do
       it "applies missing updates" do
-        TariffSynchronizer.apply
+        described_class.apply
         expect(taric_update.reload).to be_applied
         expect(chief_update.reload).to be_applied
       end
@@ -34,10 +34,10 @@ describe TariffSynchronizer do
         )
       end
 
-      it 'should mark chief update as failed' do
+      it 'marks chief update as failed' do
         expect(taric_update).to be_pending
         expect(chief_update).to be_pending
-        rescuing { TariffSynchronizer.apply }
+        rescuing { described_class.apply }
         expect(taric_update.reload).to be_applied
         expect(chief_update.reload).to be_failed
       end
@@ -50,10 +50,10 @@ describe TariffSynchronizer do
         ).and_raise TaricImporter::ImportException
       end
 
-      it 'should mark taric update as failed' do
+      it 'marks taric update as failed' do
         expect(taric_update).to be_pending
         expect(chief_update).to be_pending
-        rescuing { TariffSynchronizer.apply }
+        rescuing { described_class.apply }
         expect(taric_update.reload).to be_failed
         expect(chief_update.reload).to be_pending
       end
@@ -67,9 +67,9 @@ describe TariffSynchronizer do
       end
 
       it 'stops syncing' do
-        expect { TariffSynchronizer.apply }.to raise_error Sequel::Rollback
-        expect(taric_update.reload).to_not be_applied
-        expect(chief_update.reload).to_not be_applied
+        expect { described_class.apply }.to raise_error Sequel::Rollback
+        expect(taric_update.reload).not_to be_applied
+        expect(chief_update.reload).not_to be_applied
       end
     end
 
@@ -83,9 +83,9 @@ describe TariffSynchronizer do
       end
 
       it 'stops syncing' do
-        expect { TariffSynchronizer.apply }.to raise_error Sequel::Rollback
-        expect(taric_update.reload).to_not be_applied
-        expect(chief_update.reload).to_not be_applied
+        expect { described_class.apply }.to raise_error Sequel::Rollback
+        expect(taric_update.reload).not_to be_applied
+        expect(chief_update.reload).not_to be_applied
       end
     end
   end
@@ -97,7 +97,7 @@ describe TariffSynchronizer do
 
     context 'successful run' do
       before {
-        TariffSynchronizer.rollback(Date.yesterday, true)
+        described_class.rollback(Date.yesterday, true)
       }
 
       it 'removes entries from oplog tables' do
@@ -117,11 +117,11 @@ describe TariffSynchronizer do
       before {
         expect(Measure).to receive(:operation_klass).and_raise(StandardError)
 
-        rescuing { TariffSynchronizer.rollback(Date.yesterday, true) }
+        rescuing { described_class.rollback(Date.yesterday, true) }
       }
 
       it 'does not remove entries from oplog derived tables' do
-        expect(Measure.any?).to be_truthy
+        expect(Measure).to be_any
       end
 
       it 'leaves Chief and Taric updates in applid state' do
@@ -129,13 +129,13 @@ describe TariffSynchronizer do
       end
 
       it 'removes imported Chief records entries' do
-        expect(Chief::Mfcm.any?).to be_truthy
+        expect(Chief::Mfcm).to be_any
       end
     end
 
     context 'forced to redownload by default' do
       before {
-        TariffSynchronizer.rollback(Date.yesterday)
+        described_class.rollback(Date.yesterday)
       }
 
       it 'removes entries from oplog derived tables' do
@@ -152,12 +152,12 @@ describe TariffSynchronizer do
     end
 
     context 'with date passed as string' do
-      let!(:older_update)  {
+      let!(:older_update) {
         create :taric_update, :applied, issue_date: 2.days.ago
       }
 
       before {
-        TariffSynchronizer.rollback(Date.yesterday)
+        described_class.rollback(Date.yesterday)
       }
 
       it 'removes entries from oplog derived tables' do

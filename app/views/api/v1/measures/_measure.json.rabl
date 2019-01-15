@@ -88,10 +88,10 @@ end
 child(order_number: :order_number) do
   node(:number) { |qon| qon.quota_order_number_id }
 
-  child(quota_definition: :definition) do
+  child(quota_definition!: :definition) do
     attributes :initial_volume, :validity_start_date, :validity_end_date, :status, :description
 
-    node(:measurement_unit) { |qd| qd.measurement_unit_code }
+    node(:measurement_unit) { |qd| qd.formatted_measurement_unit }
     node(:monetary_unit) { |qd| qd.monetary_unit_code }
     node(:measurement_unit_qualifier ) { |qd| qd.measurement_unit_qualifier_code }
     node(:balance) { |qd| qd.balance }

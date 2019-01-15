@@ -22,6 +22,7 @@ describe MeasurementUnit do
         raise Sequel::RecordNotFound
       }
     }
+
     it {
       expect(measurement_unit.abbreviation).to eq(measurement_unit.description)
     }
@@ -40,6 +41,7 @@ describe MeasurementUnit do
       let!(:measurement_unit_abbreviation) {
         create(:measurement_unit_abbreviation, measurement_unit_code: measurement_unit.measurement_unit_code)
       }
+
       it {
         expect(measurement_unit.measurement_unit_abbreviation).to eq(measurement_unit_abbreviation)
       }

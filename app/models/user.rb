@@ -6,9 +6,9 @@ class User < Sequel::Model
   serialize_attributes :yaml, :permissions
 
   module Permissions
-    SIGNIN = 'signin'
-    HMRC_EDITOR = 'HMRC Editor'
-    GDS_EDITOR = 'GDS Editor'
+    SIGNIN = 'signin'.freeze
+    HMRC_EDITOR = 'HMRC Editor'.freeze
+    GDS_EDITOR = 'GDS Editor'.freeze
   end
 
   def self.find_for_gds_oauth(auth_hash)
@@ -51,7 +51,7 @@ class User < Sequel::Model
   end
 
   def update_attribute(attribute, value)
-    update({ attribute => value })
+    update(attribute => value)
   end
 
   def update_attributes(attributes)

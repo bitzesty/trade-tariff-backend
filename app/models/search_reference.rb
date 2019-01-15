@@ -7,10 +7,12 @@ class SearchReference < Sequel::Model
 
   many_to_one :referenced, reciprocal: :search_references, reciprocal_type: :many_to_one,
     setter: (proc do |referenced|
-      self.set(
-        referenced_id: referenced.to_param,
-        referenced_class: referenced.class.name
-      ) if referenced.present?
+      if referenced.present?
+        self.set(
+          referenced_id: referenced.to_param,
+          referenced_class: referenced.class.name
+        )
+      end
     end),
     dataset: (proc do
       klass = referenced_class.constantize
@@ -41,7 +43,7 @@ class SearchReference < Sequel::Model
       id_map.each do |klass_name, id_map|
         klass = klass_name.constantize
         if klass_name == 'Section'
-          klass.where(klass.primary_key=>id_map.keys).all do |ref|
+          klass.where(klass.primary_key => id_map.keys).all do |ref|
             id_map[ref.pk.to_s].each do |search_reference|
               search_reference.associations[:referenced] = ref
             end
@@ -50,9 +52,9 @@ class SearchReference < Sequel::Model
 
           pattern = case klass_name
                     when 'Chapter'
-                      id_map.keys.map{|key| "#{key}________"}.join("|")
+                      id_map.keys.map { |key| "#{key}________" }.join("|")
                     when 'Heading'
-                      id_map.keys.map{|key| "#{key}______"}.join("|")
+                      id_map.keys.map { |key| "#{key}______" }.join("|")
                     when 'Commodity'
                       id_map.keys.join("|")
                     end
@@ -66,7 +68,7 @@ class SearchReference < Sequel::Model
       end
     end)
 
-  many_to_one :section do |ds|
+  many_to_one :section do |_ds|
     referenced
   end
 

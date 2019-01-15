@@ -1,5 +1,5 @@
 class DutyExpression < Sequel::Model
-  MEURSING_DUTY_EXPRESSION_IDS = %w[12 14 21 25 27 29]
+  MEURSING_DUTY_EXPRESSION_IDS = %w[12 14 21 25 27 29].freeze
 
   plugin :time_machine
   plugin :oplog, primary_key: :duty_expression_id
@@ -11,5 +11,3 @@ class DutyExpression < Sequel::Model
 
   delegate :abbreviation, :description, to: :duty_expression_description
 end
-
-

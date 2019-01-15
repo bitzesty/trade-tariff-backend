@@ -10,5 +10,3 @@ class MeasureTypeDescription < Sequel::Model
     description
   end
 end
-
-

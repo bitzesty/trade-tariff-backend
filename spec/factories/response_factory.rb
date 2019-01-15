@@ -24,7 +24,7 @@ FactoryGirl.define do
 
     trait :retry_exceeded do
       failed
-      after(:build) { |response| response.retry_count_exceeded! }
+      after(:build, &:retry_count_exceeded!)
     end
 
     initialize_with { new(response_code, content) }

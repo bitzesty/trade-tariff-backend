@@ -1,7 +1,7 @@
 FactoryGirl.define do
-  sequence(:measure_sid) { |n| n}
-  sequence(:measure_type_id) { |n| n}
-  sequence(:measure_condition_sid) { |n| n}
+  sequence(:measure_sid) { |n| n }
+  sequence(:measure_type_id) { |n| n }
+  sequence(:measure_condition_sid) { |n| n }
 
   factory :measure do |f|
     transient do
@@ -11,28 +11,32 @@ FactoryGirl.define do
       order_number_capture_code { 2 }
     end
 
-    f.measure_sid  { generate(:measure_sid) }
+    f.measure_sid { generate(:measure_sid) }
     f.measure_type_id { generate(:measure_type_id) }
     f.measure_generating_regulation_id { generate(:base_regulation_sid) }
     f.measure_generating_regulation_role { 1 }
-    f.additional_code_type_id { Forgery(:basic).text(exactly: 1) }
+    f.additional_code_type_id { generate(:additional_code_type_id) }
     f.goods_nomenclature_sid { generate(:goods_nomenclature_sid) }
-    f.goods_nomenclature_item_id { 10.times.map{ Random.rand(9) }.join }
+    f.goods_nomenclature_item_id { 10.times.map { Random.rand(9) }.join }
     f.geographical_area_sid { generate(:geographical_area_sid) }
     f.geographical_area_id { generate(:geographical_area_id) }
     f.validity_start_date { Date.today.ago(3.years) }
     f.validity_end_date   { nil }
 
     # mandatory valid associations
-    f.goods_nomenclature { create :goods_nomenclature, validity_start_date: validity_start_date - 1.day,
+    f.goods_nomenclature {
+      create :goods_nomenclature, validity_start_date: validity_start_date - 1.day,
                                                        goods_nomenclature_item_id: goods_nomenclature_item_id,
                                                        goods_nomenclature_sid: goods_nomenclature_sid,
                                                        producline_suffix: gono_producline_suffix,
-                                                       indents: gono_number_indents }
-    f.measure_type { create :measure_type, measure_type_id: measure_type_id,
+                                                       indents: gono_number_indents
+    }
+    f.measure_type {
+      create :measure_type, measure_type_id: measure_type_id,
                                    validity_start_date: validity_start_date - 1.day,
                                    measure_explosion_level: type_explosion_level,
-                                   order_number_capture_code: order_number_capture_code }
+                                   order_number_capture_code: order_number_capture_code
+    }
     f.geographical_area {
       create(:geographical_area, geographical_area_sid: geographical_area_sid,
                                  geographical_area_id: geographical_area_id,
@@ -64,7 +68,7 @@ FactoryGirl.define do
     trait :with_modification_regulation do
       measure_generating_regulation_role { 4 }
 
-      after(:build) { |measure, evaluator|
+      after(:build) { |measure, _evaluator|
         FactoryGirl.create(:modification_regulation, modification_regulation_id: measure.measure_generating_regulation_id)
       }
     end
@@ -72,7 +76,7 @@ FactoryGirl.define do
     trait :with_abrogated_modification_regulation do
       measure_generating_regulation_role { 4 }
 
-      after(:build) { |measure, evaluator|
+      after(:build) { |measure, _evaluator|
         base_regulation = FactoryGirl.create(:base_regulation, :abrogated)
         FactoryGirl.create(:modification_regulation,
                             modification_regulation_id: measure.measure_generating_regulation_id,
@@ -87,20 +91,20 @@ FactoryGirl.define do
     end
 
     trait :with_additional_code_type do
-      after(:build) { |measure, evaluator|
-        FactoryGirl.create(:additional_code_type, additional_code_type_id: measure.additional_code_type_id )
+      after(:build) { |measure, _evaluator|
+        FactoryGirl.create(:additional_code_type, additional_code_type_id: measure.additional_code_type_id)
       }
     end
 
     trait :with_related_additional_code_type do
-      after(:build) { |measure, evaluator|
+      after(:build) { |measure, _evaluator|
         FactoryGirl.create(:additional_code_type_measure_type, additional_code_type_id: measure.additional_code_type_id,
                                                                measure_type_id: measure.measure_type_id)
       }
     end
 
     trait :with_quota_order_number do
-      after(:build) { |measure, evaluator|
+      after(:build) { |measure, _evaluator|
         FactoryGirl.create(:quota_order_number, quota_order_number_id: measure.ordernumber)
       }
     end
@@ -111,8 +115,8 @@ FactoryGirl.define do
       measure_type_description { Forgery(:basic).text }
     end
 
-    measure_type_id        { generate(:measure_type_id) }
-    measure_type_series_id { Forgery(:basic).text(exactly: 1) }
+    measure_type_id { generate(:measure_type_id) }
+    sequence(:measure_type_series_id, LoopingSequence.lower_a_to_upper_z, &:value)
     validity_start_date    { Date.today.ago(3.years) }
     validity_end_date      { nil }
     measure_explosion_level { 10 }
@@ -135,10 +139,10 @@ FactoryGirl.define do
     end
 
     trait :excise do
-      measure_type_description "EXCISE 111"
+      measure_type_description { "EXCISE 111" }
     end
 
-    after(:build) { |measure_type, evaluator|
+    after(:build) { |measure_type, _evaluator|
       FactoryGirl.create(:measure_type_series, measure_type_series_id: measure_type.measure_type_series_id)
     }
 
@@ -152,21 +156,21 @@ FactoryGirl.define do
   end
 
   factory :measure_type_description do
-    measure_type_id        { generate(:measure_type_id) }
+    measure_type_id { generate(:measure_type_id) }
     description { Forgery(:basic).text }
   end
 
   factory :measure_condition do
     measure_condition_sid { generate(:measure_condition_sid) }
     measure_sid { generate(:measure_sid) }
-    condition_code     { Forgery(:basic).text(exactly: 2) }
-    component_sequence_number     { Forgery(:basic).number }
-    condition_duty_amount     { Forgery(:basic).number }
-    condition_monetary_unit_code     { Forgery(:basic).text(exactly: 3) }
-    condition_measurement_unit_code     { Forgery(:basic).text(exactly: 3) }
-    condition_measurement_unit_qualifier_code     { Forgery(:basic).text(exactly: 1) }
-    action_code     { Forgery(:basic).text(exactly: 1) }
-    certificate_type_code     { Forgery(:basic).text(exactly: 1) }
-    certificate_code     { Forgery(:basic).text(exactly: 3) }
+    condition_code { Forgery(:basic).text(exactly: 2) }
+    component_sequence_number { Forgery(:basic).number }
+    condition_duty_amount { Forgery(:basic).number }
+    condition_monetary_unit_code { Forgery(:basic).text(exactly: 3) }
+    condition_measurement_unit_code { Forgery(:basic).text(exactly: 3) }
+    sequence(:condition_measurement_unit_qualifier_code, LoopingSequence.lower_a_to_upper_z, &:value)
+    sequence(:action_code, LoopingSequence.lower_a_to_upper_z, &:value)
+    sequence(:certificate_type_code, LoopingSequence.lower_a_to_upper_z, &:value)
+    certificate_code { Forgery(:basic).text(exactly: 3) }
   end
 end

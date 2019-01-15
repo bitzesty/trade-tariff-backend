@@ -2,8 +2,8 @@
 namespace :importer do
   namespace :taric do
     desc "Import Tariff file"
-    task import: [:environment, :class_eager_load] do
-      if ENV["TARGET"] && File.exists?(ENV["TARGET"])
+    task import: %i[environment class_eager_load] do
+      if ENV["TARGET"] && File.exist?(ENV["TARGET"])
         # We will be fetching updates from Taric and modifying primary keys
         # so unrestrict it for all models.
         Sequel::Model.subclasses.each(&:unrestrict_primary_key)

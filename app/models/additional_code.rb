@@ -7,10 +7,10 @@ class AdditionalCode < Sequel::Model
 
   many_to_many :additional_code_descriptions, join_table: :additional_code_description_periods,
                                               left_key: :additional_code_sid,
-                                              right_key: [:additional_code_description_period_sid,
-                                                          :additional_code_sid] do |ds|
-                                                ds.with_actual(AdditionalCodeDescriptionPeriod)
-                                              end
+                                              right_key: %i[additional_code_description_period_sid
+                                                            additional_code_sid] do |ds|
+    ds.with_actual(AdditionalCodeDescriptionPeriod)
+  end
 
   def additional_code_description
     additional_code_descriptions(reload: true).first

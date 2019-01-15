@@ -14,5 +14,3 @@ class CertificateType < Sequel::Model
 
   delegate :description, to: :certificate_type_description
 end
-
-

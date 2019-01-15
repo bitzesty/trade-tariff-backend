@@ -10,7 +10,7 @@ FactoryGirl.define do
     end
 
     trait :include_qualifier do
-      measurement_unit_qualifier { Forgery(:basic).text(exactly: 1) }
+      sequence(:measurement_unit_qualifier, LoopingSequence.lower_a_to_upper_z, &:value)
     end
   end
 end

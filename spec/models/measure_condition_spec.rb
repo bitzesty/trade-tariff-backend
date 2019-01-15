@@ -54,7 +54,7 @@ describe MeasureCondition do
     describe 'measure condition components' do
       let!(:measure_condition)                { create :measure_condition }
       let!(:measure_condition_component1)     { create :measure_condition_component, measure_condition_sid: measure_condition.measure_condition_sid }
-      let!(:measure_condition_component2)     { create :measure_condition_component, measure_condition_sid: generate(:measure_condition_sid)  }
+      let!(:measure_condition_component2)     { create :measure_condition_component, measure_condition_sid: generate(:measure_condition_sid) }
 
       context 'direct loading' do
         it 'loads associated measure condition components' do
@@ -66,14 +66,14 @@ describe MeasureCondition do
         it 'does not load associated measure component' do
           expect(
             measure_condition.measure_condition_components
-          ).to_not include measure_condition_component2
+          ).not_to include measure_condition_component2
         end
       end
 
       context 'eager loading' do
         it 'loads associated measure components' do
           expect(
-            MeasureCondition.where(measure_condition_sid: measure_condition.measure_condition_sid)
+            described_class.where(measure_condition_sid: measure_condition.measure_condition_sid)
                  .eager(:measure_condition_components)
                  .all
                  .first
@@ -83,12 +83,12 @@ describe MeasureCondition do
 
         it 'does not load associated measure component' do
           expect(
-            MeasureCondition.where(measure_condition_sid: measure_condition.measure_condition_sid)
+            described_class.where(measure_condition_sid: measure_condition.measure_condition_sid)
                  .eager(:measure_condition_components)
                  .all
                  .first
                  .measure_condition_components
-          ).to_not include measure_condition_component2
+          ).not_to include measure_condition_component2
         end
       end
     end
@@ -158,11 +158,11 @@ describe MeasureCondition do
   describe '#document_code' do
     let(:measure_condition) { create :measure_condition, condition_code: 'L', certificate_type_code: '1' }
 
-    it 'should contain certificate_type_code' do
+    it 'contains certificate_type_code' do
       expect(measure_condition.document_code).to include(measure_condition.certificate_type_code)
     end
 
-    it 'should contain certificate_code' do
+    it 'contains certificate_code' do
       expect(measure_condition.certificate_code).to include(measure_condition.certificate_code)
     end
   end
@@ -170,27 +170,29 @@ describe MeasureCondition do
   describe '#action' do
     let(:measure_condition) { create :measure_condition, measure_action: create(:measure_action) }
 
-    it 'should return measure_action_description' do
+    it 'returns measure_action_description' do
       expect(measure_condition.measure_action).to receive(:description).at_least(1)
       expect(measure_condition.action).to eq(measure_condition.measure_action_description)
     end
   end
 
   describe '#condition' do
-    let(:measure_condition) { create :measure_condition, condition_code: '123',
-                                     component_sequence_number: 456 }
+    let(:measure_condition) {
+      create :measure_condition, condition_code: '123',
+                                     component_sequence_number: 456
+    }
     let!(:measure_condition_code) { create :measure_condition_code, condition_code: measure_condition.condition_code }
     let!(:measure_condition_code_description) { create :measure_condition_code_description, condition_code: measure_condition.condition_code }
 
-    it 'should contain condition_code' do
+    it 'contains condition_code' do
       expect(measure_condition.condition).to include(measure_condition.condition_code)
     end
 
-    it 'should contain component_sequence_number' do
-      expect(measure_condition.condition).to_not include(measure_condition.component_sequence_number.to_s)
+    it 'contains component_sequence_number' do
+      expect(measure_condition.condition).not_to include(measure_condition.component_sequence_number.to_s)
     end
 
-    it 'should contain measure_condition_code_description' do
+    it 'contains measure_condition_code_description' do
       expect(measure_condition.condition).to include(measure_condition.measure_condition_code_description.to_s)
     end
   end
