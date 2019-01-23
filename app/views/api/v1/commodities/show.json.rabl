@@ -5,9 +5,9 @@ attributes :producline_suffix, :description, :number_indents,
            :goods_nomenclature_item_id, :bti_url, :formatted_description,
            :description_plain, :consigned, :consigned_from, :basic_duty_rate
 
-  footnotes = (@commodity.footnotes + @commodity.heading.footnotes).uniq
-  if footnotes.any?
-    child(footnotes) {
+footnotes = (@commodity.footnotes + @commodity.heading.footnotes).uniq
+if footnotes.any?
+  child(footnotes) {
     attributes :code, :description, :formatted_description
   }
 end
@@ -21,9 +21,12 @@ end
 
 child @commodity.chapter do |chapter|
   attributes :goods_nomenclature_item_id, :description, :formatted_description
-  node :chapter_note do
-    chapter.chapter_note.content
+  if chapter.chapter_note.present?
+    node :chapter_note do
+      chapter.chapter_note.content
+    end
   end
+
   child chapter.guides do
     attributes :title, :url
   end
