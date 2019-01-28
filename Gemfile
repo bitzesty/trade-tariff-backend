@@ -13,9 +13,9 @@ gem "rails", "5.1.6.1"
 gem "sinatra", "~> 2.0.2"
 
 # DB
-gem 'pg', '~> 1.1', '>= 1.1.3'
-gem "sequel", "~> 4.49"
-gem "sequel-rails", "~> 0.9", ">= 0.9.12"
+gem 'pg', "~> 1.1", ">= 1.1.3"
+gem "sequel", "~> 5.0.0"
+gem "sequel-rails", "~> 1.0.0"
 
 # File uploads and AWS
 gem "aws-sdk", "~> 2"
@@ -68,6 +68,7 @@ group :development, :test do
   gem "dotenv-rails", ">= 2.1.1"
   gem "pry-byebug"
   gem "pry-rails"
+  gem "factory_girl_rails", "~> 4.8.0"
 end
 
 group :test do
