@@ -286,7 +286,7 @@ GEM
       sass (~> 3.5, >= 3.5.5)
     sentry-raven (2.7.4)
       faraday (>= 0.7.6, < 1.0)
-    sequel (5.0.0)
+    sequel (5.3.0)
     sequel-rails (1.0.1)
       actionpack (>= 4.0.0)
       activemodel (>= 4.0.0)
@@ -383,7 +383,7 @@ DEPENDENCIES
   rspec-rails (~> 3.5.2)
   rspec_junit_formatter
   sentry-raven
-  sequel (~> 5.0.0)
+  sequel (~> 5.3.0)
   sequel-rails (~> 1.0.0)
   sidekiq (~> 4.1.4)
   sidekiq-scheduler (~> 2.1.8)
