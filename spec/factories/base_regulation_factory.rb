@@ -4,7 +4,7 @@ FactoryGirl.define do
   factory :base_regulation do
     base_regulation_id   { generate(:sid) }
     base_regulation_role { 1 }
-    validity_start_date { Date.today.ago(3.years) }
+    validity_start_date { Date.current.ago(3.years) }
     validity_end_date   { nil }
     effective_end_date  { nil }
 

@@ -21,7 +21,7 @@ describe Api::V1::SearchController, "POST #search" do
   end
 
   describe 'fuzzy matching' do
-    let(:chapter) { create :chapter, :with_description, description: 'horse', validity_start_date: Date.today }
+    let(:chapter) { create :chapter, :with_description, description: 'horse', validity_start_date: Date.current }
     let(:pattern) {
       {
         type: 'fuzzy_match',

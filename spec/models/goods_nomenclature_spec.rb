@@ -352,15 +352,15 @@ describe GoodsNomenclature do
       let(:tbl3) { create :tbl9, :unoq }
       let!(:comm1) {
         create :comm, cmdty_code: gono.goods_nomenclature_item_id,
-                                  fe_tsmp: Date.today.ago(2.years),
+                                  fe_tsmp: Date.current.ago(2.years),
                                   le_tsmp: nil,
                                   uoq_code_cdu2: tbl1.tbl_code,
                                   uoq_code_cdu3: tbl2.tbl_code
       }
       let!(:comm2) {
         create :comm, cmdty_code: gono.goods_nomenclature_item_id,
-                                  fe_tsmp: Date.today.ago(5.years),
-                                  le_tsmp: Date.today.ago(3.years),
+                                  fe_tsmp: Date.current.ago(5.years),
+                                  le_tsmp: Date.current.ago(3.years),
                                   uoq_code_cdu2: tbl3.tbl_code
       }
 

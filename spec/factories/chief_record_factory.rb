@@ -329,7 +329,7 @@ FactoryGirl.define do
   end
 
   factory :comm, class: Chief::Comm do
-    fe_tsmp { Date.today.ago(2.years) }
+    fe_tsmp { Date.current.ago(2.years) }
     le_tsmp { nil }
     cmdty_code    { 10.times.map { Random.rand(9) }.join }
     uoq_code_cdu2 { 3.times.map { Random.rand(9) }.join }

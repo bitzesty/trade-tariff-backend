@@ -133,7 +133,7 @@ module TradeTariffBackend
                     mfcm: mfcm,
                     tame: mfcm.tame,
                     operation: :create,
-                    operation_date: Date.today
+                    operation_date: Date.current
                   )
 
                   added_list << measure_candidate_ops[0]

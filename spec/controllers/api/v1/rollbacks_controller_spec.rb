@@ -23,7 +23,7 @@ describe Api::V1::RollbacksController, 'POST to #create' do
     it 'performs a rollback' do
       Sidekiq::Testing.inline! do
         expect {
-          create(:rollback, date: Date.today.ago(1.month).to_date)
+          create(:rollback, date: Date.current.ago(1.month).to_date)
         }.to change { Measure.count }.from(1).to(0)
       end
     end

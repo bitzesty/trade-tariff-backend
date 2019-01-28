@@ -42,7 +42,7 @@ describe SearchService do
 
     it 'is valid if has both t and as_of params provided' do
       expect(
-        described_class.new(q: 'value', as_of: Date.today)
+        described_class.new(q: 'value', as_of: Date.current)
       ).to be_valid
     end
   end
@@ -68,14 +68,14 @@ describe SearchService do
 
         it 'returns endpoint and identifier if provided with 2 digit chapter code' do
           result = described_class.new(q: chapter.goods_nomenclature_item_id.first(2),
-                                     as_of: Date.today).to_json
+                                     as_of: Date.current).to_json
 
           expect(result).to match_json_expression pattern
         end
 
         it 'returns endpoint and identifier if provided with matching 3 digit chapter code' do
           result = described_class.new(q: chapter.goods_nomenclature_item_id.first(2),
-                                     as_of: Date.today).to_json
+                                     as_of: Date.current).to_json
 
           expect(result).to match_json_expression pattern
         end
@@ -95,7 +95,7 @@ describe SearchService do
 
         it 'returns endpoint and identifier if provided with 1 digit chapter code' do
           result = described_class.new(q: chapter.goods_nomenclature_item_id.first(2),
-                                     as_of: Date.today).to_json
+                                     as_of: Date.current).to_json
 
           expect(result).to match_json_expression pattern
         end
@@ -116,21 +116,21 @@ describe SearchService do
 
       it 'returns endpoint and identifier if provided with 4 symbol heading code' do
         result = described_class.new(q: heading.goods_nomenclature_item_id.first(4),
-                                   as_of: Date.today).to_json
+                                   as_of: Date.current).to_json
 
         expect(result).to match_json_expression pattern
       end
 
       it 'returns endpoint and identifier if provided with matching 6 (or any between length of 4 to 9) symbol heading code' do
         result = described_class.new(q: heading.goods_nomenclature_item_id.first(6),
-                                   as_of: Date.today).to_json
+                                   as_of: Date.current).to_json
 
         expect(result).to match_json_expression pattern
       end
 
       it 'returns endpoint and identifier if provided with matching 10 symbol declarable heading code' do
         result = described_class.new(q: heading.goods_nomenclature_item_id,
-                                   as_of: Date.today).to_json
+                                   as_of: Date.current).to_json
 
         expect(result).to match_json_expression pattern
       end
@@ -153,7 +153,7 @@ describe SearchService do
 
         it 'returns endpoint and identifier if provided with 10 symbol commodity code' do
           result = described_class.new(q: commodity.goods_nomenclature_item_id.first(10),
-                                     as_of: Date.today).to_json
+                                     as_of: Date.current).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity)
         end
@@ -165,7 +165,7 @@ describe SearchService do
                   commodity.goods_nomenclature_item_id[6..7],
                   commodity.goods_nomenclature_item_id[8..9]].join("")
           result = described_class.new(q: code,
-                                     as_of: Date.today).to_json
+                                     as_of: Date.current).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity)
         end
@@ -178,7 +178,7 @@ describe SearchService do
           code << "  " << commodity.goods_nomenclature_item_id[8..9]
 
           result = described_class.new(q: code,
-                                     as_of: Date.today).to_json
+                                     as_of: Date.current).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity)
         end
@@ -190,7 +190,7 @@ describe SearchService do
                   commodity.goods_nomenclature_item_id[6..7],
                   commodity.goods_nomenclature_item_id[8..9]].join(".")
           result = described_class.new(q: code,
-                                     as_of: Date.today).to_json
+                                     as_of: Date.current).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity)
         end
@@ -203,14 +203,14 @@ describe SearchService do
           code << "  " << commodity.goods_nomenclature_item_id[8..9]
 
           result = described_class.new(q: code,
-                                     as_of: Date.today).to_json
+                                     as_of: Date.current).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity)
         end
 
         it 'returns endpoint and identifier if provided with matching 12 symbol commodity code' do
           result = described_class.new(q: commodity.goods_nomenclature_item_id + commodity.producline_suffix,
-                                     as_of: Date.today).to_json
+                                     as_of: Date.current).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity)
         end
@@ -249,7 +249,7 @@ describe SearchService do
         it 'does not exact match commodity with children' do
           # even though productline suffix (80) suggests that it is declarable
           result = described_class.new(q: commodity1.goods_nomenclature_item_id,
-                                     as_of: Date.today).to_json
+                                     as_of: Date.current).to_json
 
           expect(result).to match_json_expression heading_pattern
         end
@@ -261,7 +261,7 @@ describe SearchService do
 
         it 'returns mapped commodity' do
           result = described_class.new(q: '1010111255',
-                                     as_of: Date.today).to_json
+                                     as_of: Date.current).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity2)
         end
@@ -274,7 +274,7 @@ describe SearchService do
 
       before {
         @result = described_class.new(q: commodity.goods_nomenclature_item_id.first(10),
-                                    as_of: Date.today).to_json
+                                    as_of: Date.current).to_json
       }
 
       it 'does not return hidden commodity as exact match' do
@@ -416,7 +416,7 @@ describe SearchService do
       let(:synonym) { "synonym 1" }
       let(:resources) { %w(section chapter heading commodity) }
       let(:exact_match) {
-        described_class.new(q: synonym, as_of: Date.today).send(:perform).results
+        described_class.new(q: synonym, as_of: Date.current).send(:perform).results
       }
 
       before {
@@ -519,7 +519,7 @@ describe SearchService do
 
       it 'only matches exact phrases' do
         @result = described_class.new(q: 'acid oil',
-                                    as_of: Date.today).to_json
+                                    as_of: Date.current).to_json
 
         expect(@result).to match_json_expression heading_pattern
       end

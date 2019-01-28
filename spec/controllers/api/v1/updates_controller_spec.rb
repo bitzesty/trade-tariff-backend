@@ -20,7 +20,7 @@ describe Api::V1::UpdatesController, "GET #index" do
 
   context 'when records are present' do
     let!(:taric_update1) { create :taric_update, :applied, issue_date: Date.yesterday }
-    let!(:taric_update2) { create :taric_update, :pending, issue_date: Date.today }
+    let!(:taric_update2) { create :taric_update, :pending, issue_date: Date.current }
 
     it 'returns rendered records' do
       get :index, format: :json

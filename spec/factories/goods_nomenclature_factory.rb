@@ -14,7 +14,7 @@ FactoryGirl.define do
     # results
     goods_nomenclature_item_id { 10.times.map { Random.rand(1..9) }.join }
     producline_suffix   { "80" }
-    validity_start_date { Date.today.ago(2.years) }
+    validity_start_date { Date.current.ago(2.years) }
     validity_end_date   { nil }
 
     after(:build) { |gono, evaluator|
@@ -25,12 +25,12 @@ FactoryGirl.define do
     }
 
     trait :actual do
-      validity_start_date { Date.today.ago(3.years) }
+      validity_start_date { Date.current.ago(3.years) }
       validity_end_date   { nil }
     end
 
     trait :fifteen_years do
-      validity_start_date { Date.today.ago(15.years) }
+      validity_start_date { Date.current.ago(15.years) }
     end
 
     trait :declarable do
@@ -38,8 +38,8 @@ FactoryGirl.define do
     end
 
     trait :expired do
-      validity_start_date { Date.today.ago(3.years) }
-      validity_end_date   { Date.today.ago(1.year)  }
+      validity_start_date { Date.current.ago(3.years) }
+      validity_end_date   { Date.current.ago(1.year)  }
     end
 
     trait :with_indent do
@@ -57,7 +57,7 @@ FactoryGirl.define do
     end
 
     trait :xml do
-      validity_end_date           { Date.today.ago(1.years) }
+      validity_end_date           { Date.current.ago(1.years) }
       statistical_indicator       { 1 }
     end
   end
@@ -130,32 +130,32 @@ FactoryGirl.define do
     goods_nomenclature_sid { generate(:sid) }
     goods_nomenclature_indent_sid { generate(:sid) }
     number_indents { Forgery(:basic).number }
-    validity_start_date { Date.today.ago(3.years) }
+    validity_start_date { Date.current.ago(3.years) }
     validity_end_date   { nil }
 
     trait :xml do
       goods_nomenclature_item_id     { Forgery(:basic).text(exactly: 2) }
       productline_suffix             { Forgery(:basic).text(exactly: 2) }
-      validity_end_date              { Date.today.ago(1.years) }
+      validity_end_date              { Date.current.ago(1.years) }
     end
   end
 
   factory :goods_nomenclature_description_period do
     goods_nomenclature_sid { generate(:sid) }
     goods_nomenclature_description_period_sid { generate(:sid) }
-    validity_start_date { Date.today.ago(3.years) }
+    validity_start_date { Date.current.ago(3.years) }
     validity_end_date   { nil }
 
     trait :xml do
       goods_nomenclature_item_id                 { Forgery(:basic).text(exactly: 2) }
       productline_suffix                         { Forgery(:basic).text(exactly: 2) }
-      validity_end_date                          { Date.today.ago(1.years) }
+      validity_end_date                          { Date.current.ago(1.years) }
     end
   end
 
   factory :goods_nomenclature_description do
     transient do
-      validity_start_date { Date.today.ago(3.years) }
+      validity_start_date { Date.current.ago(3.years) }
       validity_end_date { nil }
     end
 
@@ -179,14 +179,14 @@ FactoryGirl.define do
   end
 
   factory :goods_nomenclature_group do
-    validity_start_date                  { Date.today.ago(3.years) }
+    validity_start_date                  { Date.current.ago(3.years) }
     validity_end_date                    { nil }
     goods_nomenclature_group_type        { generate(:goods_nomenclature_group_type) }
     goods_nomenclature_group_id          { Forgery(:basic).text(exactly: 2) }
     nomenclature_group_facility_code     { 0 }
 
     trait :xml do
-      validity_end_date { Date.today.ago(1.years) }
+      validity_end_date { Date.current.ago(1.years) }
     end
   end
 
@@ -222,11 +222,11 @@ FactoryGirl.define do
     goods_nomenclature_group_id    { Forgery(:basic).text(exactly: 2) }
     goods_nomenclature_item_id     { Forgery(:basic).text(exactly: 2) }
     productline_suffix             { Forgery(:basic).text(exactly: 2) }
-    validity_start_date            { Date.today.ago(3.years) }
+    validity_start_date            { Date.current.ago(3.years) }
     validity_end_date              { nil }
 
     trait :xml do
-      validity_end_date            { Date.today.ago(1.years) }
+      validity_end_date            { Date.current.ago(1.years) }
     end
   end
 end

@@ -7,7 +7,7 @@ FactoryGirl.define do
     additional_code_sid     { generate(:additional_code_sid) }
     additional_code_type_id { generate(:additional_code_type_id) }
     additional_code         { Forgery(:basic).text(exactly: 3) }
-    validity_start_date     { Date.today.ago(2.years) }
+    validity_start_date     { Date.current.ago(2.years) }
     validity_end_date       { nil }
 
     trait :with_export_refund_nomenclature do
@@ -22,7 +22,7 @@ FactoryGirl.define do
     additional_code_sid                    { generate(:additional_code_sid) }
     additional_code_type_id                { generate(:additional_code_type_id) }
     additional_code                        { Forgery(:basic).text(exactly: 3) }
-    validity_start_date                    { Date.today.ago(2.years) }
+    validity_start_date                    { Date.current.ago(2.years) }
     validity_end_date                      { nil }
   end
 
@@ -53,7 +53,7 @@ FactoryGirl.define do
   factory :additional_code_type do
     additional_code_type_id { generate(:additional_code_type_id) }
     application_code        { "1" }
-    validity_start_date     { Date.today.ago(2.years) }
+    validity_start_date     { Date.current.ago(2.years) }
     validity_end_date       { nil }
 
     trait :ern do
@@ -81,7 +81,7 @@ FactoryGirl.define do
     end
 
     trait :xml do
-      validity_end_date { Date.today.ago(1.years) }
+      validity_end_date { Date.current.ago(1.years) }
     end
   end
 
@@ -97,14 +97,14 @@ FactoryGirl.define do
   factory :meursing_additional_code do
     meursing_additional_code_sid { generate(:meursing_additional_code_sid) }
     additional_code         { Forgery(:basic).text(exactly: 3) }
-    validity_start_date     { Date.today.ago(2.years) }
+    validity_start_date     { Date.current.ago(2.years) }
     validity_end_date       { nil }
   end
 
   factory :additional_code_type_measure_type do |f|
     f.measure_type_id { Forgery(:basic).text(exactly: 3) }
     f.additional_code_type_id { generate(:additional_code_type_id) }
-    f.validity_start_date     { Date.today.ago(2.years) }
+    f.validity_start_date     { Date.current.ago(2.years) }
     f.validity_end_date       { nil }
 
     f.measure_type         { create :measure_type, measure_type_id: measure_type_id }
