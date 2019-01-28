@@ -3,6 +3,20 @@ require 'description_formatter'
 
 describe DescriptionFormatter do
   describe '.format' do
+    it 'corrects inconsistent newlines in lists' do
+      description = '-| bread -| butter'
+
+      expect(
+        described_class.format(description: description)
+      ).to eq "<br/>- bread <br/>- butter"
+
+      description2 = "\n-| bread -| butter"
+
+      expect(
+        described_class.format(description: description2)
+      ).to eq "<br/>- bread <br/>- butter"
+    end
+
     it 'replaces & with ampersands' do
       description = 'bread & butter'
 
