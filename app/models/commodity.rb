@@ -35,14 +35,17 @@ class Commodity < GoodsNomenclature
       .distinct(:measure_generating_regulation_id, :measure_type_id, :goods_nomenclature_sid, :geographical_area_id, :geographical_area_sid, :additional_code_type_id, :additional_code_id)
       .select(Sequel.expr(:measures).*)
       .eager(
-        { measure_type: :measure_type_description },
-         measure_components: [{ duty_expression: :duty_expression_description },
-                              { measurement_unit: :measurement_unit_description },
-                              :monetary_unit,
-                              :measurement_unit_qualifier]
-)
+        {
+          measure_type: :measure_type_description },
+          measure_components: [
+            { duty_expression: :duty_expression_description },
+            { measurement_unit: :measurement_unit_description },
+            :monetary_unit,
+            :measurement_unit_qualifier
+          ]
+      )
       .where(measure_sid: search_service.measure_sids).all, self
-).validate!
+    ).validate!
   end
 
   one_to_many :search_references, key: :referenced_id, primary_key: :code, reciprocal: :referenced, conditions: { referenced_class: 'Commodity' },
@@ -60,6 +63,11 @@ class Commodity < GoodsNomenclature
     def declarable
       filter(producline_suffix: "80")
     end
+  end
+
+  # See oplog sequel plugin
+  def operation=(op)
+    self[:operation] = op.to_s.first.upcase
   end
 
   def ancestors

@@ -40,8 +40,11 @@ module Sequel
       end
 
       module InstanceMethods
-        # Operation can be set to :update, :insert and :delete
-        # But they get persistated as U, I and D.
+        # Operation can be set to :update, :create and :delete
+        # But they get persisted as U, C and D.
+        # For some reasons it does not work for operation setter method (operation=) for child class
+        # in rails = 5.1.6.1 and sequel >= 5.0.0
+        # e.g. Chapter, Heading, Commodity
         def operation=(op)
           self[:operation] = op.to_s.first.upcase
         end
