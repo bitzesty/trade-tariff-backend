@@ -30,21 +30,23 @@ describe Api::V1::HeadingsController, "GET #show" do
     end
 
     context 'when record is present and commodity has hidden commodities' do
-      let!(:commodity1) { create :commodity, :with_indent, :with_description, :with_chapter, :declarable, goods_nomenclature_item_id: "#{heading.short_code}010000"}
+      let!(:commodity1) { create :commodity, :with_indent, :with_description, :with_chapter, :declarable, goods_nomenclature_item_id: "#{heading.short_code}010000" }
       let!(:commodity2) { create :commodity, :with_indent, :with_description, :with_chapter, :declarable, goods_nomenclature_item_id: "#{heading.short_code}020000"}
-
       let!(:hidden_goods_nomenclature) { create :hidden_goods_nomenclature, goods_nomenclature_item_id: commodity2.goods_nomenclature_item_id }
+      let(:body) { JSON.parse(response.body) }
+
+      before { get :show, params: { id: heading }, format: :json }
+
+      it 'inclused the non hidden commodities' do
+        expect(
+          body["commodities"].map { |c| c["goods_nomenclature_item_id"] }
+        ).to include commodity1.goods_nomenclature_item_id
+      end
 
       it 'does not include hidden commodities in the response' do
-        get :show, params: { id: heading }, format: :json
-
-        body = JSON.parse(response.body)
         expect(
-          body["commodities"].map{|c| c["goods_nomenclature_item_id"] }
-        ).to include commodity1.goods_nomenclature_item_id
-        expect(
-          body["commodities"].map{|c| c["goods_nomenclature_item_id"] }
-        ).to_not include commodity2.goods_nomenclature_item_id
+          body["commodities"].map { |c| c["goods_nomenclature_item_id"] }
+        ).not_to include commodity2.goods_nomenclature_item_id
       end
     end
 
