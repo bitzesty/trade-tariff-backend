@@ -14,7 +14,7 @@ gem "sinatra", "~> 2.0.2"
 
 # DB
 gem 'pg', "~> 1.1", ">= 1.1.3"
-gem "sequel", "~> 5.3.0"
+gem "sequel", "~> 5.16.0"
 gem "sequel-rails", "~> 1.0.0"
 
 # File uploads and AWS
