@@ -11,6 +11,7 @@ module TariffSynchronizer
 
     def apply
       return unless @base_update.pending?
+
       track_latest_sql_queries
       keep_record_of_conformance_errors
       keep_record_of_presence_errors
@@ -21,7 +22,7 @@ module TariffSynchronizer
         Sequel::Model.db.after_rollback { @base_update.mark_as_failed }
         @base_update.import!
       end
-    rescue => e
+    rescue StandardError => e
       e = e.original if e.respond_to?(:original) && e.original
       persist_exception_for_review(e)
       notify_exception(e)
@@ -33,7 +34,7 @@ module TariffSynchronizer
       ActiveSupport::Notifications.unsubscribe(@cds_errors_subscriber)
     end
 
-    private
+  private
 
     def track_latest_sql_queries
       @sql_subscriber = ActiveSupport::Notifications.subscribe(/sql\.sequel/) do |*args|
@@ -49,7 +50,8 @@ module TariffSynchronizer
           format("(%{class_name}) %{sql} %{binds}",
                  class_name: event.payload[:name],
                  sql: event.payload[:sql].squeeze(" "),
-                 binds: binds))
+                 binds: binds)
+)
       end
     end
 
@@ -104,7 +106,8 @@ module TariffSynchronizer
         "failed_update.tariff_synchronizer",
         exception: exception,
         update: @base_update,
-        database_queries: @database_queries)
+        database_queries: @database_queries
+)
     end
   end
 end

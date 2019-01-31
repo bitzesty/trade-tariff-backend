@@ -11,16 +11,17 @@ class ChiefTransformer
       dataset.each_page(per_page) do |batch|
         candidate_measures = CandidateMeasure::Collection.new(
           batch.map { |mfcm|
-            mfcm.tames.map{|tame|
+            mfcm.tames.map { |tame|
               if tame.tamfs.any?
-                tame.tamfs.map{|tamf|
+                tame.tamfs.map { |tamf|
                   CandidateMeasure.new(mfcm: mfcm, tame: tame, tamf: tamf)
                 }
               else
                 [CandidateMeasure.new(mfcm: mfcm, tame: tame)]
               end
             }
-          }.flatten.compact)
+          }.flatten.compact
+)
         candidate_measures.sort
         candidate_measures.uniq
         candidate_measures.validate
@@ -30,10 +31,10 @@ class ChiefTransformer
       cleanup
     end
 
-    private
+  private
 
     def cleanup
-      [Chief::Mfcm, Chief::Tame, Chief::Tamf].each{|model|
+      [Chief::Mfcm, Chief::Tame, Chief::Tamf].each { |model|
         model.unprocessed.update(processed: true)
       }
     end

@@ -1,6 +1,6 @@
 ######### Conformance validations 210
 class MeasurementUnitValidator < TradeTariffBackend::Validator
-  validation :MU1, 'The measurement unit code must be unique.', on: [:create, :update] do
+  validation :MU1, 'The measurement unit code must be unique.', on: %i[create update] do
     validates :uniqueness, of: [:measurement_unit_code]
   end
 

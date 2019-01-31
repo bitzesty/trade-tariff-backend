@@ -20,10 +20,11 @@ module TariffSynchronizer
       end
     end
 
-    private
+  private
 
     def create_entry
       return if tariff_update.present?
+
       update_or_create(filename, BaseUpdate::PENDING_STATE, filesize)
       instrument("created_tariff.tariff_synchronizer", date: date, filename: filename, type: update_klass.update_type)
     end

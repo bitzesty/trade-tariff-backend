@@ -5,5 +5,3 @@ class MeasureTypeSeries < Sequel::Model
 
   one_to_many :measure_types
 end
-
-

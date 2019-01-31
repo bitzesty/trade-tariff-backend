@@ -4,16 +4,17 @@ class DescriptionFormatter
 
     str = opts.values.first
     str.gsub!("|%", "%")
+    str.gsub!("-|", "\n-")
     str.gsub!("|", "&nbsp;")
-    str.gsub!(/&(?!#|nbsp)/, '&amp;')
     str.gsub!("!1!", "<br />")
+    str.gsub!(/&(?!#|nbsp)/, '&amp;')
     str.gsub!("!X!", "&times;")
     str.gsub!("!x!", "&times;")
     str.gsub!("!o!", "&deg;")
     str.gsub!("!O!", "&deg;")
     str.gsub!("!>=!", "&ge;")
     str.gsub!("!<=!", "&le;")
-    str.gsub!("\n \n", "<br/>")
+    str.gsub!(/\n\s*\n/, "<br/>")
     str.gsub!("\n", "<br/>")
     str.gsub! /@(.)/ do
       "<sub>#{$1}</sub>"

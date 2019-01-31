@@ -25,7 +25,7 @@ class AdditionalCodeType < Sequel::Model
     1 => "Additional Codes",
     3 => "Meursing addition codes",
     4 => "Export refund for processed agricultural goods"
-  }
+  }.freeze
 
   def meursing?
     application_code.in?("3")

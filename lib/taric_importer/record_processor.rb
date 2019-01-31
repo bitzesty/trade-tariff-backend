@@ -21,7 +21,7 @@ require 'taric_importer/record_processor/create_operation'
 #       operations should inherit from CreateOperation and destroy
 #       operations should inherit from DestroyOperation
 
-Dir[File.join(Rails.root, 'lib', 'taric_importer', 'record_processor', 'operation_overrides', '*.rb')].each {|file|
+Dir[File.join(Rails.root, 'lib', 'taric_importer', 'record_processor', 'operation_overrides', '*.rb')].each { |file|
   require file
 }
 
@@ -35,7 +35,7 @@ class TaricImporter
       "1" => UpdateOperation,
       "2" => DestroyOperation,
       "3" => CreateOperation
-    }
+    }.freeze
 
     # Instance of Record, containing extracted primary key, attributes etc
     attr_reader :record
@@ -68,7 +68,7 @@ class TaricImporter
       processor_for(record.klass, operation_class).new(record, operation_date).call
     end
 
-    private
+  private
 
     def processor_for(record_class, operation_class)
       operation_override_class = "TaricImporter::RecordProcessor::#{record_class}#{operation_class.to_s.demodulize}"

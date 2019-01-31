@@ -8,5 +8,3 @@ class CertificateDescriptionPeriod < Sequel::Model
   one_to_one :certificate_description, key: :certificate_description_period_sid,
                                        primary_key: :certificate_description_period_sid
 end
-
-

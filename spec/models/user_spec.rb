@@ -31,8 +31,8 @@ describe User do
 
       it {
         expect {
-          User.create!(attrs)
-        }.to change{ User.count }.by(1)
+          described_class.create!(attrs)
+        }.to change(described_class, :count).by(1)
       }
     end
 
@@ -46,7 +46,7 @@ describe User do
 
       it {
         expect {
-          User.create!(attrs)
+          described_class.create!(attrs)
         }.to raise_error(Sequel::Error)
       }
     end

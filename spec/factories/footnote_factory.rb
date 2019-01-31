@@ -1,10 +1,10 @@
 FactoryGirl.define do
-  sequence(:footnote_sid) { |n| n}
+  sequence(:footnote_sid) { |n| n }
 
   factory :footnote do
     transient do
-      valid_at Date.today.ago(2.years)
-      valid_to nil
+      valid_at { Date.today.ago(2.years) }
+      valid_to { nil }
       goods_nomenclature_sid { generate(:goods_nomenclature_sid) }
     end
 
@@ -13,7 +13,7 @@ FactoryGirl.define do
     validity_start_date     { Date.today.ago(2.years).localtime }
     validity_end_date       { nil }
 
-    after(:build) { |ftn, evaluator|
+    after(:build) { |ftn, _evaluator|
       FactoryGirl.create(:footnote_type, footnote_type_id: ftn.footnote_type_id,
                                          validity_start_date: ftn.validity_start_date - 1.day)
       ftn_desc_period = FactoryGirl.create(:footnote_description_period, footnote_type_id: ftn.footnote_type_id,
@@ -53,8 +53,8 @@ FactoryGirl.define do
 
   factory :footnote_description do
     transient do
-      valid_at Date.today.ago(2.years)
-      valid_to nil
+      valid_at { Date.today.ago(2.years) }
+      valid_to { nil }
     end
 
     footnote_description_period_sid { generate(:footnote_sid) }

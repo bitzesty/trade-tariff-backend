@@ -16,11 +16,10 @@ class MeasureCondition < Sequel::Model
     ds.with_actual(MeasureAction)
   end
 
-  one_to_one :certificate, key: [:certificate_type_code, :certificate_code],
-                           primary_key: [:certificate_type_code, :certificate_code] do |ds|
+  one_to_one :certificate, key: %i[certificate_type_code certificate_code],
+                           primary_key: %i[certificate_type_code certificate_code] do |ds|
     ds.with_actual(Certificate)
   end
-
 
   one_to_one :certificate_type, key: :certificate_type_code,
                                 primary_key: :certificate_type_code do |ds|
@@ -80,7 +79,7 @@ class MeasureCondition < Sequel::Model
   end
 
   def requirement_duty_expression
-    RequirementDutyExpressionFormatter.format({
+    RequirementDutyExpressionFormatter.format(
       duty_amount: condition_duty_amount,
       monetary_unit: condition_monetary_unit_code,
       monetary_unit_abbreviation: monetary_unit_abbreviation,
@@ -88,7 +87,7 @@ class MeasureCondition < Sequel::Model
       formatted_measurement_unit_qualifier: formatted_measurement_unit_qualifier,
       currency: TradeTariffBackend.currency,
       formatted: true
-    })
+    )
   end
 
   def action

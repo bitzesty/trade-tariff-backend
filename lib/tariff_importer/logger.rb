@@ -1,6 +1,5 @@
 module TariffImporter
   class Logger < ActiveSupport::LogSubscriber
-
     def chief_imported(event)
       info "Parsed #{event.payload[:count]} CHIEF records from #{event.payload[:filename]}"
     end
@@ -10,7 +9,7 @@ module TariffImporter
     end
 
     def taric_failed(event)
-      "Taric import failed: #{event.payload[:exception]}".tap {|message|
+      "Taric import failed: #{event.payload[:exception]}".tap { |message|
         message << "\n Failed transaction:\n #{event.payload[:hash]}"
         message << "\n Backtrace:\n #{event.payload[:exception].backtrace.join("\n")}"
         error message

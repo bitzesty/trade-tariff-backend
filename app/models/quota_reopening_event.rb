@@ -11,5 +11,3 @@ class QuotaReopeningEvent < Sequel::Model
     'reopened'
   end
 end
-
-

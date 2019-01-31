@@ -10,5 +10,3 @@ class MonetaryUnitDescription < Sequel::Model
     }[monetary_unit_code]
   end
 end
-
-

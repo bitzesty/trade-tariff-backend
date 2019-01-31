@@ -14,7 +14,7 @@ describe ImportSearchReferences do
       }
 
       it 'truncates existing SearchReference table entries' do
-        ImportSearchReferences.reload(file_name)
+        described_class.reload(file_name)
 
         expect(SearchReference.count).to eq 0
       end
@@ -22,7 +22,7 @@ describe ImportSearchReferences do
   end
 
   describe '#run' do
-    let(:task)     { described_class.new(file_name) }
+    let(:task) { described_class.new(file_name) }
 
     context 'file contains entries for Chapters' do
       before {
@@ -35,7 +35,7 @@ describe ImportSearchReferences do
         it 'creates SearchReference entries for Chapters' do
           task.run
 
-          expect(SearchReference.for_chapter(chapter).any?).to be_truthy
+          expect(SearchReference.for_chapter(chapter)).to be_any
         end
       end
 
@@ -54,12 +54,12 @@ describe ImportSearchReferences do
       }
 
       context 'heading is present' do
-        let!(:heading)  { create :heading, goods_nomenclature_item_id: "0102000000" }
+        let!(:heading) { create :heading, goods_nomenclature_item_id: "0102000000" }
 
         it 'creates SearchReference entries for Headings' do
           task.run
 
-          expect(SearchReference.for_heading(heading).any?).to be_truthy
+          expect(SearchReference.for_heading(heading)).to be_any
         end
       end
 
@@ -83,7 +83,7 @@ describe ImportSearchReferences do
         it 'creates SearchReference entries for Sections' do
           task.run
 
-          expect(SearchReference.for_section(section).any?).to be_truthy
+          expect(SearchReference.for_section(section)).to be_any
         end
       end
 
@@ -107,11 +107,11 @@ describe ImportSearchReferences do
       }
 
       it 'creates SearchReference entry for Chapter' do
-        expect(SearchReference.for_chapter(chapter).any?).to be_truthy
+        expect(SearchReference.for_chapter(chapter)).to be_any
       end
 
       it 'creates SearchReference entry for Heading' do
-        expect(SearchReference.for_heading(heading).any?).to be_truthy
+        expect(SearchReference.for_heading(heading)).to be_any
       end
     end
 

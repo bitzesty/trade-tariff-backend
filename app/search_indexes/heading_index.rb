@@ -13,7 +13,7 @@ class HeadingIndex < SearchIndex
               dynamic: true,
               properties: {
                 description: { type: "text" },
-                validity_start_date: { type: "date" , format: "dateOptionalTime"},
+                validity_start_date: { type: "date", format: "dateOptionalTime" },
                 producline_suffix: { type: "keyword" },
                 goods_nomenclature_sid: { type: "long" },
                 goods_nomenclature_item_id: { type: "keyword" }

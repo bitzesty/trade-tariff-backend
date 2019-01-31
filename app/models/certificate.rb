@@ -1,12 +1,12 @@
 class Certificate < Sequel::Model
-  plugin :oplog, primary_key: [:certificate_code, :certificate_type_code]
+  plugin :oplog, primary_key: %i[certificate_code certificate_type_code]
   plugin :time_machine
   plugin :conformance_validator
 
-  set_primary_key [:certificate_code, :certificate_type_code]
+  set_primary_key %i[certificate_code certificate_type_code]
 
   many_to_many :certificate_descriptions, join_table: :certificate_description_periods,
-                                          left_key: [:certificate_code, :certificate_type_code],
+                                          left_key: %i[certificate_code certificate_type_code],
                                           right_key: :certificate_description_period_sid do |ds|
     ds.with_actual(CertificateDescriptionPeriod)
       .order(Sequel.desc(:certificate_description_periods__validity_start_date))

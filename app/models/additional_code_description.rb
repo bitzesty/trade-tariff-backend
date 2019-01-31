@@ -2,10 +2,10 @@ class AdditionalCodeDescription < Sequel::Model
   include Formatter
 
   plugin :time_machine
-  plugin :oplog, primary_key: [:additional_code_description_period_sid, :additional_code_sid]
+  plugin :oplog, primary_key: %i[additional_code_description_period_sid additional_code_sid]
   plugin :conformance_validator
 
-  set_primary_key [:additional_code_description_period_sid, :additional_code_sid]
+  set_primary_key %i[additional_code_description_period_sid additional_code_sid]
 
   format :formatted_description, with: DescriptionFormatter,
                                  using: :description

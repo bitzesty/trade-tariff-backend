@@ -11,7 +11,7 @@ class TariffValidationMatcher
 
     @validation = subject.conformance_validator
                          .validations
-                         .detect{|validation| validation.type == validation_type }
+                         .detect { |validation| validation.type == validation_type }
   end
 
   def of(arg)

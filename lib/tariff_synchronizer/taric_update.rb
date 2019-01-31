@@ -17,7 +17,7 @@ module TariffSynchronizer
       end
     end
 
-    private
+  private
 
     def self.validate_file!(xml_string)
       Ox.parse(xml_string)

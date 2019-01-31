@@ -4,7 +4,7 @@ describe SearchReferenceSerializer do
   describe "#to_json" do
     context 'when there is a valid referenced object' do
       let(:section) { create :section, position: 12 }
-      let(:search_reference) { described_class.new(create :search_reference, referenced: section) }
+      let(:search_reference) { described_class.new(create(:search_reference, referenced: section)) }
       let(:pattern) {
         {
           title: search_reference.title,
@@ -25,11 +25,11 @@ describe SearchReferenceSerializer do
     context 'when there is no valid referenced object' do
       let(:search_reference) {
         described_class.new(
-          create :search_reference,
+          create(:search_reference,
                  section_id: nil,
                  chapter_id: nil,
                  heading_id: nil,
-                 referenced: nil
+                 referenced: nil)
         )
       }
 

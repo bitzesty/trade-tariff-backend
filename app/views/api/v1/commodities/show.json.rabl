@@ -5,9 +5,9 @@ attributes :producline_suffix, :description, :number_indents,
            :goods_nomenclature_item_id, :bti_url, :formatted_description,
            :description_plain, :consigned, :consigned_from, :basic_duty_rate
 
-  footnotes = (@commodity.footnotes + @commodity.heading.footnotes).uniq
-  if footnotes.any?
-    child(footnotes) {
+footnotes = (@commodity.footnotes + @commodity.heading.footnotes).uniq
+if footnotes.any?
+  child(footnotes) {
     attributes :code, :description, :formatted_description
   }
 end
@@ -17,6 +17,19 @@ extends "api/v1/declarables/declarable", object: @commodity, locals: { measures:
 child @commodity.heading do
   attributes :goods_nomenclature_item_id, :description, :formatted_description,
              :description_plain
+end
+
+child @commodity.chapter do |chapter|
+  attributes :goods_nomenclature_item_id, :description, :formatted_description
+  if chapter.chapter_note.present?
+    node :chapter_note do
+      chapter.chapter_note.content
+    end
+  end
+
+  child chapter.guides do
+    attributes :title, :url
+  end
 end
 
 child(@commodity.ancestors => :ancestors) {
@@ -36,7 +49,7 @@ node(:_response_info) do
       { rel: 'self', href: api_link(request.fullpath) },
       { rel: 'heading', href: api_link(api_heading_path(@commodity.heading)) },
       { rel: 'chapter', href: api_link(api_chapter_path(@commodity.chapter)) },
-      { rel: 'section', href: api_link(api_section_path(@commodity.section)) }
+      { rel: 'section', href: api_link(api_section_path(@commodity.section.position)) }
     ]
   }
 end
