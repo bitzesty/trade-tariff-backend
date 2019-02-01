@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
 
   respond_to :json, :html
 
+  before_action :sample_requests_for_scout
   before_action :configure_currency
   around_action :configure_time_machine
 
@@ -69,4 +70,17 @@ private
   def configure_currency
     TradeTariffBackend.currency = params[:currency]&.to_s&.upcase
   end
+
+  def sample_requests_for_scout
+  # Sample rate should range from 0-1:
+  # * 0: captures no requests
+  # * 0.75: captures 75% of requests
+  # * 1: captures all requests
+  sample_rate = 0.75
+
+  if rand > sample_rate
+    Rails.logger.debug("[Scout] Ignoring request: #{request.original_url}")
+    ScoutApm::Transaction.ignore!
+  end
+
 end
