@@ -79,7 +79,7 @@ describe Api::V1::CommoditiesController, "GET #changes" do
                                           :with_heading,
                                           :with_description,
                                           :declarable,
-                                          operation_date: Date.today }
+                                          operation_date: Date.current }
 
     let(:pattern) {
       [
@@ -126,14 +126,14 @@ describe Api::V1::CommoditiesController, "GET #changes" do
                                           :with_heading,
                                           :with_description,
                                           :declarable,
-                                          operation_date: Date.today }
+                                          operation_date: Date.current }
     let!(:measure) {
       create :measure,
         :with_measure_type,
         goods_nomenclature: commodity,
         goods_nomenclature_sid: commodity.goods_nomenclature_sid,
         goods_nomenclature_item_id: commodity.goods_nomenclature_item_id,
-        operation_date: Date.today
+        operation_date: Date.current
     }
 
     let(:pattern) {

@@ -32,6 +32,11 @@ class Chapter < GoodsNomenclature
     end
   end
 
+  # See oplog sequel plugin
+  def operation=(op)
+    self[:operation] = op.to_s.first.upcase
+  end
+
   def short_code
     goods_nomenclature_item_id.first(2)
   end

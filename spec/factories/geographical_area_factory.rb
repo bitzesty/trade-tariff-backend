@@ -5,11 +5,11 @@ FactoryGirl.define do
   factory :geographical_area do
     geographical_area_sid { generate(:geographical_area_sid) }
     geographical_area_id  { Forgery(:basic).text(exactly: 2) }
-    validity_start_date   { Date.today.ago(3.years) }
+    validity_start_date   { Date.current.ago(3.years) }
     validity_end_date     { nil }
 
     trait :fifteen_years do
-      validity_start_date { Date.today.ago(15.years) }
+      validity_start_date { Date.current.ago(15.years) }
     end
 
     trait :erga_omnes do
@@ -37,7 +37,7 @@ FactoryGirl.define do
     geographical_area_description_period_sid { generate(:geographical_area_sid) }
     geographical_area_sid                    { generate(:geographical_area_sid) }
     geographical_area_id                     { Forgery(:basic).text(exactly: 3) }
-    validity_start_date                      { Date.today.ago(2.years) }
+    validity_start_date                      { Date.current.ago(2.years) }
     validity_end_date                        { nil }
   end
 
@@ -66,7 +66,7 @@ FactoryGirl.define do
   factory :geographical_area_membership do
     geographical_area_sid                    { generate(:geographical_area_sid) }
     geographical_area_group_sid              { generate(:geographical_area_sid) }
-    validity_start_date                      { Date.today.ago(2.years) }
+    validity_start_date                      { Date.current.ago(2.years) }
     validity_end_date                        { nil }
   end
 end

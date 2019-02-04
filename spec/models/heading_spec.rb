@@ -151,7 +151,7 @@ describe Heading do
 
   describe '#declarable' do
     context 'different points in time' do
-      today = Date.today
+      today = Date.current
       t1 = today.ago(2.years)
       t2 = today.ago(1.year)
       let!(:declarable_heading) { create :heading, :declarable, goods_nomenclature_item_id: "0102000000", validity_start_date: t1, validity_end_date: nil }
@@ -234,7 +234,7 @@ describe Heading do
     end
 
     context 'with Heading changes' do
-      let!(:heading) { create :heading, operation_date: Date.today }
+      let!(:heading) { create :heading, operation_date: Date.current }
 
       it 'includes Heading changes' do
         expect(

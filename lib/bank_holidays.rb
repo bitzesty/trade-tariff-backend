@@ -9,11 +9,11 @@ module BankHolidays
   private
 
   def self.weekends(n)
-    ((Date.today - n + 1)..Date.today).to_a.select{ |d| d.saturday? || d.sunday? }
+    ((Date.current - n + 1)..Date.current).to_a.select{ |d| d.saturday? || d.sunday? }
   end
 
   def self.holidays(n)
-    Holidays.between(Date.today - n, Date.today, :be_nl, :gb)
+    Holidays.between(Date.current - n, Date.current, :be_nl, :gb)
             .map{ |h| h[:date] }
   end
 end
