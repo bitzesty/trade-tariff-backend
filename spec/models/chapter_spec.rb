@@ -74,7 +74,7 @@ describe Chapter do
     end
 
     context 'with Chapter changes' do
-      let!(:chapter) { create :chapter, operation_date: Date.today }
+      let!(:chapter) { create :chapter, operation_date: Date.current }
 
       it 'includes Chapter changes' do
         expect(
@@ -88,7 +88,7 @@ describe Chapter do
       context 'with Heading changes' do
         let!(:heading) {
           create :heading,
-                 operation_date: Date.today,
+                 operation_date: Date.current,
                  goods_nomenclature_item_id: "#{chapter.short_code}01000000"
         }
 
@@ -104,7 +104,7 @@ describe Chapter do
         context 'with associated Commodity changes' do
           let!(:commodity) {
             create :commodity,
-                   operation_date: Date.today,
+                   operation_date: Date.current,
                    goods_nomenclature_item_id: "#{heading.short_code}000001"
           }
 
@@ -122,7 +122,7 @@ describe Chapter do
               create :measure,
                      goods_nomenclature: commodity,
                      goods_nomenclature_item_id: commodity.goods_nomenclature_item_id,
-                     operation_date: Date.today
+                     operation_date: Date.current
             }
 
             it 'includes Measure changes' do

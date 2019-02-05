@@ -112,7 +112,7 @@ describe Api::V1::HeadingsController, "GET #changes" do
                                      :non_declarable,
                                      :with_description,
                                      :with_chapter,
-                                     operation_date: Date.today }
+                                     operation_date: Date.current }
 
     let(:pattern) {
       [
@@ -157,14 +157,14 @@ describe Api::V1::HeadingsController, "GET #changes" do
                                      :non_declarable,
                                      :with_description,
                                      :with_chapter,
-                                     operation_date: Date.today }
+                                     operation_date: Date.current }
     let!(:measure) {
       create :measure,
         :with_measure_type,
         goods_nomenclature: heading,
         goods_nomenclature_sid: heading.goods_nomenclature_sid,
         goods_nomenclature_item_id: heading.goods_nomenclature_item_id,
-        operation_date: Date.today
+        operation_date: Date.current
     }
     let(:pattern) {
       [

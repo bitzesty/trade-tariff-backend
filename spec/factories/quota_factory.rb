@@ -14,11 +14,11 @@ FactoryGirl.define do
   factory :quota_order_number do
     quota_order_number_sid { generate(:quota_order_number_sid) }
     quota_order_number_id  { generate(:quota_order_number_id) }
-    validity_start_date { Date.today.ago(4.years) }
+    validity_start_date { Date.current.ago(4.years) }
     validity_end_date   { nil }
 
     trait :xml do
-      validity_end_date { Date.today.ago(1.years) }
+      validity_end_date { Date.current.ago(1.years) }
     end
   end
 
@@ -27,11 +27,11 @@ FactoryGirl.define do
     quota_order_number_sid         { generate(:sid) }
     geographical_area_id           { Forgery(:basic).text(exactly: 2) }
     geographical_area_sid          { generate(:sid) }
-    validity_start_date            { Date.today.ago(4.years) }
+    validity_start_date            { Date.current.ago(4.years) }
     validity_end_date              { nil }
 
     trait :xml do
-      validity_end_date { Date.today.ago(1.years) }
+      validity_end_date { Date.current.ago(1.years) }
     end
 
     trait :with_geographical_area do
@@ -57,7 +57,7 @@ FactoryGirl.define do
   factory :quota_reopening_event do
     quota_definition_sid  { generate(:sid) }
     occurrence_timestamp  { 24.hours.ago }
-    reopening_date        { Date.today.ago(1.years) }
+    reopening_date        { Date.current.ago(1.years) }
   end
 
   factory :quota_definition do
@@ -69,13 +69,13 @@ FactoryGirl.define do
     measurement_unit_qualifier_code { generate(:measurement_unit_qualifier_code) }
 
     trait :actual do
-      validity_start_date { Date.today.ago(3.years) }
+      validity_start_date { Date.current.ago(3.years) }
       validity_end_date   { nil }
     end
 
     trait :xml do
-      validity_start_date { Date.today.ago(3.years) }
-      validity_end_date                { Date.today.ago(1.years) }
+      validity_start_date { Date.current.ago(3.years) }
+      validity_end_date                { Date.current.ago(1.years) }
       volume                           { Forgery(:basic).number }
       initial_volume                   { Forgery(:basic).number }
       measurement_unit_code            { Forgery(:basic).text(exactly: 2) }
@@ -91,8 +91,8 @@ FactoryGirl.define do
   factory :quota_blocking_period do
     quota_blocking_period_sid  { Forgery(:basic).number }
     quota_definition_sid       { Forgery(:basic).number }
-    blocking_start_date        { Date.today.ago(1.years) }
-    blocking_end_date          { Date.today.ago(1.years) }
+    blocking_start_date        { Date.current.ago(1.years) }
+    blocking_end_date          { Date.current.ago(1.years) }
     blocking_period_type       { Forgery(:basic).number }
     description                { Forgery(:lorem_ipsum).sentence }
   end
@@ -108,13 +108,13 @@ FactoryGirl.define do
 
   factory :quota_exhaustion_event do
     quota_definition
-    exhaustion_date { Date.today }
+    exhaustion_date { Date.current }
     occurrence_timestamp { 24.hours.ago }
   end
 
   factory :quota_critical_event do
     quota_definition
-    critical_state_change_date { Date.today }
+    critical_state_change_date { Date.current }
     occurrence_timestamp       { 24.hours.ago }
 
     trait :xml do
@@ -125,20 +125,20 @@ FactoryGirl.define do
   factory :quota_suspension_period do
     quota_suspension_period_sid  { generate(:sid) }
     quota_definition_sid         { generate(:sid) }
-    suspension_start_date        { Date.today.ago(1.years) }
-    suspension_end_date          { Date.today.ago(1.years) }
+    suspension_start_date        { Date.current.ago(1.years) }
+    suspension_end_date          { Date.current.ago(1.years) }
     description                  { Forgery(:lorem_ipsum).sentence }
   end
 
   factory :quota_unblocking_event do
     quota_definition_sid  { generate(:sid) }
     occurrence_timestamp  { 24.hours.ago }
-    unblocking_date       { Date.today.ago(1.years) }
+    unblocking_date       { Date.current.ago(1.years) }
   end
 
   factory :quota_unsuspension_event do
     quota_definition_sid  { generate(:sid) }
     occurrence_timestamp  { 24.hours.ago }
-    unsuspension_date     { Date.today.ago(1.years) }
+    unsuspension_date     { Date.current.ago(1.years) }
   end
 end

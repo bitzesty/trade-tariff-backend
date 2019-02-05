@@ -9,7 +9,7 @@ FactoryGirl.define do
 
     certificate_type_code { generate(:certificate_type_code) }
     certificate_code      { Forgery(:basic).text(exactly: 3) }
-    validity_start_date   { Date.today.ago(2.years) }
+    validity_start_date   { Date.current.ago(2.years) }
     validity_end_date     { nil }
   end
 
@@ -17,7 +17,7 @@ FactoryGirl.define do
     certificate_description_period_sid { generate(:certificate_sid) }
     certificate_type_code              { generate(:certificate_type_code) }
     certificate_code                   { Forgery(:basic).text(exactly: 3) }
-    validity_start_date                { Date.today.ago(2.years) }
+    validity_start_date                { Date.current.ago(2.years) }
     validity_end_date                  { nil }
   end
 
@@ -49,7 +49,7 @@ FactoryGirl.define do
     end
 
     certificate_type_code              { generate(:certificate_type_code) }
-    validity_start_date                { Date.today.ago(2.years) }
+    validity_start_date                { Date.current.ago(2.years) }
     validity_end_date                  { nil }
 
     trait :with_description do

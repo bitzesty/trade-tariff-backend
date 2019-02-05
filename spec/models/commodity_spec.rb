@@ -142,13 +142,13 @@ describe Commodity do
       # validity_start date
       # need to group and choose the latest one
       let(:measure_type) { create :measure_type }
-      let(:commodity)    { create :commodity, :with_indent, validity_start_date: Date.today.ago(3.years) }
+      let(:commodity)    { create :commodity, :with_indent, validity_start_date: Date.current.ago(3.years) }
       let!(:measure1)    {
         create :measure, measure_sid: 1,
                                             measure_type_id: measure_type.measure_type_id,
                                             additional_code_type_id: nil,
                                             goods_nomenclature_sid: commodity.goods_nomenclature_sid,
-                                            validity_start_date: Date.today.ago(1.year)
+                                            validity_start_date: Date.current.ago(1.year)
       }
       let!(:measure2) {
         create :measure, measure_sid: 2,
@@ -159,7 +159,7 @@ describe Commodity do
                                              goods_nomenclature_sid: commodity.goods_nomenclature_sid,
                                              additional_code_type_id: measure1.additional_code_type_id,
                                              additional_code_id: measure1.additional_code_id,
-                                             validity_start_date: Date.today.ago(2.years)
+                                             validity_start_date: Date.current.ago(2.years)
       }
 
       it 'groups measures by measure_generating_regulation_id and picks latest one' do
@@ -172,14 +172,14 @@ describe Commodity do
 
     describe 'measure duplication on same date but different goods_nomenclature_item_id' do
       let(:measure_type) { create :measure_type }
-      let(:commodity)    { create :commodity, :with_indent, validity_start_date: Date.today.ago(3.years), goods_nomenclature_item_id: "2202901919" }
+      let(:commodity)    { create :commodity, :with_indent, validity_start_date: Date.current.ago(3.years), goods_nomenclature_item_id: "2202901919" }
       let!(:measure1)    {
         create :measure, measure_sid: 1,
                                            measure_type_id: measure_type.measure_type_id,
                                            additional_code_type_id: nil,
                                            goods_nomenclature_sid: commodity.goods_nomenclature_sid,
                                            goods_nomenclature_item_id: "2202901900",
-                                           validity_start_date: Date.today.ago(1.year)
+                                           validity_start_date: Date.current.ago(1.year)
       }
       let!(:measure2) {
         create :measure, measure_sid: 2,
@@ -191,7 +191,7 @@ describe Commodity do
                                             goods_nomenclature_item_id: "2202901919",
                                             additional_code_type_id: measure1.additional_code_type_id,
                                             additional_code_id: measure1.additional_code_id,
-                                            validity_start_date: Date.today.ago(1.years)
+                                            validity_start_date: Date.current.ago(1.years)
       }
 
       it 'groups measures by measure_generating_regulation_id and picks the measure with the highest goods_nomenclature_item_id' do
@@ -374,7 +374,7 @@ describe Commodity do
 
     context 'when in TimeMachine block' do
       it 'fetches commodities that are actual on specified Date' do
-        TimeMachine.at(Date.today.ago(2.years)) do
+        TimeMachine.at(Date.current.ago(2.years)) do
           commodities = described_class.actual.all
           expect(commodities).to include actual_commodity
           expect(commodities).to include expired_commodity
@@ -597,7 +597,7 @@ describe Commodity do
     end
 
     context 'with commodity changes' do
-      let!(:commodity) { create :commodity, operation_date: Date.today }
+      let!(:commodity) { create :commodity, operation_date: Date.current }
 
       it 'includes commodity changes' do
         expect(
@@ -615,7 +615,7 @@ describe Commodity do
         create :measure,
                goods_nomenclature: commodity,
                goods_nomenclature_item_id: commodity.goods_nomenclature_item_id,
-               operation_date: Date.today
+               operation_date: Date.current
       }
 
       it 'includes measure changes' do

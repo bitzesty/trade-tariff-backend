@@ -128,7 +128,7 @@ describe Footnote do
       end
 
       describe 'The start date must be less than or equal to the end date of the footnote.' do
-        let(:footnote)    { create :footnote, validity_end_date: Date.today }
+        let(:footnote)    { create :footnote, validity_end_date: Date.current }
         let(:desc_period) { footnote.footnote_description_periods.first }
 
         before { desc_period.update(validity_start_date: footnote.validity_end_date + 1.day) }

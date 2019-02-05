@@ -13,9 +13,9 @@ gem "rails", "5.1.6.1"
 gem "sinatra", "~> 2.0.2"
 
 # DB
-gem 'pg', '~> 1.1', '>= 1.1.3'
-gem "sequel", "~> 4.49"
-gem "sequel-rails", "~> 0.9", ">= 0.9.12"
+gem 'pg', "~> 1.1", ">= 1.1.3"
+gem "sequel", "~> 5.16.0"
+gem "sequel-rails", "~> 1.0.0"
 
 # File uploads and AWS
 gem "aws-sdk", "~> 2"
@@ -39,7 +39,7 @@ gem "holidays"
 gem "lograge", ">= 0.3.6"
 gem "logstash-event"
 gem "multi_json", "~> 1.11"
-gem "newrelic_rpm"
+gem "scout_apm"
 gem "nokogiri", "~> 1.8.1"
 gem "ox", ">= 2.8.1"
 gem "plek", "~> 1.11"

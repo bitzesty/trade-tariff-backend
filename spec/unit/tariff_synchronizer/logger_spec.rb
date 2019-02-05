@@ -13,8 +13,8 @@ describe TariffSynchronizer::Logger, truncation: true do
     let(:not_found_response) { build :response, :not_found }
     before {
       stub_holidays_gem_between_call
-      create :chief_update, :missing, issue_date: Date.today.ago(2.days)
-      create :chief_update, :missing, issue_date: Date.today.ago(3.days)
+      create :chief_update, :missing, issue_date: Date.current.ago(2.days)
+      create :chief_update, :missing, issue_date: Date.current.ago(3.days)
       allow(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform)
                                             .and_return(not_found_response)
       TariffSynchronizer::ChiefUpdate.sync
@@ -36,7 +36,7 @@ describe TariffSynchronizer::Logger, truncation: true do
        expect(TradeTariffBackend).to receive(
         :with_redis_lock).and_raise(RedisLock::LockTimeout)
 
-       TariffSynchronizer.rollback(Date.today, true)
+       TariffSynchronizer.rollback(Date.current, true)
     }
 
     it 'logs a warn event' do

@@ -1,7 +1,7 @@
 require 'fileutils'
 
 module SynchronizerHelper
-  def create_taric_file(date = Date.today)
+  def create_taric_file(date = Date.current)
     date = Date.parse(date.to_s)
 
     content = %{<?xml version="1.0" encoding="UTF-8"?>
@@ -31,7 +31,7 @@ module SynchronizerHelper
     create_file taric_file_path, content
   end
 
-  def create_chief_file(date = Date.today)
+  def create_chief_file(date = Date.current)
     date = Date.parse(date.to_s)
 
     content =

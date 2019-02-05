@@ -81,11 +81,11 @@ describe TariffSynchronizer, truncation: true do
 
   describe ".apply" do
     let(:update_1) { instance_double("TariffSynchronizer::TaricUpdate", issue_date: Date.yesterday, filename: Date.yesterday) }
-    let(:update_2) { instance_double("TariffSynchronizer::TaricUpdate", issue_date: Date.today, filename: Date.today) }
+    let(:update_2) { instance_double("TariffSynchronizer::TaricUpdate", issue_date: Date.current, filename: Date.current) }
 
     context "success scenario" do
       before do
-        allow(TariffSynchronizer).to receive(:date_range_since_last_pending_update).and_return([Date.yesterday, Date.today])
+        allow(TariffSynchronizer).to receive(:date_range_since_last_pending_update).and_return([Date.yesterday, Date.current])
         expect(TariffSynchronizer::TaricUpdate).to receive(:pending_at).with(update_1.issue_date).and_return([update_1])
         expect(TariffSynchronizer::TaricUpdate).to receive(:pending_at).with(update_2.issue_date).and_return([update_2])
       end
@@ -114,7 +114,7 @@ describe TariffSynchronizer, truncation: true do
 
     context "failure scenario" do
       before do
-        allow(TariffSynchronizer).to receive(:date_range_since_last_pending_update).and_return([Date.yesterday, Date.today])
+        allow(TariffSynchronizer).to receive(:date_range_since_last_pending_update).and_return([Date.yesterday, Date.current])
         allow(TariffSynchronizer::TaricUpdate).to receive(:pending_at).with(update_1.issue_date).and_return([update_1])
         allow(TariffSynchronizer::BaseUpdateImporter).to receive(:perform).with(update_1).and_raise(Sequel::Rollback)
       end

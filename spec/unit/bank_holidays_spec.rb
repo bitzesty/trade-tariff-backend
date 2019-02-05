@@ -17,8 +17,8 @@ describe BankHolidays do
       expect(described_class.last(2)).to be_a(Array)
     end
 
-    it 'returns max date less or equal Date.today' do
-      expect(described_class.last(3).last).to be <= Date.today
+    it 'returns max date less or equal Date.current' do
+      expect(described_class.last(3).last).to be <= Date.current
     end
 
     it 'returns Date type records' do

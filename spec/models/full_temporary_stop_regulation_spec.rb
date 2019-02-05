@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe FullTemporaryStopRegulation do
-  let(:fts_regulation) { build :fts_regulation, effective_enddate: Date.today }
+  let(:fts_regulation) { build :fts_regulation, effective_enddate: Date.current }
 
   describe '#regulation_id' do
     it 'is an alias for full temporary stop regulation id' do

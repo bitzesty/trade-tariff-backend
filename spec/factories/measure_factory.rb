@@ -20,7 +20,7 @@ FactoryGirl.define do
     f.goods_nomenclature_item_id { 10.times.map { Random.rand(9) }.join }
     f.geographical_area_sid { generate(:geographical_area_sid) }
     f.geographical_area_id { generate(:geographical_area_id) }
-    f.validity_start_date { Date.today.ago(3.years) }
+    f.validity_start_date { Date.current.ago(3.years) }
     f.validity_end_date   { nil }
 
     # mandatory valid associations
@@ -45,7 +45,7 @@ FactoryGirl.define do
     f.base_regulation {
       create(:base_regulation, base_regulation_id: measure_generating_regulation_id,
                                base_regulation_role: measure_generating_regulation_role,
-                               effective_end_date: Date.today.in(10.years))
+                               effective_end_date: Date.current.in(10.years))
     }
 
     trait :national do
@@ -117,7 +117,7 @@ FactoryGirl.define do
 
     measure_type_id { generate(:measure_type_id) }
     sequence(:measure_type_series_id, LoopingSequence.lower_a_to_upper_z, &:value)
-    validity_start_date    { Date.today.ago(3.years) }
+    validity_start_date    { Date.current.ago(3.years) }
     validity_end_date      { nil }
     measure_explosion_level { 10 }
     order_number_capture_code { 10 }

@@ -2,8 +2,8 @@ require 'rails_helper'
 
 describe MonetaryExchangeRateSerializer do
   describe "#to_json" do
-    let!(:gbp_unit) { create(:monetary_unit, monetary_unit_code: "GBP", validity_start_date: Date.today.ago(10.years)) }
-    let!(:eur_unit) { create(:monetary_unit, monetary_unit_code: "EUR", validity_start_date: Date.today.ago(10.years)) }
+    let!(:gbp_unit) { create(:monetary_unit, monetary_unit_code: "GBP", validity_start_date: Date.current.ago(10.years)) }
+    let!(:eur_unit) { create(:monetary_unit, monetary_unit_code: "EUR", validity_start_date: Date.current.ago(10.years)) }
     let!(:monetary_exchange_period) { create :monetary_exchange_period }
     let!(:monetary_exchange_rate) { create :monetary_exchange_rate, monetary_exchange_period_sid: monetary_exchange_period.monetary_exchange_period_sid }
     let(:pattern) {

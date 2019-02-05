@@ -71,7 +71,7 @@ describe Api::V1::ChaptersController, "GET #changes" do
 
   context 'changes happened after chapter creation' do
     let(:chapter) { create :chapter, :with_section, :with_note,
-                                     operation_date: Date.today }
+                                     operation_date: Date.current }
 
     let(:heading) { create :heading, goods_nomenclature_item_id: "#{chapter.goods_nomenclature_item_id.first(2)}20000000" }
     let!(:measure) {
@@ -80,7 +80,7 @@ describe Api::V1::ChaptersController, "GET #changes" do
         goods_nomenclature: heading,
         goods_nomenclature_sid: heading.goods_nomenclature_sid,
         goods_nomenclature_item_id: heading.goods_nomenclature_item_id,
-        operation_date: Date.today
+        operation_date: Date.current
     }
 
     let(:pattern) {
@@ -138,7 +138,7 @@ describe Api::V1::ChaptersController, "GET #changes" do
 
   context 'changes include deleted record' do
     let(:chapter) { create :chapter, :with_section, :with_note,
-                                     operation_date: Date.today }
+                                     operation_date: Date.current }
 
     let(:heading) { create :heading, goods_nomenclature_item_id: "#{chapter.goods_nomenclature_item_id.first(2)}20000000" }
     let!(:measure) {
@@ -147,7 +147,7 @@ describe Api::V1::ChaptersController, "GET #changes" do
         goods_nomenclature: heading,
         goods_nomenclature_sid: heading.goods_nomenclature_sid,
         goods_nomenclature_item_id: heading.goods_nomenclature_item_id,
-        operation_date: Date.today
+        operation_date: Date.current
     }
 
     let(:pattern) {
