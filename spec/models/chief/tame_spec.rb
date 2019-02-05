@@ -15,7 +15,7 @@ describe Chief::Tame do
       end
 
       context 'multiple choices' do
-        let!(:tamf1) { create :tamf, common_tame_attributes.merge(fe_tsmp: Date.today.ago(20.years)) }
+        let!(:tamf1) { create :tamf, common_tame_attributes.merge(fe_tsmp: Date.current.ago(20.years)) }
 
         it 'latest relevant tamf record is chosen' do
           expect(tame.tamfs).to     include tamf

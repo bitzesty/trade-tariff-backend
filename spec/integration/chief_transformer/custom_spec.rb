@@ -215,7 +215,7 @@ describe 'CHIEF: Custom scenarios' do
                                 amend_indicator: 'U' }
 
 
-    let!(:measure_type) { create :measure_type, measure_type_id: 'VTS', validity_start_date: Date.today.ago(10.years) }
+    let!(:measure_type) { create :measure_type, measure_type_id: 'VTS', validity_start_date: Date.current.ago(10.years) }
 
     it 'will not raise validation exception' do
       expect { ChiefTransformer.instance.invoke }.not_to raise_error

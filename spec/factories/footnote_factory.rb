@@ -3,14 +3,14 @@ FactoryGirl.define do
 
   factory :footnote do
     transient do
-      valid_at { Date.today.ago(2.years) }
+      valid_at { Date.current.ago(2.years) }
       valid_to { nil }
       goods_nomenclature_sid { generate(:goods_nomenclature_sid) }
     end
 
     footnote_id      { Forgery(:basic).text(exactly: 3) }
     footnote_type_id { Forgery(:basic).text(exactly: 2) }
-    validity_start_date     { Date.today.ago(2.years).localtime }
+    validity_start_date     { Date.current.ago(2.years).localtime }
     validity_end_date       { nil }
 
     after(:build) { |ftn, _evaluator|
@@ -47,13 +47,13 @@ FactoryGirl.define do
     footnote_description_period_sid { generate(:footnote_sid) }
     footnote_id      { Forgery(:basic).text(exactly: 3) }
     footnote_type_id { Forgery(:basic).text(exactly: 2) }
-    validity_start_date                    { Date.today.ago(2.years) }
+    validity_start_date                    { Date.current.ago(2.years) }
     validity_end_date                      { nil }
   end
 
   factory :footnote_description do
     transient do
-      valid_at { Date.today.ago(2.years) }
+      valid_at { Date.current.ago(2.years) }
       valid_to { nil }
     end
 
@@ -77,7 +77,7 @@ FactoryGirl.define do
     goods_nomenclature_sid          { generate(:goods_nomenclature_sid) }
     footnote_id                     { Forgery(:basic).text(exactly: 3) }
     footnote_type                   { Forgery(:basic).text(exactly: 2) }
-    validity_start_date             { Date.today.ago(3.years) }
+    validity_start_date             { Date.current.ago(3.years) }
     validity_end_date               { nil }
   end
 
@@ -85,7 +85,7 @@ FactoryGirl.define do
     export_refund_nomenclature_sid  { generate(:export_refund_nomenclature_sid) }
     footnote_id                     { Forgery(:basic).text(exactly: 3) }
     footnote_type                   { Forgery(:basic).text(exactly: 2) }
-    validity_start_date             { Date.today.ago(2.years) }
+    validity_start_date             { Date.current.ago(2.years) }
     validity_end_date               { nil }
   end
 
@@ -99,7 +99,7 @@ FactoryGirl.define do
     additional_code_sid             { generate(:additional_code_sid) }
     footnote_id                     { Forgery(:basic).text(exactly: 3) }
     footnote_type_id                { Forgery(:basic).text(exactly: 2) }
-    validity_start_date             { Date.today.ago(2.years) }
+    validity_start_date             { Date.current.ago(2.years) }
     validity_end_date               { nil }
   end
 
@@ -108,13 +108,13 @@ FactoryGirl.define do
     meursing_heading_number         { Forgery(:basic).number }
     footnote_id                     { Forgery(:basic).text(exactly: 3) }
     footnote_type                   { Forgery(:basic).text(exactly: 2) }
-    validity_start_date             { Date.today.ago(2.years) }
+    validity_start_date             { Date.current.ago(2.years) }
     validity_end_date               { nil }
   end
 
   factory :footnote_type do
     footnote_type_id { Forgery(:basic).text(exactly: 2) }
-    validity_start_date { Date.today.ago(2.years) }
+    validity_start_date { Date.current.ago(2.years) }
     validity_end_date   { nil }
   end
 end

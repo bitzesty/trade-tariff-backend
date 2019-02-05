@@ -62,7 +62,7 @@ describe Measure do
     let(:measure) {
       create :measure, measure_generating_regulation_role: 1,
                                      base_regulation: base_regulation,
-                                     validity_end_date: Date.today
+                                     validity_end_date: Date.current
     }
 
     context 'measure end date greater than generating regulation end date' do
@@ -72,7 +72,7 @@ describe Measure do
     end
 
     context 'measure end date lesser than generating regulation end date' do
-      let(:base_regulation) { create :base_regulation, effective_end_date: Date.today }
+      let(:base_regulation) { create :base_regulation, effective_end_date: Date.current }
       let(:measure) {
         create :measure, measure_generating_regulation_role: 1,
                                        base_regulation: base_regulation,
@@ -102,7 +102,7 @@ describe Measure do
       let(:measure) {
         create :measure, measure_generating_regulation_role: 1,
                                        base_regulation: base_regulation,
-                                       validity_end_date: Date.today
+                                       validity_end_date: Date.current
       }
 
       it 'returns validity end date of the measure' do
@@ -111,7 +111,7 @@ describe Measure do
     end
 
     context 'generating regulation effective end date present, measure end date blank' do
-      let(:base_regulation) { create :base_regulation, effective_end_date: Date.today }
+      let(:base_regulation) { create :base_regulation, effective_end_date: Date.current }
       let(:measure) {
         create :measure, measure_generating_regulation_role: 1,
                                        base_regulation: base_regulation,
@@ -119,7 +119,7 @@ describe Measure do
       }
 
       it 'returns validity end date of the measure' do
-        expect(measure.validity_end_date.to_date).to eq Date.today
+        expect(measure.validity_end_date.to_date).to eq Date.current
       end
     end
 
@@ -128,12 +128,12 @@ describe Measure do
       let(:measure) {
         create :measure, measure_generating_regulation_role: 1,
                                        base_regulation: base_regulation,
-                                       validity_end_date: Date.today,
+                                       validity_end_date: Date.current,
                                        national: true
       }
 
       it 'returns validity end date of the measure' do
-        expect(measure.validity_end_date.to_date).to eq Date.today
+        expect(measure.validity_end_date.to_date).to eq Date.current
       end
     end
   end
@@ -433,8 +433,8 @@ describe Measure do
     end
 
     describe 'additional code' do
-      let!(:additional_code1)     { create :additional_code, validity_start_date: Date.today.ago(3.years) }
-      let!(:additional_code2)     { create :additional_code, validity_start_date: Date.today.ago(5.years) }
+      let!(:additional_code1)     { create :additional_code, validity_start_date: Date.current.ago(3.years) }
+      let!(:additional_code2)     { create :additional_code, validity_start_date: Date.current.ago(5.years) }
       let!(:measure)              { create :measure, additional_code_sid: additional_code1.additional_code_sid }
 
       context 'direct loading' do
@@ -471,8 +471,8 @@ describe Measure do
     end
 
     describe 'quota order number' do
-      let!(:quota_order_number1)     { create :quota_order_number, validity_start_date: Date.today.ago(3.years) }
-      let!(:quota_order_number2)     { create :quota_order_number, validity_start_date: Date.today.ago(5.years) }
+      let!(:quota_order_number1)     { create :quota_order_number, validity_start_date: Date.current.ago(3.years) }
+      let!(:quota_order_number2)     { create :quota_order_number, validity_start_date: Date.current.ago(5.years) }
       let!(:measure)                 { create :measure, ordernumber: quota_order_number1.quota_order_number_id }
 
       context 'direct loading' do
@@ -509,8 +509,8 @@ describe Measure do
     end
 
     describe 'full temporary stop regulation' do
-      let!(:fts_regulation1)        { create :fts_regulation, validity_start_date: Date.today.ago(3.years) }
-      let!(:fts_regulation2)        { create :fts_regulation, validity_start_date: Date.today.ago(5.years) }
+      let!(:fts_regulation1)        { create :fts_regulation, validity_start_date: Date.current.ago(3.years) }
+      let!(:fts_regulation2)        { create :fts_regulation, validity_start_date: Date.current.ago(5.years) }
       let!(:fts_regulation_action1) { create :fts_regulation_action, fts_regulation_id: fts_regulation1.full_temporary_stop_regulation_id }
       let!(:fts_regulation_action2) { create :fts_regulation_action, fts_regulation_id: fts_regulation2.full_temporary_stop_regulation_id }
       let!(:measure)                { create :measure, measure_generating_regulation_id: fts_regulation_action1.stopped_regulation_id }
@@ -549,8 +549,8 @@ describe Measure do
     end
 
     describe 'measure partial temporary stop' do
-      let!(:mpt_stop1)        { create :measure_partial_temporary_stop, validity_start_date: Date.today.ago(3.years) }
-      let!(:mpt_stop2)        { create :measure_partial_temporary_stop, validity_start_date: Date.today.ago(5.years) }
+      let!(:mpt_stop1)        { create :measure_partial_temporary_stop, validity_start_date: Date.current.ago(3.years) }
+      let!(:mpt_stop2)        { create :measure_partial_temporary_stop, validity_start_date: Date.current.ago(5.years) }
       let!(:measure)          { create :measure, measure_generating_regulation_id: mpt_stop1.partial_temporary_stop_regulation_id }
 
       context 'direct loading' do
@@ -808,7 +808,7 @@ describe Measure do
       }
 
       context 'measure validity end date is set' do
-        before { measure.validity_end_date = Date.today }
+        before { measure.validity_end_date = Date.current }
 
         it 'performs validation' do
           expect(measure).not_to be_conformant
@@ -850,11 +850,11 @@ describe Measure do
 
       context 'measure validity end date is set' do
         before {
-          measure.geographical_area.update(validity_end_date: Date.today.in(1.year))
-          measure.measure_type.update(validity_end_date: Date.today.in(1.year))
-          measure.goods_nomenclature.update(validity_end_date: Date.today.in(1.year))
+          measure.geographical_area.update(validity_end_date: Date.current.in(1.year))
+          measure.measure_type.update(validity_end_date: Date.current.in(1.year))
+          measure.goods_nomenclature.update(validity_end_date: Date.current.in(1.year))
 
-          measure.validity_end_date = Date.today
+          measure.validity_end_date = Date.current
         }
 
         it 'performs validation' do
@@ -1028,7 +1028,7 @@ describe Measure do
           let(:tbl2) { create :tbl9, :unoq }
           let!(:comm1) {
             create :comm, cmdty_code: commodity.goods_nomenclature_item_id,
-                                      fe_tsmp: Date.today.ago(2.years),
+                                      fe_tsmp: Date.current.ago(2.years),
                                       le_tsmp: nil,
                                       uoq_code_cdu2: tbl1.tbl_code,
                                       uoq_code_cdu3: tbl2.tbl_code
@@ -1133,7 +1133,7 @@ describe Measure do
     context "with national_measurement_unit" do
       let!(:comm1) {
         create :comm, cmdty_code: commodity.goods_nomenclature_item_id,
-                                   fe_tsmp: Date.today.ago(2.years),
+                                   fe_tsmp: Date.current.ago(2.years),
                                    le_tsmp: nil,
                                    uoq_code_cdu2: tbl1.tbl_code,
                                    uoq_code_cdu3: tbl2.tbl_code

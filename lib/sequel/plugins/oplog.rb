@@ -40,8 +40,11 @@ module Sequel
       end
 
       module InstanceMethods
-        # Operation can be set to :update, :insert and :delete
-        # But they get persistated as U, I and D.
+        # Operation can be set to :update, :create and :delete
+        # But they get persisted as U, C and D.
+        # For some reasons it does not work for operation setter method (operation=) for child class
+        # in rails = 5.1.6.1 and sequel >= 5.0.0
+        # e.g. Chapter, Heading, Commodity
         def operation=(op)
           self[:operation] = op.to_s.first.upcase
         end
@@ -57,13 +60,15 @@ module Sequel
         end
 
         ##
-        # will be called by https://github.com/jeremyevans/sequel/blob/5afb0d0e28a89e68f1823d77d23cfa57d6b88dad/lib/sequel/model/base.rb#L1549
+        # Will be called by https://github.com/jeremyevans/sequel/blob/5afb0d0e28a89e68f1823d77d23cfa57d6b88dad/lib/sequel/model/base.rb#L1549
         # @note fixes `NotImplementedError: You should be inserting model instances`
-        def _insert_select_raw(ds)
-          false
+        # Since sequel 5.4.0 method needs to return `nil` to execute `_insert_raw`
+        # See https://github.com/jeremyevans/sequel/compare/5.3.0...5.4.0#diff-a5b2d78790313f597d88b4f2977a7d57R1638
+        def _insert_select_raw(_ds)
+          nil
         end
 
-        def _insert_raw(ds)
+        def _insert_raw(_ds)
           self.operation = :create
 
           operation_klass.insert(self.values.except(:oid))
@@ -75,16 +80,15 @@ module Sequel
           operation_klass.insert(self.values.except(:oid))
         end
 
-        def _update_columns(columns)
+        def _update_columns(_columns)
           self.operation = :update
 
           operation_klass.insert(self.values.except(:oid))
         end
       end
 
-      # Enforce operation logging by undefining operations that do not use
-      # model instances (as Insert/Update/Delete operations will not be
-      # created)
+      # Enforce operation logging by un-defining operations that do not use
+      # model instances (as Insert/Update/Delete operations will not be created)
       module ClassMethods
         # Hide oplog columns if asked
         def columns
@@ -101,7 +105,7 @@ module Sequel
       end
 
       module DatasetMethods
-        def update(*attr)
+        def update(*_attr)
           # noop
         end
 

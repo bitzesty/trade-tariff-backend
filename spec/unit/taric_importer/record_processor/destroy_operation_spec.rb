@@ -22,7 +22,7 @@ describe TaricImporter::RecordProcessor::DestroyOperation do
   }
 
   let(:operation) {
-    TaricImporter::RecordProcessor::DestroyOperation.new(record, Date.today)
+    TaricImporter::RecordProcessor::DestroyOperation.new(record, Date.current)
   }
 
   describe '#to_oplog_operation' do

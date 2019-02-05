@@ -46,6 +46,11 @@ class Heading < GoodsNomenclature
 
   delegate :section, to: :chapter
 
+  # See oplog sequel plugin
+  def operation=(op)
+    self[:operation] = op.to_s.first.upcase
+  end
+
   def short_code
     goods_nomenclature_item_id.first(4)
   end

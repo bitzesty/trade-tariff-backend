@@ -89,7 +89,7 @@ describe TariffSynchronizer::BaseUpdate do
         travel_back
       end
 
-      let!(:chief_update1) { create :chief_update, :missing, example_date: Date.today }
+      let!(:chief_update1) { create :chief_update, :missing, example_date: Date.current }
       let!(:chief_update2) { create :chief_update, example_date: Date.yesterday }
 
       it 'should return false' do
@@ -106,7 +106,7 @@ describe TariffSynchronizer::BaseUpdate do
         travel_back
       end
 
-      let!(:chief_update1) { create :chief_update, :missing, example_date: Date.today }
+      let!(:chief_update1) { create :chief_update, :missing, example_date: Date.current }
       let!(:chief_update2) { create :chief_update, example_date: Date.yesterday }
 
       it 'should return true' do
