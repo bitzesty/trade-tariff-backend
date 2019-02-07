@@ -5,7 +5,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-ruby "~> 2.5.3"
+ruby "~> 2.6.0"
 
 # Server
 gem "puma", "~> 3.4"
@@ -73,11 +73,11 @@ end
 group :test do
   gem "database_cleaner"
   gem "factory_girl_rails", "~> 4.8.0", require: false
-  gem "fakefs", "~> 0.11.0", require: "fakefs/safe"
+  gem "fakefs", "~> 0.18.0", require: "fakefs/safe"
   gem "forgery"
   gem "json_expressions", "~> 0.9.0"
   gem "rspec-rails", "~> 3.5.2"
   gem "rspec_junit_formatter"
   gem "simplecov", "~> 0.14.1"
-  gem "webmock", "~> 3.0.1"
+  gem "webmock", "~> 3.5.0"
 end

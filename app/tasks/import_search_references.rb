@@ -18,7 +18,7 @@ class ImportSearchReferences
   end
 
   def run
-    CSV.foreach(@data_file, col_sep: ";") do |line|
+    CSV.foreach(@data_file, col_sep: ';') do |line|
       title, reference = line
 
       if references_multiple_records?(reference)
@@ -29,7 +29,7 @@ class ImportSearchReferences
     end
   end
 
-private
+  private
 
   def create_record(title, reference)
     SearchReference.create({
