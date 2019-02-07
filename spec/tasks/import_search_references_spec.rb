@@ -10,7 +10,7 @@ describe ImportSearchReferences do
       let(:search_reference) { create :search_reference }
 
       before {
-        create_file(file_name)
+        create_file(file_name, 'invalid')
       }
 
       it 'truncates existing SearchReference table entries' do
