@@ -42,11 +42,12 @@ private
 
     @collection.delete_if { |m| m.measure_type_id == type && m.goods_nomenclature_sid != @declarable.goods_nomenclature_sid }
     latest = @collection.select { |m| m.measure_type_id == type }.sort_by(&:effective_start_date).pop
+    @collection.uniq! { |m| m.duty_expression_with_national_measurement_units_for(nil) }
     @collection.delete_if { |m| m.measure_type_id == type && matching_item_id(m) }
     @collection.prepend(latest) unless @collection.include?(latest)
   end
 
-  def matching_item_id(m)
-    m.goods_nomenclature_item_id == @declarable.goods_nomenclature_item_id
+  def matching_item_id(measure)
+    measure.goods_nomenclature_item_id == @declarable.goods_nomenclature_item_id
   end
 end
