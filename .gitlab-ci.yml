@@ -1,5 +1,5 @@
 image:
-  name: circleci/ruby:2.6-node-browsers
+  name: circleci/ruby:2.5-node-browsers
 
 variables:
   POSTGRES_DB: tariff_test
