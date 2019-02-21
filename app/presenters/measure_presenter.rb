@@ -14,27 +14,9 @@ class MeasurePresenter
 private
 
   def measure_deduplicate
-    if @collection.select { |m| m.measure_type_id == THIRD_COUNTRY_DUTY_ID }.size > 1
-      @collection.delete_if { |m|
-        m.measure_type_id == THIRD_COUNTRY_DUTY_ID &&
-          m.additional_code.blank? &&
-          m.goods_nomenclature_sid != @declarable.goods_nomenclature_sid
-      }
-    end
-
-    if @collection.select { |m| m.measure_type_id == 'VTS' }.any?
-      @collection.delete_if { |m|
-        m.measure_type_id == 'VTS' &&
-          m.goods_nomenclature_sid != @declarable.goods_nomenclature_sid
-      }
-    end
-
-    if @collection.select { |m| m.measure_type_id == 'VTZ' }.any?
-      @collection.delete_if { |m|
-        m.measure_type_id == 'VTZ' &&
-          m.goods_nomenclature_sid != @declarable.goods_nomenclature_sid
-      }
-    end
+    third_country_duty_dedup
+    delete_duplicate_vat_measures(type: 'VTZ')
+    delete_duplicate_vat_measures(type: 'VTS')
 
     @collection.delete_if do |m|
       HIDDEN_MEASURE_TYPE_IDS.include?(m.measure_type_id)
@@ -45,5 +27,27 @@ private
 
   def method_missing(*args, &block)
     @collection.send(*args, &block)
+  end
+
+  def third_country_duty_dedup
+    if @collection.select { |m| m.measure_type_id == THIRD_COUNTRY_DUTY_ID }.size > 1
+      @collection.delete_if do |m|
+        m.measure_type_id == THIRD_COUNTRY_DUTY_ID && m.additional_code.blank? && m.goods_nomenclature_sid != @declarable.goods_nomenclature_sid
+      end
+    end
+  end
+
+  def delete_duplicate_vat_measures(type:)
+    return unless @collection.select { |m| m.measure_type_id == type }.any?
+
+    @collection.delete_if { |m| m.measure_type_id == type && m.goods_nomenclature_sid != @declarable.goods_nomenclature_sid }
+    latest = @collection.select { |m| m.measure_type_id == type }.sort_by(&:effective_start_date).pop
+    @collection.uniq! { |m| m.duty_expression_with_national_measurement_units_for(nil) }
+    @collection.delete_if { |m| m.measure_type_id == type && matching_item_id(m) }
+    @collection.prepend(latest) unless @collection.include?(latest)
+  end
+
+  def matching_item_id(measure)
+    measure.goods_nomenclature_item_id == @declarable.goods_nomenclature_item_id
   end
 end
