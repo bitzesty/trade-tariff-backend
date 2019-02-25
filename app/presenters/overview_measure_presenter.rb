@@ -1,4 +1,4 @@
-class MeasurePresenter
+class OverviewMeasurePresenter
   THIRD_COUNTRY_DUTY_ID = '103'.freeze
   HIDDEN_MEASURE_TYPE_IDS = %w[430 447].freeze
 
@@ -42,6 +42,7 @@ private
 
     @collection.delete_if { |m| m.measure_type_id == type && m.goods_nomenclature_sid != @declarable.goods_nomenclature_sid }
     latest = @collection.select { |m| m.measure_type_id == type }.sort_by(&:effective_start_date).pop
+    @collection.uniq! { |m| m.duty_expression_with_national_measurement_units_for(nil) }
     @collection.delete_if { |m| m.measure_type_id == type && matching_item_id(m) }
     @collection.prepend(latest) unless @collection.include?(latest)
   end
