@@ -30,7 +30,7 @@ class Commodity < GoodsNomenclature
 
   def overview_measures_indexed
     search_service = ::CommodityService::OverviewMeasuresService.new(goods_nomenclature_sid, point_in_time)
-    MeasurePresenter.new(search_service.indexed_measures, self).validate!
+    OverviewMeasurePresenter.new(search_service.indexed_measures, self).validate!
   end
 
   one_to_many :search_references, key: :referenced_id, primary_key: :code, reciprocal: :referenced, conditions: { referenced_class: 'Commodity' },
