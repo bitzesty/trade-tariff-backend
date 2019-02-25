@@ -22,7 +22,7 @@ private
       HIDDEN_MEASURE_TYPE_IDS.include?(m.measure_type_id)
     end
 
-    @collection
+    @collection.compact
   end
 
   def method_missing(*args, &block)
@@ -33,7 +33,7 @@ private
     if @collection.select { |m| m.measure_type_id == THIRD_COUNTRY_DUTY_ID }.size > 1
       @collection.delete_if do |m|
         m.measure_type_id == THIRD_COUNTRY_DUTY_ID && m.additional_code.blank? && m.goods_nomenclature_sid != @declarable.goods_nomenclature_sid
-      end
+      end.compact!
     end
   end
 
@@ -45,6 +45,7 @@ private
     @collection.uniq! { |m| m.duty_expression_with_national_measurement_units_for(nil) }
     @collection.delete_if { |m| m.measure_type_id == type && matching_item_id(m) }
     @collection.prepend(latest) unless @collection.include?(latest)
+    @collection.compact!
   end
 
   def matching_item_id(measure)
