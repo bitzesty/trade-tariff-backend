@@ -9,6 +9,6 @@ class QuotaBalanceEvent < Sequel::Model
                                  primary_key: :quota_definition_sid
 
   def self.status
-    'open'
+    'Open'
   end
 end
