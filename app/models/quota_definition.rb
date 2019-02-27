@@ -27,11 +27,11 @@ class QuotaDefinition < Sequel::Model
   end
 
   def status
-    QuotaEvent.last_for(quota_definition_sid).status.presence || (critical_state? ? 'Critical' : 'Open')
+    QuotaEvent.last_for(quota_definition_sid, point_in_time).status.presence || (critical_state? ? 'Critical' : 'Open')
   end
 
   def last_balance_event
-    @_last_balance_event ||= quota_balance_events.last
+    @_last_balance_event ||= quota_balance_events.select { |balance| balance.occurrence_timestamp <= point_in_time }.sort_by(&:occurrence_timestamp).last
   end
 
   def balance
