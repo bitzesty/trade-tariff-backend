@@ -7,13 +7,18 @@ class QuotaDefinition < Sequel::Model
 
   one_to_many :quota_exhaustion_events, key: :quota_definition_sid,
                                         primary_key: :quota_definition_sid
-
   one_to_many :quota_balance_events, key: :quota_definition_sid,
                                      primary_key: :quota_definition_sid
+
   one_to_many :quota_suspension_periods, key: :quota_definition_sid,
-                                         primary_key: :quota_definition_sid
+                                         primary_key: :quota_definition_sid do |ds|
+    ds.with_actual(QuotaSuspensionPeriod)
+  end
+
   one_to_many :quota_blocking_periods, key: :quota_definition_sid,
-                                       primary_key: :quota_definition_sid
+                                       primary_key: :quota_definition_sid do |ds|
+    ds.with_actual(QuotaBlockingPeriod)
+  end
 
   one_to_one :measurement_unit, primary_key: :measurement_unit_code,
              key: :measurement_unit_code do |ds|
