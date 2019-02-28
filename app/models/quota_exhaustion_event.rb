@@ -8,6 +8,6 @@ class QuotaExhaustionEvent < Sequel::Model
                                  primary_key: :quota_definition_sid
 
   def self.status
-    'exhausted'
+    'Exhausted'
   end
 end

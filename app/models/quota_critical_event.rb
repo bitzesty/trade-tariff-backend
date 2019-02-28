@@ -8,6 +8,6 @@ class QuotaCriticalEvent < Sequel::Model
                                  primary_key: :quota_definition_sid
 
   def self.status
-    'critical'
+    'Critical'
   end
 end
