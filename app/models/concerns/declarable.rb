@@ -9,7 +9,7 @@ module Declarable
                 .with_actual(BaseRegulation)
                 .where({measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid)})
                 .where{ Sequel.~(measures__measure_type_id: MeasureType::EXCLUDED_TYPES) }
-                .order(Sequel.desc(:measures__measure_generating_regulation_id), Sequel.desc(:measures__measure_type_id), Sequel.desc(:measures__goods_nomenclature_sid), Sequel.desc(:measures__geographical_area_id), Sequel.desc(:measures__geographical_area_sid), Sequel.desc(:measures__additional_code_type_id), Sequel.desc(:measures__additional_code_id), Sequel.desc(:effective_start_date)).tap! { |query|
+                .order(Sequel.desc(:measures__measure_generating_regulation_id), Sequel.desc(:measures__measure_type_id), Sequel.desc(:measures__goods_nomenclature_sid), Sequel.desc(:measures__geographical_area_id), Sequel.desc(:measures__geographical_area_sid), Sequel.desc(:measures__additional_code_type_id), Sequel.desc(:measures__additional_code_id), Sequel.desc(:measures__ordernumber), Sequel.desc(:effective_start_date)).tap! { |query|
                  query.union(
                         Measure.with_base_regulations
                                .with_actual(BaseRegulation)
@@ -23,7 +23,7 @@ module Declarable
                 .with_actual(ModificationRegulation)
                 .where({measures__goods_nomenclature_sid: uptree.map(&:goods_nomenclature_sid)})
                 .where{ Sequel.~(measures__measure_type_id: MeasureType::EXCLUDED_TYPES) }
-                .order(Sequel.desc(:measures__measure_generating_regulation_id), Sequel.desc(:measures__measure_type_id), Sequel.desc(:measures__goods_nomenclature_sid), Sequel.desc(:measures__geographical_area_id), Sequel.desc(:measures__geographical_area_sid), Sequel.desc(:measures__additional_code_type_id), Sequel.desc(:measures__additional_code_id), Sequel.desc(:effective_start_date))
+                .order(Sequel.desc(:measures__measure_generating_regulation_id), Sequel.desc(:measures__measure_type_id), Sequel.desc(:measures__goods_nomenclature_sid), Sequel.desc(:measures__geographical_area_id), Sequel.desc(:measures__geographical_area_sid), Sequel.desc(:measures__additional_code_type_id), Sequel.desc(:measures__additional_code_id), Sequel.desc(:measures__ordernumber), Sequel.desc(:effective_start_date))
                 .tap! {|query|
                   query.union(
                         Measure.with_modification_regulations
