@@ -42,6 +42,6 @@ class MeasureType < Sequel::Model
   end
 
   def vat?
-    !!(description =~ /^VAT/)
+    MeasureType::VAT_TYPES.include?(measure_type_id)
   end
 end
