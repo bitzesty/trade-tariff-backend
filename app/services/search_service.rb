@@ -48,7 +48,7 @@ class SearchService
     @as_of = begin
                Date.parse(date)
              rescue StandardError
-               Date.today
+               Date.current
              end
   end
 

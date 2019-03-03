@@ -2,6 +2,7 @@
 engines:
   rubocop:
     enabled: true
+    channel: "rubocop-0-63"
   bundler-audit:
     enabled: true
   brakeman:

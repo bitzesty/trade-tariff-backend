@@ -77,24 +77,24 @@ describe GeographicalArea do
       let!(:geographical_area)                { create :geographical_area, geographical_area_id: 'xx' }
       let!(:contained_area_present)           {
         create :geographical_area, geographical_area_id: 'ab',
-                                                                           validity_start_date: Date.today.ago(2.years),
-                                                                           validity_end_date: Date.today.ago(2.years)
+                                                                           validity_start_date: Date.current.ago(2.years),
+                                                                           validity_end_date: Date.current.ago(2.years)
       }
       let!(:contained_area_past) {
         create :geographical_area, geographical_area_id: 'de',
-                                                                           validity_start_date: Date.today.ago(5.years),
+                                                                           validity_start_date: Date.current.ago(5.years),
                                                                            validity_end_date: 3.years.ago
       }
       let!(:geographical_area_membership1) {
         create :geographical_area_membership, geographical_area_sid: contained_area_present.geographical_area_sid,
                                                                                       geographical_area_group_sid: geographical_area.geographical_area_sid,
-                                                                                      validity_start_date: Date.today.ago(2.years),
+                                                                                      validity_start_date: Date.current.ago(2.years),
                                                                                       validity_end_date: nil
       }
       let!(:geographical_area_membership2) {
         create :geographical_area_membership, geographical_area_sid: contained_area_past.geographical_area_sid,
                                                                                       geographical_area_group_sid: geographical_area.geographical_area_sid,
-                                                                                      validity_start_date: Date.today.ago(5.years),
+                                                                                      validity_start_date: Date.current.ago(5.years),
                                                                                       validity_end_date: 3.years.ago
       }
 
@@ -263,7 +263,7 @@ describe GeographicalArea do
           }
 
           before {
-            geographical_area.validity_start_date = Date.today.ago(2.years)
+            geographical_area.validity_start_date = Date.current.ago(2.years)
             geographical_area.validity_end_date = nil
             geographical_area.conformant?
           }

@@ -3,12 +3,12 @@ FactoryGirl.define do
 
   factory :measure_type_series do
     measure_type_series_id   { generate(:measure_type_series_id) }
-    validity_start_date      { Date.today.ago(3.years) }
+    validity_start_date      { Date.current.ago(3.years) }
     validity_end_date        { nil }
 
     trait :xml do
       measure_type_combination { 0 }
-      validity_end_date        { Date.today.ago(1.years) }
+      validity_end_date        { Date.current.ago(1.years) }
     end
   end
 

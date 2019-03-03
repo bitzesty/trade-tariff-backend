@@ -162,7 +162,7 @@ class Measure < Sequel::Model
   dataset_module do
     def with_base_regulations
       query = if model.point_in_time.present?
-                distinct(:measure_generating_regulation_id, :measure_type_id, :goods_nomenclature_sid, :geographical_area_id, :geographical_area_sid, :additional_code_type_id, :additional_code_id).select(Sequel.expr(:measures).*)
+                distinct(:measure_generating_regulation_id, :measure_type_id, :goods_nomenclature_sid, :geographical_area_id, :geographical_area_sid, :additional_code_type_id, :additional_code_id, :ordernumber).select(Sequel.expr(:measures).*)
               else
                 select(Sequel.expr(:measures).*)
       end
@@ -175,7 +175,7 @@ class Measure < Sequel::Model
 
     def with_modification_regulations
       query = if model.point_in_time.present?
-                distinct(:measure_generating_regulation_id, :measure_type_id, :goods_nomenclature_sid, :geographical_area_id, :geographical_area_sid, :additional_code_type_id, :additional_code_id).select(Sequel.expr(:measures).*)
+                distinct(:measure_generating_regulation_id, :measure_type_id, :goods_nomenclature_sid, :geographical_area_id, :geographical_area_sid, :additional_code_type_id, :additional_code_id, :ordernumber).select(Sequel.expr(:measures).*)
               else
                 select(Sequel.expr(:measures).*)
       end
