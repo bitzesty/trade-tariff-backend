@@ -8,13 +8,7 @@ class QuotaBalanceEvent < Sequel::Model
   many_to_one :quota_definition, key: :quota_definition_sid,
                                  primary_key: :quota_definition_sid
 
-  dataset_module do
-    def last
-      order(Sequel.desc(:occurrence_timestamp)).first
-    end
-  end
-
   def self.status
-    'open'
+    'Open'
   end
 end
