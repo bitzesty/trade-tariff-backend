@@ -3,7 +3,7 @@ class MeasureType < Sequel::Model
   EXPORT_MOVEMENT_CODES = [1, 2].freeze
   EXCLUDED_TYPES = %w[442 SPL].freeze
   THIRD_COUNTRY = '103'.freeze
-  VAT_TYPES = %w[VTA VTE VTS VTZ].freeze
+  VAT_TYPES = %w[VTA VTE VTS VTZ 305].freeze
   SUPPLEMENTARY_TYPES = %w[109 110 111].freeze
 
   plugin :time_machine, period_start_column: :measure_types__validity_start_date,
@@ -47,6 +47,6 @@ class MeasureType < Sequel::Model
   # The VAT exempt has measure type 305 and  VATE additional code.
   # The VAT reduced rate 5% has measure type 305 and  VATA additional code.
   def vat?
-    measure_type_id == "305" || MeasureType::VAT_TYPES.include?(measure_type_id)
+    MeasureType::VAT_TYPES.include?(measure_type_id)
   end
 end
