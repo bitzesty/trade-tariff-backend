@@ -96,6 +96,8 @@ GEM
     fakefs (0.18.1)
     faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
+    fast_jsonapi (1.5)
+      activesupport (>= 4.2)
     ffi (1.10.0)
     foreman (0.85.0)
       thor (~> 0.19.1)
@@ -358,13 +360,14 @@ DEPENDENCIES
   aws-sdk-rails (>= 1.0.1)
   bootsnap
   builder (~> 3.2)
-  curb (~> 0.8)
+  curb (~> 0.9)
   database_cleaner
   dotenv-rails (>= 2.1.1)
   elasticsearch (= 6.1.0)
   elasticsearch-extensions (= 0.0.30)
   factory_girl_rails (~> 4.8.0)
   fakefs (~> 0.18.0)
+  fast_jsonapi
   foreman
   forgery
   gds-sso (~> 13, >= 12.1.0)

@@ -52,8 +52,9 @@ gem "yajl-ruby", "~> 1.3.1", require: "yajl"
 
 # API related
 gem "ansi", "~> 1.5"
-gem "curb", "~> 0.8"
+gem "curb", "~> 0.9"
 gem "rabl", "~> 0.12"
+gem "fast_jsonapi"
 gem "responders", "~> 2.1", ">= 2.1.0"
 gem "tilt"
 
