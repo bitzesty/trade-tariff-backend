@@ -1,28 +1,12 @@
-class ChapterSerializer < Serializer
-  def serializable_hash(_opts = {})
-    chapter_attributes = {
-      id: goods_nomenclature_sid,
-      goods_nomenclature_item_id: goods_nomenclature_item_id,
-      producline_suffix: producline_suffix,
-      validity_start_date: validity_start_date,
-      validity_end_date: validity_end_date,
-      description: formatted_description,
-      guides: guides.map do |guide|
-        {
-          title: guide.title,
-          url: guide.url
-        }
-      end
-    }
+class ChapterSerializer
+  include FastJsonapi::ObjectSerializer
+  set_id :goods_nomenclature_sid
+  attributes :goods_nomenclature_sid, :goods_nomenclature_item_id, :headings_from, :headings_to, :description, :formatted_description
 
-    if section.present?
-      chapter_attributes[:section] = {
-          numeral: section.numeral,
-          title: section.title,
-          position: section.position
-        }
-    end
-
-    chapter_attributes
+  attribute :chapter_note_id do |chapter|
+    chapter.chapter_note.try(:id)
   end
+
+  has_many :guides, serializer: GuideSerializer
+
 end

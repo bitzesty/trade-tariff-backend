@@ -1,10 +1,8 @@
-class SectionSerializer < Serializer
-  def serializable_hash(_opts = {})
-    {
-      id: id,
-      numeral: numeral,
-      title: title,
-      position: position
-    }
+class SectionSerializer
+  include FastJsonapi::ObjectSerializer
+  attributes :id, :numeral, :title, :position, :chapter_from, :chapter_to
+  attribute :section_note, if: Proc.new { |section| section.section_note.present? } do |section|
+    section.section_note.content
   end
+  has_many :chapters, serializer: ChapterSerializer
 end
