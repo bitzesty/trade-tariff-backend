@@ -37,11 +37,16 @@ class MeasureType < Sequel::Model
     measure_type_id == THIRD_COUNTRY
   end
 
+  # 306
   def excise?
     !!(description =~ /EXCISE/)
   end
 
+  # The VAT standard rate has measure type 305 and no additional code.
+  # The VAT zero rate has measure type 305 and  VATZ additional code.
+  # The VAT exempt has measure type 305 and  VATE additional code.
+  # The VAT reduced rate 5% has measure type 305 and  VATA additional code.
   def vat?
-    MeasureType::VAT_TYPES.include?(measure_type_id)
+    measure_type_id == "305" || MeasureType::VAT_TYPES.include?(measure_type_id)
   end
 end
