@@ -4,7 +4,7 @@ module Api
       def index
         @sections = Section.eager({ chapters: [:chapter_note] }, :section_note).all
 
-        render json: SectionListSerializer.new(@sections).serializable_hash
+        render json: Api::V1::Sections::SectionListSerializer.new(@sections).serializable_hash
       end
 
       def show
@@ -13,7 +13,7 @@ module Api
                           .take
         options = {}
         options[:include] = [:chapters, 'chapters.guides']
-        render json: SectionSerializer.new(@section, options).serializable_hash
+        render json: Api::V1::Sections::SectionSerializer.new(@section, options).serializable_hash
       end
 
     end
