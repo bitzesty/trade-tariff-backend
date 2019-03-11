@@ -4,7 +4,7 @@ module Api
       def index
         @sections = Section.eager({ chapters: [:chapter_note] }, :section_note).all
 
-        respond_with @sections
+        render json: SectionListSerializer.new(@sections).serializable_hash
       end
 
       def show
@@ -16,9 +16,6 @@ module Api
         render json: SectionSerializer.new(@section, options).serializable_hash
       end
 
-      def tree
-        @sections = Section.eager({ chapters: [:headings] }).all
-      end
     end
   end
 end
