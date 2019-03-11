@@ -122,6 +122,7 @@ FactoryGirl.define do
         FactoryGirl.create(:chapter, :with_section,
                                      :with_note,
                                      :with_description,
+                                     :with_guide,
                                      goods_nomenclature_item_id: heading.chapter_id)
       }
     end
