@@ -25,6 +25,7 @@ config/trade_tariff_backend_secrets.yml
 /coverage/*
 .idea/*
 REVISION
+searches_without_match_or_synonym.csv
 
 # RVM
 .ruby-gemset
