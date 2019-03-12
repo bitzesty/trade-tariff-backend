@@ -52,10 +52,28 @@ describe Api::V1::ChaptersController, "GET #index" do
   let!(:chapter2) { create :chapter, :with_section, :with_note }
 
   let(:pattern) {
-    [
-      {goods_nomenclature_item_id: String, chapter_note_id: Integer },
-      {goods_nomenclature_item_id: String, chapter_note_id: Integer }
-    ]
+    {
+      data: [
+        {
+          id: "#{chapter1.goods_nomenclature_sid}",
+          type: 'chapter',
+          attributes: {
+            goods_nomenclature_sid: chapter1.goods_nomenclature_sid,
+            goods_nomenclature_item_id: chapter1.goods_nomenclature_item_id,
+            chapter_note_id: chapter1.chapter_note.id,
+          }
+        },
+        {
+          id: "#{chapter2.goods_nomenclature_sid}",
+          type: 'chapter',
+          attributes: {
+            goods_nomenclature_sid: chapter2.goods_nomenclature_sid,
+            goods_nomenclature_item_id: chapter2.goods_nomenclature_item_id,
+            chapter_note_id: chapter2.chapter_note.id,
+          }
+        },
+      ]
+    }
   }
 
   it 'returns rendered records' do

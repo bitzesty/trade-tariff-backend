@@ -8,7 +8,6 @@ module Api
       def index
         @chapters = Chapter.eager(:chapter_note).all
 
-        # respond_with @chapters
         render json: Api::V1::Chapters::ChapterListSerializer.new(@chapters).serializable_hash
       end
 
