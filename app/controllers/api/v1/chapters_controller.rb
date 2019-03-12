@@ -17,7 +17,10 @@ module Api
                                                                :goods_nomenclature_indents)
                                                         .all).root_entries
 
-        respond_with @chapter
+        options = {}
+        options[:include] = [:section, :guides, :headings]
+        presenter = Api::V1::Chapters::ChapterPresenter.new(@chapter, @headings)
+        render json: Api::V1::Chapters::ChapterSerializer.new(presenter, options).serializable_hash
       end
 
       def changes
