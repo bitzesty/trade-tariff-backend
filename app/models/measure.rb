@@ -96,8 +96,8 @@ class Measure < Sequel::Model
     full_temporary_stop_regulations.first
   end
 
-  one_to_many :measure_partial_temporary_stops, primary_key: :measure_generating_regulation_id,
-                                                key: :partial_temporary_stop_regulation_id do |ds|
+  one_to_many :measure_partial_temporary_stops, primary_key: :measure_sid,
+                                                key: :measure_sid do |ds|
                                                   ds.with_actual(MeasurePartialTemporaryStop)
                                                 end
 

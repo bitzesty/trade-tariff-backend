@@ -551,7 +551,7 @@ describe Measure do
     describe 'measure partial temporary stop' do
       let!(:mpt_stop1)        { create :measure_partial_temporary_stop, validity_start_date: Date.current.ago(3.years) }
       let!(:mpt_stop2)        { create :measure_partial_temporary_stop, validity_start_date: Date.current.ago(5.years) }
-      let!(:measure)          { create :measure, measure_generating_regulation_id: mpt_stop1.partial_temporary_stop_regulation_id }
+      let!(:measure)          { create :measure, measure_generating_regulation_id: mpt_stop1.partial_temporary_stop_regulation_id, measure_sid: mpt_stop1.measure_sid }
 
       context 'direct loading' do
         it 'loads associated full temporary stop regulation' do
