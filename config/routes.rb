@@ -38,10 +38,14 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :commodities, only: [:show], constraints: { id: /\d{10}/ } do
+      resources :commodities, only: [:show], constraints: { id: /\d{10}/, as_of: /.*/ } do
         member {
           get :changes
         }
+
+        collection do
+          get :codes
+        end
 
         scope module: 'commodities', constraints: { commodity_id: /\d{10}/, id: /\d+/ } do
           resources :search_references, only: [:show, :index, :destroy, :create, :update]

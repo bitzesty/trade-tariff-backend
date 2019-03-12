@@ -32,6 +32,8 @@ module Api
             :additional_code,
             :full_temporary_stop_regulations,
             :measure_partial_temporary_stops
+          ).order(
+            Sequel.asc(:measures__national, nulls: :last), Sequel.asc(:measures__geographical_area_id)
           ).all, @commodity
         ).validate!
 
@@ -53,6 +55,20 @@ module Api
         render 'api/v1/changes/changes'
       end
 
+      def codes
+        TimeMachine.at(as_of_date) do
+          @commodities = Commodity.dataset.actual.declarable.limit(10)
+        end
+        response.set_header('Date', as_of_date.httpdate )
+
+        respond_to do |format|
+          format.json
+          format.csv {
+            headers['Content-Type'] = 'text/csv'
+          }
+        end
+      end
+
       private
 
       def find_commodity
@@ -63,6 +79,14 @@ module Api
 
         raise Sequel::RecordNotFound if @commodity.children.any?
         raise Sequel::RecordNotFound if @commodity.goods_nomenclature_item_id.in? HiddenGoodsNomenclature.codes
+      end
+
+      def as_of_date
+        @as_of ||= begin
+          Date.parse(params[:as_of])
+        rescue StandardError
+          Date.current
+        end
       end
     end
   end

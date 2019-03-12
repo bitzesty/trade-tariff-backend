@@ -1,0 +1,17 @@
+<%= CSV.generate_line %w(sid chapter goods_nomenclature_item_id indents description product_line_suffix third_country_duty	standard_vat zero_vat reduced_vat	url) %>
+<%- @commodities.each do |c| -%>
+<%- vat = c.measures.select(&:vat?).first&.measure_type_id %>
+<%= CSV.generate_line([
+  c.goods_nomenclature_sid, 
+  c.chapter.short_code,
+  c.goods_nomenclature_item_id,
+  c.number_indents,
+  c.description,
+  c.producline_suffix,
+  c.measures.select(&:third_country?).first&.duty_expression,
+  (vat == 'VTS'),
+  (vat == 'VTZ'),
+  (vat == 'VTA'),
+  "https://www.trade-tariff.service.gov.uk/v1/commodities/#{c.goods_nomenclature_item_id}.json"
+]).html_safe -%>
+<%- end -%>
