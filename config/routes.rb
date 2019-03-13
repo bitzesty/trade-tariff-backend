@@ -43,10 +43,6 @@ Rails.application.routes.draw do
           get :changes
         }
 
-        # collection do
-        #   get :goods_nomenclature
-        # end
-
         scope module: 'commodities', constraints: { commodity_id: /\d{10}/, id: /\d+/ } do
           resources :search_references, only: [:show, :index, :destroy, :create, :update]
         end
