@@ -3,12 +3,11 @@ require 'csv'
 module Api
   module V1
     class GoodsNomenclaturesController < ApiController
+      before_action :as_of_date, only: [:index]
 
       def index
-        TimeMachine.at(as_of_date) do
-          @commodities = GoodsNomenclature.actual
-        end
-        response.set_header('Date', as_of_date.httpdate )
+        @commodities = GoodsNomenclature.actual
+        response.set_header('Date', @as_of.httpdate )
         @class_determinator = GoodsNomenclature.class_determinator
 
         respond_to do |format|
@@ -16,9 +15,9 @@ module Api
             headers['Content-Type'] = 'application/json'
           }
           format.csv {
-            filename = params[:filename]
+            filename = "goods_nomenclature_#{@as_of.strftime('%Y%m%d')}.csv"
             headers['Content-Type'] = 'text/csv'
-            headers['Content-Disposition'] = "attachment; filename=#{filename}" unless filename.blank?
+            headers['Content-Disposition'] = "attachment; filename=#{filename}"
           }
         end
       end

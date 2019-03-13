@@ -1,4 +1,4 @@
-<%= CSV.generate_line(['SID','Goods Nomenclature Item ID','Indents','Description','Product Line Suffix','Third Country Duty','Standard VAT','Zero VAT','Reduced VAT','Href'], {row_sep: ""}) %>
+<%= CSV.generate_line(['SID','Goods Nomenclature Item ID','Indents','Description','Product Line Suffix','Href'], {row_sep: ""}) %>
 <%- @commodities.each do |c| -%>
 <%= CSV.generate_line([
   c.goods_nomenclature_sid, 
