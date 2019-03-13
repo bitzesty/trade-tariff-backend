@@ -31,7 +31,9 @@ module Api
           })
         end
 
-        render 'api/v1/changes/changes'
+        options = {}
+        options[:include] = [:record, 'record.geographical_area', 'record.measure_type']
+        render json: Api::V1::Changes::ChangeSerializer.new(@changes.changes, options).serializable_hash
       end
 
       private
