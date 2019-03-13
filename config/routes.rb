@@ -43,9 +43,9 @@ Rails.application.routes.draw do
           get :changes
         }
 
-        collection do
-          get :goods_nomenclature
-        end
+        # collection do
+        #   get :goods_nomenclature
+        # end
 
         scope module: 'commodities', constraints: { commodity_id: /\d{10}/, id: /\d+/ } do
           resources :search_references, only: [:show, :index, :destroy, :create, :update]
@@ -68,7 +68,7 @@ Rails.application.routes.draw do
       get "search_suggestions" => "search#suggestions", as: :search_suggestions
       get '/headings/:id/tree' => 'headings#tree'
 
-      get 'goods_nomenclature', to: 'commodities#goods_nomenclature'
+      get 'goods_nomenclature', to: 'goods_nomenclatures#index'
 
       resources :rollbacks, only: [:create, :index]
       resources :footnotes, only: [:index, :show, :update]

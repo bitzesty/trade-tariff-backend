@@ -57,24 +57,6 @@ module Api
         render 'api/v1/changes/changes'
       end
 
-      def goods_nomenclature
-        TimeMachine.at(as_of_date) do
-          @commodities = Commodity.actual.declarable.limit(10)
-        end
-        response.set_header('Date', as_of_date.httpdate )
-
-        respond_to do |format|
-          format.json {
-            headers['Content-Type'] = 'application/json'
-          }
-          format.csv {
-            filename = params[:filename]
-            headers['Content-Type'] = 'text/csv'
-            headers['Content-Disposition'] = "attachment; filename=#{filename}" unless filename.blank?
-          }
-        end
-      end
-
       private
 
       def find_commodity
@@ -85,14 +67,6 @@ module Api
 
         raise Sequel::RecordNotFound if @commodity.children.any?
         raise Sequel::RecordNotFound if @commodity.goods_nomenclature_item_id.in? HiddenGoodsNomenclature.codes
-      end
-
-      def as_of_date
-        @as_of ||= begin
-          Date.parse(params[:as_of])
-        rescue StandardError
-          Date.current
-        end
       end
     end
   end
