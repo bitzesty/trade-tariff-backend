@@ -3,19 +3,88 @@ require 'rails_helper'
 describe Api::V1::ChaptersController, "GET #show" do
   render_views
 
-  let!(:chapter) { create :chapter, :with_description, :with_section, goods_nomenclature_item_id: "1100000000" }
-  let!(:section_note) { create :section_note, section: chapter.section }
+  let(:heading) { create :heading, :with_chapter }
+  let(:chapter) { heading.reload.chapter }
+  let!(:section) { chapter.section }
+  let!(:section_note) { create :section_note, section_id: section.id }
+  let(:chapter_guide) { chapter.guides.first }
+  let!(:chapter_note) { chapter.chapter_note }
 
   let(:pattern) {
     {
-      goods_nomenclature_item_id: chapter.code,
-      description: String,
-      headings: Array,
-      section: {
-        section_note: String
-      }.ignore_extra_keys!,
-      _response_info: Hash
-    }.ignore_extra_keys!
+      data: {
+        id: "#{chapter.goods_nomenclature_sid}",
+        type: 'chapter',
+        attributes: {
+          goods_nomenclature_sid: chapter.goods_nomenclature_sid,
+          goods_nomenclature_item_id: chapter.goods_nomenclature_item_id,
+          description: chapter.description,
+          formatted_description: chapter.formatted_description,
+          chapter_note_id: chapter_note.id,
+          chapter_note: chapter_note.content,
+          section_id: section.id
+        },
+        relationships: {
+          section: {
+            data: {
+              id: "#{section.id}",
+              type: 'section'
+            }
+          },
+          guides: {
+            data: [
+              {
+                id: "#{chapter_guide.id}",
+                type: 'guide'
+              }
+            ]
+          },
+          headings: {
+            data: [
+              {
+                id: "#{heading.goods_nomenclature_sid}",
+                type: 'heading'
+              }
+            ]
+          }
+        },
+      },
+      included: [
+        {
+          id: "#{chapter.section.id}",
+          type: 'section',
+          attributes: {
+            id: section.id,
+            position: section.position,
+            title: section.title,
+            numeral: section.numeral,
+            section_note: section_note.content,
+          }
+        },
+        {
+          id: "#{chapter_guide.id}",
+          type: 'guide',
+          attributes: {
+            title: chapter_guide.title,
+            url: chapter_guide.url,
+          }
+        },
+        {
+          id: "#{heading.goods_nomenclature_sid}",
+          type: 'heading',
+          attributes: {
+            goods_nomenclature_sid: heading.goods_nomenclature_sid,
+            goods_nomenclature_item_id: heading.goods_nomenclature_item_id,
+            declarable: heading.declarable,
+            description: heading.description,
+            producline_suffix: heading.producline_suffix,
+            leaf: true,
+            description_plain: heading.description_plain,
+            formatted_description: heading.formatted_description
+          }
+        }
+      ]
+    }
   }
 
   context 'when record is present' do
