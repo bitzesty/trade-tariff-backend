@@ -44,7 +44,7 @@ Rails.application.routes.draw do
         }
 
         collection do
-          get :codes
+          get :goods_nomenclature
         end
 
         scope module: 'commodities', constraints: { commodity_id: /\d{10}/, id: /\d+/ } do
@@ -67,6 +67,8 @@ Rails.application.routes.draw do
       post "search" => "search#search", via: :post, as: :search
       get "search_suggestions" => "search#suggestions", as: :search_suggestions
       get '/headings/:id/tree' => 'headings#tree'
+
+      get 'goods_nomenclature', to: 'commodities#goods_nomenclature'
 
       resources :rollbacks, only: [:create, :index]
       resources :footnotes, only: [:index, :show, :update]

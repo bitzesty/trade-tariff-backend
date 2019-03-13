@@ -57,16 +57,20 @@ module Api
         render 'api/v1/changes/changes'
       end
 
-      def codes
+      def goods_nomenclature
         TimeMachine.at(as_of_date) do
-          @commodities = Commodity.dataset.actual.declarable.limit(10)
+          @commodities = Commodity.actual.declarable.limit(10)
         end
         response.set_header('Date', as_of_date.httpdate )
 
         respond_to do |format|
-          format.json
+          format.json {
+            headers['Content-Type'] = 'application/json'
+          }
           format.csv {
+            filename = params[:filename]
             headers['Content-Type'] = 'text/csv'
+            headers['Content-Disposition'] = "attachment; filename=#{filename}" unless filename.blank?
           }
         end
       end
