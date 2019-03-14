@@ -171,29 +171,116 @@ describe Api::V1::ChaptersController, "GET #changes" do
     }
 
     let(:pattern) {
-      [
-        {
-          oid: Integer,
-          model_name: "Measure",
-          record: {
-            measure_type: {
-              description: measure.measure_type.description
-            }.ignore_extra_keys!
-          }.ignore_extra_keys!
-        }.ignore_extra_keys!,
-        {
-          oid: Integer,
-          model_name: "Chapter",
-          operation: String,
-          operation_date: String,
-          record: {
-            description: String,
-            goods_nomenclature_item_id: String,
-            validity_start_date: String,
-            validity_end_date: nil
+      {
+        data: [
+          {
+            id: String,
+            type: 'change',
+            attributes: {
+              oid: Integer,
+              model_name: 'Measure',
+              operation: 'C',
+              operation_date: String
+            },
+            relationships: {
+              record: {
+                data: {
+                  id: "#{measure.measure_sid}",
+                  type: 'measure'
+                }
+              }
+            }
+          },
+          {
+            id: String,
+            type: 'change',
+            attributes: {
+              oid: Integer,
+              model_name: 'Chapter',
+              operation: 'C',
+              operation_date: String
+            },
+            relationships: {
+              record: {
+                data: {
+                  id: "#{chapter.goods_nomenclature_sid}",
+                  type: 'chapter'
+                }
+              }
+            }
+          },
+          {
+            id: String,
+            type: 'change',
+            attributes: {
+              oid: Integer,
+              model_name: 'Chapter',
+              operation: 'U',
+              operation_date: String
+            },
+            relationships: {
+              record: {
+                data: {
+                  id: "#{chapter.goods_nomenclature_sid}",
+                  type: 'chapter'
+                }
+              }
+            }
           }
-        }
-      ].ignore_extra_values!
+        ],
+        included: [
+          {
+            id: "#{measure.measure_sid}",
+            type: 'measure',
+            attributes: {
+              id: measure.measure_sid,
+              origin: measure.origin,
+              import: measure.import,
+              goods_nomenclature_item_id: measure.goods_nomenclature_item_id
+            },
+            relationships: {
+              geographical_area: {
+                data: {
+                  id: "#{measure.geographical_area.id}",
+                  type: 'geographical_area'
+                }
+              },
+              measure_type: {
+                data: {
+                  id: "#{measure.measure_type.id}",
+                  type: 'measure_type'
+                }
+              }
+            }
+          },
+          {
+            id: "#{measure.geographical_area.id}",
+            type: 'geographical_area',
+            attributes: {
+              id: "#{measure.geographical_area.id}",
+              description: measure.geographical_area.geographical_area_description.description
+            }
+          },
+          {
+            id: "#{measure.measure_type.id}",
+            type: 'measure_type',
+            attributes: {
+              id: "#{measure.measure_type.id}",
+              description: measure.measure_type.description
+            }
+          },
+          {
+            id: "#{chapter.goods_nomenclature_sid}",
+            type: 'chapter',
+            attributes: {
+              description: chapter.description,
+              goods_nomenclature_item_id: chapter.goods_nomenclature_item_id,
+              validity_start_date: chapter.validity_start_date,
+              validity_end_date: chapter.validity_end_date
+            }
+          },
+        ]
+      }
     }
 
     it 'returns chapter changes' do
@@ -216,10 +303,17 @@ describe Api::V1::ChaptersController, "GET #changes" do
         operation_date: Date.current
     }
 
+    let!(:pattern) {
+      {
+        data: [],
+        included: []
+      }
+    }
+
     it 'does not include change records' do
       get :changes, params: { id: chapter, as_of: Date.yesterday }, format: :json
 
-      expect(response.body).to match_json_expression []
+      expect(response.body).to match_json_expression pattern
     end
   end
 
@@ -238,31 +332,134 @@ describe Api::V1::ChaptersController, "GET #changes" do
     }
 
     let(:pattern) {
-      [
-        {
-          oid: Integer,
-          model_name: "Measure",
-          operation: "D",
-          record: {
-            goods_nomenclature_item_id: measure.goods_nomenclature_item_id,
-            measure_type: {
-              description: measure.measure_type.description
-            }.ignore_extra_keys!
-          }.ignore_extra_keys!
-        }.ignore_extra_keys!,
-        {
-          oid: Integer,
-          model_name: "Chapter",
-          operation: String,
-          operation_date: String,
-          record: {
-            description: String,
-            goods_nomenclature_item_id: String,
-            validity_start_date: String,
-            validity_end_date: nil
+      {
+        data: [
+          {
+            id: String,
+            type: 'change',
+            attributes: {
+              oid: Integer,
+              model_name: 'Measure',
+              operation: 'C',
+              operation_date: String
+            },
+            relationships: {
+              record: {
+                data: {
+                  id: "#{measure.measure_sid}",
+                  type: 'measure'
+                }
+              }
+            }
+          },
+          {
+            id: String,
+            type: 'change',
+            attributes: {
+              oid: Integer,
+              model_name: 'Measure',
+              operation: 'D',
+              operation_date: String
+            },
+            relationships: {
+              record: {
+                data: {
+                  id: "#{measure.measure_sid}",
+                  type: 'measure'
+                }
+              }
+            }
+          },
+          {
+            id: String,
+            type: 'change',
+            attributes: {
+              oid: Integer,
+              model_name: 'Chapter',
+              operation: 'C',
+              operation_date: String
+            },
+            relationships: {
+              record: {
+                data: {
+                  id: "#{chapter.goods_nomenclature_sid}",
+                  type: 'chapter'
+                }
+              }
+            }
+          },
+          {
+            id: String,
+            type: 'change',
+            attributes: {
+              oid: Integer,
+              model_name: 'Chapter',
+              operation: 'U',
+              operation_date: String
+            },
+            relationships: {
+              record: {
+                data: {
+                  id: "#{chapter.goods_nomenclature_sid}",
+                  type: 'chapter'
+                }
+              }
+            }
           }
-        }
-      ].ignore_extra_values!
+        ],
+        included: [
+          {
+            id: "#{measure.measure_sid}",
+            type: 'measure',
+            attributes: {
+              id: measure.measure_sid,
+              origin: measure.origin,
+              import: measure.import,
+              goods_nomenclature_item_id: measure.goods_nomenclature_item_id
+            },
+            relationships: {
+              geographical_area: {
+                data: {
+                  id: "#{measure.geographical_area.id}",
+                  type: 'geographical_area'
+                }
+              },
+              measure_type: {
+                data: {
+                  id: "#{measure.measure_type.id}",
+                  type: 'measure_type'
+                }
+              }
+            }
+          },
+          {
+            id: "#{measure.geographical_area.id}",
+            type: 'geographical_area',
+            attributes: {
+              id: "#{measure.geographical_area.id}",
+              description: measure.geographical_area.geographical_area_description.description
+            }
+          },
+          {
+            id: "#{measure.measure_type.id}",
+            type: 'measure_type',
+            attributes: {
+              id: "#{measure.measure_type.id}",
+              description: measure.measure_type.description
+            }
+          },
+          {
+            id: "#{chapter.goods_nomenclature_sid}",
+            type: 'chapter',
+            attributes: {
+              description: chapter.description,
+              goods_nomenclature_item_id: chapter.goods_nomenclature_item_id,
+              validity_start_date: chapter.validity_start_date,
+              validity_end_date: chapter.validity_end_date
+            }
+          },
+        ]
+      }
     }
 
     before { measure.destroy }
