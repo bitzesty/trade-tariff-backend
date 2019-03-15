@@ -9,13 +9,13 @@ module ApplicationHelper
     "/trade-tariff#{relative_link}"
   end
 
-  def regulation_url(regulation)
+  def self.regulation_url(regulation)
     MeasureService::CouncilRegulationUrlGenerator.new(
       regulation
     ).generate
   end
 
-  def regulation_code(regulation)
+  def self.regulation_code(regulation)
     regulation_id = regulation.regulation_id
     "#{regulation_id.first}#{regulation_id[3..6]}/#{regulation_id[1..2]}"
   end

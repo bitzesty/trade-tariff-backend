@@ -44,7 +44,7 @@ class Heading < GoodsNomenclature
     end
   end
 
-  delegate :section, to: :chapter
+  delegate :section, :section_id, to: :chapter
 
   # See oplog sequel plugin
   def operation=(op)

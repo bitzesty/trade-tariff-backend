@@ -33,6 +33,17 @@ module Api
                                                       :additional_code,
                                                       :full_temporary_stop_regulations,
                                                       :measure_partial_temporary_stops).all, @heading).validate!
+          presenter = Api::V1::Headings::DeclarableHeadingPresenter.new(@heading, @measures)
+          options = {}
+          options[:include] = [:section, :chapter, 'chapter.guides', :footnotes,
+                               :import_measures, 'import_measures.measure_type',
+                               'import_measures.legal_acts', 'import_measures.suspending_regulation',
+                               'import_measures.measure_conditions',
+                               :export_measures, 'export_measures.measure_type',
+                               'export_measures.legal_acts', 'export_measures.suspending_regulation',
+                               'export_measures.measure_conditions']
+          options[:params] = {declarable: @heading}
+          render json: Api::V1::Headings::DeclarableHeadingSerializer.new(presenter, options).serializable_hash
         else
           @commodities = GoodsNomenclatureMapper.new(@heading.commodities_dataset.eager(:goods_nomenclature_indents,
                                                                                         :goods_nomenclature_descriptions)
@@ -40,8 +51,8 @@ module Api
 
         end
 
-        @heading_cache_key = "heading-#{@heading.goods_nomenclature_sid}-#{actual_date}-#{TradeTariffBackend.currency}-#{@heading.declarable?}"
-        respond_with @heading
+        # @heading_cache_key = "heading-#{@heading.goods_nomenclature_sid}-#{actual_date}-#{TradeTariffBackend.currency}-#{@heading.declarable?}"
+        # respond_with @heading
       end
 
       def changes
@@ -53,14 +64,6 @@ module Api
         end
 
         render 'api/v1/changes/changes'
-      end
-
-      def tree
-        @heading = Heading.actual
-                          .non_grouping
-                          .where(goods_nomenclatures__goods_nomenclature_item_id: params[:id])
-                          .take
-        @commodities = GoodsNomenclatureMapper.new(@heading.commodities_dataset.eager(:goods_nomenclature_indents, :goods_nomenclature_descriptions).all).all
       end
 
       private

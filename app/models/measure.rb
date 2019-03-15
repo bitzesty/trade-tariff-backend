@@ -33,6 +33,10 @@ class Measure < Sequel::Model
   one_to_many :measure_conditions, key: :measure_sid,
     order: [Sequel.asc(:condition_code), Sequel.asc(:component_sequence_number)]
 
+  def measure_condition_ids
+    measure_conditions.pluck(:id)
+  end
+
   one_to_one :geographical_area, key: :geographical_area_sid,
                         primary_key: :geographical_area_sid,
                         class_name: GeographicalArea do |ds|
@@ -152,6 +156,10 @@ class Measure < Sequel::Model
     result << generating_regulation
     result << generating_regulation.base_regulation if measure_generating_regulation_role == MODIFICATION_REGULATION_ROLE
     result.compact
+  end
+
+  def legal_act_ids
+    legal_acts.map(&:regulation_id)
   end
 
   # Soft-deleted
@@ -335,6 +343,10 @@ class Measure < Sequel::Model
 
   def suspending_regulation
     full_temporary_stop_regulation.presence || measure_partial_temporary_stop
+  end
+
+  def suspending_regulation_id
+    suspending_regulation&.regulation_id
   end
 
   def associated_to_non_open_ended_gono?
