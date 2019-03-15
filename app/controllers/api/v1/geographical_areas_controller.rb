@@ -7,7 +7,7 @@ module Api
                                               .countries
                                               .all
 
-        respond_with @geographical_areas
+        render json:  Api::V1::GeographicalAreaSerializer.new(@geographical_areas).serializable_hash
       end
     end
   end

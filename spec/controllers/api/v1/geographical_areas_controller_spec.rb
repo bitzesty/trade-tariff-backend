@@ -20,11 +20,13 @@ describe Api::V1::GeographicalAreasController, "GET #countries" do
   }
 
   let(:pattern) {
-    [
-      {id: String, description: String},
-      {id: String, description: String},
-      {id: String, description: String}
-    ]
+    {
+      data: [
+        { id: String, type: String, attributes: { description: String } },
+        { id: String, type: String, attributes: { description: String } },
+        { id: String, type: String, attributes: { description: String } }
+      ]
+    }
   }
 
   it 'returns rendered records' do
@@ -65,10 +67,12 @@ describe Api::V1::GeographicalAreasController, "GET #countries" do
     }
 
     let(:pattern) {
-      [
-        { id: String, description: String },
-        { id: String, description: String }
-      ]
+      {
+        data: [
+          { id: String, type: String, attributes: { description: String } },
+          { id: String, type: String, attributes: { description: String } }
+        ]
+      }
     }
 
     before do
