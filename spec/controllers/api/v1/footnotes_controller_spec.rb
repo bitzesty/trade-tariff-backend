@@ -9,23 +9,28 @@ describe Api::V1::FootnotesController, "GET to #index" do
   before { login_as_api_user }
 
   let(:response_pattern) {
-    [
-      {
-        footnote_id: String,
-        footnote_type_id: String,
-        validity_start_date: String,
+    {
+      data: [{
         id: String,
-        description: String
-      }.ignore_extra_keys!
-    ]
+        type: String,
+        attributes: {
+          footnote_id: String,
+          footnote_type_id: String,
+          validity_start_date: String,
+          description: String
+        }.ignore_extra_keys!
+      }]
+    }
   }
 
   let(:json_body) {
-    JSON.parse(response.body)
+    JSON.parse(response.body)["data"]
   }
 
   specify 'returns national footnote' do
     get :index, format: :json
+
+    puts response.body
 
     expect(response.body).to match_json_expression response_pattern
     expect(json_body.map { |f| f["id"] }).to include national_footnote.pk.join
@@ -48,12 +53,17 @@ describe Api::V1::FootnotesController, "GET to #show" do
 
   let(:response_pattern) {
     {
-      footnote_id: String,
-      footnote_type_id: String,
-      validity_start_date: String,
-      id: String,
-      description: String
-    }.ignore_extra_keys!
+      data: {
+        id: String,
+        type: String,
+        attributes: {
+          footnote_id: String,
+          footnote_type_id: String,
+          validity_start_date: String,
+          description: String
+        }.ignore_extra_keys!
+      }
+    }
   }
 
   specify 'returns national footnote' do

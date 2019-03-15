@@ -6,11 +6,13 @@ module Api
       def index
         @footnotes = Footnote.actual.eager(:footnote_descriptions).national.all
 
-        respond_with @footnotes
+        render json: Api::V1::FootnoteSerializer.new(@footnotes).serializable_hash
       end
 
       def show
         @footnote = Footnote.national.with_pk!(footnote_pk)
+
+        render json: Api::V1::FootnoteSerializer.new(@footnote).serializable_hash
       end
 
       def update
@@ -20,7 +22,7 @@ module Api
           footnote_description.save
         end
 
-        respond_with @footnote
+        render json: Api::V1::FootnoteSerializer.new(@footnote).serializable_hash
       end
 
       private
