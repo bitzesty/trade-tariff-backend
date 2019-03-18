@@ -15,14 +15,16 @@ describe Api::V1::MonetaryExchangeRatesController, "GET to #index"do
     it 'returns exchange rates for the last 5 years' do
       get :index, format: :json
 
-      json_response = JSON.parse(response.body)
+      puts response.body
+
+      json_response = JSON.parse(response.body)['data']
       expect(json_response.length).to eq(2)
 
       er1 = json_response.first
-      expect(er1["exchange_rate"]).to eq(five_year_old_rate.exchange_rate.to_s)
+      expect(er1['attributes']["exchange_rate"]).to eq(five_year_old_rate.exchange_rate.to_s)
 
       er2 = json_response.last
-      expect(er2["exchange_rate"]).to eq(monetary_exchange_rate.exchange_rate.to_s)
+      expect(er2['attributes']["exchange_rate"]).to eq(monetary_exchange_rate.exchange_rate.to_s)
     end
   end
 
@@ -37,14 +39,14 @@ describe Api::V1::MonetaryExchangeRatesController, "GET to #index"do
     it "doesn't return exchange rates other than EUR/GBP" do
       get :index, format: :json
 
-      json_response = JSON.parse(response.body)
+      json_response = JSON.parse(response.body)['data']
       expect(json_response.length).to eq(0)
     end
 
     it "doesn't return rates older than 5 years back" do
       get :index, format: :json
 
-      json_response = JSON.parse(response.body)
+      json_response = JSON.parse(response.body)['data']
       expect(json_response.length).to eq(0)
     end
   end

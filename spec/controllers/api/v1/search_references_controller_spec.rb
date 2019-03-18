@@ -20,10 +20,12 @@ describe Api::V1::SearchReferencesController, "GET to #index"do
 
   context 'with letter param provided' do
     let(:pattern) {
-      [
-        {id: Integer, title: String, referenced_class: 'Section', referenced_id: String },
-        {id: Integer, title: String, referenced_class: 'Chapter', referenced_id: String }
-      ]
+      {
+        data: [
+          { id: String, type: String, attributes: { title: String, referenced_class: 'Section', referenced_id: String } },
+          { id: String, type: String, attributes: { title: String, referenced_class: 'Chapter', referenced_id: String } }
+        ]
+      }
     }
 
     it 'performs lookup with provided letter' do
@@ -35,9 +37,11 @@ describe Api::V1::SearchReferencesController, "GET to #index"do
 
   context 'with no letter param provided' do
     let(:pattern) {
-      [
-        {id: Integer, title: String, referenced_class: 'Heading', referenced_id: String }
-      ]
+      {
+        data: [
+          { id: String, type: String, attributes: { title: String, referenced_class: 'Heading', referenced_id: String } }
+        ]
+      }
     }
 
     it 'peforms lookup with letter A by default' do

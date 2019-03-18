@@ -4,11 +4,7 @@ module Api
       def index
         @search_references = SearchReference.for_letter(letter).by_title.all
 
-        respond_to do |format|
-          format.json {
-            render 'api/v1/search_references_base/index'
-          }
-        end
+        render json: Api::V1::SearchReferenceSerializer.new(@search_references).serializable_hash
       end
 
       private

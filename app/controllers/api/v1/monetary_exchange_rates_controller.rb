@@ -7,12 +7,9 @@ module Api
                                      .where(child_monetary_unit_code: "GBP")
                                      .where{ validity_start_date >= jan_five_back }
                                      .order(Sequel.asc(:validity_start_date))
+                                     .to_a
 
-        respond_to do |format|
-          format.json {
-            render 'api/v1/monetary_exchange_rates/index'
-          }
-        end
+        render json: Api::V1::MonetaryExchangeRateSerializer.new(@rates).serializable_hash
       end
     end
   end
