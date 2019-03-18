@@ -13,16 +13,20 @@ module Api
 
         def initialize(heading, measures)
           @heading = heading
-          @import_measures = measures.select(&:import)
-          @export_measures = measures.select(&:export)
+          @import_measures = measures.select(&:import).map do |measure|
+            Api::V1::Measures::MeasurePresenter.new(measure, heading)
+          end
+          @export_measures = measures.select(&:export).map do |measure|
+            Api::V1::Measures::MeasurePresenter.new(measure, heading)
+          end
         end
 
         def import_measure_ids
-          import_measures.pluck(:measure_sid)
+          import_measures.map(&:measure_sid)
         end
 
         def export_measure_ids
-          export_measures.pluck(:measure_sid)
+          export_measures.map(&:measure_sid)
         end
       end
     end

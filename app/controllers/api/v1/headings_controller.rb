@@ -36,13 +36,20 @@ module Api
           presenter = Api::V1::Headings::DeclarableHeadingPresenter.new(@heading, @measures)
           options = {}
           options[:include] = [:section, :chapter, 'chapter.guides', :footnotes,
-                               :import_measures, 'import_measures.measure_type',
+                               :import_measures, 'import_measures.duty_expression', 'import_measures.measure_type',
                                'import_measures.legal_acts', 'import_measures.suspending_regulation',
-                               'import_measures.measure_conditions',
-                               :export_measures, 'export_measures.measure_type',
+                               'import_measures.measure_conditions', 'import_measures.geographical_area',
+                               'import_measures.geographical_area.children_geographical_areas',
+                               'import_measures.excluded_geographical_areas',
+                               'import_measures.footnotes', 'import_measures.additional_code',
+                               'import_measures.export_refund_nomenclature',
+                               :export_measures, 'export_measures.duty_expression', 'export_measures.measure_type',
                                'export_measures.legal_acts', 'export_measures.suspending_regulation',
-                               'export_measures.measure_conditions']
-          options[:params] = {declarable: @heading}
+                               'export_measures.measure_conditions', 'export_measures.geographical_area',
+                               'export_measures.geographical_area.children_geographical_areas',
+                               'export_measures.excluded_geographical_areas',
+                               'export_measures.footnotes', 'export_measures.additional_code',
+                               'export_measures.export_refund_nomenclature',]
           render json: Api::V1::Headings::DeclarableHeadingSerializer.new(presenter, options).serializable_hash
         else
           @commodities = GoodsNomenclatureMapper.new(@heading.commodities_dataset.eager(:goods_nomenclature_indents,

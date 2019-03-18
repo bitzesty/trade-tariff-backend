@@ -1,6 +1,6 @@
 module Api
   module V1
-    module Headings
+    module Measures
       class MeasureSuspensionLegalActSerializer
         include FastJsonapi::ObjectSerializer
         set_id :regulation_id

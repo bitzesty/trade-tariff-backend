@@ -1,6 +1,6 @@
 module Api
   module V1
-    module Headings
+    module Measures
       class MeasureTypeSerializer
         include FastJsonapi::ObjectSerializer
         set_id :measure_type_id

@@ -14,8 +14,8 @@ module Api
         has_many :footnotes, serializer: Api::V1::Headings::FootnoteSerializer
         has_one :section, serializer: Api::V1::Headings::SectionSerializer
         has_one :chapter, serializer: Api::V1::Headings::ChapterSerializer
-        has_many :import_measures, serializer: Api::V1::Headings::MeasureSerializer
-        has_many :export_measures, serializer: Api::V1::Headings::MeasureSerializer
+        has_many :import_measures, serializer: Api::V1::Measures::MeasureSerializer
+        has_many :export_measures, serializer: Api::V1::Measures::MeasureSerializer
       end
     end
   end

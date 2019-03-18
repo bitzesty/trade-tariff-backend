@@ -5,9 +5,7 @@ module Api
 
       set_type :footnote
 
-      set_id do |footnote|
-        "#{footnote.footnote_type_id}#{footnote.footnote_id}"
-      end
+      set_id :code
 
       attributes :footnote_id, :footnote_type_id, :validity_start_date, :validity_end_date
 

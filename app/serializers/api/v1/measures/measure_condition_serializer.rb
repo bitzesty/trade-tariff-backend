@@ -1,6 +1,6 @@
 module Api
   module V1
-    module Headings
+    module Measures
       class MeasureConditionSerializer
         include FastJsonapi::ObjectSerializer
         set_id :measure_condition_sid
