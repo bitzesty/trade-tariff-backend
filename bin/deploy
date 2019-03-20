@@ -3,6 +3,7 @@ set -e
 
 # Fetch deployed revision
 export GIT_OLD_REVISION=`curl "https://$CF_APP.$HEALTHCHECK_URL" | grep -o -w -E '[[:alnum:]]{7}'`
+
 # Log the new revision
 export GIT_REVISION=`git rev-parse --short HEAD`
 echo $GIT_REVISION > REVISION
@@ -10,7 +11,7 @@ echo $GIT_REVISION > REVISION
 export GIT_MESSAGE=`git log --oneline $GIT_OLD_REVISION..$GIT_REVISION`
 
 # Check CF connectivity
-cf login -a api.cloud.service.gov.uk -u $CF_USER -p "$CF_PASSWORD" -o $CF_ORG -s $CF_SPACE
+cf login -a $CF_ENDPOINT -u $CF_USER -p "$CF_PASSWORD" -o $CF_ORG -s $CF_SPACE
 cf a
 
 # Notify Slack deployment started
