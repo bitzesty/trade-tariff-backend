@@ -1,16 +1,12 @@
 module Api
   module V1
     module Headings
-      class DeclarableHeadingPresenter
+      class DeclarableHeadingPresenter < SimpleDelegator
 
         attr_reader :heading, :import_measures, :export_measures, :cache_key
 
-        delegate :goods_nomenclature_sid, :goods_nomenclature_item_id, :description, :bti_url,
-                 :formatted_description, :basic_duty_rate, :meursing_code,
-                 :footnote_ids, :section_id, :chapter_id, :chapter, :section, :footnotes,
-                 to: :heading
-
         def initialize(heading, measures, cache_key)
+          super(heading)
           @heading = heading
           @import_measures = measures.select(&:import).map do |measure|
             Api::V1::Measures::MeasurePresenter.new(measure, heading)

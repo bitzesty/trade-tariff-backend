@@ -1,16 +1,12 @@
 module Api
   module V1
     module Headings
-      class HeadingPresenter
+      class HeadingPresenter < SimpleDelegator
 
         attr_reader :heading, :commodities, :cache_key
 
-        delegate :goods_nomenclature_sid, :goods_nomenclature_item_id, :description, :bti_url,
-                 :formatted_description,
-                 :footnote_ids, :section_id, :chapter_id, :chapter, :section, :footnotes,
-                 to: :heading
-
         def initialize(heading, commodities, cache_key)
+          super(heading)
           @heading = heading
           @commodities = commodities.map do |commodity|
             Api::V1::Headings::CommodityPresenter.new(commodity)
