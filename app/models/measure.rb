@@ -420,6 +420,10 @@ class Measure < Sequel::Model
     end
   end
 
+  def order_number_id
+    order_number&.quota_order_number_id
+  end
+
   def self.changes_for(depth = 1, conditions = {})
     operation_klass.select(
       Sequel.as(Sequel.cast_string("Measure"), :model),

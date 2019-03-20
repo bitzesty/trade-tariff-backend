@@ -23,6 +23,7 @@ module Api
         has_one :export_refund_nomenclature, key: :additional_code,
                 if: Proc.new { |measure| measure.export_refund_nomenclature.present? },
                 serializer: Api::V1::Measures::ExportRefundNomenclatureSerializer
+        has_one :order_number, serializer: Api::V1::Quotas::QuotaOrderNumberSerializer
 
       end
     end

@@ -12,6 +12,7 @@ module Api
                  :excluded_geographical_areas, :excluded_geographical_area_ids,
                  :footnotes, :footnote_ids, :additional_code, :additional_code_id,
                  :export_refund_nomenclature, :export_refund_nomenclature_id,
+                 :order_number, :order_number_id,
                  to: :measure
         alias :excise :excise?
         alias :vat :vat?
