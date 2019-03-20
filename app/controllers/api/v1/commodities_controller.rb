@@ -39,7 +39,28 @@ module Api
             eager(:geographical_area_descriptions, { contained_geographical_areas: :geographical_area_descriptions }).all
 
         @commodity_cache_key = "commodity-#{@commodity.goods_nomenclature_sid}-#{actual_date}-#{TradeTariffBackend.currency}"
-        respond_with @commodity
+
+        presenter = Api::V1::Commodities::CommodityPresenter.new(@commodity, @measures, @geographical_areas, @commodity_cache_key)
+        options = {}
+        options[:include] = [:section, :chapter, 'chapter.guides', :heading, :ancestors, :footnotes,
+                             :import_measures, 'import_measures.duty_expression', 'import_measures.measure_type',
+                             'import_measures.legal_acts', 'import_measures.suspending_regulation',
+                             'import_measures.measure_conditions', 'import_measures.geographical_area',
+                             'import_measures.geographical_area.children_geographical_areas',
+                             'import_measures.excluded_geographical_areas',
+                             'import_measures.footnotes', 'import_measures.additional_code',
+                             'import_measures.export_refund_nomenclature',
+                             'import_measures.order_number', 'import_measures.order_number.definition',
+                             :export_measures, 'export_measures.duty_expression', 'export_measures.measure_type',
+                             'export_measures.legal_acts', 'export_measures.suspending_regulation',
+                             'export_measures.measure_conditions', 'export_measures.geographical_area',
+                             'export_measures.geographical_area.children_geographical_areas',
+                             'export_measures.excluded_geographical_areas',
+                             'export_measures.footnotes', 'export_measures.additional_code',
+                             'export_measures.export_refund_nomenclature',
+                             'export_measures.order_number', 'export_measures.order_number.definition',]
+        render json: Api::V1::Commodities::CommoditySerializer.new(presenter, options).serializable_hash
+        # respond_with @commodity
       end
 
       def changes
