@@ -3,14 +3,14 @@ module Api
     module Headings
       class DeclarableHeadingPresenter
 
-        attr_reader :heading, :import_measures, :export_measures
+        attr_reader :heading, :import_measures, :export_measures, :cache_key
 
         delegate :goods_nomenclature_sid, :goods_nomenclature_item_id, :description, :bti_url,
                  :formatted_description, :basic_duty_rate, :meursing_code,
                  :footnote_ids, :section_id, :chapter_id, :chapter, :section, :footnotes,
                  to: :heading
 
-        def initialize(heading, measures)
+        def initialize(heading, measures, cache_key)
           @heading = heading
           @import_measures = measures.select(&:import).map do |measure|
             Api::V1::Measures::MeasurePresenter.new(measure, heading)
@@ -18,6 +18,7 @@ module Api
           @export_measures = measures.select(&:export).map do |measure|
             Api::V1::Measures::MeasurePresenter.new(measure, heading)
           end
+          @cache_key = cache_key
         end
 
         def import_measure_ids

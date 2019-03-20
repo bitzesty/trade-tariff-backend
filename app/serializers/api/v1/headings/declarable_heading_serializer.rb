@@ -3,6 +3,7 @@ module Api
     module Headings
       class DeclarableHeadingSerializer
         include FastJsonapi::ObjectSerializer
+        cache_options enabled: true, cache_length: 12.hours
         set_id :goods_nomenclature_sid
         set_type :heading
         attributes :goods_nomenclature_item_id, :description, :bti_url,

@@ -6,6 +6,7 @@ module Api
       before_action :find_heading, only: [:show, :changes]
 
       def show
+        heading_cache_key = "heading-#{@heading.goods_nomenclature_sid}-#{actual_date}-#{TradeTariffBackend.currency}-#{@heading.declarable?}"
         if @heading.declarable?
           @measures = MeasurePresenter.new(@heading.measures_dataset.eager({geographical_area: [:geographical_area_descriptions,
                                                                                                 { contained_geographical_areas: :geographical_area_descriptions }]},
@@ -33,7 +34,7 @@ module Api
                                                       :additional_code,
                                                       :full_temporary_stop_regulations,
                                                       :measure_partial_temporary_stops).all, @heading).validate!
-          presenter = Api::V1::Headings::DeclarableHeadingPresenter.new(@heading, @measures)
+          presenter = Api::V1::Headings::DeclarableHeadingPresenter.new(@heading, @measures, heading_cache_key)
           options = {}
           options[:include] = [:section, :chapter, 'chapter.guides', :footnotes,
                                :import_measures, 'import_measures.duty_expression', 'import_measures.measure_type',
@@ -57,7 +58,7 @@ module Api
           @commodities = GoodsNomenclatureMapper.new(@heading.commodities_dataset.eager(:goods_nomenclature_indents,
                                                                                         :goods_nomenclature_descriptions)
                                                              .all).all
-          presenter = Api::V1::Headings::HeadingPresenter.new(@heading, @commodities)
+          presenter = Api::V1::Headings::HeadingPresenter.new(@heading, @commodities, heading_cache_key)
           options = {}
           options[:include] = [:section, :chapter, 'chapter.guides', :footnotes,
                                :commodities, 'commodities.overview_measures_indexed',
