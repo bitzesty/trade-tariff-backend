@@ -10,7 +10,6 @@ module Api
                  :footnote_ids, :section_id, :chapter_id, :chapter, :section, :footnotes,
                  to: :heading
 
-
         def initialize(heading, measures)
           @heading = heading
           @import_measures = measures.select(&:import).map do |measure|

@@ -57,11 +57,13 @@ module Api
           @commodities = GoodsNomenclatureMapper.new(@heading.commodities_dataset.eager(:goods_nomenclature_indents,
                                                                                         :goods_nomenclature_descriptions)
                                                              .all).all
-
+          presenter = Api::V1::Headings::HeadingPresenter.new(@heading, @commodities)
+          options = {}
+          options[:include] = [:section, :chapter, 'chapter.guides', :footnotes,
+                               :commodities, 'commodities.overview_measures_indexed',
+                               'commodities.overview_measures_indexed.duty_expression', 'commodities.overview_measures_indexed.measure_type']
+          render json: Api::V1::Headings::HeadingSerializer.new(presenter, options).serializable_hash
         end
-
-        # @heading_cache_key = "heading-#{@heading.goods_nomenclature_sid}-#{actual_date}-#{TradeTariffBackend.currency}-#{@heading.declarable?}"
-        # respond_with @heading
       end
 
       def changes
