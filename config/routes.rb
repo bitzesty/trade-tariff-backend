@@ -71,7 +71,7 @@ Rails.application.routes.draw do
       resources :measure_types, only: [:index, :show, :update]
     end
 
-    scope module: :v2, constraints: ApiConstraints.new(version: 2, default: true) do
+    scope module: :v2, constraints: ApiConstraints.new(version: 2, default: false) do
       resources :sections, only: [:index, :show], constraints: { id: /\d{1,2}/ } do
         collection do
           get :tree
@@ -125,8 +125,8 @@ Rails.application.routes.draw do
 
       resources :search_references, only: [:index]
 
-      post "search" => "search#search", via: :post, as: :search
-      get "search_suggestions" => "search#suggestions", as: :search_suggestions
+      # post "search" => "search#search", via: :post, as: :search
+      # get "search_suggestions" => "search#suggestions", as: :search_suggestions
       get '/headings/:id/tree' => 'headings#tree'
 
       resources :rollbacks, only: [:create, :index]
