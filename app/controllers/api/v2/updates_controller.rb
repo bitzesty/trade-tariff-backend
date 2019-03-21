@@ -1,5 +1,5 @@
 module Api
-  module V1
+  module V2
     class UpdatesController < ApiController
       before_action :collection, only: :index
 

@@ -1,5 +1,5 @@
 module Api
-  module V1
+  module V2
     class MonetaryExchangeRatesController < ApiController
       def index
         jan_five_back = 5.years.ago.change({ day: 01, month: 01, hour: 0, minute: 0, second: 0 })
@@ -9,7 +9,7 @@ module Api
                                      .order(Sequel.asc(:validity_start_date))
                                      .to_a
 
-        render json: Api::V1::MonetaryExchangeRateSerializer.new(@rates).serializable_hash
+        render json: Api::V2::MonetaryExchangeRateSerializer.new(@rates).serializable_hash
       end
     end
   end

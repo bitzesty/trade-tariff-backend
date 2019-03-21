@@ -1,5 +1,5 @@
 module Api
-  module V1
+  module V2
     class CommoditiesController < ApiController
       before_action :find_commodity, only: [:show, :changes]
 
@@ -40,7 +40,7 @@ module Api
 
         @commodity_cache_key = "commodity-#{@commodity.goods_nomenclature_sid}-#{actual_date}-#{TradeTariffBackend.currency}"
 
-        presenter = Api::V1::Commodities::CommodityPresenter.new(@commodity, @measures, @geographical_areas, @commodity_cache_key)
+        presenter = Api::V2::Commodities::CommodityPresenter.new(@commodity, @measures, @geographical_areas, @commodity_cache_key)
         options = {}
         options[:include] = [:section, :chapter, 'chapter.guides', :heading, :ancestors, :footnotes,
                              :import_measures, 'import_measures.duty_expression', 'import_measures.measure_type',
@@ -59,7 +59,7 @@ module Api
                              'export_measures.footnotes', 'export_measures.additional_code',
                              'export_measures.export_refund_nomenclature',
                              'export_measures.order_number', 'export_measures.order_number.definition',]
-        render json: Api::V1::Commodities::CommoditySerializer.new(presenter, options).serializable_hash
+        render json: Api::V2::Commodities::CommoditySerializer.new(presenter, options).serializable_hash
         # respond_with @commodity
       end
 
@@ -71,7 +71,7 @@ module Api
           })
         end
 
-        render 'api/v1/changes/changes'
+        render 'api/v2/changes/changes'
       end
 
       private

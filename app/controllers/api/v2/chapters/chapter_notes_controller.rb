@@ -1,5 +1,5 @@
 module Api
-  module V1
+  module V2
     module Chapters
       class ChapterNotesController < ApiController
         before_action :authenticate_user!

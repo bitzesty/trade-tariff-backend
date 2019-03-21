@@ -1,5 +1,5 @@
 module Api
-  module V1
+  module V2
     class RollbacksController < ApiController
       before_action :authenticate_user!
       before_action :collection, only: :index

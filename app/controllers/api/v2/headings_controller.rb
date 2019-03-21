@@ -1,7 +1,7 @@
 require 'goods_nomenclature_mapper'
 
 module Api
-  module V1
+  module V2
     class HeadingsController < ApiController
       before_action :find_heading, only: [:show, :changes]
 
@@ -34,7 +34,7 @@ module Api
                                                       :additional_code,
                                                       :full_temporary_stop_regulations,
                                                       :measure_partial_temporary_stops).all, @heading).validate!
-          presenter = Api::V1::Headings::DeclarableHeadingPresenter.new(@heading, @measures, heading_cache_key)
+          presenter = Api::V2::Headings::DeclarableHeadingPresenter.new(@heading, @measures, heading_cache_key)
           options = {}
           options[:include] = [:section, :chapter, 'chapter.guides', :footnotes,
                                :import_measures, 'import_measures.duty_expression', 'import_measures.measure_type',
@@ -53,17 +53,17 @@ module Api
                                'export_measures.footnotes', 'export_measures.additional_code',
                                'export_measures.export_refund_nomenclature',
                                'export_measures.order_number', 'export_measures.order_number.definition',]
-          render json: Api::V1::Headings::DeclarableHeadingSerializer.new(presenter, options).serializable_hash
+          render json: Api::V2::Headings::DeclarableHeadingSerializer.new(presenter, options).serializable_hash
         else
           @commodities = GoodsNomenclatureMapper.new(@heading.commodities_dataset.eager(:goods_nomenclature_indents,
                                                                                         :goods_nomenclature_descriptions)
                                                              .all).all
-          presenter = Api::V1::Headings::HeadingPresenter.new(@heading, @commodities, heading_cache_key)
+          presenter = Api::V2::Headings::HeadingPresenter.new(@heading, @commodities, heading_cache_key)
           options = {}
           options[:include] = [:section, :chapter, 'chapter.guides', :footnotes,
                                :commodities, 'commodities.overview_measures_indexed',
                                'commodities.overview_measures_indexed.duty_expression', 'commodities.overview_measures_indexed.measure_type']
-          render json: Api::V1::Headings::HeadingSerializer.new(presenter, options).serializable_hash
+          render json: Api::V2::Headings::HeadingSerializer.new(presenter, options).serializable_hash
         end
       end
 
@@ -75,7 +75,7 @@ module Api
           })
         end
 
-        render 'api/v1/changes/changes'
+        render 'api/v2/changes/changes'
       end
 
       private

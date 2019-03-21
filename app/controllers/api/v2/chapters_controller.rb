@@ -1,14 +1,14 @@
 require 'goods_nomenclature_mapper'
 
 module Api
-  module V1
+  module V2
     class ChaptersController < ApiController
       before_action :find_chapter, only: [:show, :changes]
 
       def index
         @chapters = Chapter.eager(:chapter_note).all
 
-        render json: Api::V1::Chapters::ChapterListSerializer.new(@chapters).serializable_hash
+        render json: Api::V2::Chapters::ChapterListSerializer.new(@chapters).serializable_hash
       end
 
       def show
@@ -19,8 +19,8 @@ module Api
 
         options = {}
         options[:include] = [:section, :guides, :headings]
-        presenter = Api::V1::Chapters::ChapterPresenter.new(@chapter, headings_presenter)
-        render json: Api::V1::Chapters::ChapterSerializer.new(presenter, options).serializable_hash
+        presenter = Api::V2::Chapters::ChapterPresenter.new(@chapter, headings_presenter)
+        render json: Api::V2::Chapters::ChapterSerializer.new(presenter, options).serializable_hash
       end
 
       def changes
@@ -33,7 +33,7 @@ module Api
 
         options = {}
         options[:include] = [:record, 'record.geographical_area', 'record.measure_type']
-        render json: Api::V1::Changes::ChangeSerializer.new(@changes.changes, options).serializable_hash
+        render json: Api::V2::Changes::ChangeSerializer.new(@changes.changes, options).serializable_hash
       end
 
       private

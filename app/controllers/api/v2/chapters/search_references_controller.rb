@@ -1,7 +1,7 @@
 module Api
-  module V1
+  module V2
     module Chapters
-      class SearchReferencesController < Api::V1::SearchReferencesBaseController
+      class SearchReferencesController < Api::V2::SearchReferencesBaseController
         private
 
         def search_reference_collection

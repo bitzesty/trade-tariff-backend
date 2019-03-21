@@ -1,12 +1,12 @@
 # NOTE: for shared base behaviour inherited by
 #
-# * api/v1/search_references_controller
-# * api/v1/sections/search_references_controller
-# * api/v1/chapters/search_references_controller
-# * api/v1/headings/search_references_controller
+# * api/v2/search_references_controller
+# * api/v2/sections/search_references_controller
+# * api/v2/chapters/search_references_controller
+# * api/v2/headings/search_references_controller
 
 module Api
-  module V1
+  module V2
     class SearchReferencesBaseController < ApiController
       before_action :authenticate_user!
 
