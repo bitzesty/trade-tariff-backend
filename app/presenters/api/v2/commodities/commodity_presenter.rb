@@ -1,5 +1,5 @@
 module Api
-  module V1
+  module V2
     module Commodities
       class CommodityPresenter < SimpleDelegator
 
@@ -10,10 +10,10 @@ module Api
           @commodity = commodity
           @footnotes = commodity.footnotes + commodity.heading.footnotes
           @import_measures = measures.select(&:import).map do |measure|
-            Api::V1::Measures::MeasurePresenter.new(measure, commodity, geographical_areas)
+            Api::V2::Measures::MeasurePresenter.new(measure, commodity, geographical_areas)
           end
           @export_measures = measures.select(&:export).map do |measure|
-            Api::V1::Measures::MeasurePresenter.new(measure, commodity, geographical_areas)
+            Api::V2::Measures::MeasurePresenter.new(measure, commodity, geographical_areas)
           end
           @cache_key = cache_key
         end

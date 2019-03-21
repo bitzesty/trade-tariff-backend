@@ -1,5 +1,5 @@
 module Api
-  module V1
+  module V2
     module Headings
       class CommodityPresenter < SimpleDelegator
 
@@ -9,7 +9,7 @@ module Api
           super(commodity)
           @commodity = commodity
           @overview_measures_indexed = commodity.overview_measures_indexed.map do |measure|
-            Api::V1::Measures::MeasurePresenter.new(measure, commodity)
+            Api::V2::Measures::MeasurePresenter.new(measure, commodity)
           end
         end
 

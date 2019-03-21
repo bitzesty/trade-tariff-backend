@@ -1,5 +1,5 @@
 module Api
-  module V1
+  module V2
     module Headings
       class DeclarableHeadingPresenter < SimpleDelegator
 
@@ -9,10 +9,10 @@ module Api
           super(heading)
           @heading = heading
           @import_measures = measures.select(&:import).map do |measure|
-            Api::V1::Measures::MeasurePresenter.new(measure, heading)
+            Api::V2::Measures::MeasurePresenter.new(measure, heading)
           end
           @export_measures = measures.select(&:export).map do |measure|
-            Api::V1::Measures::MeasurePresenter.new(measure, heading)
+            Api::V2::Measures::MeasurePresenter.new(measure, heading)
           end
           @cache_key = cache_key
         end

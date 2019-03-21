@@ -1,5 +1,5 @@
 module Api
-  module V1
+  module V2
     module Measures
       class MeasurePresenter < SimpleDelegator
 
@@ -8,7 +8,7 @@ module Api
         def initialize(measure, declarable, geo_areas = nil)
           super(measure)
           @measure = measure
-          @duty_expression = Api::V1::Measures::DutyExpressionPresenter.new(measure, declarable)
+          @duty_expression = Api::V2::Measures::DutyExpressionPresenter.new(measure, declarable)
           @geo_area = geo_areas&.last
         end
 

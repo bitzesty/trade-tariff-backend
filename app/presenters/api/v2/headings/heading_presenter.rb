@@ -1,5 +1,5 @@
 module Api
-  module V1
+  module V2
     module Headings
       class HeadingPresenter < SimpleDelegator
 
@@ -9,7 +9,7 @@ module Api
           super(heading)
           @heading = heading
           @commodities = commodities.map do |commodity|
-            Api::V1::Headings::CommodityPresenter.new(commodity)
+            Api::V2::Headings::CommodityPresenter.new(commodity)
           end
           @cache_key = cache_key
         end
