@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: 'json'}, path: "/" do
     # How (or even if) API versioning will be implemented is still an open question. We can defer
     # the choice until we need to expose the API to clients which we don't control.
-    scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
+    scope module: :v2, constraints: ApiConstraints.new(version: 2, default: false) do
       resources :sections, only: [:index, :show], constraints: { id: /\d{1,2}/ } do
         collection do
           get :tree
@@ -60,8 +60,8 @@ Rails.application.routes.draw do
 
       resources :search_references, only: [:index]
 
-      post "search" => "search#search", via: :post, as: :search
-      get "search_suggestions" => "search#suggestions", as: :search_suggestions
+      post "search" => "search#search"
+      get "search_suggestions" => "search#suggestions"
       get '/headings/:id/tree' => 'headings#tree'
 
       get 'goods_nomenclature', to: 'goods_nomenclatures#index'
@@ -71,7 +71,7 @@ Rails.application.routes.draw do
       resources :measure_types, only: [:index, :show, :update]
     end
 
-    scope module: :v2, constraints: ApiConstraints.new(version: 2, default: false) do
+    scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
       resources :sections, only: [:index, :show], constraints: { id: /\d{1,2}/ } do
         collection do
           get :tree
@@ -125,8 +125,8 @@ Rails.application.routes.draw do
 
       resources :search_references, only: [:index]
 
-      # post "search" => "search#search", via: :post, as: :search
-      # get "search_suggestions" => "search#suggestions", as: :search_suggestions
+      post "search" => "search#search"
+      get "search_suggestions" => "search#suggestions"
       get '/headings/:id/tree' => 'headings#tree'
 
       resources :rollbacks, only: [:create, :index]
