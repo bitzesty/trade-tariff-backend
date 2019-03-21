@@ -1,5 +1,5 @@
 module Api
-  module V1
+  module V2
     module Measures
       class OverviewMeasureSerializer
         include FastJsonapi::ObjectSerializer
@@ -8,8 +8,8 @@ module Api
 
         attributes :id, :vat
 
-        has_one :duty_expression, serializer: Api::V1::Measures::DutyExpressionSerializer
-        has_one :measure_type, serializer: Api::V1::Measures::MeasureTypeSerializer
+        has_one :duty_expression, serializer: Api::V2::Measures::DutyExpressionSerializer
+        has_one :measure_type, serializer: Api::V2::Measures::MeasureTypeSerializer
       end
     end
   end

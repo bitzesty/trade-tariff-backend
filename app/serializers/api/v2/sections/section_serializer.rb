@@ -1,5 +1,5 @@
 module Api
-  module V1
+  module V2
     module Sections
       class SectionSerializer
         include FastJsonapi::ObjectSerializer
@@ -8,7 +8,7 @@ module Api
         attribute :section_note, if: Proc.new { |section| section.section_note.present? } do |section|
           section.section_note.content
         end
-        has_many :chapters, serializer: Api::V1::Sections::ChapterSerializer
+        has_many :chapters, serializer: Api::V2::Sections::ChapterSerializer
       end
     end
   end

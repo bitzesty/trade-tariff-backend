@@ -1,5 +1,5 @@
 module Api
-  module V1
+  module V2
     module Headings
       class CommoditySerializer
         include FastJsonapi::ObjectSerializer
@@ -13,7 +13,7 @@ module Api
           commodity.parent.try(:goods_nomenclature_sid)
         end
         has_many :overview_measures_indexed, key: :overview_measures, record_type: :measure,
-                 serializer: Api::V1::Measures::OverviewMeasureSerializer
+                 serializer: Api::V2::Measures::OverviewMeasureSerializer
 
       end
     end

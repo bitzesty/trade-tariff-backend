@@ -1,5 +1,5 @@
 module Api
-  module V1
+  module V2
     module Headings
       class ChapterSerializer
         include FastJsonapi::ObjectSerializer
@@ -9,7 +9,7 @@ module Api
         attribute :chapter_note, if: Proc.new { |chapter| chapter.chapter_note.present? } do |chapter|
           chapter.chapter_note.content
         end
-        has_many :guides, serializer: Api::V1::Headings::GuideSerializer
+        has_many :guides, serializer: Api::V2::Headings::GuideSerializer
       end
     end
   end

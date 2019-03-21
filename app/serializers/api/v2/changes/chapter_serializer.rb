@@ -1,5 +1,5 @@
 module Api
-  module V1
+  module V2
     module Changes
       class ChapterSerializer
         include FastJsonapi::ObjectSerializer

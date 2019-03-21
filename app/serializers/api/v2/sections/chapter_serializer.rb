@@ -1,5 +1,5 @@
 module Api
-  module V1
+  module V2
     module Sections
       class ChapterSerializer
         include FastJsonapi::ObjectSerializer
@@ -11,7 +11,7 @@ module Api
           chapter.chapter_note.try(:id)
         end
 
-        has_many :guides, serializer: Api::V1::Sections::GuideSerializer
+        has_many :guides, serializer: Api::V2::Sections::GuideSerializer
 
       end
     end
