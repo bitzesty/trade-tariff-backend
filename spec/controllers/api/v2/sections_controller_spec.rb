@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Api::V1::SectionsController, "GET #show" do
+describe Api::V2::SectionsController, "GET #show" do
   render_views
 
   let(:heading) { create :heading, :with_chapter }
@@ -87,7 +87,7 @@ describe Api::V1::SectionsController, "GET #show" do
   end
 end
 
-describe Api::V1::SectionsController, "GET #index" do
+describe Api::V2::SectionsController, "GET #index" do
   render_views
 
   let!(:chapter1) { create :chapter, :with_section }

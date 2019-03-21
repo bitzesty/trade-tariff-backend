@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Api::V1::SearchController, "POST #search" do
+describe Api::V2::SearchController, "POST #search" do
   describe 'exact matching' do
     let(:chapter) { create :chapter }
     let(:pattern) {
@@ -63,7 +63,7 @@ describe Api::V1::SearchController, "POST #search" do
   end
 end
 
-describe Api::V1::SearchController, "GET #suggestions" do
+describe Api::V2::SearchController, "GET #suggestions" do
   render_views
 
   let!(:commodity1) { create :commodity }

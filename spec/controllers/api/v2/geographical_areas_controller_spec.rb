@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Api::V1::GeographicalAreasController, "GET #countries" do
+describe Api::V2::GeographicalAreasController, "GET #countries" do
   render_views
 
   let!(:geographical_area1) {

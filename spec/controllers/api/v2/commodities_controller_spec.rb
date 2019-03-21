@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Api::V1::CommoditiesController, "GET #show" do
+describe Api::V2::CommoditiesController, "GET #show" do
   render_views
 
   let!(:commodity) { create :commodity, :with_indent,
@@ -70,7 +70,7 @@ describe Api::V1::CommoditiesController, "GET #show" do
   end
 end
 
-describe Api::V1::CommoditiesController, "GET #changes" do
+describe Api::V2::CommoditiesController, "GET #changes" do
   render_views
 
   context 'changes happened after chapter creation' do

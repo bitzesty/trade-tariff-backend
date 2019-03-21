@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Api::V1::UpdatesController, "GET #index" do
+describe Api::V2::UpdatesController, "GET #index" do
   render_views
 
   let(:pattern) {
@@ -39,7 +39,7 @@ describe Api::V1::UpdatesController, "GET #index" do
   end
 end
 
-describe Api::V1::UpdatesController, "GET #latest" do
+describe Api::V2::UpdatesController, "GET #latest" do
   render_views
 
   let(:pattern) do

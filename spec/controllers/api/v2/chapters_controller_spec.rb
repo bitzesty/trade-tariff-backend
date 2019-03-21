@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Api::V1::ChaptersController, "GET #show" do
+describe Api::V2::ChaptersController, "GET #show" do
   render_views
 
   let(:heading) { create :heading, :with_chapter }
@@ -114,7 +114,7 @@ describe Api::V1::ChaptersController, "GET #show" do
   end
 end
 
-describe Api::V1::ChaptersController, "GET #index" do
+describe Api::V2::ChaptersController, "GET #index" do
   render_views
 
   let!(:chapter1) { create :chapter, :with_section, :with_note }
@@ -153,7 +153,7 @@ describe Api::V1::ChaptersController, "GET #index" do
 end
 
 
-describe Api::V1::ChaptersController, "GET #changes" do
+describe Api::V2::ChaptersController, "GET #changes" do
   render_views
 
   context 'changes happened after chapter creation' do

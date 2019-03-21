@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Api::V1::RollbacksController, 'POST to #create' do
+describe Api::V2::RollbacksController, 'POST to #create' do
   render_views
 
   before { login_as_api_user }
@@ -45,7 +45,7 @@ describe Api::V1::RollbacksController, 'POST to #create' do
   end
 end
 
-describe Api::V1::RollbacksController, 'GET to #index' do
+describe Api::V2::RollbacksController, 'GET to #index' do
   render_views
 
   before {

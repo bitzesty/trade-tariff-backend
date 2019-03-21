@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Api::V1::MeasureTypesController do
+describe Api::V2::MeasureTypesController do
   render_views
 
   before { login_as_api_user }
