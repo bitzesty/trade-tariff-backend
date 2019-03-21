@@ -5,7 +5,7 @@ default: &default
 
 development:
   <<: *default
-  database: tariff_development
+  database: tariff_development_cds
 
 test:
   <<: *default

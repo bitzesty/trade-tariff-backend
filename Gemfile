@@ -21,6 +21,9 @@ gem "sequel-rails", "~> 1.0.0"
 gem "aws-sdk", "~> 2"
 gem "aws-sdk-rails", ">= 1.0.1"
 
+# File zip/unzipping
+gem 'rubyzip'
+
 # Background jobs
 gem "redis-rails"
 gem "sidekiq", "~> 4.1.4"
