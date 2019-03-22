@@ -38,7 +38,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :commodities, only: [:show], constraints: { id: /\d{10}/ } do
+      resources :commodities, only: [:show], constraints: { id: /\d{10}/, as_of: /.*/ } do
         member {
           get :changes
         }
@@ -63,6 +63,8 @@ Rails.application.routes.draw do
       post "search" => "search#search", via: :post, as: :search
       get "search_suggestions" => "search#suggestions", as: :search_suggestions
       get '/headings/:id/tree' => 'headings#tree'
+
+      get 'goods_nomenclature', to: 'goods_nomenclatures#index'
 
       resources :rollbacks, only: [:create, :index]
       resources :footnotes, only: [:index, :show, :update]
