@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Api::V2::CommoditiesController, "GET #show" do
+describe Api::V2::CommoditiesController, 'GET #show' do
   render_views
 
   let!(:commodity) { create :commodity, :with_indent,
@@ -10,14 +10,39 @@ describe Api::V2::CommoditiesController, "GET #show" do
                                         :declarable }
   let(:pattern) {
     {
-      goods_nomenclature_item_id: commodity.goods_nomenclature_item_id,
-      description: String,
-      chapter: Hash,
-      section: Hash,
-      import_measures: Array,
-      export_measures: Array,
-      _response_info: Hash,
-    }.ignore_extra_keys!
+      data: {
+        id: String,
+        type: 'commodity',
+        attributes: Hash,
+        relationships: {
+          footnotes: Hash,
+          section: Hash,
+          chapter: Hash,
+          heading: Hash,
+          ancestors: Hash,
+          import_measures: Hash,
+          export_measures: Hash
+        }
+      },
+      included: [
+        {
+          id: String,
+          type: 'chapter',
+          attributes: Hash,
+          relationships: {
+            guides: Hash
+          }
+        }, {
+          id: String,
+          type: 'heading',
+          attributes: Hash
+        }, {
+          id: String,
+          type: 'section',
+          attributes: Hash
+        }
+      ]
+    }
   }
 
   context 'when record is present' do
@@ -30,7 +55,7 @@ describe Api::V2::CommoditiesController, "GET #show" do
 
   context 'when record is not present' do
     it 'returns not found if record was not found' do
-      get :show, params: { id: "1234567890" }, format: :json
+      get :show, params: { id: '1234567890'}, format: :json
 
       expect(response.status).to eq 404
     end
@@ -70,7 +95,7 @@ describe Api::V2::CommoditiesController, "GET #show" do
   end
 end
 
-describe Api::V2::CommoditiesController, "GET #changes" do
+describe Api::V2::CommoditiesController, 'GET #changes' do
   render_views
 
   context 'changes happened after chapter creation' do
@@ -82,20 +107,35 @@ describe Api::V2::CommoditiesController, "GET #changes" do
                                           operation_date: Date.current }
 
     let(:pattern) {
-      [
-        {
-          oid: Integer,
-          model_name: "GoodsNomenclature",
-          operation: String,
-          operation_date: String,
-          record: {
-            description: String,
-            goods_nomenclature_item_id: String,
-            validity_start_date: String,
-            validity_end_date: nil
+      {
+        data: [
+          {
+            id: String,
+            type: 'change',
+            attributes: {
+              oid: Integer,
+              model_name: 'GoodsNomenclature',
+              operation: 'C',
+              operation_date: String
+            },
+            relationships: {
+              record: {
+                data: {
+                  id: String,
+                  type: 'goods_nomenclature'
+                }
+              }
+            }
           }
-        }
-      ].ignore_extra_values!
+        ],
+        included: [
+          {
+            id: String,
+            type: 'goods_nomenclature',
+            attributes: Hash
+          }
+        ]
+      }
     }
 
     it 'returns commodity changes' do
@@ -113,10 +153,17 @@ describe Api::V2::CommoditiesController, "GET #changes" do
                                           :declarable,
                                           operation_date: Date.current }
 
+    let!(:pattern) {
+      {
+        data: [],
+        included: []
+      }
+    }
+    
     it 'does not include change records' do
       get :changes, params: { id: commodity, as_of: Date.yesterday }, format: :json
 
-      expect(response.body).to match_json_expression []
+      expect(response.body).to match_json_expression pattern
     end
   end
 
@@ -137,31 +184,95 @@ describe Api::V2::CommoditiesController, "GET #changes" do
     }
 
     let(:pattern) {
-      [
-        {
-          oid: Integer,
-          model_name: "Measure",
-          operation: "D",
-          record: {
-            goods_nomenclature_item_id: measure.goods_nomenclature_item_id,
-            measure_type: {
-              description: measure.measure_type.description
-            }.ignore_extra_keys!
-          }.ignore_extra_keys!
-        }.ignore_extra_keys!,
-        {
-          oid: Integer,
-          model_name: String,
-          operation: String,
-          operation_date: String,
-          record: {
-            description: String,
-            goods_nomenclature_item_id: String,
-            validity_start_date: String,
-            validity_end_date: nil
+      {
+        data: [
+          {
+            id: String,
+            type: 'change',
+            attributes: {
+              oid: Integer,
+              model_name: 'Measure',
+              operation: 'C',
+              operation_date: String
+            },
+            relationships: {
+              record: {
+                data: {
+                  id: String,
+                  type: 'measure'
+                }
+              }
+            }
+          }, {
+            id: String,
+            type: 'change',
+            attributes: {
+              oid: Integer,
+              model_name: 'Measure',
+              operation: 'D',
+              operation_date: String
+            },
+            relationships: {
+              record: {
+                data: {
+                  id: String,
+                  type: 'measure'
+                }
+              }
+            }
+          }, {
+            id: String,
+            type: 'change',
+            attributes: {
+              oid: Integer,
+              model_name: 'GoodsNomenclature',
+              operation: 'C',
+              operation_date: String
+            },
+            relationships: {
+              record: {
+                data: {
+                  id: String,
+                  type: 'goods_nomenclature'
+                }
+              }
+            }
           }
-        }
-      ].ignore_extra_values!
+        ],
+        included: [
+          {
+            id: String,
+            type: 'measure',
+            attributes: Hash,
+            relationships: {
+              geographical_area: {
+                data: {
+                  id: String,
+                  type: 'geographical_area'
+                }
+              },
+              measure_type: {
+                data: {
+                  id: String,
+                  type: 'measure_type'
+                }
+              }
+            }
+          }, {
+            id: String,
+            type: 'geographical_area',
+            attributes: Hash
+          }, {
+            id: String,
+            type: 'measure_type',
+            attributes: Hash
+          }, {
+            id: String,
+            type: 'goods_nomenclature',
+            attributes: Hash
+          }
+        ]
+      }
     }
 
     before { measure.destroy }
