@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Api::V2::HeadingsController, "GET #show" do
+describe Api::V2::HeadingsController, 'GET #show' do
   render_views
 
   context 'non-declarable heading' do
@@ -14,11 +14,18 @@ describe Api::V2::HeadingsController, "GET #show" do
 
     let(:pattern) {
       {
-        goods_nomenclature_item_id: heading.code,
-        description: String,
-        commodities: Array,
-        chapter: Hash,
-        _response_info: Hash
+        data: {
+          id: String,
+          type: String,
+          attributes: {
+            goods_nomenclature_item_id: heading.code,
+            description: String,
+          }.ignore_extra_keys!,
+          relationships: {
+            commodities: Hash,
+            chapter: Hash,
+          }.ignore_extra_keys!
+        }.ignore_extra_keys!
       }.ignore_extra_keys!
     }
 
@@ -40,17 +47,17 @@ describe Api::V2::HeadingsController, "GET #show" do
 
         body = JSON.parse(response.body)
         expect(
-          body["commodities"].map{|c| c["goods_nomenclature_item_id"] }
-        ).to include commodity1.goods_nomenclature_item_id
+          body['data']['relationships']['commodities']['data'].map{|c| c['id'] }
+        ).to include commodity1.goods_nomenclature_sid.to_s
         expect(
-          body["commodities"].map{|c| c["goods_nomenclature_item_id"] }
-        ).to_not include commodity2.goods_nomenclature_item_id
+          body['data']['relationships']['commodities']['data'].map{|c| c['goods_nomenclature_item_id'] }
+        ).to_not include commodity2.goods_nomenclature_sid.to_s
       end
     end
 
     context 'when record is not present' do
       it 'returns not found if record was not found' do
-        get :show, params: { id: "5555" }, format: :json
+        get :show, params: { id: '5555'}, format: :json
 
         expect(response.status).to eq 404
       end
@@ -67,26 +74,34 @@ describe Api::V2::HeadingsController, "GET #show" do
 
     let(:pattern) {
       {
-        goods_nomenclature_item_id: heading.goods_nomenclature_item_id,
-        description: String,
-        chapter: Hash,
-        import_measures: Array,
-        export_measures: Array,
-        _response_info: Hash
+        data: {
+          id: String,
+          type: 'heading',
+          attributes: {
+            goods_nomenclature_item_id: heading.goods_nomenclature_item_id,
+            description: String,
+          }.ignore_extra_keys!,
+          relationships: {
+            chapter: Hash,
+            import_measures: Hash,
+            export_measures: Hash,
+            footnotes: Hash,
+            section: Hash,
+          }
+        }
       }.ignore_extra_keys!
     }
 
     context 'when record is present' do
       it 'returns rendered record' do
         get :show, params: { id: heading }, format: :json
-
         expect(response.body).to match_json_expression pattern
       end
     end
 
     context 'when record is not present' do
       it 'returns not found if record was not found' do
-        get :show, params: { id: "1234" }, format: :json
+        get :show, params: { id: '1234'}, format: :json
 
         expect(response.status).to eq 404
       end
@@ -104,7 +119,7 @@ describe Api::V2::HeadingsController, "GET #show" do
   end
 end
 
-describe Api::V2::HeadingsController, "GET #changes" do
+describe Api::V2::HeadingsController, 'GET #changes' do
   render_views
 
   context 'changes happened after chapter creation' do
@@ -115,20 +130,40 @@ describe Api::V2::HeadingsController, "GET #changes" do
                                      operation_date: Date.current }
 
     let(:pattern) {
-      [
-        {
-          oid: Integer,
-          model_name: "Heading",
-          operation: String,
-          operation_date: String,
-          record: {
-            description: String,
-            goods_nomenclature_item_id: String,
-            validity_start_date: String,
-            validity_end_date: nil
+      {
+        data: [
+          {
+            id: String,
+            type: 'change',
+            attributes: {
+              oid: Integer,
+              model_name: 'Heading',
+              operation: 'C',
+              operation_date: String
+          },
+            relationships: {
+              record: {
+                data: {
+                  id: String,
+                  type: 'heading'
+                }
+              }
+            }
           }
-        }
-      ].ignore_extra_values!
+        ],
+        included: [
+          {
+            id: String,
+            type: 'heading',
+            attributes: {
+              description: String,
+              goods_nomenclature_item_id: String,
+              validity_start_date: String,
+              validity_end_date: nil
+           }
+          }
+        ]
+      }
     }
 
     it 'returns heading changes' do
@@ -145,10 +180,17 @@ describe Api::V2::HeadingsController, "GET #changes" do
                                      :with_chapter,
                                      operation_date: Date.current }
 
+    let!(:pattern) {
+      {
+          data: [],
+          included: []
+      }
+    }
+
     it 'does not include change records' do
       get :changes, params: { id: heading, as_of: Date.yesterday }, format: :json
 
-      expect(response.body).to match_json_expression []
+      expect(response.body).to match_json_expression pattern
     end
   end
 
@@ -167,31 +209,84 @@ describe Api::V2::HeadingsController, "GET #changes" do
         operation_date: Date.current
     }
     let(:pattern) {
-      [
-        {
-          oid: Integer,
-          model_name: "Measure",
-          operation: "D",
-          record: {
-            goods_nomenclature_item_id: measure.goods_nomenclature_item_id,
-            measure_type: {
-              description: measure.measure_type.description
-            }.ignore_extra_keys!
-          }.ignore_extra_keys!
-        }.ignore_extra_keys!,
-        {
-          oid: Integer,
-          model_name: "Heading",
-          operation: String,
-          operation_date: String,
-          record: {
-            description: String,
-            goods_nomenclature_item_id: String,
-            validity_start_date: String,
-            validity_end_date: nil
+      {
+        data: [
+          {
+            id: String,
+            type: 'change',
+            attributes: {
+              oid: Integer,
+              model_name: 'Measure',
+              operation: 'C',
+              operation_date: String
+            },
+            relationships: {
+              record: {
+                data: {
+                  id: String,
+                  type: 'measure'
+                }
+              }
+            }
+          }, {
+            id: String,
+            type: 'change',
+            attributes: {
+              oid: Integer,
+              model_name: 'Measure',
+              operation: 'D',
+              operation_date: String
+            },
+            relationships: {
+              record: {
+                data: {
+                  id: String,
+                  type: 'measure'
+                }
+              }
+            }
+        }, {
+          id: String,
+          type: 'change',
+          attributes: {
+            oid: Integer,
+            model_name: 'Heading',
+            operation: 'C',
+            operation_date: String
+          },
+          relationships: {
+            record: {
+              data: {
+                id: String,
+                type: 'heading'
+              }
+            }
           }
-        }
-      ].ignore_extra_values!
+        }],
+        included: [
+          {
+            id: String,
+            type: 'measure',
+            attributes: Hash,
+            relationships: {
+              geographical_area: Hash,
+              measure_type: Hash
+            }
+          }, {
+            id: String,
+            type: 'geographical_area',
+            attributes: Hash
+          }, {
+            id: String,
+            type: 'measure_type',
+            attributes: Hash
+          }, {
+            id: String,
+            type: 'heading',
+            attributes: Hash
+          }
+        ]
+      }
     }
 
     before { measure.destroy }
