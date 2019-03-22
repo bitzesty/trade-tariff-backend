@@ -30,8 +30,6 @@ describe Api::V2::FootnotesController, "GET to #index" do
   specify 'returns national footnote' do
     get :index, format: :json
 
-    puts response.body
-
     expect(response.body).to match_json_expression response_pattern
     expect(json_body.map { |f| f["id"] }).to include national_footnote.pk.join
   end

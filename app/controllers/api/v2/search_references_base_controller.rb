@@ -20,10 +20,14 @@ module Api
          search_reference_collection.by_title
                                 .paginate(page, per_page)
         end
+        render json: Api::V2::SearchReferences::SearchReferenceListSerializer.new(@search_references.to_a).serializable_hash
       end
 
       def show
         @search_reference = search_reference_resource
+        options = {}
+        options[:include] = [:referenced, 'referenced.chapter', 'referenced.chapter.guides', 'referenced.section']
+        render json: Api::V2::SearchReferences::SearchReferenceSerializer.new(@search_reference, options).serializable_hash
       end
 
       def create
@@ -31,9 +35,17 @@ module Api
           search_reference_params.merge(search_reference_resource_association_hash)
         )
 
-        @search_reference.save
-
-        respond_with @search_reference, location: collection_url
+        if @search_reference.save
+          options = {}
+          options[:include] = [:referenced, 'referenced.chapter', 'referenced.chapter.guides', 'referenced.section']
+          render json: Api::V2::SearchReferences::SearchReferenceSerializer.new(@search_reference, options).serializable_hash
+        else
+          data = { errors: [] }
+          data[:errors] = @search_reference.errors.full_messages.map do |error|
+            { title: error }
+          end
+          render json: data, status: :unprocessable_entity
+        end
       end
 
       def update

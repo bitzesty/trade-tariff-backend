@@ -19,7 +19,7 @@ module Api
         end
 
         has_one :section, serializer: Api::V2::Chapters::SectionSerializer
-        has_many :guides, serializer: Api::V2::Chapters::GuideSerializer
+        has_many :guides, serializer: Api::V2::GuideSerializer
         has_many :headings, serializer: Api::V2::Chapters::HeadingSerializer
 
       end

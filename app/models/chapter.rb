@@ -31,7 +31,7 @@ class Chapter < GoodsNomenclature
   end
 
   def section_id
-    section.id
+    section&.id
   end
 
   def heading_ids

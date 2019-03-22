@@ -15,8 +15,6 @@ describe Api::V2::MonetaryExchangeRatesController, "GET to #index"do
     it 'returns exchange rates for the last 5 years' do
       get :index, format: :json
 
-      puts response.body
-
       json_response = JSON.parse(response.body)['data']
       expect(json_response.length).to eq(2)
 

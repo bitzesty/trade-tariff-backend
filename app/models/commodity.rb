@@ -38,7 +38,7 @@ class Commodity < GoodsNomenclature
                                   remover: proc { |search_reference| search_reference.update(referenced_id: nil, referenced_class: nil) },
                                   clearer: proc { search_references_dataset.update(referenced_id: nil, referenced_class: nil) }
 
-  delegate :section, :section_id, to: :chapter
+  delegate :section, :section_id, to: :chapter, allow_nil: true
 
   dataset_module do
     def by_code(code = "")

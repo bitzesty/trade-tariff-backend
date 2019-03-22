@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Api::V2::Commodities::SearchReferencesController do
-  it_behaves_like 'search references controller' do
+  it_behaves_like 'v2 search references controller' do
     let(:search_reference_parent)  { create :commodity, :declarable }
     let(:search_reference)         { create :search_reference, commodity_id: search_reference_parent.code }
     let(:collection_query)         {

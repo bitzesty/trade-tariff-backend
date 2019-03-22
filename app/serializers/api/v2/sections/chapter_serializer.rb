@@ -11,7 +11,7 @@ module Api
           chapter.chapter_note.try(:id)
         end
 
-        has_many :guides, serializer: Api::V2::Sections::GuideSerializer
+        has_many :guides, serializer: Api::V2::GuideSerializer
 
       end
     end
