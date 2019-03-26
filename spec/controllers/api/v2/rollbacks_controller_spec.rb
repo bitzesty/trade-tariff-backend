@@ -30,11 +30,11 @@ describe Api::V2::RollbacksController, 'POST to #create' do
   end
 
   context 'when rollback is not valid' do
-    let(:response_pattern) {
-      {
-        errors: Hash
-      }.ignore_extra_keys!
-    }
+      let(:response_pattern) {
+        {
+          data: { errors: Array }
+        }.ignore_extra_keys!
+      }
 
     it 'returns errors for rollback' do
       post :create, params: { rollback: { date: '', keep: '' } }
@@ -55,18 +55,26 @@ describe Api::V2::RollbacksController, 'GET to #index' do
   let!(:rollback) { create :rollback }
 
   let(:response_pattern) {
-    { rollbacks:
-      [
+    {
+      data: [
         {
-          id: rollback.id,
-          user_id: rollback.user_id,
-          reason: rollback.reason,
-          enqueued_at: wildcard_matcher,
-          date: rollback.date.to_s,
-          keep: rollback.keep
+          id: rollback.id.to_s,
+          type: 'rollback',
+          attributes: {
+            user_id: rollback.user_id,
+            reason: rollback.reason,
+            enqueued_at: wildcard_matcher,
+            date: rollback.date.to_s,
+            keep: rollback.keep
+          }
         }.ignore_extra_keys!
-      ].ignore_extra_values!
-    }.ignore_extra_keys!
+      ].ignore_extra_values!,
+      links: {
+        first: String,
+        self: String,
+        last: String
+      }
+    }
   }
 
   it 'returns scheduled rollbacks' do
@@ -74,7 +82,6 @@ describe Api::V2::RollbacksController, 'GET to #index' do
 
     expect(response.status).to eq 200
     expect(response.body).to match_json_expression response_pattern
-    expect(response.body).to match_json_expression pagination_pattern
   end
 
   context 'when records are not present' do
@@ -86,7 +93,7 @@ describe Api::V2::RollbacksController, 'GET to #index' do
       get :index, format: :json
 
       expect(response.status).to eq 200
-      expect(JSON.parse(response.body)['rollbacks']).to eq []
+      expect(JSON.parse(response.body)['data']).to eq []
     end
   end
 end
