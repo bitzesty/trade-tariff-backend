@@ -4,18 +4,35 @@ describe Api::V2::UpdatesController, "GET #index" do
   render_views
 
   let(:pattern) {
-    { updates:
-      [
-       { update_type: "TariffSynchronizer::TaricUpdate",
-         state: String,
-         filename: String
-       }.ignore_extra_keys!,
-       { update_type: "TariffSynchronizer::TaricUpdate",
-         state: String,
-         filename: String
-       }.ignore_extra_keys!
-      ].ignore_extra_values!
-    }.ignore_extra_keys!
+    {
+      data: [
+        {
+          id: String,
+          type: 'update',
+          attributes: {
+            update_type: "TariffSynchronizer::TaricUpdate",
+            state: String,
+            filename: String,
+            created_at: String
+          }.ignore_extra_keys!
+        }.ignore_extra_keys!,
+        {
+          id: String,
+          type: 'update',
+          attributes: {
+            update_type: "TariffSynchronizer::TaricUpdate",
+            state: String,
+            filename: String,
+            created_at: String
+          }.ignore_extra_keys!
+        }.ignore_extra_keys!
+      ],
+      links: {
+        first: String,
+        self: String,
+        last: String
+      }
+    }
   }
 
   context 'when records are present' do
@@ -26,7 +43,6 @@ describe Api::V2::UpdatesController, "GET #index" do
       get :index, format: :json
 
       expect(response.body).to match_json_expression pattern
-      expect(response.body).to match_json_expression pagination_pattern
     end
   end
 
@@ -34,7 +50,7 @@ describe Api::V2::UpdatesController, "GET #index" do
     it 'returns blank array' do
       get :index, format: :json
 
-      expect(JSON.parse(response.body)["updates"]).to eq []
+      expect(JSON.parse(response.body)['data']).to eq []
     end
   end
 end
@@ -43,9 +59,20 @@ describe Api::V2::UpdatesController, "GET #latest" do
   render_views
 
   let(:pattern) do
-    [{ update_type: String,
-      state: String,
-      filename: String}.ignore_extra_keys!].ignore_extra_values!
+    {
+      data: [
+        {
+          id: String,
+            type: 'update',
+            attributes: {
+            update_type: "TariffSynchronizer::TaricUpdate",
+            state: String,
+            filename: String,
+            created_at: String
+          }.ignore_extra_keys!
+        }.ignore_extra_keys!
+      ].ignore_extra_values!
+    }
   end
 
   context 'when records are present' do
@@ -64,7 +91,7 @@ describe Api::V2::UpdatesController, "GET #latest" do
       get :latest, format: :json
 
       expect(
-        JSON.parse(response.body)
+        JSON.parse(response.body)['data']
       ).to eq []
     end
   end
