@@ -20,12 +20,12 @@ curl -X POST \
 $SLACK_WEBHOOK
 
 # Deploy Worker & Migrate DB
-cf push $CF_APP_WORKER -f "$CF_APP_WORKER"_manifest.yml
+cf push $CF_APP_WORKER
 cf run-task $CF_APP_WORKER "rake db:migrate" --name "db-migrate"
 cf run-task $CF_APP_WORKER "rake db:data:migrate" --name "db-data-migrate"
 
 # Deploy App
-cf zero-downtime-push $CF_APP -f "$CF_APP"_manifest.yml
+cf bgd $CF_APP 
 
 # Notify Slack deployment finished
 curl -X POST \
