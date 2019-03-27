@@ -19,19 +19,10 @@ curl -X POST \
 --data-urlencode 'payload={"text": "'"Deploying $CF_APP.\n${GIT_MESSAGE}"'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":cloud:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}, {"title": "SHA1", "value": "'"<https://github.com/bitzesty/trade-tariff-backend/compare/$GIT_OLD_REVISION...$GIT_REVISION|$GIT_REVISION>"'", "short": true}]}' \
 $SLACK_WEBHOOK
 
-# Fetch manifest
-cf create-app-manifest $CF_APP
-cf create-app-manifest $CF_APP_WORKER
-
-# Database migrations
-# cf push "$CF_APP"-migrations -f "$CF_APP_WORKER"_manifest.yml -c "rake db:migrate" -i 1
-# cf push "$CF_APP"-migrations -f "$CF_APP_WORKER"_manifest.yml -c "rake db:data:migrate" -i 1
-
-cf run-task $CF_APP "rake db:migrate" --name "$CF_APP"-migrations
-cf run-task $CF_APP "rake db:data:migrate" --name "$CF_APP"-migrations
-
-# Deploy Worker
+# Deploy Worker & Migrate DB
 cf push $CF_APP_WORKER -f "$CF_APP_WORKER"_manifest.yml
+cf run-task $CF_APP_WORKER "rake db:migrate" --name "db-migrate"
+cf run-task $CF_APP_WORKER "rake db:data:migrate" --name "db-data-migrate"
 
 # Deploy App
 cf zero-downtime-push $CF_APP -f "$CF_APP"_manifest.yml
