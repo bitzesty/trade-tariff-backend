@@ -27,7 +27,7 @@ cf run-task $CF_APP_WORKER "rake db:data:migrate" --name "db-data-migrate"
 
 # Deploy App
 cf create-app-manifest $CF_APP
-cf bgd $CF_APP -f "$CF_APP"_manifest.yml
+cf push $CF_APP -f "$CF_APP"_manifest.yml
 
 # Notify Slack deployment finished
 curl -X POST \
