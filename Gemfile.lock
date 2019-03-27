@@ -282,6 +282,7 @@ GEM
     rubocop-rspec (1.32.0)
       rubocop (>= 0.60.0)
     ruby-progressbar (1.10.0)
+    rubyzip (1.2.2)
     rufus-scheduler (3.5.2)
       fugit (~> 1.1, >= 1.1.5)
     safe_yaml (1.0.5)
@@ -390,6 +391,7 @@ DEPENDENCIES
   responders (~> 2.1, >= 2.1.0)
   rspec-rails (~> 3.5.2)
   rspec_junit_formatter
+  rubyzip
   scout_apm
   sentry-raven
   sequel (~> 5.16.0)
