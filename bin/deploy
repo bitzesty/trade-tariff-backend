@@ -20,7 +20,8 @@ curl -X POST \
 $SLACK_WEBHOOK
 
 # Deploy Worker & Migrate DB
-cf push $CF_APP_WORKER
+cf create-app-manifest $CF_APP_WORKER
+cf push $CF_APP_WORKER -f "$CF_APP_WORKER"_manifest.yml
 cf run-task $CF_APP_WORKER "rake db:migrate" --name "db-migrate"
 cf run-task $CF_APP_WORKER "rake db:data:migrate" --name "db-data-migrate"
 
