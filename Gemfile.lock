@@ -367,7 +367,7 @@ DEPENDENCIES
   elasticsearch-extensions (= 0.0.30)
   factory_girl_rails (~> 4.8.0)
   fakefs (~> 0.18.0)
-  fast_jsonapi
+  fast_jsonapi (~> 1.5)
   foreman
   forgery
   gds-sso (~> 13, >= 12.1.0)

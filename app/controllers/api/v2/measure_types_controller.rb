@@ -22,7 +22,7 @@ module Api
           measure_type_description.save
         end
 
-        render json:  Api::V2::MeasureTypeSerializer.new(@measure_type).serializable_hash
+        render json: Api::V2::MeasureTypeSerializer.new(@measure_type).serializable_hash
       end
 
       private
