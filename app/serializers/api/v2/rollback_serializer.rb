@@ -13,7 +13,7 @@ module Api
         errors = @resource.errors.flat_map do |attribute, error|
           { title: attribute, detail: error }
         end
-        { data: { errors: errors } }
+        { errors: errors }
       end
     end
   end

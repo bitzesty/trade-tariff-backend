@@ -3,8 +3,11 @@ module Api
     module Measures
       class DutyExpressionSerializer
         include FastJsonapi::ObjectSerializer
-        set_id :id
+
         set_type :duty_expression
+
+        set_id :id
+
         attributes :base, :formatted_base
       end
     end

@@ -3,8 +3,9 @@ module Api
     module SearchReferences
       class ChapterSerializer
         include FastJsonapi::ObjectSerializer
-        set_id :goods_nomenclature_sid
         set_type :chapter
+
+        set_id :goods_nomenclature_sid
 
         attributes :goods_nomenclature_item_id, :producline_suffix, :validity_start_date,
                    :validity_end_date, :description

@@ -3,9 +3,13 @@ module Api
     module Measures
       class MeasureTypeSerializer
         include FastJsonapi::ObjectSerializer
-        set_id :measure_type_id
+
         set_type :measure_type
+
+        set_id :measure_type_id
+
         attributes :description
+
         attribute :id do |measure_type|
           measure_type.measure_type_id
         end

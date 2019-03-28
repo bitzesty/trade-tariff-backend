@@ -3,8 +3,12 @@ module Api
     module Chapters
       class SectionSerializer
         include FastJsonapi::ObjectSerializer
-        attributes :id, :numeral, :title, :position
+
         set_type :section
+
+        set_id :id
+
+        attributes :id, :numeral, :title, :position
         attribute :section_note, if: Proc.new { |section| section.section_note.present? } do |section|
           section.section_note.content
         end

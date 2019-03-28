@@ -3,8 +3,11 @@ module Api
     module Measures
       class MeasureSerializer
         include FastJsonapi::ObjectSerializer
-        set_id :measure_sid
+
         set_type :measure
+
+        set_id :measure_sid
+
         attributes :id, :origin, :effective_start_date, :effective_end_date, :import,
                    :excise, :vat
 
@@ -24,7 +27,6 @@ module Api
                 if: Proc.new { |measure| measure.export_refund_nomenclature.present? },
                 serializer: Api::V2::Measures::ExportRefundNomenclatureSerializer
         has_one :order_number, serializer: Api::V2::Quotas::QuotaOrderNumberSerializer
-
       end
     end
   end

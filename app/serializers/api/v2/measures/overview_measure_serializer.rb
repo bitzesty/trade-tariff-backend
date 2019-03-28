@@ -3,8 +3,10 @@ module Api
     module Measures
       class OverviewMeasureSerializer
         include FastJsonapi::ObjectSerializer
-        set_id :measure_sid
+
         set_type :measure
+
+        set_id :measure_sid
 
         attributes :id, :vat
 

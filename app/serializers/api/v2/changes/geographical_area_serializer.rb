@@ -3,8 +3,11 @@ module Api
     module Changes
       class GeographicalAreaSerializer
         include FastJsonapi::ObjectSerializer
-        set_id :id
+
         set_type :geographical_area
+
+        set_id :id
+
         attributes :id
         attribute :description do |geographical_area|
           geographical_area.geographical_area_description.description

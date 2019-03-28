@@ -30,11 +30,11 @@ describe Api::V2::RollbacksController, 'POST to #create' do
   end
 
   context 'when rollback is not valid' do
-      let(:response_pattern) {
-        {
-          data: { errors: Array }
-        }.ignore_extra_keys!
-      }
+    let(:response_pattern) {
+      {
+        errors: Array
+      }.ignore_extra_keys!
+    }
 
     it 'returns errors for rollback' do
       post :create, params: { rollback: { date: '', keep: '' } }
