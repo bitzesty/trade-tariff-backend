@@ -8,6 +8,8 @@ namespace :tariff do
       files = taric_files(s3)
       s3 = Aws::S3::Client.new
       files.each do |key|
+        next unless proceed_with_download?(key)
+
         File.open(filename(key), 'wb') do |file|
           s3.get_object(bucket: s3_bucket, key: key) do |chunk|
             file.write(chunk)
@@ -85,5 +87,11 @@ namespace :tariff do
       filename = filepath.gsub('.gz', '')
       system("mv #{filename} #{filename}.xml")
     end
+  end
+
+  def proceed_with_download?(filename)
+    return true unless ENV['CDS'] == 'true'
+
+    !TariffSynchronizer::TaricUpdate.find(filename: filename[0, 30]).present?
   end
 end
