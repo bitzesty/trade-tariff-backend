@@ -676,10 +676,13 @@ describe Measure do
 
     describe 'ME13' do
       context 'additional code type meursing and attributes missing' do
+        let(:additional_code_type) { create :additional_code_type, :meursing }
+        let(:meursing_additional_code) { create :meursing_additional_code }
         let(:measure) {
           create :measure, :with_related_additional_code_type,
-                                        additional_code_type_id: 3,
-                                        additional_code_id: '123',
+                                        additional_code_type_id: additional_code_type.additional_code_type_id,
+                                        additional_code_sid: meursing_additional_code.meursing_additional_code_sid,
+                                        additional_code_id: meursing_additional_code.additional_code,
                                         goods_nomenclature_item_id: nil,
                                         ordernumber: nil,
                                         reduction_indicator: nil

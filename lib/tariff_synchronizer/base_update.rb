@@ -5,6 +5,14 @@ module TariffSynchronizer
     one_to_many :conformance_errors, class: TariffUpdateConformanceError, key: :tariff_update_filename
     one_to_many :presence_errors, class: TariffUpdatePresenceError, key: :tariff_update_filename
 
+    def conformance_error_ids
+      conformance_errors.pluck(:id)
+    end
+
+    def presence_error_ids
+      presence_errors.pluck(:id)
+    end
+
     plugin :eager_each
     plugin :timestamps
     plugin :single_table_inheritance, :update_type

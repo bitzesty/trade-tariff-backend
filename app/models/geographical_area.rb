@@ -27,6 +27,10 @@ class GeographicalArea < Sequel::Model
   one_to_many :children_geographical_areas, key: :parent_geographical_area_group_sid,
                                             class: self
 
+  def children_geographical_area_ids
+    children_geographical_areas.pluck(:geographical_area_id)
+  end
+
   one_to_one :parent_geographical_area, key: :geographical_area_sid,
                                         primary_key: :parent_geographical_area_group_sid,
                                         class_name: 'GeographicalArea'

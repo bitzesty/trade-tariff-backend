@@ -29,6 +29,10 @@ class Section < Sequel::Model
     end
   end)
 
+  def chapter_ids
+    chapters.pluck(:goods_nomenclature_sid)
+  end
+
   one_to_one :section_note
 
   one_to_many :search_references, key: Sequel.cast_numeric(:referenced_id), reciprocal: :referenced, conditions: { referenced_class: 'Section' },
