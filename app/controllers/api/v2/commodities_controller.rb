@@ -35,12 +35,9 @@ module Api
           ).all, @commodity
         ).validate!
 
-        @geographical_areas = GeographicalArea.actual.where("geographical_area_sid IN ?", @measures.map(&:geographical_area_sid)).
-            eager(:geographical_area_descriptions, { contained_geographical_areas: :geographical_area_descriptions }).all
-
         @commodity_cache_key = "commodity-#{@commodity.goods_nomenclature_sid}-#{actual_date}-#{TradeTariffBackend.currency}"
 
-        presenter = Api::V2::Commodities::CommodityPresenter.new(@commodity, @measures, @geographical_areas, @commodity_cache_key)
+        presenter = Api::V2::Commodities::CommodityPresenter.new(@commodity, @measures, @commodity_cache_key)
         options = {}
         options[:include] = [:section, :chapter, 'chapter.guides', :heading, :ancestors, :footnotes,
                              :import_measures, 'import_measures.duty_expression', 'import_measures.measure_type',
@@ -60,7 +57,6 @@ module Api
                              'export_measures.export_refund_nomenclature',
                              'export_measures.order_number', 'export_measures.order_number.definition',]
         render json: Api::V2::Commodities::CommoditySerializer.new(presenter, options).serializable_hash
-        # respond_with @commodity
       end
 
       def changes

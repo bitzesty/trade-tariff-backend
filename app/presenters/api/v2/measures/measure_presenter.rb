@@ -5,11 +5,10 @@ module Api
 
         attr_reader :measure, :duty_expression
 
-        def initialize(measure, declarable, geo_areas = nil)
+        def initialize(measure, declarable)
           super(measure)
           @measure = measure
           @duty_expression = Api::V2::Measures::DutyExpressionPresenter.new(measure, declarable)
-          @geo_area = geo_areas&.last
         end
 
         def excise
@@ -25,7 +24,7 @@ module Api
         end
 
         def geographical_area
-          @geo_area || measure.geographical_area
+          measure.geographical_area
         end
 
         def geographical_area_id

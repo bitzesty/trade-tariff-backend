@@ -6,7 +6,7 @@ module Api
 
         set_type :heading
 
-        set_id :goods_nomenclature_sid
+        set_id :heading_id
 
         attributes :goods_nomenclature_item_id, :description, :formatted_description,
                    :description_plain
