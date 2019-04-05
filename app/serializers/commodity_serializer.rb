@@ -61,6 +61,7 @@ class CommoditySerializer < Serializer
               vat?: measure.vat?,
               third_country?: measure.third_country?,
               measure_type: {
+                measure_type_id: measure.measure_type.measure_type_id,
                 description: measure.measure_type.description
               },
               duty_expression_with_national_measurement_units_for: measure.duty_expression_with_national_measurement_units_for(nil),
