@@ -34,6 +34,13 @@ module Api
           export_measures.map(&:measure_sid)
         end
 
+        def heading_id
+          commodity.heading.goods_nomenclature_sid
+        end
+
+        def chapter_id
+          commodity.chapter.goods_nomenclature_sid
+        end
       end
     end
   end
