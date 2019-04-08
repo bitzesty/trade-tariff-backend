@@ -18,6 +18,10 @@ module Api
           commodities.map(&:goods_nomenclature_sid)
         end
 
+        def chapter_id
+          heading.chapter.goods_nomenclature_sid
+        end
+        
       end
     end
   end
