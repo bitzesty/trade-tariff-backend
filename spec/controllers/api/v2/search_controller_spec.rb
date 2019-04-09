@@ -71,7 +71,31 @@ describe Api::V2::SearchController, "GET #suggestions" do
   let!(:commodity3) { create :commodity }
 
   let(:pattern) {
-    [ { value: String }, { value: String }, { value: String } ]
+    {
+      data: [
+        {
+          id: String,
+          type: 'search_suggestion',
+          attributes: {
+            value: String
+          }
+        },
+        {
+          id: String,
+          type: 'search_suggestion',
+          attributes: {
+            value: String
+          }
+        },
+        {
+          id: String,
+          type: 'search_suggestion',
+          attributes: {
+            value: String
+          }
+        },
+      ]
+    }
   }
 
   it 'returns rendered suggestions' do
@@ -92,7 +116,24 @@ describe Api::V2::SearchController, "GET #suggestions" do
     let!(:commodity3) { create :commodity, validity_end_date: "2015-12-31", validity_start_date: "2000-12-31" }
 
     let(:pattern) {
-      [ { value: String }, { value: String } ]
+      {
+        data: [
+          {
+            id: String,
+            type: 'search_suggestion',
+            attributes: {
+              value: String
+            }
+          },
+          {
+            id: String,
+            type: 'search_suggestion',
+            attributes: {
+              value: String
+            }
+          },
+        ]
+      }
     }
 
     before do

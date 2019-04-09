@@ -6,7 +6,8 @@ module Api
       end
 
       def suggestions
-        render json: SuggestionsService.new
+        suggestions = Api::V2::SuggestionsService.new.perform
+        render json: Api::V2::SearchSuggestionSerializer.new(suggestions).serializable_hash
       end
     end
   end

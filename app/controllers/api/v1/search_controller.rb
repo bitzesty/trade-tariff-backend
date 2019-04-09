@@ -6,7 +6,7 @@ module Api
       end
 
       def suggestions
-        render json: SuggestionsService.new
+        render json: Api::V1::SuggestionsService.new
       end
     end
   end
