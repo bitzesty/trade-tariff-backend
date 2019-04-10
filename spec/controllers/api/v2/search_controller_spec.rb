@@ -5,10 +5,16 @@ describe Api::V2::SearchController, "POST #search" do
     let(:chapter) { create :chapter }
     let(:pattern) {
       {
-        type: 'exact_match',
-        entry: {
-          endpoint: 'chapters',
-          id: chapter.to_param
+        data: {
+          id: String,
+          type: 'exact_search',
+          attributes: {
+            type: 'exact_match',
+            entry: {
+              endpoint: 'chapters',
+              id: chapter.to_param
+            }
+          }
         }
       }
     }
@@ -24,18 +30,24 @@ describe Api::V2::SearchController, "POST #search" do
     let(:chapter) { create :chapter, :with_description, description: 'horse', validity_start_date: Date.current }
     let(:pattern) {
       {
-        type: 'fuzzy_match',
-        reference_match: {
-          commodities: Array,
-          headings: Array,
-          chapters: Array,
-          sections: Array
-        },
-        goods_nomenclature_match: {
-          commodities: Array,
-          headings: Array,
-          chapters: Array,
-          sections: Array
+        data: {
+          id: String,
+          type: 'fuzzy_search',
+          attributes: {
+            type: 'fuzzy_match',
+            reference_match: {
+              commodities: Array,
+              headings: Array,
+              chapters: Array,
+              sections: Array
+            },
+            goods_nomenclature_match: {
+              commodities: Array,
+              headings: Array,
+              chapters: Array,
+              sections: Array
+            }
+          }
         }
       }
     }
