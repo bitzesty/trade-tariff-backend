@@ -1,18 +1,14 @@
 module Api
   module V2
-    class SuggestionsService
-      def perform
-        a = Commodity.select(:goods_nomenclature_sid, :goods_nomenclature_item_id)
-              .actual
-              .distinct
-              .order(Sequel.desc(:goods_nomenclature_item_id))
-              .map { |i| Api::V2::SuggestionPresenter.new(i.goods_nomenclature_sid, i.goods_nomenclature_item_id) }
+    class SuggestionsService < ::BaseSuggestionsService
+      protected
       
-        b = SearchReference.select(:id, :title)
-              .distinct
-              .order(Sequel.desc(:title))
-              .map { |i| Api::V2::SuggestionPresenter.new(i.id, i.title) }
-        [a, b].flatten.compact
+      def handle_commodity_record(commodity)
+        Api::V2::SuggestionPresenter.new(commodity.goods_nomenclature_sid, commodity.goods_nomenclature_item_id)
+      end
+
+      def handle_search_reference_record(search_reference)
+        Api::V2::SuggestionPresenter.new(search_reference.id, search_reference.title)
       end
     end
   end
