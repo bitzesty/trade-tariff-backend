@@ -62,8 +62,16 @@ describe Api::V2::SearchController, "POST #search" do
   describe 'errors' do
     let(:pattern) {
       {
-        q: Array,
-        as_of: Array
+        errors: [
+          {
+            title: 'q',
+            detail: String,
+          },
+          {
+            title: 'as_of',
+            detail: String,
+          }
+        ]
       }
     }
 
