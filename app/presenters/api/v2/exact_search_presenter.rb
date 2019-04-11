@@ -1,7 +1,6 @@
 module Api
   module V2
     class ExactSearchPresenter
-      
       attr_reader :result
       
       def initialize(result)

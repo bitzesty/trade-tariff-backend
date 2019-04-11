@@ -5,7 +5,6 @@ module Api
       def serialized_errors(errors)
         errors.to_json
       end
-      
     end
   end
 end

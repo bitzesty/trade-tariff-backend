@@ -1,7 +1,6 @@
 module Api
   module V2
     class FuzzySearchPresenter
-
       attr_reader :result
       
       def initialize(result)

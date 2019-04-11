@@ -2,7 +2,6 @@ module Api
   module V2
     module Headings
       class DeclarableHeadingPresenter < SimpleDelegator
-
         attr_reader :heading, :import_measures, :export_measures, :cache_key
 
         def initialize(heading, measures, cache_key)

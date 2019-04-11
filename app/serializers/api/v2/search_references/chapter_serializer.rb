@@ -12,7 +12,6 @@ module Api
 
         has_many :guides, serializer: Api::V2::GuideSerializer
         has_one :section, serializer: Api::V2::SearchReferences::SectionSerializer
-
       end
     end
   end

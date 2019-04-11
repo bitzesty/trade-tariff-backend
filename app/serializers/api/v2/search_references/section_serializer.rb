@@ -9,7 +9,6 @@ module Api
         set_id :id
         
         attributes :numeral, :title, :position
-        
       end
     end
   end

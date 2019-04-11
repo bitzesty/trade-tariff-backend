@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
       }
       format.json {
         serializer = TradeTariffBackend.error_serializer(request)
-        render json: serializer.serialized_errors({ error: "404 - Not Found" }), status: 404
+        render json: serializer.serialized_errors(error: "404 - Not Found"), status: 404
       }
     end
   end
@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
       }
       format.json {
         serializer = TradeTariffBackend.error_serializer(request)
-        render json: serializer.serialized_errors({ error: "500 - Internal Server Error: #{exception.message}" }), status: 500
+        render json: serializer.serialized_errors(error: "500 - Internal Server Error: #{exception.message}"), status: 500
       }
     end
   end
@@ -47,14 +47,14 @@ class ApplicationController < ActionController::Base
     head :ok
   end
 
-protected
+  protected
 
   def append_info_to_payload(payload)
     super
     payload[:user_agent] = request.headers["HTTP_X_ORIGINAL_USER_AGENT"].presence || request.env["HTTP_USER_AGENT"]
   end
 
-private
+  private
 
   def actual_date
     Date.parse(params[:as_of].to_s)

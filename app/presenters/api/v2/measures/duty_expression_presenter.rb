@@ -2,7 +2,6 @@ module Api
   module V2
     module Measures
       class DutyExpressionPresenter
-
         def initialize(measure, declarable)
           @measure = measure
           @declarable = declarable
@@ -19,7 +18,6 @@ module Api
         def id
           "#{@measure.measure_sid}-duty_expression"
         end
-
       end
     end
   end

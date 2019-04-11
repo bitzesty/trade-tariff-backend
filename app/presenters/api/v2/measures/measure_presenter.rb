@@ -2,7 +2,6 @@ module Api
   module V2
     module Measures
       class MeasurePresenter < SimpleDelegator
-
         attr_reader :measure, :duty_expression
 
         def initialize(measure, declarable)
@@ -38,7 +37,6 @@ module Api
         def additional_code_id
           measure.export_refund_nomenclature_sid || measure.additional_code_sid
         end
-
       end
     end
   end

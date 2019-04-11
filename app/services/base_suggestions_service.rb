@@ -19,11 +19,11 @@ class BaseSuggestionsService
 
   protected
 
-  def handle_commodity_record(commodity)
+  def handle_commodity_record(_commodity)
     nil
   end
 
-  def handle_search_reference_record(search_reference)
+  def handle_search_reference_record(_search_reference)
     nil
   end
 end
