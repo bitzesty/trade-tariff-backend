@@ -132,7 +132,7 @@ module TradeTariffBackend
     end
     
     def api_version(request)
-      request.headers['Accept']&.gsub('application/vnd.uktt.v', '') || '1'
+      request.headers['Accept']&.scan(/application\/vnd.uktt.v(\d+)/).flatten.first || '1'
     end
     
     def error_serializer(request)
