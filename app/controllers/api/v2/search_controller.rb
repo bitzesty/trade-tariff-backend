@@ -2,7 +2,10 @@ module Api
   module V2
     class SearchController < ApiController
       def search
-        render json: SearchService.new(Api::V2::SearchSerializationService.new, params).to_json
+        render json: SearchService.new(
+          Api::V2::SearchSerializationService.new,
+          Api::V2::ErrorSerializationService.new,
+          params).to_json
       end
 
       def suggestions

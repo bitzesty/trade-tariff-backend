@@ -27,14 +27,14 @@ class SearchService
   end
 
   attr_accessor :q
-  attr_reader :result, :as_of, :serializer
+  attr_reader :result, :as_of, :data_serializer, :error_serializer
 
   validates :q, presence: true
   validates :as_of, presence: true
 
   delegate :serializable_hash, to: :result
 
-  def initialize(serializer, attributes = {})
+  def initialize(data_serializer, error_serializer, attributes = {})
     if attributes.present?
       attributes.each do |name, value|
         if self.respond_to?(:"#{name}=")
@@ -42,7 +42,8 @@ class SearchService
         end
       end
     end
-    @serializer = serializer
+    @data_serializer = data_serializer
+    @error_serializer = error_serializer
   end
 
   def as_of=(date)
@@ -72,9 +73,9 @@ class SearchService
     if valid?
       perform
 
-      serializer.perform(result)
+      data_serializer.perform(result)
     else
-      errors.to_json
+      error_serializer.serialized_errors(errors)
     end
   end
 

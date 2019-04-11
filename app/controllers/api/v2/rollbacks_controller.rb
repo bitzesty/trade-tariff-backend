@@ -15,7 +15,7 @@ module Api
           rollback.save
           render json: Api::V2::RollbackSerializer.new(rollback).serializable_hash, status: :created, location: api_rollbacks_url
         else
-          render json: Api::V2::RollbackSerializer.new(rollback).serialized_errors, status: :unprocessable_entity
+          render json: Api::V2::ErrorSerializationService.new.serialized_errors(rollback.errors), status: :unprocessable_entity
         end
       end
 

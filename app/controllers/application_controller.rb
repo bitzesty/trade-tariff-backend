@@ -21,7 +21,8 @@ class ApplicationController < ActionController::Base
         render html: "404 - Not Found", status: 404
       }
       format.json {
-        render json: { error: "404 - Not Found" }, status: 404
+        serializer = TradeTariffBackend.error_serializer(request)
+        render json: serializer.serialized_errors({ error: "404 - Not Found" }), status: 404
       }
     end
   end
@@ -36,7 +37,8 @@ class ApplicationController < ActionController::Base
         render html: "500 - Internal Server Error: #{exception.message}", status: 500
       }
       format.json {
-        render json: { error: "500 - Internal Server Error: #{exception.message}" }, status: 500
+        serializer = TradeTariffBackend.error_serializer(request)
+        render json: serializer.serialized_errors({ error: "500 - Internal Server Error: #{exception.message}" }), status: 500
       }
     end
   end
