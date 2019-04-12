@@ -4,17 +4,19 @@ class BaseSuggestionsService
   end
   
   def perform
-    a = Commodity.select(:goods_nomenclature_sid, :goods_nomenclature_item_id)
+    commodities = Commodity
+          .select(:goods_nomenclature_sid, :goods_nomenclature_item_id)
           .actual
           .distinct
           .order(Sequel.desc(:goods_nomenclature_item_id))
-          .map { |i| handle_commodity_record(i) }
+          .map { |commodity| handle_commodity_record(commodity) }
   
-    b = SearchReference.select(:id, :title)
+    search_references = SearchReference
+          .select(:id, :title)
           .distinct
           .order(Sequel.desc(:title))
-          .map { |i| handle_search_reference_record(i)}
-    [a, b].flatten.compact
+          .map { |search_reference| handle_search_reference_record(search_reference)}
+    [commodities, search_references].flatten.compact
   end
 
   protected
