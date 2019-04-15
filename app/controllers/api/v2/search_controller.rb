@@ -12,6 +12,11 @@ module Api
         suggestions = Api::V2::SuggestionsService.new.perform
         render json: Api::V2::SearchSuggestionSerializer.new(suggestions).serializable_hash
       end
+      
+      def quota_search
+        quotas = QuotaSearchService.new(params).perform
+        render json: Api::V2::QuotaOrderNumberSerializer.new(quotas).serializable_hash
+      end
     end
   end
 end

@@ -22,7 +22,9 @@ class QuotaOrderNumber < Sequel::Model
   end
 
   one_to_one :quota_order_number_origin, primary_key: :quota_order_number_sid,
-                                         key: :quota_order_number_sid
+                                         key: :quota_order_number_sid do |ds|
+    ds.with_actual(QuotaOrderNumberOrigin)
+  end
 
   delegate :present?, to: :quota_order_number_origin, prefix: true, allow_nil: true
 end
