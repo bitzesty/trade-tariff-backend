@@ -43,15 +43,13 @@ class QuotaSearchService
   end
   
   def perform
-    TimeMachine.at(as_of || Date.current) do
-      result = scope.
-                  actual.
-                  with_actual(QuotaOrderNumberOrigin, QuotaOrderNumber).
-                  with_actual(QuotaDefinition, QuotaOrderNumber).
-                  all
-      
-      apply_status_filters(result)
-    end
+    result = scope.
+                actual.
+                with_actual(QuotaOrderNumberOrigin, QuotaOrderNumber).
+                with_actual(QuotaDefinition, QuotaOrderNumber).
+                all
+    
+    apply_status_filters(result)
   end
 
   private

@@ -14,8 +14,13 @@ module Api
       end
       
       def quota_search
-        quotas = QuotaSearchService.new(params).perform
-        render json: Api::V2::QuotaOrderNumberSerializer.new(quotas).serializable_hash
+        service = QuotaSearchService.new(params)
+        TimeMachine.at(service.as_of || Date.current) do
+          quotas = service.perform
+          options = {}
+          options[:include] = [:definition]
+          render json: Api::V2::Quotas::QuotaOrderNumberSerializer.new(quotas, options).serializable_hash
+        end
       end
     end
   end
