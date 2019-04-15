@@ -125,9 +125,12 @@ Rails.application.routes.draw do
 
       resources :search_references, only: [:index]
 
+      resources :quotas, only: [:search] do
+        collection { get :search }
+      end
+
       post "search" => "search#search"
       get "search_suggestions" => "search#suggestions"
-      get 'quota_search' => 'search#quota_search'
       get '/headings/:id/tree' => 'headings#tree'
 
       resources :rollbacks, only: [:create, :index]

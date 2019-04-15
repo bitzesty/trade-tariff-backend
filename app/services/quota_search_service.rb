@@ -55,7 +55,8 @@ class QuotaSearchService
   private
   
   def apply_status_filters(quotas)
-    send("apply_#{status}_filter", quotas) if quotas.present?
+    return quotas unless quotas.present? && status.present?
+    send("apply_#{status}_filter", quotas)
   end
   
   def apply_exhausted_filter(quotas)

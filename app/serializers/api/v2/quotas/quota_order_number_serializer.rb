@@ -8,6 +8,9 @@ module Api
 
         set_id :quota_order_number_id
 
+        attribute :number do |quota|
+          quota.quota_order_number_id
+        end
         has_one :definition, serializer: Api::V2::Quotas::QuotaDefinitionSerializer
       end
     end
