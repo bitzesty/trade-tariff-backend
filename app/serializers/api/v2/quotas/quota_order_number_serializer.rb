@@ -12,6 +12,7 @@ module Api
           quota.quota_order_number_id
         end
         has_one :definition, serializer: Api::V2::Quotas::QuotaDefinitionSerializer
+        has_one :geographical_area, serializer: Api::V2::GeographicalAreaSerializer
       end
     end
   end

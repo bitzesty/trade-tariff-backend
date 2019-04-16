@@ -27,4 +27,9 @@ class QuotaOrderNumber < Sequel::Model
   end
 
   delegate :present?, to: :quota_order_number_origin, prefix: true, allow_nil: true
+  delegate :geographical_area, to: :quota_order_number_origin, allow_nil: true
+  
+  def geographical_area_id
+    geographical_area&.id
+  end
 end

@@ -4,7 +4,7 @@ class QuotaSearchService
   
   def initialize(attributes)
     @scope = QuotaOrderNumber.
-               eager(:quota_order_number_origin, quota_definition: [:quota_exhaustion_events, :quota_blocking_periods]).
+               eager(quota_order_number_origin: [:geographical_area], quota_definition: [:quota_exhaustion_events, :quota_blocking_periods]).
                distinct(:quota_order_numbers__quota_order_number_sid).
                join(:quota_order_number_origins, quota_order_numbers__quota_order_number_sid: :quota_order_number_origins__quota_order_number_sid).
                join(:quota_definitions, quota_order_numbers__quota_order_number_id: :quota_definitions__quota_order_number_id)
@@ -45,8 +45,6 @@ class QuotaSearchService
   def perform
     result = scope.
                 actual.
-                with_actual(QuotaOrderNumberOrigin, QuotaOrderNumber).
-                with_actual(QuotaDefinition, QuotaOrderNumber).
                 all
     
     apply_status_filters(result)
