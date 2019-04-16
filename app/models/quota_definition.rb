@@ -5,6 +5,9 @@ class QuotaDefinition < Sequel::Model
 
   set_primary_key [:quota_definition_sid]
 
+  one_to_one :quota_order_number, key: :quota_order_number_sid,
+                                  primary_key: :quota_order_number_sid
+  
   one_to_many :quota_exhaustion_events, key: :quota_definition_sid,
                                         primary_key: :quota_definition_sid
   one_to_many :quota_balance_events, key: :quota_definition_sid,

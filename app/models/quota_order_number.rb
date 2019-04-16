@@ -5,8 +5,8 @@ class QuotaOrderNumber < Sequel::Model
 
   set_primary_key [:quota_order_number_sid]
 
-  one_to_one :quota_definition, key: :quota_order_number_id,
-                                primary_key: :quota_order_number_id do |ds|
+  one_to_one :quota_definition, key: :quota_order_number_sid,
+                                primary_key: :quota_order_number_sid do |ds|
     ds.with_actual(QuotaDefinition)
   end
 
@@ -18,7 +18,7 @@ class QuotaOrderNumber < Sequel::Model
   alias :definition :quota_definition!
 
   def definition_id
-    definition&.quota_order_number_id
+    definition&.quota_order_number_sid
   end
 
   one_to_one :quota_order_number_origin, primary_key: :quota_order_number_sid,

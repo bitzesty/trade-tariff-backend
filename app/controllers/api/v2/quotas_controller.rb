@@ -2,12 +2,11 @@ module Api
   module V2
     class QuotasController < ApiController
       def search
-        service = QuotaSearchService.new(params)
-        TimeMachine.at(service.as_of || Date.current) do
-          quotas = service.perform
+        TimeMachine.at(Date.current) do
+          quotas = QuotaSearchService.new(params).perform
           options = {}
-          options[:include] = [:definition, :geographical_area]
-          render json: Api::V2::Quotas::QuotaOrderNumberSerializer.new(quotas, options).serializable_hash
+          options[:include] = [:quota_order_number, 'quota_order_number.geographical_area']
+          render json: Api::V2::Quotas::Definition::QuotaDefinitionSerializer.new(quotas, options).serializable_hash
         end
       end
     end

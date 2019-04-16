@@ -3,17 +3,16 @@ class QuotaSearchService
   attr_reader :scope, :as_of, :status
   
   def initialize(attributes)
-    @scope = QuotaOrderNumber.
-               eager(quota_order_number_origin: [:geographical_area], quota_definition: [:quota_exhaustion_events, :quota_blocking_periods]).
-               distinct(:quota_order_numbers__quota_order_number_sid).
-               join(:quota_order_number_origins, quota_order_numbers__quota_order_number_sid: :quota_order_number_origins__quota_order_number_sid).
-               join(:quota_definitions, quota_order_numbers__quota_order_number_id: :quota_definitions__quota_order_number_id)
+    @scope = QuotaDefinition.
+      eager(:quota_exhaustion_events, :quota_blocking_periods, quota_order_number: [quota_order_number_origin: :geographical_area]).
+      distinct(:quota_definitions__quota_definition_sid).
+      select(Sequel.expr(:quota_definitions).*).
+      join(:quota_order_numbers, quota_order_numbers__quota_order_number_sid: :quota_definitions__quota_order_number_sid).
+      join(:quota_order_number_origins, quota_order_numbers__quota_order_number_sid: :quota_order_number_origins__quota_order_number_sid)
     
     if attributes.present?
       attributes.each do |name, value|
-        if self.respond_to?(:"#{name}=")
-          send(:"#{name}=", value)
-        end
+        send(:"#{name}=", value) if self.respond_to?(:"#{name}=") && value.present?
       end
     end
   end
@@ -27,15 +26,11 @@ class QuotaSearchService
   end
   
   def critical=(value)
-    @scope = scope.where(quota_definitions__critical_state: value ? 'Y' : 'N')
+    @scope = scope.where(quota_definitions__critical_state: value)
   end
   
   def year=(value)
-    @as_of = begin
-               Date.new(value.to_i, 12, 31)
-             rescue
-               Date.current
-             end
+    @scope = scope.where("EXTRACT(YEAR FROM quota_definitions.validity_start_date) IN (#{Array.wrap(value).join(', ')})")
   end
   
   def status=(value)
@@ -43,10 +38,7 @@ class QuotaSearchService
   end
   
   def perform
-    result = scope.
-                actual.
-                all
-    
+    result = scope.all
     apply_status_filters(result)
   end
 
@@ -58,26 +50,26 @@ class QuotaSearchService
   end
   
   def apply_exhausted_filter(quotas)
-    quotas.select do |quota_order_number|
-      quota_order_number.definition&.status == 'Exhausted'
+    quotas.select do |definition|
+      definition.status == 'Exhausted'
     end
   end
   
   def apply_not_exhausted_filter(quotas)
-    quotas.reject do |quota_order_number|
-      quota_order_number.definition&.status == 'Exhausted'
+    quotas.reject do |definition|
+      definition.status == 'Exhausted'
     end
   end
   
   def apply_blocked_filter(quotas)
-    quotas.select do |quota_order_number|
-      quota_order_number.definition&.last_blocking_period.present?
+    quotas.select do |definition|
+      definition.last_blocking_period.present?
     end
   end
 
   def apply_not_blocked_filter(quotas)
-    quotas.reject do |quota_order_number|
-      quota_order_number.definition&.last_blocking_period.present?
+    quotas.reject do |definition|
+      definition.last_blocking_period.present?
     end
   end
 end
