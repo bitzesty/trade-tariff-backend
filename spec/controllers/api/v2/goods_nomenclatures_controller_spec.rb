@@ -1,20 +1,22 @@
 require 'rails_helper'
 
-describe Api::V2::GoodsNomenclaturesController, "GET #show_by_section" do
+describe Api::V2::GoodsNomenclaturesController, Api::V2::GoodsNomenclaturesController.class do
   render_views
 
-  let!(:goods_nomenclature)  { create :commodity,
-                                      :with_indent,
-                                      :with_chapter,
-                                      :with_heading }
+  let!(:goods_nomenclature) do
+    create :commodity,
+           :with_indent,
+           :with_chapter,
+           :with_heading
+  end
   let(:chapter) { goods_nomenclature.reload.chapter }
   let(:heading) { goods_nomenclature.reload.heading }
   let(:section) { goods_nomenclature.chapter.reload.section }
-  let(:pattern_section_and_chapter) {
+  let(:pattern_section_and_chapter) do
     {
       data: [
         { # goods_nomenclature
-          id: "#{goods_nomenclature.id}",
+          id: goods_nomenclature.id.to_s,
           type: 'goods_nomenclature',
           attributes: {
             goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
@@ -26,7 +28,7 @@ describe Api::V2::GoodsNomenclaturesController, "GET #show_by_section" do
           }
         },
         { # heading
-          id: "#{heading.id}",
+          id: heading.id.to_s,
           type: 'goods_nomenclature',
           attributes: {
             goods_nomenclature_sid: heading.goods_nomenclature_sid,
@@ -38,25 +40,25 @@ describe Api::V2::GoodsNomenclaturesController, "GET #show_by_section" do
           }
         },
         { # chapter
-          id: "#{chapter.id}",
+          id: chapter.id.to_s,
           type: 'goods_nomenclature',
           attributes: {
             goods_nomenclature_sid: chapter.goods_nomenclature_sid,
             goods_nomenclature_item_id: chapter.goods_nomenclature_item_id,
             description: chapter.description,
-            number_indents: Integer,#chapter.number_indents,
+            number_indents: Integer,
             producline_suffix: chapter.producline_suffix,
             href: Api::V2::GoodsNomenclaturesController.api_path_builder(chapter)
           }
         }
       ],
     }
-  }
-  let(:pattern_heading) {
+  end
+  let(:pattern_heading) do
     {
       data: [
         { # goods_nomenclature
-          id: "#{goods_nomenclature.id}",
+          id: goods_nomenclature.id.to_s,
           type: 'goods_nomenclature',
           attributes: {
             goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid,
@@ -68,7 +70,7 @@ describe Api::V2::GoodsNomenclaturesController, "GET #show_by_section" do
           }
         },
         { # heading
-          id: "#{heading.id}",
+          id: heading.id.to_s,
           type: 'goods_nomenclature',
           attributes: {
             goods_nomenclature_sid: heading.goods_nomenclature_sid,
@@ -81,7 +83,7 @@ describe Api::V2::GoodsNomenclaturesController, "GET #show_by_section" do
         }
       ],
     }
-  }
+  end
 
   context 'when GNs for a section are requested' do
     it 'returns rendered record of GNs in the section' do
