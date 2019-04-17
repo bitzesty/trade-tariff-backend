@@ -1,5 +1,6 @@
 class GeographicalArea < Sequel::Model
   COUNTRIES_CODES = %w[0 2].freeze
+  AREAS_CODES = %w[0 1 2].freeze
 
   plugin :time_machine
   plugin :oplog, primary_key: :geographical_area_sid
@@ -59,6 +60,10 @@ class GeographicalArea < Sequel::Model
 
     def countries
       where(geographical_code: COUNTRIES_CODES)
+    end
+    
+    def areas
+      where(geographical_code: AREAS_CODES)
     end
   end
 

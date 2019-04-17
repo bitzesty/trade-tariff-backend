@@ -113,7 +113,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :geographical_areas, only: [:countries] do
+      resources :geographical_areas, only: [:index, :countries] do
         collection { get :countries }
       end
 
