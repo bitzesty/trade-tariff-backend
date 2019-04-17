@@ -8,13 +8,6 @@ module Api
       set_id :id
 
       attributes :user_id, :reason, :date, :keep, :enqueued_at
-
-      def serialized_errors
-        errors = @resource.errors.flat_map do |attribute, error|
-          { title: attribute, detail: error }
-        end
-        { errors: errors }
-      end
     end
   end
 end

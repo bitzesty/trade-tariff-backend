@@ -2,7 +2,6 @@ module Api
   module V2
     module Commodities
       class CommodityPresenter < SimpleDelegator
-
         attr_reader :commodity, :footnotes, :import_measures, :export_measures, :cache_key
 
         def initialize(commodity, measures, cache_key)

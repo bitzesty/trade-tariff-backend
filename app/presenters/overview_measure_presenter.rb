@@ -11,7 +11,7 @@ class OverviewMeasurePresenter
     @collection = measure_deduplicate
   end
 
-private
+  private
 
   def measure_deduplicate
     third_country_duty_dedup

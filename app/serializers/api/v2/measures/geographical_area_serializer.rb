@@ -8,9 +8,9 @@ module Api
 
         set_id :id
 
-        attributes :id, :description
+        attributes :id, :description, :geographical_area_id
 
-        has_many :children_geographical_areas, key: :contained_geographical_areas, serializer: Api::V2::GeographicalAreaSerializer
+        has_many :contained_geographical_areas, key: :children_geographical_areas, record_type: :geographical_area, serializer: Api::V2::GeographicalAreaSerializer
       end
     end
   end

@@ -2,7 +2,6 @@ module Api
   module V2
     module Headings
       class HeadingPresenter < SimpleDelegator
-
         attr_reader :heading, :commodities, :cache_key
 
         def initialize(heading, commodities, cache_key)
@@ -21,7 +20,6 @@ module Api
         def chapter_id
           heading.chapter.goods_nomenclature_sid
         end
-        
       end
     end
   end

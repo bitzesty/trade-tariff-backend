@@ -2,7 +2,6 @@ module Api
   module V2
     module Chapters
       class ChapterPresenter
-
         attr_reader :chapter, :headings_presenter
         alias :headings :headings_presenter
 
@@ -14,7 +13,6 @@ module Api
           @chapter = chapter
           @headings_presenter = headings_presenter
         end
-
       end
     end
   end

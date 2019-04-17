@@ -7,7 +7,7 @@ module Api
 
       set_type :geographical_area
 
-      attributes :description
+      attributes :id, :description, :geographical_area_id
     end
   end
 end

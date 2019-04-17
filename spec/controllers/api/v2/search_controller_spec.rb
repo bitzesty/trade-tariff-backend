@@ -5,10 +5,16 @@ describe Api::V2::SearchController, "POST #search" do
     let(:chapter) { create :chapter }
     let(:pattern) {
       {
-        type: 'exact_match',
-        entry: {
-          endpoint: 'chapters',
-          id: chapter.to_param
+        data: {
+          id: String,
+          type: 'exact_search',
+          attributes: {
+            type: 'exact_match',
+            entry: {
+              endpoint: 'chapters',
+              id: chapter.to_param
+            }
+          }
         }
       }
     }
@@ -24,18 +30,24 @@ describe Api::V2::SearchController, "POST #search" do
     let(:chapter) { create :chapter, :with_description, description: 'horse', validity_start_date: Date.current }
     let(:pattern) {
       {
-        type: 'fuzzy_match',
-        reference_match: {
-          commodities: Array,
-          headings: Array,
-          chapters: Array,
-          sections: Array
-        },
-        goods_nomenclature_match: {
-          commodities: Array,
-          headings: Array,
-          chapters: Array,
-          sections: Array
+        data: {
+          id: String,
+          type: 'fuzzy_search',
+          attributes: {
+            type: 'fuzzy_match',
+            reference_match: {
+              commodities: Array,
+              headings: Array,
+              chapters: Array,
+              sections: Array
+            },
+            goods_nomenclature_match: {
+              commodities: Array,
+              headings: Array,
+              chapters: Array,
+              sections: Array
+            }
+          }
         }
       }
     }
@@ -50,8 +62,16 @@ describe Api::V2::SearchController, "POST #search" do
   describe 'errors' do
     let(:pattern) {
       {
-        q: Array,
-        as_of: Array
+        errors: [
+          {
+            title: 'q',
+            detail: String,
+          },
+          {
+            title: 'as_of',
+            detail: String,
+          }
+        ]
       }
     }
 
@@ -71,7 +91,31 @@ describe Api::V2::SearchController, "GET #suggestions" do
   let!(:commodity3) { create :commodity }
 
   let(:pattern) {
-    [ { value: String }, { value: String }, { value: String } ]
+    {
+      data: [
+        {
+          id: String,
+          type: 'search_suggestion',
+          attributes: {
+            value: String
+          }
+        },
+        {
+          id: String,
+          type: 'search_suggestion',
+          attributes: {
+            value: String
+          }
+        },
+        {
+          id: String,
+          type: 'search_suggestion',
+          attributes: {
+            value: String
+          }
+        },
+      ]
+    }
   }
 
   it 'returns rendered suggestions' do
@@ -92,7 +136,24 @@ describe Api::V2::SearchController, "GET #suggestions" do
     let!(:commodity3) { create :commodity, validity_end_date: "2015-12-31", validity_start_date: "2000-12-31" }
 
     let(:pattern) {
-      [ { value: String }, { value: String } ]
+      {
+        data: [
+          {
+            id: String,
+            type: 'search_suggestion',
+            attributes: {
+              value: String
+            }
+          },
+          {
+            id: String,
+            type: 'search_suggestion',
+            attributes: {
+              value: String
+            }
+          },
+        ]
+      }
     }
 
     before do

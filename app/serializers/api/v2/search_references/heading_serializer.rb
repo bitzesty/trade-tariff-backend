@@ -13,7 +13,6 @@ module Api
 
         has_one :section, serializer: Api::V2::SearchReferences::SectionSerializer
         has_one :chapter, serializer: Api::V2::SearchReferences::ChapterSerializer
-
       end
     end
   end
