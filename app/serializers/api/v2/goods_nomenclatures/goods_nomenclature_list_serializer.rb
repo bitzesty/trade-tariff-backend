@@ -7,7 +7,8 @@ module Api
         set_type :goods_nomenclature
         set_id :goods_nomenclature_sid
 
-        attributes :goods_nomenclature_item_id, :goods_nomenclature_sid, :description, :number_indents, :producline_suffix
+        attributes :goods_nomenclature_item_id, :goods_nomenclature_sid, :description, :number_indents
+        attribute :productline_suffix, &:producline_suffix
         attribute :href do |c|
           GoodsNomenclaturesController.api_path_builder(c)
         end
