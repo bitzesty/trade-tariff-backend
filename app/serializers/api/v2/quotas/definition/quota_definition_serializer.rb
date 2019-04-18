@@ -42,6 +42,10 @@ module Api
           attribute :blocking_period_end_date do |definition|
             definition.last_blocking_period.try(:blocking_end_date)
           end
+
+          attribute :goods_nomenclature_item_id do |definition|
+            definition.measure&.goods_nomenclature_item_id
+          end
           
           has_one :quota_order_number, key: :order_number, record_type: :order_number, serializer: Api::V2::Quotas::Definition::QuotaOrderNumberSerializer
         end

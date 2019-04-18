@@ -27,6 +27,9 @@ class QuotaDefinition < Sequel::Model
              key: :measurement_unit_code do |ds|
     ds.with_actual(MeasurementUnit)
   end
+  
+  one_to_one :measure, key: [:ordernumber, :validity_start_date],
+                       primary_key: [:quota_order_number_id, :validity_start_date]
 
   delegate :description, :abbreviation, to: :measurement_unit, prefix: true, allow_nil: true
 
