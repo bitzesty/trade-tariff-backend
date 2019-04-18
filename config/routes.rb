@@ -64,8 +64,6 @@ Rails.application.routes.draw do
       get "search_suggestions" => "search#suggestions"
       get '/headings/:id/tree' => 'headings#tree'
 
-      get 'goods_nomenclature', to: 'goods_nomenclatures#index'
-
       resources :rollbacks, only: [:create, :index]
       resources :footnotes, only: [:index, :show, :update]
       resources :measure_types, only: [:index, :show, :update]
