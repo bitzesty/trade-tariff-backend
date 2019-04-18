@@ -15,11 +15,24 @@ FactoryGirl.define do
         FactoryGirl.create(:chapter_note, chapter_id: chapter.to_param)
       }
     end
+
+    trait :with_guide do
+      after(:create) { |chapter, _evaluator|
+        guide = FactoryGirl.create(:chapter_guide)
+        chapter.add_guide guide
+        chapter.save
+      }
+    end
   end
 
   factory :chapter_note do
     chapter
 
     content { Forgery(:basic).text }
+  end
+
+  factory :chapter_guide, class: Guide do
+    title { Forgery(:basic).text }
+    url { Forgery(:basic).text }
   end
 end

@@ -39,6 +39,10 @@ class GeographicalArea < Sequel::Model
     ds.with_actual(GeographicalAreaMembership).order(Sequel.asc(:geographical_area_id))
   end
 
+  def contained_geographical_area_ids
+    contained_geographical_areas.pluck(:geographical_area_id)
+  end
+
   one_to_many :measures, key: :geographical_area_sid,
                          primary_key: :geographical_area_sid do |ds|
     ds.with_actual(Measure)

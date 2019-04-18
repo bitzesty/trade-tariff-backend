@@ -10,19 +10,22 @@ describe SearchService do
       }
     }
   end
+  
+  let(:data_serializer) { Api::V1::SearchSerializationService.new }
+  let(:error_serializer) { Api::V1::ErrorSerializationService.new }
 
   describe 'initialization' do
     let(:query) { Forgery(:basic).text }
 
     it 'assigns search query' do
       expect(
-        described_class.new(q: query).q
+        described_class.new(data_serializer, error_serializer, q: query).q
       ).to eq query
     end
 
     it 'strips [, ] characters from search query' do
       expect(
-        described_class.new(q: '[hello] [world]').q
+        described_class.new(data_serializer, error_serializer,q: '[hello] [world]').q
       ).to eq 'hello world'
     end
   end
@@ -30,19 +33,19 @@ describe SearchService do
   describe "#valid?" do
     it 'is not valid if has no t param assigned' do
       expect(
-        described_class.new(q: nil)
+        described_class.new(data_serializer, error_serializer,q: nil)
       ).not_to be_valid
     end
 
     it 'is not valid if has no as_of param assigned' do
       expect(
-        described_class.new(q: 'value')
+        described_class.new(data_serializer, error_serializer,q: 'value')
       ).not_to be_valid
     end
 
     it 'is valid if has both t and as_of params provided' do
       expect(
-        described_class.new(q: 'value', as_of: Date.current)
+        described_class.new(data_serializer, error_serializer,q: 'value', as_of: Date.current)
       ).to be_valid
     end
   end
@@ -67,15 +70,17 @@ describe SearchService do
         }
 
         it 'returns endpoint and identifier if provided with 2 digit chapter code' do
-          result = described_class.new(q: chapter.goods_nomenclature_item_id.first(2),
-                                     as_of: Date.current).to_json
+          result = described_class.new(data_serializer, error_serializer,
+                                       q: chapter.goods_nomenclature_item_id.first(2),
+                                       as_of: Date.current).to_json
 
           expect(result).to match_json_expression pattern
         end
 
         it 'returns endpoint and identifier if provided with matching 3 digit chapter code' do
-          result = described_class.new(q: chapter.goods_nomenclature_item_id.first(2),
-                                     as_of: Date.current).to_json
+          result = described_class.new(data_serializer, error_serializer,
+                                       q: chapter.goods_nomenclature_item_id.first(2),
+                                       as_of: Date.current).to_json
 
           expect(result).to match_json_expression pattern
         end
@@ -94,8 +99,9 @@ describe SearchService do
         }
 
         it 'returns endpoint and identifier if provided with 1 digit chapter code' do
-          result = described_class.new(q: chapter.goods_nomenclature_item_id.first(2),
-                                     as_of: Date.current).to_json
+          result = described_class.new(data_serializer, error_serializer,
+                                       q: chapter.goods_nomenclature_item_id.first(2),
+                                       as_of: Date.current).to_json
 
           expect(result).to match_json_expression pattern
         end
@@ -115,22 +121,25 @@ describe SearchService do
       }
 
       it 'returns endpoint and identifier if provided with 4 symbol heading code' do
-        result = described_class.new(q: heading.goods_nomenclature_item_id.first(4),
-                                   as_of: Date.current).to_json
+        result = described_class.new(data_serializer, error_serializer,
+                                     q: heading.goods_nomenclature_item_id.first(4),
+                                     as_of: Date.current).to_json
 
         expect(result).to match_json_expression pattern
       end
 
       it 'returns endpoint and identifier if provided with matching 6 (or any between length of 4 to 9) symbol heading code' do
-        result = described_class.new(q: heading.goods_nomenclature_item_id.first(6),
-                                   as_of: Date.current).to_json
+        result = described_class.new(data_serializer, error_serializer,
+                                     q: heading.goods_nomenclature_item_id.first(6),
+                                     as_of: Date.current).to_json
 
         expect(result).to match_json_expression pattern
       end
 
       it 'returns endpoint and identifier if provided with matching 10 symbol declarable heading code' do
-        result = described_class.new(q: heading.goods_nomenclature_item_id,
-                                   as_of: Date.current).to_json
+        result = described_class.new(data_serializer, error_serializer,
+                                     q: heading.goods_nomenclature_item_id,
+                                     as_of: Date.current).to_json
 
         expect(result).to match_json_expression pattern
       end
@@ -152,8 +161,9 @@ describe SearchService do
         }
 
         it 'returns endpoint and identifier if provided with 10 symbol commodity code' do
-          result = described_class.new(q: commodity.goods_nomenclature_item_id.first(10),
-                                     as_of: Date.current).to_json
+          result = described_class.new(data_serializer, error_serializer,
+                                       q: commodity.goods_nomenclature_item_id.first(10),
+                                       as_of: Date.current).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity)
         end
@@ -164,7 +174,7 @@ describe SearchService do
                   commodity.goods_nomenclature_item_id[4..5],
                   commodity.goods_nomenclature_item_id[6..7],
                   commodity.goods_nomenclature_item_id[8..9]].join("")
-          result = described_class.new(q: code,
+          result = described_class.new(data_serializer, error_serializer,q: code,
                                      as_of: Date.current).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity)
@@ -177,7 +187,7 @@ describe SearchService do
                    commodity.goods_nomenclature_item_id[6..7]].join("     ")
           code << "  " << commodity.goods_nomenclature_item_id[8..9]
 
-          result = described_class.new(q: code,
+          result = described_class.new(data_serializer, error_serializer,q: code,
                                      as_of: Date.current).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity)
@@ -189,7 +199,7 @@ describe SearchService do
                   commodity.goods_nomenclature_item_id[4..5],
                   commodity.goods_nomenclature_item_id[6..7],
                   commodity.goods_nomenclature_item_id[8..9]].join(".")
-          result = described_class.new(q: code,
+          result = described_class.new(data_serializer, error_serializer,q: code,
                                      as_of: Date.current).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity)
@@ -202,14 +212,14 @@ describe SearchService do
                    commodity.goods_nomenclature_item_id[6..7]].join("!!  !!!")
           code << "  " << commodity.goods_nomenclature_item_id[8..9]
 
-          result = described_class.new(q: code,
+          result = described_class.new(data_serializer, error_serializer,q: code,
                                      as_of: Date.current).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity)
         end
 
         it 'returns endpoint and identifier if provided with matching 12 symbol commodity code' do
-          result = described_class.new(q: commodity.goods_nomenclature_item_id + commodity.producline_suffix,
+          result = described_class.new(data_serializer, error_serializer,q: commodity.goods_nomenclature_item_id + commodity.producline_suffix,
                                      as_of: Date.current).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity)
@@ -248,7 +258,7 @@ describe SearchService do
 
         it 'does not exact match commodity with children' do
           # even though productline suffix (80) suggests that it is declarable
-          result = described_class.new(q: commodity1.goods_nomenclature_item_id,
+          result = described_class.new(data_serializer, error_serializer,q: commodity1.goods_nomenclature_item_id,
                                      as_of: Date.current).to_json
 
           expect(result).to match_json_expression heading_pattern
@@ -260,7 +270,7 @@ describe SearchService do
         let!(:commodity2) { create :commodity, :declarable, :with_heading, :with_indent, goods_nomenclature_item_id: '2210113355' }
 
         it 'returns mapped commodity' do
-          result = described_class.new(q: '1010111255',
+          result = described_class.new(data_serializer, error_serializer,q: '1010111255',
                                      as_of: Date.current).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity2)
@@ -273,7 +283,7 @@ describe SearchService do
       let!(:hidden_gono)  { create :hidden_goods_nomenclature, goods_nomenclature_item_id: commodity.goods_nomenclature_item_id }
 
       before {
-        @result = described_class.new(q: commodity.goods_nomenclature_item_id.first(10),
+        @result = described_class.new(data_serializer, error_serializer,q: commodity.goods_nomenclature_item_id.first(10),
                                     as_of: Date.current).to_json
       }
 
@@ -310,14 +320,14 @@ describe SearchService do
         }
 
         it 'returns goods code if search date falls within validity period' do
-          @result = described_class.new(q: "water",
+          @result = described_class.new(data_serializer, error_serializer,q: "water",
                                       as_of: "2005-01-01").to_json
 
           expect(@result).to match_json_expression heading_pattern
         end
 
         it 'does not return goods code if search date does not fall within validity period' do
-          @result = described_class.new(q: "water",
+          @result = described_class.new(data_serializer, error_serializer,q: "water",
                                       as_of: "2007-01-01").to_json
 
           expect(@result).not_to match_json_expression heading_pattern
@@ -348,14 +358,14 @@ describe SearchService do
         }
 
         it 'returns goods code if search date is greater than start of validity period' do
-          @result = described_class.new(q: "animal products",
+          @result = described_class.new(data_serializer, error_serializer,q: "animal products",
                                       as_of: "2007-01-01").to_json
 
           expect(@result).to match_json_expression heading_pattern
         end
 
         it 'does not return goods code if search date is less than start of validity period' do
-          @result = described_class.new(q: "animal products",
+          @result = described_class.new(data_serializer, error_serializer,q: "animal products",
                                       as_of: "1970-01-01").to_json
 
           expect(@result).not_to match_json_expression heading_pattern
@@ -369,7 +379,7 @@ describe SearchService do
       # and we don't need these advanced features
 
       let(:result) {
-        described_class.new(q: "!!! [t_e_s_t][",
+        described_class.new(data_serializer, error_serializer,q: "!!! [t_e_s_t][",
                           as_of: "1970-01-01")
       }
 
@@ -389,7 +399,7 @@ describe SearchService do
       let(:title) { "example title" }
       let!(:section) { create :section, title: title }
       let(:result) {
-        described_class.new(q: title,
+        described_class.new(data_serializer, error_serializer,q: title,
                           as_of: "1970-01-01")
       }
       let(:response_pattern) {
@@ -416,7 +426,7 @@ describe SearchService do
       let(:synonym) { "synonym 1" }
       let(:resources) { %w(section chapter heading commodity) }
       let(:exact_match) {
-        described_class.new(q: synonym, as_of: Date.current).send(:perform).results
+        described_class.new(data_serializer, error_serializer,q: synonym, as_of: Date.current).send(:perform).results
       }
 
       before {
@@ -471,14 +481,14 @@ describe SearchService do
       end
 
       it 'returns goods code if search date falls within validity period' do
-        @result = described_class.new(q: "water",
+        @result = described_class.new(data_serializer, error_serializer,q: "water",
                                     as_of: "2005-01-01").to_json
 
         expect(@result).to match_json_expression heading_pattern
       end
 
       it 'does not return goods code if search date does not fall within validity period' do
-        @result = described_class.new(q: "water",
+        @result = described_class.new(data_serializer, error_serializer,q: "water",
                                     as_of: "2007-01-01").to_json
 
         expect(@result).not_to match_json_expression heading_pattern
@@ -518,7 +528,7 @@ describe SearchService do
       }
 
       it 'only matches exact phrases' do
-        @result = described_class.new(q: 'acid oil',
+        @result = described_class.new(data_serializer, error_serializer,q: 'acid oil',
                                     as_of: Date.current).to_json
 
         expect(@result).to match_json_expression heading_pattern
@@ -528,7 +538,7 @@ describe SearchService do
 
   describe '#persisted?' do
     it 'returns false' do
-      expect(described_class.new(q: '123')).not_to be_persisted
+      expect(described_class.new(data_serializer, error_serializer,q: '123')).not_to be_persisted
     end
   end
 end

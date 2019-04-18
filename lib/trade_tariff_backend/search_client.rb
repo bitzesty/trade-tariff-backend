@@ -5,6 +5,10 @@ module TradeTariffBackend
     # Raised if Elasticsearch returns an error from query
     QueryError = Class.new(StandardError)
 
+    class Response < Hashie::Mash
+      disable_warnings
+    end
+
     attr_reader :indexed_models
     attr_reader :index_page_size
     attr_reader :search_operation_options
@@ -20,11 +24,11 @@ module TradeTariffBackend
     end
 
     def search(*)
-      Hashie::Mash.new(super)
+      Response.new(super)
     end
 
     def msearch(*)
-      Hashie::Mash.new(super)
+      Response.new(super)
     end
 
     def reindex

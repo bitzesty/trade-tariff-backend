@@ -9,9 +9,6 @@ Rails.application.configure do
   # Do not eager load code on boot.
   config.eager_load = false
 
-  # Show full error reports.
-  config.consider_all_requests_local = true
-
   # Log error messages when you accidentally call methods on nil.
   config.whiny_nils = true
 

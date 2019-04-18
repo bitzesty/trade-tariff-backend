@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-shared_examples_for 'search references controller' do
+shared_examples_for 'v2 search references controller' do
   before { login_as_api_user }
 
   render_views
@@ -9,9 +9,19 @@ shared_examples_for 'search references controller' do
 
   describe "GET #index" do
     let(:pattern) {
-      [
-        {id: Integer, title: String, referenced_class: String, referenced_id: String }
-      ]
+      {
+        data: [
+          {
+            id: String,
+            type: 'search_reference',
+            attributes: {
+              title: String,
+              referenced_id: String,
+              referenced_class: String
+            }
+          }
+        ]
+      }
     }
 
     context 'without pagination' do
@@ -54,7 +64,30 @@ shared_examples_for 'search references controller' do
 
   describe "GET to #show" do
     let(:pattern) {
-      {id: Integer, title: String, referenced: Hash, referenced_class: String, referenced_id: String }.ignore_extra_keys!
+      {
+        data:
+          {
+            id: String,
+            type: 'search_reference',
+            attributes: {
+              title: String,
+              referenced_id: String,
+              referenced_class: String
+            },
+            relationships: {
+              referenced: {
+                data: Hash
+              }
+            }
+          },
+        included: [
+          {
+            id: String,
+            type: String,
+            attributes: Hash
+          }.ignore_extra_keys!
+        ]
+      }
     }
 
     it 'returns rendered search reference record' do
@@ -71,7 +104,26 @@ shared_examples_for 'search references controller' do
 
     context 'valid params provided' do
       let(:pattern) {
-        { id: Integer, title: String, referenced: Hash, referenced_id: String, referenced_class: String }
+        {
+          data:
+            {
+              id: String,
+              type: 'search_reference',
+              attributes: {
+                title: String,
+                referenced_id: String,
+                referenced_class: String
+              },
+              relationships: Hash
+            },
+          included: [
+            {
+              id: String,
+              type: String,
+              attributes: Hash,
+            }.ignore_extra_keys!
+          ]
+        }
       }
 
       before {
@@ -94,7 +146,7 @@ shared_examples_for 'search references controller' do
 
     context 'invalid params provided' do
       let(:pattern) {
-        { errors: Hash }
+        { errors: Array }
       }
 
       before {
