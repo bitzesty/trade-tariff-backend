@@ -4,6 +4,7 @@ class QuotaSearchService
   
   def initialize(attributes)
     @scope = QuotaDefinition.
+      actual.
       eager(:measure, :quota_exhaustion_events, :quota_blocking_periods, quota_order_number: [quota_order_number_origin: :geographical_area]).
       distinct(:quota_definitions__quota_definition_sid).
       select(Sequel.expr(:quota_definitions).*).
@@ -23,7 +24,7 @@ class QuotaSearchService
   end
   
   def geographical_area_id=(value)
-    @scope = scope.where(quota_order_number_origins__geographical_area_id: value)
+    @scope = scope.where(quota_order_number_origins__geographical_area_id: value).with_actual(QuotaOrderNumberOrigin)
   end
   
   def order_number=(value)
