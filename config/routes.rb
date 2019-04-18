@@ -128,6 +128,10 @@ Rails.application.routes.draw do
       get "search_suggestions" => "search#suggestions"
       get '/headings/:id/tree' => 'headings#tree'
 
+      get 'goods_nomenclatures/section/:position', to: 'goods_nomenclatures#show_by_section', constraints: { position: /\d{1,2}/ }
+      get 'goods_nomenclatures/chapter/:chapter_id', to: 'goods_nomenclatures#show_by_chapter', constraints: { position: /\d{2}/ }
+      get 'goods_nomenclatures/heading/:heading_id', to: 'goods_nomenclatures#show_by_heading', constraints: { position: /\d{4}/ }
+
       resources :rollbacks, only: [:create, :index]
       resources :footnotes, only: [:index, :show, :update]
       resources :measure_types, only: [:index, :show, :update]
