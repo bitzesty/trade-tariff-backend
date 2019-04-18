@@ -9,7 +9,7 @@ module Api
   
           set_id :quota_definition_sid
   
-          attributes :quota_order_number_id, :initial_volume, :validity_start_date, :validity_end_date, :status, :description, :balance
+          attributes :quota_definition_sid, :quota_order_number_id, :initial_volume, :validity_start_date, :validity_end_date, :status, :description, :balance
   
           attribute :measurement_unit do |definition|
             definition.formatted_measurement_unit
