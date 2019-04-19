@@ -2,7 +2,7 @@ module Api
   module V2
     class QuotasController < ApiController
       def search
-        TimeMachine.at(Date.current) do
+        TimeMachine.now do
           quotas = QuotaSearchService.new(params).perform
           options = {}
           options[:include] = [:quota_order_number, 'quota_order_number.geographical_area']
