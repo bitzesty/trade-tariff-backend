@@ -49,7 +49,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :geographical_areas, only: [:countries] do
+      resources :geographical_areas, only: [:index, :countries] do
         collection { get :countries }
       end
 
@@ -60,6 +60,10 @@ Rails.application.routes.draw do
       end
 
       resources :search_references, only: [:index]
+
+      resources :quotas, only: [:search] do
+        collection { get :search }
+      end
 
       post "search" => "search#search"
       get "search_suggestions" => "search#suggestions"
