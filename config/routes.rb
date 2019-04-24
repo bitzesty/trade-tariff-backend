@@ -49,7 +49,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :geographical_areas, only: [:countries] do
+      resources :geographical_areas, only: [:index, :countries] do
         collection { get :countries }
       end
 
@@ -61,9 +61,17 @@ Rails.application.routes.draw do
 
       resources :search_references, only: [:index]
 
+      resources :quotas, only: [:search] do
+        collection { get :search }
+      end
+
       post "search" => "search#search"
       get "search_suggestions" => "search#suggestions"
       get '/headings/:id/tree' => 'headings#tree'
+
+      get 'goods_nomenclatures/section/:position', to: 'goods_nomenclatures#show_by_section', constraints: { position: /\d{1,2}/ }
+      get 'goods_nomenclatures/chapter/:chapter_id', to: 'goods_nomenclatures#show_by_chapter', constraints: { position: /\d{2}/ }
+      get 'goods_nomenclatures/heading/:heading_id', to: 'goods_nomenclatures#show_by_heading', constraints: { position: /\d{4}/ }
 
       resources :rollbacks, only: [:create, :index]
       resources :footnotes, only: [:index, :show, :update]
