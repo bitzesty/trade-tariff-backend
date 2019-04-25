@@ -1,9 +1,9 @@
 module Api
   module V2
-    class UpdateSerializer
+    class TariffUpdateSerializer
       include FastJsonapi::ObjectSerializer
 
-      set_type :update
+      set_type :tariff_update
 
       set_id :filename
 

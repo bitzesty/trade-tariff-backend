@@ -8,7 +8,7 @@ describe Api::V2::UpdatesController, "GET #index" do
       data: [
         {
           id: String,
-          type: 'update',
+          type: 'tariff_update',
           attributes: {
             update_type: "TariffSynchronizer::TaricUpdate",
             state: String,
@@ -18,7 +18,7 @@ describe Api::V2::UpdatesController, "GET #index" do
         }.ignore_extra_keys!,
         {
           id: String,
-          type: 'update',
+          type: 'tariff_update',
           attributes: {
             update_type: "TariffSynchronizer::TaricUpdate",
             state: String,
@@ -27,10 +27,12 @@ describe Api::V2::UpdatesController, "GET #index" do
           }.ignore_extra_keys!
         }.ignore_extra_keys!
       ],
-      links: {
-        first: String,
-        self: String,
-        last: String
+      meta: {
+        pagination: {
+          page: Integer,
+          per_page: Integer,
+          total_count: Integer
+        }
       }
     }
   }
@@ -63,7 +65,7 @@ describe Api::V2::UpdatesController, "GET #latest" do
       data: [
         {
           id: String,
-            type: 'update',
+            type: 'tariff_update',
             attributes: {
             update_type: "TariffSynchronizer::TaricUpdate",
             state: String,
