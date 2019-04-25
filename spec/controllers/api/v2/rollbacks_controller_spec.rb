@@ -69,10 +69,12 @@ describe Api::V2::RollbacksController, 'GET to #index' do
           }
         }.ignore_extra_keys!
       ].ignore_extra_values!,
-      links: {
-        first: String,
-        self: String,
-        last: String
+      meta: {
+        pagination: {
+          page: Integer,
+          per_page: Integer,
+          total_count: Integer
+        }
       }
     }
   }

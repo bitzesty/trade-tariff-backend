@@ -5,7 +5,7 @@ module Api
       before_action :collection, only: :index
 
       def index
-        render json: Api::V2::RollbackSerializer.new(@collection.to_a, pagination_links).serializable_hash
+        render json: Api::V2::RollbackSerializer.new(@collection.to_a, serialization_meta).serializable_hash
       end
 
       def create
@@ -29,12 +29,14 @@ module Api
         @collection ||= Rollback.descending.paginate(current_page, per_page)
       end
 
-      def pagination_links
+      def serialization_meta
         {
-          links: {
-            first: api_updates_path(per_page: per_page),
-            self: api_updates_path(page: current_page, per_page: per_page),
-            last: api_updates_path(page: @collection.page_count, per_page: per_page)
+          meta: {
+            pagination: {
+              page: current_page,
+              per_page: per_page,
+              total_count: @collection.pagination_record_count
+            }
           }
         }
       end
