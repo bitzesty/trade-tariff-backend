@@ -102,10 +102,18 @@ describe Api::V2::GoodsNomenclaturesController, Api::V2::GoodsNomenclaturesContr
   end
 
   context 'when GNs for a heading are requested' do
-    it 'returns rendered record of GNs in the heading' do
-      get :show_by_heading, params: { heading_id: heading.short_code }, format: :json
+    context 'with a correct short code' do
+      it 'returns rendered record of GNs in the heading' do
+        get :show_by_heading, params: { heading_id: heading.short_code }, format: :json
 
-      expect(response.body).to match_json_expression pattern_heading
+        expect(response.body).to match_json_expression pattern_heading
+      end
+    end
+
+    context 'with an incorrect short code' do
+      it 'returns a 404' do
+        expect { get :show_by_heading, params: { heading_id: '0' }, format: :json }.to raise_error { ActionController::UrlGenerationError }
+      end
     end
   end
 end
