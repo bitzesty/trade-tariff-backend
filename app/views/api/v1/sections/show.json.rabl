@@ -15,6 +15,7 @@ child(chapters: :chapters) do
   end
 
   node(:chapter_note_id) { |chapter| chapter.chapter_note.try(:id) }
+  node(:search_references_count) { |chapter| chapter.search_references.count }
 end
 
 node(:_response_info) do
