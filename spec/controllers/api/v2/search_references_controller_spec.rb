@@ -29,7 +29,7 @@ describe Api::V2::SearchReferencesController, "GET to #index"do
     }
 
     it 'performs lookup with provided letter' do
-      get :index, params: { letter: 'b' }, format: :json
+      get :index, params: { query: { letter: 'b' } }, format: :json
 
       expect(response.body).to match_json_expression pattern
     end
@@ -45,7 +45,7 @@ describe Api::V2::SearchReferencesController, "GET to #index"do
     }
 
     it 'peforms lookup with letter A by default' do
-      get :index, params: { letter: 'a' }, format: :json
+      get :index, format: :json
 
       expect(response.body).to match_json_expression pattern
     end
