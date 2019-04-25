@@ -24,6 +24,10 @@ class Measure < Sequel::Model
   many_to_one :export_refund_nomenclature, key: :export_refund_nomenclature_sid,
                                    foreign_key: :export_refund_nomenclature_sid
 
+  def export_refund_nomenclature_id
+    export_refund_nomenclature_sid
+  end
+
   one_to_one :measure_type, primary_key: :measure_type_id,
                     key: :measure_type_id,
                     class_name: MeasureType do |ds|
@@ -32,6 +36,10 @@ class Measure < Sequel::Model
 
   one_to_many :measure_conditions, key: :measure_sid,
     order: [Sequel.asc(:condition_code), Sequel.asc(:component_sequence_number)]
+
+  def measure_condition_ids
+    measure_conditions.pluck(:measure_condition_sid)
+  end
 
   one_to_one :geographical_area, key: :geographical_area_sid,
                         primary_key: :geographical_area_sid,
@@ -50,6 +58,10 @@ class Measure < Sequel::Model
                                              order: Sequel.asc(:geographical_area_id),
                                              class_name: 'GeographicalArea'
 
+  def excluded_geographical_area_ids
+    excluded_geographical_areas.pluck(:geographical_area_id)
+  end
+
   many_to_many :footnotes, join_table: :footnote_association_measures,
                            order: [Sequel.asc(:footnote_type_id, nulls: :first),
                                    Sequel.asc(:footnote_id, nulls: :first)],
@@ -57,6 +69,10 @@ class Measure < Sequel::Model
                            right_key: %i[footnote_type_id footnote_id] do |ds|
                              ds.with_actual(Footnote)
                            end
+
+  def footnote_ids
+    footnotes&.map(&:code)
+  end
 
   one_to_many :footnote_association_measures, key: :measure_sid, primary_key: :measure_sid
 
@@ -67,8 +83,12 @@ class Measure < Sequel::Model
     ds.with_actual(AdditionalCode)
   end
 
-  one_to_one :meursing_additional_code, key: :additional_code,
-                                        primary_key: :additional_code_id do |ds|
+  def additional_code_id
+    additional_code_sid
+  end
+
+  one_to_one :meursing_additional_code, key: :meursing_additional_code_sid,
+                                        primary_key: :additional_code_sid do |ds|
     ds.with_actual(MeursingAdditionalCode)
   end
 
@@ -152,6 +172,10 @@ class Measure < Sequel::Model
     result << generating_regulation
     result << generating_regulation.base_regulation if measure_generating_regulation_role == MODIFICATION_REGULATION_ROLE
     result.compact
+  end
+
+  def legal_act_ids
+    legal_acts.map(&:regulation_id)
   end
 
   # Soft-deleted
@@ -337,6 +361,10 @@ class Measure < Sequel::Model
     full_temporary_stop_regulation.presence || measure_partial_temporary_stop
   end
 
+  def suspending_regulation_id
+    suspending_regulation&.regulation_id
+  end
+
   def associated_to_non_open_ended_gono?
     goods_nomenclature.present? && goods_nomenclature.validity_end_date.present?
   end
@@ -390,6 +418,10 @@ class Measure < Sequel::Model
       qon.associations[:quota_definition] = nil
       qon
     end
+  end
+
+  def order_number_id
+    order_number&.quota_order_number_id
   end
 
   def self.changes_for(depth = 1, conditions = {})

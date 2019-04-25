@@ -5,11 +5,11 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-ruby "~> 2.5.3"
+ruby "~> 2.6.2"
 
 # Server
 gem "puma", "~> 3.4"
-gem "rails", "5.1.6.1"
+gem "rails", "5.1.6.2"
 gem "sinatra", "~> 2.0.2"
 
 # DB
@@ -20,6 +20,9 @@ gem "sequel-rails", "~> 1.0.0"
 # File uploads and AWS
 gem "aws-sdk", "~> 2"
 gem "aws-sdk-rails", ">= 1.0.1"
+
+# File zip/unzipping
+gem 'rubyzip'
 
 # Background jobs
 gem "redis-rails"
@@ -49,7 +52,8 @@ gem "yajl-ruby", "~> 1.3.1", require: "yajl"
 
 # API related
 gem "ansi", "~> 1.5"
-gem "curb", "~> 0.8"
+gem "curb", "~> 0.9"
+gem "fast_jsonapi", "~> 1.5"
 gem "rabl", "~> 0.12"
 gem "responders", "~> 2.1", ">= 2.1.0"
 gem "tilt"

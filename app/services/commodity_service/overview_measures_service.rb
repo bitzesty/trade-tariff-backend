@@ -25,6 +25,5 @@ module CommodityService
       result = search_client.search index: CommodityIndex.new(TradeTariffBackend.search_namespace).name, body: { query: { match: { id: @goods_nomenclature_sid } } }
       result&.hits&.hits&.first&._source
     end
-
   end
 end

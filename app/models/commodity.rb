@@ -38,7 +38,7 @@ class Commodity < GoodsNomenclature
                                   remover: proc { |search_reference| search_reference.update(referenced_id: nil, referenced_class: nil) },
                                   clearer: proc { search_references_dataset.update(referenced_id: nil, referenced_class: nil) }
 
-  delegate :section, to: :chapter
+  delegate :section, :section_id, to: :chapter, allow_nil: true
 
   dataset_module do
     def by_code(code = "")
@@ -87,6 +87,10 @@ class Commodity < GoodsNomenclature
       .reverse
       .sort_by(&:number_indents)
       .select { |a| a.number_indents < goods_nomenclature_indent.number_indents }
+  end
+
+  def ancestor_ids
+    ancestors.pluck(:goods_nomenclature_sid)
   end
 
   def declarable?

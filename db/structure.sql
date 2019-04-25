@@ -9576,6 +9576,13 @@ CREATE INDEX measures_goods_nomenclature_item_id_index ON public.measures_oplog 
 
 
 --
+-- Name: measures_oplog_ordernumber_validity_start_date_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX measures_oplog_ordernumber_validity_start_date_index ON public.measures_oplog USING btree (ordernumber, validity_start_date);
+
+
+--
 -- Name: megao_meaexcgeoareopl_urededcaleaslog_operation_date; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10313,3 +10320,4 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20180828074852_add_complet
 INSERT INTO "schema_migrations" ("filename") VALUES ('20181003140819_add_updated_at_to_sections.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20181029112658_change_size_to_six_for_measure_type_id.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20181211165412_create_guides.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20190418162242_add_order_number_index_on_measure.rb');
