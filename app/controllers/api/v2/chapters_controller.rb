@@ -18,7 +18,7 @@ module Api
                                                         .all).root_entries
 
         options = {}
-        options[:include] = [:section, :guides, :headings]
+        options[:include] = [:section, :guides, :headings, 'headings.children']
         presenter = Api::V2::Chapters::ChapterPresenter.new(@chapter, headings_presenter)
         render json: Api::V2::Chapters::ChapterSerializer.new(presenter, options).serializable_hash
       end
