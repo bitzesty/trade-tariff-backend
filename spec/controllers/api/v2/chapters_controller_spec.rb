@@ -81,6 +81,11 @@ describe Api::V2::ChaptersController, "GET #show" do
             leaf: true,
             description_plain: heading.description_plain,
             formatted_description: heading.formatted_description
+          },
+          relationships: {
+            children: {
+              data: Array
+            }
           }
         }
       ]
