@@ -6,6 +6,10 @@ class GoodsNomenclatureMapper
     def children
       @children ||= []
     end
+    
+    def child_ids
+      children.map(&:goods_nomenclature_sid)
+    end
 
     def leaf?
       children.empty?
