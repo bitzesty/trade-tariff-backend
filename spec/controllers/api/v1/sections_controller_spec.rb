@@ -46,8 +46,8 @@ describe Api::V1::SectionsController, "GET #index" do
 
   let(:pattern) {
     [
-      {id: Integer, section_note_id: nil, position: Integer, title: String, numeral: String, chapter_from: String, chapter_to: String},
-      {id: Integer, section_note_id: nil, position: Integer, title: String, numeral: String, chapter_from: String, chapter_to: String}
+      {id: Integer, section_note_id: nil, position: Integer, title: String, numeral: String, chapter_from: String, chapter_to: String, search_references_count: Integer},
+      {id: Integer, section_note_id: nil, position: Integer, title: String, numeral: String, chapter_from: String, chapter_to: String, search_references_count: Integer}
     ]
   }
 

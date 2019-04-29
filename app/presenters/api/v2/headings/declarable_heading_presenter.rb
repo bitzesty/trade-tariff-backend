@@ -23,6 +23,10 @@ module Api
         def export_measure_ids
           export_measures.map(&:measure_sid)
         end
+
+        def chapter_id
+          heading.chapter.goods_nomenclature_sid
+        end
       end
     end
   end
