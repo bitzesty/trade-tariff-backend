@@ -82,7 +82,7 @@ module TradeTariffBackend
     end
 
     def pre_warm_headings_cache
-      actual_date = Date.current
+      actual_date = Date.yesterday
       TimeMachine.now do
         Heading.dataset.each do |heading|
           ::HeadingService::HeadingSerializationService.new(heading, actual_date).serializable_hash
