@@ -11,6 +11,11 @@ namespace :tariff do
   task reindex: %w[environment] do
     TradeTariffBackend.reindex
   end
+  
+  desc 'Pre-warm heavy headings cache'
+  task pre_warm_cache: %w[environment] do
+    TradeTariffBackend.pre_warm_headings_cache
+  end
 
   desc 'Add commodity footnotes for ECO licences where these is an export restriction'
   task add_missing_commodity_footnote: :environment do
