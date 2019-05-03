@@ -81,6 +81,15 @@ module TradeTariffBackend
       end
     end
 
+    def pre_warm_headings_cache
+      actual_date = Date.current
+      TimeMachine.now do
+        Heading.dataset.each do |heading|
+          ::HeadingService::HeadingSerializationService.new(heading, actual_date).serializable_hash
+        end
+      end
+    end
+
     # Number of changes to fetch for Commodity/Heading/Chapter
     def change_count
       10
