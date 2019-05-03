@@ -76,7 +76,8 @@ class Measure < Sequel::Model
 
   one_to_many :footnote_association_measures, key: :measure_sid, primary_key: :measure_sid
 
-  one_to_many :measure_components, key: :measure_sid
+  one_to_many :measure_components, key: :measure_sid,
+                                   order: [Sequel.asc(:oid)]
 
   one_to_one :additional_code, key: :additional_code_sid,
                                primary_key: :additional_code_sid do |ds|
