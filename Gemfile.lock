@@ -1,5 +1,5 @@
 GIT
-  remote: https://gitlab.bitzesty.com/clients/trade-tariff/uktt.git
+  remote: https://github.com/mcumcu/uktt.git
   revision: 56bcfd262ce969e8a729573d781a5272323e551b
   specs:
     uktt (0.2.0)
