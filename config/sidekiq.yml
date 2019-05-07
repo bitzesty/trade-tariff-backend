@@ -21,3 +21,6 @@
   UpdatesSynchronizerWorker:
     cron: "0 22 * * *" # 10 PM every days
     description: "UpdatesSynchronizerWorker will run every day at 10pm."
+  CacheWarmingWorker:
+    cron: "0 3 * * *" # 3 AM every day
+    description: "CacheWarmingWorker will run every day at 3am."
