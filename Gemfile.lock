@@ -1,6 +1,6 @@
 GIT
-  remote: https://gitlab.bitzesty.com/christopher.unger/uktt
-  revision: 39d23cdaf71ffc85fd841e4ce790a40b408f32f9
+  remote: https://gitlab.bitzesty.com/clients/trade-tariff/uktt.git
+  revision: 56bcfd262ce969e8a729573d781a5272323e551b
   specs:
     uktt (0.2.0)
       faraday

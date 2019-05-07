@@ -59,7 +59,7 @@ gem "responders", "~> 2.1", ">= 2.1.0"
 gem "tilt"
 
 # Printed PDF
-gem 'uktt', git: 'https://gitlab.bitzesty.com/christopher.unger/uktt'
+gem 'uktt', git: 'https://gitlab.bitzesty.com/clients/trade-tariff/uktt.git'
 gem 'combine_pdf'
 gem 'sidekiq-batch'
 
