@@ -6,7 +6,7 @@ class CacheWarmingWorker
   def perform
     logger.info 'Running CacheWarmingWorker'
     logger.info 'Warming it up...'
-    TradeTariffBackend.pre_war_headings_cache
+    TradeTariffBackend.pre_warm_headings_cache
     logger.info 'Warming complete!'
   end
 end
