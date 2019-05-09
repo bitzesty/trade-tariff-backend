@@ -128,10 +128,8 @@ shared_examples_for 'v2 search references controller' do
 
       before {
         post :create, params: {
-            search_reference: {
-              title: search_reference.title
-            },
-            format: :json
+          data: { type: :search_reference, attributes: { title: search_reference.title } },
+          format: :json
         }.merge(collection_query)
       }
 
@@ -151,7 +149,7 @@ shared_examples_for 'v2 search references controller' do
 
       before {
         post :create, params: {
-          search_reference: { title: '' },
+          data: { type: :search_reference, attributes: { title: '' } },
           format: :json
         }.merge(collection_query)
       }
@@ -209,9 +207,7 @@ shared_examples_for 'v2 search references controller' do
     context 'valid params provided' do
       before {
         put :update, params: {
-          search_reference: {
-            title: new_title
-          },
+          data: { type: search_reference, attributes: { title: new_title } },
           format: :json
         }.merge(resource_query)
       }
@@ -236,9 +232,7 @@ shared_examples_for 'v2 search references controller' do
 
       before {
         put :update, params: {
-          search_reference: {
-            title: '',
-          },
+          data: { type: search_reference, attributes: { title: '' } },
           format: :json
         }.merge(resource_query)
       }

@@ -18,7 +18,7 @@ module Api
       def update
         @measure_type = MeasureType.national.with_pk!(measure_type_pk)
         @measure_type.measure_type_description.tap do |measure_type_description|
-          measure_type_description.set(measure_type_params)
+          measure_type_description.set(measure_type_params[:attributes])
           measure_type_description.save
         end
 
@@ -28,7 +28,7 @@ module Api
       private
 
       def measure_type_params
-        params.require(:measure_type).permit(:description)
+        params.require(:data).permit(:type, attributes: [:description])
       end
 
       def measure_type_pk

@@ -41,7 +41,7 @@ describe Api::V2::Sections::SectionNotesController, "POST to #create" do
 
   context 'save succeeded' do
     before {
-      post :create, params: { section_id: section.id, section_note: { content: 'test string' } }, format: :json
+      post :create, params: { section_id: section.id, data: { type: 'section_note', attributes: { content: 'test string' } } }, format: :json
     }
 
     it 'responds with success' do
@@ -65,7 +65,7 @@ describe Api::V2::Sections::SectionNotesController, "POST to #create" do
 
   context 'save failed' do
     before {
-      post :create, params: { section_id: section.id, section_note: { content: '' } }, format: :json
+      post :create, params: { section_id: section.id, data: { type: 'section_note', attributes: { content: '' } } }, format: :json
     }
 
     it 'responds with 406 unacceptable' do
@@ -93,27 +93,27 @@ describe Api::V2::Sections::SectionNotesController, "PUT to #update" do
 
   context 'save succeeded' do
     it 'responds with success (204 no content)' do
-      put :update, params: { section_id: section.id, section_note: { content: 'test string' } }, format: :json
+      put :update, params: { section_id: section.id, data: { type: 'section_note', attributes: { content: 'test string' } } }, format: :json
 
       expect(response.status).to eq 204
     end
 
     it 'changes section_note content' do
       expect {
-        put :update, params: { section_id: section.id, section_note: { content: 'test string' } }, format: :json
+        put :update, params: { section_id: section.id, data: { type: 'section_note', attributes: { content: 'test string' } } }, format: :json
       }.to change{ section.reload.section_note.content }
     end
   end
 
   context 'save failed' do
     it 'responds with 422 not acceptable' do
-      put :update, params: { section_id: section.id, section_note: { content: '' } }, format: :json
+      put :update, params: { section_id: section.id, data: { type: 'section_note', attributes: { content: '' } } }, format: :json
 
       expect(response.status).to eq 422
     end
 
     it 'returns section_note validation errors' do
-      put :update, params: { section_id: section.id, section_note: { content: '' } }, format: :json
+      put :update, params: { section_id: section.id, data: { type: 'section_note', attributes: { content: '' } } }, format: :json
 
       pattern = {
         errors: Hash,

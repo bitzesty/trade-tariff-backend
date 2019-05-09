@@ -18,7 +18,7 @@ module Api
         end
 
         def create
-          chapter_note = ChapterNote.new(chapter_note_params.merge(chapter_id: chapter.to_param))
+          chapter_note = ChapterNote.new(chapter_note_params[:attributes].merge(chapter_id: chapter.to_param))
           chapter_note.save(raise_on_failure: false)
 
           respond_with chapter_note,
@@ -27,7 +27,7 @@ module Api
 
         def update
           chapter_note = chapter.chapter_note
-          chapter_note.set(chapter_note_params)
+          chapter_note.set(chapter_note_params[:attributes])
           chapter_note.save(raise_on_failure: false)
 
           respond_with chapter_note
@@ -46,7 +46,7 @@ module Api
         private
 
         def chapter_note_params
-          params.require(:chapter_note).permit(:content)
+          params.require(:data).permit(:type, attributes: [:content])
         end
 
         def chapter
