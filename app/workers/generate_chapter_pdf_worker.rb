@@ -57,18 +57,16 @@ class GenerateChapterPdfWorker
     if File.directory?(@dir)
       start = Time.now.to_i
 
-      # pdf = ExportChapterPdf.new(@chapter)
-      # pdf.save_as(@pdf_file_path)
-
       pdf = Uktt::Pdf.new
       pdf.config = {
         chapter_id: @chapter.short_code,
         filepath: @pdf_file_path,
-        host: 'https://www.trade-tariff.service.gov.uk'
+        host: 'https://www.trade-tariff.service.gov.uk/api'
       }
+      logger.info "PDF started: #{@pdf_file_path}"
       pdf.make_chapter
-
       logger.info "PDF saved locally: #{@pdf_file_path}"
+
       @logger.info [
         @chapter.short_code,
         @chapter.goods_nomenclature_sid,

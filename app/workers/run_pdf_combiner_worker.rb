@@ -37,7 +37,7 @@ class RunPdfCombinerWorker
   end
 
   def bucket_name
-    ENV.fetch("AWS_BUCKET_NAME")
+    ENV.fetch("AWS_PDF_BUCKET_NAME")
   end
 
   def bucket_prefix

@@ -22,7 +22,7 @@ class UploadChapterPdfWorker
   end
 
   def bucket_name
-    ENV.fetch("AWS_BUCKET_NAME")
+    ENV.fetch("AWS_PDF_BUCKET_NAME")
   end
 
   def set_s3_object
