@@ -83,7 +83,7 @@ class ApplicationController < ActionController::Base
     # * 0: captures no requests
     # * 0.75: captures 75% of requests
     # * 1: captures all requests
-    sample_rate = 0.75
+    sample_rate = 0.5
 
     if rand > sample_rate
       Rails.logger.debug("[Scout] Ignoring request: #{request.original_url}")
