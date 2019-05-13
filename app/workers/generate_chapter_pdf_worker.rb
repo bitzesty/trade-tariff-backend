@@ -1,7 +1,7 @@
 class GenerateChapterPdfWorker
   include Sidekiq::Worker
 
-  sidekiq_options retry: 2
+  sidekiq_options retry: 3
 
   def self.chapter_pdf(chapter_sid, save_immediately=false)
     chapter = Chapter.eager(:headings).where(goods_nomenclature_sid: chapter_sid).take
