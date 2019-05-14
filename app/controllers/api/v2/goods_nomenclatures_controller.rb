@@ -4,6 +4,7 @@ module Api
   module V2
     class GoodsNomenclaturesController < ApiController
       before_action :set_cache_key
+      before_action :set_request_format, only: %w(show_by_section show_by_chapter show_by_heading)
 
       def index
         commodities = GoodsNomenclature.non_hidden
@@ -73,6 +74,10 @@ module Api
         return if key_string.nil?
         
         @goods_nomenclatures_cache_key = "goods_nomenclatures-#{key_string}-#{actual_date}"
+      end
+
+      def set_request_format
+        request.format = :csv if request.headers["CONTENT_TYPE"] == 'text/csv'
       end
     end
   end
