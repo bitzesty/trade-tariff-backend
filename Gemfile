@@ -28,6 +28,7 @@ gem 'rubyzip'
 gem "redis-rails"
 gem "sidekiq", "~> 4.1.4"
 gem "sidekiq-scheduler", "~> 2.1.8"
+gem "redlock", "~> 1.0.0"
 
 # Elasticsearch
 gem "elasticsearch", "6.1.0"

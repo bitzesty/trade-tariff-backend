@@ -2,7 +2,6 @@ require 'date'
 require 'logger'
 require 'fileutils'
 require 'ring_buffer'
-require 'redis_lock'
 require 'active_support/notifications'
 require 'active_support/log_subscriber'
 
@@ -148,7 +147,7 @@ module TariffSynchronizer
       ) if applied_updates.any? && BaseUpdate.pending_or_failed.none?
     end
 
-    rescue RedisLock::LockTimeout
+    rescue Redlock::LockError
       instrument "apply_lock_error.tariff_synchronizer"
   end
 
@@ -216,7 +215,7 @@ module TariffSynchronizer
         keep: keep
       )
     end
-  rescue RedisLock::LockTimeout
+  rescue Redlock::LockError
     instrument(
       "rollback_lock_error.tariff_synchronizer",
       date: rollback_date,

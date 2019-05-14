@@ -1,4 +1,3 @@
-require 'redis_lock'
 require 'ostruct'
 require "paas_resolver"
 
@@ -67,8 +66,8 @@ module TradeTariffBackend
     end
 
     def with_redis_lock(lock_name = db_lock_key, &block)
-      lock = RedisLock.new(RedisLockDb.redis, lock_name)
-      lock.lock &block
+      lock = Redlock::Client.new([ RedisLockDb.redis ])
+      lock.lock!(lock_name, 5000, &block)
     end
 
     def reindex(indexer = search_client)
