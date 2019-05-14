@@ -4,33 +4,34 @@ module Api
       class SectionNotesController < ApiController
         before_action :authenticate_user!
 
-        rescue_from Sequel::RecordNotFound do |exception|
-          render json: {}, status: 404
-        end
-
         def show
-          @section = section
-          @section_note = section.section_note
+          section_note = section.section_note
 
-          raise Sequel::RecordNotFound if @section_note.blank?
+          raise Sequel::RecordNotFound if section_note.blank?
 
-          respond_with @section_note
+          render json: Api::V2::Sections::SectionNoteSerializer.new(section_note).serializable_hash
         end
 
         def create
           section_note = SectionNote.new(section_note_params[:attributes].merge(section_id: section.id))
-          section_note.save(raise_on_failure: false)
 
-          respond_with section_note,
-            location: api_section_section_note_url(section.id)
+          if section_note.save(raise_on_failure: false)
+            response.headers['Location'] = api_section_section_note_url(section.id)
+            render json: Api::V2::Sections::SectionNoteSerializer.new(section_note).serializable_hash, status: :created
+          else
+            render json: Api::V2::Sections::SectionNoteSerializer.new(section_note).serialized_errors, status: :unprocessable_entity
+          end
         end
 
         def update
           section_note = section.section_note
           section_note.set(section_note_params[:attributes])
-          section_note.save(raise_on_failure: false)
 
-          respond_with section_note
+          if section_note.save(raise_on_failure: false)
+            render json: Api::V2::Sections::SectionNoteSerializer.new(section_note).serializable_hash, status: :ok
+          else
+            render json: Api::V2::Sections::SectionNoteSerializer.new(section_note).serialized_errors, status: :unprocessable_entity
+          end
         end
 
         def destroy
@@ -40,7 +41,7 @@ module Api
 
           section_note.destroy
 
-          respond_with section_note
+          head :no_content
         end
 
         private

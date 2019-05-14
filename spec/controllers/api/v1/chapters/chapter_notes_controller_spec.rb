@@ -70,7 +70,7 @@ describe Api::V1::Chapters::ChapterNotesController, "POST to #create" do
       post :create, params: { chapter_id: chapter.to_param, chapter_note: { content: '' } }, format: :json
     }
 
-    it 'responds with 406 unacceptable' do
+    it 'responds with 422' do
       expect(response.status).to eq 422
     end
 
