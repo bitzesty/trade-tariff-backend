@@ -37,13 +37,13 @@ module Api
 
         case GoodsNomenclature.class_determinator.call(object)
         when "Chapter"
-          "/v2/chapters/#{gnid.first(2)}.json"
+          "/api/v2/chapters/#{gnid.first(2)}.json"
         when "Heading"
-          "/v2/headings/#{gnid.first(4)}.json"
+          "/api/v2/headings/#{gnid.first(4)}.json"
         when "Commodity"
-          "/v2/commodities/#{gnid.first(10)}.json"
+          "/api/v2/commodities/#{gnid.first(10)}.json"
         else
-          "/v2/commodities/#{gnid.first(10)}.json"
+          "/api/v2/commodities/#{gnid.first(10)}.json"
         end
       end
       helper_method :api_path_builder
