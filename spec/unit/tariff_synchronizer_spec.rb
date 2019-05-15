@@ -104,7 +104,7 @@ describe TariffSynchronizer, truncation: true do
 
         TariffSynchronizer.apply
 
-        expect(@logger.logged(:info).size).to eq(1)
+        expect(@logger.logged(:info).size).to eq(3)
         expect(@logger.logged(:info).last).to include("Finished applying updates")
         expect(ActionMailer::Base.deliveries).not_to be_empty
         expect(ActionMailer::Base.deliveries.last.subject).to include("Tariff updates applied")
