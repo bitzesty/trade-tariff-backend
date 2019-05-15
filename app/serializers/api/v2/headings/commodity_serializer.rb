@@ -16,6 +16,10 @@ module Api
           commodity.parent.try(:goods_nomenclature_sid)
         end
 
+        attribute :search_references_count do |commodity|
+          commodity.search_references.count
+        end
+
         has_many :overview_measures_indexed, key: :overview_measures, record_type: :measure,
                  serializer: Api::V2::Measures::OverviewMeasureSerializer
 

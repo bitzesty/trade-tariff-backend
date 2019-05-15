@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     # How (or even if) API versioning will be implemented is still an open question. We can defer
     # the choice until we need to expose the API to clients which we don't control.
 
-    scope module: :v2, constraints: ApiConstraints.new(version: 2, default: false) do
+    scope module: :v2, constraints: ApiConstraints.new(version: 2, default: true) do
       resources :sections, only: [:index, :show], constraints: { id: /\d{1,2}/ } do
         collection do
           get :tree
@@ -78,7 +78,7 @@ Rails.application.routes.draw do
       resources :measure_types, only: [:index, :show, :update]
     end
 
-    scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
+    scope module: :v1, constraints: ApiConstraints.new(version: 1, default: false) do
       resources :sections, only: [:index, :show], constraints: { id: /\d{1,2}/ } do
         collection do
           get :tree
