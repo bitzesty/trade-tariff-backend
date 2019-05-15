@@ -17,6 +17,11 @@ namespace :tariff do
     TradeTariffBackend.pre_warm_headings_cache
   end
 
+  desc 'Recache relevant entities on ElasticSearch'
+  task recache: %w[environment] do
+    TradeTariffBackend.recache
+  end
+
   desc 'Add commodity footnotes for ECO licences where these is an export restriction'
   task add_missing_commodity_footnote: :environment do
     measure_type_id = MeasureType.all.detect { |mt| mt.description == 'Export authorization (Dual use)' }.values[:measure_type_id]

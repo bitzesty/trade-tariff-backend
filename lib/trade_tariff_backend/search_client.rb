@@ -12,6 +12,7 @@ module TradeTariffBackend
     attr_reader :indexed_models
     attr_reader :index_page_size
     attr_reader :search_operation_options
+    attr_reader :namespace
 
     delegate :search_index_for, to: TradeTariffBackend
 
@@ -19,6 +20,7 @@ module TradeTariffBackend
       @indexed_models = options.fetch(:indexed_models, [])
       @index_page_size = options.fetch(:index_page_size, 1000)
       @search_operation_options = options.fetch(:search_operation_options, {})
+      @namespace = options.fetch(:namespace, 'search')
 
       super(search_client)
     end
@@ -33,7 +35,7 @@ module TradeTariffBackend
 
     def reindex
       indexed_models.each do |model|
-        search_index_for(model).tap do |index|
+        search_index_for(namespace, model).tap do |index|
           drop_index(index)
           create_index(index)
           build_index(index, model)
@@ -56,18 +58,18 @@ module TradeTariffBackend
     end
 
     def index(model)
-      search_index_for(model.class).tap do |model_index|
+      search_index_for(namespace, model.class).tap do |model_index|
         super({
           index: model_index.name,
           type: model_index.type,
           id: model.id,
-          body: TradeTariffBackend.model_serializer_for(model_index.model).new(model).as_json
+          body: TradeTariffBackend.model_serializer_for(namespace, model_index.model).new(model).as_json
         }.merge(search_operation_options))
       end
     end
 
     def delete(model)
-      search_index_for(model.class).tap do |model_index|
+      search_index_for(namespace, model.class).tap do |model_index|
         super({
           index: model_index.name,
           type: model_index.type,
@@ -85,7 +87,7 @@ module TradeTariffBackend
             _index: index.name,
             _type: index.type,
             _id: model.id,
-            data: TradeTariffBackend.model_serializer_for(index.model).new(model).as_json
+            data: TradeTariffBackend.model_serializer_for(namespace, index.model).new(model).as_json
           }
         )
       end

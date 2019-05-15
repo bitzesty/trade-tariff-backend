@@ -7,7 +7,7 @@ describe TradeTariffBackend::SearchClient do
     }
 
     let(:search_result) {
-      TradeTariffBackend.search_client.search q: 'test', index: TradeTariffBackend.search_index_for(commodity).name
+      TradeTariffBackend.search_client.search q: 'test', index: TradeTariffBackend.search_index_for('search', commodity).name
     }
 
     it 'searches in supplied index' do
@@ -29,17 +29,17 @@ describe TradeTariffBackend::SearchClient do
 
     before {
       # Make sure index is fresh
-      TradeTariffBackend.search_client.drop_index(TradeTariffBackend.search_index_for(commodity))
-      TradeTariffBackend.search_client.create_index(TradeTariffBackend.search_index_for(commodity))
+      TradeTariffBackend.search_client.drop_index(TradeTariffBackend.search_index_for('search', commodity))
+      TradeTariffBackend.search_client.create_index(TradeTariffBackend.search_index_for('search', commodity))
     }
 
     it 'bulk indexes all model entries' do
       TradeTariffBackend.search_client.build_index(
-        TradeTariffBackend.search_index_for(commodity),
+        TradeTariffBackend.search_index_for('search', commodity),
         commodity.class
       )
 
-      search_result = TradeTariffBackend.search_client.search q: 'test', index: TradeTariffBackend.search_index_for(commodity).name
+      search_result = TradeTariffBackend.search_client.search q: 'test', index: TradeTariffBackend.search_index_for('search', commodity).name
 
       expect(search_result.hits.total).to be >= 1
       expect(search_result.hits.hits.first._source.goods_nomenclature_item_id).to eq commodity.goods_nomenclature_item_id
