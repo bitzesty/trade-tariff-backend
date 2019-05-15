@@ -48,9 +48,9 @@ class RunPdfCombinerWorker
     @dir = ENV["AWS_PDF_ROOT_PATH"] || ''
     @key = ENV["AWS_PDF_FILENAME"] || 'tariff.pdf'
     @s3 = Aws::S3::Resource.new(
-      region: ENV.fetch("AWS_REGION"),
-      access_key_id: ENV.fetch("AWS_ACCESS_KEY_ID"),
-      secret_access_key: ENV.fetch("AWS_SECRET_ACCESS_KEY")
+      region: ENV.fetch("AWS_PDF_REGION"),
+      access_key_id: ENV.fetch("AWS_PDF_ACCESS_KEY_ID"),
+      secret_access_key: ENV.fetch("AWS_PDF_SECRET_ACCESS_KEY")
     )
     @s3_obj = @s3.bucket(bucket_name).object(s3_file_path)
   end
