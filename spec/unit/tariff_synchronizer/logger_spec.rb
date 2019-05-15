@@ -34,7 +34,7 @@ describe TariffSynchronizer::Logger, truncation: true do
   describe "#rollback_lock_error" do
     before {
        expect(TradeTariffBackend).to receive(
-        :with_redis_lock).and_raise(RedisLock::LockTimeout)
+        :with_redis_lock).and_raise(Redlock::LockError)
 
        TariffSynchronizer.rollback(Date.current, true)
     }
@@ -48,7 +48,7 @@ describe TariffSynchronizer::Logger, truncation: true do
   describe "#apply_lock_error" do
     before {
        expect(TradeTariffBackend).to receive(
-        :with_redis_lock).and_raise(RedisLock::LockTimeout)
+        :with_redis_lock).and_raise(Redlock::LockError)
 
        TariffSynchronizer.apply
     }
