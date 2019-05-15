@@ -30,6 +30,9 @@ describe Api::V2::HeadingsController, 'GET #show' do
     }
 
     context 'when record is present' do
+      
+      before { TradeTariffBackend.cache_client.reindex }
+      
       it 'returns rendered record' do
         get :show, params: { id: heading }, format: :json
         expect(response.body).to match_json_expression pattern
@@ -42,6 +45,8 @@ describe Api::V2::HeadingsController, 'GET #show' do
 
       let!(:hidden_goods_nomenclature) { create :hidden_goods_nomenclature, goods_nomenclature_item_id: commodity2.goods_nomenclature_item_id }
 
+      before { TradeTariffBackend.cache_client.reindex }
+      
       it 'does not include hidden commodities in the response' do
         get :show, params: { id: heading }, format: :json
 

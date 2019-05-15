@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe ChapterSerializer do
+describe Search::ChapterSerializer do
   describe '#to_json' do
     let!(:chapter) {
       described_class.new(

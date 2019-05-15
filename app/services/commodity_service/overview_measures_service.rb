@@ -22,7 +22,7 @@ module CommodityService
 
     def commodity
       search_client = ::TradeTariffBackend.search_client
-      result = search_client.search index: CommodityIndex.new(TradeTariffBackend.search_namespace).name, body: { query: { match: { id: @goods_nomenclature_sid } } }
+      result = search_client.search index: ::Search::CommodityIndex.new(TradeTariffBackend.search_namespace).name, body: { query: { match: { id: @goods_nomenclature_sid } } }
       result&.hits&.hits&.first&._source
     end
   end
