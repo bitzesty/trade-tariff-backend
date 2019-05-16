@@ -4,13 +4,11 @@ module Api
       class DeclarableHeadingSerializer
         include FastJsonapi::ObjectSerializer
 
-        cache_options enabled: true, cache_length: 12.hours
-
         set_type :heading
 
         set_id :goods_nomenclature_sid
 
-        attributes :goods_nomenclature_item_id, :description, :bti_url,
+        attributes :validity_start_date, :validity_end_date, :goods_nomenclature_item_id, :description, :bti_url,
                    :formatted_description, :basic_duty_rate, :meursing_code
 
         attribute :declarable do
