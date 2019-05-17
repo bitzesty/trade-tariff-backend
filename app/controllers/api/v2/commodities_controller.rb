@@ -37,8 +37,11 @@ module Api
               :measure_partial_temporary_stops
             ).all, @commodity
           ).validate!
-  
-          presenter = Api::V2::Commodities::CommodityPresenter.new(@commodity, @measures, @commodity_cache_key)
+
+          geographical_areas = GeographicalArea.actual.where("geographical_area_sid IN ?", @measures.map(&:geographical_area_sid)).
+            eager(:geographical_area_descriptions, { contained_geographical_areas: :geographical_area_descriptions }).all
+
+          presenter = Api::V2::Commodities::CommodityPresenter.new(@commodity, @measures, geographical_areas,@commodity_cache_key)
           options = {}
           options[:include] = [:section, :chapter, 'chapter.guides', :heading, :ancestors, :footnotes,
                                :import_measures, 'import_measures.duty_expression', 'import_measures.measure_type',
