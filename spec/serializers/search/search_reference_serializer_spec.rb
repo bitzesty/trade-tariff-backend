@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe SearchReferenceSerializer do
+describe Search::SearchReferenceSerializer do
   describe "#to_json" do
     context 'when there is a valid referenced object' do
       let(:section) { create :section, position: 12 }

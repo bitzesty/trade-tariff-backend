@@ -12,7 +12,7 @@ class SearchIndex
   end
 
   def model
-    self.class.name.chomp("Index").constantize
+    self.class.name.split('::').last.chomp("Index").constantize
   end
 
   def goods_nomenclature?

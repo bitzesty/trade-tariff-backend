@@ -14,6 +14,10 @@ module Api
           chapter.chapter_note.try(:id)
         end
 
+        attribute :search_references_count do |chapter|
+          chapter.search_references.count
+        end
+
         has_many :guides, serializer: Api::V2::GuideSerializer
       end
     end

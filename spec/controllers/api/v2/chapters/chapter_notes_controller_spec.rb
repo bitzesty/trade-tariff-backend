@@ -5,10 +5,15 @@ describe Api::V2::Chapters::ChapterNotesController, "GET #show" do
 
   let(:pattern) {
     {
-      id: Integer,
-      section_id: nil,
-      chapter_id: String,
-      content: String
+      data: {
+        id: String,
+        type: 'chapter_note',
+        attributes: {
+          section_id: nil,
+          chapter_id: String,
+          content: String
+        }
+      }
     }
   }
 
@@ -42,7 +47,7 @@ describe Api::V2::Chapters::ChapterNotesController, "POST to #create" do
 
   context 'save succeeded' do
     before {
-      post :create, params: { chapter_id: chapter.to_param, chapter_note: { content: 'test string' } }, format: :json
+      post :create, params: { chapter_id: chapter.to_param, data: { type: 'chapter_note', attributes: { content: 'test string' } } }, format: :json
     }
 
     it 'responds with success' do
@@ -51,10 +56,15 @@ describe Api::V2::Chapters::ChapterNotesController, "POST to #create" do
 
     it 'returns chapter_note attributes' do
       pattern = {
-        id: Integer,
-        chapter_id: String,
-        section_id: nil,
-        content: String
+        data: {
+          id: String,
+          type: 'chapter_note',
+          attributes: {
+            section_id: nil,
+            chapter_id: String,
+            content: String
+          }
+        }
       }
 
       expect(response.body).to match_json_expression(pattern)
@@ -67,16 +77,16 @@ describe Api::V2::Chapters::ChapterNotesController, "POST to #create" do
 
   context 'save failed' do
     before {
-      post :create, params: { chapter_id: chapter.to_param, chapter_note: { content: '' } }, format: :json
+      post :create, params: { chapter_id: chapter.to_param, data: { type: 'chapter_note', attributes: { content: '' } } }, format: :json
     }
 
-    it 'responds with 406 unacceptable' do
+    it 'responds with 422' do
       expect(response.status).to eq 422
     end
 
     it 'returns chapter_note validation errors' do
       pattern = {
-        errors: Hash,
+        errors: [Hash],
       }
 
       expect(response.body).to match_json_expression(pattern)
@@ -94,31 +104,31 @@ describe Api::V2::Chapters::ChapterNotesController, "PUT to #update" do
   before { login_as_api_user }
 
   context 'save succeeded' do
-    it 'responds with success (204 no content)' do
-      put :update, params: {  chapter_id: chapter.to_param, chapter_note: { content: 'test string' } }, format: :json
+    it 'responds with success' do
+      put :update, params: { chapter_id: chapter.to_param, data: { type: 'chapter_note', attributes: { content: 'test string' } } }, format: :json
 
-      expect(response.status).to eq 204
+      expect(response.status).to eq 200
     end
 
     it 'changes chapter_note content' do
       expect {
-        put :update, params: { chapter_id: chapter.to_param, chapter_note: { content: 'test string' } }, format: :json
+        put :update, params: { chapter_id: chapter.to_param, data: { type: 'chapter_note', attributes: { content: 'test string' } } }, format: :json
       }.to change{ chapter.reload.chapter_note.content }
     end
   end
 
   context 'save failed' do
     it 'responds with 422 not acceptable' do
-      put :update, params: { chapter_id: chapter.to_param, chapter_note: { content: '' } }, format: :json
+      put :update, params: { chapter_id: chapter.to_param, data: { type: 'chapter_note', attributes: { content: '' } } }, format: :json
 
       expect(response.status).to eq 422
     end
 
     it 'returns chapter_note validation errors' do
-      put :update, params: { chapter_id: chapter.to_param, chapter_note: { content: '' } }, format: :json
+      put :update, params: { chapter_id: chapter.to_param, data: { type: 'chapter_note', attributes: { content: '' } } }, format: :json
 
       pattern = {
-        errors: Hash,
+        errors: [Hash],
       }
 
       expect(response.body).to match_json_expression(pattern)
@@ -126,7 +136,7 @@ describe Api::V2::Chapters::ChapterNotesController, "PUT to #update" do
 
     it 'does not change chapter_note content' do
       expect {
-        put :update, params: { chapter_id: chapter.to_param, chapter_note: { content: '' } }, format: :json
+        put :update, params: { chapter_id: chapter.to_param, data: { type: 'chapter_note', attributes: { content: '' } } }, format: :json
       }.not_to change{ chapter.reload.chapter_note.content }
     end
   end

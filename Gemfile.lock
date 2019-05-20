@@ -248,6 +248,8 @@ GEM
       redis-store (>= 1.2, < 2)
     redis-store (1.6.0)
       redis (>= 2.2, < 5)
+    redlock (1.0.0)
+      redis (>= 3.0.0, < 5.0)
     request_store (1.4.1)
       rack (>= 1.4)
     responders (2.4.1)
@@ -391,6 +393,7 @@ DEPENDENCIES
   rails (= 5.1.6.2)
   rails_12factor
   redis-rails
+  redlock (~> 1.0.0)
   responders (~> 2.1, >= 2.1.0)
   rspec-rails (~> 3.5.2)
   rspec_junit_formatter

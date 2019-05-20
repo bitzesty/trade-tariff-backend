@@ -2,15 +2,14 @@ module Api
   module V2
     module Headings
       class HeadingPresenter < SimpleDelegator
-        attr_reader :heading, :commodities, :cache_key
+        attr_reader :heading, :commodities
 
-        def initialize(heading, commodities, cache_key)
+        def initialize(heading, commodities)
           super(heading)
           @heading = heading
           @commodities = commodities.map do |commodity|
             Api::V2::Headings::CommodityPresenter.new(commodity)
           end
-          @cache_key = cache_key
         end
 
         def commodity_ids

@@ -8,11 +8,7 @@ module Api
 
         set_id :id
 
-        attributes :numeral, :title, :position
-
-        attribute :section_note, if: Proc.new { |section| section.section_note.present? } do |section|
-          section.section_note.content
-        end
+        attributes :numeral, :title, :position, :section_note
       end
     end
   end

@@ -42,7 +42,9 @@ class QuotaDefinition < Sequel::Model
   end
 
   def last_balance_event
-    @_last_balance_event ||= quota_balance_events.select { |balance| balance.occurrence_timestamp <= point_in_time }.sort_by(&:occurrence_timestamp).last
+    @_last_balance_event ||= quota_balance_events.select { |balance|
+      point_in_time.blank? || balance.occurrence_timestamp <= point_in_time
+    }.sort_by(&:occurrence_timestamp).last
   end
 
   def balance
