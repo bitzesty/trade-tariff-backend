@@ -25,9 +25,15 @@ cf push $CF_APP_WORKER -f "$CF_APP_WORKER"_manifest.yml
 cf run-task $CF_APP_WORKER "rake db:migrate" --name "db-migrate"
 cf run-task $CF_APP_WORKER "rake db:data:migrate" --name "db-data-migrate"
 
-# Deploy App
+# Deploy
 cf create-app-manifest $CF_APP
-cf push $CF_APP -f "$CF_APP"_manifest.yml
+
+# "patch" the manifest so it has "buildpack", not "buildpacks":
+ruby -ryaml -e 'm = YAML.load(STDIN); m["applications"].map{ |x| x["buildpack"] = x["buildpacks"][0]; x.delete("buildpacks") }; puts YAML.dump(m)' \
+  < "$CF_APP"_manifest.yml \
+  > "$CF_APP"_patched_manifest.yml
+
+cf bgd $CF_APP -f "$CF_APP"_patched_manifest.yml
 
 # Notify Slack deployment finished
 curl -X POST \
