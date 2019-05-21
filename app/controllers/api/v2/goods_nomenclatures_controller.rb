@@ -85,17 +85,9 @@ module Api
         }[params[:action].to_sym]
       end
 
-      def not_found
-        serializer = TradeTariffBackend.error_serializer(request)
-        render json: serializer.serialized_errors({ error: 'not found', url: request.url }), status: 404
-      end
-
       def set_cache_key
         key_string = params[:position] || params[:chapter_id] || params[:heading_id] || nil
-        not_found if key_string.nil?
-        
         object_type = action
-        not_found if object_type.nil?
 
         @goods_nomenclatures_cache_key = [
           'goods-nomenclatures-for',
