@@ -15,7 +15,8 @@ class SearchService
                         # match the search phrase
                         multi_match: {
                           query: query_string,
-                          fields: ['description']
+                          fields: ['description'],
+                          operator: 'and'
                         }.merge(query_opts)
                       },
                       {
