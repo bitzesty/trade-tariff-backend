@@ -358,14 +358,14 @@ describe SearchService do
         }
 
         it 'returns goods code if search date is greater than start of validity period' do
-          @result = described_class.new(data_serializer, error_serializer,q: "bovine animal",
+          @result = described_class.new(data_serializer, error_serializer, q: "bovine animal",
                                       as_of: "2007-01-01").to_json
 
           expect(@result).to match_json_expression heading_pattern
         end
 
         it 'does not return goods code if search date is less than start of validity period' do
-          @result = described_class.new(data_serializer, error_serializer,q: "bovine animal",
+          @result = described_class.new(data_serializer, error_serializer, q: "bovine animal",
                                       as_of: "1970-01-01").to_json
 
           expect(@result).not_to match_json_expression heading_pattern
