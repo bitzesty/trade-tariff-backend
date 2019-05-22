@@ -3,11 +3,14 @@ require 'net/http'
 
 class RunPdfCombinerWorker
   include Sidekiq::Worker
+  include PaasS3
 
   sidekiq_options retry: 2
 
   def perform
-    set_s3
+    @dir = ENV["AWS_PDF_ROOT_PATH"] || ''
+    @key = ENV["AWS_PDF_FILENAME"] || 'tariff.pdf'
+    initialize_s3(s3_file_path)
     create_combined_pdf
     upload_to_s3
     verify_on_s3
@@ -19,8 +22,7 @@ class RunPdfCombinerWorker
 
   def create_combined_pdf
     pdf = CombinePDF.new
-    bucket = @s3.bucket(bucket_name)
-    @chapters = bucket.objects({prefix: bucket_prefix}).collect(&:key)
+    @chapters = bucket.objects(prefix: bucket_prefix).collect(&:key)
     @chapters.each do |key|
       url = bucket.object(key).presigned_url(:get)
       pdf << CombinePDF.parse(Net::HTTP.get_response(URI.parse(url)).body)
@@ -33,26 +35,11 @@ class RunPdfCombinerWorker
   end
 
   def s3_file_path
-    File.join(@dir, @key).gsub(/^\//, '')
-  end
-
-  def bucket_name
-    ENV.fetch("AWS_PDF_BUCKET_NAME")
+    File.join(@dir, @key).gsub(%r{^/}, '')
   end
 
   def bucket_prefix
-    File.join(@dir, "chapters").gsub(/^\//, '')
-  end
-
-  def set_s3
-    @dir = ENV["AWS_PDF_ROOT_PATH"] || ''
-    @key = ENV["AWS_PDF_FILENAME"] || 'tariff.pdf'
-    @s3 = Aws::S3::Resource.new(
-      region: ENV.fetch("AWS_PDF_REGION"),
-      access_key_id: ENV.fetch("AWS_PDF_ACCESS_KEY_ID"),
-      secret_access_key: ENV.fetch("AWS_PDF_SECRET_ACCESS_KEY")
-    )
-    @s3_obj = @s3.bucket(bucket_name).object(s3_file_path)
+    File.join(@dir, "chapters").gsub(%r{^/}, '')
   end
 
   def upload_to_s3
@@ -85,7 +72,7 @@ class RunPdfCombinerWorker
     include MailerEnvironment
 
     default from: TradeTariffBackend.from_email,
-              to: TradeTariffBackend.admin_email
+            to: TradeTariffBackend.admin_email
 
     def pdf_generation_report(subject, message, options)
       @options = options

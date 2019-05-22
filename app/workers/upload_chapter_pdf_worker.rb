@@ -1,11 +1,12 @@
 class UploadChapterPdfWorker
   include Sidekiq::Worker
+  include PaasS3
 
   sidekiq_options queue: :sync, retry: false
 
   def perform(pdf_file_path)
     @dir, @key = File.split(pdf_file_path)
-    set_s3_object
+    initialize_s3(s3_file_path)
     upload_to_s3
     verify_on_s3
     delete_from_ephemeral
@@ -18,20 +19,7 @@ class UploadChapterPdfWorker
   end
 
   def s3_file_path
-    File.join(ENV.fetch("AWS_PDF_ROOT_PATH"), "chapters", @key).gsub(/^\//, '')
-  end
-
-  def bucket_name
-    ENV.fetch("AWS_PDF_BUCKET_NAME")
-  end
-
-  def set_s3_object
-    s3 = Aws::S3::Resource.new(
-      region: ENV.fetch("AWS_PDF_REGION"),
-      access_key_id: ENV.fetch("AWS_PDF_ACCESS_KEY_ID"),
-      secret_access_key: ENV.fetch("AWS_PDF_SECRET_ACCESS_KEY")
-    )
-    @s3_obj = s3.bucket(bucket_name).object(s3_file_path)
+    File.join(ENV["AWS_PDF_ROOT_PATH"].to_s, "chapters", @key).gsub(%r{^/}, '')
   end
 
   def upload_to_s3

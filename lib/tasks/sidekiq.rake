@@ -2,7 +2,7 @@ namespace :sidekiq do
   require 'sidekiq/api'
 
   desc "Get status of batch. You must supply a :bid (batch id), e.g. `rake sidekiq:status['BYUxWr4GbojwaQ']`. Batch ID may be found in the Sidekiq::Worker, e.g., `rake sidekiq:workers`"
-  task :status, [:bid] do |task, args|
+  task :status, [:bid] do |_task, args|
     exit unless args[:bid]
     status = Sidekiq::Batch::Status.new(args[:bid])
     puts "batch:        " + args[:bid]
@@ -23,8 +23,8 @@ namespace :sidekiq do
   end
 
   desc "List jobs on a queue. You may provide a queue name, e.g., `rake sidekiq:queue['sync']`, or leave blank for the 'default' queue."
-  task :queue, [:queue] do |task, args|
-    q = args[:queue] ? args[:queue] : "default"
+  task :queue, [:queue] do |_task, args|
+    q = args[:queue] || "default"
     queue = Sidekiq::Queue.new(q)
     puts "queue: #{queue.name}"
     puts "jobs:"
@@ -58,18 +58,16 @@ namespace :sidekiq do
   end
 
   desc "Dynamically creates or updates the current schedule for `RunChapterPdfWorker`. Provide a crontab string as an argument, e.g., `rake sidekiq:set_schedule['0 23 * * *']`"
-  task :set_schedule, [:cron_string] do |task, args|
-    Sidekiq.set_schedule('RunChapterPdfWorker', {
-      cron: args[:cron_string],
-      class: 'RunChapterPdfWorker',
-      description: "RunChapterPdfWorker produces a printable Trade Tariff"
-      }
-    )
+  task :set_schedule, [:cron_string] do |_task, args|
+    Sidekiq.set_schedule('RunChapterPdfWorker',
+                         cron: args[:cron_string],
+                         class: 'RunChapterPdfWorker',
+                         description: "RunChapterPdfWorker produces a printable Trade Tariff PDF.")
     puts Sidekiq.get_schedule
   end
 
   desc "CAUTION! Clear all of this app's Sidekiq queues from Redis (destructive)."
   task :clear_queue do
-    Sidekiq.redis { |conn| conn.flushdb }
+    Sidekiq.redis(&:flushdb)
   end
 end
