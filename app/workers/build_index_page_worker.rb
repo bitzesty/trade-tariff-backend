@@ -1,8 +1,8 @@
 class BuildIndexPageWorker
   include Sidekiq::Worker
-  
+
   sidekiq_options queue: :default, retry: false
-  
+
   attr_reader :namespace
 
   def perform(namespace, model_name, page_number, page_size)
@@ -11,16 +11,15 @@ class BuildIndexPageWorker
     model = model_name.constantize
     index = TradeTariffBackend.search_index_for(namespace, model)
 
-    client.bulk({
+    client.bulk(
                   body: serialize_for(
                     :index,
                     index,
-                    model.dataset.paginate(page_number, page_size))
-                })
+                    model.dataset.paginate(page_number, page_size)))
   end
-  
+
   private
-  
+
   def serialize_for(operation, index, entries)
     entries.each_with_object([]) do |model, memo|
       memo.push(
@@ -33,5 +32,4 @@ class BuildIndexPageWorker
       )
     end
   end
-  
 end
