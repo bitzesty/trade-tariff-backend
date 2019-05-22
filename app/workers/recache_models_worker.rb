@@ -7,8 +7,6 @@ class RecacheModelsWorker
     logger.info 'Running RecacheModelsWorker'
     logger.info 'Recache it up...'
     TradeTariffBackend.recache
-    Rails.cache.clear
-    TradeTariffBackend.pre_warm_headings_cache
     logger.info 'Recache complete!'
   end
 end
