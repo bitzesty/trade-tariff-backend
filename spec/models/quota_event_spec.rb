@@ -8,7 +8,7 @@ describe QuotaEvent do
   }
   let!(:exhaustion_event) {
     create :quota_exhaustion_event, quota_definition: quota_definition,
-                                                            occurrence_timestamp: 1.day.ago
+                                                            occurrence_timestamp: 25.hours.ago
   }
   let!(:critical_event) { create :quota_critical_event }
 
