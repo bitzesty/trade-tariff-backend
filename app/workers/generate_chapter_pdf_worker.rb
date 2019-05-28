@@ -28,7 +28,7 @@ class GenerateChapterPdfWorker
     return if File.exist?(@dir)
 
     begin
-      Dir.mkdir(@dir)
+      FileUtils.mkpath(@dir)
     rescue SystemCallError => e
       logger.warn e
     end
@@ -38,7 +38,7 @@ class GenerateChapterPdfWorker
     log_dir = File.join(Rails.root, "log", "pdf")
     unless File.exist?(log_dir)
       begin
-        Dir.mkdir(log_dir)
+        FileUtils.mkpath(log_dir)
       rescue SystemCallError => e
         logger.warn e
       end
