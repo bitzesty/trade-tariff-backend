@@ -21,3 +21,6 @@
   UpdatesSynchronizerWorker:
     cron: "0 22 * * *" # 10 PM every days
     description: "UpdatesSynchronizerWorker will run every day at 10pm."
+  RunChapterPdfWorker:
+    cron: "0 2 * * *" # 2 AM every day
+    description: "RunChapterPdfWorker produces the Tariff PDF."
