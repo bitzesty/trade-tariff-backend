@@ -8,8 +8,8 @@ class RunChapterPdfWorker
   def perform
     batch = Sidekiq::Batch.new
     batch.description = "Produces PDFs for all chapters"
-    # chapter_ids = Section.all.map(&:chapters).flatten.map(&:goods_nomenclature_sid)
-    chapter_ids = %w[47137 32338 54748] # <- short chapters
+    chapter_ids = Section.all.map(&:chapters).flatten.map(&:goods_nomenclature_sid)
+    # chapter_ids = %w[47137 32338 54748] # <- short chapters
     if chapter_ids.empty?
       puts "Cancelled batch #{batch.bid}. No chapters were specified."
     else
