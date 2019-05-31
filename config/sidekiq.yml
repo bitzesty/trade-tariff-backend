@@ -1,5 +1,5 @@
 :verbose: false
-:concurrency:  1
+:concurrency:  12
 :queues:
   - [rollbacks, 2]
   - [sync, 2]
@@ -24,3 +24,6 @@
   RecacheModelsWorker:
     cron: "0 0 * * *" # 0 AM every day
     description: "RecacheModelsWorker will run every day at 0am."
+  RunChapterPdfWorker:
+    cron: "0 2 * * *" # 2 AM every day
+    description: "RunChapterPdfWorker produces the Tariff PDF."

@@ -59,6 +59,11 @@ gem "rabl", "~> 0.12"
 gem "responders", "~> 2.1", ">= 2.1.0"
 gem "tilt"
 
+# Printed PDF
+gem 'uktt', git: 'https://github.com/mcumcu/uktt.git'
+gem 'combine_pdf'
+gem 'sidekiq-batch'
+
 group :production do
   gem "rails_12factor"
 end
