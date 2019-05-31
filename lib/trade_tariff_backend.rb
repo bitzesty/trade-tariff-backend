@@ -110,7 +110,7 @@ module TradeTariffBackend
       @search_client ||= SearchClient.new(
         Elasticsearch::Client.new,
         indexed_models: indexed_models,
-        index_page_size: 10,
+        index_page_size: 5,
         search_operation_options: search_operation_options
       )
     end
