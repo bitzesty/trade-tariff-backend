@@ -14,6 +14,10 @@ module Api
           section.section_note.content
         end
 
+        attribute :search_references_count do |section|
+          section.search_references.count
+        end
+
         has_many :chapters, serializer: Api::V2::Sections::ChapterSerializer
       end
     end

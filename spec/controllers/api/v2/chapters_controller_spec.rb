@@ -58,7 +58,7 @@ describe Api::V2::ChaptersController, "GET #show" do
             position: section.position,
             title: section.title,
             numeral: section.numeral,
-            section_note: section_note.content,
+            section_note: section_note.content
           }
         },
         {
@@ -80,7 +80,8 @@ describe Api::V2::ChaptersController, "GET #show" do
             producline_suffix: heading.producline_suffix,
             leaf: true,
             description_plain: heading.description_plain,
-            formatted_description: heading.formatted_description
+            formatted_description: heading.formatted_description,
+            search_references_count: Integer
           },
           relationships: {
             children: {

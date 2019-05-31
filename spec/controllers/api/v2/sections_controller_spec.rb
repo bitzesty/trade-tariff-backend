@@ -22,6 +22,7 @@ describe Api::V2::SectionsController, "GET #show" do
           chapter_from: section.chapter_from,
           chapter_to: section.chapter_to,
           section_note: section_note.content,
+          search_references_count: Integer
         },
         relationships: {
           chapters: {
@@ -45,7 +46,8 @@ describe Api::V2::SectionsController, "GET #show" do
             headings_to: chapter.headings_to,
             description: chapter.description,
             formatted_description: chapter.formatted_description,
-            chapter_note_id: chapter.chapter_note.id
+            chapter_note_id: chapter.chapter_note.id,
+            search_references_count: Integer
           },
           relationships: {
             guides: {
@@ -109,7 +111,8 @@ describe Api::V2::SectionsController, "GET #index" do
             title: section1.title,
             numeral: section1.numeral,
             chapter_from: section1.chapter_from,
-            chapter_to: section1.chapter_to
+            chapter_to: section1.chapter_to,
+            search_references_count: Integer
           }
         },
         {
@@ -122,7 +125,8 @@ describe Api::V2::SectionsController, "GET #index" do
             title: section2.title,
             numeral: section2.numeral,
             chapter_from: section2.chapter_from,
-            chapter_to: section2.chapter_to
+            chapter_to: section2.chapter_to,
+            search_references_count: Integer
           }
         },
       ]

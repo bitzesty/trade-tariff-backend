@@ -2,12 +2,13 @@ module Api
   module V2
     module Measures
       class MeasurePresenter < SimpleDelegator
-        attr_reader :measure, :duty_expression
+        attr_reader :measure, :duty_expression, :geographical_areas
 
-        def initialize(measure, declarable)
+        def initialize(measure, declarable, geographical_areas)
           super(measure)
           @measure = measure
           @duty_expression = Api::V2::Measures::DutyExpressionPresenter.new(measure, declarable)
+          @geographical_areas = geographical_areas
         end
 
         def excise
@@ -23,7 +24,7 @@ module Api
         end
 
         def geographical_area
-          measure.geographical_area
+          measure.geographical_area || cached_geographical_area
         end
 
         def geographical_area_id
@@ -36,6 +37,12 @@ module Api
 
         def additional_code_id
           measure.export_refund_nomenclature_sid || measure.additional_code_sid
+        end
+        
+        def cached_geographical_area
+          @cached_geographical_area ||= geographical_areas.select do |area|
+            area.geographical_area_sid == geographical_area_sid
+          end.last
         end
       end
     end

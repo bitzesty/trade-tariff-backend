@@ -4,33 +4,34 @@ module Api
       class ChapterNotesController < ApiController
         before_action :authenticate_user!
 
-        rescue_from Sequel::RecordNotFound do |exception|
-          render json: {}, status: 404
-        end
-
         def show
-          @chapter = chapter
-          @chapter_note = chapter.chapter_note
+          chapter_note = chapter.chapter_note
 
-          raise Sequel::RecordNotFound if @chapter_note.blank?
+          raise Sequel::RecordNotFound if chapter_note.blank?
 
-          respond_with @chapter_note
+          render json: Api::V2::Chapters::ChapterNoteSerializer.new(chapter_note).serializable_hash
         end
 
         def create
-          chapter_note = ChapterNote.new(chapter_note_params.merge(chapter_id: chapter.to_param))
-          chapter_note.save(raise_on_failure: false)
+          chapter_note = ChapterNote.new(chapter_note_params[:attributes].merge(chapter_id: chapter.to_param))
 
-          respond_with chapter_note,
-            location: api_chapter_chapter_note_url(chapter)
+          if chapter_note.save(raise_on_failure: false)
+            response.headers['Location'] = api_chapter_chapter_note_url(chapter)
+            render json: Api::V2::Chapters::ChapterNoteSerializer.new(chapter_note).serializable_hash, status: :created
+          else
+            render json: Api::V2::Chapters::ChapterNoteSerializer.new(chapter_note).serialized_errors, status: :unprocessable_entity
+          end
         end
 
         def update
           chapter_note = chapter.chapter_note
-          chapter_note.set(chapter_note_params)
-          chapter_note.save(raise_on_failure: false)
+          chapter_note.set(chapter_note_params[:attributes])
 
-          respond_with chapter_note
+          if chapter_note.save(raise_on_failure: false)
+            render json: Api::V2::Chapters::ChapterNoteSerializer.new(chapter_note).serializable_hash, status: :ok
+          else
+            render json: Api::V2::Chapters::ChapterNoteSerializer.new(chapter_note).serialized_errors, status: :unprocessable_entity
+          end
         end
 
         def destroy
@@ -40,13 +41,13 @@ module Api
 
           chapter_note.destroy
 
-          respond_with chapter_note
+          head :no_content
         end
 
         private
 
         def chapter_note_params
-          params.require(:chapter_note).permit(:content)
+          params.require(:data).permit(:type, attributes: [:content])
         end
 
         def chapter
