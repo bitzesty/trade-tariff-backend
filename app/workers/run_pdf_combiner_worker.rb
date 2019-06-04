@@ -11,6 +11,7 @@ class RunPdfCombinerWorker
     @dir = ENV["AWS_PDF_ROOT_PATH"] || ''
     @key = ENV["AWS_PDF_FILENAME"] || 'tariff.pdf'
     initialize_s3(s3_file_path)
+    setup_ephemeral_directory
     create_combined_pdf
     upload_to_s3
     verify_on_s3
@@ -19,6 +20,13 @@ class RunPdfCombinerWorker
   end
 
   private
+
+  def setup_ephemeral_directory
+    dir = File.join(Rails.root, "public", "pdf", "tariff")
+    return if File.exist?(dir)
+
+    FileUtils.mkpath(dir)
+  end
 
   def create_combined_pdf
     pdf = CombinePDF.new
