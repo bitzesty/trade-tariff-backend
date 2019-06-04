@@ -24,6 +24,9 @@ class ApplicationController < ActionController::Base
         serializer = TradeTariffBackend.error_serializer(request)
         render json: serializer.serialized_errors(error: "404 - Not Found"), status: 404
       }
+      format.csv {
+        render plain: "404 - Not Found", status: 404
+      }
     end
   end
 
