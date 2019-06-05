@@ -38,7 +38,7 @@ module TradeTariffBackend
         search_index_for(namespace, model).tap do |index|
           drop_index(index)
           create_index(index)
-          build_index(index, model)
+          build_index(model)
         end
       end
     end
@@ -51,9 +51,10 @@ module TradeTariffBackend
       indices.delete(index: index.name) if indices.exists(index: index.name)
     end
 
-    def build_index(index, model)
-      model.dataset.each_page(index_page_size) do |entries|
-        bulk({ body: serialize_for(:index, index, entries) }.merge(search_operation_options))
+    def build_index(model)
+      total_pages = (model.dataset.count / index_page_size.to_f).ceil
+      (1..total_pages).each do |page_number|
+        BuildIndexPageWorker.perform_async(namespace, model.to_s, page_number, index_page_size)
       end
     end
 
@@ -75,21 +76,6 @@ module TradeTariffBackend
           type: model_index.type,
           id: model.id
         }.merge(search_operation_options))
-      end
-    end
-
-  private
-
-    def serialize_for(operation, index, entries)
-      entries.each_with_object([]) do |model, memo|
-        memo.push(
-          operation => {
-            _index: index.name,
-            _type: index.type,
-            _id: model.id,
-            data: TradeTariffBackend.model_serializer_for(namespace, index.model).new(model).as_json
-          }
-        )
       end
     end
   end

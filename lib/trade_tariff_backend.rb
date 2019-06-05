@@ -113,7 +113,7 @@ module TradeTariffBackend
         search_operation_options: search_operation_options
       )
     end
-    
+
     def cache_client
       @cache_client ||= SearchClient.new(
         Elasticsearch::Client.new,
@@ -145,7 +145,7 @@ module TradeTariffBackend
     def indexed_models
       [Chapter, Commodity, Heading, SearchReference, Section]
     end
-    
+
     def cached_models
       [Heading]
     end
