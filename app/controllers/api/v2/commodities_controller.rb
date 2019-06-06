@@ -12,6 +12,7 @@ module Api
               { measure_type: :measure_type_description },
               { measure_components: [{ duty_expression: :duty_expression_description },
                                      { measurement_unit: [:measurement_unit_description, :measurement_unit_abbreviations] },
+                                     { measure: { measure_type: :measure_type_description }},
                                      :monetary_unit,
                                      :measurement_unit_qualifier] },
               { measure_conditions: [{ measure_action: :measure_action_description},
