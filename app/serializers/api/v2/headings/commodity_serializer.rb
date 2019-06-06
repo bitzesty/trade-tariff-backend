@@ -14,7 +14,7 @@ module Api
 
         attribute :search_references_count do |object|
           # after adding ES caching serialized objects are no longer Sequel::Model instances
-          SearchReference.where(referenced_id: object.id, referenced_class: 'Commodity').count
+          SearchReference.where(referenced_id: object.id.to_s, referenced_class: 'Commodity').count
         end
 
         has_many :overview_measures, record_type: :measure,

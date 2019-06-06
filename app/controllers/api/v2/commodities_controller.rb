@@ -11,28 +11,31 @@ module Api
               { footnotes: :footnote_descriptions },
               { measure_type: :measure_type_description },
               { measure_components: [{ duty_expression: :duty_expression_description },
-                                     { measurement_unit: :measurement_unit_description },
+                                     { measurement_unit: [:measurement_unit_description, :measurement_unit_abbreviations] },
                                      :monetary_unit,
                                      :measurement_unit_qualifier] },
               { measure_conditions: [{ measure_action: :measure_action_description},
                                      { certificate: :certificate_descriptions },
                                      { certificate_type: :certificate_type_description },
-                                     { measurement_unit: :measurement_unit_description },
+                                     { measurement_unit: [:measurement_unit_description, :measurement_unit_abbreviations] },
                                      :monetary_unit,
                                      :measurement_unit_qualifier,
                                      { measure_condition_code: :measure_condition_code_description },
-                                     { measure_condition_components: [:measure_condition,
+                                     { measure_condition_components: [{ measurement_unit: [:measurement_unit_description, :measurement_unit_abbreviations] },
+                                                                      :measure_condition,
                                                                       :duty_expression,
-                                                                      :measurement_unit,
                                                                       :monetary_unit,
                                                                       :measurement_unit_qualifier]
                                      }]
               },
-              { quota_order_number: :quota_definition },
+              { quota_order_number: { quota_definition: [:quota_balance_events, :quota_suspension_periods, :quota_blocking_periods] } },
               { excluded_geographical_areas: :geographical_area_descriptions },
               { geographical_area: [:geographical_area_descriptions,
                                     { contained_geographical_areas: :geographical_area_descriptions }] },
               :additional_code,
+              :footnotes,
+              :base_regulation,
+              :modification_regulation,
               :full_temporary_stop_regulations,
               :measure_partial_temporary_stops
             ).all, @commodity
@@ -84,6 +87,7 @@ module Api
         @commodity = Commodity.actual
                               .declarable
                               .by_code(params[:id])
+                              .eager(:goods_nomenclature_indents, :goods_nomenclature_descriptions, :footnotes)
                               .take
 
         raise Sequel::RecordNotFound if @commodity.children.any?

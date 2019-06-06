@@ -1,17 +1,18 @@
 module Cache
   class HeadingSerializer
-  
+
     attr_reader :heading
-    
+
     def initialize(heading)
       @heading = heading
     end
-    
+
     def as_json
       if heading.declarable?
         {}
       else
         heading_attributes = {
+          id: heading.id,
           goods_nomenclature_sid: heading.goods_nomenclature_sid,
           goods_nomenclature_item_id: heading.goods_nomenclature_item_id,
           producline_suffix: heading.producline_suffix,
@@ -25,6 +26,7 @@ module Cache
 
         if heading.chapter.present?
           heading_attributes[:chapter] = {
+            id: heading.chapter.id,
             goods_nomenclature_sid: heading.chapter.goods_nomenclature_sid,
             goods_nomenclature_item_id: heading.chapter.goods_nomenclature_item_id,
             producline_suffix: heading.chapter.producline_suffix,
@@ -70,12 +72,13 @@ module Cache
 
         heading_attributes[:commodities] = heading.commodities.map do |commodity|
           commodity_attributes = {
+            id: commodity.id,
             goods_nomenclature_sid: commodity.goods_nomenclature_sid,
             goods_nomenclature_item_id: commodity.goods_nomenclature_item_id,
             validity_start_date: commodity.validity_start_date&.strftime('%FT%T.%LZ'),
             validity_end_date: commodity.validity_end_date,
           }
-          
+
           commodity_attributes[:goods_nomenclature_indents] = commodity.goods_nomenclature_indents.map do |goods_nomenclature_indent|
             {
               goods_nomenclature_indent_sid: goods_nomenclature_indent.goods_nomenclature_indent_sid,
@@ -85,7 +88,7 @@ module Cache
               productline_suffix: goods_nomenclature_indent.productline_suffix,
             }
           end
-          
+
           commodity_attributes[:goods_nomenclature_descriptions] = commodity.goods_nomenclature_descriptions.map do |goods_nomenclature_description|
             {
               goods_nomenclature_description_period_sid: goods_nomenclature_description.goods_nomenclature_description_period_sid,
