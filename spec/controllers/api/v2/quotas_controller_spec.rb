@@ -4,7 +4,7 @@ describe Api::V2::QuotasController, type: :controller do
   render_views
 
   describe 'quota search' do
-  
+
     let(:validity_start_date) { Date.new(Date.current.year, 1, 1) }
     let(:quota_order_number) { create :quota_order_number }
     let!(:measure) { create :measure, ordernumber: quota_order_number.quota_order_number_id, validity_start_date: validity_start_date }
@@ -64,11 +64,13 @@ describe Api::V2::QuotasController, type: :controller do
               number: String
             },
             relationships: {
-              geographical_area: {
-                data: {
-                  id: String,
-                  type: 'geographical_area'
-                }
+              geographical_areas: {
+                data: [
+                  {
+                    id: String,
+                    type: 'geographical_area'
+                  }
+                ]
               }
             }
           }, {
