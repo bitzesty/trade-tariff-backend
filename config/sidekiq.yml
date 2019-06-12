@@ -22,10 +22,10 @@
     cron: "0 22 * * *" # 10 PM every days
     description: "UpdatesSynchronizerWorker will run every day at 10pm."
   RecacheModelsWorker:
-    cron: "0 0 * * *" # 0 AM every day
+    cron: "0 1 * * *" # 0 AM every day
     description: "RecacheModelsWorker will run every day at 0am."
   ReindexModelsWorker:
-    cron: "0 0 * * *" # 0 AM every day
+    cron: "0 1 * * *" # 0 AM every day
     description: "ReindexModelsWorker will run every day at 0am."
   RunChapterPdfWorker:
     cron: "0 2 * * *" # 2 AM every day
