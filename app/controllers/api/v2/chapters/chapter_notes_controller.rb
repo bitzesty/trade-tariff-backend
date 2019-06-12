@@ -3,6 +3,7 @@ module Api
     module Chapters
       class ChapterNotesController < ApiController
         before_action :authenticate_user!
+        skip_before_action :authenticate_user!, only: [:show]
 
         def show
           chapter_note = chapter.chapter_note
