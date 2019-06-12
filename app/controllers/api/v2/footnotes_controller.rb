@@ -18,7 +18,7 @@ module Api
       def update
         @footnote = Footnote.national.with_pk!(footnote_pk)
         @footnote.footnote_description.tap do |footnote_description|
-          footnote_description.set(footnote_params)
+          footnote_description.set(footnote_params[:attributes])
           footnote_description.save
         end
 
@@ -28,7 +28,7 @@ module Api
       private
 
       def footnote_params
-        params.require(:footnote).permit(:description)
+        params.require(:data).permit(:type, attributes: [:description])
       end
 
       def footnote_pk

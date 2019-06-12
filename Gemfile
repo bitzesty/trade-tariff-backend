@@ -28,6 +28,7 @@ gem 'rubyzip'
 gem "redis-rails"
 gem "sidekiq", "~> 4.1.4"
 gem "sidekiq-scheduler", "~> 2.1.8"
+gem "redlock", "~> 1.0.0"
 
 # Elasticsearch
 gem "elasticsearch", "6.1.0"
@@ -57,6 +58,11 @@ gem "fast_jsonapi", "~> 1.5"
 gem "rabl", "~> 0.12"
 gem "responders", "~> 2.1", ">= 2.1.0"
 gem "tilt"
+
+# Printed PDF
+gem 'uktt', git: 'https://github.com/mcumcu/uktt.git'
+gem 'combine_pdf'
+gem 'sidekiq-batch'
 
 group :production do
   gem "rails_12factor"

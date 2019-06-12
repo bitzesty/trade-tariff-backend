@@ -32,7 +32,7 @@ module Api
 
       def create
         @search_reference = SearchReference.new(
-          search_reference_params.merge(search_reference_resource_association_hash)
+          search_reference_params[:attributes].merge(search_reference_resource_association_hash)
         )
 
         if @search_reference.save
@@ -51,7 +51,7 @@ module Api
       def update
         @search_reference = search_reference_resource
         @search_reference.set(
-          search_reference_params
+          search_reference_params[:attributes]
         )
         @search_reference.save
 
@@ -84,7 +84,7 @@ module Api
       end
 
       def search_reference_params
-        params.require(:search_reference).slice(:title).permit(:title)
+        params.require(:data).permit(:type, attributes: [:title])
       end
 
       def search_reference_collection

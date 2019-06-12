@@ -1,4 +1,3 @@
-require 'redis_lock'
 require 'ostruct'
 require "paas_resolver"
 
@@ -67,8 +66,8 @@ module TradeTariffBackend
     end
 
     def with_redis_lock(lock_name = db_lock_key, &block)
-      lock = RedisLock.new(RedisLockDb.redis, lock_name)
-      lock.lock &block
+      lock = Redlock::Client.new([ RedisLockDb.redis ])
+      lock.lock!(lock_name, 5000, &block)
     end
 
     def reindex(indexer = search_client)
@@ -81,9 +80,17 @@ module TradeTariffBackend
       end
     end
 
+    def recache(indexer = cache_client)
+      begin
+        indexer.reindex
+      rescue StandardError => e
+        Mailer.reindex_exception(e).deliver_now
+      end
+    end
+
     def pre_warm_headings_cache
       actual_date = Date.yesterday
-      TimeMachine.now do
+      TimeMachine.at(actual_date) do
         Heading.dataset.each do |heading|
           ::HeadingService::HeadingSerializationService.new(heading, actual_date).serializable_hash
         end
@@ -102,8 +109,17 @@ module TradeTariffBackend
     def search_client
       @search_client ||= SearchClient.new(
         Elasticsearch::Client.new,
-        namespace: search_namespace,
         indexed_models: indexed_models,
+        search_operation_options: search_operation_options
+      )
+    end
+
+    def cache_client
+      @cache_client ||= SearchClient.new(
+        Elasticsearch::Client.new,
+        namespace: 'cache',
+        indexed_models: cached_models,
+        index_page_size: 5,
         search_operation_options: search_operation_options
       )
     end
@@ -115,10 +131,10 @@ module TradeTariffBackend
 
     # Returns search index instance for given model instance or
     # model class instance
-    def search_index_for(model)
+    def search_index_for(namespace, model)
       index_name = model.is_a?(Class) ? model : model.class
 
-      "#{index_name}Index".constantize.new(search_namespace)
+      "::#{namespace.capitalize}::#{index_name}Index".constantize.new(search_namespace)
     end
 
     def search_operation_options
@@ -130,14 +146,18 @@ module TradeTariffBackend
       [Chapter, Commodity, Heading, SearchReference, Section]
     end
 
+    def cached_models
+      [Heading]
+    end
+
     def search_indexes
       indexed_models.map { |model|
-        "#{model}Index".constantize.new(search_namespace)
+        "::Search::#{model}Index".constantize.new(search_namespace)
       }
     end
 
-    def model_serializer_for(model)
-      "#{model}Serializer".constantize
+    def model_serializer_for(namespace, model)
+      "::#{namespace.capitalize}::#{model}Serializer".constantize
     end
 
     def api_version(request)

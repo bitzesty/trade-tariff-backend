@@ -9,7 +9,7 @@ module Api
       end
 
       def create
-        rollback = Rollback.new(rollback_params)
+        rollback = Rollback.new(rollback_params[:attributes])
 
         if rollback.valid?
           rollback.save
@@ -22,7 +22,7 @@ module Api
       private
 
       def rollback_params
-        params.require(:rollback).permit(:date, :keep, :reason, :user_id)
+        params.require(:data).permit(:type, attributes: [:date, :keep, :reason, :user_id])
       end
 
       def collection

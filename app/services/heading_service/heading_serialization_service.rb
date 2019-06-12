@@ -38,7 +38,7 @@ module HeadingService
                                                                            :additional_code,
                                                                            :full_temporary_stop_regulations,
                                                                            :measure_partial_temporary_stops).all, heading).validate!
-          presenter = Api::V2::Headings::DeclarableHeadingPresenter.new(heading, @measures, heading_cache_key)
+          presenter = Api::V2::Headings::DeclarableHeadingPresenter.new(heading, @measures)
           options = {}
           options[:include] = [:section, :chapter, 'chapter.guides', :footnotes,
                                :import_measures, 'import_measures.duty_expression', 'import_measures.measure_type',
@@ -61,15 +61,13 @@ module HeadingService
         end
       else
         Rails.cache.fetch('_' + heading_cache_key, expires_in: seconds_till_midnight) do
-          @commodities = GoodsNomenclatureMapper.new(heading.commodities_dataset.eager(:goods_nomenclature_indents,
-                                                                                        :goods_nomenclature_descriptions)
-                                                       .all).all
-          presenter = Api::V2::Headings::HeadingPresenter.new(heading, @commodities, heading_cache_key)
+          service = HeadingService::CachedHeadingService.new(heading, actual_date)
+          hash = service.serializable_hash
           options = {}
           options[:include] = [:section, :chapter, 'chapter.guides', :footnotes,
-                               :commodities, 'commodities.overview_measures_indexed',
-                               'commodities.overview_measures_indexed.duty_expression', 'commodities.overview_measures_indexed.measure_type']
-          Api::V2::Headings::HeadingSerializer.new(presenter, options).serializable_hash
+                               :commodities, 'commodities.overview_measures',
+                               'commodities.overview_measures.duty_expression', 'commodities.overview_measures.measure_type']
+          Api::V2::Headings::HeadingSerializer.new(hash, options).serializable_hash
         end
       end
     end
@@ -77,7 +75,7 @@ module HeadingService
     private
 
     def seconds_till_midnight
-      Time.now.end_of_day + 1.day - Time.now
+      Time.now.end_of_day - Time.now
     end
   end
 end

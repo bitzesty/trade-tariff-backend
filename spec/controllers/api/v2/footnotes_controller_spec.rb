@@ -87,12 +87,12 @@ describe Api::V2::FootnotesController, "PUT to #update" do
 
   specify 'updates national footnote' do
     expect {
-      put :update, params: { id: national_footnote.pk.join, footnote: { description: 'new description' } }, format: :json
+      put :update, params: { id: national_footnote.pk.join, data: { type: :footnote, attributes: { description: 'new description' } } }, format: :json
     }.to change { national_footnote.reload.description }.to('new description')
   end
 
   specify 'does not update non-national footnote' do
-    put :update, params: { id: non_national_footnote.pk.join, footnote: {} }, format: :json
+    put :update, params: { id: non_national_footnote.pk.join, data: {} }, format: :json
 
     expect(response.status).to eq 404
   end

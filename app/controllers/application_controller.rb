@@ -24,6 +24,9 @@ class ApplicationController < ActionController::Base
         serializer = TradeTariffBackend.error_serializer(request)
         render json: serializer.serialized_errors(error: "404 - Not Found"), status: 404
       }
+      format.csv {
+        render plain: "404 - Not Found", status: 404
+      }
     end
   end
 
@@ -64,7 +67,7 @@ class ApplicationController < ActionController::Base
   helper_method :actual_date
   
   def seconds_till_midnight
-    Time.now.end_of_day + 1.day - Time.now
+    Time.now.end_of_day - Time.now
   end
   helper_method :seconds_till_midnight
 
@@ -83,7 +86,7 @@ class ApplicationController < ActionController::Base
     # * 0: captures no requests
     # * 0.75: captures 75% of requests
     # * 1: captures all requests
-    sample_rate = 0.75
+    sample_rate = 0.5
 
     if rand > sample_rate
       Rails.logger.debug("[Scout] Ignoring request: #{request.original_url}")

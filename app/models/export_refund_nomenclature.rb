@@ -68,6 +68,18 @@ class ExportRefundNomenclature < Sequel::Model
       .sort_by(&:number_indents)
   end
 
+  def additional_code_sid
+    export_refund_nomenclature_sid
+  end
+
+  def code
+    additional_code
+  end
+  
+  def formatted_description
+    ''
+  end
+
   def additional_code
     "#{additional_code_type}#{export_refund_code}"
   end
