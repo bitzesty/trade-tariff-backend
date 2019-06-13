@@ -1,6 +1,5 @@
 module Cache
   class HeadingSerializer
-
     attr_reader :heading
 
     def initialize(heading)

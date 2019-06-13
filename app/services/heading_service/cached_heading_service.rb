@@ -1,6 +1,5 @@
 module HeadingService
   class CachedHeadingService
-
     attr_reader :heading, :as_of, :result
 
     def initialize(heading, as_of)
@@ -59,8 +58,8 @@ module HeadingService
     def filter_commodity_relations
       search_references = SearchReference.where(
         referenced_id: result.commodity_ids.map(&:to_s),
-        referenced_class: 'Commodity').all.
-        group_by(&:referenced_id)
+        referenced_class: 'Commodity'
+      ).all.group_by(&:referenced_id)
 
       result.commodities.each do |commodity|
         commodity.search_references = search_references[commodity.id.to_s] || []

@@ -9,7 +9,7 @@ class MeasurementUnit < Sequel::Model
                                             key: :measurement_unit_code
 
   one_to_many :measurement_unit_abbreviations, primary_key: :measurement_unit_code,
-                                            key: :measurement_unit_code
+                                               key: :measurement_unit_code
 
   delegate :description, to: :measurement_unit_description
 
