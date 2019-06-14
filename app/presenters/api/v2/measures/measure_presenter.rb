@@ -4,7 +4,7 @@ module Api
       class MeasurePresenter < SimpleDelegator
         attr_reader :measure, :duty_expression, :geographical_areas
 
-        def initialize(measure, declarable, geographical_areas)
+        def initialize(measure, declarable, geographical_areas = [])
           super(measure)
           @measure = measure
           @duty_expression = Api::V2::Measures::DutyExpressionPresenter.new(measure, declarable)
