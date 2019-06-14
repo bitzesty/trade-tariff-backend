@@ -38,6 +38,11 @@ describe QuotaSearchService do
              quota_order_number_sid: quota_order_number2.quota_order_number_sid
     }
 
+    before do
+      measure1.update(geographical_area_id: quota_order_number_origin1.geographical_area_id)
+      measure2.update(geographical_area_id: quota_order_number_origin2.geographical_area_id)
+    end
+
     context 'by goods_nomenclature_item_id' do
       it 'should find quota definition by goods nomenclature' do
         result = described_class.new(
@@ -75,7 +80,7 @@ describe QuotaSearchService do
         expect(result).not_to include(quota_definition2)
       end
     end
-    
+
     context 'by order_number' do
       it 'should find quota definition by order number' do
         result = described_class.new(
@@ -94,7 +99,7 @@ describe QuotaSearchService do
         expect(result).not_to include(quota_definition2)
       end
     end
-    
+
     context 'by critical' do
       it 'should find quota definition by critical state' do
         result = described_class.new(
@@ -113,7 +118,7 @@ describe QuotaSearchService do
         expect(result).not_to include(quota_definition2)
       end
     end
-    
+
     context 'by year' do
       let(:past_validity_start_date) { Date.new(Date.current.year - 1, 1, 1) }
       let(:quota_order_number3) { create :quota_order_number }
@@ -130,7 +135,7 @@ describe QuotaSearchService do
                :with_geographical_area,
                quota_order_number_sid: quota_order_number3.quota_order_number_sid
       }
-  
+
       it 'should find quota definition by year' do
         result = described_class.new(
           {
@@ -154,7 +159,7 @@ describe QuotaSearchService do
         expect(result).not_to include(quota_definition3)
       end
     end
-    
+
     context 'by status' do
       context 'exhausted' do
         let!(:quota_exhaustion_event) {
@@ -178,7 +183,7 @@ describe QuotaSearchService do
           expect(result).not_to include(quota_definition2)
         end
       end
-      
+
       context 'not exhausted' do
         let!(:quota_exhaustion_event) {
           create :quota_exhaustion_event,
@@ -201,7 +206,7 @@ describe QuotaSearchService do
           expect(result).not_to include(quota_definition1)
         end
       end
-      
+
       context 'blocked' do
         let!(:quota_blocking_period) {
           create :quota_blocking_period,
@@ -226,7 +231,7 @@ describe QuotaSearchService do
           expect(result).not_to include(quota_definition2)
         end
       end
-      
+
       context 'not blocked' do
         let!(:quota_blocking_period) {
           create :quota_blocking_period,
