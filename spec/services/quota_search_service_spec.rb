@@ -256,6 +256,22 @@ describe QuotaSearchService do
           expect(result).not_to include(quota_definition1)
         end
       end
+
+      context '094 quotas' do
+        let(:measure_094) { create :measure,
+                                   ordernumber: "094#{3.times.map { Random.rand(9) }.join}",
+                                   validity_start_date: validity_start_date }
+
+        it 'should search 094 quotas' do
+          result = described_class.new(
+            {
+              'order_number' => measure_094.ordernumber,
+              'year' => Date.current.year.to_s
+            }
+          ).perform
+          expect(result.first.quota_order_number_id).to eq(measure_094.ordernumber)
+        end
+      end
     end
   end
 end
