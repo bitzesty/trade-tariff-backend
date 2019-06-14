@@ -3,6 +3,7 @@ module Api
     module Sections
       class SectionNotesController < ApiController
         before_action :authenticate_user!
+        skip_before_action :authenticate_user!, only: [:show]
 
         def show
           section_note = section.section_note
