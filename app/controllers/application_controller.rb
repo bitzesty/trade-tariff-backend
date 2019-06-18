@@ -65,11 +65,6 @@ class ApplicationController < ActionController::Base
     Date.current
   end
   helper_method :actual_date
-  
-  def seconds_till_midnight
-    Time.now.end_of_day - Time.now
-  end
-  helper_method :seconds_till_midnight
 
   def configure_time_machine
     TimeMachine.at(actual_date) do
