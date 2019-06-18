@@ -1,6 +1,5 @@
 module HeadingService
   class HeadingSerializationService
-
     attr_reader :heading, :actual_date
 
     def initialize(heading, actual_date)
