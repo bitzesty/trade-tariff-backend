@@ -33,7 +33,7 @@ ruby -ryaml -e 'm = YAML.load(STDIN); m["applications"].map{ |x| x["buildpack"] 
   < "$CF_APP"_manifest.yml \
   > "$CF_APP"_patched_manifest.yml
 
-cf bgd $CF_APP -f "$CF_APP"_patched_manifest.yml
+cf bgd $CF_APP -f "$CF_APP"_patched_manifest.yml --delete-old-apps
 
 # Notify Slack deployment finished
 curl -X POST \
