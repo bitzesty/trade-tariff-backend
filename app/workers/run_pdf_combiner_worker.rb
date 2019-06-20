@@ -69,10 +69,10 @@ class RunPdfCombinerWorker
   end
 
   def email_results
-    presigned_url = @s3_obj.presigned_url(:get)
+    public_url = @s3_obj.public_url
     subject = "The Trade Tariff PDF was produced"
-    message = "#{@chapters.size} chapters were combined into a single PDF. (#{presigned_url})"
-    options = { key: s3_file_path, public_url: presigned_url }
+    message = "#{@chapters.size} chapters were combined into a single PDF. (#{public_url})"
+    options = { key: s3_file_path, public_url: public_url }
     Mailer.pdf_generation_report(subject, message, options).deliver_now
   end
 

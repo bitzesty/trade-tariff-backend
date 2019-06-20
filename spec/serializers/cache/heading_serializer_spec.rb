@@ -19,9 +19,10 @@ describe Cache::HeadingSerializer do
              goods_nomenclature_sid: commodity.goods_nomenclature_sid
     }
     let(:serializer) { described_class.new(heading.reload) }
-  
+
     let(:pattern) {
       {
+        id: Integer,
         goods_nomenclature_sid: Integer,
         goods_nomenclature_item_id: String,
         producline_suffix: String,
@@ -32,6 +33,7 @@ describe Cache::HeadingSerializer do
         bti_url: String,
         number_indents: Integer,
         chapter: {
+          id: Integer,
           goods_nomenclature_sid: Integer,
           goods_nomenclature_item_id: String,
           producline_suffix: String,
@@ -63,6 +65,7 @@ describe Cache::HeadingSerializer do
         ],
         commodities: [
           {
+            id: Integer,
             goods_nomenclature_sid: Integer,
             goods_nomenclature_item_id: String,
             validity_start_date: String,
@@ -110,7 +113,7 @@ describe Cache::HeadingSerializer do
         ]
       }
     }
-    
+
     it 'returns json representation for ElasticSearch' do
       expect(serializer.as_json).to match_json_expression pattern
     end

@@ -43,6 +43,12 @@ module TradeTariffBackend
       end
     end
 
+    def update
+      indexed_models.each do |model|
+        build_index(model)
+      end
+    end
+
     def create_index(index)
       indices.create(index: index.name, body: index.definition)
     end
