@@ -7,7 +7,7 @@ class QuotaDefinition < Sequel::Model
 
   one_to_one :quota_order_number, key: :quota_order_number_sid,
                                   primary_key: :quota_order_number_sid
-  
+
   one_to_many :quota_exhaustion_events, key: :quota_definition_sid,
                                         primary_key: :quota_definition_sid
   one_to_many :quota_balance_events, key: :quota_definition_sid,
@@ -27,9 +27,13 @@ class QuotaDefinition < Sequel::Model
              key: :measurement_unit_code do |ds|
     ds.with_actual(MeasurementUnit)
   end
-  
-  one_to_one :measure, key: [:ordernumber, :validity_start_date],
-                       primary_key: [:quota_order_number_id, :validity_start_date]
+
+  one_to_many :measures, key: [:ordernumber, :validity_start_date],
+                         primary_key: [:quota_order_number_id, :validity_start_date]
+
+  def measure_ids
+    measures&.map(&:measure_sid)
+  end
 
   delegate :description, :abbreviation, to: :measurement_unit, prefix: true, allow_nil: true
 
