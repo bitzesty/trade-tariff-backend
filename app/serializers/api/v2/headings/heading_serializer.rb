@@ -12,7 +12,7 @@ module Api
 
         attribute :search_references_count do |object|
           # after adding ES caching serialized objects are no longer Sequel::Model instances
-          SearchReference.where(referenced_id: object.id, referenced_class: 'Heading').count
+          SearchReference.where(referenced_id: object.id.to_s, referenced_class: 'Heading').count
         end
 
         has_many :footnotes, serializer: Api::V2::Headings::FootnoteSerializer

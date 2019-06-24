@@ -73,7 +73,7 @@ module TradeTariffBackend
     def reindex(indexer = search_client)
       TimeMachine.with_relevant_validity_periods do
         begin
-          indexer.reindex
+          indexer.update
         rescue StandardError => e
           Mailer.reindex_exception(e).deliver_now
         end
@@ -82,7 +82,7 @@ module TradeTariffBackend
 
     def recache(indexer = cache_client)
       begin
-        indexer.reindex
+        indexer.update
       rescue StandardError => e
         Mailer.reindex_exception(e).deliver_now
       end
@@ -95,6 +95,10 @@ module TradeTariffBackend
           ::HeadingService::HeadingSerializationService.new(heading, actual_date).serializable_hash
         end
       end
+    end
+
+    def seconds_till_6am
+      Time.now.end_of_day + 6.hours - Time.now
     end
 
     # Number of changes to fetch for Commodity/Heading/Chapter

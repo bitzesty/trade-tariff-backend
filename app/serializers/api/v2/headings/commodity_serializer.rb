@@ -12,9 +12,8 @@ module Api
                    :goods_nomenclature_sid, :formatted_description, :description_plain,
                    :producline_suffix, :parent_sid
 
-        attribute :search_references_count do |object|
-          # after adding ES caching serialized objects are no longer Sequel::Model instances
-          SearchReference.where(referenced_id: object.id, referenced_class: 'Commodity').count
+        attribute :search_references_count do |commodity|
+          commodity.search_references.size
         end
 
         has_many :overview_measures, record_type: :measure,
