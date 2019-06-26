@@ -172,4 +172,8 @@ class SearchReference < Sequel::Model
   def commodity_id
     referenced_id
   end
+
+  def referenced_id_number
+    referenced_id&.to_i
+  end
 end
