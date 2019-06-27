@@ -12,14 +12,14 @@ module Api
       end
 
       def show
-        headings_presenter = GoodsNomenclatureMapper.new(@chapter.headings_dataset
-                                                        .eager(:goods_nomenclature_descriptions,
-                                                               :goods_nomenclature_indents)
-                                                        .all).root_entries
+        root_headings = GoodsNomenclatureMapper.new(@chapter.headings_dataset
+                                                      .eager(:goods_nomenclature_descriptions,
+                                                             :goods_nomenclature_indents)
+                                                      .all).root_entries
 
         options = {}
         options[:include] = [:section, :guides, :headings, 'headings.children']
-        presenter = Api::V2::Chapters::ChapterPresenter.new(@chapter, headings_presenter)
+        presenter = Api::V2::Chapters::ChapterPresenter.new(@chapter, root_headings)
         render json: Api::V2::Chapters::ChapterSerializer.new(presenter, options).serializable_hash
       end
 

@@ -4,7 +4,7 @@ describe Api::V2::QuotasController, type: :controller do
   render_views
 
   describe 'quota search' do
-  
+
     let(:validity_start_date) { Date.new(Date.current.year, 1, 1) }
     let(:quota_order_number) { create :quota_order_number }
     let!(:measure) { create :measure, ordernumber: quota_order_number.quota_order_number_id, validity_start_date: validity_start_date }
@@ -15,7 +15,7 @@ describe Api::V2::QuotasController, type: :controller do
              critical_state: 'Y',
              validity_start_date: validity_start_date
     }
-    let!(:quota_order_number_origin1) {
+    let!(:quota_order_number_origin) {
       create :quota_order_number_origin,
              :with_geographical_area,
              quota_order_number_sid: quota_order_number.quota_order_number_sid
@@ -44,7 +44,6 @@ describe Api::V2::QuotasController, type: :controller do
               suspension_period_end_date: nil,
               blocking_period_start_date: nil,
               blocking_period_end_date: nil,
-              goods_nomenclature_item_id: String
             },
             relationships: {
               order_number: {
@@ -52,6 +51,14 @@ describe Api::V2::QuotasController, type: :controller do
                   id: String,
                   type: 'order_number'
                 }
+              },
+              measures: {
+                data: [
+                  {
+                    id: String,
+                    type: 'measure'
+                  }
+                ]
               }
             }
           }
@@ -64,11 +71,13 @@ describe Api::V2::QuotasController, type: :controller do
               number: String
             },
             relationships: {
-              geographical_area: {
-                data: {
-                  id: String,
-                  type: 'geographical_area'
-                }
+              geographical_areas: {
+                data: [
+                  {
+                    id: String,
+                    type: 'geographical_area'
+                  }
+                ]
               }
             }
           }, {
@@ -79,9 +88,28 @@ describe Api::V2::QuotasController, type: :controller do
               description: String,
               geographical_area_id: String
             }
+          }, {
+            id: String,
+            type: 'measure',
+            attributes: {
+              goods_nomenclature_item_id: String
+            },
+            relationships: {
+              geographical_area: {
+                data: {
+                  id: String,
+                  type: 'geographical_area'
+                }
+              }
+            }
           }
         ]
       }
+    }
+
+    before {
+      measure.geographical_area = quota_order_number_origin.geographical_area
+      measure.save
     }
 
     it 'returns rendered found quotas' do

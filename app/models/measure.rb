@@ -102,6 +102,9 @@ class Measure < Sequel::Model
       .order(Sequel.desc(:validity_start_date))
   end
 
+  one_to_one :quota_definition, key: [:quota_order_number_id, :validity_start_date],
+                                primary_key: [:ordernumber, :validity_start_date]
+
   many_to_many :full_temporary_stop_regulations, join_table: :fts_regulation_actions,
                                                  left_primary_key: :measure_generating_regulation_id,
                                                  left_key: :stopped_regulation_id,
@@ -417,6 +420,16 @@ class Measure < Sequel::Model
       qon = QuotaOrderNumber.new(quota_order_number_id: ordernumber)
       qon.associations[:quota_definition] = nil
       qon
+    end
+  end
+
+  def quota_definition_or_nil
+    if quota_definition.present?
+      quota_definition
+    elsif ordernumber.present?
+      definition = QuotaDefinition.new(quota_order_number_id: ordernumber, validity_start_date: validity_start_date)
+      definition[:quota_definition_sid] = -rand(100000)
+      definition
     end
   end
 

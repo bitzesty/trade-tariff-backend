@@ -104,7 +104,7 @@ class Chapter < GoodsNomenclature
      .order(Sequel.desc(:operation_date, nulls: :last), Sequel.desc(:depth))
   end
 
-private
+  private
 
   def relevant_headings
     "#{short_code}__000000"

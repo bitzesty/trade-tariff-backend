@@ -28,8 +28,21 @@ class QuotaOrderNumber < Sequel::Model
 
   delegate :present?, to: :quota_order_number_origin, prefix: true, allow_nil: true
   delegate :geographical_area, to: :quota_order_number_origin, allow_nil: true
-  
+
   def geographical_area_id
     geographical_area&.id
+  end
+
+  one_to_many :quota_order_number_origins, primary_key: :quota_order_number_sid,
+              key: :quota_order_number_sid do |ds|
+    ds.with_actual(QuotaOrderNumberOrigin)
+  end
+
+  def geographical_areas
+    quota_order_number_origins.map(&:geographical_area)
+  end
+
+  def geographical_area_ids
+    geographical_areas&.map(&:id)
   end
 end
