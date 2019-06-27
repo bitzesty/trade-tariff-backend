@@ -113,7 +113,7 @@ class Heading < GoodsNomenclature
      .order(Sequel.desc(:operation_date, nulls: :last))
   end
 
-private
+  private
 
   def relevant_commodities
     "#{short_code}______"
