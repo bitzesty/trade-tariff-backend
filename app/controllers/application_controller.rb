@@ -17,15 +17,10 @@ class ApplicationController < ActionController::Base
 
   def render_not_found
     respond_to do |format|
-      format.html {
-        render html: "404 - Not Found", status: 404
-      }
-      format.json {
+      format.any { 
+        response.headers['Content-Type'] = 'application/json'
         serializer = TradeTariffBackend.error_serializer(request)
         render json: serializer.serialized_errors(error: "404 - Not Found"), status: 404
-      }
-      format.csv {
-        render plain: "404 - Not Found", status: 404
       }
     end
   end
@@ -36,10 +31,8 @@ class ApplicationController < ActionController::Base
     ::Raven.capture_exception(exception)
 
     respond_to do |format|
-      format.html {
-        render html: "500 - Internal Server Error: #{exception.message}", status: 500
-      }
-      format.json {
+      format.any {
+        response.headers['Content-Type'] = 'application/json'
         serializer = TradeTariffBackend.error_serializer(request)
         render json: serializer.serialized_errors(error: "500 - Internal Server Error: #{exception.message}"), status: 500
       }
