@@ -3,7 +3,7 @@ module Api
     module Chapters
       class ChapterPresenter
         attr_reader :chapter, :root_headings
-        alias :headings :root_headings
+        alias headings root_headings
 
         delegate :goods_nomenclature_sid, :goods_nomenclature_item_id,
                  :description, :formatted_description, :chapter_note, :section,
