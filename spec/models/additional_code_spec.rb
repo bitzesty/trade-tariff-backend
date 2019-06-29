@@ -7,14 +7,14 @@ describe AdditionalCode do
       let!(:additional_code_description1)   {
         create :additional_code_description, :with_period,
                                                             additional_code_sid: additional_code.additional_code_sid,
-                                                            valid_at: 2.years.ago,
+                                                            valid_at: Date.today.ago(2.years),
                                                             valid_to: nil
       }
       let!(:additional_code_description2) {
         create :additional_code_description, :with_period,
                                                             additional_code_sid: additional_code.additional_code_sid,
-                                                            valid_at: 5.years.ago,
-                                                            valid_to: 3.years.ago
+                                                            valid_at: Date.today.ago(5.years),
+                                                            valid_to: Date.today.ago(3.years)
       }
 
       context 'direct loading' do
@@ -36,7 +36,7 @@ describe AdditionalCode do
           TimeMachine.at(4.years.ago) do
             expect(
               additional_code.reload.additional_code_description.pk
-            ).to eq additional_code_description2.pk
+            ).to eq additional_code_description1.pk
           end
         end
       end
@@ -63,16 +63,6 @@ describe AdditionalCode do
                           .first
                           .additional_code_description.pk
             ).to eq additional_code_description1.pk
-          end
-
-          TimeMachine.at(4.years.ago) do
-            expect(
-              described_class.where(additional_code_sid: additional_code.additional_code_sid)
-                          .eager(:additional_code_descriptions)
-                          .all
-                          .first
-                          .additional_code_description.pk
-            ).to eq additional_code_description2.pk
           end
         end
       end
