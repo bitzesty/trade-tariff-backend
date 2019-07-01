@@ -10,10 +10,6 @@ module Api
 
         attributes :goods_nomenclature_sid, :goods_nomenclature_item_id, :description, :formatted_description
 
-        attribute :chapter_note_id do |chapter|
-          chapter.chapter_note.try(:id)
-        end
-
         attribute :chapter_note, if: Proc.new { |chapter| chapter.chapter_note.present? } do |chapter|
           chapter.chapter_note.content
         end
