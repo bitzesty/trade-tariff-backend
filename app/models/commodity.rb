@@ -28,6 +28,11 @@ class Commodity < GoodsNomenclature
         .filter(measures__measure_type_id: MeasureType::VAT_TYPES + MeasureType::SUPPLEMENTARY_TYPES + Array.wrap(MeasureType::THIRD_COUNTRY))
   }, class_name: 'Measure'
 
+  def overview_measures_indexed
+    search_service = ::CommodityService::OverviewMeasuresService.new(goods_nomenclature_sid, point_in_time)
+    OverviewMeasurePresenter.new(search_service.indexed_measures, self).validate!
+  end
+
   one_to_many :search_references, key: :referenced_id, primary_key: :code, reciprocal: :referenced, conditions: { referenced_class: 'Commodity' },
                                   adder: proc { |search_reference| search_reference.update(referenced_id: code, referenced_class: 'Commodity') },
                                   remover: proc { |search_reference| search_reference.update(referenced_id: nil, referenced_class: nil) },
