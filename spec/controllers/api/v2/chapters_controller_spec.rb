@@ -20,7 +20,6 @@ describe Api::V2::ChaptersController, "GET #show" do
           goods_nomenclature_item_id: chapter.goods_nomenclature_item_id,
           description: chapter.description,
           formatted_description: chapter.formatted_description,
-          chapter_note_id: chapter_note.id,
           chapter_note: chapter_note.content,
           section_id: section.id
         },
@@ -80,8 +79,7 @@ describe Api::V2::ChaptersController, "GET #show" do
             producline_suffix: heading.producline_suffix,
             leaf: true,
             description_plain: heading.description_plain,
-            formatted_description: heading.formatted_description,
-            search_references_count: Integer
+            formatted_description: heading.formatted_description
           },
           relationships: {
             children: {
@@ -134,8 +132,7 @@ describe Api::V2::ChaptersController, "GET #index" do
           type: 'chapter',
           attributes: {
             goods_nomenclature_sid: chapter1.goods_nomenclature_sid,
-            goods_nomenclature_item_id: chapter1.goods_nomenclature_item_id,
-            chapter_note_id: chapter1.chapter_note.id,
+            goods_nomenclature_item_id: chapter1.goods_nomenclature_item_id
           }
         },
         {
@@ -143,8 +140,7 @@ describe Api::V2::ChaptersController, "GET #index" do
           type: 'chapter',
           attributes: {
             goods_nomenclature_sid: chapter2.goods_nomenclature_sid,
-            goods_nomenclature_item_id: chapter2.goods_nomenclature_item_id,
-            chapter_note_id: chapter2.chapter_note.id,
+            goods_nomenclature_item_id: chapter2.goods_nomenclature_item_id
           }
         },
       ]

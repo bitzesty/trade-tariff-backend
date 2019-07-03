@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Api::V2::Chapters::ChapterNotesController, "GET #show" do
+describe Api::Admin::Chapters::ChapterNotesController, "GET #show" do
   render_views
 
   let(:pattern) {
@@ -40,7 +40,7 @@ describe Api::V2::Chapters::ChapterNotesController, "GET #show" do
   end
 end
 
-describe Api::V2::Chapters::ChapterNotesController, "POST to #create" do
+describe Api::Admin::Chapters::ChapterNotesController, "POST to #create" do
   let(:chapter) { create :chapter }
 
   before { login_as_api_user }
@@ -98,7 +98,7 @@ describe Api::V2::Chapters::ChapterNotesController, "POST to #create" do
   end
 end
 
-describe Api::V2::Chapters::ChapterNotesController, "PUT to #update" do
+describe Api::Admin::Chapters::ChapterNotesController, "PUT to #update" do
   let(:chapter) { create :chapter, :with_note }
 
   before { login_as_api_user }
@@ -142,7 +142,7 @@ describe Api::V2::Chapters::ChapterNotesController, "PUT to #update" do
   end
 end
 
-describe Api::V2::Chapters::ChapterNotesController, "DELETE to #destroy" do
+describe Api::Admin::Chapters::ChapterNotesController, "DELETE to #destroy" do
   before { login_as_api_user }
 
   context 'deletiong succeeded' do
