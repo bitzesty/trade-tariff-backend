@@ -10,7 +10,9 @@ module Api
 
         attributes :id, :numeral, :title, :position
 
-        has_one :section_note, serializer: Api::Admin::Sections::SectionNoteSerializer
+        has_one :section_note, serializer: Api::Admin::Sections::SectionNoteSerializer, id_method_name: :id do |section|
+          section.section_note
+        end
       end
     end
   end

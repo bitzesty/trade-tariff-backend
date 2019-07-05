@@ -13,7 +13,9 @@ class AdditionalCode < Sequel::Model
   end
 
   def additional_code_description
-    additional_code_descriptions(reload: true).first
+    TimeMachine.at(validity_start_date) do
+      additional_code_descriptions(reload: true).last
+    end
   end
 
   one_to_one :meursing_additional_code, key: :additional_code,
