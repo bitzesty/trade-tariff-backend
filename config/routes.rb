@@ -48,41 +48,24 @@ Rails.application.routes.draw do
         collection do
           get :tree
         end
-        scope module: 'sections', constraints: { section_id: /\d{1,2}/, id: /\d+/ } do
-          resource :section_note, only: [:show, :create, :update, :destroy]
-          resources :search_references, only: [:show, :index, :destroy, :create, :update]
-        end
       end
 
       resources :chapters, only: [:index, :show], constraints: { id: /\d{2}/ } do
         member {
           get :changes
         }
-
-        scope module: 'chapters', constraints: { chapter_id: /\d{2}/, id: /\d+/ } do
-          resource :chapter_note, only: [:show, :create, :update, :destroy]
-          resources :search_references, only: [:show, :index, :destroy, :create, :update]
-        end
       end
 
       resources :headings, only: [:show], constraints: { id: /\d{4}/ } do
         member {
           get :changes
         }
-
-        scope module: 'headings', constraints: { heading_id: /\d{4}/, id: /\d+/ } do
-          resources :search_references, only: [:show, :index, :destroy, :create, :update]
-        end
       end
 
       resources :commodities, only: [:show], constraints: { id: /\d{10}/ } do
         member {
           get :changes
         }
-
-        scope module: 'commodities', constraints: { commodity_id: /\d{10}/, id: /\d+/ } do
-          resources :search_references, only: [:show, :index, :destroy, :create, :update]
-        end
       end
 
       resources :geographical_areas, only: [:index, :countries] do
@@ -91,7 +74,7 @@ Rails.application.routes.draw do
 
       resources :monetary_exchange_rates, only: [:index]
 
-      resources :updates, only: [:index] do
+      resources :updates, only: [] do
         collection { get :latest }
       end
 
@@ -108,10 +91,6 @@ Rails.application.routes.draw do
       get 'goods_nomenclatures/section/:position', to: 'goods_nomenclatures#show_by_section', constraints: { position: /\d{1,2}/ }
       get 'goods_nomenclatures/chapter/:chapter_id', to: 'goods_nomenclatures#show_by_chapter', constraints: { chapter_id: /\d{2}/ }
       get 'goods_nomenclatures/heading/:heading_id', to: 'goods_nomenclatures#show_by_heading', constraints: { heading_id: /\d{4}/ }
-
-      resources :rollbacks, only: [:create, :index]
-      resources :footnotes, only: [:index, :show, :update]
-      resources :measure_types, only: [:index, :show, :update]
     end
 
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do

@@ -14,12 +14,11 @@ module Api
 
       def index
         @search_references = begin
-          search_reference_collection.by_title
-                                 .paginate(page, per_page)
+          search_reference_collection.by_title.paginate(page, per_page)
         rescue Sequel::Error
-         search_reference_collection.by_title
-                                .paginate(page, per_page)
+          search_reference_collection.by_title.paginate(page, per_page)
         end
+
         render json: Api::Admin::SearchReferences::SearchReferenceListSerializer.new(@search_references.to_a).serializable_hash
       end
 
@@ -27,6 +26,7 @@ module Api
         @search_reference = search_reference_resource
         options = {}
         options[:include] = [:referenced, 'referenced.chapter', 'referenced.chapter.guides', 'referenced.section']
+
         render json: Api::Admin::SearchReferences::SearchReferenceSerializer.new(@search_reference, options).serializable_hash
       end
 
@@ -101,7 +101,7 @@ module Api
 
       def set_pagination_headers
         headers["X-Meta"] = {
-            pagination: {
+          pagination: {
             total: search_reference_collection.count,
             offset: page * per_page,
             page: page,
