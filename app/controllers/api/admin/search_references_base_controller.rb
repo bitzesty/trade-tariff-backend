@@ -13,13 +13,9 @@ module Api
       after_action :set_pagination_headers, only: [:index]
 
       def index
-        @search_references = begin
-          search_reference_collection.by_title.paginate(page, per_page)
-        rescue Sequel::Error
-          search_reference_collection.by_title.paginate(page, per_page)
-        end
+        search_references = search_reference_collection.by_title.paginate(page, per_page).all
 
-        render json: Api::Admin::SearchReferences::SearchReferenceListSerializer.new(@search_references.to_a).serializable_hash
+        render json: Api::Admin::SearchReferences::SearchReferenceListSerializer.new(search_references).serializable_hash
       end
 
       def show
