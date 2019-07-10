@@ -8,7 +8,7 @@ rackup      DefaultRackup
 port        ENV['PORT']     || 3000
 environment ENV['RACK_ENV'] || 'development'
 
-on_worker_boot do
+before_fork do
   # Ensure we don't keep connections
   if defined?(Sequel)
     ::Sequel::Model.db.disconnect
