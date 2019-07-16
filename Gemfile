@@ -88,6 +88,6 @@ group :test do
   gem "json_expressions", "~> 0.9.0"
   gem "rspec-rails", "~> 3.5.2"
   gem "rspec_junit_formatter"
-  gem "simplecov", "~> 0.14.1"
+  gem "simplecov", "~> 0.15.0", require: false
   gem "webmock", "~> 3.5.0"
 end
