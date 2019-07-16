@@ -15,6 +15,9 @@ class RunChapterPdfWorker
     else
       batch.on(:success, BatchCallback, bid: batch.bid, total: chapter_ids.size, start_time: Time.now.to_i)
       batch.jobs do
+        GenerateCoverPdfWorker.perform_async
+      end
+      batch.jobs do
         chapter_ids.shuffle.each do |sid|
           GenerateChapterPdfWorker.perform_async(sid)
         end
