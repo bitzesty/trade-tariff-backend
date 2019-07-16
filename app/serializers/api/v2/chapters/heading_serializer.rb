@@ -12,10 +12,6 @@ module Api
                    :declarable, :description, :producline_suffix, :leaf,
                    :description_plain, :formatted_description
 
-        attribute :search_references_count do |heading|
-          heading.search_references.count
-        end
-
         has_many :children, record_type: 'heading', serializer: Api::V2::Chapters::HeadingLeafSerializer
       end
     end

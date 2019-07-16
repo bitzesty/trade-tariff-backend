@@ -9,7 +9,7 @@ class RunPdfCombinerWorker
 
   def perform
     @dir = ENV["AWS_PDF_ROOT_PATH"] || ''
-    @key = ENV["AWS_PDF_FILENAME"] || 'tariff.pdf'
+    @key = ENV["AWS_PDF_FILENAME"] || "UK-Trade-Tariff-#{Date.today.strftime('%d-%m-%Y')}.pdf"
     initialize_s3(s3_file_path)
     setup_ephemeral_directory
     create_combined_pdf
