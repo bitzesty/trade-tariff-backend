@@ -1,9 +1,10 @@
 GIT
   remote: https://github.com/mcumcu/uktt.git
-  revision: 243058aca8f91a0369490d6a2dfdbaa4d6f79fff
+  revision: 2874a6d15c4b2e07a69ebcfbda875cb99f392b94
   specs:
-    uktt (0.2.1)
+    uktt (0.2.2)
       faraday
+      nokogiri
       prawn
       prawn-table
       thor (~> 0.20)
