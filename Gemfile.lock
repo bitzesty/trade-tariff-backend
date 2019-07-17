@@ -1,8 +1,8 @@
 GIT
   remote: https://gitlab.bitzesty.com/open-source/uktt.git
-  revision: 2874a6d15c4b2e07a69ebcfbda875cb99f392b94
+  revision: 72ad41ce7fc3ed4b08b02146d573a776435ee7e6
   specs:
-    uktt (0.2.2)
+    uktt (0.2.3)
       faraday
       nokogiri
       prawn
