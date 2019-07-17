@@ -1,9 +1,10 @@
 GIT
-  remote: https://github.com/mcumcu/uktt.git
-  revision: 243058aca8f91a0369490d6a2dfdbaa4d6f79fff
+  remote: https://gitlab.bitzesty.com/open-source/uktt.git
+  revision: 72ad41ce7fc3ed4b08b02146d573a776435ee7e6
   specs:
-    uktt (0.2.1)
+    uktt (0.2.3)
       faraday
+      nokogiri
       prawn
       prawn-table
       thor (~> 0.20)
@@ -335,7 +336,7 @@ GEM
       rufus-scheduler (~> 3.2)
       sidekiq (>= 3)
       tilt (>= 1.4.0)
-    simplecov (0.14.1)
+    simplecov (0.15.1)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
@@ -425,7 +426,7 @@ DEPENDENCIES
   sidekiq (~> 4.1.4)
   sidekiq-batch
   sidekiq-scheduler (~> 2.1.8)
-  simplecov (~> 0.14.1)
+  simplecov (~> 0.15.0)
   sinatra (~> 2.0.2)
   tilt
   uktt!

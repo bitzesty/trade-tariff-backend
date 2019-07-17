@@ -60,7 +60,7 @@ gem "responders", "~> 2.1", ">= 2.1.0"
 gem "tilt"
 
 # Printed PDF
-gem 'uktt', git: 'https://github.com/mcumcu/uktt.git'
+gem 'uktt', git: 'https://gitlab.bitzesty.com/open-source/uktt.git'
 gem 'combine_pdf'
 gem 'sidekiq-batch'
 
@@ -88,6 +88,6 @@ group :test do
   gem "json_expressions", "~> 0.9.0"
   gem "rspec-rails", "~> 3.5.2"
   gem "rspec_junit_formatter"
-  gem "simplecov", "~> 0.14.1"
+  gem "simplecov", "~> 0.15.0", require: false
   gem "webmock", "~> 3.5.0"
 end
