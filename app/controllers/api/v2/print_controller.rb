@@ -6,25 +6,18 @@ module Api
       before_action :set_up_s3_bucket
 
       def index
-        @files = @bucket.objects.select { |f| f.key =~ /UK-Trade-Tariff-/ }
-                                .map { |obj| printed_pdf(obj) }
-                                .sort_by(&:date)
-                                .reverse
-        render json: Api::V2::PrintSerializer.new(@files).serializable_hash
+        @result = filter_by(/^UK-Trade-Tariff-/).sort_by(&:date).reverse
+        render_result
       end
 
       def chapters
-        @chapters =  @bucket.objects.select { |f| f.key =~ %r{chapters/} }
-                                    .map { |obj| printed_pdf(obj) }
-                                    .sort_by(&:id)
-        render json: Api::V2::PrintSerializer.new(@chapters).serializable_hash
+        @result = filter_by(%r{^chapters/}).sort_by(&:id)
+        render_result
       end
 
       def latest
-        @file = @bucket.objects.select { |f| f.key =~ /UK-Trade-Tariff-/ }
-                                .map { |obj| printed_pdf(obj) }
-                                .max_by(&:date)
-        render json: Api::V2::PrintSerializer.new(@file).serializable_hash
+        @result = filter_by(/^UK-Trade-Tariff-/).max_by(&:date)
+        render_result
       end
 
       private
@@ -42,10 +35,17 @@ module Api
       end
 
       def url(pdf_file_path)
-        @dir, @key = File.split(pdf_file_path)
-        @dir = '' if @dir == '.'
         initialize_s3(pdf_file_path)
         @s3_obj.public_url
+      end
+
+      def render_result
+        render json: Api::V2::PrintSerializer.new(@result).serializable_hash
+      end
+
+      def filter_by(filter)
+        @bucket.objects.select { |f| f.key =~ filter }
+                       .map { |obj| printed_pdf(obj) }
       end
     end
   end
