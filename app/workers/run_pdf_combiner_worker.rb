@@ -7,6 +7,8 @@ class RunPdfCombinerWorker
 
   sidekiq_options retry: 2
 
+  LATEST_FILENAME = 'UK-Trade-Tariff-latest.pdf'.freeze
+
   def perform
     @dir = ENV["AWS_PDF_ROOT_PATH"] || ''
     @key = ENV["AWS_PDF_FILENAME"] || "UK-Trade-Tariff-#{Date.today.strftime('%d-%m-%Y')}.pdf"
@@ -53,6 +55,7 @@ class RunPdfCombinerWorker
   def upload_to_s3
     File.open(ephemeral_file_path, 'rb') do |pdf|
       @s3_obj.put(body: pdf)
+      @bucket.object(LATEST_FILENAME).upload_file(pdf)
     end
   end
 

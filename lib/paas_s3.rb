@@ -2,14 +2,14 @@ module PaasS3
   attr_accessor :bucket
   attr_accessor :s3_obj
 
-  def initialize_s3(s3_file_path)
+  def initialize_s3(s3_file_path = nil)
     s3 = service_definition
     @bucket = Aws::S3::Resource.new(
       region: s3['credentials']['aws_region'],
       access_key_id: s3['credentials']['aws_access_key_id'],
       secret_access_key: s3['credentials']['aws_secret_access_key']
     ).bucket(s3['credentials']['bucket_name'])
-    @s3_obj = @bucket.object(s3_file_path)
+    @s3_obj = s3_file_path ? @bucket.object(s3_file_path) : @bucket
   end
 
   def service_definition
