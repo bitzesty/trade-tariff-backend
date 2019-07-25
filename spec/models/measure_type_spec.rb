@@ -11,10 +11,8 @@ describe MeasureType do
   end
 
   describe '#excise?' do
-    let(:measure_type) { build :measure_type, measure_type_id: measure_type_description.measure_type_id, measure_type_description: measure_type_description }
-
     context 'measure type is Excise related' do
-      let!(:measure_type_description) { create :measure_type_description, description: 'EXCISE 111' }
+      let(:measure_type) { build :measure_type, measure_type_series_id: 'Q' }
 
       it 'returns true' do
         expect(measure_type).to be_excise
@@ -22,7 +20,7 @@ describe MeasureType do
     end
 
     context 'measure type is not Excise related' do
-      let(:measure_type_description) { create :measure_type_description, description: 'not really e_x_c_i_s_e' }
+      let(:measure_type) { build :measure_type, measure_type_series_id: 'E' }
 
       it 'returns false' do
         expect(measure_type).not_to be_excise
