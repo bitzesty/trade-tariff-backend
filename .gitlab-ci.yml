@@ -8,6 +8,7 @@ variables:
   ES_JAVA_OPTS: "-Xms1g -Xmx1g"
   ELASTICSEARCH_URL: 'http://localhost:9200'
   BUNDLER_VERSION: 2.0.1
+  DOCKER_TLS_CERTDIR: ""
 
 services:
   - name: redis:3.2.11
