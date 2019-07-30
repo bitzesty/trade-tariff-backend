@@ -1,5 +1,4 @@
 class QuotaSearchService
-
   attr_reader :scope, :status
 
   def initialize(attributes)

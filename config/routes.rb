@@ -95,6 +95,10 @@ Rails.application.routes.draw do
       get "pdf/tariff", to: "print#index"
       get "pdf/latest", to: "print#latest"
       get "pdf/chapters", to: "print#chapters"
+
+      get 'additional_codes/search', to: 'additional_codes#search'
+      get 'additional_codes/search/measures', to: 'additional_codes#search_measures'
+      get 'additional_codes/search/goods_nomenclatures', to: 'additional_codes#search_goods_nomenclatures'
     end
 
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
