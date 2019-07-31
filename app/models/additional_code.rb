@@ -15,6 +15,10 @@ class AdditionalCode < Sequel::Model
   one_to_one :measure, key: :additional_code_sid,
                        primary_key: :additional_code_sid
 
+  def measure_id
+    measure.measure_sid
+  end
+
   def additional_code_description
     TimeMachine.at(validity_start_date) do
       additional_code_descriptions(reload: true).last
