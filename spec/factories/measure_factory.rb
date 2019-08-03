@@ -139,6 +139,7 @@ FactoryGirl.define do
     end
 
     trait :excise do
+      measure_type_series_id { 'Q' }
       measure_type_description { "EXCISE 111" }
     end
 

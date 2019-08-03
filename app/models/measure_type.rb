@@ -39,7 +39,7 @@ class MeasureType < Sequel::Model
 
   # 306
   def excise?
-    !!(description =~ /EXCISE/)
+    measure_type_series_id == 'Q'
   end
 
   # The VAT standard rate has measure type 305 and no additional code.
