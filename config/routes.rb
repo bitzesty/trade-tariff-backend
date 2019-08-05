@@ -84,7 +84,7 @@ Rails.application.routes.draw do
         collection { get :search }
       end
 
-      resources :additional_codes, only: [:search] do
+      resources :additional_codes, only: [] do
         collection { get :search }
       end
 
