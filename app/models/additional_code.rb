@@ -16,7 +16,7 @@ class AdditionalCode < Sequel::Model
                        primary_key: :additional_code_sid
 
   def measure_id
-    measure.measure_sid
+    measure&.measure_sid
   end
 
   def additional_code_description
