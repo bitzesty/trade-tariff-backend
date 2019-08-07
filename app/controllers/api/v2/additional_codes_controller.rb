@@ -5,7 +5,7 @@ module Api
 
       def search
         options = {}
-        options[:include] = [:measure, 'measure.goods_nomenclature']
+        options[:include] = [:measures, 'measures.goods_nomenclature']
         render json: Api::V2::AdditionalCodes::AdditionalCodeSerializer.new(@additional_codes, options).serializable_hash
       end
 
