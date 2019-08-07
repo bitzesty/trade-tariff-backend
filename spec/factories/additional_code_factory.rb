@@ -28,7 +28,7 @@ FactoryGirl.define do
 
   factory :additional_code_description do
     transient do
-      valid_at { Time.now.ago(2.years) }
+      valid_at { Date.current.ago(2.years) }
       valid_to { nil }
     end
 
@@ -36,7 +36,7 @@ FactoryGirl.define do
     additional_code_sid                    { generate(:additional_code_sid) }
     additional_code_type_id                { generate(:additional_code_type_id) }
     additional_code                        { Forgery(:basic).text(exactly: 3) }
-    description                            { Forgery(:lorem_ipsum).sentence }
+    description                            { "#{Forgery('basic').text} #{Forgery('basic').text} #{Forgery('basic').text}" }
 
     trait :with_period do
       after(:create) { |adco_description, evaluator|

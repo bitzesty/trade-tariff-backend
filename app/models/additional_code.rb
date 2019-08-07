@@ -12,6 +12,20 @@ class AdditionalCode < Sequel::Model
     ds.with_actual(AdditionalCodeDescriptionPeriod)
   end
 
+  one_to_one :measure, key: :additional_code_sid,
+                       primary_key: :additional_code_sid
+
+  def valid_measure
+    measure if point_in_time.blank? ||
+        (measure.validity_start_date <= point_in_time &&
+          (measure.validity_end_date == nil ||
+            measure.validity_end_date >= point_in_time))
+  end
+
+  def measure_id
+    valid_measure&.measure_sid
+  end
+
   def additional_code_description
     TimeMachine.at(validity_start_date) do
       additional_code_descriptions(reload: true).last
