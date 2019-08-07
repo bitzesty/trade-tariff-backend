@@ -10,7 +10,7 @@ module Api
 
         attributes :code, :description, :formatted_description
 
-        has_one :measure, serializer: Api::V2::AdditionalCodes::MeasureSerializer
+        has_one :measure, object_method_name: :valid_measure, serializer: Api::V2::AdditionalCodes::MeasureSerializer
       end
     end
   end
