@@ -29,9 +29,7 @@ class Certificate < Sequel::Model
   end
 
   def certificate_description
-    TimeMachine.at(validity_start_date) do
-      certificate_descriptions(reload: true).last
-    end
+    certificate_descriptions(reload: true).last
   end
 
   one_to_many :certificate_types, key: :certificate_type_code,
