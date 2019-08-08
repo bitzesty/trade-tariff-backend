@@ -21,11 +21,13 @@ describe Api::V2::AdditionalCodesController, type: :controller do
             formatted_description: String
           },
           relationships: {
-            measure: {
-              data: {
-                id: String,
-                type: "measure"
-              }
+            measures: {
+              data: [
+                {
+                  id: String,
+                  type: "measure"
+                }
+              ]
             }
           }
         }],
