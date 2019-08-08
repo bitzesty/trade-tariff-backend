@@ -10,6 +10,7 @@ describe Api::V2::FootnotesController, type: :controller do
     let!(:measure) { create :measure }
     let!(:footnote_association_measure) { create :footnote_association_measure, footnote_type_id: footnote.footnote_type_id, footnote_id: footnote.footnote_id, measure_sid: measure.measure_sid }
     let!(:goods_nomenclature) { measure.goods_nomenclature }
+    let!(:footnote_association_goods_nomenclature) { create :footnote_association_goods_nomenclature, footnote_type: footnote.footnote_type_id, footnote_id: footnote.footnote_id, goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid }
 
     let(:pattern) {
       {
@@ -27,6 +28,14 @@ describe Api::V2::FootnotesController, type: :controller do
                 {
                   id: String,
                   type: "measure"
+                }
+              ].ignore_extra_values!
+            },
+            goods_nomenclatures: {
+              data: [
+                {
+                  id: String,
+                  type: "goods_nomenclature"
                 }
               ].ignore_extra_values!
             }

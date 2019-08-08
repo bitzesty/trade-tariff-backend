@@ -7,7 +7,7 @@ module Api
         # raise Sequel::RecordNotFound if @footnotes.empty?
 
         options = {}
-        options[:include] = [:measures, 'measures.goods_nomenclature']
+        options[:include] = [:measures, 'measures.goods_nomenclature', :goods_nomenclatures]
         render json: Api::V2::Footnotes::FootnoteSerializer.new(@footnotes, options).serializable_hash
       end
 

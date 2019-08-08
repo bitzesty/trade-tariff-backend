@@ -6,6 +6,7 @@ class FootnoteSearchService
     self.scope = Footnote
       .actual
       .eager(:footnote_descriptions)
+      .eager(:goods_nomenclatures)
 
     @code = attributes['code']
     @description = attributes['description']

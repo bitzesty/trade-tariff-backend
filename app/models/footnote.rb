@@ -52,6 +52,17 @@ class Footnote < Sequel::Model
   many_to_many :goods_nomenclatures, join_table: :footnote_association_goods_nomenclatures,
                                      left_key: %i[footnote_type footnote_id],
                                      right_key: [:goods_nomenclature_sid]
+  
+  def valid_goods_nomenclatures
+    goods_nomenclatures.reject do |goods_nomenclature|
+      HiddenGoodsNomenclature.codes.include? goods_nomenclature.goods_nomenclature_item_id
+    end
+  end
+
+  def goods_nomenclature_ids
+    valid_goods_nomenclatures.pluck(:goods_nomenclature_sid)
+  end
+                                  
   one_to_many :footnote_association_erns, key: %i[footnote_type footnote_id],
                                           primary_key: %i[footnote_type_id footnote_id]
   many_to_many :export_refund_nomenclatures, join_table: :footnote_association_erns,
