@@ -12,20 +12,18 @@ class CertificateSearchService
   end
 
   def perform
-    apply_code_filter
-    apply_description_filter
+    apply_code_filter if code.present?
+    apply_description_filter if description.present?
     scope.all
   end
 
   private
 
   def apply_code_filter
-    return if code.blank?
     self.scope = scope.where(certificates__certificate_code: code)
   end
 
   def apply_description_filter
-    return if description.blank?
     self.scope = scope.
       join(:certificate_description_periods, [[:certificates__certificate_code, :certificate_description_periods__certificate_code ],
                                               [:certificates__certificate_type_code, :certificate_description_periods__certificate_type_code]]).
