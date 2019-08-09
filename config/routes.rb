@@ -92,6 +92,10 @@ Rails.application.routes.draw do
         collection { get :search }
       end
 
+      resources :footnotes, only: [] do
+        collection { get :search }
+      end
+
       post "search" => "search#search"
       get "search_suggestions" => "search#suggestions"
       get '/headings/:id/tree' => 'headings#tree'
