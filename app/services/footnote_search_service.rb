@@ -22,7 +22,7 @@ class FootnoteSearchService
 
   def apply_code_filter
     self.scope = scope
-      .where("footnotes.footnote_type_id::text || footnotes.footnote_id::text LIKE '%#{code}%'")
+      .where("footnotes.footnote_type_id::text || footnotes.footnote_id::text LIKE '#{code}%'")
   end
 
   def apply_description_filter
