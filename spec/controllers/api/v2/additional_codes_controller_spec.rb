@@ -16,6 +16,8 @@ describe Api::V2::AdditionalCodesController, type: :controller do
           id: String,
           type: "additional_code",
           attributes: {
+            additional_code_type_id: String,
+            additional_code: String,
             code: String,
             description: String,
             formatted_description: String
