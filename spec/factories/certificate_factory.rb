@@ -23,14 +23,14 @@ FactoryGirl.define do
 
   factory :certificate_description do
     transient do
-      valid_at { Time.now.ago(2.years) }
+      valid_at { Date.current.ago(2.years) }
       valid_to { nil }
     end
 
     certificate_description_period_sid { generate(:certificate_sid) }
     certificate_type_code              { generate(:certificate_type_code) }
     certificate_code                   { Forgery(:basic).text(exactly: 3) }
-    description                        { Forgery(:lorem_ipsum).sentence }
+    description                        { "#{Forgery('basic').text} #{Forgery('basic').text} #{Forgery('basic').text}" }
 
     trait :with_period do
       after(:create) { |cert_description, evaluator|

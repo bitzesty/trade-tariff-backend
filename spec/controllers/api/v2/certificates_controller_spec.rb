@@ -1,35 +1,42 @@
 require 'rails_helper'
 
-describe Api::V2::AdditionalCodesController, type: :controller do
+describe Api::V2::CertificatesController, type: :controller do
   render_views
 
-  context 'additional codes search' do
+  context 'certificates search' do
 
-    let!(:additional_code) { create :additional_code }
-    let!(:additional_code_description) { create :additional_code_description, :with_period, additional_code_sid: additional_code.additional_code_sid }
-    let!(:measure) { create :measure, additional_code_sid: additional_code.additional_code_sid }
+    let!(:certificate) { create :certificate }
+    let!(:certificate_description) {
+      create :certificate_description,
+        :with_period,
+        certificate_type_code: certificate.certificate_type_code,
+        certificate_code: certificate.certificate_code
+    }
+    let!(:measure) { create :measure }
     let!(:goods_nomenclature) { measure.goods_nomenclature }
+    let!(:measure_condition) {
+      create :measure_condition,
+        certificate_type_code: certificate.certificate_type_code,
+        certificate_code: certificate.certificate_code,
+        measure_sid: measure.measure_sid
+    }
 
     let(:pattern) {
       {
         data: [{
           id: String,
-          type: "additional_code",
+          type: "certificates",
           attributes: {
-            additional_code_type_id: String,
-            additional_code: String,
-            code: String,
-            description: String,
-            formatted_description: String
+            certificate_type_code: String,
+            certificate_code: String,
+            description: String
           },
           relationships: {
             measures: {
-              data: [
-                {
-                  id: String,
-                  type: "measure"
-                }
-              ]
+              data: [{
+                id: String,
+                type: "measure"
+              }]
             }
           }
         }],
@@ -64,7 +71,7 @@ describe Api::V2::AdditionalCodesController, type: :controller do
     }
 
     it 'returns rendered found additional codes and related measures and goods nomenclatures' do
-      get :search, params: { code: additional_code.additional_code }, format: :json
+      get :search, params: { code: certificate.certificate_code }, format: :json
 
       expect(response.body).to match_json_expression pattern
     end
