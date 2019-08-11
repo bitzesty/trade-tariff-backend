@@ -10,9 +10,9 @@ module Api
 
         attributes :code, :description, :formatted_description
 
-        has_many :measures, object_method_name: :valid_measures, serializer: Api::V2::Footnotes::MeasureSerializer
+        has_many :measures, serializer: Api::V2::Footnotes::MeasureSerializer
 
-        has_many :goods_nomenclatures, object_method_name: :valid_goods_nomenclatures, serializer: Api::V2::Footnotes::GoodsNomenclatureSerializer
+        has_many :goods_nomenclatures, serializer: Api::V2::Footnotes::GoodsNomenclatureSerializer
       end
     end
   end

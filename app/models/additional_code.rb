@@ -13,19 +13,12 @@ class AdditionalCode < Sequel::Model
   end
 
   one_to_many :measures, key: :additional_code_sid,
-                         primary_key: :additional_code_sid
-
-  def valid_measures
-    @_measures ||= measures&.select do |measure|
-      point_in_time.blank? ||
-        (measure.validity_start_date <= point_in_time &&
-          (measure.validity_end_date == nil ||
-            measure.validity_end_date >= point_in_time))
-    end
+                         primary_key: :additional_code_sid do |ds|
+    ds.with_actual(Measure)
   end
 
   def measure_ids
-    valid_measures&.map(&:measure_sid)
+    measures.pluck(:measure_sid)
   end
 
   def additional_code_description

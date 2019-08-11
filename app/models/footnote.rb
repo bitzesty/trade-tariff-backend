@@ -32,19 +32,12 @@ class Footnote < Sequel::Model
                                                      footnote_id]
   many_to_many :measures, join_table: :footnote_association_measures,
                           left_key: %i[footnote_type_id footnote_id],
-                          right_key: [:measure_sid]
-
-  def valid_measures
-    measures.select do |measure|
-      point_in_time.blank? ||
-          (measure.validity_start_date <= point_in_time &&
-            (measure.validity_end_date == nil ||
-              measure.validity_end_date >= point_in_time))
-    end
+                          right_key: [:measure_sid] do |ds|
+    ds.with_actual(Measure)
   end
 
   def measure_ids
-    valid_measures.pluck(:measure_sid)
+    measures.pluck(:measure_sid)
   end
 
   one_to_many :footnote_association_goods_nomenclatures, key: %i[footnote_type footnote_id],

@@ -16,12 +16,7 @@ class Certificate < Sequel::Model
                                    primary_key: %i[certificate_type_code certificate_code]
 
   def measures
-    @_measures ||= measure_conditions&.map(&:measure).select do |measure|
-      point_in_time.blank? ||
-        (measure.validity_start_date <= point_in_time &&
-          (measure.validity_end_date == nil ||
-            measure.validity_end_date >= point_in_time))
-    end
+    @_measures ||= measure_conditions&.map(&:measure)
   end
 
   def measure_ids
