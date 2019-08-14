@@ -37,6 +37,8 @@ class Certificate < Sequel::Model
     ds.with_actual(CertificateType)
   end
 
+  delegate :description, :formatted_description, to: :certificate_description
+
   def certificate_type
     certificate_types(reload: true).first
   end
