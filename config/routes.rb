@@ -87,6 +87,7 @@ Rails.application.routes.draw do
       resources :certificates, only: [] do
         collection { get :search }
       end
+      resources :certificate_types, only: [:index]
 
       resources :additional_codes, only: [] do
         collection { get :search }
