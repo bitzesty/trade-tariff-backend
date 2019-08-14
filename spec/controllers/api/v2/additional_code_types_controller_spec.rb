@@ -39,7 +39,7 @@ describe Api::V2::AdditionalCodeTypesController, type: :controller do
       }
     }
 
-    it 'returns rendered found additional codes and related measures and goods nomenclatures' do
+    it 'returns all additional code types' do
       get :index, format: :json
 
       expect(response.body).to match_json_expression pattern
