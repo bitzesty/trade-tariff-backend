@@ -91,6 +91,7 @@ Rails.application.routes.draw do
       resources :additional_codes, only: [] do
         collection { get :search }
       end
+      resources :additional_code_types, only: [:index]
 
       resources :footnotes, only: [] do
         collection { get :search }
