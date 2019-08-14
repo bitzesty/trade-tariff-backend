@@ -54,6 +54,22 @@ describe CertificateSearchService do
       end
     end
 
+    context 'by certificate type' do
+      it 'should find certificate by type' do
+        result = described_class.new({
+          'type' => certificate_1.certificate_type_code
+        }).perform
+        expect(result).to include(certificate_1)
+      end
+
+      it 'should not find additional code by wrong type' do
+        result = described_class.new({
+          'type' => certificate_1.certificate_type_code
+        }).perform
+        expect(result).not_to include(certificate_2)
+      end
+    end
+
     context 'by description' do
       it 'should find certificate by description' do
         result = described_class.new({
