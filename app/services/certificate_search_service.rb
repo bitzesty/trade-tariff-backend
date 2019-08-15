@@ -1,6 +1,6 @@
 class CertificateSearchService
   attr_accessor :scope
-  attr_reader :code, :description
+  attr_reader :code, :type, :description
 
   def initialize(attributes)
     @scope = Certificate.
@@ -8,11 +8,13 @@ class CertificateSearchService
       eager(:certificate_descriptions, measure_conditions: [measure: :goods_nomenclature])
 
     @code = attributes['code']
+    @type = attributes['type']
     @description = attributes['description']
   end
 
   def perform
     apply_code_filter if code.present?
+    apply_type_filter if type.present?
     apply_description_filter if description.present?
     scope.all
   end
@@ -21,6 +23,10 @@ class CertificateSearchService
 
   def apply_code_filter
     self.scope = scope.where(certificates__certificate_code: code)
+  end
+
+  def apply_type_filter
+    self.scope = scope.where(certificates__certificate_type_code: type)
   end
 
   def apply_description_filter
