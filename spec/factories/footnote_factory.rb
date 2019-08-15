@@ -117,4 +117,9 @@ FactoryGirl.define do
     validity_start_date { Date.current.ago(2.years) }
     validity_end_date   { nil }
   end
+
+  factory :footnote_type_description do
+    footnote_type_id { Forgery(:basic).text(exactly: 2) }
+    description      { Forgery(:basic).text }
+  end
 end

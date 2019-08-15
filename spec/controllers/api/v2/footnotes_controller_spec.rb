@@ -91,6 +91,12 @@ describe Api::V2::FootnotesController, type: :controller do
       expect(response.body).to match_json_expression pattern
     end
 
+    it 'returns footnotes, related measures, and goods nomenclatures when searching by footnote type' do
+      get :search, params: { type: footnote.footnote_type_id }, format: :json
+
+      expect(response.body).to match_json_expression pattern
+    end
+
     it 'returns footnotes, related measures, and goods nomenclatures when searching by description' do
       get :search, params: { description: footnote.description }, format: :json
 
