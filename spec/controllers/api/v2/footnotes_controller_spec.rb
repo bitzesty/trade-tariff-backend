@@ -82,14 +82,8 @@ describe Api::V2::FootnotesController, type: :controller do
       }
     }
 
-    it 'returns footnotes, related measures, and goods nomenclatures when searching by code' do
-      get :search, params: { code: footnote.code }, format: :json
-
-      expect(response.body).to match_json_expression pattern
-    end
-
-    it 'returns footnotes, related measures, and goods nomenclatures when searching by part of a code' do
-      get :search, params: { code: footnote.footnote_type_id }, format: :json
+    it 'returns footnotes, related measures, and goods nomenclatures when searching by footnote id' do
+      get :search, params: { code: footnote.footnote_id }, format: :json
 
       expect(response.body).to match_json_expression pattern
     end
