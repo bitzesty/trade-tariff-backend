@@ -19,6 +19,8 @@ describe Api::V2::FootnotesController, type: :controller do
           type: "footnote",
           attributes: {
             code: String,
+            footnote_type_id: String,
+            footnote_id: String,
             description: String,
             formatted_description: String
           },
