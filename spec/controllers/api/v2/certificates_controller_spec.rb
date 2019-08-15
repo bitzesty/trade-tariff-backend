@@ -20,6 +20,7 @@ describe Api::V2::CertificatesController, type: :controller do
         certificate_code: certificate.certificate_code,
         measure_sid: measure.measure_sid
     }
+    let!(:goods_nomenclature_description) { create :goods_nomenclature_description, goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid }
 
     let(:pattern) {
       {
@@ -29,7 +30,8 @@ describe Api::V2::CertificatesController, type: :controller do
           attributes: {
             certificate_type_code: String,
             certificate_code: String,
-            description: String
+            description: String,
+            formatted_description: String
           },
           relationships: {
             measures: {

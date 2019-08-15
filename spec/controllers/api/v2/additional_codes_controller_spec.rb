@@ -9,6 +9,7 @@ describe Api::V2::AdditionalCodesController, type: :controller do
     let!(:additional_code_description) { create :additional_code_description, :with_period, additional_code_sid: additional_code.additional_code_sid }
     let!(:measure) { create :measure, additional_code_sid: additional_code.additional_code_sid }
     let!(:goods_nomenclature) { measure.goods_nomenclature }
+    let!(:goods_nomenclature_description) { create :goods_nomenclature_description, goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid }
 
     let(:pattern) {
       {
