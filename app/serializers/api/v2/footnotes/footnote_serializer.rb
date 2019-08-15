@@ -8,7 +8,7 @@ module Api
 
         set_id :code
 
-        attributes :code, :description, :formatted_description
+        attributes :code, :footnote_type_id, :footnote_id, :description, :formatted_description
 
         has_many :measures, object_method_name: :valid_measures, serializer: Api::V2::Footnotes::MeasureSerializer
 
