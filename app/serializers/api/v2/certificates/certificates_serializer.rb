@@ -6,8 +6,7 @@ module Api
 
         set_id :id
 
-        attributes :certificate_type_code, :certificate_code
-        attribute :description, &:formatted_description
+        attributes :certificate_type_code, :certificate_code, :description, :formatted_description
 
         has_many :measures, serializer: Api::V2::Certificates::MeasureSerializer
       end

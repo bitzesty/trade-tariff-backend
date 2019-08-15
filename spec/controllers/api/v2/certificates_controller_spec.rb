@@ -30,7 +30,8 @@ describe Api::V2::CertificatesController, type: :controller do
           attributes: {
             certificate_type_code: String,
             certificate_code: String,
-            description: String
+            description: String,
+            formatted_description: String
           },
           relationships: {
             measures: {
