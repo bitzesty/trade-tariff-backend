@@ -95,6 +95,7 @@ Rails.application.routes.draw do
       resources :footnotes, only: [] do
         collection { get :search }
       end
+      resources :footnote_types, only: [:index]
 
       post "search" => "search#search"
       get "search_suggestions" => "search#suggestions"

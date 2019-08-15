@@ -19,6 +19,8 @@ describe Api::V2::FootnotesController, type: :controller do
           type: "footnote",
           attributes: {
             code: String,
+            footnote_type_id: String,
+            footnote_id: String,
             description: String,
             formatted_description: String
           },
@@ -87,6 +89,12 @@ describe Api::V2::FootnotesController, type: :controller do
 
     it 'returns footnotes, related measures, and goods nomenclatures when searching by part of a code' do
       get :search, params: { code: footnote.footnote_type_id }, format: :json
+
+      expect(response.body).to match_json_expression pattern
+    end
+
+    it 'returns footnotes, related measures, and goods nomenclatures when searching by footnote type' do
+      get :search, params: { type: footnote.footnote_type_id }, format: :json
 
       expect(response.body).to match_json_expression pattern
     end
