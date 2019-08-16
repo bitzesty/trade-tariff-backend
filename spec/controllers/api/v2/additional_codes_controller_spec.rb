@@ -63,6 +63,10 @@ describe Api::V2::AdditionalCodesController, type: :controller do
       }
     }
 
+    before(:each) do
+      TradeTariffBackend.update_measure_effective_dates
+    end
+
     it 'returns rendered found additional codes and related measures and goods nomenclatures' do
       get :search, params: { code: additional_code.additional_code }, format: :json
 

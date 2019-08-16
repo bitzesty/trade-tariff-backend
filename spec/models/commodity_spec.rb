@@ -162,6 +162,10 @@ describe Commodity do
                                              validity_start_date: Date.current.ago(2.years)
       }
 
+      before(:each) do
+        TradeTariffBackend.update_measure_effective_dates
+      end
+
       it 'groups measures by measure_generating_regulation_id and picks latest one' do
         TimeMachine.at(Date.current) do
           expect(commodity.measures.map(&:measure_sid)).to     include measure1.measure_sid
@@ -193,6 +197,10 @@ describe Commodity do
                                             additional_code_id: measure1.additional_code_id,
                                             validity_start_date: Date.current.ago(1.years)
       }
+
+      before(:each) do
+        TradeTariffBackend.update_measure_effective_dates
+      end
 
       it 'groups measures by measure_generating_regulation_id and picks the measure with the highest goods_nomenclature_item_id' do
         TimeMachine.at(Date.current) do
@@ -283,6 +291,10 @@ describe Commodity do
                                                 geographical_area_sid: 3
       }
 
+      before(:each) do
+        TradeTariffBackend.update_measure_effective_dates
+      end
+
       it 'measure validity date superseeds regulation validity date' do
         measures = TimeMachine.at(Time.now.ago(1.year)) { described_class.actual.first.measures }.map(&:measure_sid)
         expect(measures).to     include measure3.measure_sid
@@ -332,6 +344,10 @@ describe Commodity do
                                                 validity_end_date: nil,
                                                 geographical_area_sid: 3
       }
+
+      before(:each) do
+        TradeTariffBackend.update_measure_effective_dates
+      end
 
       it 'measure validity date superseeds regulation validity date' do
         measures = TimeMachine.at(Time.now.ago(1.year)) { described_class.actual.first.measures }.map(&:measure_sid)

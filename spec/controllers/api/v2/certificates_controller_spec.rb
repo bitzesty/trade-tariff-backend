@@ -70,6 +70,10 @@ describe Api::V2::CertificatesController, type: :controller do
       }
     }
 
+    before(:each) do
+      TradeTariffBackend.update_measure_effective_dates
+    end
+
     it 'returns rendered found additional codes and related measures and goods nomenclatures' do
       get :search, params: { code: certificate.certificate_code }, format: :json
 

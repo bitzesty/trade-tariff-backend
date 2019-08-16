@@ -79,6 +79,10 @@ describe Api::V2::FootnotesController, type: :controller do
       }
     }
 
+    before(:each) do
+      TradeTariffBackend.update_measure_effective_dates
+    end
+
     it 'returns footnotes, related measures, and goods nomenclatures when searching by code' do
       get :search, params: { code: footnote.code }, format: :json
 

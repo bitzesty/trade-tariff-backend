@@ -44,6 +44,7 @@ describe Measure do
 	      (67883, 68304, '1998-01-01 00:00:00', 2, '0805201000', '80', '2013-08-02 20:03:55', NULL, 38832, 'C', NULL),
 	      (69920, 70329, '1999-01-01 00:00:00', 3, '0805201005', '80', '2013-08-02 20:04:48', NULL, 40421, 'C', NULL);
       })
+      TradeTariffBackend.update_measure_effective_dates
 
       # Measures on a parent code should also be present (e.g. 0805201000 on 0805201005)
       expect(Commodity.by_code('0805201005').first.measures.count).to eq 1
