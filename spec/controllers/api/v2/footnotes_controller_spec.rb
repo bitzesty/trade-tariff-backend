@@ -11,6 +11,7 @@ describe Api::V2::FootnotesController, type: :controller do
     let!(:footnote_association_measure) { create :footnote_association_measure, footnote_type_id: footnote.footnote_type_id, footnote_id: footnote.footnote_id, measure_sid: measure.measure_sid }
     let!(:goods_nomenclature) { measure.goods_nomenclature }
     let!(:footnote_association_goods_nomenclature) { create :footnote_association_goods_nomenclature, footnote_type: footnote.footnote_type_id, footnote_id: footnote.footnote_id, goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid }
+    let!(:goods_nomenclature_description) { create :goods_nomenclature_description, goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid }
 
     let(:pattern) {
       {
@@ -19,6 +20,8 @@ describe Api::V2::FootnotesController, type: :controller do
           type: "footnote",
           attributes: {
             code: String,
+            footnote_type_id: String,
+            footnote_id: String,
             description: String,
             formatted_description: String
           },
@@ -82,15 +85,15 @@ describe Api::V2::FootnotesController, type: :controller do
     before(:each) do
       TradeTariffBackend.update_measure_effective_dates
     end
-
-    it 'returns footnotes, related measures, and goods nomenclatures when searching by code' do
-      get :search, params: { code: footnote.code }, format: :json
+    
+    it 'returns footnotes, related measures, and goods nomenclatures when searching by footnote id' do
+      get :search, params: { code: footnote.footnote_id }, format: :json
 
       expect(response.body).to match_json_expression pattern
     end
 
-    it 'returns footnotes, related measures, and goods nomenclatures when searching by part of a code' do
-      get :search, params: { code: footnote.footnote_type_id }, format: :json
+    it 'returns footnotes, related measures, and goods nomenclatures when searching by footnote type' do
+      get :search, params: { type: footnote.footnote_type_id }, format: :json
 
       expect(response.body).to match_json_expression pattern
     end

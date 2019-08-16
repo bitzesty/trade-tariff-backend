@@ -1,6 +1,6 @@
 class FootnoteSearchService
   attr_accessor :scope
-  attr_reader :code, :description
+  attr_reader :code, :type, :description
 
   def initialize(attributes)
     self.scope = Footnote
@@ -9,11 +9,13 @@ class FootnoteSearchService
       .eager(:goods_nomenclatures)
 
     @code = attributes['code']
+    @type = attributes['type']
     @description = attributes['description']
   end
 
   def perform
     apply_code_filter if code.present?
+    apply_type_filter if type.present?
     apply_description_filter if description.present?
     scope.all
   end
@@ -21,8 +23,11 @@ class FootnoteSearchService
   private
 
   def apply_code_filter
-    self.scope = scope
-      .where("footnotes.footnote_type_id::text || footnotes.footnote_id::text LIKE '#{code}%'")
+    self.scope = scope.where(footnotes__footnote_id: code)
+  end
+
+  def apply_type_filter
+    self.scope = scope.where(footnotes__footnote_type_id: type)
   end
 
   def apply_description_filter

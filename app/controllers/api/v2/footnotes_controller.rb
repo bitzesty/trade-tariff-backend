@@ -14,7 +14,7 @@ module Api
       private
 
       def find_footnotes
-        raise Sequel::RecordNotFound unless params[:code] || params[:description]
+        raise Sequel::RecordNotFound unless params[:code] || params[:description] || params[:type]
 
         TimeMachine.now do
           @footnotes = FootnoteSearchService.new(params).perform

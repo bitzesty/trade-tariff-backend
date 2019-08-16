@@ -32,6 +32,22 @@ describe AdditionalCodeSearchService do
       end
     end
 
+    context 'by additional code type' do
+      it 'should find additional code by type' do
+        result = described_class.new({
+          'type' => additional_code_1.additional_code_type_id
+        }).perform
+        expect(result).to include(additional_code_1)
+      end
+
+      it 'should not find additional code by wrong code' do
+        result = described_class.new({
+          'type' => additional_code_1.additional_code_type_id
+        }).perform
+        expect(result).not_to include(additional_code_2)
+      end
+    end
+
     context 'by description' do
       it 'should find additional code by description' do
         result = described_class.new({
