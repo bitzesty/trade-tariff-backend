@@ -24,7 +24,7 @@ module Api
         end
 
         def geographical_area
-          measure.geographical_area || cached_geographical_area
+          measure.geographical_area
         end
 
         def geographical_area_id
@@ -37,12 +37,6 @@ module Api
 
         def additional_code_id
           measure.export_refund_nomenclature_sid || measure.additional_code_sid
-        end
-
-        def cached_geographical_area
-          @cached_geographical_area ||= geographical_areas.select do |area|
-            area.geographical_area_sid == geographical_area_sid
-          end.last
         end
       end
     end

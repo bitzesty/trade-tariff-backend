@@ -15,15 +15,14 @@ class GeographicalArea < Sequel::Model
                right_key: %i[geographical_area_description_period_sid
                              geographical_area_sid],
                right_primary_key: %i[geographical_area_description_period_sid
-                                     geographical_area_sid] do |ds|
+                                     geographical_area_sid],
+               eager_block: (->(ds) {
+                 ds.order(Sequel.desc(:geographical_area_description_periods__validity_start_date))
+               }) do |ds|
     ds.with_actual(GeographicalAreaDescriptionPeriod)
       .order(Sequel.desc(:geographical_area_description_periods__validity_start_date))
   end
-  # NOTE: if eager loading will not work properly add :eager_block
-  # eager_block: (->(ds) {
-  #                  ds.with_actual(GeographicalAreaDescriptionPeriod)
-  #                    .order(Sequel.desc(:geographical_area_description_periods__validity_start_date))
-  #                })
+  # NOTE: if eager loading will not work properly change :eager_block
   # See geo area, description and periods data for CH geographical_area_id
 
   def geographical_area_description
