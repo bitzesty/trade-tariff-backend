@@ -8,17 +8,23 @@ class GeographicalArea < Sequel::Model
 
   set_primary_key :geographical_area_sid
 
-  many_to_many :geographical_area_descriptions, join_table: :geographical_area_description_periods,
-                                                left_primary_key: :geographical_area_sid,
-                                                left_key: :geographical_area_sid,
-                                                right_key: %i[geographical_area_description_period_sid
-                                                              geographical_area_sid],
-                                                right_primary_key: %i[geographical_area_description_period_sid
-                                                                      geographical_area_sid],
-                                                eager_block: (->(ds) { ds }) do |ds|
+  many_to_many :geographical_area_descriptions,
+               join_table: :geographical_area_description_periods,
+               left_primary_key: :geographical_area_sid,
+               left_key: :geographical_area_sid,
+               right_key: %i[geographical_area_description_period_sid
+                             geographical_area_sid],
+               right_primary_key: %i[geographical_area_description_period_sid
+                                     geographical_area_sid] do |ds|
     ds.with_actual(GeographicalAreaDescriptionPeriod)
       .order(Sequel.desc(:geographical_area_description_periods__validity_start_date))
   end
+  # NOTE: if eager loading will not work properly add :eager_block
+  # eager_block: (->(ds) {
+  #                  ds.with_actual(GeographicalAreaDescriptionPeriod)
+  #                    .order(Sequel.desc(:geographical_area_description_periods__validity_start_date))
+  #                })
+  # See geo area, description and periods data for CH geographical_area_id
 
   def geographical_area_description
     geographical_area_descriptions.first
