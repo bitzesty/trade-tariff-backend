@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe QuotaSearchService do
-
   describe 'quota search' do
     around do |example|
       TimeMachine.now { example.run }

@@ -28,15 +28,13 @@ module Api
             },
             { quota_order_number: :quota_definition },
             { excluded_geographical_areas: :geographical_area_descriptions },
-            { geographical_area: :geographical_area_descriptions },
+            { geographical_area: [:geographical_area_descriptions,
+                                  { contained_geographical_areas: :geographical_area_descriptions }] },
             :additional_code,
             :full_temporary_stop_regulations,
             :measure_partial_temporary_stops
           ).all, @commodity
         ).validate!
-
-        @geographical_areas = GeographicalArea.actual.where("geographical_area_sid IN ?", @measures.map(&:geographical_area_sid)).
-            eager(:geographical_area_descriptions, { contained_geographical_areas: :geographical_area_descriptions }).all
 
         @commodity_cache_key = "commodity-#{@commodity.goods_nomenclature_sid}-#{actual_date}-#{TradeTariffBackend.currency}"
         respond_with @commodity

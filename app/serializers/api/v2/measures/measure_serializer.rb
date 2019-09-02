@@ -22,7 +22,7 @@ module Api
         has_many :excluded_geographical_areas, key: :excluded_countries,
                  record_type: :geographical_area, serializer: Api::V2::GeographicalAreaSerializer
         has_many :footnotes, serializer: Api::V2::Measures::FootnoteSerializer
-        has_one :additional_code, if: Proc.new { |measure| measure.additional_code.present? }, serializer: Api::V2::Measures::AdditionalCodeSerializer
+        has_one :additional_code, if: Proc.new { |measure| measure.additional_code.present? }, serializer: Api::V2::AdditionalCodeSerializer
         has_one :order_number, serializer: Api::V2::Quotas::OrderNumber::QuotaOrderNumberSerializer
       end
     end

@@ -110,7 +110,7 @@ module Cache
               duty_expression: {
                 id: "#{measure.measure_sid}-duty_expression",
                 base: measure.duty_expression_with_national_measurement_units_for(commodity),
-                formatted_base: measure.formatted_duty_expression_with_national_measurement_units_for(self)
+                formatted_base: measure.formatted_duty_expression_with_national_measurement_units_for(commodity)
               },
               measure_type_id: measure.measure_type.measure_type_id,
               measure_type: {
