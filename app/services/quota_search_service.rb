@@ -13,7 +13,7 @@ class QuotaSearchService
     @geographical_area_id = attributes['geographical_area_id']
     @order_number = attributes['order_number']
     @critical = attributes['critical']
-    @years = Array.wrap(attributes['year']).join(', ')
+    @years = Array.wrap(attributes['years']).join(', ')
     @status = (attributes['status'] || '').downcase.tr(' ', '_')
   end
 
