@@ -118,7 +118,7 @@ describe QuotaSearchService do
       end
     end
 
-    context 'by year' do
+    context 'by years' do
       let(:past_validity_start_date) { Date.new(Date.current.year - 1, 1, 1) }
       let(:quota_order_number3) { create :quota_order_number }
       let!(:measure3) { create :measure, ordernumber: quota_order_number3.quota_order_number_id, validity_start_date: past_validity_start_date }
@@ -138,14 +138,14 @@ describe QuotaSearchService do
       it 'should find quota definition by year' do
         result = described_class.new(
           {
-            'year' => Date.current.year.to_s
+            'years' => Date.current.year.to_s
           }).perform
         expect(result).to include(quota_definition1)
       end
       it 'should find quota definition by multiple years' do
         result = described_class.new(
           {
-            'year' => [Date.current.year.to_s, (Date.current.year - 1).to_s]
+            'years' => [Date.current.year.to_s, (Date.current.year - 1).to_s]
           }).perform
         expect(result).to include(quota_definition1)
         expect(result).to include(quota_definition3)
@@ -153,7 +153,7 @@ describe QuotaSearchService do
       it 'should not find quota definition by wrong year' do
         result = described_class.new(
           {
-            'year' => Date.current.year.to_s
+            'years' => Date.current.year.to_s
           }).perform
         expect(result).not_to include(quota_definition3)
       end
