@@ -61,30 +61,35 @@
   table when the sulphated ashes content is less than 1% by the ISO 3987 method and
   the saponification index is less than 4 by the ISO 6293-1 or 6293-2 method,\r\n
   \   * - exceeding that shown in line II when the pour point is not less than 10
-  C by the ISO 3016 method,\r\n    * - exceeding that shown in line I but not exceeding
+  C by the ISO 3016 method, (except where the product contains one or more bio-components,
+  in which case the requirement in this indent for the saponification number to be
+  less than 4 does not apply).\r\n    * - exceeding that shown in line I but not exceeding
   that shown in line II when 25% or more by volume distils at 300 C by the ISO 3405
   method (equivalent to the ASTM D 86 method) or, if less than 25% by volume distils
   at 300 C, when the pour point is higher than 10 C below zero by the ISO 3016 method.
-  These provisions apply only to oils having a diluted colour C of less than 2.\r\n\r\n<table>\r\n<thead>\r\n<tr><th
+  These provisions apply only to oils having a diluted colour C of less than 2.\r\n
+  \   * - The term \"bio-components\" means animal or vegetable fats, animal or vegetable
+  oils, or mono-alkyl esters of fatty acids (FAMAE).\r\n\r\n<table>\r\n<thead>\r\n<tr><th
   colspan=\"18\">Diluted colour C/Viscosity V condordance table</th></tr>\r\n</thead>\r\n<tbody>\r\n<tr><td
   colspan=\"18\"><hr class=\"thick\"></td></tr>\r\n<tr>\r\n<td>Colour</td>\r\n<td>C</td>\r\n<td>0</td>\r\n<td>0.5</td>\r\n<td>1</td>\r\n<td>1.5</td>\r\n<td>2</td>\r\n<td>2.5</td>\r\n<td>3</td>\r\n<td>3.5</td>\r\n<td>4</td>\r\n<td>4.5</td>\r\n<td>5</td>\r\n<td>5.5</td>\r\n<td>6</td>\r\n<td>6.5</td>\r\n<td>7</td>\r\n<td>7.5
   and above</td>\r\n</tr>\r\n<tr><td colspan=\"18\"><hr class=\"thick\"></td></tr>\r\n<tr>\r\n<td>Viscosity</td>\r\n<td>I</td>\r\n<td>4</td>\r\n<td>4</td>\r\n<td>4</td>\r\n<td>5.4</td>\r\n<td>9</td>\r\n<td>15.1</td>\r\n<td>25.3</td>\r\n<td>42.4</td>\r\n<td>71.1</td>\r\n<td>119</td>\r\n<td>200</td>\r\n<td>335</td>\r\n<td>562</td>\r\n<td>943</td>\r\n<td>1580</td>\r\n<td>2650</td>\r\n</tr>\r\n<tr><td
   colspan=\"18\"><hr class=\"thin\"></td></tr>\r\n<tr>\r\n<td>V</td>\r\n<td>II</td>\r\n<td>7</td>\r\n<td>7</td>\r\n<td>7</td>\r\n<td>7</td>\r\n<td>9</td>\r\n<td>15.1</td>\r\n<td>25.3</td>\r\n<td>42.4</td>\r\n<td>71.1</td>\r\n<td>119</td>\r\n<td>200</td>\r\n<td>335</td>\r\n<td>562</td>\r\n<td>943</td>\r\n<td>1580</td>\r\n<td>2650</td>\r\n</tr>\r\n</tbody>\r\n<tfoot>\r\n<tr><td
   colspan=\"18\"><hr class=\"thin\"></td></tr>\r\n</tfoot>\r\n</table>\r\n\r\n* The
   term 'viscosity V' means the 'kinematic viscosity' at 50 C expressed in 10-6 m2
-  s-1 by the EN ISO 3104 method.\r\n* The term 'diluted colour C' means the colour
-  of a product, as determined by the ASTM D 1500 method, after one part of such product
-  has been mixed with 100 parts by volume of xylene, toluene or another suitable solvent.
-  The colour must be determined immediately after dilution.\r\n* Subheading 2710 19
-  51 to 2710 19 68 and 2710 2031 to 2710 2039 cover only fuel oils of natural colour.\r\n*
-  These subheadings do not cover heavy oils defined in paragraph (d) above for which
-  it is not possible to determine:\r\n  * - the distillation percentage at 250 C by
-  the EN ISO 3104 method (zero shall be deemed to be a percentage);\r\n  * - the kinematic
-  viscosity at 50 C by the EN ISO 3104 method;\r\n  * - or the diluted colour C by
-  the ASTM D 1500 method.\r\n* Such products fall in subheadings 2710 19 71 to 2710
-  19 99.\r\n  * (g) 'containing biodiesel' means that the products of subheading 2710
-  20 have a minimum content of biodiesel, i.e. mono-alkyl esters of fatty acids (FAMAE)
-  of a kind used as a fuel, of 0.5% by volume (determination by the EN 14078 method).\r\n*
+  s-1 by the EN ISO 3104 method.\r\n* The term diluted colour C means the colour of
+  a product, as determined by the ISO 2049 method (equivalent to the ASTM D 1 500
+  method),\r\nafter one part of the product has been made up to 100 parts by volume
+  with xylene, toluene or another suitable solvent. The colour must be\r\ndetermined
+  immediately after dilution.\r\n* Subheading 2710 19 51 to 2710 19 68 and 2710 2031
+  to 2710 2039 cover only fuel oils of natural colour.\r\n* These subheadings do not
+  cover heavy oils defined in paragraph (d) above for which it is not possible to
+  determine:\r\n  * - the distillation percentage at 250 C by the EN ISO 3104 method
+  (zero shall be deemed to be a percentage);\r\n  * - the kinematic viscosity at 50
+  C by the EN ISO 3104 method;\r\n  * - or the diluted colour C by the ASTM D 1500
+  method.\r\n* Such products fall in subheadings 2710 19 71 to 2710 19 99.\r\n  *
+  (g) 'containing biodiesel' means that the products of subheading 2710 20 have a
+  minimum content of biodiesel, i.e. mono-alkyl esters of fatty acids (FAMAE) of a
+  kind used as a fuel, of 0.5% by volume (determination by the EN 14078 method).\r\n*
   3\\. For the purposes of heading 2712 the expression 'crude petroleum jelly' (subheading
   2712 10 10) is to be taken to apply to petroleum jelly of a natural colour higher
   than 4.5 by the ASTM D 1500 method.\r\n* 4\\. For the purposes of subheadings 2712

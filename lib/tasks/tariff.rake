@@ -131,7 +131,7 @@ namespace :tariff do
 
       desc "Dump Section notes"
       task dump_section_notes: :environment do
-        section_note = SectionNote.all.each do |section_note|
+        SectionNote.all.each do |section_note|
           section_file = "db/notes/sections/#{section_note.section_id}.yaml"
           File.open(section_file, 'w') do |out|
             section_doc = {
@@ -147,7 +147,7 @@ namespace :tariff do
       task section_notes: :environment do
         Dir[Rails.root.join('db', 'notes', 'sections', '*')].each do |file|
           begin
-            note = YAML.safe_load(File.read(file))
+            note = YAML.safe_load(File.read(file), [Symbol])
             section_note = SectionNote.find(section_id: note[:section]) || SectionNote.new(section_id: note[:section])
             section_note.content = note[:content]
             section_note.save
@@ -159,7 +159,7 @@ namespace :tariff do
 
       desc "Dump Chapter notes"
       task dump_chapter_notes: :environment do
-        chatper_notes = ChapterNote.all.each do |chatper_note|
+        ChapterNote.all.each do |chatper_note|
           chapter_file = "db/notes/chapters/#{chatper_note.section_id}_#{chatper_note.chapter_id.to_i}.yaml"
           File.open(chapter_file, 'w') do |out|
             chapter_doc = {
@@ -176,7 +176,7 @@ namespace :tariff do
       task chapter_notes: :environment do
         Dir[Rails.root.join('db', 'notes', 'chapters', '*')].each do |file|
           begin
-            note = YAML.safe_load(File.read(file))
+            note = YAML.safe_load(File.read(file), [Symbol])
             chapter_note = ChapterNote.find(section_id: note[:section],
                                             chapter_id: note[:chapter].to_s) || ChapterNote.new(section_id: note[:section], chapter_id: note[:chapter].to_s)
             chapter_note.content = note[:content]
