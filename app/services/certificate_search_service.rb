@@ -3,7 +3,7 @@ class CertificateSearchService
   attr_reader :code, :type, :description
 
   def initialize(attributes)
-    @scope = Certificate.
+    @scope = Certificate.distinct(:certificates__certificate_type_code, :certificates__certificate_code).
       actual.
       eager(:certificate_descriptions, measure_conditions: [measure: :goods_nomenclature])
 
@@ -35,6 +35,6 @@ class CertificateSearchService
                                               [:certificates__certificate_type_code, :certificate_description_periods__certificate_type_code]]).
       join(:certificate_descriptions, [[:certificate_description_periods__certificate_description_period_sid, :certificate_descriptions__certificate_description_period_sid]]).
       with_actual(CertificateDescriptionPeriod).
-      where(Sequel.ilike(:certificate_descriptions__description, "#{description}%"))
+      where(Sequel.ilike(:certificate_descriptions__description, "%#{description}%"))
   end
 end
