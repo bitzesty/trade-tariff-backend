@@ -1,8 +1,11 @@
 class QuotaSearchService
-  attr_accessor :scope, :result
-  attr_reader :goods_nomenclature_item_id, :geographical_area_id, :order_number, :critical, :years, :status
+  attr_accessor :scope
+  attr_reader :goods_nomenclature_item_id, :geographical_area_id, :order_number, :critical, :years, :status,
+    :current_page, :per_page
 
-  def initialize(attributes)
+  delegate :pagination_record_count, to: :scope
+
+  def initialize(attributes, current_page, per_page)
     self.scope = Measure.
       eager(quota_definition: [:measures, :quota_exhaustion_events, :quota_blocking_periods, quota_order_number: [quota_order_number_origins: :geographical_area]]).
       distinct(:measures__ordernumber, :measures__validity_start_date).
@@ -15,6 +18,8 @@ class QuotaSearchService
     @critical = attributes['critical']
     @years = Array.wrap(attributes['years']).join(', ')
     @status = (attributes['status'] || '').downcase.tr(' ', '_')
+    @current_page = current_page
+    @per_page = per_page
   end
 
   def perform
@@ -25,8 +30,8 @@ class QuotaSearchService
     apply_years_filter if years.present?
     apply_status_filters if status.present?
 
-    self.result = scope.all.map(&:quota_definition_or_nil)
-    result
+    self.scope = scope.paginate(current_page, per_page)
+    scope.map(&:quota_definition_or_nil)
   end
 
   private
