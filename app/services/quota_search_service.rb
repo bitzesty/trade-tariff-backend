@@ -23,9 +23,9 @@ class QuotaSearchService
     apply_order_number_filter if order_number.present?
     apply_critical_filter if critical.present?
     apply_years_filter if years.present?
+    apply_status_filters if status.present?
 
     self.result = scope.all.map(&:quota_definition_or_nil)
-    apply_status_filters if result.present? && status.present?
     result
   end
 
@@ -58,26 +58,70 @@ class QuotaSearchService
   end
 
   def apply_exhausted_filter
-    self.result = result.select do |definition|
-      definition.status == 'Exhausted'
-    end
+    @scope = scope.
+      join(:quota_definitions, [[:measures__ordernumber, :quota_definitions__quota_order_number_id], [:measures__validity_start_date, :quota_definitions__validity_start_date]]).
+      where(
+      <<~SQL
+EXISTS (
+SELECT * 
+  FROM "quota_exhaustion_events"
+ WHERE "quota_exhaustion_events"."quota_definition_sid" = "quota_definitions"."quota_definition_sid" AND
+       "quota_exhaustion_events"."occurrence_timestamp" <= '#{QuotaDefinition.point_in_time}'
+ LIMIT 1
+)
+      SQL
+    )
   end
 
   def apply_not_exhausted_filter
-    self.result = result.reject do |definition|
-      definition.status == 'Exhausted'
-    end
+    @scope = scope.
+      join(:quota_definitions, [[:measures__ordernumber, :quota_definitions__quota_order_number_id], [:measures__validity_start_date, :quota_definitions__validity_start_date]]).
+      where(
+      <<~SQL
+NOT EXISTS (
+SELECT * 
+  FROM "quota_exhaustion_events"
+ WHERE "quota_exhaustion_events"."quota_definition_sid" = "quota_definitions"."quota_definition_sid" AND
+       "quota_exhaustion_events"."occurrence_timestamp" <= '#{QuotaDefinition.point_in_time}'
+ LIMIT 1
+)
+    SQL
+    )
   end
 
   def apply_blocked_filter
-    self.result = result.select do |definition|
-      definition.last_blocking_period.present?
-    end
+    @scope = scope.
+      join(:quota_definitions, [[:measures__ordernumber, :quota_definitions__quota_order_number_id], [:measures__validity_start_date, :quota_definitions__validity_start_date]]).
+      where(
+        <<~SQL
+EXISTS (
+SELECT * 
+  FROM "quota_blocking_periods"
+ WHERE "quota_blocking_periods"."quota_definition_sid" = "quota_definitions"."quota_definition_sid" AND
+       ("quota_blocking_periods"."blocking_start_date" <= '#{QuotaDefinition.point_in_time}' AND 
+       ("quota_blocking_periods"."blocking_end_date" >= '#{QuotaDefinition.point_in_time}' OR 
+        "quota_blocking_periods"."blocking_end_date" IS NULL))
+ LIMIT 1
+)
+      SQL
+      )
   end
 
   def apply_not_blocked_filter
-    self.result = result.reject do |definition|
-      definition.last_blocking_period.present?
-    end
+    @scope = scope.
+      join(:quota_definitions, [[:measures__ordernumber, :quota_definitions__quota_order_number_id], [:measures__validity_start_date, :quota_definitions__validity_start_date]]).
+      where(
+        <<~SQL
+NOT EXISTS (
+SELECT * 
+  FROM "quota_blocking_periods"
+ WHERE "quota_blocking_periods"."quota_definition_sid" = "quota_definitions"."quota_definition_sid" AND
+       ("quota_blocking_periods"."blocking_start_date" <= '#{QuotaDefinition.point_in_time}' AND 
+       ("quota_blocking_periods"."blocking_end_date" >= '#{QuotaDefinition.point_in_time}' OR 
+        "quota_blocking_periods"."blocking_end_date" IS NULL))
+ LIMIT 1
+)
+      SQL
+      )
   end
 end
