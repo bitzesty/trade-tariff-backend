@@ -72,14 +72,28 @@ describe Api::V2::FootnotesController, type: :controller do
             number_indents: Integer,
             productline_suffix: String
           }
-        }].ignore_extra_values!
+        }].ignore_extra_values!,
+        meta: {
+          pagination: {
+            page: Integer,
+            per_page: Integer,
+            total_count: Integer
+          }
+        }
       }
     }
 
     let(:pattern_empty) {
       {
         data: [],
-        included: []
+        included: [],
+        meta: {
+          pagination: {
+            page: Integer,
+            per_page: Integer,
+            total_count: Integer
+          }
+        }
       }
     }
 
