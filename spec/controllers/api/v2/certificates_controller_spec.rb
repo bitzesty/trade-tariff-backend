@@ -69,7 +69,14 @@ describe Api::V2::CertificatesController, type: :controller do
             number_indents: Integer,
             productline_suffix: String
           }
-        }]
+        }],
+        meta: {
+          pagination: {
+            page: Integer,
+            per_page: Integer,
+            total_count: Integer
+          }
+        }
       }
     }
 
