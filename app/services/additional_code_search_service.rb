@@ -2,6 +2,8 @@ class AdditionalCodeSearchService
   attr_accessor :scope
   attr_reader :code, :type, :description, :current_page, :per_page
 
+  delegate :pagination_record_count, to: :scope
+
   def initialize(attributes, current_page, per_page)
     self.scope = AdditionalCode.
         actual.
@@ -18,7 +20,8 @@ class AdditionalCodeSearchService
     apply_code_filter if code.present?
     apply_type_filter if type.present?
     apply_description_filter if description.present?
-    scope.paginate(current_page, per_page)
+    self.scope = scope.paginate(current_page, per_page)
+    scope.to_a
   end
 
   private
