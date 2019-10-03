@@ -1,8 +1,8 @@
 class AdditionalCodeSearchService
   attr_accessor :scope
-  attr_reader :code, :type, :description
+  attr_reader :code, :type, :description, :current_page, :per_page
 
-  def initialize(attributes)
+  def initialize(attributes, current_page, per_page)
     self.scope = AdditionalCode.
         actual.
         eager(:additional_code_descriptions)
@@ -10,13 +10,15 @@ class AdditionalCodeSearchService
     @code = attributes['code']
     @type = attributes['type']
     @description = attributes['description']
+    @current_page = current_page
+    @per_page = per_page
   end
 
   def perform
     apply_code_filter if code.present?
     apply_type_filter if type.present?
     apply_description_filter if description.present?
-    scope.all
+    scope.paginate(current_page, per_page)
   end
 
   private

@@ -6,15 +6,27 @@ module Api
       def search
         options = {}
         options[:include] = [:measures, 'measures.goods_nomenclature']
-        render json: Api::V2::AdditionalCodes::AdditionalCodeSerializer.new(@additional_codes, options).serializable_hash
+        render json: Api::V2::AdditionalCodes::AdditionalCodeSerializer.new(@additional_codes.to_a, options.merge(serialization_meta)).serializable_hash
       end
 
       private
 
       def find_additional_codes
         TimeMachine.now do
-          @additional_codes = AdditionalCodeSearchService.new(params).perform
+          @additional_codes = AdditionalCodeSearchService.new(params, current_page, per_page).perform
         end
+      end
+
+      def serialization_meta
+        {
+          meta: {
+            pagination: {
+              page: current_page,
+              per_page: per_page,
+              total_count: @additional_codes.pagination_record_count
+            }
+          }
+        }
       end
     end
   end
