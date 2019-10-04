@@ -7,7 +7,8 @@ class CertificateSearchService
   def initialize(attributes, current_page, per_page)
     @scope = Certificate.distinct(:certificates__certificate_type_code, :certificates__certificate_code).
       actual.
-      eager(:certificate_descriptions, measure_conditions: [measure: :goods_nomenclature])
+      eager(:certificate_descriptions, measure_conditions: [measure: :goods_nomenclature]).
+      order(:certificates__certificate_type_code, :certificates__certificate_code)
 
     @code = attributes['code']
     @type = attributes['type']

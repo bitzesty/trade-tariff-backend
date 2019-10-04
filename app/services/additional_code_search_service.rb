@@ -7,7 +7,8 @@ class AdditionalCodeSearchService
   def initialize(attributes, current_page, per_page)
     self.scope = AdditionalCode.
         actual.
-        eager(:additional_code_descriptions)
+        eager(:additional_code_descriptions).
+        order(:additional_codes__additional_code_type_id, :additional_codes__additional_code)
 
     @code = attributes['code']
     @type = attributes['type']

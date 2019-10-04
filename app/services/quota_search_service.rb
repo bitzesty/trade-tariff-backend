@@ -10,7 +10,8 @@ class QuotaSearchService
       eager(quota_definition: [:measures, :quota_exhaustion_events, :quota_blocking_periods, quota_order_number: [quota_order_number_origins: :geographical_area]]).
       distinct(:measures__ordernumber, :measures__validity_start_date).
       select(Sequel.expr(:measures).*).
-      exclude(measures__ordernumber: nil)
+      exclude(measures__ordernumber: nil).
+      order(:measures__ordernumber)
 
     @goods_nomenclature_item_id = attributes['goods_nomenclature_item_id']
     @geographical_area_id = attributes['geographical_area_id']

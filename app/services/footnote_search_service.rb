@@ -9,6 +9,7 @@ class FootnoteSearchService
       .actual
       .eager(:footnote_descriptions)
       .eager(:goods_nomenclatures)
+      .order(:footnotes__footnote_type_id, :footnotes__footnote_id)
 
     @code = attributes['code']
     @type = attributes['type']
