@@ -21,6 +21,10 @@ module Api
         @search_service ||= AdditionalCodeSearchService.new(params, current_page, per_page)
       end
 
+      def per_page
+        5
+      end
+
       def serialization_meta
         {
           meta: {
