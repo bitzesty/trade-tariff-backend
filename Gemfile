@@ -22,7 +22,7 @@ gem "aws-sdk", "~> 2"
 gem "aws-sdk-rails", ">= 1.0.1"
 
 # File zip/unzipping
-gem 'rubyzip'
+gem "rubyzip", ">= 1.3.0"
 
 # Background jobs
 gem "redis-rails"

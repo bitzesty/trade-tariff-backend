@@ -40,7 +40,8 @@ describe Api::V2::AdditionalCodesController, type: :controller do
           attributes: {
             id: Integer,
             validity_start_date: String,
-            validity_end_date: String
+            validity_end_date: String,
+            goods_nomenclature_item_id: String
           },
           relationships: {
             goods_nomenclature: {
