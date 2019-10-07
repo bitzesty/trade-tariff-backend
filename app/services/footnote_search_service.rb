@@ -1,23 +1,29 @@
 class FootnoteSearchService
   attr_accessor :scope
-  attr_reader :code, :type, :description
+  attr_reader :code, :type, :description, :current_page, :per_page
 
-  def initialize(attributes)
+  delegate :pagination_record_count, to: :scope
+
+  def initialize(attributes, current_page, per_page)
     self.scope = Footnote
       .actual
       .eager(:footnote_descriptions)
       .eager(:goods_nomenclatures)
+      .order(:footnotes__footnote_type_id, :footnotes__footnote_id)
 
     @code = attributes['code']
     @type = attributes['type']
     @description = attributes['description']
+    @current_page = current_page
+    @per_page = per_page
   end
 
   def perform
     apply_code_filter if code.present?
     apply_type_filter if type.present?
     apply_description_filter if description.present?
-    scope.all
+    self.scope = scope.paginate(current_page, per_page)
+    scope.to_a
   end
 
   private
