@@ -11,6 +11,7 @@ class AdditionalCodeSearchService
         order(:additional_codes__additional_code_type_id, :additional_codes__additional_code)
 
     @code = attributes['code']
+    @code = @code[1..-1] if @code&.length == 4
     @type = attributes['type']
     @description = attributes['description']
     @current_page = current_page
@@ -28,7 +29,6 @@ class AdditionalCodeSearchService
   private
 
   def apply_code_filter
-    self.code = code[1..-1] if code.length == 4
     self.scope = scope.where(additional_codes__additional_code: code)
   end
 
