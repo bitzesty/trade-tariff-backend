@@ -28,6 +28,7 @@ class AdditionalCodeSearchService
   private
 
   def apply_code_filter
+    self.code = code[1..-1] if code.length == 4
     self.scope = scope.where(additional_codes__additional_code: code)
   end
 
