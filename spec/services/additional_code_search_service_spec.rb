@@ -37,14 +37,14 @@ describe AdditionalCodeSearchService do
         it 'should find additional code by code' do
           result = described_class.new({
             'code' => "#{rand(9)}#{additional_code_1.additional_code}"
-          }).perform
+          }, current_page, per_page).perform
           expect(result).to include(additional_code_1)
         end
 
         it 'should ignore first digit' do
           service = described_class.new({
             'code' => "#{rand(9)}#{additional_code_1.additional_code}"
-          })
+          }, current_page, per_page)
           service.perform
           expect(service.code).to eq(additional_code_1.additional_code)
         end
