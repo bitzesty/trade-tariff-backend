@@ -32,6 +32,23 @@ describe AdditionalCodeSearchService do
         }, current_page, per_page).perform
         expect(result).not_to include(additional_code_2)
       end
+
+      context 'when user enter 4-digits code' do
+        it 'should find additional code by code' do
+          result = described_class.new({
+            'code' => "#{rand(9)}#{additional_code_1.additional_code}"
+          }, current_page, per_page).perform
+          expect(result).to include(additional_code_1)
+        end
+
+        it 'should ignore first digit' do
+          service = described_class.new({
+            'code' => "#{rand(9)}#{additional_code_1.additional_code}"
+          }, current_page, per_page)
+          service.perform
+          expect(service.code).to eq(additional_code_1.additional_code)
+        end
+      end
     end
 
     context 'by additional code type' do
