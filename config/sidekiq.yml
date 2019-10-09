@@ -30,3 +30,4 @@
   RunChapterPdfWorker:
     cron: "0 5 * * *" # 5 AM every day
     description: "RunChapterPdfWorker produces the Tariff PDF."
+    args: [['EUR', 'GBP']]

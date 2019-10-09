@@ -5,21 +5,24 @@ class RunChapterPdfWorker
 
   sidekiq_options retry: 2
 
-  def perform
-    batch = Sidekiq::Batch.new
-    batch.description = "Produces PDFs for all chapters"
-    chapter_ids = Section.all.map(&:chapters).flatten.map(&:goods_nomenclature_sid)
-    # chapter_ids = %w[47137 32338 54748] # <- short chapters
-    if chapter_ids.empty?
-      puts "Cancelled batch #{batch.bid}. No chapters were specified."
-    else
-      batch.on(:success, BatchCallback, bid: batch.bid, total: chapter_ids.size, start_time: Time.now.to_i)
-      batch.jobs do
-        GenerateCoverPdfWorker.perform_async
-      end
-      batch.jobs do
-        chapter_ids.shuffle.each do |sid|
-          GenerateChapterPdfWorker.perform_async(sid)
+  def perform(currencies = ['EUR'])
+    currencies.each do |currency|
+      batch = Sidekiq::Batch.new
+      batch.description = "Produces PDFs for all chapters (in #{currency})"
+      chapter_ids = Section.all.map(&:chapters).flatten.map(&:goods_nomenclature_sid)
+      # chapter_ids = %w[47137 32338 54748] # <- short chapters
+      ENV["MX_RATE_EUR_#{currency}"] ||= MonetaryExchangeRate.latest(currency).to_s
+      if chapter_ids.empty?
+        puts "Cancelled batch #{batch.bid}. No chapters were specified."
+      else
+        batch.on(:success, BatchCallback, bid: batch.bid, total: chapter_ids.size, start_time: Time.now.to_i, currency: currency)
+        batch.jobs do
+          GenerateCoverPdfWorker.perform_async(currency)
+        end
+        batch.jobs do
+          chapter_ids.shuffle.each do |sid|
+            GenerateChapterPdfWorker.perform_async(sid, currency)
+          end
         end
       end
     end
@@ -35,12 +38,13 @@ class RunChapterPdfWorker
 
     def on_success(_status, options)
       elapsed_time = Time.now.to_i - options['start_time']
-      subject = "All Trade Tariff PDF chapters were created"
-      message = "PDF chapters created: #{options['total']} in #{elapsed_time} seconds."
+      currency = options['currency'] || 'EUR'
+      subject = "All Trade Tariff PDF chapters were created for #{currency}"
+      message = "PDF chapters created (in #{currency}): #{options['total']} in #{elapsed_time} seconds."
       email_results(subject, message, options)
       puts "Batch #{options['bid']} succeeded in #{elapsed_time} seconds."
 
-      RunPdfCombinerWorker.perform_async
+      RunPdfCombinerWorker.perform_async(currency)
     end
 
     def email_results(subject, message, options)
