@@ -80,6 +80,13 @@ describe Api::V2::CertificatesController, type: :controller do
       }
     }
 
+    before do
+      Sidekiq::Testing.inline! do
+        TradeTariffBackend.cache_client.reindex
+        sleep(1)
+      end
+    end
+
     it 'returns rendered found additional codes and related measures and goods nomenclatures' do
       get :search, params: { code: certificate.certificate_code }, format: :json
 
