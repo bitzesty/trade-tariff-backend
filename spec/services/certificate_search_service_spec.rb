@@ -61,6 +61,23 @@ describe CertificateSearchService do
         }, current_page, per_page).perform
         expect(result.map(&:id)).not_to include(certificate_2.id)
       end
+
+      context 'when user enter 4-digits code' do
+        it 'should find certificate by code' do
+          result = described_class.new({
+            'code' => "#{rand(9)}#{certificate_1.certificate_code}"
+          }, current_page, per_page).perform
+          expect(result.map(&:id)).to include(certificate_1.id)
+        end
+
+        it 'should ignore first digit' do
+          service = described_class.new({
+            'code' => "#{rand(9)}#{certificate_1.certificate_code}"
+          }, current_page, per_page)
+          service.perform
+          expect(service.code).to eq(certificate_1.certificate_code)
+        end
+      end
     end
 
     context 'by certificate type' do
