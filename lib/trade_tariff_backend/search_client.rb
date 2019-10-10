@@ -45,12 +45,15 @@ module TradeTariffBackend
 
     def update
       indexed_models.each do |model|
-        build_index(model)
+        search_index_for(namespace, model).tap do |index|
+          create_index(index)
+          build_index(model)
+        end
       end
     end
 
     def create_index(index)
-      indices.create(index: index.name, body: index.definition)
+      indices.create(index: index.name, body: index.definition) unless indices.exists(index: index.name)
     end
 
     def drop_index(index)
