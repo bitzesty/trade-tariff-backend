@@ -1,9 +1,12 @@
 module Cache
   class CertificateSerializer
-    attr_reader :certificate
+    include ::Cache::SearchCacheMethods
+
+    attr_reader :certificate, :as_of
 
     def initialize(certificate)
       @certificate = certificate
+      @as_of = Date.current.midnight
     end
 
     def as_json
@@ -15,7 +18,9 @@ module Cache
         formatted_description: certificate.formatted_description,
         validity_start_date: certificate.validity_start_date,
         validity_end_date: certificate.validity_end_date,
-        measures: certificate.measures.map do |measure|
+        measures: certificate.measures.select do |measure|
+          has_valid_dates(measure)
+        end.map do |measure|
           {
             id: measure.measure_sid,
             measure_sid: measure.measure_sid,
@@ -23,23 +28,9 @@ module Cache
             validity_end_date: measure.validity_end_date,
             goods_nomenclature_item_id: measure.goods_nomenclature_item_id,
             goods_nomenclature_sid: measure.goods_nomenclature_sid,
-            goods_nomenclature: goods_nomenclature_attributes(measure)
+            goods_nomenclature: goods_nomenclature_attributes(measure.goods_nomenclature)
           }
         end
-      }
-    end
-
-    def goods_nomenclature_attributes(measure)
-      return nil unless measure.goods_nomenclature.present?
-
-      {
-        goods_nomenclature_item_id: measure.goods_nomenclature_item_id,
-        goods_nomenclature_sid: measure.goods_nomenclature_sid,
-        number_indents: measure.goods_nomenclature.number_indents,
-        formatted_description: measure.goods_nomenclature.formatted_description,
-        producline_suffix: measure.goods_nomenclature.producline_suffix,
-        validity_start_date: measure.goods_nomenclature.validity_start_date,
-        validity_end_date: measure.goods_nomenclature.validity_end_date
       }
     end
   end
