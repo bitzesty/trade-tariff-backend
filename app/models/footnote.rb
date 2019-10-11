@@ -101,4 +101,8 @@ class Footnote < Sequel::Model
   def code
     "#{footnote_type_id}#{footnote_id}"
   end
+
+  def id
+    code
+  end
 end

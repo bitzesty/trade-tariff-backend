@@ -32,4 +32,8 @@ class AdditionalCode < Sequel::Model
   def code
     "#{additional_code_type_id}#{additional_code}"
   end
+
+  def id
+    additional_code_sid
+  end
 end
