@@ -39,8 +39,6 @@ class CertificateSearchService
       }
     }]
 
-    @query = []
-
     @code = attributes['code']
     @code = @code[1..-1] if @code&.length == 4
     @type = attributes['type']
