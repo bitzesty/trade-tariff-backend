@@ -10,6 +10,9 @@ module Cache
     end
 
     def as_json
+      measures = certificate.measures.select do |measure|
+        has_valid_dates(measure)
+      end
       {
         id: certificate.id,
         certificate_type_code: certificate.certificate_type_code,
@@ -18,9 +21,8 @@ module Cache
         formatted_description: certificate.formatted_description,
         validity_start_date: certificate.validity_start_date,
         validity_end_date: certificate.validity_end_date,
-        measures: certificate.measures.select do |measure|
-          has_valid_dates(measure)
-        end.map do |measure|
+        measure_ids: measures.map(&:measure_sid),
+        measures: measures.map do |measure|
           {
             id: measure.measure_sid,
             measure_sid: measure.measure_sid,
