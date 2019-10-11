@@ -34,19 +34,23 @@ class RunChapterPdfWorker
 
   class BatchCallback
     def on_complete(status, options)
-      subject = "One or more PDF chapters were not created"
-      message = "One or more PDF chapters were not created: #{status.failures}"
-      email_results(subject, message, options)
-      puts "Batch has #{status.failures} failures" if status.failures != 0
+      if Rails.env.development?
+        subject = "One or more PDF chapters were not created"
+        message = "One or more PDF chapters were not created: #{status.failures}"
+        email_results(subject, message, options)
+        puts "Batch has #{status.failures} failures" if status.failures != 0
+      end
     end
 
     def on_success(_status, options)
-      elapsed_time = Time.now.to_i - options['start_time']
       currency = options['currency'] || 'EUR'
-      subject = "All Trade Tariff PDF chapters were created for #{currency}"
-      message = "PDF chapters created (in #{currency}): #{options['total']} in #{elapsed_time} seconds."
-      email_results(subject, message, options)
-      puts "Batch #{options['bid']} succeeded in #{elapsed_time} seconds."
+      if Rails.env.development?
+        elapsed_time = Time.now.to_i - options['start_time']
+        subject = "All Trade Tariff PDF chapters were created for #{currency}"
+        message = "PDF chapters created (in #{currency}): #{options['total']} in #{elapsed_time} seconds."
+        email_results(subject, message, options)
+        puts "Batch #{options['bid']} succeeded in #{elapsed_time} seconds."
+      end
 
       RunPdfCombinerWorker.perform_async(currency)
     end
