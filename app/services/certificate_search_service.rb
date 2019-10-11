@@ -55,7 +55,6 @@ class CertificateSearchService
     apply_type_filter if type.present?
     apply_description_filter if description.present?
     fetch
-    filter_measures if @result.present?
     @result
   end
 
@@ -67,16 +66,6 @@ class CertificateSearchService
     result = search_client.search index: index, body: { query: { constant_score: { filter: { bool: { must: @query } } } }, size: per_page, from: (current_page - 1) * per_page, sort: %w(certificate_type_code certificate_code) }
     @pagination_record_count = result&.hits&.total || 0
     @result = result&.hits&.hits&.map(&:_source)
-  end
-
-  def filter_measures
-    @result.each do |certificate|
-      certificate.measures.keep_if do |measure|
-        measure.validity_start_date.to_date <= as_of &&
-          (measure.validity_end_date.nil? || measure.validity_end_date.to_date >= as_of)
-      end
-      certificate.measure_ids = certificate.measures.map(&:id)
-    end
   end
 
   def apply_code_filter

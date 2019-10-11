@@ -53,7 +53,6 @@ class AdditionalCodeSearchService
     apply_type_filter if type.present?
     apply_description_filter if description.present?
     fetch
-    filter_measures if @result.present?
     @result
   end
 
@@ -65,16 +64,6 @@ class AdditionalCodeSearchService
     result = search_client.search index: index, body: { query: { constant_score: { filter: { bool: { must: @query } } } }, size: per_page, from: (current_page - 1) * per_page, sort: %w(additional_code_type_id additional_code) }
     @pagination_record_count = result&.hits&.total || 0
     @result = result&.hits&.hits&.map(&:_source)
-  end
-
-  def filter_measures
-    @result.each do |additional_code|
-      additional_code.measures.keep_if do |measure|
-        measure.validity_start_date.to_date <= as_of &&
-          (measure.validity_end_date.nil? || measure.validity_end_date.to_date >= as_of)
-      end
-      additional_code.measure_ids = additional_code.measures.map(&:id)
-    end
   end
 
   def apply_code_filter
