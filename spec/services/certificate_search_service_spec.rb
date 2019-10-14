@@ -39,20 +39,44 @@ describe CertificateSearchService do
     }
     let(:current_page) { 1 }
     let(:per_page) { 20 }
-    
+
+    before do
+      Sidekiq::Testing.inline! do
+        TradeTariffBackend.cache_client.reindex
+        sleep(1)
+      end
+    end
+
     context 'by certificate code' do
       it 'should find certificate by code' do
         result = described_class.new({
           'code' => certificate_1.certificate_code
         }, current_page, per_page).perform
-        expect(result).to include(certificate_1)
+        expect(result.map(&:id)).to include(certificate_1.id)
       end
 
       it 'should not find additional code by wrong code' do
         result = described_class.new({
           'code' => certificate_1.certificate_code
         }, current_page, per_page).perform
-        expect(result).not_to include(certificate_2)
+        expect(result.map(&:id)).not_to include(certificate_2.id)
+      end
+
+      context 'when user enter 4-digits code' do
+        it 'should find certificate by code' do
+          result = described_class.new({
+            'code' => "#{rand(9)}#{certificate_1.certificate_code}"
+          }, current_page, per_page).perform
+          expect(result.map(&:id)).to include(certificate_1.id)
+        end
+
+        it 'should ignore first digit' do
+          service = described_class.new({
+            'code' => "#{rand(9)}#{certificate_1.certificate_code}"
+          }, current_page, per_page)
+          service.perform
+          expect(service.code).to eq(certificate_1.certificate_code)
+        end
       end
     end
 
@@ -61,14 +85,14 @@ describe CertificateSearchService do
         result = described_class.new({
           'type' => certificate_1.certificate_type_code
         }, current_page, per_page).perform
-        expect(result).to include(certificate_1)
+        expect(result.map(&:id)).to include(certificate_1.id)
       end
 
       it 'should not find additional code by wrong type' do
         result = described_class.new({
           'type' => certificate_1.certificate_type_code
         }, current_page, per_page).perform
-        expect(result).not_to include(certificate_2)
+        expect(result.map(&:id)).not_to include(certificate_2.id)
       end
     end
 
@@ -77,14 +101,14 @@ describe CertificateSearchService do
         result = described_class.new({
           'description' => certificate_1.description
         }, current_page, per_page).perform
-        expect(result).to include(certificate_1)
+        expect(result.map(&:id)).to include(certificate_1.id)
       end
 
       it 'should not find certificate by wrong description' do
         result = described_class.new({
           'description' => certificate_1.description
         }, current_page, per_page).perform
-        expect(result).not_to include(certificate_2)
+        expect(result.map(&:id)).not_to include(certificate_2.id)
       end
     end
 
@@ -93,14 +117,14 @@ describe CertificateSearchService do
         result = described_class.new({
           'description' => certificate_1.description.split(' ').first
         }, current_page, per_page).perform
-        expect(result).to include(certificate_1)
+        expect(result.map(&:id)).to include(certificate_1.id)
       end
 
       it 'should not find certificate by wrong description first word' do
         result = described_class.new({
           'description' => certificate_1.description.split(' ').first
         }, current_page, per_page).perform
-        expect(result).not_to include(certificate_2)
+        expect(result.map(&:id)).not_to include(certificate_2.id)
       end
     end
   end

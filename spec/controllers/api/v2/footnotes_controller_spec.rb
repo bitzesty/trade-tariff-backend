@@ -23,7 +23,8 @@ describe Api::V2::FootnotesController, type: :controller do
             footnote_type_id: String,
             footnote_id: String,
             description: String,
-            formatted_description: String
+            formatted_description: String,
+            extra_large_measures: boolean
           },
           relationships: {
             measures: {
@@ -96,6 +97,13 @@ describe Api::V2::FootnotesController, type: :controller do
         }
       }
     }
+
+    before do
+      Sidekiq::Testing.inline! do
+        TradeTariffBackend.cache_client.reindex
+        sleep(1)
+      end
+    end
 
     it 'returns footnotes, related measures, and goods nomenclatures when searching by footnote id' do
       get :search, params: { code: footnote.footnote_id }, format: :json
