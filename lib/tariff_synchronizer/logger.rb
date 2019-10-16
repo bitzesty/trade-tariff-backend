@@ -83,7 +83,7 @@ module TariffSynchronizer
 
     # Apply CDS update
     def apply_cds(event)
-      info "Applied TARIC update #{event.payload[:filename]}"
+      info "Applied CDS update #{event.payload[:filename]}"
     end
 
     # Query for TARIC update path

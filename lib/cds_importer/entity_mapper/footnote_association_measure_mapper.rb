@@ -7,7 +7,7 @@ class CdsImporter
     class FootnoteAssociationMeasureMapper < BaseMapper
       self.entity_class = "FootnoteAssociationMeasure".freeze
 
-      self.mapping_root = "Measure"
+      self.mapping_root = "Measure".freeze
 
       self.mapping_path = "footnoteAssociationMeasure".freeze
 

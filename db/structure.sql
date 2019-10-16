@@ -9622,6 +9622,13 @@ CREATE INDEX measures_goods_nomenclature_item_id_index ON public.measures_oplog 
 
 
 --
+-- Name: measures_oplog_ordernumber_validity_start_date_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX measures_oplog_ordernumber_validity_start_date_index ON public.measures_oplog USING btree (ordernumber, validity_start_date);
+
+
+--
 -- Name: megao_meaexcgeoareopl_urededcaleaslog_operation_date; Type: INDEX; Schema: public; Owner: -
 --
 
