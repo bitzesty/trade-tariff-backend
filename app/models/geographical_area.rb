@@ -1,5 +1,6 @@
 class GeographicalArea < Sequel::Model
   COUNTRIES_CODES = %w[0 2].freeze
+  AREAS_CODES = %w[0 1 2].freeze
 
   plugin :time_machine
   plugin :oplog, primary_key: :geographical_area_sid
@@ -7,17 +8,22 @@ class GeographicalArea < Sequel::Model
 
   set_primary_key :geographical_area_sid
 
-  many_to_many :geographical_area_descriptions, join_table: :geographical_area_description_periods,
-                                                left_primary_key: :geographical_area_sid,
-                                                left_key: :geographical_area_sid,
-                                                right_key: %i[geographical_area_description_period_sid
-                                                              geographical_area_sid],
-                                                right_primary_key: %i[geographical_area_description_period_sid
-                                                                      geographical_area_sid],
-                                                eager_block: (->(ds) { ds }) do |ds|
+  many_to_many :geographical_area_descriptions,
+               join_table: :geographical_area_description_periods,
+               left_primary_key: :geographical_area_sid,
+               left_key: :geographical_area_sid,
+               right_key: %i[geographical_area_description_period_sid
+                             geographical_area_sid],
+               right_primary_key: %i[geographical_area_description_period_sid
+                                     geographical_area_sid],
+               eager_block: (->(ds) {
+                 ds.order(Sequel.desc(:geographical_area_description_periods__validity_start_date))
+               }) do |ds|
     ds.with_actual(GeographicalAreaDescriptionPeriod)
       .order(Sequel.desc(:geographical_area_description_periods__validity_start_date))
   end
+  # NOTE: if eager loading will not work properly change :eager_block
+  # See geo area, description and periods data for CH geographical_area_id
 
   def geographical_area_description
     geographical_area_descriptions.first
@@ -39,6 +45,10 @@ class GeographicalArea < Sequel::Model
     ds.with_actual(GeographicalAreaMembership).order(Sequel.asc(:geographical_area_id))
   end
 
+  def contained_geographical_area_ids
+    contained_geographical_areas.pluck(:geographical_area_id)
+  end
+
   one_to_many :measures, key: :geographical_area_sid,
                          primary_key: :geographical_area_sid do |ds|
     ds.with_actual(Measure)
@@ -55,6 +65,10 @@ class GeographicalArea < Sequel::Model
 
     def countries
       where(geographical_code: COUNTRIES_CODES)
+    end
+    
+    def areas
+      where(geographical_code: AREAS_CODES)
     end
   end
 

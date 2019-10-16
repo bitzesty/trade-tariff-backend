@@ -17,7 +17,7 @@ class ChiefTransformer
     EXCISE_GROUP_CODES = %w[EX].freeze
     VAT_GROUP_CODES = %w[VT].freeze
     RESTRICTION_GROUP_CODES = %w[DL PR DP DO HO].freeze
-    NATIONAL_MEASURE_TYPES = %w[AIL DPO EXA EXB EXC EXD DAA DAB DAC DAE DAI
+    NATIONAL_MEASURE_TYPES = %w[AIL DPO EXA EXB EXC EXD EXF DAA DAB DAC DAE DAI
                                 DBA DBB DBC DBE DBI DCA DCC DCE DCH DDJ DDA
                                 DDB DDC DDD DDE DDF DDG DEA DFA DFB DFC DGC
                                 DHA DHC DHE EAA EAE EBJ EBA EBB EBE EDJ EDA

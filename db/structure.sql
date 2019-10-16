@@ -2,14 +2,15 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.6
--- Dumped by pg_dump version 10.6
+-- Dumped from database version 10.10
+-- Dumped by pg_dump version 10.10
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
@@ -28,7 +29,48 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
-SET search_path = public, pg_catalog;
+--
+-- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
+
+
+--
+-- Name: reassign_owned(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.reassign_owned() RETURNS event_trigger
+    LANGUAGE plpgsql
+    AS $$
+	begin
+		-- do not execute if member of rds_superuser
+		IF EXISTS (select 1 from pg_catalog.pg_roles where rolname = 'rds_superuser')
+		AND pg_has_role(current_user, 'rds_superuser', 'member') THEN
+			RETURN;
+		END IF;
+
+		-- do not execute if not member of manager role
+		IF NOT pg_has_role(current_user, 'rdsbroker_266a9334_2e5d_4234_b2bf_5f5ebf7d973d_manager', 'member') THEN
+			RETURN;
+		END IF;
+
+		-- do not execute if superuser
+		IF EXISTS (SELECT 1 FROM pg_user WHERE usename = current_user and usesuper = true) THEN
+			RETURN;
+		END IF;
+
+		EXECUTE 'reassign owned by "' || current_user || '" to "rdsbroker_266a9334_2e5d_4234_b2bf_5f5ebf7d973d_manager"';
+	end
+	$$;
+
 
 SET default_tablespace = '';
 
@@ -10231,6 +10273,14 @@ CREATE INDEX user_id ON public.rollbacks USING btree (user_id);
 
 
 --
+-- Name: reassign_owned; Type: EVENT TRIGGER; Schema: -; Owner: -
+--
+
+CREATE EVENT TRIGGER reassign_owned ON ddl_command_end
+   EXECUTE PROCEDURE public.reassign_owned();
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -10317,3 +10367,4 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20181003140819_add_updated
 INSERT INTO "schema_migrations" ("filename") VALUES ('20181029112658_change_size_to_six_for_measure_type_id.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20181211165412_create_guides.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20180822124608_add_tariff_update_cds_error.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20190418162242_add_order_number_index_on_measure.rb');

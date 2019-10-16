@@ -28,17 +28,12 @@ class Commodity < GoodsNomenclature
         .filter(measures__measure_type_id: MeasureType::VAT_TYPES + MeasureType::SUPPLEMENTARY_TYPES + Array.wrap(MeasureType::THIRD_COUNTRY))
   }, class_name: 'Measure'
 
-  def overview_measures_indexed
-    search_service = ::CommodityService::OverviewMeasuresService.new(goods_nomenclature_sid, point_in_time)
-    OverviewMeasurePresenter.new(search_service.indexed_measures, self).validate!
-  end
-
   one_to_many :search_references, key: :referenced_id, primary_key: :code, reciprocal: :referenced, conditions: { referenced_class: 'Commodity' },
                                   adder: proc { |search_reference| search_reference.update(referenced_id: code, referenced_class: 'Commodity') },
                                   remover: proc { |search_reference| search_reference.update(referenced_id: nil, referenced_class: nil) },
                                   clearer: proc { search_references_dataset.update(referenced_id: nil, referenced_class: nil) }
 
-  delegate :section, to: :chapter
+  delegate :section, :section_id, to: :chapter, allow_nil: true
 
   dataset_module do
     def by_code(code = "")
@@ -87,6 +82,10 @@ class Commodity < GoodsNomenclature
       .reverse
       .sort_by(&:number_indents)
       .select { |a| a.number_indents < goods_nomenclature_indent.number_indents }
+  end
+
+  def ancestor_ids
+    ancestors.pluck(:goods_nomenclature_sid)
   end
 
   def declarable?

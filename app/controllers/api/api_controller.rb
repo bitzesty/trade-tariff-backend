@@ -6,8 +6,14 @@ module Api
 
     skip_before_action :verify_authenticity_token
 
-    rescue_from Sequel::NoMatchingRow, Sequel::RecordNotFound do |exception|
-      render json: { error: 'not found', url: request.url }, status: 404
+    rescue_from Sequel::NoMatchingRow, Sequel::RecordNotFound do |_exception|
+      serializer = TradeTariffBackend.error_serializer(request)
+      render json: serializer.serialized_errors({ error: 'not found', url: request.url }), status: :not_found
+    end
+
+    rescue_from ActionController::ParameterMissing do |exception|
+      serializer = TradeTariffBackend.error_serializer(request)
+      render json: serializer.serialized_errors({ error: exception.message, url: request.url }), status: :unprocessable_entity
     end
 
     protected

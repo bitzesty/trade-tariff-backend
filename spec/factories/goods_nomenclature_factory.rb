@@ -119,9 +119,11 @@ FactoryGirl.define do
 
     trait :with_chapter do
       after(:create) { |heading, _evaluator|
-        FactoryGirl.create(:goods_nomenclature, :with_description,
-                                                :with_indent,
-                                                goods_nomenclature_item_id: heading.chapter_id)
+        FactoryGirl.create(:chapter, :with_section,
+                                     :with_note,
+                                     :with_description,
+                                     :with_guide,
+                                     goods_nomenclature_item_id: heading.chapter_id)
       }
     end
   end

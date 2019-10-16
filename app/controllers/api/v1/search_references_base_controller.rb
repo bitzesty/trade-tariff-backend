@@ -89,7 +89,7 @@ module Api
 
       def set_pagination_headers
         headers["X-Meta"] = {
-            pagination: {
+          pagination: {
             total: search_reference_collection.count,
             offset: page * per_page,
             page: page,

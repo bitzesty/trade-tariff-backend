@@ -40,7 +40,7 @@ module TariffSynchronizer
       end
 
       def file_as_stringio(tariff_update)
-        if Rails.env.production?
+        if Rails.env.production? && ENV['CDS'] != 'true'
           bucket.object(tariff_update.file_path).get.body
         else
           IO.new(IO.sysopen(tariff_update.file_path))

@@ -26,6 +26,18 @@ class Chapter < GoodsNomenclature
   many_to_many :guides, left_key: :goods_nomenclature_sid,
                         join_table: :chapters_guides
 
+  def guide_ids
+    guides.pluck(:id)
+  end
+
+  def section_id
+    section&.id
+  end
+
+  def heading_ids
+    headings.pluck(:goods_nomenclature_sid)
+  end
+
   dataset_module do
     def by_code(code = "")
       filter("goods_nomenclatures.goods_nomenclature_item_id LIKE ?", "#{code.to_s.first(2)}00000000")
@@ -92,7 +104,7 @@ class Chapter < GoodsNomenclature
      .order(Sequel.desc(:operation_date, nulls: :last), Sequel.desc(:depth))
   end
 
-private
+  private
 
   def relevant_headings
     "#{short_code}__000000"

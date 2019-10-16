@@ -130,6 +130,14 @@ module TariffSynchronizer
 
       Mailer.missing_updates(event.payload[:count], event.payload[:update_type].to_s).deliver_now
     end
+
+    def perform_update(event)
+      info "Processing #{event.payload[:update_type]} file: #{event.payload[:filename]}"
+    end
+
+    def rollback_update(event)
+      info "Rolling back #{event.payload[:update_type].to_s.upcase} file: #{event.payload[:filename]}"
+    end
   end
 end
 

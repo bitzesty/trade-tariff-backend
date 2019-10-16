@@ -68,7 +68,7 @@ describe Api::V1::Sections::SectionNotesController, "POST to #create" do
       post :create, params: { section_id: section.id, section_note: { content: '' } }, format: :json
     }
 
-    it 'responds with 406 unacceptable' do
+    it 'responds with 422' do
       expect(response.status).to eq 422
     end
 

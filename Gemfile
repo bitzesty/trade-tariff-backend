@@ -5,11 +5,11 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-ruby "~> 2.5.3"
+ruby "~> 2.6.2"
 
 # Server
 gem "puma", "~> 3.4"
-gem "rails", "5.1.6.1"
+gem "rails", "5.1.6.2"
 gem "sinatra", "~> 2.0.2"
 
 # DB
@@ -21,10 +21,14 @@ gem "sequel-rails", "~> 1.0.0"
 gem "aws-sdk", "~> 2"
 gem "aws-sdk-rails", ">= 1.0.1"
 
+# File zip/unzipping
+gem "rubyzip", ">= 1.3.0"
+
 # Background jobs
 gem "redis-rails"
 gem "sidekiq", "~> 4.1.4"
 gem "sidekiq-scheduler", "~> 2.1.8"
+gem "redlock", "~> 1.0.0"
 
 # Elasticsearch
 gem "elasticsearch", "6.1.0"
@@ -40,7 +44,7 @@ gem "lograge", ">= 0.3.6"
 gem "logstash-event"
 gem "multi_json", "~> 1.11"
 gem "scout_apm"
-gem "nokogiri", "~> 1.8.1"
+gem "nokogiri", ">= 1.10.4"
 gem "ox", ">= 2.8.1"
 gem "plek", "~> 1.11"
 gem "rack-timeout", "~> 0.4"
@@ -49,10 +53,16 @@ gem "yajl-ruby", "~> 1.3.1", require: "yajl"
 
 # API related
 gem "ansi", "~> 1.5"
-gem "curb", "~> 0.8"
+gem "curb", "~> 0.9"
+gem "fast_jsonapi", "~> 1.5"
 gem "rabl", "~> 0.12"
 gem "responders", "~> 2.1", ">= 2.1.0"
 gem "tilt"
+
+# Printed PDF
+gem 'uktt', git: 'https://gitlab.bitzesty.com/open-source/uktt.git'
+gem 'combine_pdf'
+gem 'sidekiq-batch'
 
 group :production do
   gem "rails_12factor"
@@ -78,6 +88,6 @@ group :test do
   gem "json_expressions", "~> 0.9.0"
   gem "rspec-rails", "~> 3.5.2"
   gem "rspec_junit_formatter"
-  gem "simplecov", "~> 0.14.1"
+  gem "simplecov", "~> 0.15.0", require: false
   gem "webmock", "~> 3.5.0"
 end

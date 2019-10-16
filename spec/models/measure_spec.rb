@@ -551,7 +551,7 @@ describe Measure do
     describe 'measure partial temporary stop' do
       let!(:mpt_stop1)        { create :measure_partial_temporary_stop, validity_start_date: Date.current.ago(3.years) }
       let!(:mpt_stop2)        { create :measure_partial_temporary_stop, validity_start_date: Date.current.ago(5.years) }
-      let!(:measure)          { create :measure, measure_generating_regulation_id: mpt_stop1.partial_temporary_stop_regulation_id }
+      let!(:measure)          { create :measure, measure_generating_regulation_id: mpt_stop1.partial_temporary_stop_regulation_id, measure_sid: mpt_stop1.measure_sid }
 
       context 'direct loading' do
         it 'loads associated full temporary stop regulation' do
@@ -676,10 +676,13 @@ describe Measure do
 
     describe 'ME13' do
       context 'additional code type meursing and attributes missing' do
+        let(:additional_code_type) { create :additional_code_type, :meursing }
+        let(:meursing_additional_code) { create :meursing_additional_code }
         let(:measure) {
           create :measure, :with_related_additional_code_type,
-                                        additional_code_type_id: 3,
-                                        additional_code_id: '123',
+                                        additional_code_type_id: additional_code_type.additional_code_type_id,
+                                        additional_code_sid: meursing_additional_code.meursing_additional_code_sid,
+                                        additional_code_id: meursing_additional_code.additional_code,
                                         goods_nomenclature_item_id: nil,
                                         ordernumber: nil,
                                         reduction_indicator: nil
@@ -1014,7 +1017,7 @@ describe Measure do
   end
 
   describe '#national_measurement_units_for' do
-    let(:measure_type) { create :measure_type, measure_type_description: measure_type_description }
+    let(:measure_type) { create :measure_type, measure_type_description: measure_type_description, measure_type_series_id: 'Q' }
     let(:measure) { create :measure, measure_type_id: measure_type.measure_type_id }
 
     context 'measure is excise' do

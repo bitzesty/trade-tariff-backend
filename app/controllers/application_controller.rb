@@ -17,11 +17,10 @@ class ApplicationController < ActionController::Base
 
   def render_not_found
     respond_to do |format|
-      format.html {
-        render html: "404 - Not Found", status: 404
-      }
-      format.json {
-        render json: { error: "404 - Not Found" }, status: 404
+      format.any { 
+        response.headers['Content-Type'] = 'application/json'
+        serializer = TradeTariffBackend.error_serializer(request)
+        render json: serializer.serialized_errors(error: "404 - Not Found"), status: 404
       }
     end
   end
@@ -32,11 +31,10 @@ class ApplicationController < ActionController::Base
     ::Raven.capture_exception(exception)
 
     respond_to do |format|
-      format.html {
-        render html: "500 - Internal Server Error: #{exception.message}", status: 500
-      }
-      format.json {
-        render json: { error: "500 - Internal Server Error: #{exception.message}" }, status: 500
+      format.any {
+        response.headers['Content-Type'] = 'application/json'
+        serializer = TradeTariffBackend.error_serializer(request)
+        render json: serializer.serialized_errors(error: "500 - Internal Server Error: #{exception.message}"), status: 500
       }
     end
   end
@@ -45,14 +43,14 @@ class ApplicationController < ActionController::Base
     head :ok
   end
 
-protected
+  protected
 
   def append_info_to_payload(payload)
     super
     payload[:user_agent] = request.headers["HTTP_X_ORIGINAL_USER_AGENT"].presence || request.env["HTTP_USER_AGENT"]
   end
 
-private
+  private
 
   def actual_date
     Date.parse(params[:as_of].to_s)
@@ -76,7 +74,7 @@ private
     # * 0: captures no requests
     # * 0.75: captures 75% of requests
     # * 1: captures all requests
-    sample_rate = 0.75
+    sample_rate = 0.1
 
     if rand > sample_rate
       Rails.logger.debug("[Scout] Ignoring request: #{request.original_url}")

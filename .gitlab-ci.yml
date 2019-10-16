@@ -1,5 +1,5 @@
 image:
-  name: circleci/ruby:2.5-node-browsers
+  name: circleci/ruby:2.6.2-node-browsers
 
 variables:
   POSTGRES_DB: tariff_test
@@ -7,10 +7,12 @@ variables:
   REDIS_URL: redis://localhost:6379
   ES_JAVA_OPTS: "-Xms1g -Xmx1g"
   ELASTICSEARCH_URL: 'http://localhost:9200'
+  BUNDLER_VERSION: 2.0.2
+  DOCKER_TLS_CERTDIR: ""
 
 services:
   - name: redis:3.2.11
-  - name: postgres:9.6-alpine
+  - name: postgres:10-alpine
     alias: postgres
   - name: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
     alias: elasticsearch
@@ -34,6 +36,7 @@ test:
     - chmod 400 ~/.ssh/id_rsa
     - sudo apt-get update -qq && sudo apt-get install -y postgresql
     - dockerize -wait tcp://localhost:5432 -timeout 1m
+    - gem install bundler
     - bundle install --path vendor/bundler --jobs=4 --retry=3
     - RAILS_ENV=test bundle exec rake db:structure:load --trace
   script:
@@ -51,11 +54,11 @@ code_quality:
   image: docker:stable
   variables:
     DOCKER_DRIVER: overlay2
+    DOCKER_HOST: tcp://localhost:2375
   allow_failure: true
   services:
     - docker:stable-dind
   script:
-    - export DOCKER_HOST=tcp://localhost:2375
     - export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
     - docker run
         --env SOURCE_CODE="$PWD"
@@ -71,10 +74,9 @@ deploy_dev:
     - curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
     - sudo dpkg -i cf-cli_amd64.deb
     - cf -v
-    - curl -v -L -o autopilot https://github.com/contraband/autopilot/releases/download/0.0.3/autopilot-linux
-    - chmod +x autopilot
-    - cf install-plugin autopilot -f
-    - CF_SPACE=development CF_APP=tariff-backend-dev CF_APP_WORKER=tariff-backend-worker-dev ./bin/deploy
+    - cf add-plugin-repo CF-Community https://plugins.cloudfoundry.org
+    - cf install-plugin blue-green-deploy -r CF-Community -f
+    - CF_ENDPOINT=api.london.cloud.service.gov.uk CF_SPACE=development CF_APP=tariff-backend-dev CF_APP_WORKER=tariff-backend-worker-dev ./bin/deploy
   only:
     - master
 
@@ -84,10 +86,9 @@ deploy_staging:
     - curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
     - sudo dpkg -i cf-cli_amd64.deb
     - cf -v
-    - curl -v -L -o autopilot https://github.com/contraband/autopilot/releases/download/0.0.3/autopilot-linux
-    - chmod +x autopilot
-    - cf install-plugin autopilot -f
-    - CF_SPACE=staging CF_APP=tariff-backend-staging CF_APP_WORKER=tariff-backend-worker-staging ./bin/deploy
+    - cf add-plugin-repo CF-Community https://plugins.cloudfoundry.org
+    - cf install-plugin blue-green-deploy -r CF-Community -f
+    - CF_ENDPOINT=api.london.cloud.service.gov.uk CF_SPACE=staging CF_APP=tariff-backend-staging CF_APP_WORKER=tariff-backend-worker-staging ./bin/deploy
   only:
     - staging
 
@@ -97,9 +98,8 @@ deploy_production:
     - curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
     - sudo dpkg -i cf-cli_amd64.deb
     - cf -v
-    - curl -v -L -o autopilot https://github.com/contraband/autopilot/releases/download/0.0.3/autopilot-linux
-    - chmod +x autopilot
-    - cf install-plugin autopilot -f
+    - cf add-plugin-repo CF-Community https://plugins.cloudfoundry.org
+    - cf install-plugin blue-green-deploy -r CF-Community -f
     - CF_SPACE=production CF_APP=tariff-backend-production CF_APP_WORKER=tariff-backend-worker-production ./bin/deploy
   when: manual
   only:

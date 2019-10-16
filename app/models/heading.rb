@@ -44,7 +44,7 @@ class Heading < GoodsNomenclature
     end
   end
 
-  delegate :section, to: :chapter
+  delegate :section, :section_id, to: :chapter, allow_nil: true
 
   # See oplog sequel plugin
   def operation=(op)
@@ -113,7 +113,7 @@ class Heading < GoodsNomenclature
      .order(Sequel.desc(:operation_date, nulls: :last))
   end
 
-private
+  private
 
   def relevant_commodities
     "#{short_code}______"

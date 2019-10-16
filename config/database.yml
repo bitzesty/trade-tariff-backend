@@ -1,7 +1,7 @@
 default: &default
   adapter: postgresql
   encoding: utf8
-  pool: 5
+  pool: 12
 
 development:
   <<: *default

@@ -12,7 +12,7 @@ on_worker_boot do
   # Ensure we don't keep connections
   if defined?(Sequel)
     ::Sequel::Model.db.disconnect
-    ::Sequel::DATABASES.each{|db| db.disconnect }
+    ::Sequel::DATABASES.each(&:disconnect)
   end
 end
 

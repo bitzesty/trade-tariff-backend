@@ -12,8 +12,13 @@ class AdditionalCode < Sequel::Model
     ds.with_actual(AdditionalCodeDescriptionPeriod)
   end
 
+  one_to_many :measures, key: :additional_code_sid,
+                         primary_key: :additional_code_sid
+
   def additional_code_description
-    additional_code_descriptions(reload: true).first
+    TimeMachine.at(validity_start_date) do
+      additional_code_descriptions(reload: true).last
+    end
   end
 
   one_to_one :meursing_additional_code, key: :additional_code,
@@ -26,5 +31,9 @@ class AdditionalCode < Sequel::Model
 
   def code
     "#{additional_code_type_id}#{additional_code}"
+  end
+
+  def id
+    additional_code_sid
   end
 end

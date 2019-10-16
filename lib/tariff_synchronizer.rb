@@ -2,7 +2,6 @@ require 'date'
 require 'logger'
 require 'fileutils'
 require 'ring_buffer'
-require 'redis_lock'
 require 'active_support/notifications'
 require 'active_support/log_subscriber'
 
@@ -109,14 +108,12 @@ module TariffSynchronizer
   # Download pending updates for TARIC and CHIEF data
   # Gets latest downloaded file present in (inbox/failbox/processed) and tries
   # to download any further updates to current day.
-  # Since October 2017 we don't need TARIC and CHIEF data
   def download
     return instrument("config_error.tariff_synchronizer") unless sync_variables_set?
 
     TradeTariffBackend.with_redis_lock do
       instrument("download.tariff_synchronizer") do
         begin
-          # TODO: CdsUpdate.sync
           [TaricUpdate, ChiefUpdate].map(&:sync)
         rescue TariffUpdatesRequester::DownloadException => exception
           instrument("failed_download.tariff_synchronizer", exception: exception)
@@ -166,7 +163,7 @@ module TariffSynchronizer
       ) if applied_updates.any? && BaseUpdate.pending_or_failed.none?
     end
 
-    rescue RedisLock::LockTimeout
+    rescue Redlock::LockError
       instrument "apply_lock_error.tariff_synchronizer"
   end
 
@@ -185,6 +182,11 @@ module TariffSynchronizer
 
           if keep
             TariffSynchronizer::TaricUpdate.applied_or_failed.where { issue_date > date_for_rollback }.each do |taric_update|
+              instrument("rollback_update.tariff_synchronizer",
+                update_type: :taric,
+                filename: taric_update.filename
+              )
+
               taric_update.mark_as_pending
               taric_update.clear_applied_at
 
@@ -192,6 +194,11 @@ module TariffSynchronizer
               taric_update.presence_errors.map(&:delete)
             end
             TariffSynchronizer::ChiefUpdate.applied_or_failed.where { issue_date > date_for_rollback }.each do |chief_update|
+              instrument("rollback_update.tariff_synchronizer",
+                update_type: :chief,
+                filename: chief_update.filename
+              )
+
               [Chief::Comm, Chief::Mfcm, Chief::Tame, Chief::Tamf, Chief::Tbl9].each do |chief_model|
                 chief_model.where(origin: chief_update.filename).delete
               end
@@ -214,11 +221,21 @@ module TariffSynchronizer
             end
           else
             TariffSynchronizer::TaricUpdate.where { issue_date > date }.each do |taric_update|
+              instrument("rollback_update.tariff_synchronizer",
+                update_type: :taric,
+                filename: taric_update.filename
+              )
+
               # delete presence errors
               taric_update.presence_errors.map(&:delete)
               taric_update.delete
             end
             TariffSynchronizer::ChiefUpdate.where { issue_date > date }.each do |chief_update|
+              instrument("rollback_update.tariff_synchronizer",
+                update_type: :chief,
+                filename: chief_update.filename
+              )
+
               [Chief::Comm, Chief::Mfcm, Chief::Tame, Chief::Tamf, Chief::Tbl9].each do |chief_model|
                 chief_model.where(origin: chief_update.filename).delete
               end
@@ -248,7 +265,7 @@ module TariffSynchronizer
         keep: keep
       )
     end
-  rescue RedisLock::LockTimeout
+  rescue Redlock::LockError
     instrument(
       "rollback_lock_error.tariff_synchronizer",
       date: rollback_date,
@@ -264,7 +281,14 @@ module TariffSynchronizer
 
   def perform_update(update_type, day)
     updates = update_type.pending_at(day).to_a
-    updates.map{ |update| BaseUpdateImporter.perform(update) }
+    updates.map do |update|
+      instrument("perform_update.tariff_synchronizer",
+        filename: update.filename,
+        update_type: update_type
+      )
+
+      BaseUpdateImporter.perform(update)
+    end
     updates
   end
 

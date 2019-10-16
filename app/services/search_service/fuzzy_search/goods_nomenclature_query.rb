@@ -12,10 +12,20 @@ class SearchService
                   bool: {
                     must: [
                       {
+                        bool: {
+                          must_not: {
+                            terms: {
+                              goods_nomenclature_item_id: HiddenGoodsNomenclature.codes
+                            }
+                          }
+                        }
+                      },
+                      {
                         # match the search phrase
                         multi_match: {
                           query: query_string,
-                          fields: ['description']
+                          fields: %w[description],
+                          operator: 'and'
                         }.merge(query_opts)
                       },
                       {

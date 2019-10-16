@@ -14,7 +14,7 @@ module Api
       private
 
       def letter
-        params.fetch(:letter, 'a')
+        params.fetch(:query, {}).fetch(:letter, 'a')
       end
     end
   end

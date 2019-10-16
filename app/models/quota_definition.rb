@@ -5,6 +5,9 @@ class QuotaDefinition < Sequel::Model
 
   set_primary_key [:quota_definition_sid]
 
+  one_to_one :quota_order_number, key: :quota_order_number_sid,
+                                  primary_key: :quota_order_number_sid
+
   one_to_many :quota_exhaustion_events, key: :quota_definition_sid,
                                         primary_key: :quota_definition_sid
   one_to_many :quota_balance_events, key: :quota_definition_sid,
@@ -25,6 +28,13 @@ class QuotaDefinition < Sequel::Model
     ds.with_actual(MeasurementUnit)
   end
 
+  one_to_many :measures, key: [:ordernumber, :validity_start_date],
+                         primary_key: [:quota_order_number_id, :validity_start_date]
+
+  def measure_ids
+    measures&.map(&:measure_sid)
+  end
+
   delegate :description, :abbreviation, to: :measurement_unit, prefix: true, allow_nil: true
 
   def formatted_measurement_unit
@@ -36,7 +46,9 @@ class QuotaDefinition < Sequel::Model
   end
 
   def last_balance_event
-    @_last_balance_event ||= quota_balance_events.select { |balance| balance.occurrence_timestamp <= point_in_time }.sort_by(&:occurrence_timestamp).last
+    @_last_balance_event ||= quota_balance_events.select { |balance|
+      point_in_time.blank? || balance.occurrence_timestamp <= point_in_time
+    }.sort_by(&:occurrence_timestamp).last
   end
 
   def balance
