@@ -6,7 +6,7 @@ describe HeadingService::CachedHeadingService do
                          :with_description }
   let(:measure_type) { create :measure_type, measure_type_id: '103' }
   let(:actual_date) { Date.current }
-  
+
   describe '#serializable_hash' do
     describe 'applying time machine to footnotes, chapter, commodities and overview measures' do
       context 'footnotes, chapter, commodities and overview measures has valid period' do
@@ -26,7 +26,11 @@ describe HeadingService::CachedHeadingService do
                  goods_nomenclature_sid: commodity.goods_nomenclature_sid
         }
         let(:serializable_hash) { described_class.new(heading.reload, actual_date).serializable_hash }
-      
+
+        before(:each) do
+          TradeTariffBackend.update_measure_effective_dates
+        end
+
         it 'should contain chapter' do
           expect(serializable_hash.chapter).not_to equal(nil)
           expect(serializable_hash.chapter_id).not_to equal(nil)
@@ -58,6 +62,10 @@ describe HeadingService::CachedHeadingService do
         }
         let(:serializable_hash) { described_class.new(heading.reload, actual_date).serializable_hash }
 
+        before(:each) do
+          TradeTariffBackend.update_measure_effective_dates
+        end
+
         it 'should not contain footnotes' do
           expect(serializable_hash.footnotes).to be_empty
         end
@@ -82,6 +90,10 @@ describe HeadingService::CachedHeadingService do
                  goods_nomenclature_sid: commodity.goods_nomenclature_sid
         }
         let(:serializable_hash) { described_class.new(heading.reload, actual_date).serializable_hash }
+
+        before(:each) do
+          TradeTariffBackend.update_measure_effective_dates
+        end
 
         it 'should not contain chapter' do
           expect(serializable_hash.chapter).to equal(nil)
@@ -109,6 +121,10 @@ describe HeadingService::CachedHeadingService do
         }
         let(:serializable_hash) { described_class.new(heading.reload, actual_date).serializable_hash }
 
+        before(:each) do
+          TradeTariffBackend.update_measure_effective_dates
+        end
+
         it 'should not contain commodities' do
           expect(serializable_hash.commodities).to be_empty
         end
@@ -134,6 +150,10 @@ describe HeadingService::CachedHeadingService do
         }
         let(:serializable_hash) { described_class.new(heading.reload, actual_date).serializable_hash }
 
+        before(:each) do
+          TradeTariffBackend.update_measure_effective_dates
+        end
+
         it 'should not contain overview measures' do
           expect(serializable_hash.commodities.first.overview_measures).to be_empty
         end
@@ -157,7 +177,11 @@ describe HeadingService::CachedHeadingService do
                                 indents: 2,
                                 goods_nomenclature_item_id: "#{parent_commodity.goods_nomenclature_item_id.first(6)}#{4.times.map { Random.rand(9) }.join}" }
       let(:serializable_hash) { described_class.new(heading.reload, actual_date).serializable_hash }
-      
+
+      before(:each) do
+        TradeTariffBackend.update_measure_effective_dates
+      end
+
       it 'should build correct commodity tree' do
         parent = serializable_hash.commodities.detect { |commodity| commodity.goods_nomenclature_sid == parent_commodity.goods_nomenclature_sid }
         child = serializable_hash.commodities.detect { |commodity| commodity.goods_nomenclature_sid == child_commodity.goods_nomenclature_sid }

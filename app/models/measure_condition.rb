@@ -9,7 +9,9 @@ class MeasureCondition < Sequel::Model
   set_primary_key [:measure_condition_sid]
 
   one_to_one :measure, key: :measure_sid,
-                       primary_key: :measure_sid
+                       primary_key: :measure_sid do |ds|
+    ds.with_actual(Measure)
+  end
 
   one_to_one :measure_action, primary_key: :action_code,
                               key: :action_code do |ds|
