@@ -152,7 +152,7 @@ module TradeTariffBackend
     end
 
     def cached_models
-      [Heading]
+      [Heading, Certificate, AdditionalCode, Footnote]
     end
 
     def search_indexes

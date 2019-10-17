@@ -1,40 +1,79 @@
 class FootnoteSearchService
-  attr_accessor :scope
-  attr_reader :code, :type, :description
+  attr_reader :code, :type, :description, :as_of
+  attr_reader :current_page, :per_page, :pagination_record_count
 
-  def initialize(attributes)
-    self.scope = Footnote
-      .actual
-      .eager(:footnote_descriptions)
-      .eager(:goods_nomenclatures)
+  def initialize(attributes, current_page, per_page)
+    @as_of = Certificate.point_in_time
+    @query = [{
+      bool: {
+        should: [
+          # actual date is either between item's (validity_start_date..validity_end_date)
+          {
+            bool: {
+              must: [
+                { range: { validity_start_date: { lte: as_of } } },
+                { range: { validity_end_date: { gte: as_of } } }
+              ]
+            }
+          },
+          # or is greater than item's validity_start_date
+          # and item has blank validity_end_date (is unbounded)
+          {
+            bool: {
+              must: [
+                { range: { validity_start_date: { lte: as_of } } },
+                { bool: { must_not: { exists: { field: "validity_end_date" } } } }
+              ]
+            }
+          },
+          # or item has blank validity_start_date and validity_end_date
+          {
+            bool: {
+              must: [
+                { bool: { must_not: { exists: { field: "validity_start_date" } } } },
+                { bool: { must_not: { exists: { field: "validity_end_date" } } } }
+              ]
+            }
+          }
+        ]
+      }
+    }]
 
     @code = attributes['code']
     @type = attributes['type']
     @description = attributes['description']
+    @current_page = current_page
+    @per_page = per_page
+    @pagination_record_count = 0
   end
 
   def perform
     apply_code_filter if code.present?
     apply_type_filter if type.present?
     apply_description_filter if description.present?
-    scope.all
+    fetch
+    @result
   end
 
   private
 
+  def fetch
+    search_client = ::TradeTariffBackend.search_client
+    index = ::Cache::FootnoteIndex.new(TradeTariffBackend.search_namespace).name
+    result = search_client.search index: index, body: { query: { constant_score: { filter: { bool: { must: @query } } } }, size: per_page, from: (current_page - 1) * per_page, sort: %w(footnote_type_id footnote_id) }
+    @pagination_record_count = result&.hits&.total || 0
+    @result = result&.hits&.hits&.map(&:_source)
+  end
+
   def apply_code_filter
-    self.scope = scope.where(footnotes__footnote_id: code)
+    @query.push({ bool: { must: { term: { footnote_id: code } } } })
   end
 
   def apply_type_filter
-    self.scope = scope.where(footnotes__footnote_type_id: type)
+    @query.push({ bool: { must: { term: { footnote_type_id: type } } } })
   end
 
   def apply_description_filter
-    self.scope = scope
-      .join(:footnote_description_periods, [%i[footnotes__footnote_type_id footnote_description_periods__footnote_type_id], %i[footnotes__footnote_id footnote_description_periods__footnote_id]])
-      .join(:footnote_descriptions, [%i[footnote_description_periods__footnote_description_period_sid footnote_descriptions__footnote_description_period_sid]])
-      .with_actual(FootnoteDescriptionPeriod)
-      .where(Sequel.ilike(:footnote_descriptions__description, "%#{description}%"))
+    @query.push({ multi_match: { query: description, fields: %w[description], operator: 'and' } })
   end
 end

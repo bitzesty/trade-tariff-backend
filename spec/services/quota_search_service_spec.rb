@@ -36,6 +36,8 @@ describe QuotaSearchService do
              :with_geographical_area,
              quota_order_number_sid: quota_order_number2.quota_order_number_sid
     }
+    let(:current_page) { 1 }
+    let(:per_page) { 20 }
 
     before do
       measure1.update(geographical_area_id: quota_order_number_origin1.geographical_area_id)
@@ -48,7 +50,7 @@ describe QuotaSearchService do
           {
             'goods_nomenclature_item_id' => measure1.goods_nomenclature_item_id,
             'year' => Date.current.year.to_s
-          }).perform
+          }, current_page, per_page).perform
         expect(result).to include(quota_definition1)
       end
       it 'should not find quota definition by wrong goods nomenclature' do
@@ -56,7 +58,7 @@ describe QuotaSearchService do
           {
             'goods_nomenclature_item_id' => measure1.goods_nomenclature_item_id,
             'year' => Date.current.year.to_s
-          }).perform
+          }, current_page, per_page).perform
         expect(result).not_to include(quota_definition2)
       end
     end
@@ -67,7 +69,7 @@ describe QuotaSearchService do
           {
             'geographical_area_id' => quota_order_number_origin1.geographical_area_id,
             'year' => Date.current.year.to_s
-          }).perform
+          }, current_page, per_page).perform
         expect(result).to include(quota_definition1)
       end
       it 'should not find quota definition by wrong geographical area' do
@@ -75,7 +77,7 @@ describe QuotaSearchService do
           {
             'geographical_area_id' => quota_order_number_origin1.geographical_area_id,
             'year' => Date.current.year.to_s
-          }).perform
+          }, current_page, per_page).perform
         expect(result).not_to include(quota_definition2)
       end
     end
@@ -86,7 +88,7 @@ describe QuotaSearchService do
           {
             'order_number' => quota_order_number1.quota_order_number_id,
             'year' => Date.current.year.to_s
-          }).perform
+          }, current_page, per_page).perform
         expect(result).to include(quota_definition1)
       end
       it 'should not find quota definition by wrong order number' do
@@ -94,7 +96,7 @@ describe QuotaSearchService do
           {
             'order_number' => quota_order_number1.quota_order_number_id,
             'year' => Date.current.year.to_s
-          }).perform
+          }, current_page, per_page).perform
         expect(result).not_to include(quota_definition2)
       end
     end
@@ -105,7 +107,7 @@ describe QuotaSearchService do
           {
             'critical' => quota_definition1.critical_state,
             'year' => Date.current.year.to_s
-          }).perform
+          }, current_page, per_page).perform
         expect(result).to include(quota_definition1)
       end
       it 'should not find quota definition by wrong critical state' do
@@ -113,12 +115,12 @@ describe QuotaSearchService do
           {
             'critical' => quota_definition1.critical_state,
             'year' => Date.current.year.to_s
-          }).perform
+          }, current_page, per_page).perform
         expect(result).not_to include(quota_definition2)
       end
     end
 
-    context 'by year' do
+    context 'by years' do
       let(:past_validity_start_date) { Date.new(Date.current.year - 1, 1, 1) }
       let(:quota_order_number3) { create :quota_order_number }
       let!(:measure3) { create :measure, ordernumber: quota_order_number3.quota_order_number_id, validity_start_date: past_validity_start_date }
@@ -138,23 +140,23 @@ describe QuotaSearchService do
       it 'should find quota definition by year' do
         result = described_class.new(
           {
-            'year' => Date.current.year.to_s
-          }).perform
+            'years' => Date.current.year.to_s
+          }, current_page, per_page).perform
         expect(result).to include(quota_definition1)
       end
       it 'should find quota definition by multiple years' do
         result = described_class.new(
           {
-            'year' => [Date.current.year.to_s, (Date.current.year - 1).to_s]
-          }).perform
+            'years' => [Date.current.year.to_s, (Date.current.year - 1).to_s]
+          }, current_page, per_page).perform
         expect(result).to include(quota_definition1)
         expect(result).to include(quota_definition3)
       end
       it 'should not find quota definition by wrong year' do
         result = described_class.new(
           {
-            'year' => Date.current.year.to_s
-          }).perform
+            'years' => Date.current.year.to_s
+          }, current_page, per_page).perform
         expect(result).not_to include(quota_definition3)
       end
     end
@@ -170,7 +172,7 @@ describe QuotaSearchService do
             {
               'status' => 'Exhausted',
               'year' => Date.current.year.to_s
-            }).perform
+            }, current_page, per_page).perform
           expect(result).to include(quota_definition1)
         end
         it 'should not find quota definition by wrong exhausted status' do
@@ -178,7 +180,7 @@ describe QuotaSearchService do
             {
               'status' => 'Exhausted',
               'year' => Date.current.year.to_s
-            }).perform
+            }, current_page, per_page).perform
           expect(result).not_to include(quota_definition2)
         end
       end
@@ -193,7 +195,7 @@ describe QuotaSearchService do
             {
               'status' => 'Not exhausted',
               'year' => Date.current.year.to_s
-            }).perform
+            }, current_page, per_page).perform
           expect(result).to include(quota_definition2)
         end
         it 'should not find quota definition by wrong not exhausted status' do
@@ -201,7 +203,7 @@ describe QuotaSearchService do
             {
               'status' => 'Not exhausted',
               'year' => Date.current.year.to_s
-            }).perform
+            }, current_page, per_page).perform
           expect(result).not_to include(quota_definition1)
         end
       end
@@ -218,7 +220,7 @@ describe QuotaSearchService do
             {
               'status' => 'Blocked',
               'year' => Date.current.year.to_s
-            }).perform
+            }, current_page, per_page).perform
           expect(result).to include(quota_definition1)
         end
         it 'should not find quota definition by wrong blocked status' do
@@ -226,7 +228,7 @@ describe QuotaSearchService do
             {
               'status' => 'Blocked',
               'year' => Date.current.year.to_s
-            }).perform
+            }, current_page, per_page).perform
           expect(result).not_to include(quota_definition2)
         end
       end
@@ -243,7 +245,7 @@ describe QuotaSearchService do
             {
               'status' => 'Not blocked',
               'year' => Date.current.year.to_s
-            }).perform
+            }, current_page, per_page).perform
           expect(result).to include(quota_definition2)
         end
         it 'should not find quota definition by wrong not blocked status' do
@@ -251,7 +253,7 @@ describe QuotaSearchService do
             {
               'status' => 'Not blocked',
               'year' => Date.current.year.to_s
-            }).perform
+            }, current_page, per_page).perform
           expect(result).not_to include(quota_definition1)
         end
       end
@@ -266,7 +268,7 @@ describe QuotaSearchService do
             {
               'order_number' => measure_094.ordernumber,
               'year' => Date.current.year.to_s
-            }
+            }, current_page, per_page
           ).perform
           expect(result.first.quota_order_number_id).to eq(measure_094.ordernumber)
         end

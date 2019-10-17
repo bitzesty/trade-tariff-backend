@@ -40,7 +40,8 @@ describe Api::V2::AdditionalCodesController, type: :controller do
           attributes: {
             id: Integer,
             validity_start_date: String,
-            validity_end_date: String
+            validity_end_date: String,
+            goods_nomenclature_item_id: String
           },
           relationships: {
             goods_nomenclature: {
@@ -60,12 +61,26 @@ describe Api::V2::AdditionalCodesController, type: :controller do
             number_indents: Integer,
             productline_suffix: String
           }
-        }]
+        }],
+        meta: {
+          pagination: {
+            page: Integer,
+            per_page: Integer,
+            total_count: Integer
+          }
+        }
       }
     }
 
     before(:each) do
       TradeTariffBackend.update_measure_effective_dates
+    end
+
+    before do
+      Sidekiq::Testing.inline! do
+        TradeTariffBackend.cache_client.reindex
+        sleep(1)
+      end
     end
 
     it 'returns rendered found additional codes and related measures and goods nomenclatures' do

@@ -17,10 +17,6 @@ class AdditionalCode < Sequel::Model
     ds.with_actual(Measure)
   end
 
-  def measure_ids
-    measures.pluck(:measure_sid)
-  end
-
   def additional_code_description
     TimeMachine.at(validity_start_date) do
       additional_code_descriptions(reload: true).last
@@ -37,5 +33,9 @@ class AdditionalCode < Sequel::Model
 
   def code
     "#{additional_code_type_id}#{additional_code}"
+  end
+
+  def id
+    additional_code_sid
   end
 end
