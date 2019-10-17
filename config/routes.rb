@@ -99,6 +99,8 @@ Rails.application.routes.draw do
       end
       resources :footnote_types, only: [:index]
 
+      resources :chemicals, only: [:index, :show]
+
       post "search" => "search#search"
       get "search_suggestions" => "search#suggestions"
       get '/headings/:id/tree' => 'headings#tree'
