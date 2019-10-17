@@ -10327,3 +10327,4 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20181211165412_create_guid
 INSERT INTO "schema_migrations" ("filename") VALUES ('20190418162242_add_order_number_index_on_measure.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20190810104215_add_effective_dates_to_measures_oplog.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20190811114215_add_effective_dates_to_measures_view.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20190815114215_change_effective_dates_to_measures_view.rb');
