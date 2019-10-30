@@ -7,11 +7,10 @@ class RunPdfCombinerWorker
 
   sidekiq_options retry: 2
 
-  LATEST_FILENAME = 'UK-Trade-Tariff-latest.pdf'.freeze
-
-  def perform
+  def perform(currency = 'EUR')
     @dir = ENV["AWS_PDF_ROOT_PATH"] || ''
     @key = ENV["AWS_PDF_FILENAME"] || "UK-Trade-Tariff-#{Date.today.strftime('%d-%m-%Y')}.pdf"
+    @cur = currency.downcase
     initialize_s3(s3_file_path)
     setup_ephemeral_directory
     create_combined_pdf
@@ -23,8 +22,12 @@ class RunPdfCombinerWorker
 
   private
 
+  def latest_filename
+    File.join(@cur, "UK-Trade-Tariff-latest.pdf")
+  end
+
   def setup_ephemeral_directory
-    dir = File.join(Rails.root, "public", "pdf", "tariff")
+    dir = File.join(Rails.root, "public", "pdf", "tariff", @cur)
     return if File.exist?(dir)
 
     FileUtils.mkpath(dir)
@@ -41,21 +44,21 @@ class RunPdfCombinerWorker
   end
 
   def ephemeral_file_path
-    File.join(Rails.root, "public", "pdf", "tariff", @key)
+    File.join(Rails.root, "public", "pdf", "tariff", @cur, @key)
   end
 
   def s3_file_path
-    File.join(@dir, @key).gsub(%r{^/}, '')
+    File.join(@dir, @cur, @key).gsub(%r{^/}, '')
   end
 
   def bucket_prefix
-    File.join(@dir, "chapters").gsub(%r{^/}, '')
+    File.join(@dir, "chapters", @cur).gsub(%r{^/}, '')
   end
 
   def upload_to_s3
     File.open(ephemeral_file_path, 'rb') do |pdf|
       @s3_obj.put(body: pdf)
-      @bucket.object(LATEST_FILENAME).upload_file(pdf)
+      @bucket.object(latest_filename).upload_file(pdf)
     end
   end
 
@@ -74,7 +77,7 @@ class RunPdfCombinerWorker
   def email_results
     public_url = @s3_obj.public_url
     subject = "The Trade Tariff PDF was produced"
-    message = "#{@chapters.size} chapters were combined into a single PDF. (#{public_url})"
+    message = "#{@chapters.size} chapters were combined into a single PDF (in #{@cur.upcase}). (#{public_url})"
     options = { key: s3_file_path, public_url: public_url }
     Mailer.pdf_generation_report(subject, message, options).deliver_now
   end
