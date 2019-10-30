@@ -12,6 +12,9 @@ class SearchService
                    find_commodity(query_string) || find_heading(query_string)
                  when /^[0-9]{11,12}$/
                    find_commodity(query_string)
+                 when /\Acas\s+.+\z/i
+                   # A CAS number, in the format e.g., "178535-93-8", e.g. /\d+-\d+-\d/
+                   find_by_chemical(query_string)
                  else
                    # exact match for search references
                    find_search_reference(query_string)
@@ -70,6 +73,22 @@ class SearchService
       item = SearchReference.where(title: query).first.try(:referenced)
       return nil if item && item.try(:validity_end_date) && item.validity_end_date < date
       item
+    end
+
+    def find_by_chemical(query)
+      matchdata = /\A(cas\s*)?(\d+-\d+-\d)\z/i.match(query)
+      q = matchdata ? matchdata[2] : query.gsub(/\Acas\s+/i, '')
+      c = Chemical.join(:chemical_names, chemical_id: :id).where(cas: q).or(Sequel[:chemical_names][:name] => q).first
+      gns = c.goods_nomenclatures.map do |gn|
+        ExactSearch.new(gn.goods_nomenclature_item_id, date).search!.results
+      end
+
+      # Each Chemical should map to one Goods Nomenclaure, 
+      # but the database includes two chemicals that belong to more than one GN
+      # These "chemicals" are probably placeholders and are not really correct
+      return gns.first if gns.length === 1
+
+      nil
     end
   end
 end
