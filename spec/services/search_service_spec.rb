@@ -149,6 +149,7 @@ describe SearchService do
       context 'declarable' do
         let(:commodity) { create :commodity, :declarable, :with_heading, :with_indent }
         let(:heading)   { commodity.heading }
+        let(:chemical)  { create :chemical, :with_name}
 
         let(:heading_pattern) {
           {
@@ -221,6 +222,14 @@ describe SearchService do
         it 'returns endpoint and identifier if provided with matching 12 symbol commodity code' do
           result = described_class.new(data_serializer, error_serializer,q: commodity.goods_nomenclature_item_id + commodity.producline_suffix,
                                      as_of: Date.current).to_json
+
+          expect(result).to match_json_expression commodity_pattern(commodity)
+        end
+
+        it 'returns endpoint and identifier if provided with CAS number' do
+          create(:chemicals_goods_nomenclatures, chemical_id: chemical.id, goods_nomenclature_sid: commodity.goods_nomenclature_sid).save
+          result = described_class.new(data_serializer, error_serializer, q: "cas #{chemical.cas}",
+                                    as_of: Date.current).to_json
 
           expect(result).to match_json_expression commodity_pattern(commodity)
         end
