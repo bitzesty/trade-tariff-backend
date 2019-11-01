@@ -60,10 +60,6 @@ class GoodsNomenclature < Sequel::Model
     footnotes(reload: true).first
   end
 
-  def footnote_ids
-    footnotes.pluck(:footnote_id)
-  end
-
   one_to_one :national_measurement_unit_set, key: :cmdty_code,
                                              primary_key: :goods_nomenclature_item_id do |ds|
     ds.with_actual(Chief::Comm)

@@ -23,6 +23,10 @@ module Api
           export_measures.map(&:measure_sid)
         end
 
+        def footnote_ids
+          footnotes.map(&:footnote_id)
+        end
+
         def chapter_id
           heading.chapter.goods_nomenclature_sid
         end

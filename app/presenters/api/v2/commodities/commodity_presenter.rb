@@ -41,6 +41,10 @@ module Api
           commodity.chapter.goods_nomenclature_sid
         end
 
+        def ancestor_ids
+          commodity.ancestors.pluck(:goods_nomenclature_sid)
+        end
+
         def meursing_code?
           import_measures.any?(&:meursing?) || export_measures.any?(&:meursing?)
         end
