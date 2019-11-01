@@ -9,6 +9,7 @@
 
 # Local tariff files
 data/*/*.xml
+data/*/*.gzip
 data/*.xml
 data/*/*.txt
 data/failed-measures-report*
