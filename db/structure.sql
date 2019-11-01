@@ -6387,7 +6387,7 @@ ALTER SEQUENCE public.tariff_update_presence_errors_id_seq OWNED BY public.tarif
 --
 
 CREATE TABLE public.tariff_updates (
-    filename character varying(30) NOT NULL,
+    filename character varying(255) NOT NULL,
     update_type character varying(50),
     state character varying(1),
     issue_date date,
@@ -10375,3 +10375,4 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20181029112658_change_size
 INSERT INTO "schema_migrations" ("filename") VALUES ('20181211165412_create_guides.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20180822124608_add_tariff_update_cds_error.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20190418162242_add_order_number_index_on_measure.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20191022065944_update_filename_size.rb');
