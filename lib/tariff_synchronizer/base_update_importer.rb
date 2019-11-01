@@ -51,7 +51,7 @@ module TariffSynchronizer
                  class_name: event.payload[:name],
                  sql: event.payload[:sql].squeeze(" "),
                  binds: binds)
-)
+        )
       end
     end
 
@@ -107,7 +107,7 @@ module TariffSynchronizer
         exception: exception,
         update: @base_update,
         database_queries: @database_queries
-)
+      )
     end
   end
 end

@@ -23,6 +23,7 @@ class CdsImporter
   def import
     handler = XmlProcessor.new
     file = TariffSynchronizer::FileService.file_as_stringio(@cds_update)
+    # TODO: unzip file before parsing
     # file = File.open(@cds_update.file_path)
     # do the xml parsing depending on records root depth
     CdsImporter::XmlParser::Reader.new(file, handler).parse

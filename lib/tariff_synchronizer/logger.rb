@@ -64,7 +64,7 @@ module TariffSynchronizer
 
     # Update not found
     def not_found(event)
-      warn "Update not found for #{event.payload[:date]} at #{event.payload[:url]}"
+      warn "Update NOT found for #{event.payload[:date]} at #{event.payload[:url]}"
     end
 
     def created_tariff(event)
@@ -94,6 +94,15 @@ module TariffSynchronizer
     # Query for CDS update path
     def get_cds_update_name(event)
       info "Checking for CDS update for #{event.payload[:date]} at #{event.payload[:url]}"
+    end
+
+    # Query for CDS daily updates
+    def get_cds_daily_updates(event)
+      info "Checking for CDS daily updates for #{event.payload[:date]}"
+    end
+
+    def cds_not_found(event)
+      warn "Cds daily update NOT found for #{event.payload[:date]}"
     end
 
     def downloaded_tariff_update(event)

@@ -12,6 +12,7 @@ require 'cds_importer'
 require 'chief_transformer'
 require 'tariff_synchronizer/base_update'
 require 'tariff_synchronizer/base_update_importer'
+require 'tariff_synchronizer/cds_update_downloader'
 require 'tariff_synchronizer/chief_file_name_generator'
 require 'tariff_synchronizer/file_service'
 require 'tariff_synchronizer/logger'
@@ -77,7 +78,7 @@ module TariffSynchronizer
   # set initial update date
   # Initial dump date + 1 day
   mattr_accessor :cds_initial_update_date
-  self.cds_initial_update_date = Date.new(2017,11,11)
+  self.cds_initial_update_date = Date.new(2019,10,1)
 
   # Times to retry downloading update before giving up
   mattr_accessor :retry_count
@@ -105,7 +106,7 @@ module TariffSynchronizer
 
   delegate :instrument, :subscribe, to: ActiveSupport::Notifications
 
-  # Download pending updates for TARIC and CHIEF data
+  # Download pending updates for TARIC, CHIEF and CDS data
   # Gets latest downloaded file present in (inbox/failbox/processed) and tries
   # to download any further updates to current day.
   def download
@@ -114,6 +115,8 @@ module TariffSynchronizer
     TradeTariffBackend.with_redis_lock do
       instrument("download.tariff_synchronizer") do
         begin
+          # TODO: enable cds updates when it's needed
+          # [TaricUpdate, ChiefUpdate, CdsUpdate].map(&:sync)
           [TaricUpdate, ChiefUpdate].map(&:sync)
         rescue TariffUpdatesRequester::DownloadException => exception
           instrument("failed_download.tariff_synchronizer", exception: exception)
@@ -151,9 +154,9 @@ module TariffSynchronizer
         applied_updates << perform_update(ChiefUpdate, day)
       end
 
-      # date_range.each do |daye|
-        # TODO: applied_updates << perform_update(CdsUpdate, day)
-      # end
+      date_range.each do |day|
+        applied_updates << perform_update(CdsUpdate, day)
+      end
 
       applied_updates.flatten!
 

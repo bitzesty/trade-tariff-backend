@@ -2,13 +2,7 @@ module TariffSynchronizer
   class CdsUpdate < BaseUpdate
     class << self
       def download(date)
-        url = "some url to new xml file"
-        filename = "some filename"
-
-        # TODO:
-        # get the url and filename depending on CDS api
-
-        TariffDownloader.new(filename, url, date, self).perform
+        CdsUpdateDownloader.new(date).perform
       end
 
       def update_type
@@ -26,7 +20,8 @@ module TariffSynchronizer
     private
 
     def self.validate_file!(xml_string)
-      Ox.parse(xml_string)
+      # maybe we need to validate gzip
+      true
     rescue Ox::ParseError => e
       raise InvalidContents.new(e.message, e)
     end
