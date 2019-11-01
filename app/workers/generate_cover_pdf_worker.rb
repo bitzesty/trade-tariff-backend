@@ -3,17 +3,18 @@ class GenerateCoverPdfWorker
 
   sidekiq_options retry: 3
 
-  def perform
-    setup_cover_object
+  def perform(currency = 'EUR')
+    setup_cover_object(currency)
 
     make_logger
 
     generate_and_upload
   end
 
-  def setup_cover_object
+  def setup_cover_object(currency = 'EUR')
     file_name = "00-cover.pdf"
-    @pdf_file_path = File.join("public", "pdf", "tariff", "chapters", file_name)
+    @cur = currency.downcase
+    @pdf_file_path = File.join("public", "pdf", "tariff", "chapters", @cur, file_name)
     @dir, @base = File.split(@pdf_file_path)
     return if File.exist?(@dir)
 
@@ -59,7 +60,7 @@ class GenerateCoverPdfWorker
   def queue_for_upload
     if File.exist?(@pdf_file_path)
       batch.jobs do
-        UploadChapterPdfWorker.perform_async(@pdf_file_path)
+        UploadChapterPdfWorker.perform_async(@pdf_file_path, @cur)
       end
     else
       logger.error "#{@pdf_file_path} not found"
