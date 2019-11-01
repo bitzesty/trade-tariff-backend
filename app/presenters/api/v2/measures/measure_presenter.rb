@@ -38,6 +38,22 @@ module Api
         def additional_code_id
           measure.export_refund_nomenclature_sid || measure.additional_code_sid
         end
+
+        def measure_condition_ids
+          measure.measure_conditions.pluck(:measure_condition_sid)
+        end
+
+        def excluded_geographical_area_ids
+          measure.excluded_geographical_areas.pluck(:geographical_area_id)
+        end
+
+        def footnote_ids
+          measure.footnotes&.map(&:code)
+        end
+
+        def legal_act_ids
+          measure.legal_acts.map(&:regulation_id)
+        end
       end
     end
   end
