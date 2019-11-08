@@ -51,7 +51,6 @@ module Api
                                'import_measures.geographical_area.contained_geographical_areas',
                                'import_measures.excluded_geographical_areas',
                                'import_measures.footnotes', 'import_measures.additional_code',
-                               'import_measures.export_refund_nomenclature',
                                'import_measures.order_number', 'import_measures.order_number.definition',
                                :export_measures, 'export_measures.duty_expression', 'export_measures.measure_type',
                                'export_measures.legal_acts', 'export_measures.suspending_regulation',
@@ -59,7 +58,6 @@ module Api
                                'export_measures.geographical_area.contained_geographical_areas',
                                'export_measures.excluded_geographical_areas',
                                'export_measures.footnotes', 'export_measures.additional_code',
-                               'export_measures.export_refund_nomenclature',
                                'export_measures.order_number', 'export_measures.order_number.definition',]
             Api::V2::Commodities::CommoditySerializer.new(presenter, options).serializable_hash
           end
