@@ -16,6 +16,7 @@ module Api
 
       def show_by_section
         section = Section.where(position: params[:position]).first
+        raise Sequel::RecordNotFound if section.blank?
         chapters = section.chapters.map(&:goods_nomenclature_item_id).map { |gn| gn[0..1] }.join('|')
         @goods_nomenclatures = Rails.cache.fetch(@goods_nomenclatures_cache_key, expires_in: TradeTariffBackend.seconds_till_6am) do
           GoodsNomenclature.actual.non_hidden.where(goods_nomenclature_item_id: /(#{chapters})\d{8}/).all
