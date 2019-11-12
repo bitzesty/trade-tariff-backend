@@ -12,18 +12,19 @@ class GenerateChapterPdfWorker
     pdf.save_as(pdf_name)
   end
 
-  def perform(chapter_sid)
-    setup_chapter_object(chapter_sid)
+  def perform(chapter_sid, currency = 'EUR')
+    setup_chapter_object(chapter_sid, currency)
 
     make_logger
 
     generate_and_upload
   end
 
-  def setup_chapter_object(chapter_sid)
+  def setup_chapter_object(chapter_sid, currency)
     @chapter = Chapter.eager(:headings).where(goods_nomenclature_sid: chapter_sid).take
     file_name = "#{@chapter.section.position.to_s.rjust(2, '0')}-#{@chapter.short_code}.pdf"
-    @pdf_file_path = File.join("public", "pdf", "tariff", "chapters", file_name)
+    @currency = currency
+    @pdf_file_path = File.join("public", "pdf", "tariff", "chapters", @currency.downcase, file_name)
     @dir, @base = File.split(@pdf_file_path)
     return if File.exist?(@dir)
 
@@ -61,7 +62,8 @@ class GenerateChapterPdfWorker
     pdf = Uktt::Pdf.new
     pdf.config = { chapter_id: @chapter.short_code,
                    filepath: @pdf_file_path,
-                   host: 'https://www.trade-tariff.service.gov.uk/api' }
+                   host: 'https://www.trade-tariff.service.gov.uk/api',
+                   currency: @currency }
     logger.info "PDF started: #{@pdf_file_path}"
     pdf.make_chapter
     logger.info "PDF saved locally: #{@pdf_file_path}"
@@ -77,7 +79,7 @@ class GenerateChapterPdfWorker
   def queue_for_upload
     if File.exist?(@pdf_file_path)
       batch.jobs do
-        UploadChapterPdfWorker.perform_async(@pdf_file_path)
+        UploadChapterPdfWorker.perform_async(@pdf_file_path, @currency)
       end
     else
       logger.error "#{@pdf_file_path} not found"

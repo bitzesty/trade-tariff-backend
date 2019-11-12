@@ -90,10 +90,20 @@ describe Api::V2::GoodsNomenclaturesController, Api::V2::GoodsNomenclaturesContr
   let(:csv_commodity_row) { "#{goods_nomenclature.goods_nomenclature_sid},#{goods_nomenclature.goods_nomenclature_item_id},#{goods_nomenclature.number_indents},\"\",#{goods_nomenclature.producline_suffix},#{Api::V2::GoodsNomenclaturesController.api_path_builder(goods_nomenclature)}" }
 
   context 'when GNs for a section are requested' do
-    it 'returns rendered record of GNs in the section' do
-      get :show_by_section, params: { position: section.position }, format: :json
+    context 'with a correct short code' do
+      it 'returns rendered record of GNs in the section' do
+        get :show_by_section, params: { position: section.position }, format: :json
 
-      expect(response.body).to match_json_expression pattern_section_and_chapter
+        expect(response.body).to match_json_expression pattern_section_and_chapter
+      end
+    end
+
+    context 'with an incorrect short code' do
+      it 'returns a 404' do
+        get :show_by_section, params: { position: '99' }, format: :json
+
+        expect(response.status).to eq 404
+      end
     end
   end
 

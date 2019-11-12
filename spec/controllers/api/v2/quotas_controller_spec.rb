@@ -103,7 +103,14 @@ describe Api::V2::QuotasController, type: :controller do
               }
             }
           }
-        ]
+        ],
+        meta: {
+          pagination: {
+            page: Integer,
+            per_page: Integer,
+            total_count: Integer
+          }
+        }
       }
     }
 

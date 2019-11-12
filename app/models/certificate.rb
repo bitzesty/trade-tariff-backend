@@ -15,18 +15,9 @@ class Certificate < Sequel::Model
   one_to_many :measure_conditions, key: %i[certificate_type_code certificate_code],
                                    primary_key: %i[certificate_type_code certificate_code]
 
-  def measures
-    @_measures ||= measure_conditions&.map(&:measure).select do |measure|
-      point_in_time.blank? ||
-        (measure.validity_start_date <= point_in_time &&
-          (measure.validity_end_date == nil ||
-            measure.validity_end_date >= point_in_time))
-    end
-  end
-
-  def measure_ids
-    measures&.map(&:measure_sid)
-  end
+  many_to_many :measures, join_table: :measure_conditions,
+                          left_key: %i[certificate_code certificate_type_code],
+                          right_key: :measure_sid
 
   def certificate_description
     certificate_descriptions(reload: true).first
