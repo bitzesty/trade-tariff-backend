@@ -8,7 +8,8 @@ class CdsImporter
         # mapping_path    - path to attributes in xml
         # mapping_root    - node name in xml that provides data for mapping
         # exclude_mapping - list of excluded attributes
-        attr_accessor :entity_class, :entity_mapping, :mapping_path, :mapping_root, :exclude_mapping, :entity_mapping_key_as_array
+        attr_accessor :entity_class, :entity_mapping, :mapping_path, :mapping_root, :exclude_mapping,
+                      :entity_mapping_key_as_array, :entity_mapping_keys_to_parse
 
         def base_mapping
           BASE_MAPPING.except(*exclude_mapping).keys.inject({}) do |memo, key|
@@ -24,12 +25,20 @@ class CdsImporter
             memo
           end
         end
+
+        def mapping_keys_to_parse
+          mapping_with_key_as_array.keys.reject { |key|
+            key.size == 1 ||
+            key[0] == METAINFO
+          }
+        end
       end
 
       NATIONAL = "N".freeze
       APPROVED_FLAG = "1".freeze
       STOPPED_FLAG = "1".freeze
       PATH_SEPARATOR = ".".freeze
+      METAINFO = 'metainfo'.freeze
       BASE_MAPPING = {
         "validityStartDate" => :validity_start_date,
         "validityEndDate" => :validity_end_date,
@@ -39,7 +48,7 @@ class CdsImporter
       }.freeze
 
       def initialize(values)
-        @values = values
+        @values = values.slice(*entity_mapping_key_as_array.keys.map{ |k| k[0] }.uniq)
       end
 
       # sometimes we have array as a mapping path value,
@@ -47,30 +56,29 @@ class CdsImporter
       def parse
         expanded = [@values]
         # iterating through all the mapping keys to expand Arrays
-        entity_mapping_key_as_array.keys.each do |path|
+        entity_mapping_keys_to_parse.each do |path|
           current_path = []
           path.each do |key|
             current_path << key
-            new_expanded = []
+            new_expanded = nil
             expanded.each do |values|
               value = values.dig(*current_path)
               if value.is_a?(Array)
                 # iterating through all items in Array and creating @values copy
                 value.each do |v|
                   # [1,2,3] => {1=>{2=>{3=>value}}
-                  tmp = current_path.reverse.inject(v) { |memo, i| memo = { i => memo }; memo }
+                  tmp = current_path.lazy.reverse_each.inject(v) { |memo, i| memo = { i => memo }; memo }
+                  new_expanded ||= []
                   new_expanded << values.deep_merge(tmp)
                 end
-              else
-                new_expanded << values
               end
             end
-            expanded = new_expanded
+            expanded = new_expanded if new_expanded.present?
           end
         end
         # creating instances for all expanded values
         if mapping_path.present?
-          expanded = expanded.select{ |values| values.dig(*mapping_path.split(PATH_SEPARATOR)).present? }
+          expanded.select!{ |values| values.dig(*mapping_path.split(PATH_SEPARATOR)).present? }
         end
         expanded.map { |values| create_instance(values) }
       end
@@ -101,9 +109,13 @@ class CdsImporter
         self.class.entity_mapping_key_as_array.presence || raise(ArgumentError.new("entity_mapping_key_as_array has not been defined: #{self.class}"))
       end
 
+      def entity_mapping_keys_to_parse
+        self.class.entity_mapping_keys_to_parse || raise(ArgumentError.new("entity_mapping_keys_to_parse has not been defined: #{self.class}"))
+      end
+
       def mapped_values(values)
         entity_mapping_key_as_array.keys.inject({}) do |memo, key|
-          mapped_key = entity_mapping_key_as_array.fetch(key)
+          mapped_key = entity_mapping_key_as_array[key]
           memo[mapped_key] = values.dig(*key)
           memo
         end

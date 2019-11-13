@@ -1,5 +1,7 @@
 class CdsImporter
   class EntityMapper
+    ALL_MAPPERS = CdsImporter::EntityMapper::BaseMapper.descendants.freeze
+
     delegate :instrument, to: ActiveSupport::Notifications
 
     def initialize(key, values)
@@ -12,9 +14,8 @@ class CdsImporter
       # it means that every selected mapper requires fetched by this xml key
       # sort mappers to apply top level first
       # e.g. Footnote before FootnoteDescription
-      mappers = CdsImporter::EntityMapper::BaseMapper.descendants
-                                                     .select  { |m| m.mapping_root == @key }
-                                                     .sort_by { |m| m.mapping_path.to_s.length }
+      mappers = ALL_MAPPERS.select  { |m| m.mapping_root == @key }
+                           .sort_by { |m| m.mapping_path ? m.mapping_path.length : 0 }
 
       mappers.each do |mapper|
         instances = mapper.new(@values).parse

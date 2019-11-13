@@ -2367,7 +2367,7 @@ describe CdsImporter::EntityMapper do
       "sid" => "12348",
       "validityStartDate" => "1970-01-01T00:00:00",
       "validityEndDate" => "1972-01-01T00:00:00",
-      "measureComponent" => {
+      "measureComponent" => [{
         "dutyAmount" => "12.34",
         "dutyExpression" => {
           "dutyExpressionId" => "01"
@@ -2386,6 +2386,27 @@ describe CdsImporter::EntityMapper do
           "transactionDate" => "2017-06-29T20:04:37"
         }
       },
+
+     {
+         "dutyAmount" => "32.11",
+         "dutyExpression" => {
+             "dutyExpressionId" => "02"
+         },
+         "monetaryUnit" => {
+             "monetaryUnitCode" => "EUR"
+         },
+         "measurementUnit" => {
+             "measurementUnitCode" => "QTN"
+         },
+         "measurementUnitQualifier" => {
+             "measurementUnitQualifierCode" => "78"
+         },
+         "metainfo" => {
+             "opType" => "C",
+             "transactionDate" => "2018-06-29T20:04:37"
+         }
+     }
+      ],
       "metainfo" => {
         "opType" => "U",
         "origin" => "N",
@@ -2393,17 +2414,19 @@ describe CdsImporter::EntityMapper do
       }
     }
     subject = CdsImporter::EntityMapper::MeasureComponentMapper.new(values)
-    entity = subject.parse[0]
+    entities = subject.parse
+    entity = entities[0]
+    expect(entities.length).to eq(2)
     expect(entity).to be_a(MeasureComponent)
     expect(entity).to be_valid
     expect(entity.measure_sid.to_s).to eq(values["sid"])
-    expect(entity.duty_expression_id).to eq(values["measureComponent"]["dutyExpression"]["dutyExpressionId"])
-    expect(entity.duty_amount.to_s).to eq(values["measureComponent"]["dutyAmount"])
-    expect(entity.monetary_unit_code).to eq(values["measureComponent"]["monetaryUnit"]["monetaryUnitCode"])
-    expect(entity.measurement_unit_code).to eq(values["measureComponent"]["measurementUnit"]["measurementUnitCode"])
-    expect(entity.measurement_unit_qualifier_code).to eq(values["measureComponent"]["measurementUnitQualifier"]["measurementUnitQualifierCode"])
+    expect(entity.duty_expression_id).to eq(values["measureComponent"][0]["dutyExpression"]["dutyExpressionId"])
+    expect(entity.duty_amount.to_s).to eq(values["measureComponent"][0]["dutyAmount"])
+    expect(entity.monetary_unit_code).to eq(values["measureComponent"][0]["monetaryUnit"]["monetaryUnitCode"])
+    expect(entity.measurement_unit_code).to eq(values["measureComponent"][0]["measurementUnit"]["measurementUnitCode"])
+    expect(entity.measurement_unit_qualifier_code).to eq(values["measureComponent"][0]["measurementUnitQualifier"]["measurementUnitQualifierCode"])
     expect(entity.operation).to eq(:update)
-    expect(entity.operation_date).to eq(Date.parse(values["measureComponent"]["metainfo"]["transactionDate"]))
+    expect(entity.operation_date).to eq(Date.parse(values["measureComponent"][0]["metainfo"]["transactionDate"]))
   end
 
   it "MeasureCondition sample" do
@@ -2467,43 +2490,124 @@ describe CdsImporter::EntityMapper do
       "sid" => "12348",
       "validityStartDate" => "1970-01-01T00:00:00",
       "validityEndDate" => "1972-01-01T00:00:00",
-      "measureCondition" => {
-        "sid" => "3321",
-        "conditionDutyAmount" => "12.34",
-        "conditionSequenceNumber" => "123",
-        "measureConditionComponent" => {
-          "dutyExpression" => {
-            "dutyExpressionId" => "01"
-          },
-          "dutyAmount" => "23.1",
+      "measureCondition" => [
+        {
+          "sid" => "3321",
+          "conditionDutyAmount" => "12.34",
+          "conditionSequenceNumber" => "123",
+          "measureConditionComponent" => [
+            {
+              "dutyExpression" => {
+                "dutyExpressionId" => "01"
+              },
+              "dutyAmount" => "23.1",
+              "monetaryUnit" => {
+                "monetaryUnitCode" => "USD"
+              },
+              "measurementUnit" => {
+                "measurementUnitCode" => "ASD"
+              },
+              "measurementUnitQualifier" => {
+                "measurementUnitQualifierCode" => "12"
+              },
+              "metainfo" => {
+                "opType" => "C",
+                "transactionDate" => "2017-06-29T20:04:37"
+              }
+            },
+            {
+              "dutyExpression" => {
+                  "dutyExpressionId" => "02"
+              },
+              "dutyAmount" => "123.1",
+              "monetaryUnit" => {
+                  "monetaryUnitCode" => "USD"
+              },
+              "measurementUnit" => {
+                  "measurementUnitCode" => "ASD"
+              },
+              "measurementUnitQualifier" => {
+                  "measurementUnitQualifierCode" => "15"
+              },
+              "metainfo" => {
+                  "opType" => "C",
+                  "transactionDate" => "2017-06-29T20:04:37"
+              }
+            }
+          ],
           "monetaryUnit" => {
-            "monetaryUnitCode" => "USD"
+            "monetaryUnitCode" => "EUR"
           },
           "measurementUnit" => {
-            "measurementUnitCode" => "ASD"
+            "measurementUnitCode" => "DTN"
           },
           "measurementUnitQualifier" => {
-            "measurementUnitQualifierCode" => "12"
+            "measurementUnitQualifierCode" => "56"
           },
           "metainfo" => {
-            "opType" => "C",
+            "opType" => "U",
             "transactionDate" => "2017-06-29T20:04:37"
           }
         },
-        "monetaryUnit" => {
-          "monetaryUnitCode" => "EUR"
-        },
-        "measurementUnit" => {
-          "measurementUnitCode" => "DTN"
-        },
-        "measurementUnitQualifier" => {
-          "measurementUnitQualifierCode" => "56"
-        },
-        "metainfo" => {
-          "opType" => "U",
-          "transactionDate" => "2017-06-29T20:04:37"
+        {
+          "sid" => "99111",
+          "conditionDutyAmount" => "99.34",
+          "conditionSequenceNumber" => "998",
+          "measureConditionComponent" => [
+            {
+              "dutyExpression" => {
+                  "dutyExpressionId" => "09"
+              },
+              "dutyAmount" => "29.1",
+              "monetaryUnit" => {
+                  "monetaryUnitCode" => "USD"
+              },
+              "measurementUnit" => {
+                  "measurementUnitCode" => "ASD"
+              },
+              "measurementUnitQualifier" => {
+                  "measurementUnitQualifierCode" => "19"
+              },
+              "metainfo" => {
+                  "opType" => "C",
+                  "transactionDate" => "2017-06-29T20:04:37"
+              }
+            },
+            {
+              "dutyExpression" => {
+                  "dutyExpressionId" => "19"
+              },
+              "dutyAmount" => "19.1",
+              "monetaryUnit" => {
+                  "monetaryUnitCode" => "USD"
+              },
+              "measurementUnit" => {
+                  "measurementUnitCode" => "ASD"
+              },
+              "measurementUnitQualifier" => {
+                  "measurementUnitQualifierCode" => "29"
+              },
+              "metainfo" => {
+                  "opType" => "C",
+                  "transactionDate" => "2017-06-29T20:04:37"
+              }
+            }
+          ],
+          "monetaryUnit" => {
+              "monetaryUnitCode" => "EUR"
+          },
+          "measurementUnit" => {
+              "measurementUnitCode" => "DTN"
+          },
+          "measurementUnitQualifier" => {
+              "measurementUnitQualifierCode" => "59"
+          },
+          "metainfo" => {
+              "opType" => "U",
+              "transactionDate" => "2017-06-29T20:04:37"
+          }
         }
-      },
+      ],
       "metainfo" => {
         "opType" => "U",
         "origin" => "N",
@@ -2514,14 +2618,14 @@ describe CdsImporter::EntityMapper do
     entity = subject.parse[0]
     expect(entity).to be_a(MeasureConditionComponent)
     expect(entity).to be_valid
-    expect(entity.measure_condition_sid.to_s).to eq(values["measureCondition"]["sid"])
-    expect(entity.duty_expression_id).to eq(values["measureCondition"]["measureConditionComponent"]["dutyExpression"]["dutyExpressionId"])
-    expect(entity.duty_amount.to_s).to eq(values["measureCondition"]["measureConditionComponent"]["dutyAmount"])
-    expect(entity.monetary_unit_code).to eq(values["measureCondition"]["measureConditionComponent"]["monetaryUnit"]["monetaryUnitCode"])
-    expect(entity.measurement_unit_code).to eq(values["measureCondition"]["measureConditionComponent"]["measurementUnit"]["measurementUnitCode"])
-    expect(entity.measurement_unit_qualifier_code).to eq(values["measureCondition"]["measureConditionComponent"]["measurementUnitQualifier"]["measurementUnitQualifierCode"])
+    expect(entity.measure_condition_sid.to_s).to eq(values["measureCondition"][0]["sid"])
+    expect(entity.duty_expression_id).to eq(values["measureCondition"][0]["measureConditionComponent"][0]["dutyExpression"]["dutyExpressionId"])
+    expect(entity.duty_amount.to_s).to eq(values["measureCondition"][0]["measureConditionComponent"][0]["dutyAmount"])
+    expect(entity.monetary_unit_code).to eq(values["measureCondition"][0]["measureConditionComponent"][0]["monetaryUnit"]["monetaryUnitCode"])
+    expect(entity.measurement_unit_code).to eq(values["measureCondition"][0]["measureConditionComponent"][0]["measurementUnit"]["measurementUnitCode"])
+    expect(entity.measurement_unit_qualifier_code).to eq(values["measureCondition"][0]["measureConditionComponent"][0]["measurementUnitQualifier"]["measurementUnitQualifierCode"])
     expect(entity.operation).to eq(:create)
-    expect(entity.operation_date).to eq(Date.parse(values["measureCondition"]["measureConditionComponent"]["metainfo"]["transactionDate"]))
+    expect(entity.operation_date).to eq(Date.parse(values["measureCondition"][0]["measureConditionComponent"][0]["metainfo"]["transactionDate"]))
   end
 
   it "MeasurementUnitDescription sample" do

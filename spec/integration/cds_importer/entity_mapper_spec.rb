@@ -19,6 +19,10 @@ describe CdsImporter::EntityMapper do
   }
   let(:mapper) { described_class.new("AdditionalCode", xml_node) }
 
+  before :all do
+   CdsImporter::EntityMapper::ALL_MAPPERS = [CdsImporter::EntityMapper::AdditionalCodeMapper]
+  end
+
   describe "#import" do
     context "when cds logger enabled" do
       before do

@@ -6,6 +6,7 @@ class CdsImporter
   module XmlParser
     class Reader < ::Ox::Sax
       STRIP_NAMESPACE = "*".freeze
+      CONTENT_KEY = :__content__.freeze
 
       def initialize(stringio, target_handler)
         @stringio = stringio
@@ -52,7 +53,7 @@ class CdsImporter
         when Hash
           @node[key] = [@node[key], child]
         else
-          if child.keys == [:__content__]
+          if child.size == 1 && child.key?(CONTENT_KEY)
             @node[key] = child[:__content__]
           else
             @node[key] = child
