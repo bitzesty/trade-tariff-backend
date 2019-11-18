@@ -4,7 +4,8 @@ class UploadChapterPdfWorker
 
   sidekiq_options queue: :sync, retry: false
 
-  def perform(pdf_file_path)
+  def perform(pdf_file_path, currency = 'EUR')
+    @cur = currency.downcase
     @dir, @key = File.split(pdf_file_path)
     initialize_s3(s3_file_path)
     upload_to_s3
@@ -19,7 +20,7 @@ class UploadChapterPdfWorker
   end
 
   def s3_file_path
-    File.join(ENV["AWS_PDF_ROOT_PATH"].to_s, "chapters", @key).gsub(%r{^/}, '')
+    File.join(ENV["AWS_PDF_ROOT_PATH"].to_s, "chapters", @cur, @key).gsub(%r{^/}, '')
   end
 
   def upload_to_s3

@@ -69,9 +69,23 @@ describe Api::V2::CertificatesController, type: :controller do
             number_indents: Integer,
             productline_suffix: String
           }
-        }]
+        }],
+        meta: {
+          pagination: {
+            page: Integer,
+            per_page: Integer,
+            total_count: Integer
+          }
+        }
       }
     }
+
+    before do
+      Sidekiq::Testing.inline! do
+        TradeTariffBackend.cache_client.reindex
+        sleep(1)
+      end
+    end
 
     it 'returns rendered found additional codes and related measures and goods nomenclatures' do
       get :search, params: { code: certificate.certificate_code }, format: :json

@@ -84,10 +84,6 @@ class Commodity < GoodsNomenclature
       .select { |a| a.number_indents < goods_nomenclature_indent.number_indents }
   end
 
-  def ancestor_ids
-    ancestors.pluck(:goods_nomenclature_sid)
-  end
-
   def declarable?
     producline_suffix == '80' && children.none?
   end
