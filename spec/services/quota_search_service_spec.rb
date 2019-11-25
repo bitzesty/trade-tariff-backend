@@ -170,7 +170,7 @@ describe QuotaSearchService do
         it 'should find quota definition by exhausted status' do
           result = described_class.new(
             {
-              'status' => 'Exhausted',
+              'status' => 'exhausted',
               'year' => Date.current.year.to_s
             }, current_page, per_page).perform
           expect(result).to include(quota_definition1)
@@ -178,7 +178,7 @@ describe QuotaSearchService do
         it 'should not find quota definition by wrong exhausted status' do
           result = described_class.new(
             {
-              'status' => 'Exhausted',
+              'status' => 'exhausted',
               'year' => Date.current.year.to_s
             }, current_page, per_page).perform
           expect(result).not_to include(quota_definition2)
@@ -193,7 +193,7 @@ describe QuotaSearchService do
         it 'should find quota definition by not exhausted status' do
           result = described_class.new(
             {
-              'status' => 'Not exhausted',
+              'status' => 'not_exhausted',
               'year' => Date.current.year.to_s
             }, current_page, per_page).perform
           expect(result).to include(quota_definition2)
@@ -201,7 +201,7 @@ describe QuotaSearchService do
         it 'should not find quota definition by wrong not exhausted status' do
           result = described_class.new(
             {
-              'status' => 'Not exhausted',
+              'status' => 'not_exhausted',
               'year' => Date.current.year.to_s
             }, current_page, per_page).perform
           expect(result).not_to include(quota_definition1)
@@ -218,7 +218,7 @@ describe QuotaSearchService do
         it 'should find quota definition by blocked status' do
           result = described_class.new(
             {
-              'status' => 'Blocked',
+              'status' => 'blocked',
               'year' => Date.current.year.to_s
             }, current_page, per_page).perform
           expect(result).to include(quota_definition1)
@@ -226,7 +226,7 @@ describe QuotaSearchService do
         it 'should not find quota definition by wrong blocked status' do
           result = described_class.new(
             {
-              'status' => 'Blocked',
+              'status' => 'blocked',
               'year' => Date.current.year.to_s
             }, current_page, per_page).perform
           expect(result).not_to include(quota_definition2)
@@ -243,7 +243,7 @@ describe QuotaSearchService do
         it 'should find quota definition by not blocked status' do
           result = described_class.new(
             {
-              'status' => 'Not blocked',
+              'status' => 'not_blocked',
               'year' => Date.current.year.to_s
             }, current_page, per_page).perform
           expect(result).to include(quota_definition2)
@@ -251,7 +251,7 @@ describe QuotaSearchService do
         it 'should not find quota definition by wrong not blocked status' do
           result = described_class.new(
             {
-              'status' => 'Not blocked',
+              'status' => 'not_blocked',
               'year' => Date.current.year.to_s
             }, current_page, per_page).perform
           expect(result).not_to include(quota_definition1)
