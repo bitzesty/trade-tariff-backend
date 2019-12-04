@@ -18,6 +18,8 @@ module Api
                 serializer: Api::V2::Measures::MeasureSuspensionLegalActSerializer,
                 if: Proc.new { |measure| !measure.national && measure.suspended? }
         has_many :measure_conditions, serializer: Api::V2::Measures::MeasureConditionSerializer
+        has_many :measure_components, serializer: Api::V2::Measures::MeasureComponentSerializer
+        has_many :national_measurement_units, serializer: Api::V2::Measures::NationalMeasurementUnitSerializer
         has_one :geographical_area, serializer: Api::V2::Measures::GeographicalAreaSerializer
         has_many :excluded_geographical_areas, key: :excluded_countries,
                  record_type: :geographical_area, serializer: Api::V2::GeographicalAreaSerializer
