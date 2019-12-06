@@ -1124,6 +1124,38 @@ describe Measure do
                                  duty_expression_id: duty_expression.duty_expression_id
     }
 
+    context '#duty_expression' do
+      context 'measure components order' do
+        let(:duty_expression2) {
+          create(:duty_expression, :with_description, duty_expression_id: '00')
+        }
+        let!(:measure_component2) {
+          create :measure_component, measure_sid: measure.measure_sid,
+                 duty_expression_id: duty_expression2.duty_expression_id
+        }
+
+        it 'orders components by duty_expression_id' do
+          expect(measure.duty_expression).to eq([measure_component2, measure_component].map(&:duty_expression_str).join(" "))
+        end
+      end
+    end
+
+    context '#formatted_duty_expression' do
+      context 'measure components order' do
+        let(:duty_expression2) {
+          create(:duty_expression, :with_description, duty_expression_id: '00')
+        }
+        let!(:measure_component2) {
+          create :measure_component, measure_sid: measure.measure_sid,
+                 duty_expression_id: duty_expression2.duty_expression_id
+        }
+
+        it 'orders components by duty_expression_id' do
+          expect(measure.formatted_duty_expression).to eq([measure_component2, measure_component].map(&:formatted_duty_expression).join(" "))
+        end
+      end
+    end
+
     context "without national_measurement_unit" do
       it {
         expect(base).to match Regexp.new(measure_component.duty_expression_str)
