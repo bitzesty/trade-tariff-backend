@@ -1,14 +1,21 @@
 class NationalMeasurementUnit
-  attr_reader :measurement_unit_code, :description, :level
+  # parent_pk - NationalMeasurementUnitSer.primary_key
+  # level - values 1,2 or 3
+  attr_reader :measurement_unit_code, :description, :level, :parent_pk
 
   def initialize(attributes = {})
     @measurement_unit_code = attributes.fetch(:measurement_unit_code, nil)
     @description = attributes.fetch(:description, nil)
     @level = attributes.fetch(:level)
+    @parent_pk = attributes.fetch(:parent_pk, [])
   end
 
   def description
     self.class.description_map.fetch(measurement_unit_code, nil)
+  end
+
+  def original_description
+    @description
   end
 
   def present?
@@ -17,6 +24,10 @@ class NationalMeasurementUnit
 
   def to_s
     description
+  end
+
+  def pk
+    [level] + parent_pk
   end
 
   def self.description_map
