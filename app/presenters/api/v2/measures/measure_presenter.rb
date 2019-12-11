@@ -10,9 +10,9 @@ module Api
           @duty_expression = Api::V2::Measures::DutyExpressionPresenter.new(measure, declarable)
           @geographical_areas = geographical_areas
           @national_measurement_units = declarable.national_measurement_unit_set
-                                                  .national_measurement_unit_set_units
-                                                  .select(&:present?)
-                                                  .select { |nmu| nmu.level > 1 }
+                                                  &.national_measurement_unit_set_units
+                                                  &.select(&:present?)
+                                                  &.select { |nmu| nmu.level > 1 } || []
         end
 
         def excise
