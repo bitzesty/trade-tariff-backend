@@ -94,8 +94,8 @@ module Cache
               validity_start_date: goods_nomenclature_description.validity_start_date&.strftime('%FT%T.%LZ'),
               validity_end_date: goods_nomenclature_description.validity_end_date,
               description: goods_nomenclature_description.description,
-              formatted_description: DescriptionFormatter.format(value: goods_nomenclature_description.description),
-              description_plain: DescriptionTrimFormatter.format(value: goods_nomenclature_description.description)
+              formatted_description: goods_nomenclature_description.description.present? ? DescriptionFormatter.format(value: goods_nomenclature_description.description) : '',
+              description_plain: goods_nomenclature_description.description.present? ? DescriptionTrimFormatter.format(value: goods_nomenclature_description.description) : '',
             }
           end
 
