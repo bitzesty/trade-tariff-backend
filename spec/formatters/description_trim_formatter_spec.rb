@@ -62,5 +62,19 @@ describe DescriptionTrimFormatter do
         described_class.format(description: '$1')
       ).to eq '1'
     end
+
+    it 'return empty string for empty description' do
+      expect(
+        described_class.format(description: nil)
+      ).to eq ''
+
+      expect(
+        described_class.format(description: '')
+      ).to eq ''
+
+      expect(
+        described_class.format(description: '    ')
+      ).to eq ''
+    end
   end
 end
