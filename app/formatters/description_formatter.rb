@@ -3,6 +3,7 @@ class DescriptionFormatter
     raise ArgumentError.new("DescriptionFormatter expects :using arg to be a single value") if opts.keys.many?
 
     str = opts.values.first
+    return '' if str.blank?
     str.gsub!("|%", "%")
     str.gsub!("-|", "\n-")
     str.gsub!("|", "&nbsp;")
