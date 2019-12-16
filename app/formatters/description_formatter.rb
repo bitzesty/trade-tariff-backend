@@ -4,6 +4,7 @@ class DescriptionFormatter
 
     str = opts.values.first
     return '' if str.blank?
+
     str.gsub!("|%", "%")
     str.gsub!("-|", "\n-")
     str.gsub!("|", "&nbsp;")
