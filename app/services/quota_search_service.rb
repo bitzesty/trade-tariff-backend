@@ -20,7 +20,8 @@ class QuotaSearchService
     @order_number = attributes['order_number']
     @critical = attributes['critical']
     @years = Array.wrap(attributes['years']).join(', ')
-    @status = attributes['status'] if STATUS_VALUES.include?(attributes['status'])
+    status_value = attributes['status']&.gsub(/[+ ]/, '_')
+    @status = status_value if STATUS_VALUES.include?(status_value)
     @current_page = current_page
     @per_page = per_page
   end
