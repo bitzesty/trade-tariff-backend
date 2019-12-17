@@ -22,9 +22,9 @@ describe Api::V2::GeographicalAreasController, "GET #countries" do
   let(:pattern) {
     {
       data: [
-        { id: String, type: String, attributes: { id: String, description: String, geographical_area_id: String } },
-        { id: String, type: String, attributes: { id: String, description: String, geographical_area_id: String } },
-        { id: String, type: String, attributes: { id: String, description: String, geographical_area_id: String } }
+        { id: String, type: String, attributes: { id: String, description: String, geographical_area_id: String }, relationships: { children_geographical_areas: { data: [] } } },
+        { id: String, type: String, attributes: { id: String, description: String, geographical_area_id: String }, relationships: { children_geographical_areas: { data: [] } } },
+        { id: String, type: String, attributes: { id: String, description: String, geographical_area_id: String }, relationships: { children_geographical_areas: { data: [] } } }
       ]
     }
   }
@@ -69,8 +69,8 @@ describe Api::V2::GeographicalAreasController, "GET #countries" do
     let(:pattern) {
       {
         data: [
-          { id: String, type: String, attributes: { id: String, description: String, geographical_area_id: String } },
-          { id: String, type: String, attributes: { id: String, description: String, geographical_area_id: String } }
+          { id: String, type: String, attributes: { id: String, description: String, geographical_area_id: String }, relationships: { children_geographical_areas: { data: [] } } },
+          { id: String, type: String, attributes: { id: String, description: String, geographical_area_id: String }, relationships: { children_geographical_areas: { data: [] } } }
         ]
       }
     }
