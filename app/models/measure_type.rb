@@ -1,3 +1,7 @@
+# National Measure Type ID mapping
+# A B C D E F G H I J
+# 1 2 3 4 5 6 7 8 9 0
+
 class MeasureType < Sequel::Model
   IMPORT_MOVEMENT_CODES = [0, 2].freeze
   EXPORT_MOVEMENT_CODES = [1, 2].freeze
