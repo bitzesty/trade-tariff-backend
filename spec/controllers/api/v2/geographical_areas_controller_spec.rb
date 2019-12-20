@@ -97,4 +97,113 @@ describe Api::V2::GeographicalAreasController, "GET #countries" do
       )
     end
   end
+
+  describe 'with children geographical areas' do
+    let!(:geographical_area1) {
+      create :geographical_area,
+        :with_description,
+        :country
+    }
+    let!(:geographical_area2) {
+      create :geographical_area,
+        :with_description,
+        :country
+    }
+    let!(:geographical_area3) {
+      create :geographical_area,
+        :with_description,
+        geographical_code: "2"
+    }
+    let!(:parent_geographical_area) {
+      create :geographical_area,
+        :with_description,
+        geographical_code: "1"
+    }
+    let!(:geographical_area_membership1) {
+      create :geographical_area_membership,
+        geographical_area_sid: geographical_area1.geographical_area_sid,
+        geographical_area_group_sid: parent_geographical_area.geographical_area_sid
+    }
+    let!(:geographical_area_membership3) {
+      create :geographical_area_membership,
+        geographical_area_sid: geographical_area3.geographical_area_sid,
+        geographical_area_group_sid: parent_geographical_area.geographical_area_sid
+    }
+
+    let(:pattern) {
+      { data: [
+        { 
+          id: String,
+          type: "geographical_area",
+          attributes: { 
+            id: String,
+            description: String,
+            geographical_area_id: String
+          }, 
+          relationships: { 
+            children_geographical_areas: { 
+              data: [] 
+            } 
+          } 
+        }, 
+        { 
+          id: String,
+          type: "geographical_area",
+          attributes: {
+            id: String,
+            description: String,
+            geographical_area_id: String
+          }, 
+          relationships: { 
+            children_geographical_areas: { 
+              data: [] 
+            } 
+          } 
+        }, 
+        { 
+          id: String,
+          type: "geographical_area",
+          attributes: {
+            id: String,
+            description: String,
+            geographical_area_id: String
+          }, 
+          relationships: { 
+            children_geographical_areas: { 
+              data: [] 
+            } 
+          } 
+        }, 
+        { 
+          id: parent_geographical_area.geographical_area_id,
+          type: "geographical_area",
+          attributes: {
+            id: parent_geographical_area.geographical_area_id,
+            description: String,
+            geographical_area_id: String
+          }, 
+          relationships: { 
+            children_geographical_areas: { 
+              data: [
+                { 
+                  id: geographical_area1.geographical_area_id,
+                  type: "geographical_area"
+                }, 
+                { 
+                  id: geographical_area3.geographical_area_id,
+                  type: "geographical_area"
+                }
+              ] 
+            } 
+          } 
+        } ] 
+      }
+    }
+
+    it 'returns rendered records' do
+      get :index, format: :json
+
+      expect(response.body).to match_json_expression pattern
+    end
+  end
 end
