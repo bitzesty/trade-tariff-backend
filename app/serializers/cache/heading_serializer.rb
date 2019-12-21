@@ -95,7 +95,7 @@ module Cache
               validity_end_date: goods_nomenclature_description.validity_end_date,
               description: goods_nomenclature_description.description,
               formatted_description: DescriptionFormatter.format(value: goods_nomenclature_description.description),
-              description_plain: DescriptionTrimFormatter.format(value: goods_nomenclature_description.description)
+              description_plain: DescriptionTrimFormatter.format(value: goods_nomenclature_description.description),
             }
           end
 
