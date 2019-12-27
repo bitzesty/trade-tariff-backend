@@ -194,13 +194,13 @@ describe Commodity do
                                             validity_start_date: Date.current.ago(1.years)
       }
 
-      it 'groups measures by measure_generating_regulation_id and picks the measure with the highest goods_nomenclature_item_id' do
-        pending 'The goods nomenclatures cannot have the same goods_nomenclature_sid and different goods_nomenclature_item_id'
-        #TimeMachine.at(Date.current) do
-        #  expect(commodity.measures.map(&:measure_sid)).not_to include measure1.measure_sid
-        #  expect(commodity.measures.map(&:measure_sid)).to include measure2.measure_sid
-        #end
-      end
+      pending 'The goods nomenclatures cannot have the same goods_nomenclature_sid and different goods_nomenclature_item_id'
+      #it 'groups measures by measure_generating_regulation_id and picks the measure with the highest goods_nomenclature_item_id' do
+      #  TimeMachine.at(Date.current) do
+      #    expect(commodity.measures.map(&:measure_sid)).not_to include measure1.measure_sid
+      #    expect(commodity.measures.map(&:measure_sid)).to include measure2.measure_sid
+      #  end
+      #end
     end
 
     describe 'measures for export' do
