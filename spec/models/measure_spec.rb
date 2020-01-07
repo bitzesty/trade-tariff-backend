@@ -396,8 +396,9 @@ describe Measure do
 
     describe 'measure components' do
       let!(:measure)                { create :measure }
-      let!(:measure_component1)     { create :measure_component, measure_sid: measure.measure_sid }
+      let!(:measure_component1)     { create :measure_component, measure_sid: measure.measure_sid, duty_expression_id: '03' }
       let!(:measure_component2)     { create :measure_component }
+      let!(:measure_component3)     { create :measure_component, measure_sid: measure.measure_sid, duty_expression_id: '01' }
 
       context 'direct loading' do
         it 'loads associated measure components' do
@@ -406,6 +407,10 @@ describe Measure do
 
         it 'does not load associated measure component' do
           expect(measure.measure_components).not_to include measure_component2
+        end
+
+        it 'orders components by duty_expression_id' do
+          expect(measure.measure_components.pluck(:duty_expression_id)).to eq(%w(01 03))
         end
       end
 
