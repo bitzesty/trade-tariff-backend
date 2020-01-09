@@ -12,6 +12,10 @@ FactoryGirl.define do
       validity_start_date { Date.current.ago(15.years) }
     end
 
+    trait :twenty_years do
+      validity_start_date { Date.current.ago(20.years) }
+    end
+
     trait :erga_omnes do
       geographical_area_id { "1011" }
     end
