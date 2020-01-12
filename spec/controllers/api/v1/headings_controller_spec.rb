@@ -50,7 +50,8 @@ describe Api::V1::HeadingsController, "GET #show" do
 
     context 'when record is not present' do
       it 'returns not found if record was not found' do
-        get :show, params: { id: "5555" }, format: :json
+        id = heading.goods_nomenclature_item_id.first(4).to_i + 1
+        get :show, params: { id: id }, format: :json
 
         expect(response.status).to eq 404
       end
@@ -86,7 +87,8 @@ describe Api::V1::HeadingsController, "GET #show" do
 
     context 'when record is not present' do
       it 'returns not found if record was not found' do
-        get :show, params: { id: "1234" }, format: :json
+        id = heading.goods_nomenclature_item_id.first(4).to_i + 1
+        get :show, params: { id: id }, format: :json
 
         expect(response.status).to eq 404
       end
