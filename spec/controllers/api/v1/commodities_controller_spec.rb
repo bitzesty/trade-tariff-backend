@@ -30,7 +30,8 @@ describe Api::V1::CommoditiesController, "GET #show" do
 
   context 'when record is not present' do
     it 'returns not found if record was not found' do
-      get :show, params: { id: "1234567890" }, format: :json
+      id = commodity.goods_nomenclature_item_id.to_i + 1
+      get :show, params: { id: id }, format: :json
 
       expect(response.status).to eq 404
     end
