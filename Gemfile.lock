@@ -1,8 +1,8 @@
 GIT
   remote: https://gitlab.bitzesty.com/open-source/uktt.git
-  revision: 294bf891970259555449e06e1b1c181fa0989489
+  revision: 7ee7f0dbec9c29648fba5b718f0262e0f8f14c92
   specs:
-    uktt (0.2.7)
+    uktt (0.2.8)
       faraday
       nokogiri
       prawn
@@ -356,7 +356,7 @@ GEM
     thor (0.20.3)
     thread_safe (0.3.6)
     tilt (2.0.9)
-    ttfunk (1.5.1)
+    ttfunk (1.6.1)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
     unicode-display_width (1.5.0)
