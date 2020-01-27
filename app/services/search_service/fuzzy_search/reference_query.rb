@@ -18,7 +18,7 @@ class SearchService
                 filter: {
                   bool: {
                     must: [
-                      { term: { reference_class: index.type } },
+                      { term: { reference_class: index.type.capitalize } },
                       {
                         nested: {
                           path: "reference",
