@@ -1,3 +1,7 @@
+# National Measure Type ID mapping
+# A B C D E F G H I J
+# 1 2 3 4 5 6 7 8 9 0
+
 class MeasureType < Sequel::Model
   IMPORT_MOVEMENT_CODES = [0, 2].freeze
   EXPORT_MOVEMENT_CODES = [1, 2].freeze
@@ -16,7 +20,7 @@ class MeasureType < Sequel::Model
   one_to_one :measure_type_description, key: :measure_type_id,
                                         foreign_key: :measure_type_id
 
-  one_to_many :measures, key: :measure_type,
+  one_to_many :measures, key: :measure_type_id,
                          foreign_key: :measure_type_id
 
   many_to_one :measure_type_series

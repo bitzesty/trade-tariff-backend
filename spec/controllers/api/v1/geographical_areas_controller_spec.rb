@@ -83,13 +83,13 @@ describe Api::V1::GeographicalAreasController, "GET #countries" do
 
     it "includes area 1" do
       expect(response.body.to_s).to include(
-        geographical_area1.geographical_area_id
+        "\"id\":\"#{geographical_area1.geographical_area_id}\""
       )
     end
 
     it "doesn't include area 2" do
       expect(response.body.to_s).to_not include(
-        geographical_area2.geographical_area_id
+        "\"id\":\"#{geographical_area2.geographical_area_id}\""
       )
     end
   end
