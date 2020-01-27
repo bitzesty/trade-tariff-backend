@@ -13,7 +13,9 @@ class AdditionalCode < Sequel::Model
   end
 
   one_to_many :measures, key: :additional_code_sid,
-                         primary_key: :additional_code_sid
+                         primary_key: :additional_code_sid do |ds|
+    ds.with_actual(Measure)
+  end
 
   def additional_code_description
     TimeMachine.at(validity_start_date) do

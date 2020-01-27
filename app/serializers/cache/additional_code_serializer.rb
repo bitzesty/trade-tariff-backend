@@ -11,7 +11,7 @@ module Cache
 
     def as_json
       measures = additional_code.measures.select do |measure|
-        has_valid_dates(measure)
+        has_valid_dates(measure, :effective_start_date, :effective_end_date)
       end
       {
         additional_code_sid: additional_code.additional_code_sid,
@@ -28,7 +28,9 @@ module Cache
             id: measure.measure_sid,
             measure_sid: measure.measure_sid,
             validity_start_date: measure.validity_start_date,
+            effective_start_date: measure.effective_start_date,
             validity_end_date: measure.validity_end_date,
+            effective_end_date: measure.effective_end_date,
             goods_nomenclature_item_id: measure.goods_nomenclature_item_id,
             goods_nomenclature_sid: measure.goods_nomenclature_sid,
             goods_nomenclature: goods_nomenclature_attributes(measure.goods_nomenclature)

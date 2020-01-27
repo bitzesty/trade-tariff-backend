@@ -32,7 +32,9 @@ class Footnote < Sequel::Model
                                                      footnote_id]
   many_to_many :measures, join_table: :footnote_association_measures,
                           left_key: %i[footnote_type_id footnote_id],
-                          right_key: [:measure_sid]
+                          right_key: [:measure_sid] do |ds|
+    ds.with_actual(Measure)
+  end
 
   one_to_many :footnote_association_goods_nomenclatures, key: %i[footnote_type footnote_id],
                                                          primary_key: %i[footnote_id footnote_type_id]
