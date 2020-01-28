@@ -6,7 +6,7 @@ describe TariffSynchronizer::TariffDownloader do
 
   describe "#perform" do
     context "a CHIEF file" do
-      let(:generator) { ChiefFileNameGenerator.new(example_date) }
+      let(:generator) { TariffSynchronizer::ChiefFileNameGenerator.new(example_date) }
       let(:chief_update_klass) { TariffSynchronizer::ChiefUpdate }
       let(:tariff_downloader) do
         described_class.new(

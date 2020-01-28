@@ -15,7 +15,7 @@ class ChiefImporter
     end
 
     def relevant?
-      table.in?(ChiefImporter.relevant_tables)
+      table.classify.in?(ChiefImporter.relevant_tables)
     end
 
   private

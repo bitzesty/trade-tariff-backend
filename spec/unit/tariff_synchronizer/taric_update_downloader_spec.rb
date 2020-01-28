@@ -5,7 +5,7 @@ describe TariffSynchronizer::TaricUpdateDownloader do
   let(:example_date) { Date.new(2010,1,1) }
 
   describe "#perform" do
-    let(:generator) { TaricFileNameGenerator.new(example_date) }
+    let(:generator) { TariffSynchronizer::TaricFileNameGenerator.new(example_date) }
 
     it "Logs the request for the TaricUpdate file" do
       expect(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform)
