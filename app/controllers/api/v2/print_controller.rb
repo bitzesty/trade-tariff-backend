@@ -40,6 +40,7 @@ module Api
       end
 
       def render_result
+        @result = [@result] unless @result.is_a?(Array)
         render json: Api::V2::PrintSerializer.new(@result).serializable_hash
       end
 
