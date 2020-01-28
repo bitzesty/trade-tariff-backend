@@ -4,7 +4,11 @@ require "chief_importer/start_entry"
 require "chief_importer/end_entry"
 require "chief_importer/change_entry"
 require "chief_importer/strategies/base_strategy"
-require "chief_importer/strategies/strategies"
+require "chief_importer/strategies/comm"
+require "chief_importer/strategies/mfcm"
+require "chief_importer/strategies/tame"
+require "chief_importer/strategies/tamf"
+require "chief_importer/strategies/tbl9"
 
 class ChiefImporter
   class ImportException < StandardError
@@ -17,7 +21,7 @@ class ChiefImporter
   end
 
   cattr_accessor :relevant_tables
-  self.relevant_tables = %w(MFCM TAMF TAME COMM TBL9)
+  self.relevant_tables = %w(Mfcm Tamf Tame Comm Tbl9)
 
   cattr_accessor :start_mark
   self.start_mark = "AAAAAAAAAAA"

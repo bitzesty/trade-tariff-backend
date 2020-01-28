@@ -1,6 +1,4 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery
-
   respond_to :json, :html
 
   before_action :sample_requests_for_scout

@@ -4,7 +4,7 @@ module Api
 
     respond_to :json
 
-    skip_before_action :verify_authenticity_token
+    skip_forgery_protection
 
     rescue_from Sequel::NoMatchingRow, Sequel::RecordNotFound do |_exception|
       serializer = TradeTariffBackend.error_serializer(request)
