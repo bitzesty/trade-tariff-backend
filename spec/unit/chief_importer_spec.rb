@@ -62,7 +62,7 @@ describe ChiefImporter do
           importer = described_class.new(chief_update)
           expect { importer.import }.to raise_error ChiefImporter::ImportException
           expect(@logger.logged(:error).last).to eq(
-            "CHIEF import of 2012-02-13_KBT009(12044).txt failed: Reason: Do not allow except col_sep_split_separator after quoted fields in line 1."
+            "CHIEF import of 2012-02-13_KBT009(12044).txt failed: Reason: Any value after quoted field isn't allowed in line 1."
           )
         end
       end
