@@ -1,8 +1,8 @@
-require_relative "boot"
+require_relative 'boot'
 
 require "action_controller/railtie"
 require "action_mailer/railtie"
-require "sprockets/railtie"
+# require "sprockets/railtie"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -10,10 +10,14 @@ Bundler.require(*Rails.groups)
 
 module TradeTariffBackend
   class Application < Rails::Application
+    # Initialize configuration defaults for originally generated Rails version.
+    config.load_defaults 6.0
     require "trade_tariff_backend"
 
     # lib directory to be autoloadable.
     config.eager_load_paths << Rails.root.join('lib')
+
+    config.autoloader = :classic
 
     config.generators do |g|
       g.view_specs     false
@@ -24,7 +28,7 @@ module TradeTariffBackend
     config.time_zone = "UTC"
 
     # Enable the asset pipeline
-    config.assets.enabled = false
+    # config.assets.enabled = false
 
     # Configure sequel
     config.sequel.schema_format = :sql

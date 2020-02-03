@@ -1,6 +1,4 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery
-
   respond_to :json, :html
 
   before_action :sample_requests_for_scout
@@ -11,7 +9,6 @@ class ApplicationController < ActionController::Base
     rescue_from Exception,                           with: :render_error
     rescue_from Sequel::RecordNotFound,              with: :render_not_found
     rescue_from ActionController::RoutingError,      with: :render_not_found
-    rescue_from ActionController::UnknownController, with: :render_not_found
     rescue_from AbstractController::ActionNotFound,  with: :render_not_found
   end
 

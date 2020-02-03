@@ -5,11 +5,11 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-ruby "~> 2.6.2"
+ruby "~> 2.6.5"
 
 # Server
 gem "puma", "~> 3.4"
-gem "rails", "5.1.6.2"
+gem "rails", "6.0.2.1"
 gem "sinatra", "~> 2.0.2"
 
 # DB
@@ -55,8 +55,8 @@ gem "yajl-ruby", "~> 1.3.1", require: "yajl"
 gem "ansi", "~> 1.5"
 gem "curb", "~> 0.9"
 gem "fast_jsonapi", "~> 1.5"
-gem "rabl", "~> 0.12"
-gem "responders", "~> 2.1", ">= 2.1.0"
+gem "rabl", "~> 0.14"
+gem "responders", "~> 3.0.0"
 gem "tilt"
 
 # Printed PDF
