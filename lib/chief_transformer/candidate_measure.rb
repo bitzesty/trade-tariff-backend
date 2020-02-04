@@ -1,6 +1,5 @@
 require 'chief_transformer/candidate_measure/collection'
 require 'chief_transformer/candidate_measure/candidate_associations'
-require 'chief_transformer/time'
 
 class ChiefTransformer
   class CandidateMeasure < Sequel::Model(:measures_oplog)
