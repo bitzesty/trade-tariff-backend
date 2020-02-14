@@ -1,5 +1,5 @@
 :verbose: false
-:concurrency:  12
+:concurrency:  10
 :queues:
   - [rollbacks, 2]
   - [sync, 2]
