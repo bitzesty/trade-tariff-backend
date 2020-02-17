@@ -20,6 +20,8 @@ module Api
 
     def current_page
       Integer(params[:page] || 1)
+    rescue ArgumentError
+      1
     end
 
     def per_page
