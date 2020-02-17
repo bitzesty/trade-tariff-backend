@@ -10,7 +10,7 @@ module PaasResolver
       ENV["REDIS_URL"]
     end
 
-    { url: url, db: 0 }
+    { url: url, db: 0, id: nil }
   end
 
   def get_elasticsearch_config
