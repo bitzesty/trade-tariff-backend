@@ -60,7 +60,7 @@ gem "responders", "~> 3.0.0"
 gem "tilt"
 
 # Printed PDF
-gem 'uktt', git: 'https://gitlab.bitzesty.com/open-source/uktt.git'
+gem 'uktt', git: 'https://gitlab.bitzesty.com/open-source/uktt.git', branch: :master
 gem 'combine_pdf'
 gem 'sidekiq-batch'
 
