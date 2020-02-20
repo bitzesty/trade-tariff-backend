@@ -16,7 +16,7 @@ module Api
       end
 
       def latest
-        @result = filter_by(/UK-Trade-Tariff-latest/).max_by(&:date)
+        @result = filter_by(/(eur|gbp)\/UK-Trade-Tariff-latest\.pdf/)
         render_result
       end
 
