@@ -23,7 +23,7 @@ class ChiefTransformer
                                 EDB EDE EEA EEF EFJ EFA EGJ EGA EGB EHI EIJ
                                 EIA EIB EIC EID EIE FAA FAE FAI FBC FBG LAA
                                 LAE LBJ LBA LBB LBE LDA LEA LEF LFA LGJ COE
-                                PRE AHC ATT CEX CHM COI CVD ECM EHC EQC EWP
+                                PRE AHC ATT CEX CHM COI ECM EHC EQC EWP
                                 HOP HSE IWP PHC PRT QRC SFS VTA VTE VTS VTZ].freeze
 
     attr_accessor :mfcm, :tame, :tamf, :candidate_associations, :initiator, :operation
