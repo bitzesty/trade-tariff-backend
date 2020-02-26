@@ -6,7 +6,7 @@ module Api
       before_action :set_up_s3_bucket
 
       def index
-        @result = filter_by(/^UK-Trade-Tariff-/).sort_by(&:date).reverse
+        @result = filter_by(/UK-Trade-Tariff-/).sort_by(&:date).reverse
         render_result
       end
 
@@ -16,7 +16,7 @@ module Api
       end
 
       def latest
-        @result = filter_by(/^UK-Trade-Tariff-/).max_by(&:date)
+        @result = filter_by(/(eur|gbp)\/UK-Trade-Tariff-latest\.pdf/)
         render_result
       end
 
