@@ -5,20 +5,26 @@ class AdditionalCode < Sequel::Model
 
   set_primary_key [:additional_code_sid]
 
-  many_to_many :additional_code_descriptions, join_table: :additional_code_description_periods,
-                                              left_key: :additional_code_sid,
-                                              right_key: %i[additional_code_description_period_sid
-                                                            additional_code_sid] do |ds|
+  many_to_many :additional_code_descriptions,
+               join_table: :additional_code_description_periods,
+               left_primary_key: :additional_code_sid,
+               left_key: :additional_code_sid,
+               right_key: %i[additional_code_description_period_sid
+                             additional_code_sid],
+               right_primary_key: %i[additional_code_description_period_sid
+                                     additional_code_sid],
+               eager_block: (->(ds) {
+                 ds.order(Sequel.desc(:additional_code_description_periods__validity_start_date))
+               }) do |ds|
     ds.with_actual(AdditionalCodeDescriptionPeriod)
+      .order(Sequel.desc(:additional_code_description_periods__validity_start_date))
   end
 
   one_to_many :measures, key: :additional_code_sid,
                          primary_key: :additional_code_sid
 
   def additional_code_description
-    TimeMachine.at(validity_start_date) do
-      additional_code_descriptions(reload: true).last
-    end
+    additional_code_descriptions.first
   end
 
   one_to_one :meursing_additional_code, key: :additional_code,
