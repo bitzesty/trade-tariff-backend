@@ -8,7 +8,7 @@ end
 ruby "~> 2.6.5"
 
 # Server
-gem "puma", "~> 3.4"
+gem "puma", "~> 3.12"
 gem "rails", "6.0.2.1"
 gem "sinatra", "~> 2.0.2"
 
