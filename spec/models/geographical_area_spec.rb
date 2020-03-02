@@ -7,7 +7,7 @@ describe GeographicalArea do
       let!(:geographical_area_description1)   {
         create :geographical_area_description, :with_period,
                                                             geographical_area_sid: geographical_area.geographical_area_sid,
-                                                            valid_at: 2.years.ago,
+                                                            valid_at: 3.years.ago,
                                                             valid_to: nil
       }
       let!(:geographical_area_description2) {
