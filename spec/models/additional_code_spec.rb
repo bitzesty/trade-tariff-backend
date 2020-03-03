@@ -16,6 +16,12 @@ describe AdditionalCode do
                                                             valid_at: Date.today.ago(5.years),
                                                             valid_to: Date.today.ago(3.years)
       }
+      let!(:additional_code_description3) {
+        create :additional_code_description, :with_period,
+                                                            additional_code_sid: additional_code.additional_code_sid,
+                                                            valid_at: Date.today.ago(6.years),
+                                                            valid_to: Date.today.ago(1.years)
+      }
 
       context 'direct loading' do
         it 'loads correct description respecting given actual time' do
@@ -33,10 +39,16 @@ describe AdditionalCode do
             ).to eq additional_code_description1.pk
           end
 
+          TimeMachine.at(2.year.ago) do
+            expect(
+              additional_code.additional_code_description.pk
+            ).to eq additional_code_description1.pk
+          end
+
           TimeMachine.at(4.years.ago) do
             expect(
               additional_code.reload.additional_code_description.pk
-            ).to eq additional_code_description1.pk
+            ).to eq additional_code_description2.pk
           end
         end
       end
