@@ -15,7 +15,7 @@ module Api
         has_one :measure_type, serializer: Api::V2::Measures::MeasureTypeSerializer
         has_many :legal_acts, serializer: Api::V2::Measures::MeasureLegalActSerializer
         has_one :suspending_regulation, key: :suspension_legal_act,
-                serializer: Api::V2::Measures::MeasureSuspensionLegalActSerializer,
+                record_type: :suspension_legal_act, serializer: Api::V2::Measures::MeasureSuspensionLegalActSerializer,
                 if: Proc.new { |measure| !measure.national && measure.suspended? }
         has_many :measure_conditions, serializer: Api::V2::Measures::MeasureConditionSerializer
         has_many :measure_components, serializer: Api::V2::Measures::MeasureComponentSerializer
