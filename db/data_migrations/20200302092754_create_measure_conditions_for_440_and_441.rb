@@ -8,7 +8,14 @@ TradeTariffBackend::DataMigrator.migration do
     3 => 60000.0,
     4 => 6000000.0
   }
-
+  CONDITION_COMPONENTS = {
+      5000.0 => [{duty_expression_id: "01", duty_amount: 9.54, measurement_unit_code: "LPA"}],
+      30000.0 => [{duty_expression_id: "01", duty_amount: 19.08, measurement_unit_code: "LPA"},
+                  {duty_expression_id: "02", duty_amount: 47700.0, measurement_unit_code: "FC1", measurement_unit_qualifier_code: "X"}],
+      60000.0 => [{duty_expression_id: "01", duty_amount: 20.669, measurement_unit_code: "LPA"},
+                  {duty_expression_id: "02", duty_amount: 95380.92, measurement_unit_code: "FC1", measurement_unit_qualifier_code: "X"}],
+      6000000.0 => [{duty_expression_id: "01", duty_amount: 19.08, measurement_unit_code: "LPA"}]
+  }
   up do
     applicable {
       true
@@ -45,16 +52,20 @@ TradeTariffBackend::DataMigrator.migration do
         certificate_code: nil,
         condition_code: "E",
         operation: "C"
-      ).delete
+      ).each do |mc|
+        MeasureConditionComponent::Operation.where(measure_condition_sid: mc.measure_condition_sid).delete
+        mc.delete
+      end
     }
   end
 
   def measure_sids
-    Measure.actual.where(measure_type_id: MEASURE_TYPES).pluck(:measure_sid)
+    Measure.actual.where(measure_type_id: MEASURE_TYPES).where("measures.validity_end_date IS NULL").pluck(:measure_sid)
   end
 
   def unrestrict_primary_keys
     MeasureCondition.unrestrict_primary_key
+    MeasureConditionComponent.unrestrict_primary_key
     Measurement.unrestrict_primary_key
     MeasurementUnit.unrestrict_primary_key
     MeasurementUnitDescription.unrestrict_primary_key
@@ -74,7 +85,7 @@ TradeTariffBackend::DataMigrator.migration do
   end
 
   def create_measurement_unit(operation_date)
-    if MeasurementUnit.where(measurement_unit_code: "GP1").none?
+    if MeasurementUnit.actual.where(measurement_unit_code: "GP1").none?
       MeasurementUnit.new(
         measurement_unit_code: "GP1",
         validity_start_date: Date.new(1991,01,01),
@@ -115,11 +126,27 @@ TradeTariffBackend::DataMigrator.migration do
           operation: "C"
         }
 
-        if MeasureCondition.where(attributes).none?
-          MeasureCondition.new(
-            attributes.merge(operation_date: operation_date)
-          ).save
-        end
+        measure_condition = MeasureCondition.where(attributes).last
+        measure_condition ||= MeasureCondition.new(
+          attributes.merge(operation_date: operation_date)
+        ).save
+
+        create_measure_condition_components(measure_condition)
+      end
+    end
+  end
+
+  def create_measure_condition_components(measure_condition)
+    CONDITION_COMPONENTS[measure_condition.condition_duty_amount].each do |component_attributes|
+      component_attributes[:measure_condition_sid] = measure_condition.measure_condition_sid
+      if MeasureConditionComponent.where(component_attributes).none?
+        MeasureConditionComponent.new(
+          component_attributes.merge(
+            operation_date: measure_condition.operation_date,
+            monetary_unit_code: "GBP",
+            operation: "C"
+          )
+        ).save
       end
     end
   end
