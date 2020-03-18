@@ -1,6 +1,6 @@
 class ChiefImporter
   module Strategies
-    class Tamf < BaseStrategy
+    class TAMF < BaseStrategy
       map fe_tsmp: [0, :chief_date],
           msrgp_code: [2, :chief_string],
           msr_type: [3, :chief_string],

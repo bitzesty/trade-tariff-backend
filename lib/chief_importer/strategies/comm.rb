@@ -1,6 +1,6 @@
 class ChiefImporter
   module Strategies
-    class Comm < BaseStrategy
+    class COMM < BaseStrategy
       map fe_tsmp: [0, :chief_date],
           amend_indicator: 1,
           cmdty_code: [2, :chief_code],
