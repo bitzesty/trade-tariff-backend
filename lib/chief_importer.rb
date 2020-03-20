@@ -21,7 +21,7 @@ class ChiefImporter
   end
 
   cattr_accessor :relevant_tables
-  self.relevant_tables = %w(Mfcm Tamf Tame Comm Tbl9)
+  self.relevant_tables = %w(MFCM TAMF TAME COMM TBL9)
 
   cattr_accessor :start_mark
   self.start_mark = "AAAAAAAAAAA"

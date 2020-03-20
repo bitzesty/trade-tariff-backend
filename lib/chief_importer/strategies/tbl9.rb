@@ -1,6 +1,6 @@
 class ChiefImporter
   module Strategies
-    class Tbl9 < BaseStrategy
+    class TBL9 < BaseStrategy
       map fe_tsmp: [0, :chief_date],
           amend_indicator: 1,
           tbl_type: [2, :chief_string],
