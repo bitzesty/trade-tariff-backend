@@ -56,7 +56,7 @@ module TariffSynchronizer
   mattr_accessor :root_path
   self.root_path = "data"
 
-  # Numer of seconds to sleep between sync retries
+  # Number of seconds to sleep between sync retries
   mattr_accessor :request_throttle
   self.request_throttle = 60
 

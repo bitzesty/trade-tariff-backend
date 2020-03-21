@@ -1,6 +1,6 @@
 class ChiefImporter
   module Strategies
-    class Mfcm < BaseStrategy
+    class MFCM < BaseStrategy
       map fe_tsmp: [0, :chief_date],
           msrgp_code: 2,
           msr_type: 3,
