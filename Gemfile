@@ -8,8 +8,8 @@ end
 ruby "~> 2.6.5"
 
 # Server
-gem "puma", "~> 3.4"
-gem "rails", "6.0.2.1"
+gem "puma", "~> 3.12.4"
+gem "rails", "6.0.2.2"
 gem "sinatra", "~> 2.0.2"
 
 # DB
@@ -28,7 +28,7 @@ gem "rubyzip", ">= 1.3.0"
 gem "redis-rails"
 gem "sidekiq", "<6"
 gem "sidekiq-scheduler", "~> 2.2.2"
-gem "redlock", "~> 1.0.1"
+gem "redlock", "~> 1.1.0"
 
 # Elasticsearch
 gem "elasticsearch", "6.1.0"
