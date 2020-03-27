@@ -32,7 +32,7 @@ module Api
         end
 
         def geographical_area_id
-          geographical_area.geographical_area_id
+          measure.geographical_area_id
         end
 
         def additional_code
