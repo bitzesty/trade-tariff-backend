@@ -9,9 +9,7 @@ module Api
         set_id :id
 
         attributes :id, :cas
-        attribute :name do |chemical|
-          chemical.name
-        end
+        attribute :name, &:name
 
         has_many :goods_nomenclatures, serializer: Api::V2::GoodsNomenclatures::GoodsNomenclatureListSerializer
       end
