@@ -9,10 +9,46 @@ module Api
       end
 
       def show
-        @chemical = Chemical.where(cas: params[:id]).take
+        @chemical = Chemical.first(cas: params[:id])
+        # ^ `params[:id]` is a CAS Number, e.g., '22199-08-2'
+
+        if @chemical.present?
+          render json: Api::V2::Chemicals::ChemicalSerializer.new(@chemical, object_serializer_options).serializable_hash
+        else
+          render_not_found
+        end
+      end
+
+      def search
+        @chemicals = Rails.cache.fetch(cache_id, expires_in: cache_expiry) do
+          search_service.perform.to_a
+        end
+
+        if @chemicals.present?
+          render json: Api::V2::Chemicals::ChemicalListSerializer.new(@chemicals, object_serializer_options.merge(serialization_meta)).serializable_hash
+        else
+          render_not_found
+        end
+      end
+
+      private
+
+      def search_service
+        @search_service ||= ChemicalSearchService.new(params, current_page, per_page)
+      end
+
+      def object_serializer_options
         options = {}
         options[:include] = %i[goods_nomenclatures chemical_names]
-        render json: Api::V2::Chemicals::ChemicalSerializer.new(@chemical, options).serializable_hash
+        options
+      end
+
+      def cache_id
+        "chemical-search-#{(params[:cas].presence || params[:name].presence)}"
+      end
+
+      def cache_expiry(seconds = nil)
+        seconds || TradeTariffBackend.seconds_till_6am
       end
     end
   end

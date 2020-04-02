@@ -9,4 +9,8 @@ class Chemical < Sequel::Model
   def goods_nomenclature_ids
     goods_nomenclatures.map(&:goods_nomenclature_sid)
   end
+
+  def chemical_name_ids
+    chemical_names.map(&:id)
+  end
 end

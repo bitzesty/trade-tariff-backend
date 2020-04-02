@@ -10,6 +10,9 @@ module Api
 
         attributes :id, :cas
         attribute :name, &:name
+
+        has_many :goods_nomenclatures, serializer: Api::V2::GoodsNomenclatures::GoodsNomenclatureListSerializer
+        has_many :chemical_names#, serializer: Api::V2::GoodsNomenclatures::GoodsNomenclatureListSerializer
       end
     end
   end
