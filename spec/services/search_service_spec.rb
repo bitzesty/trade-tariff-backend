@@ -225,14 +225,6 @@ describe SearchService do
 
           expect(result).to match_json_expression commodity_pattern(commodity)
         end
-
-        it 'returns endpoint and identifier if provided with CAS number' do
-          create(:chemicals_goods_nomenclatures, chemical_id: chemical.id, goods_nomenclature_sid: commodity.goods_nomenclature_sid).save
-          result = described_class.new(data_serializer, error_serializer, q: "cas #{chemical.cas}",
-                                    as_of: Date.current).to_json
-
-          expect(result).to match_json_expression commodity_pattern(commodity)
-        end
       end
 
       context 'non declarable' do
