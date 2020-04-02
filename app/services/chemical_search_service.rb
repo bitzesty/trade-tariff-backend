@@ -11,9 +11,7 @@ class ChemicalSearchService
   end
 
   def perform
-    result = fetch_by_cas || fetch_by_name
-
-    result
+    fetch_by_cas || fetch_by_name
   end
 
   private
@@ -21,14 +19,20 @@ class ChemicalSearchService
   def fetch_by_cas
     return unless cas
 
-    @chemicals = Chemical.where(cas: cas)
+    @chemicals = Rails.cache.fetch(cache_id, expires_in: cache_expiry) do
+      Chemical.where(cas: cas).all
+    end
+    Rails.cache.delete(cache_id) unless @chemicals.present?
     custom_paginator(@chemicals)
   end
 
   def fetch_by_name
     return unless name
 
-    @chemicals = ChemicalName.where(Sequel.like(:name, "%#{name}%")).map(&:chemical).uniq
+    @chemicals = Rails.cache.fetch(cache_id, expires_in: cache_expiry) do
+      ChemicalName.where(Sequel.like(:name, "%#{name}%")).map(&:chemical).uniq
+    end
+    Rails.cache.delete(cache_id) unless @chemicals.present?
     custom_paginator(@chemicals)
   end
 
@@ -43,5 +47,14 @@ class ChemicalSearchService
   def result_count(result)
     @pagination_record_count = result.count
     result
+  end
+
+  def cache_id
+    puts "chemical-search-#{(cas.presence || name.presence)}"
+    "chemical-search-#{(cas.presence || name.presence)}"
+  end
+
+  def cache_expiry(seconds = nil)
+    seconds || TradeTariffBackend.seconds_till_6am
   end
 end

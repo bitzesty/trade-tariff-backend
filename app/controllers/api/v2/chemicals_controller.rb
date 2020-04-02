@@ -20,10 +20,7 @@ module Api
       end
 
       def search
-        @chemicals = Rails.cache.fetch(cache_id, expires_in: cache_expiry) do
-          search_service.perform.to_a
-        end
-
+        @chemicals = search_service.perform
         if @chemicals.present?
           render json: Api::V2::Chemicals::ChemicalListSerializer.new(@chemicals, object_serializer_options.merge(serialization_meta)).serializable_hash
         else
@@ -41,14 +38,6 @@ module Api
         options = {}
         options[:include] = %i[goods_nomenclatures chemical_names]
         options
-      end
-
-      def cache_id
-        "chemical-search-#{(params[:cas].presence || params[:name].presence)}"
-      end
-
-      def cache_expiry(seconds = nil)
-        seconds || TradeTariffBackend.seconds_till_6am
       end
     end
   end
