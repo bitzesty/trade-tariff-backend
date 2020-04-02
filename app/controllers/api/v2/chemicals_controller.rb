@@ -3,9 +3,8 @@ module Api
     class ChemicalsController < ApiController
       def index
         @chemicals = Chemical.all
-        # @chemicals = Chemical.limit(1000).to_a
 
-        render json: Api::V2::Chemicals::ChemicalListSerializer.new(@chemicals).serializable_hash
+        render json: Api::V2::Chemicals::ChemicalSimpleListSerializer.new(@chemicals).serializable_hash
       end
 
       def show
