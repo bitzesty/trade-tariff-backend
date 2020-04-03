@@ -50,7 +50,6 @@ class ChemicalSearchService
   end
 
   def cache_id
-    puts "chemical-search-#{(cas.presence || name.presence)}"
     "chemical-search-#{(cas.presence || name.presence)}"
   end
 
