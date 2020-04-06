@@ -3,7 +3,6 @@ namespace :chemical do
   task import: :environment do
     ChemicalsGoodsNomenclatures.unrestrict_primary_key
 
-    # filepath = File.join(Rails.root, 'db', 'Annex_3.csv')
     filepath = File.join(Rails.root, 'db', 'Annex_6.csv')
     ods = File.open(filepath, 'r')
     
