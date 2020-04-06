@@ -12,7 +12,7 @@ class SearchService
                    find_commodity(query_string) || find_heading(query_string)
                  when /^[0-9]{11,12}$/
                    find_commodity(query_string)
-                 when /\Acas\s+.+\z/i
+                 when /\A(cas\s*)?(\d+-\d+-\d)\z/i
                    # A CAS number, in the format e.g., "178535-93-8", e.g. /\d+-\d+-\d/
                    find_by_chemical(query_string)
                  else

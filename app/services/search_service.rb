@@ -57,7 +57,10 @@ class SearchService
   def q=(term)
     # if search term has no letters extract the digits
     # and perform search with just the digits
-    @q = if /^(?!.*[A-Za-z]+).*$/.match?(term)
+    @q = if m = /\A(cas\s*)?(\d+-\d+-\d)\z/i.match(term)
+          # handle CAS search, with optional leading string "cas "
+          m[2]
+         elsif /^(?!.*[A-Za-z]+).*$/.match?(term)
            term.scan(/\d+/).join
          else
            # ignore [ and ] characters to avoid range searches
