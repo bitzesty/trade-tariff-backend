@@ -225,22 +225,6 @@ describe SearchService do
 
           expect(result).to match_json_expression commodity_pattern(commodity)
         end
-
-        it 'returns endpoint and identifier if provided with CAS number with the leading string "cas "' do
-          create(:chemicals_goods_nomenclatures, chemical_id: chemical.id, goods_nomenclature_sid: commodity.goods_nomenclature_sid).save
-          result = described_class.new(data_serializer, error_serializer, q: "cas #{chemical.cas}",
-                                    as_of: Date.current).to_json
-
-          expect(result).to match_json_expression commodity_pattern(commodity)
-        end
-
-        it 'returns endpoint and identifier if provided with CAS number only' do
-          create(:chemicals_goods_nomenclatures, chemical_id: chemical.id, goods_nomenclature_sid: commodity.goods_nomenclature_sid).save
-          result = described_class.new(data_serializer, error_serializer, q: chemical.cas,
-                                    as_of: Date.current).to_json
-
-          expect(result).to match_json_expression commodity_pattern(commodity)
-        end
       end
 
       context 'non declarable' do
@@ -292,6 +276,36 @@ describe SearchService do
 
           expect(result).to match_json_expression commodity_pattern(commodity2)
         end
+      end
+    end
+
+    context 'chemicals' do
+      let(:commodity) { create :commodity, :declarable, :with_heading, :with_indent }
+      let(:chemical)  { create :chemical, :with_name }
+      let(:relation)  { create :chemicals_goods_nomenclatures, chemical_id: chemical.id, goods_nomenclature_sid: commodity.goods_nomenclature_sid }
+
+      before { relation }
+
+      it 'returns endpoint and identifier if provided with CAS number with the leading string "cas "' do
+        result = described_class.new(
+          data_serializer,
+          error_serializer,
+          q: "cas #{chemical.cas}",
+          as_of: Date.current
+        ).to_json
+
+        expect(result).to match_json_expression commodity_pattern(commodity)
+      end
+
+      it 'returns endpoint and identifier if provided with CAS number only' do
+        result = described_class.new(
+          data_serializer,
+          error_serializer,
+          q: chemical.cas,
+          as_of: Date.current
+        ).to_json
+
+        expect(result).to match_json_expression commodity_pattern(commodity)
       end
     end
 

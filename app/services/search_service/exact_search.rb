@@ -78,7 +78,8 @@ class SearchService
     def find_by_chemical(query)
       matchdata = /\A(cas\s*)?(\d+-\d+-\d)\z/i.match(query)
       q = matchdata ? matchdata[2] : query.gsub(/\Acas\s+/i, '')
-      c = Chemical.join(:chemical_names, chemical_id: :id).where(cas: q).or(Sequel[:chemical_names][:name] => q).first
+      c = Chemical.first(cas: q)
+
       gns = c.goods_nomenclatures.map do |gn|
         ExactSearch.new(gn.goods_nomenclature_item_id, date).search!.results
       end
