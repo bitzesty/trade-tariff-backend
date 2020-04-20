@@ -17,7 +17,7 @@ TradeTariffBackend::DataMigrator.migration do
            https://www.gov.uk/government/publications/personal-protective-equipment-ppe-export-control-process/personal-protective-equipment-ppe-export-control-process
       </a>.
     </p>".squish
-  VALIDITY_START_DATE = Date.new(2020, 3, 14)
+  VALIDITY_START_DATE = Date.new(1971,12,31)
   FOOTNOTE_DESCRIPTION_PERIOD_SID = -219
 
   up do
