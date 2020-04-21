@@ -20,7 +20,7 @@ class ChemicalSearchService
     return unless cas
 
     @chemicals = Rails.cache.fetch(cache_id, expires_in: cache_expiry) do
-      Chemical.where(cas: cas).all
+      Chemical.where(Sequel.like(:cas, "%#{cas}%")).all
     end
     Rails.cache.delete(cache_id) unless @chemicals.present?
     custom_paginator(@chemicals)
