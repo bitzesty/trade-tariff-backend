@@ -16,7 +16,13 @@ class BaseSuggestionsService
           .distinct
           .order(Sequel.desc(:title))
           .map { |search_reference| handle_search_reference_record(search_reference)}
-    [commodities, search_references].flatten.compact
+
+    chemicals = Chemical
+          .select(:id, :cas)
+          .order(Sequel.desc(:cas))
+          .map { |chemical| handle_chemical_record(chemical) }
+
+    [commodities, search_references, chemicals].flatten.compact
   end
 
   protected
