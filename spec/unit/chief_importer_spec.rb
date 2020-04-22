@@ -4,7 +4,7 @@ require "chief_importer"
 describe ChiefImporter do
   describe ".relevant_tables" do
     it "contains chief tables same as in update files" do
-      expect(ChiefImporter.relevant_tables).to include(*%w(MFCM TAMF TAME COMM TBL9))
+      expect(ChiefImporter.relevant_tables).to eq(%w(MFCM TAMF TAME COMM TBL9))
 
       ChiefImporter.relevant_tables.each do |table|
         expect("ChiefImporter::Strategies::#{table}".constantize.new).to be_truthy
