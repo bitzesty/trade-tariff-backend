@@ -44,7 +44,8 @@ class MeasureConditionComponent < Sequel::Model
       measurement_unit: measurement_unit,
       measurement_unit_qualifier: measurement_unit_qualifier,
       currency: TradeTariffBackend.currency,
-      formatted: true
+      formatted: true,
+      excise: measure_condition.measure.excise?
     )
   end
 end
