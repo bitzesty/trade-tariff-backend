@@ -20,7 +20,7 @@ describe BuildIndexPageWorker do
           1,
           10
         )
-        sleep 1
+        sleep 2
         
         search_result = TradeTariffBackend.search_client.search q: 'test', index: TradeTariffBackend.search_index_for('search', commodity).name
       

@@ -5,7 +5,7 @@ describe Api::V2::FootnotesController, type: :controller do
 
   context 'footnotes search' do
 
-    let!(:footnote) { create :footnote }
+    let!(:footnote) { create :footnote, :national }
     let!(:footnote_description) { create :footnote_description, :with_period, footnote_type_id: footnote.footnote_type_id, footnote_id: footnote.footnote_id }
     let!(:measure) { create :measure }
     let!(:footnote_association_measure) { create :footnote_association_measure, footnote_type_id: footnote.footnote_type_id, footnote_id: footnote.footnote_id, measure_sid: measure.measure_sid }
@@ -101,7 +101,7 @@ describe Api::V2::FootnotesController, type: :controller do
     before do
       Sidekiq::Testing.inline! do
         TradeTariffBackend.cache_client.reindex
-        sleep(1)
+        sleep(2) # TODO: need to think about better ES rspec integration
       end
     end
 

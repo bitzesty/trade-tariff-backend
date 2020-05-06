@@ -2,12 +2,17 @@ require 'rails_helper'
 require 'chief_transformer'
 
 describe "CHIEF: VAT and Excises" do
-  before(:all) {
+  before(:all) do
     preload_standing_data
     create :base_regulation, base_regulation_id: 'IYY99990',
                              validity_start_date: Date.new(1971,12,31)
-  }
-  after(:all)  { clear_standing_data }
+  end
+  after(:all) { clear_standing_data }
+
+  # NOTE: We need to do a time travel because some factories are creating
+  # records with validity end/start date 15/20 years ago.
+  before(:each) { travel_to Date.new(2020, 1, 1) }
+  after(:each) { travel_back }
 
   # VAT/EXCISE measure types
   # Create Measure types used in transformations, so that validations would pass.

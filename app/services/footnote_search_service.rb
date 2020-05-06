@@ -3,7 +3,7 @@ class FootnoteSearchService
   attr_reader :current_page, :per_page, :pagination_record_count
 
   def initialize(attributes, current_page, per_page)
-    @as_of = Certificate.point_in_time
+    @as_of = Footnote.point_in_time
     @query = [{
       bool: {
         should: [
@@ -58,7 +58,7 @@ class FootnoteSearchService
   private
 
   def fetch
-    search_client = ::TradeTariffBackend.search_client
+    search_client = ::TradeTariffBackend.cache_client
     index = ::Cache::FootnoteIndex.new(TradeTariffBackend.search_namespace).name
     result = search_client.search index: index, body: { query: { constant_score: { filter: { bool: { must: @query } } } }, size: per_page, from: (current_page - 1) * per_page, sort: %w(footnote_type_id footnote_id) }
     @pagination_record_count = result&.hits&.total || 0
