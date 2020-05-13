@@ -10,12 +10,12 @@ ruby "~> 2.6.5"
 # Server
 gem "puma", "~> 3.12.4"
 gem "rails", "6.0.2.2"
-gem "sinatra", "~> 2.0.2"
+gem "sinatra", "~> 2.0.8", ">= 2.0.8.1"
 
 # DB
 gem 'pg', "~> 1.1", ">= 1.1.3"
 gem "sequel", "~> 5.16.0"
-gem "sequel-rails", "~> 1.0.0"
+gem "sequel-rails", "~> 1.0.1"
 
 # File uploads and AWS
 gem "aws-sdk", "~> 2"
@@ -25,8 +25,8 @@ gem "aws-sdk-rails", ">= 1.0.1"
 gem "rubyzip", ">= 1.3.0"
 
 # Background jobs
-gem "redis-rails"
-gem "sidekiq", "<6"
+gem "redis-rails", ">= 5.0.2"
+gem "sidekiq", "~> 6.0"
 gem "sidekiq-scheduler", "~> 2.2.2"
 gem "redlock", "~> 1.1.0"
 
@@ -37,10 +37,10 @@ gem "elasticsearch-extensions", "0.0.30"
 # Helpers
 gem "bootsnap", require: false
 gem "builder", "~> 3.2"
-gem "gds-sso", "~> 13", ">= 12.1.0"
+gem "gds-sso", "~> 13", ">= 13.6.0"
 gem "hashie", "~> 3.4"
 gem "holidays"
-gem "lograge", ">= 0.3.6"
+gem "lograge", ">= 0.11.0"
 gem "logstash-event"
 gem "multi_json", "~> 1.11"
 gem "scout_apm"
@@ -62,7 +62,7 @@ gem "tilt"
 # Printed PDF
 gem 'uktt', git: 'https://gitlab.bitzesty.com/open-source/uktt.git', branch: :master
 gem 'combine_pdf'
-gem 'sidekiq-batch'
+gem 'sidekiq-batch', '>= 0.1.5'
 
 group :production do
   gem "rails_12factor"
@@ -75,7 +75,7 @@ group :development do
 end
 
 group :development, :test do
-  gem "dotenv-rails", ">= 2.1.1"
+  gem "dotenv-rails", ">= 2.7.2"
   gem "pry-byebug"
   gem "pry-rails"
 end
