@@ -59,7 +59,7 @@ describe Api::V2::AdditionalCodesController, type: :controller do
             goods_nomenclature_sid: Integer,
             description: String,
             number_indents: Integer,
-            productline_suffix: String
+            producline_suffix: String
           }
         }],
         meta: {
