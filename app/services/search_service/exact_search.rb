@@ -78,18 +78,17 @@ class SearchService
     def find_by_chemical(query)
       matchdata = /\A(cas\s*)?(\d+-\d+-\d)\z/i.match(query)
       q = matchdata ? matchdata[2] : query.gsub(/\Acas\s+/i, '')
-      c = Chemical.first(cas: q)
 
-      gns = c.goods_nomenclatures.map do |gn|
-        ExactSearch.new(gn.goods_nomenclature_item_id, date).search!.results
+      if c = Chemical.first(cas: q)
+        gns = c.goods_nomenclatures.map do |gn|
+          ExactSearch.new(gn.goods_nomenclature_item_id, date).search!.results
+        end
+  
+        # Each Chemical should map to only one Goods Nomenclaure,
+        # but the database includes two chemicals that belong to more than one GN
+        # These "chemicals" are probably placeholders and are not really correct
+        return gns.first if gns.length == 1
       end
-
-      # Each Chemical should map to only one Goods Nomenclaure,
-      # but the database includes two chemicals that belong to more than one GN
-      # These "chemicals" are probably placeholders and are not really correct
-      return gns.first if gns.length == 1
-
-      nil
     end
   end
 end
