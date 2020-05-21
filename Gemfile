@@ -9,7 +9,7 @@ ruby "~> 2.6.5"
 
 # Server
 gem "puma", "~> 3.12.4"
-gem "rails", "6.0.2.2"
+gem "rails", ">= 6.0.3.1"
 gem "sinatra", "~> 2.0.2"
 
 # DB
@@ -26,7 +26,7 @@ gem "rubyzip", ">= 1.3.0"
 
 # Background jobs
 gem "redis-rails"
-gem "sidekiq", "<6"
+gem "sidekiq", "5.2.7"
 gem "sidekiq-scheduler", "~> 2.2.2"
 gem "redlock", "~> 1.1.0"
 
