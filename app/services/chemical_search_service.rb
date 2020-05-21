@@ -60,7 +60,7 @@ class ChemicalSearchService
   def cas_cleaned
     return unless @cas
 
-    if m = /\A(cas\s*.*?\s*)?(\d+-\d+-\d{1}).*\z/i.match(term)
+    if m = /\A(cas\s*.*?\s*)?(\d+-\d+-\d{1}).*\z/i.match(@cas)
       # ^ Extract the CAS number from a string
       # - may be just the CAS number alone, e.g. `10310-21-1`
       # - optional leading 'cas', with or without spaces after, e.g. `cas 10310-21-1`
