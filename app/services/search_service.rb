@@ -22,6 +22,7 @@ class SearchService
 
   include ActiveModel::Validations
   include ActiveModel::Conversion
+  include CustomRegex
 
   class EmptyQuery < StandardError
   end
@@ -55,22 +56,17 @@ class SearchService
   end
 
   def q=(term)
+    # use `cas_number_regex` to try to find a CAS number, then
     # if search term has no letters extract the digits
-    # and perform search with just the digits
-    @q = if m = /\A(cas\s*.*?\s*)?(\d+-\d+-\d{1}).*\z/i.match(term)
-          # ^ Extract the CAS number from the search term
-          # - may be just the CAS number alone, e.g. `10310-21-1`
-          # - optional leading 'cas', with or without spaces after, e.g. `cas 10310-21-1`
-          # - optional other text between the leading 'cas' and the CAS number. e.g. `cas rn 10310-21-1`
-          # - optional other text before and/or after the CAS number. e.g. `cas rn blah 10310-21-1foobar biz baz   other text`
-          # - additional digits after the CAS number are ignored. Note: CAS numbers always end in a dash, then a single digit (`-\d{1}`) e.g. `10310-21-1684984654687` is interpreted as `10310-21-1`
-           m[2]
-         elsif /^(?!.*[A-Za-z]+).*$/.match?(term)
-           term.scan(/\d+/).join
-         else
-           # ignore [ and ] characters to avoid range searches
-           term.to_s.gsub(/(\[|\])/, '')
-         end
+    # and perform search with just the digits (i.e., `no_alpha_regex`)
+    # otherwise, ignore [ and ] characters to avoid range searches
+    @q = if m = cas_number_regex.match(term)
+      m[2]
+    elsif no_alpha_regex.match?(term)
+      term.scan(/\d+/).join
+    else
+      term.to_s.gsub(ignore_brackets_regex, '')
+    end
   end
 
   def exact_match?
