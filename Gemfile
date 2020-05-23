@@ -5,7 +5,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-ruby "~> 2.6.5"
+ruby "~> 2.7.1"
 
 # Server
 gem "puma", "~> 3.12.6"
@@ -27,7 +27,7 @@ gem "rubyzip", ">= 1.3.0"
 # Background jobs
 gem "redis-rails"
 gem "sidekiq", "5.2.7"
-gem "sidekiq-scheduler", "~> 2.2.2"
+gem "sidekiq-scheduler", "~> 3.0.1"
 gem "redlock", "~> 1.1.0"
 
 # Elasticsearch
