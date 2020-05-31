@@ -70,7 +70,7 @@ describe Api::V2::ChemicalsController, type: :controller do
             goods_nomenclature_sid: Integer,
             description: String,
             number_indents: Integer,
-            productline_suffix: String,
+            producline_suffix: String,
             href: String,
           }
         }
@@ -126,7 +126,7 @@ describe Api::V2::ChemicalsController, type: :controller do
             goods_nomenclature_sid: Integer,
             description: String,
             number_indents: Integer,
-            productline_suffix: String,
+            producline_suffix: String,
             href: String
           }
         }

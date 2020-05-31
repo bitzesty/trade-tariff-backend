@@ -21,7 +21,7 @@ TradeTariffBackend::DataMigrator.migration do
   FOOTNOTE_DESCRIPTION_PERIOD_SID = -219
 
   up do
-    applicable { true }
+    applicable { false }
     apply {
       create_footnote
       create_footnote_description_period
