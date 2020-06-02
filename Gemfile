@@ -5,29 +5,29 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-ruby "~> 2.6.5"
+ruby "~> 2.7.1"
 
 # Server
-gem "puma", "~> 3.12.4"
-gem "rails", "6.0.2.2"
+gem "puma", "~> 3.12.6"
+gem "rails", ">= 6.0.3.1"
 gem "sinatra", "~> 2.0.2"
 
 # DB
 gem 'pg', "~> 1.1", ">= 1.1.3"
-gem "sequel", "~> 5.16.0"
+gem "sequel", "~> 5.22.0"
 gem "sequel-rails", "~> 1.0.0"
 
 # File uploads and AWS
-gem "aws-sdk", "~> 2"
-gem "aws-sdk-rails", ">= 1.0.1"
+gem "aws-sdk", "~> 3"
+gem "aws-sdk-rails", "~> 3"
 
 # File zip/unzipping
 gem "rubyzip", ">= 1.3.0"
 
 # Background jobs
 gem "redis-rails"
-gem "sidekiq", "<6"
-gem "sidekiq-scheduler", "~> 2.2.2"
+gem "sidekiq", "< 7"
+gem "sidekiq-scheduler", "~> 3.0.1"
 gem "redlock", "~> 1.1.0"
 
 # Elasticsearch
@@ -86,8 +86,8 @@ group :test do
   gem "fakefs", "~> 0.18.0", require: "fakefs/safe"
   gem "forgery"
   gem "json_expressions", "~> 0.9.0"
-  gem "rspec-rails", "~> 3.5.2"
+  gem "rspec-rails", "~> 3.8.0"
   gem "rspec_junit_formatter"
   gem "simplecov", "~> 0.15.0", require: false
-  gem "webmock", "~> 3.5.0"
+  gem "webmock", "~> 3.8.0"
 end

@@ -1,4 +1,6 @@
 class ChemicalSearchService
+  include CustomRegex
+
   attr_reader :cas, :name
   attr_reader :current_page, :per_page, :pagination_record_count
 
@@ -17,7 +19,7 @@ class ChemicalSearchService
   private
 
   def fetch_by_cas
-    return unless cas
+    return unless cas = cas_cleaned
 
     @chemicals = Rails.cache.fetch(cache_id, expires_in: cache_expiry) do
       Chemical.where(Sequel.like(:cas, "%#{cas}%")).all
@@ -50,10 +52,18 @@ class ChemicalSearchService
   end
 
   def cache_id
-    "chemical-search-#{(cas.presence || name.presence)}"
+    "chemical-search-#{(cas_cleaned.presence || name.presence)}"
   end
 
   def cache_expiry(seconds = nil)
     seconds || TradeTariffBackend.seconds_till_6am
+  end
+
+  def cas_cleaned
+    return unless @cas
+
+    if m = cas_number_regex.match(@cas)
+      m[2]
+    end
   end
 end
