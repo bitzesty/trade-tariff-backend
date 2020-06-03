@@ -53,6 +53,24 @@ test:
 include:
   - template: Code-Quality.gitlab-ci.yml
 
+snyk:
+  stage: test
+  before_script:
+    - sudo npm install -g snyk
+  script:
+    - sudo snyk auth $SNYK_API
+    - sudo snyk test --severity-threshold=high --file=Gemfile.lock --package-manager=rubygems
+  when: manual
+
+snyk_full:
+  stage: test  
+  before_script:
+    - sudo npm install -g snyk
+  script:
+    - sudo snyk auth $SNYK_API
+    - sudo snyk test --file=Gemfile.lock --package-manager=rubygems
+  when: manual
+
 deploy_dev:
   stage: deploy
   resource_group: paas
