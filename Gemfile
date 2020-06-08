@@ -64,10 +64,6 @@ gem 'uktt', git: 'https://gitlab.bitzesty.com/open-source/uktt.git', branch: :ma
 gem 'combine_pdf'
 gem 'sidekiq-batch'
 
-group :production do
-  gem "rails_12factor"
-end
-
 group :development do
   gem "foreman"
   gem "govuk-lint"
