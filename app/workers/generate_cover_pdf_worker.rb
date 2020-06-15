@@ -59,9 +59,7 @@ class GenerateCoverPdfWorker
 
   def queue_for_upload
     if File.exist?(@pdf_file_path)
-      batch.jobs do
-        UploadChapterPdfWorker.perform_async(@pdf_file_path, @cur)
-      end
+      UploadChapterPdfWorker.new.perform(@pdf_file_path, @cur)
     else
       logger.error "#{@pdf_file_path} not found"
     end
