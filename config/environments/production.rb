@@ -61,8 +61,8 @@ Rails.application.configure do
   config.lograge.ignore_actions = ['HealthcheckController#index']
 
   # Rails cache store
-  # PaasResolver returns url and db
-  config.cache_store = :redis_store, PaasResolver.get_redis_config.merge({
+  # PaasConfig returns url and db
+  config.cache_store = :redis_store, PaasConfig.redis.merge({
     expires_in: 1.day,
     namespace:  ENV["GOVUK_APP_DOMAIN"],
     pool_size:  Integer(ENV["MAX_THREADS"] || 5)
