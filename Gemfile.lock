@@ -1,6 +1,6 @@
 GIT
   remote: https://gitlab.bitzesty.com/open-source/uktt.git
-  revision: 9af3f991ac79ccd3603aaf8f463532f3c9db6b5d
+  revision: 71f5ba09103d2d96810401521693161b1389a9f9
   branch: master
   specs:
     uktt (0.2.13)
