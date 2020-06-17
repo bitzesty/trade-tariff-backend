@@ -1,7 +1,7 @@
-module PaasResolver
+module PaasConfig
   module_function
 
-  def get_redis_config
+  def redis
     url = begin
       # TODO: !Important
       # need to fetch by service name if we use multiple redis services
@@ -13,7 +13,7 @@ module PaasResolver
     { url: url, db: 0, id: nil }
   end
 
-  def get_elasticsearch_config
+  def elasticsearch
     url = begin
       # TODO: !Important
       # need to fetch by service name if we use multiple elasticsearch services
@@ -23,5 +23,11 @@ module PaasResolver
     end
 
     { url: url }
+  end
+
+  def space
+    JSON.parse(ENV['VCAP_APPLICATION'])['space_name']
+  rescue
+    Rails.env
   end
 end

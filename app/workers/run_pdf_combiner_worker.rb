@@ -91,7 +91,7 @@ class RunPdfCombinerWorker
     def pdf_generation_report(subject, message, options)
       @options = options
       @message = message
-      mail subject: subject
+      mail subject: "[#{subject_prefix}] #{subject}"
     end
   end
 end

@@ -11,6 +11,8 @@ common: &defaults
   # - Valid Options: debug, info, warn, error
   # log_level: debug
   log_file_path: STDOUT
+  
+  ignore: ['/healthcheck']
 
   # name: Application name in APM Web UI
   # - Default: the application names comes from the Rails or Sinatra class name
