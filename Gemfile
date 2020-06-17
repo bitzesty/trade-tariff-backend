@@ -9,7 +9,7 @@ ruby "~> 2.7.1"
 
 # Server
 gem "puma", "~> 3.12.6"
-gem "rails", ">= 6.0.3.1"
+gem "rails", ">= 6.0.3.2"
 gem "sinatra", "~> 2.0.2"
 
 # DB
