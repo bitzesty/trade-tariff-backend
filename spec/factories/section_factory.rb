@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :section do
     position      { Forgery(:basic).number }
-    id            { position.to_i }
+    sequence(:id) { |n| n }
     numeral       { %w[I II III].sample }
     title         { Forgery(:basic).text }
     created_at    { Time.now }
