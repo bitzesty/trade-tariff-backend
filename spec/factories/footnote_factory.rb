@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:footnote_sid) { |n| n }
 
   factory :footnote do
@@ -14,19 +14,19 @@ FactoryGirl.define do
     validity_end_date       { nil }
 
     after(:build) { |ftn, _evaluator|
-      FactoryGirl.create(:footnote_type, footnote_type_id: ftn.footnote_type_id,
+      FactoryBot.create(:footnote_type, footnote_type_id: ftn.footnote_type_id,
                                          validity_start_date: ftn.validity_start_date - 1.day)
-      ftn_desc_period = FactoryGirl.create(:footnote_description_period, footnote_type_id: ftn.footnote_type_id,
+      ftn_desc_period = FactoryBot.create(:footnote_description_period, footnote_type_id: ftn.footnote_type_id,
                                                        footnote_id: ftn.footnote_id,
                                                        validity_start_date: ftn.validity_start_date)
-      FactoryGirl.create(:footnote_description, footnote_type_id: ftn.footnote_type_id,
+      FactoryBot.create(:footnote_description, footnote_type_id: ftn.footnote_type_id,
                                                 footnote_id: ftn.footnote_id,
                                                 footnote_description_period_sid: ftn_desc_period.footnote_description_period_sid)
     }
 
     trait :with_gono_association do
       after(:create) { |ftn, evaluator|
-        FactoryGirl.create(:footnote_association_goods_nomenclature, goods_nomenclature_sid: evaluator.goods_nomenclature_sid,
+        FactoryBot.create(:footnote_association_goods_nomenclature, goods_nomenclature_sid: evaluator.goods_nomenclature_sid,
                                                                      footnote_id: ftn.footnote_id,
                                                                      footnote_type: ftn.footnote_type_id,
                                                                      validity_start_date: evaluator.valid_at,
@@ -64,7 +64,7 @@ FactoryGirl.define do
 
     trait :with_period do
       after(:create) { |ftn_description, evaluator|
-        FactoryGirl.create(:footnote_description_period, footnote_description_period_sid: ftn_description.footnote_description_period_sid,
+        FactoryBot.create(:footnote_description_period, footnote_description_period_sid: ftn_description.footnote_description_period_sid,
                                                                 footnote_id: ftn_description.footnote_id,
                                                                 footnote_type_id: ftn_description.footnote_type_id,
                                                                 validity_start_date: evaluator.valid_at,

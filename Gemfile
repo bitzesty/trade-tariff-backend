@@ -72,18 +72,16 @@ end
 
 group :development, :test do
   gem "dotenv-rails", ">= 2.1.1"
-  gem "pry-byebug"
-  gem "pry-rails"
 end
 
 group :test do
   gem "database_cleaner"
-  gem "factory_girl_rails", "~> 4.8.0", require: false
+  gem "factory_bot_rails", require: false
   gem "fakefs", "~> 0.18.0", require: "fakefs/safe"
   gem "forgery"
   gem "json_expressions", "~> 0.9.0"
-  gem "rspec-rails", "~> 3.8.0"
+  gem "rspec-rails"
   gem "rspec_junit_formatter"
-  gem "simplecov", "~> 0.15.0", require: false
-  gem "webmock", "~> 3.8.0"
+  gem "simplecov", "~> 0.18", require: false
+  gem "webmock"
 end

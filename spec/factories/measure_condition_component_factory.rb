@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:measure_condition_component) { |n| n }
 
   factory :measure_condition_component do

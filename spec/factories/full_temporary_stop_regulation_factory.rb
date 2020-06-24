@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :fts_regulation, class: FullTemporaryStopRegulation do
     full_temporary_stop_regulation_role { Forgery(:basic).number }
     full_temporary_stop_regulation_id   { Forgery(:basic).text(exactly: 8) }

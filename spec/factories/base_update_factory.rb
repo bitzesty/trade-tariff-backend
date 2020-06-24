@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :base_update, class: TariffSynchronizer::BaseUpdate do
     transient do
       example_date { Forgery(:date).date }
