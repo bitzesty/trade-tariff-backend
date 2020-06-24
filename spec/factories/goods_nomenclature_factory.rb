@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:goods_nomenclature_sid) { |n| n }
   sequence(:goods_nomenclature_group_id, LoopingSequence.lower_a_to_upper_z, &:value)
   sequence(:goods_nomenclature_group_type, LoopingSequence.lower_a_to_upper_z, &:value)
@@ -18,7 +18,7 @@ FactoryGirl.define do
     validity_end_date   { nil }
 
     after(:build) { |gono, evaluator|
-      FactoryGirl.create(:goods_nomenclature_indent, goods_nomenclature_sid: gono.goods_nomenclature_sid,
+      FactoryBot.create(:goods_nomenclature_indent, goods_nomenclature_sid: gono.goods_nomenclature_sid,
                                                      validity_start_date: gono.validity_start_date,
                                                      validity_end_date: gono.validity_end_date,
                                                      number_indents: evaluator.indents)
@@ -52,7 +52,7 @@ FactoryGirl.define do
 
     trait :with_description do
       before(:create) { |gono, evaluator|
-        FactoryGirl.create(:goods_nomenclature_description, goods_nomenclature_sid: gono.goods_nomenclature_sid,
+        FactoryBot.create(:goods_nomenclature_description, goods_nomenclature_sid: gono.goods_nomenclature_sid,
                                                             goods_nomenclature_item_id: gono.goods_nomenclature_item_id,
                                                             validity_start_date: gono.validity_start_date,
                                                             validity_end_date: gono.validity_end_date,
@@ -77,7 +77,7 @@ FactoryGirl.define do
 
     trait :with_indent do
       after(:create) { |commodity, evaluator|
-        FactoryGirl.create(:goods_nomenclature_indent,
+        FactoryBot.create(:goods_nomenclature_indent,
                            goods_nomenclature_sid: commodity.goods_nomenclature_sid,
                            goods_nomenclature_item_id: commodity.goods_nomenclature_item_id,
                            validity_start_date: commodity.validity_start_date,
@@ -89,13 +89,13 @@ FactoryGirl.define do
 
     trait :with_chapter do
       after(:create) { |commodity, _evaluator|
-        FactoryGirl.create(:chapter, :with_section, :with_note, goods_nomenclature_item_id: commodity.chapter_id.to_s)
+        FactoryBot.create(:chapter, :with_section, :with_note, goods_nomenclature_item_id: commodity.chapter_id.to_s)
       }
     end
 
     trait :with_heading do
       after(:create) { |commodity, _evaluator|
-        FactoryGirl.create(:heading, goods_nomenclature_item_id: "#{commodity.goods_nomenclature_item_id.first(4)}000000")
+        FactoryBot.create(:heading, goods_nomenclature_item_id: "#{commodity.goods_nomenclature_item_id.first(4)}000000")
       }
     end
   end
@@ -115,7 +115,7 @@ FactoryGirl.define do
 
     trait :non_declarable do
       after(:create) { |heading, _evaluator|
-        FactoryGirl.create(:goods_nomenclature, :with_description,
+        FactoryBot.create(:goods_nomenclature, :with_description,
                                                 :with_indent,
                                                 goods_nomenclature_item_id: "#{heading.short_code}#{6.times.map { Random.rand(9) }.join}")
       }
@@ -123,7 +123,7 @@ FactoryGirl.define do
 
     trait :with_chapter do
       after(:create) { |heading, _evaluator|
-        FactoryGirl.create(:chapter, :with_section,
+        FactoryBot.create(:chapter, :with_section,
                                      :with_note,
                                      :with_description,
                                      :with_guide,
@@ -170,7 +170,7 @@ FactoryGirl.define do
     goods_nomenclature_description_period_sid { generate(:sid) }
 
     before(:create) { |gono_description, evaluator|
-      FactoryGirl.create(:goods_nomenclature_description_period, goods_nomenclature_description_period_sid: gono_description.goods_nomenclature_description_period_sid,
+      FactoryBot.create(:goods_nomenclature_description_period, goods_nomenclature_description_period_sid: gono_description.goods_nomenclature_description_period_sid,
                                                               goods_nomenclature_sid: gono_description.goods_nomenclature_sid,
                                                               goods_nomenclature_item_id: gono_description.goods_nomenclature_item_id,
                                                               validity_start_date: evaluator.validity_start_date,

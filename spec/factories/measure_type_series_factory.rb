@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:measure_type_series_id, LoopingSequence.lower_a_to_upper_z, &:value)
 
   factory :measure_type_series do

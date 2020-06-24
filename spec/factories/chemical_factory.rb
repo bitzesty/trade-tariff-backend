@@ -1,10 +1,11 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :chemical do
     cas { "0-#{Forgery(:basic).number}-0" }
+    sequence(:id) { |n| n }
 
     trait :with_name do
       after(:create) { |chemical, _evaluator|
-        FactoryGirl.create(:chemical_name, chemical_id: chemical.id)
+        FactoryBot.create(:chemical_name, chemical_id: chemical.id)
       }
     end
   end

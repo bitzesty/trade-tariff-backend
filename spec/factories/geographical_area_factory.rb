@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:geographical_area_sid) { |n| n }
   sequence(:geographical_area_id)  { |n| n }
 
@@ -25,7 +25,7 @@ FactoryGirl.define do
     end
 
     after(:build) { |geographical_area, _evaluator|
-      FactoryGirl.create(:geographical_area_description, :with_period,
+      FactoryBot.create(:geographical_area_description, :with_period,
                                                          geographical_area_id: geographical_area.geographical_area_id,
                                                          geographical_area_sid: geographical_area.geographical_area_sid,
                                                          valid_at: geographical_area.validity_start_date,
@@ -58,7 +58,7 @@ FactoryGirl.define do
 
     trait :with_period do
       after(:create) { |ga_description, evaluator|
-        FactoryGirl.create(:geographical_area_description_period, geographical_area_description_period_sid: ga_description.geographical_area_description_period_sid,
+        FactoryBot.create(:geographical_area_description_period, geographical_area_description_period_sid: ga_description.geographical_area_description_period_sid,
                                                                 geographical_area_sid: ga_description.geographical_area_sid,
                                                                 geographical_area_id: ga_description.geographical_area_id,
                                                                 validity_start_date: evaluator.valid_at,
