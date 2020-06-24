@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :publication_sigle do
     code_type_id       { Forgery(:basic).text(exactly: 2) }
     code               { Forgery(:basic).text(exactly: 2) }

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :rollback do
     date { Date.current }
     reason { SecureRandom.hex }

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:quota_order_number_sid) { |n| n }
   sequence(:quota_order_number_id) do
     "09" + Forgery(:basic).number(at_least: 5000, at_most: 9999).to_s

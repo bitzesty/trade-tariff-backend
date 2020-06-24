@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :section do
     position      { Forgery(:basic).number }
     numeral       { %w[I II III].sample }
@@ -8,7 +8,7 @@ FactoryGirl.define do
 
     trait :with_note do
       after(:create) { |section, _evaluator|
-        FactoryGirl.create(:section_note, section_id: section.id)
+        FactoryBot.create(:section_note, section_id: section.id)
       }
     end
   end

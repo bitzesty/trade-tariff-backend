@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :response, class: TariffSynchronizer::Response do
     response_code { [200, 404, 403].sample }
     content { Forgery(:basic).text }

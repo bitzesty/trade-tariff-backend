@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :measurement do
     measurement_unit_code           { Forgery(:basic).text(exactly: 2) }
     measurement_unit_qualifier_code { generate(:measurement_unit_qualifier_code) }

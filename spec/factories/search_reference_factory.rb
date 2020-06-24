@@ -1,7 +1,7 @@
 require 'chief_transformer'
 require 'tariff_synchronizer'
 
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:sid) { |n| n }
 
   factory :search_reference do

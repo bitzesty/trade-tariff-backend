@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:export_refund_nomenclature_sid) { |n| n }
 
   factory :export_refund_nomenclature do
@@ -16,7 +16,7 @@ FactoryGirl.define do
 
     trait :with_indent do
       after(:create) { |gono, evaluator|
-        FactoryGirl.create(:export_refund_nomenclature_indent, export_refund_nomenclature_sid: gono.export_refund_nomenclature_sid,
+        FactoryBot.create(:export_refund_nomenclature_indent, export_refund_nomenclature_sid: gono.export_refund_nomenclature_sid,
                                                                number_export_refund_nomenclature_indents: evaluator.indents)
       }
     end
@@ -50,7 +50,7 @@ FactoryGirl.define do
     export_refund_nomenclature_description_period_sid { generate(:sid) }
 
     after(:create) { |gono_description, evaluator|
-      FactoryGirl.create(:export_refund_nomenclature_description_period, export_refund_nomenclature_description_period_sid: gono_description.export_refund_nomenclature_description_period_sid,
+      FactoryBot.create(:export_refund_nomenclature_description_period, export_refund_nomenclature_description_period_sid: gono_description.export_refund_nomenclature_description_period_sid,
                                                               export_refund_nomenclature_sid: gono_description.export_refund_nomenclature_sid,
                                                               goods_nomenclature_item_id: gono_description.goods_nomenclature_item_id,
                                                               validity_start_date: evaluator.valid_at,

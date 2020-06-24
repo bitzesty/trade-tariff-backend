@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:complete_abrogation_regulation_sid) { |n| n }
 
   factory :complete_abrogation_regulation do
