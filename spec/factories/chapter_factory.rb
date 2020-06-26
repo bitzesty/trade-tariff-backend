@@ -1,10 +1,10 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :chapter, parent: :goods_nomenclature, class: Chapter do
     goods_nomenclature_item_id { "#{2.times.map { Random.rand(9) }.join}00000000" }
 
     trait :with_section do
       after(:create) { |chapter, _evaluator|
-        section = FactoryGirl.create(:section)
+        section = FactoryBot.create(:section)
         chapter.add_section section
         chapter.save
       }
@@ -12,13 +12,13 @@ FactoryGirl.define do
 
     trait :with_note do
       after(:create) { |chapter, _evaluator|
-        FactoryGirl.create(:chapter_note, chapter_id: chapter.to_param)
+        FactoryBot.create(:chapter_note, chapter_id: chapter.to_param)
       }
     end
 
     trait :with_guide do
       after(:create) { |chapter, _evaluator|
-        guide = FactoryGirl.create(:chapter_guide)
+        guide = FactoryBot.create(:chapter_guide)
         chapter.add_guide guide
         chapter.save
       }

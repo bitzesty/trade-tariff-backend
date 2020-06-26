@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:condition_code, LoopingSequence.lower_a_to_upper_z, &:value)
 
   factory :measure_condition_code do

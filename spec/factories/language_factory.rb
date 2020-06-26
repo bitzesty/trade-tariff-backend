@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:language_id) { |n| n }
 
   factory :language_description do

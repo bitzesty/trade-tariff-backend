@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :measurement_unit_qualifier do
     measurement_unit_qualifier_code { generate(:measurement_unit_qualifier_code) }
     validity_start_date { Date.current.ago(3.years) }

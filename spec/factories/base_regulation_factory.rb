@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:base_regulation_sid) { |n| n }
 
   factory :base_regulation do
@@ -10,7 +10,7 @@ FactoryGirl.define do
 
     trait :abrogated do
       after(:build) { |br, _evaluator|
-        FactoryGirl.create(:complete_abrogation_regulation, complete_abrogation_regulation_id: br.base_regulation_id,
+        FactoryBot.create(:complete_abrogation_regulation, complete_abrogation_regulation_id: br.base_regulation_id,
                                                             complete_abrogation_regulation_role: br.base_regulation_role)
       }
     end
