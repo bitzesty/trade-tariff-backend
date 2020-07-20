@@ -46,7 +46,8 @@ module HeadingService
                                'import_measures.geographical_area.contained_geographical_areas',
                                'import_measures.excluded_geographical_areas',
                                'import_measures.footnotes', 'import_measures.additional_code',
-                               'import_measures.export_refund_nomenclature',
+                               'import_measures.export_refund_nomenclature', 'import_measures.measure_components',
+                               'import_measures.national_measurement_units',
                                'import_measures.order_number', 'import_measures.order_number.definition',
                                :export_measures, 'export_measures.duty_expression', 'export_measures.measure_type',
                                'export_measures.legal_acts', 'export_measures.suspending_regulation',
@@ -54,7 +55,8 @@ module HeadingService
                                'export_measures.geographical_area.contained_geographical_areas',
                                'export_measures.excluded_geographical_areas',
                                'export_measures.footnotes', 'export_measures.additional_code',
-                               'export_measures.export_refund_nomenclature',
+                               'export_measures.export_refund_nomenclature', 'export_measures.measure_components',
+                               'export_measures.national_measurement_units',
                                'export_measures.order_number', 'export_measures.order_number.definition',]
           Api::V2::Headings::DeclarableHeadingSerializer.new(presenter, options).serializable_hash
         end

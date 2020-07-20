@@ -4,8 +4,6 @@ module Api
       class CommoditySerializer
         include FastJsonapi::ObjectSerializer
 
-        cache_options enabled: true, cache_length: 12.hours
-
         set_type :commodity
 
         set_id :goods_nomenclature_sid

@@ -61,8 +61,9 @@ module Api
                                'export_measures.excluded_geographical_areas',
                                'export_measures.footnotes', 'export_measures.additional_code',
                                'export_measures.order_number', 'export_measures.order_number.definition',]
-            Api::V2::Commodities::CommoditySerializer.new(presenter, options).serializable_hash
-          end
+          Api::V2::Commodities::CommoditySerializer.new(presenter, options).serializable_hash
+        end
+
         render json: serializable_hash
       end
 
