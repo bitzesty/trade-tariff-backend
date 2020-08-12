@@ -45,8 +45,5 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  # Configure Rails.logger to log to both STDOUT and development.log file.
   config.log_level = :info
-  file_logger = Logger.new(Rails.root.join("log", "development.log"))
-  config.logger = file_logger.extend(ActiveSupport::Logger.broadcast(Logger.new(STDOUT)))
 end
