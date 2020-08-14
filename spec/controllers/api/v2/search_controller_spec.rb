@@ -59,19 +59,28 @@ describe Api::V2::SearchController, "POST #search" do
     end
   end
 
-  describe 'errors' do
+  describe 'null match' do
     let(:pattern) {
       {
-        errors: [
-          {
-            title: 'q',
-            detail: String,
-          },
-          {
-            title: 'as_of',
-            detail: String,
+        data: {
+          id: String,
+          type: 'null_search',
+          attributes: {
+            type: 'null_match',
+            reference_match: {
+              commodities: [],
+              headings: [],
+              chapters: [],
+              sections: []
+            },
+            goods_nomenclature_match: {
+              commodities: [],
+              headings: [],
+              chapters: [],
+              sections: []
+            }
           }
-        ]
+        }
       }
     }
 
