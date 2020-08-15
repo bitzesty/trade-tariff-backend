@@ -13,6 +13,10 @@ module CustomRegex
     /^(?!.*[A-Za-z]+).*$/
   end
 
+  def digit_regex
+    /\d+/
+  end
+
   def ignore_brackets_regex
     # ignore [ and ] characters, e.g., to avoid range searches
     /(\[|\])/
