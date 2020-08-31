@@ -1,7 +1,7 @@
 module Api
   module Admin
     class RollbackSerializer
-      include FastJsonapi::ObjectSerializer
+      include JSONAPI::Serializer
 
       set_type :rollback
 

@@ -2,7 +2,7 @@ module Api
   module V2
     module Certificates
       class CertificateTypeSerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
 
         set_type :certificate_type
 

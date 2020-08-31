@@ -1,7 +1,7 @@
 module Api
   module V2
     class FuzzySearchSerializer
-      include FastJsonapi::ObjectSerializer
+      include JSONAPI::Serializer
 
       set_type :fuzzy_search
 

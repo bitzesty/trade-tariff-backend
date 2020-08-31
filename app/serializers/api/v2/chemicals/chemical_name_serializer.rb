@@ -2,7 +2,7 @@ module Api
   module V2
     module Chemicals
       class ChemicalNameSerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
 
         attributes :name, :chemical_id
       end

@@ -2,7 +2,7 @@ module Api
   module V2
     module Chapters
       class ChapterSerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
 
         set_type :chapter
 

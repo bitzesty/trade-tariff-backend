@@ -2,7 +2,7 @@ module Api
   module V2
     module Commodities
       class AncestorsSerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
 
         set_type :commodity
 

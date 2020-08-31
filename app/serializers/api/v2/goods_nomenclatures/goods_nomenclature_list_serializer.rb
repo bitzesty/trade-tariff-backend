@@ -2,7 +2,7 @@ module Api
   module V2
     module GoodsNomenclatures
       class GoodsNomenclatureListSerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
 
         set_type :goods_nomenclature
         set_id :goods_nomenclature_sid

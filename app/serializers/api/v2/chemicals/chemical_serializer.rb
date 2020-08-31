@@ -2,7 +2,7 @@ module Api
   module V2
     module Chemicals
       class ChemicalSerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
 
         set_type :chemical
 

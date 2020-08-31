@@ -43,7 +43,7 @@ module Api
           ).validate!
 
           presenter = Api::V2::Commodities::CommodityPresenter.new(@commodity, @measures, @commodity_cache_key)
-          options = {}
+          options = { is_collection: false }
           options[:include] = [:section, :chapter, 'chapter.guides', :heading, :ancestors, :footnotes,
                                :import_measures, 'import_measures.duty_expression', 'import_measures.measure_type',
                                'import_measures.legal_acts', 'import_measures.suspending_regulation',

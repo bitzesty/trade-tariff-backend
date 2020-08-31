@@ -11,7 +11,7 @@ module Api
         # id is a position
         @section = Section.where(position: params[:id]).take
 
-        options = {}
+        options = { is_collection: false }
         options[:include] = [:chapters, :section_note]
         render json: Api::Admin::Sections::SectionSerializer.new(@section, options).serializable_hash
       end

@@ -2,7 +2,7 @@ module Api
   module V2
     module Measures
       class GeographicalAreaSerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
 
         set_type :geographical_area
 

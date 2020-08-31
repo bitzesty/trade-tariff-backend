@@ -1,7 +1,7 @@
 module Api
   module V2
     class PrintSerializer
-      include FastJsonapi::ObjectSerializer
+      include JSONAPI::Serializer
       attributes :url, :date
     end
   end
