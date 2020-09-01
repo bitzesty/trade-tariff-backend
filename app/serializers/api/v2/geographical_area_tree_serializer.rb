@@ -1,7 +1,7 @@
 module Api
   module V2
     class GeographicalAreaTreeSerializer
-      include FastJsonapi::ObjectSerializer
+      include JSONAPI::Serializer
 
       set_id :id
 

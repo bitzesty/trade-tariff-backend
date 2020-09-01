@@ -6,7 +6,7 @@ module Api
       before_action :find_heading, only: [:show, :changes]
 
       def show
-        options = {}
+        options = { is_collection: false }
         options[:include] = [:commodities, :chapter]
 
         render json: Api::Admin::Headings::HeadingSerializer.new(@heading, options).serializable_hash

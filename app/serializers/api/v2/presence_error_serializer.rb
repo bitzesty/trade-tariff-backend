@@ -1,7 +1,7 @@
 module Api
   module V2
     class PresenceErrorSerializer
-      include FastJsonapi::ObjectSerializer
+      include JSONAPI::Serializer
 
       set_type :presence_error
 

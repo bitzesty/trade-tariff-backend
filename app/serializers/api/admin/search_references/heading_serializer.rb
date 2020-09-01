@@ -2,7 +2,7 @@ module Api
   module Admin
     module SearchReferences
       class HeadingSerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
 
         set_type :heading
 

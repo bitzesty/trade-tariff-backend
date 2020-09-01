@@ -2,7 +2,7 @@ module Api
   module V2
     module Changes
       class MeasureTypeSerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
 
         set_type :measure_type
 

@@ -2,7 +2,7 @@ module Api
   module V2
     module Measures
       class NationalMeasurementUnitSerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
 
         set_type :national_measurement_unit
 

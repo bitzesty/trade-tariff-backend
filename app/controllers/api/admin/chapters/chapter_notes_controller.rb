@@ -10,7 +10,7 @@ module Api
 
           raise Sequel::RecordNotFound if chapter_note.blank?
 
-          render json: Api::Admin::Chapters::ChapterNoteSerializer.new(chapter_note).serializable_hash
+          render json: Api::Admin::Chapters::ChapterNoteSerializer.new(chapter_note, { is_collection: false }).serializable_hash
         end
 
         def create
@@ -18,7 +18,7 @@ module Api
 
           if chapter_note.save(raise_on_failure: false)
             response.headers['Location'] = api_chapter_chapter_note_url(chapter)
-            render json: Api::Admin::Chapters::ChapterNoteSerializer.new(chapter_note).serializable_hash, status: :created
+            render json: Api::Admin::Chapters::ChapterNoteSerializer.new(chapter_note, { is_collection: false }).serializable_hash, status: :created
           else
             render json: Api::Admin::Chapters::ChapterNoteSerializer.new(chapter_note).serialized_errors, status: :unprocessable_entity
           end
@@ -29,7 +29,7 @@ module Api
           chapter_note.set(chapter_note_params[:attributes])
 
           if chapter_note.save(raise_on_failure: false)
-            render json: Api::Admin::Chapters::ChapterNoteSerializer.new(chapter_note).serializable_hash, status: :ok
+            render json: Api::Admin::Chapters::ChapterNoteSerializer.new(chapter_note, { is_collection: false }).serializable_hash, status: :ok
           else
             render json: Api::Admin::Chapters::ChapterNoteSerializer.new(chapter_note).serialized_errors, status: :unprocessable_entity
           end
