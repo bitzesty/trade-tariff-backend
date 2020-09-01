@@ -17,7 +17,7 @@ module Api
                                                              :goods_nomenclature_indents)
                                                       .all).root_entries
 
-        options = {}
+        options = { is_collection: false }
         options[:include] = [:section, :guides, :headings, 'headings.children']
         presenter = Api::V2::Chapters::ChapterPresenter.new(@chapter, root_headings)
         render json: Api::V2::Chapters::ChapterSerializer.new(presenter, options).serializable_hash

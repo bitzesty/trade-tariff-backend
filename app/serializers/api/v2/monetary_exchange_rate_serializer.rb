@@ -1,7 +1,7 @@
 module Api
   module V2
     class MonetaryExchangeRateSerializer
-      include FastJsonapi::ObjectSerializer
+      include JSONAPI::Serializer
 
       set_type :monetary_exchange_rate
 

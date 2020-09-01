@@ -12,7 +12,7 @@ module Api
       def show
         @footnote = Footnote.national.with_pk!(footnote_pk)
 
-        render json: Api::Admin::FootnoteSerializer.new(@footnote).serializable_hash
+        render json: Api::Admin::FootnoteSerializer.new(@footnote, { is_collection: false }).serializable_hash
       end
 
       def update
@@ -22,7 +22,7 @@ module Api
           footnote_description.save
         end
 
-        render json: Api::Admin::FootnoteSerializer.new(@footnote).serializable_hash
+        render json: Api::Admin::FootnoteSerializer.new(@footnote, { is_collection: false }).serializable_hash
       end
 
       private

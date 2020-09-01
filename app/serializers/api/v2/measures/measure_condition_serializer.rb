@@ -2,7 +2,7 @@ module Api
   module V2
     module Measures
       class MeasureConditionSerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
 
         set_type :measure_condition
 

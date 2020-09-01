@@ -1,5 +1,5 @@
 class Api::V2::Chapters::HeadingLeafSerializer
-  include FastJsonapi::ObjectSerializer
+  include JSONAPI::Serializer
   
   set_type :heading
   

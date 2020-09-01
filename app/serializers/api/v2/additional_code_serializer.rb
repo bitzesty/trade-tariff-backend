@@ -1,7 +1,7 @@
 module Api
   module V2
     class AdditionalCodeSerializer
-      include FastJsonapi::ObjectSerializer
+      include JSONAPI::Serializer
 
       set_type :additional_code
 

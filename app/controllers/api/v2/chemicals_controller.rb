@@ -12,7 +12,7 @@ module Api
         # ^ `params[:id]` is a CAS Number, e.g., '22199-08-2'
 
         if @chemical.present?
-          render json: Api::V2::Chemicals::ChemicalSerializer.new(@chemical, object_serializer_options).serializable_hash
+          render json: Api::V2::Chemicals::ChemicalSerializer.new(@chemical, object_serializer_options.merge(is_collection: false)).serializable_hash
         else
           render_not_found
         end

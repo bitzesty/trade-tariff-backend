@@ -2,7 +2,7 @@ module Api
   module Admin
     module SearchReferences
       class ChapterSerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
         set_type :chapter
 
         set_id :goods_nomenclature_sid

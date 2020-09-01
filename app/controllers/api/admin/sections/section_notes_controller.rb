@@ -10,7 +10,7 @@ module Api
 
           raise Sequel::RecordNotFound if section_note.blank?
 
-          render json: Api::Admin::Sections::SectionNoteSerializer.new(section_note).serializable_hash
+          render json: Api::Admin::Sections::SectionNoteSerializer.new(section_note, { is_collection: false }).serializable_hash
         end
 
         def create
@@ -18,7 +18,7 @@ module Api
 
           if section_note.save(raise_on_failure: false)
             response.headers['Location'] = api_section_section_note_url(section.id)
-            render json: Api::Admin::Sections::SectionNoteSerializer.new(section_note).serializable_hash, status: :created
+            render json: Api::Admin::Sections::SectionNoteSerializer.new(section_note, { is_collection: false }).serializable_hash, status: :created
           else
             render json: Api::Admin::Sections::SectionNoteSerializer.new(section_note).serialized_errors, status: :unprocessable_entity
           end
@@ -29,7 +29,7 @@ module Api
           section_note.set(section_note_params[:attributes])
 
           if section_note.save(raise_on_failure: false)
-            render json: Api::Admin::Sections::SectionNoteSerializer.new(section_note).serializable_hash, status: :ok
+            render json: Api::Admin::Sections::SectionNoteSerializer.new(section_note, { is_collection: false }).serializable_hash, status: :ok
           else
             render json: Api::Admin::Sections::SectionNoteSerializer.new(section_note).serialized_errors, status: :unprocessable_entity
           end
