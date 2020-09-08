@@ -62,7 +62,7 @@ describe Api::V2::SectionsController, "GET #show" do
           type: 'guide',
           attributes: {
             title: chapter_guide.title,
-            url: chapter_guide.url,
+            url: chapter_guide.url
           }
         },
       ]

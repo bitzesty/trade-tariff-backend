@@ -34,6 +34,7 @@ module Cache
             description: heading.chapter.description,
             formatted_description: heading.chapter.formatted_description,
             chapter_note: heading.chapter.chapter_note&.content,
+            forum_url: heading.chapter.forum_link&.url,
             guide_ids: heading.chapter.guides.map do |guide|
               guide.id
             end,

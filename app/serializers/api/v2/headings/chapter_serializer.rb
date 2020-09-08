@@ -8,7 +8,8 @@ module Api
 
         set_id :goods_nomenclature_sid
 
-        attributes :goods_nomenclature_item_id, :description, :formatted_description, :chapter_note
+        attributes :goods_nomenclature_item_id, :description, :formatted_description,
+                   :chapter_note, :forum_url
 
         has_many :guides, serializer: Api::V2::GuideSerializer
       end
