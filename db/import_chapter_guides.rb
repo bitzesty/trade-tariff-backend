@@ -1,3 +1,5 @@
+return unless ENV['RUNNING_TASK']
+
 def seed_guides(guides)
   now = Time.now
   guides.each do |guide|

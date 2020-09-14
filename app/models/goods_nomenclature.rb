@@ -90,6 +90,10 @@ class GoodsNomenclature < Sequel::Model
 
   many_to_many :chemicals, join_table: :chemicals_goods_nomenclatures, left_key: :goods_nomenclature_sid, right_key: :chemical_id
 
+  one_to_one :forum_link, key: :goods_nomenclature_sid,
+                          foreign_key: :goods_nomenclature_sid,
+                          order: Sequel.desc(:created_at)
+
   dataset_module do
     def declarable
       filter(producline_suffix: "80")

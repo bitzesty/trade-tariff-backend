@@ -14,6 +14,10 @@ module Api
           chapter.chapter_note.content
         end
 
+        attribute :forum_url do |chapter|
+          chapter.forum_link&.url
+        end
+
         attribute :section_id do |chapter|
           chapter.section.id
         end

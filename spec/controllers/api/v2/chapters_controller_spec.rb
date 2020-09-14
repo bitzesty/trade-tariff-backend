@@ -21,6 +21,7 @@ describe Api::V2::ChaptersController, "GET #show" do
           description: chapter.description,
           formatted_description: chapter.formatted_description,
           chapter_note: chapter_note.content,
+          forum_url: chapter.forum_link&.url,
           section_id: section.id
         },
         relationships: {
@@ -65,7 +66,7 @@ describe Api::V2::ChaptersController, "GET #show" do
           type: 'guide',
           attributes: {
             title: chapter_guide.title,
-            url: chapter_guide.url,
+            url: chapter_guide.url
           }
         },
         {
