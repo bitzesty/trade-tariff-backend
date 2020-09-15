@@ -76,7 +76,7 @@ module Declarable
   end
 
   def consigned?
-    description =~ /consigned from/i
+    !!(description =~ /consigned from/i)
   end
 
   def consigned_from
