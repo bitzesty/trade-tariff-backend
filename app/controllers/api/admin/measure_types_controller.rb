@@ -12,7 +12,7 @@ module Api
       def show
         @measure_type = MeasureType.national.with_pk!(measure_type_pk)
 
-        render json:  Api::Admin::MeasureTypeSerializer.new(@measure_type).serializable_hash
+        render json:  Api::Admin::MeasureTypeSerializer.new(@measure_type, { is_collection: false }).serializable_hash
       end
 
       def update
@@ -22,7 +22,7 @@ module Api
           measure_type_description.save
         end
 
-        render json: Api::Admin::MeasureTypeSerializer.new(@measure_type).serializable_hash
+        render json: Api::Admin::MeasureTypeSerializer.new(@measure_type, { is_collection: false }).serializable_hash
       end
 
       private

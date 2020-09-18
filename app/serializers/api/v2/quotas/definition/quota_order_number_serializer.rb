@@ -3,7 +3,7 @@ module Api
     module Quotas
       module Definition
         class QuotaOrderNumberSerializer
-          include FastJsonapi::ObjectSerializer
+          include JSONAPI::Serializer
 
           set_type :order_number
 

@@ -9,7 +9,7 @@ ruby "~> 2.7.1"
 
 # Server
 gem "puma", "~> 3.12.6"
-gem "rails", ">= 6.0.3.2"
+gem "rails", ">= 6.0.3.3"
 gem "sinatra", "~> 2.0.2"
 
 # DB
@@ -54,7 +54,7 @@ gem "yajl-ruby", "~> 1.3.1", require: "yajl"
 # API related
 gem "ansi", "~> 1.5"
 gem "curb", "~> 0.9"
-gem "fast_jsonapi", "~> 1.5"
+gem "jsonapi-serializer"
 gem "rabl", "~> 0.14"
 gem "responders", "~> 3.0.0"
 gem "tilt"

@@ -12,7 +12,7 @@ module Api
       end
 
       def show
-        options = {}
+        options = { is_collection: false }
         options[:include] = [:chapter_note, :headings, :section]
 
         render json: Api::Admin::Chapters::ChapterSerializer.new(@chapter, options).serializable_hash

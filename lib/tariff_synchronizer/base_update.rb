@@ -13,6 +13,7 @@ module TariffSynchronizer
       presence_errors.pluck(:id)
     end
 
+    plugin :timestamps
     plugin :eager_each
     plugin :timestamps
     plugin :single_table_inheritance, :update_type

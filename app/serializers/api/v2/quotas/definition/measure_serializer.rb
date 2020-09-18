@@ -3,7 +3,7 @@ module Api
     module Quotas
       module Definition
         class MeasureSerializer
-          include FastJsonapi::ObjectSerializer
+          include JSONAPI::Serializer
 
           set_type :measure
 
