@@ -39,7 +39,7 @@ CF_BUILDPACK=$CF_BUILDPACK ruby -ryaml -e 'm = YAML.load(STDIN); m["applications
 cf bgd $CF_APP -f "$CF_APP"_patched_manifest.yml --delete-old-apps
 
 # Attach autoscaling policy
-cf attach-autoscaling-policy config/autoscaling/"$CF_SPACE"-policy.json
+cf attach-autoscaling-policy $CF_APP config/autoscaling/"$CF_SPACE"-policy.json
 
 # Notify Slack deployment finished
 curl -X POST \
