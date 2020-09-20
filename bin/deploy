@@ -38,6 +38,9 @@ CF_BUILDPACK=$CF_BUILDPACK ruby -ryaml -e 'm = YAML.load(STDIN); m["applications
 
 cf bgd $CF_APP -f "$CF_APP"_patched_manifest.yml --delete-old-apps
 
+# Attach autoscaling policy
+cf attach-autoscaling-policy $CF_APP config/autoscaling/"$CF_SPACE"-policy.json
+
 # Notify Slack deployment finished
 curl -X POST \
 --data-urlencode 'payload={"text": "'"Deployment finished for $CF_APP"'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":cloud:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}, {"title": "SHA1", "value": "'"<https://github.com/bitzesty/trade-tariff-backend/compare/$GIT_OLD_REVISION...$GIT_REVISION|$GIT_REVISION>"'", "short": true}]}' \
