@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :monetary_exchange_rate do
     child_monetary_unit_code { "GBP" }
     exchange_rate { Random.rand.to_d.truncate(9) }

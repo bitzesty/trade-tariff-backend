@@ -7,7 +7,7 @@ module Api
 
         delegate :goods_nomenclature_sid, :goods_nomenclature_item_id,
                  :description, :formatted_description, :chapter_note, :section,
-                 :guides, :section_id, :guide_ids, to: :chapter
+                 :guides, :section_id, :guide_ids, :forum_link, to: :chapter
 
         def initialize(chapter, root_headings)
           @chapter = chapter

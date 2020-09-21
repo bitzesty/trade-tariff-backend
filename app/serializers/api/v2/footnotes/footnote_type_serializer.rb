@@ -2,7 +2,7 @@ module Api
   module V2
     module Footnotes
       class FootnoteTypeSerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
 
         set_type :footnote_type
 

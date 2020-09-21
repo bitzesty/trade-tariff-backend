@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mfcm, class: Chief::Mfcm do
     amend_indicator { %w[I U X].sample }
     fe_tsmp { DateTime.now.ago(10.years) }
@@ -14,7 +14,7 @@ FactoryGirl.define do
     end
 
     before(:create) { |mfcm, evaluator|
-      FactoryGirl.create(:measure_type_adco, measure_group_code: mfcm.msrgp_code,
+      FactoryBot.create(:measure_type_adco, measure_group_code: mfcm.msrgp_code,
                                              measure_type: mfcm.msr_type,
                                              tax_type_code: mfcm.tty_code,
                                              measure_type_id: evaluator.measure_type_id)
@@ -45,14 +45,14 @@ FactoryGirl.define do
 
     trait :with_geographical_area do
       after(:create) { |_mfcm|
-        FactoryGirl.create :geographical_area, :fifteen_years,
+        FactoryBot.create :geographical_area, :fifteen_years,
                            geographical_area_id: "1011"
       }
     end
 
     trait :with_goods_nomenclature do
       before(:create) { |mfcm|
-        FactoryGirl.create :goods_nomenclature, :fifteen_years, :declarable,
+        FactoryBot.create :goods_nomenclature, :fifteen_years, :declarable,
                            :with_indent,
                            goods_nomenclature_item_id: mfcm.cmdty_code
       }
@@ -68,7 +68,7 @@ FactoryGirl.define do
 
     trait :with_tame do
       after(:create) { |mfcm|
-        FactoryGirl.create(:tame, msrgp_code: mfcm.msrgp_code,
+        FactoryBot.create(:tame, msrgp_code: mfcm.msrgp_code,
                                   msr_type: mfcm.msr_type,
                                   tty_code: mfcm.tty_code,
                                   fe_tsmp: mfcm.fe_tsmp,
@@ -81,12 +81,12 @@ FactoryGirl.define do
       msrgp_code { "PR" }
       msr_type { "AHC" }
       after(:create) { |mfcm|
-        FactoryGirl.create(:tamf, msrgp_code: mfcm.msrgp_code,
+        FactoryBot.create(:tamf, msrgp_code: mfcm.msrgp_code,
                                   msr_type: mfcm.msr_type,
                                   tty_code: mfcm.tty_code,
                                   fe_tsmp: mfcm.fe_tsmp,
                                   amend_indicator: mfcm.amend_indicator)
-        FactoryGirl.create(:measure_type_cond, measure_group_code: "PR",
+        FactoryBot.create(:measure_type_cond, measure_group_code: "PR",
                                                measure_type: "AHC",
                                                cond_cd: "B",
                                                comp_seq_no: "002",
@@ -99,17 +99,17 @@ FactoryGirl.define do
       msr_type { "EXF" }
       tty_code { "591" }
       after(:create) { |mfcm|
-        tame = FactoryGirl.create(:tame, msrgp_code: mfcm.msrgp_code,
+        tame = FactoryBot.create(:tame, msrgp_code: mfcm.msrgp_code,
                                          msr_type: mfcm.msr_type,
                                          tty_code: mfcm.tty_code,
                                          fe_tsmp: mfcm.fe_tsmp,
                                          adval_rate: 20)
-        FactoryGirl.create(:measure_type_adco, measure_group_code: "EX",
+        FactoryBot.create(:measure_type_adco, measure_group_code: "EX",
                                                measure_type: "EXF",
                                                tax_type_code: "591",
                                                measure_type_id: "",
                                                adtnl_cd_type_id: 'V')
-        FactoryGirl.create(:chief_duty_expression, duty_expression_id_adval1: Forgery(:basic).number,
+        FactoryBot.create(:chief_duty_expression, duty_expression_id_adval1: Forgery(:basic).number,
                                                    adval1_rate: tame.adval1_rate,
                                                    adval2_rate: tame.adval2_rate,
                                                    spfc1_rate: tame.spfc1_rate,
@@ -123,7 +123,7 @@ FactoryGirl.define do
       msr_type { "EXF" }
       tty_code { "591" }
       after(:create) { |mfcm|
-        FactoryGirl.create(:tamf, msrgp_code: mfcm.msrgp_code,
+        FactoryBot.create(:tamf, msrgp_code: mfcm.msrgp_code,
                                   msr_type: mfcm.msr_type,
                                   tty_code: mfcm.tty_code,
                                   fe_tsmp: mfcm.fe_tsmp,
@@ -132,7 +132,7 @@ FactoryGirl.define do
                                   spfc1_rate: 1,
                                   spfc2_rate: nil,
                                   amend_indicator: mfcm.amend_indicator)
-        FactoryGirl.create(:measure_type_adco, measure_group_code: "EX",
+        FactoryBot.create(:measure_type_adco, measure_group_code: "EX",
                                                measure_type: "EXF",
                                                tax_type_code: "591",
                                                adtnl_cd_type_id: 'V')
@@ -141,7 +141,7 @@ FactoryGirl.define do
 
     trait :with_tamf do
       after(:create) { |mfcm|
-        FactoryGirl.create(:tamf, msrgp_code: mfcm.msrgp_code,
+        FactoryBot.create(:tamf, msrgp_code: mfcm.msrgp_code,
                                   msr_type: mfcm.msr_type,
                                   tty_code: mfcm.tty_code,
                                   fe_tsmp: mfcm.fe_tsmp,
@@ -151,7 +151,7 @@ FactoryGirl.define do
 
     trait :with_tamf_start_date_after do
       after(:create) { |mfcm|
-        FactoryGirl.create(:tamf, msrgp_code: mfcm.msrgp_code,
+        FactoryBot.create(:tamf, msrgp_code: mfcm.msrgp_code,
                                   msr_type: mfcm.msr_type,
                                   tty_code: mfcm.tty_code,
                                   fe_tsmp: mfcm.fe_tsmp + 2.days)
@@ -160,7 +160,7 @@ FactoryGirl.define do
 
     trait :with_tamf_start_date_before do
       after(:create) { |mfcm|
-        FactoryGirl.create(:tamf, msrgp_code: mfcm.msrgp_code,
+        FactoryBot.create(:tamf, msrgp_code: mfcm.msrgp_code,
                                   msr_type: mfcm.msr_type,
                                   tty_code: mfcm.tty_code,
                                   fe_tsmp: mfcm.fe_tsmp - 2.days,
@@ -170,7 +170,7 @@ FactoryGirl.define do
 
     trait :with_tame_start_date_after do
       after(:create) { |mfcm|
-        FactoryGirl.create(:tame, msrgp_code: mfcm.msrgp_code,
+        FactoryBot.create(:tame, msrgp_code: mfcm.msrgp_code,
                                   msr_type: mfcm.msr_type,
                                   tty_code: mfcm.tty_code,
                                   fe_tsmp: mfcm.fe_tsmp + 2.days,
@@ -180,7 +180,7 @@ FactoryGirl.define do
 
     trait :with_tame_start_date_before do
       after(:create) { |mfcm|
-        FactoryGirl.create(:tame, msrgp_code: mfcm.msrgp_code,
+        FactoryBot.create(:tame, msrgp_code: mfcm.msrgp_code,
                                   msr_type: mfcm.msr_type,
                                   tty_code: mfcm.tty_code,
                                   fe_tsmp: mfcm.fe_tsmp - 2.days,
@@ -191,7 +191,7 @@ FactoryGirl.define do
     trait :with_tame_end_date_after do
       le_tsmp { DateTime.now.ago(8.years) }
       after(:create) { |mfcm|
-        FactoryGirl.create(:tame, msrgp_code: mfcm.msrgp_code,
+        FactoryBot.create(:tame, msrgp_code: mfcm.msrgp_code,
                                   msr_type: mfcm.msr_type,
                                   tty_code: mfcm.tty_code,
                                   fe_tsmp: mfcm.fe_tsmp,
@@ -203,7 +203,7 @@ FactoryGirl.define do
     trait :with_tame_end_date_before do
       le_tsmp { DateTime.now.ago(8.years) }
       after(:create) { |mfcm|
-        FactoryGirl.create(:tame, msrgp_code: mfcm.msrgp_code,
+        FactoryBot.create(:tame, msrgp_code: mfcm.msrgp_code,
                                   msr_type: mfcm.msr_type,
                                   tty_code: mfcm.tty_code,
                                   le_tsmp: mfcm.le_tsmp - 2.days,
@@ -217,7 +217,7 @@ FactoryGirl.define do
 
     trait :with_chief_measure_type_mapping do
       after(:create) { |_mfcm, evaluator|
-        FactoryGirl.create(:chief_measure_type_footnote, measure_type_id: evaluator.measure_type_id)
+        FactoryBot.create(:chief_measure_type_footnote, measure_type_id: evaluator.measure_type_id)
       }
     end
   end

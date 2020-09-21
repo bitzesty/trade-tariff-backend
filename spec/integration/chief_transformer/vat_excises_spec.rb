@@ -2,12 +2,17 @@ require 'rails_helper'
 require 'chief_transformer'
 
 describe "CHIEF: VAT and Excises" do
-  before(:all) {
+  before(:all) do
     preload_standing_data
     create :base_regulation, base_regulation_id: 'IYY99990',
                              validity_start_date: Date.new(1971,12,31)
-  }
-  after(:all)  { clear_standing_data }
+  end
+  after(:all) { clear_standing_data }
+
+  # NOTE: We need to do a time travel because some factories are creating
+  # records with validity end/start date 15/20 years ago.
+  before(:each) { travel_to Date.new(2020, 1, 1) }
+  after(:each) { travel_back }
 
   # VAT/EXCISE measure types
   # Create Measure types used in transformations, so that validations would pass.
@@ -28,7 +33,7 @@ describe "CHIEF: VAT and Excises" do
     let!(:mfcm3){ create(:mfcm, :with_goods_nomenclature, amend_indicator: "I", fe_tsmp: DateTime.parse("2007-11-15 11:00:00"), msrgp_code: "VT", msr_type: "A", tty_code: "813", cmdty_code: "0303030300") }
     let!(:mfcm4){ create(:mfcm, :with_goods_nomenclature, amend_indicator: "I", fe_tsmp: DateTime.parse("2007-10-01 00:00:00"), msrgp_code: "VT", msr_type: "Z", tty_code: "B00", cmdty_code: "0404040400") }
 
-    let!(:geographical_area) { create :geographical_area, :fifteen_years, :erga_omnes }
+    let!(:geographical_area) { create :geographical_area, :twenty_years, :erga_omnes }
 
     before do
       ChiefTransformer.instance.invoke(:initial_load)
@@ -96,7 +101,7 @@ describe "CHIEF: VAT and Excises" do
     let!(:mfcm4){ create(:mfcm, :with_goods_nomenclature, amend_indicator: "I", fe_tsmp: DateTime.parse("2007-10-01 00:00:00"), msrgp_code: "EX", msr_type: "EXL", tty_code: "520", cmdty_code: "0404040400") }
     let!(:mfcm5){ create(:mfcm, :with_goods_nomenclature, amend_indicator: "I", fe_tsmp: DateTime.parse("2005-01-01 00:00:00"), msrgp_code: "EX", msr_type: "EXF", tty_code: "551", cmdty_code: "0505050500") }
 
-    let!(:geographical_area) { create :geographical_area, :fifteen_years, :erga_omnes }
+    let!(:geographical_area) { create :geographical_area, :twenty_years, :erga_omnes }
 
     before do
       ChiefTransformer.instance.invoke(:initial_load)

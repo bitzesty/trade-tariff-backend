@@ -396,8 +396,9 @@ describe Measure do
 
     describe 'measure components' do
       let!(:measure)                { create :measure }
-      let!(:measure_component1)     { create :measure_component, measure_sid: measure.measure_sid }
+      let!(:measure_component1)     { create :measure_component, measure_sid: measure.measure_sid, duty_expression_id: '03' }
       let!(:measure_component2)     { create :measure_component }
+      let!(:measure_component3)     { create :measure_component, measure_sid: measure.measure_sid, duty_expression_id: '01' }
 
       context 'direct loading' do
         it 'loads associated measure components' do
@@ -406,6 +407,10 @@ describe Measure do
 
         it 'does not load associated measure component' do
           expect(measure.measure_components).not_to include measure_component2
+        end
+
+        it 'orders components by duty_expression_id' do
+          expect(measure.measure_components.pluck(:duty_expression_id)).to eq(%w(01 03))
         end
       end
 
@@ -1123,6 +1128,38 @@ describe Measure do
       create :measure_component, measure_sid: measure.measure_sid,
                                  duty_expression_id: duty_expression.duty_expression_id
     }
+
+    context '#duty_expression' do
+      context 'measure components order' do
+        let(:duty_expression2) {
+          create(:duty_expression, :with_description, duty_expression_id: '00')
+        }
+        let!(:measure_component2) {
+          create :measure_component, measure_sid: measure.measure_sid,
+                 duty_expression_id: duty_expression2.duty_expression_id
+        }
+
+        it 'orders components by duty_expression_id' do
+          expect(measure.duty_expression).to eq([measure_component2, measure_component].map(&:duty_expression_str).join(" "))
+        end
+      end
+    end
+
+    context '#formatted_duty_expression' do
+      context 'measure components order' do
+        let(:duty_expression2) {
+          create(:duty_expression, :with_description, duty_expression_id: '00')
+        }
+        let!(:measure_component2) {
+          create :measure_component, measure_sid: measure.measure_sid,
+                 duty_expression_id: duty_expression2.duty_expression_id
+        }
+
+        it 'orders components by duty_expression_id' do
+          expect(measure.formatted_duty_expression).to eq([measure_component2, measure_component].map(&:formatted_duty_expression).join(" "))
+        end
+      end
+    end
 
     context "without national_measurement_unit" do
       it {

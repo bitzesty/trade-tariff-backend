@@ -22,31 +22,29 @@ class SearchService
 
   include ActiveModel::Validations
   include ActiveModel::Conversion
+  include CustomRegex
 
   class EmptyQuery < StandardError
   end
 
   attr_accessor :q
-  attr_reader :result, :as_of, :data_serializer, :error_serializer
-
-  validates :q, presence: true
-  validates :as_of, presence: true
+  attr_reader :result, :as_of, :data_serializer
 
   delegate :serializable_hash, to: :result
 
-  def initialize(data_serializer, error_serializer, attributes = {})
-    if attributes.present?
-      attributes.each do |name, value|
+  def initialize(data_serializer, params = {})
+    if params.present?
+      params.each do |name, value|
         if self.respond_to?(:"#{name}=")
           send(:"#{name}=", value)
         end
       end
     end
     @data_serializer = data_serializer
-    @error_serializer = error_serializer
   end
 
   def as_of=(date)
+    date ||= Date.current.to_s
     @as_of = begin
                Date.parse(date)
              rescue StandardError
@@ -55,13 +53,18 @@ class SearchService
   end
 
   def q=(term)
+    # use `cas_number_regex` to try to find a CAS number, then
     # if search term has no letters extract the digits
-    # and perform search with just the digits
-    @q = if /^(?!.*[A-Za-z]+).*$/.match?(term)
+    # and perform search with just the digits (i.e., `no_alpha_regex`)
+    # otherwise, ignore [ and ] characters to avoid range searches
+    @q = if m = cas_number_regex.match(term)
+           m[2]
+         elsif no_alpha_regex.match?(term) && digit_regex.match?(term)
            term.scan(/\d+/).join
+         elsif no_alpha_regex.match(term) && !digit_regex.match?(term)
+           ''
          else
-           # ignore [ and ] characters to avoid range searches
-           term.to_s.gsub(/(\[|\])/, '')
+           term.to_s.gsub(ignore_brackets_regex, '')
          end
   end
 
@@ -70,24 +73,23 @@ class SearchService
   end
 
   def to_json(_config = {})
-    if valid?
-      perform
+    perform
 
-      data_serializer.perform(result)
-    else
-      error_serializer.serialized_errors(errors)
-    end
+    data_serializer.perform(result)
   end
 
   def persisted?
     false
   end
 
-private
+  private
 
   def perform
-    @result = ExactSearch.new(q, as_of).search!.presence ||
-      FuzzySearch.new(q, as_of).search!.presence ||
-      NullSearch.new(q, as_of)
+    @result = if q.present?
+                ExactSearch.new(q, as_of).search!.presence ||
+                FuzzySearch.new(q, as_of).search!.presence
+              end
+
+    @result ||= NullSearch.new(q, as_of)
   end
 end

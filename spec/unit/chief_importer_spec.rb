@@ -2,6 +2,16 @@ require "rails_helper"
 require "chief_importer"
 
 describe ChiefImporter do
+  describe ".relevant_tables" do
+    it "contains chief tables same as in update files" do
+      expect(ChiefImporter.relevant_tables).to eq(%w(MFCM TAMF TAME COMM TBL9))
+
+      ChiefImporter.relevant_tables.each do |table|
+        expect("ChiefImporter::Strategies::#{table}".constantize.new).to be_truthy
+      end
+    end
+  end
+
   describe "#import" do
     let(:chief_update) { create :chief_update, example_date: Date.new(2012, 2, 13) }
 
@@ -62,7 +72,7 @@ describe ChiefImporter do
           importer = described_class.new(chief_update)
           expect { importer.import }.to raise_error ChiefImporter::ImportException
           expect(@logger.logged(:error).last).to eq(
-            "CHIEF import of 2012-02-13_KBT009(12044).txt failed: Reason: Do not allow except col_sep_split_separator after quoted fields in line 1."
+            "CHIEF import of 2012-02-13_KBT009(12044).txt failed: Reason: Any value after quoted field isn't allowed in line 1."
           )
         end
       end

@@ -7,14 +7,20 @@ describe AdditionalCode do
       let!(:additional_code_description1)   {
         create :additional_code_description, :with_period,
                                                             additional_code_sid: additional_code.additional_code_sid,
-                                                            valid_at: Date.today.ago(2.years),
+                                                            valid_at: Date.current.ago(2.years),
                                                             valid_to: nil
       }
       let!(:additional_code_description2) {
         create :additional_code_description, :with_period,
                                                             additional_code_sid: additional_code.additional_code_sid,
-                                                            valid_at: Date.today.ago(5.years),
-                                                            valid_to: Date.today.ago(3.years)
+                                                            valid_at: Date.current.ago(5.years),
+                                                            valid_to: Date.current.ago(3.years)
+      }
+      let!(:additional_code_description3) {
+        create :additional_code_description, :with_period,
+                                                            additional_code_sid: additional_code.additional_code_sid,
+                                                            valid_at: Date.current.ago(6.years),
+                                                            valid_to: Date.current.ago(1.years)
       }
 
       context 'direct loading' do
@@ -33,10 +39,16 @@ describe AdditionalCode do
             ).to eq additional_code_description1.pk
           end
 
+          TimeMachine.at(2.year.ago) do
+            expect(
+              additional_code.additional_code_description.pk
+            ).to eq additional_code_description1.pk
+          end
+
           TimeMachine.at(4.years.ago) do
             expect(
               additional_code.reload.additional_code_description.pk
-            ).to eq additional_code_description1.pk
+            ).to eq additional_code_description2.pk
           end
         end
       end

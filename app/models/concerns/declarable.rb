@@ -57,9 +57,9 @@ module Declarable
                       .filter(measure_types__trade_movement_code: MeasureType::EXPORT_MOVEMENT_CODES)
     }, class_name: 'Measure'
 
-    one_to_many :basic_duty_rate_components, primary_key: {}, key: {}, class_name: 'MeasureComponent' do
+    one_to_many :basic_duty_rate_components, primary_key: {}, key: {}, class_name: 'MeasureComponent', dataset: -> {
       MeasureComponent.where(measure: import_measures_dataset.where(measures__measure_type_id: MeasureType::THIRD_COUNTRY).all)
-    end
+    }
 
     format :description_plain, with: DescriptionTrimFormatter,
                                using: :description
@@ -76,7 +76,7 @@ module Declarable
   end
 
   def consigned?
-    description =~ /consigned from/i
+    !!(description =~ /consigned from/i)
   end
 
   def consigned_from

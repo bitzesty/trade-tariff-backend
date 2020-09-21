@@ -2,7 +2,7 @@ module Api
   module V2
     module Certificates
       class MeasureSerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
 
         set_type :measure
 

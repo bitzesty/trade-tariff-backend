@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :meursing_table_plan do
     meursing_table_plan_id          { Forgery(:basic).text(exactly: 2) }
     validity_start_date             { Date.current.ago(2.years) }

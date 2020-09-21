@@ -1,4 +1,6 @@
 class HiddenGoodsNomenclature < Sequel::Model
+  plugin :timestamps
+
   set_dataset order(Sequel.asc(:goods_nomenclature_item_id))
 
   set_primary_key [:goods_nomenclature_item_id]

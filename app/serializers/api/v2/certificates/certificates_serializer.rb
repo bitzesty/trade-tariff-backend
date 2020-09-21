@@ -2,7 +2,7 @@ module Api
   module V2
     module Certificates
       class CertificatesSerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
 
         set_id :id
 

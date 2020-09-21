@@ -34,6 +34,9 @@ module Cache
             description: heading.chapter.description,
             formatted_description: heading.chapter.formatted_description,
             chapter_note: heading.chapter.chapter_note&.content,
+            forum_link: {
+              url: heading.chapter.forum_link&.url,
+            },
             guide_ids: heading.chapter.guides.map do |guide|
               guide.id
             end,
@@ -95,7 +98,7 @@ module Cache
               validity_end_date: goods_nomenclature_description.validity_end_date,
               description: goods_nomenclature_description.description,
               formatted_description: DescriptionFormatter.format(value: goods_nomenclature_description.description),
-              description_plain: DescriptionTrimFormatter.format(value: goods_nomenclature_description.description)
+              description_plain: DescriptionTrimFormatter.format(value: goods_nomenclature_description.description),
             }
           end
 

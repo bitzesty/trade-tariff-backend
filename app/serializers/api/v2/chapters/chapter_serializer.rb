@@ -2,7 +2,7 @@ module Api
   module V2
     module Chapters
       class ChapterSerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
 
         set_type :chapter
 
@@ -12,6 +12,10 @@ module Api
 
         attribute :chapter_note, if: Proc.new { |chapter| chapter.chapter_note.present? } do |chapter|
           chapter.chapter_note.content
+        end
+
+        attribute :forum_url do |chapter|
+          chapter.forum_link&.url
         end
 
         attribute :section_id do |chapter|

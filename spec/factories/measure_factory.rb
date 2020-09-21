@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:measure_sid) { |n| n }
   sequence(:measure_type_id) { |n| n }
   sequence(:measure_condition_sid) { |n| n }
@@ -69,7 +69,7 @@ FactoryGirl.define do
       measure_generating_regulation_role { 4 }
 
       after(:build) { |measure, _evaluator|
-        FactoryGirl.create(:modification_regulation, modification_regulation_id: measure.measure_generating_regulation_id)
+        FactoryBot.create(:modification_regulation, modification_regulation_id: measure.measure_generating_regulation_id)
       }
     end
 
@@ -77,8 +77,8 @@ FactoryGirl.define do
       measure_generating_regulation_role { 4 }
 
       after(:build) { |measure, _evaluator|
-        base_regulation = FactoryGirl.create(:base_regulation, :abrogated)
-        FactoryGirl.create(:modification_regulation,
+        base_regulation = FactoryBot.create(:base_regulation, :abrogated)
+        FactoryBot.create(:modification_regulation,
                             modification_regulation_id: measure.measure_generating_regulation_id,
                             modification_regulation_role: measure.measure_generating_regulation_role,
                             base_regulation_id: base_regulation.base_regulation_id,
@@ -92,20 +92,20 @@ FactoryGirl.define do
 
     trait :with_additional_code_type do
       after(:build) { |measure, _evaluator|
-        FactoryGirl.create(:additional_code_type, additional_code_type_id: measure.additional_code_type_id)
+        FactoryBot.create(:additional_code_type, additional_code_type_id: measure.additional_code_type_id)
       }
     end
 
     trait :with_related_additional_code_type do
       after(:build) { |measure, _evaluator|
-        FactoryGirl.create(:additional_code_type_measure_type, additional_code_type_id: measure.additional_code_type_id,
+        FactoryBot.create(:additional_code_type_measure_type, additional_code_type_id: measure.additional_code_type_id,
                                                                measure_type_id: measure.measure_type_id)
       }
     end
 
     trait :with_quota_order_number do
       after(:build) { |measure, _evaluator|
-        FactoryGirl.create(:quota_order_number, quota_order_number_id: measure.ordernumber)
+        FactoryBot.create(:quota_order_number, quota_order_number_id: measure.ordernumber)
       }
     end
   end
@@ -144,11 +144,11 @@ FactoryGirl.define do
     end
 
     after(:build) { |measure_type, _evaluator|
-      FactoryGirl.create(:measure_type_series, measure_type_series_id: measure_type.measure_type_series_id)
+      FactoryBot.create(:measure_type_series, measure_type_series_id: measure_type.measure_type_series_id)
     }
 
     after(:build) { |measure_type, evaluator|
-      FactoryGirl.create(
+      FactoryBot.create(
         :measure_type_description,
         measure_type_id: measure_type.measure_type_id,
         description: evaluator.measure_type_description

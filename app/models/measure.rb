@@ -60,7 +60,7 @@ class Measure < Sequel::Model
 
   one_to_many :footnote_association_measures, key: :measure_sid, primary_key: :measure_sid
 
-  one_to_many :measure_components, key: :measure_sid
+  one_to_many :measure_components, key: :measure_sid, order: Sequel.asc(:duty_expression_id)
 
   one_to_one :additional_code, key: :additional_code_sid,
                                primary_key: :additional_code_sid do |ds|
@@ -349,7 +349,7 @@ class Measure < Sequel::Model
   end
 
   def duty_expression
-    measure_components.sort_by(&:oid).map(&:duty_expression_str).join(" ")
+    measure_components.map(&:duty_expression_str).join(" ")
   end
 
   def duty_expression_with_national_measurement_units_for(declarable)
@@ -362,7 +362,7 @@ class Measure < Sequel::Model
   end
 
   def formatted_duty_expression
-    measure_components.sort_by(&:oid).map(&:formatted_duty_expression).join(" ")
+    measure_components.map(&:formatted_duty_expression).join(" ")
   end
 
   def national_measurement_units_for(declarable)

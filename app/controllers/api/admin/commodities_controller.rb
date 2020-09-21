@@ -4,7 +4,7 @@ module Api
       before_action :find_commodity, only: [:show]
 
       def show
-        render json: Api::Admin::Commodities::CommoditySerializer.new(@commodity).serializable_hash
+        render json: Api::Admin::Commodities::CommoditySerializer.new(@commodity, { is_collection: false }).serializable_hash
       end
 
       private

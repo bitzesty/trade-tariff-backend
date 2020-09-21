@@ -47,15 +47,26 @@ describe Api::V1::SearchController, "POST #search" do
     end
   end
 
-  describe 'errors' do
+  describe 'null match' do
     let(:pattern) {
       {
-        q: Array,
-        as_of: Array
+        type: 'null_match',
+        reference_match: {
+          commodities: [],
+          headings: [],
+          chapters: [],
+          sections: []
+        },
+        goods_nomenclature_match: {
+          commodities: [],
+          headings: [],
+          chapters: [],
+          sections: []
+        }
       }
     }
 
-    it 'returns list of errors' do
+    it 'returns empty list' do
       post :search
       expect(response.status).to eq(200)
       expect(response.body).to match_json_expression pattern

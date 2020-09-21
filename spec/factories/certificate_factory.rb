@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:certificate_sid) { |n| n }
   sequence(:certificate_type_code, LoopingSequence.lower_a_to_upper_z, &:value)
 
@@ -34,7 +34,7 @@ FactoryGirl.define do
 
     trait :with_period do
       after(:create) { |cert_description, evaluator|
-        FactoryGirl.create(:certificate_description_period, certificate_description_period_sid: cert_description.certificate_description_period_sid,
+        FactoryBot.create(:certificate_description_period, certificate_description_period_sid: cert_description.certificate_description_period_sid,
                                                             certificate_type_code: cert_description.certificate_type_code,
                                                             certificate_code: cert_description.certificate_code,
                                                             validity_start_date: evaluator.valid_at,
@@ -54,7 +54,7 @@ FactoryGirl.define do
 
     trait :with_description do
       after(:create) { |certificate_type, evaluator|
-        FactoryGirl.create(:certificate_type_description,
+        FactoryBot.create(:certificate_type_description,
                            certificate_type_code: certificate_type.certificate_type_code,
                            description: evaluator.description)
       }

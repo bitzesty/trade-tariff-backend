@@ -2,7 +2,7 @@ module Api
   module V2
     module Measures
       class MeasureLegalActSerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
 
         set_type :legal_act
 

@@ -2,7 +2,7 @@ module Api
   module Admin
     module Sections
       class SectionListSerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
 
         set_type :section
 

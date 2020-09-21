@@ -1,5 +1,5 @@
 image:
-  name: circleci/ruby:2.6.2-node-browsers
+  name: circleci/ruby:2.7.1-node-browsers
 
 variables:
   POSTGRES_DB: tariff_test
@@ -7,12 +7,12 @@ variables:
   REDIS_URL: redis://localhost:6379
   ES_JAVA_OPTS: "-Xms1g -Xmx1g"
   ELASTICSEARCH_URL: 'http://localhost:9200'
-  BUNDLER_VERSION: 2.0.2
+  BUNDLER_VERSION: 2.1.4
   DOCKER_TLS_CERTDIR: ""
 
 services:
-  - name: redis:3.2.11
-  - name: postgres:10-alpine
+  - name: redis:4.0.10
+  - name: postgres:10.11-alpine
     alias: postgres
   - name: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
     alias: elasticsearch
@@ -53,38 +53,62 @@ test:
 include:
   - template: Code-Quality.gitlab-ci.yml
 
+snyk:
+  stage: test
+  before_script:
+    - sudo npm install -g snyk
+  script:
+    - sudo snyk auth $SNYK_API
+    - sudo snyk test --severity-threshold=high --file=Gemfile.lock --package-manager=rubygems
+  when: manual
+
+snyk_full:
+  stage: test  
+  before_script:
+    - sudo npm install -g snyk
+  script:
+    - sudo snyk auth $SNYK_API
+    - sudo snyk test --file=Gemfile.lock --package-manager=rubygems
+  when: manual
+
 deploy_dev:
   stage: deploy
+  resource_group: paas
   script:
     - curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
     - sudo dpkg -i cf-cli_amd64.deb
     - cf -v
     - cf add-plugin-repo CF-Community https://plugins.cloudfoundry.org
     - cf install-plugin blue-green-deploy -r CF-Community -f
+    - cf install-plugin app-autoscaler-plugin -r CF-Community -f
     - CF_ENDPOINT=api.london.cloud.service.gov.uk CF_SPACE=development CF_APP=tariff-backend-dev CF_APP_WORKER=tariff-backend-worker-dev ./bin/deploy
   only:
     - master
 
 deploy_staging:
   stage: deploy
+  resource_group: paas
   script:
     - curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
     - sudo dpkg -i cf-cli_amd64.deb
     - cf -v
     - cf add-plugin-repo CF-Community https://plugins.cloudfoundry.org
     - cf install-plugin blue-green-deploy -r CF-Community -f
+    - cf install-plugin app-autoscaler-plugin -r CF-Community -f
     - CF_ENDPOINT=api.london.cloud.service.gov.uk CF_SPACE=staging CF_APP=tariff-backend-staging CF_APP_WORKER=tariff-backend-worker-staging ./bin/deploy
   only:
     - staging
 
 deploy_production:
   stage: deploy
+  resource_group: paas
   script:
     - curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
     - sudo dpkg -i cf-cli_amd64.deb
     - cf -v
     - cf add-plugin-repo CF-Community https://plugins.cloudfoundry.org
     - cf install-plugin blue-green-deploy -r CF-Community -f
+    - cf install-plugin app-autoscaler-plugin -r CF-Community -f
     - CF_SPACE=production CF_APP=tariff-backend-production CF_APP_WORKER=tariff-backend-worker-production ./bin/deploy
   when: manual
   only:

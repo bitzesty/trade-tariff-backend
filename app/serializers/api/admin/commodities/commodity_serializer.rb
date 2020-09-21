@@ -2,7 +2,7 @@ module Api
   module Admin
     module Commodities
       class CommoditySerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
 
         set_type :commodity
 

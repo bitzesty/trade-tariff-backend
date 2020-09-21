@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :measure_excluded_geographical_area do |f|
     f.measure_sid { generate(:measure_sid) }
     f.geographical_area_sid { generate(:geographical_area_sid) }

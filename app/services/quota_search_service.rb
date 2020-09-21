@@ -1,4 +1,6 @@
 class QuotaSearchService
+  STATUS_VALUES = %w(blocked exhausted not_blocked not_exhausted).freeze
+
   attr_accessor :scope
   attr_reader :goods_nomenclature_item_id, :geographical_area_id, :order_number, :critical, :years, :status,
     :current_page, :per_page
@@ -18,7 +20,8 @@ class QuotaSearchService
     @order_number = attributes['order_number']
     @critical = attributes['critical']
     @years = Array.wrap(attributes['years']).join(', ')
-    @status = (attributes['status'] || '').downcase.tr(' ', '_')
+    status_value = attributes['status']&.gsub(/[+ ]/, '_')
+    @status = status_value if STATUS_VALUES.include?(status_value)
     @current_page = current_page
     @per_page = per_page
   end

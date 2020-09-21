@@ -13,7 +13,7 @@ module Api
 
         if rollback.valid?
           rollback.save
-          render json: Api::Admin::RollbackSerializer.new(rollback).serializable_hash, status: :created, location: api_rollbacks_url
+          render json: Api::Admin::RollbackSerializer.new(rollback, { is_collection: false }).serializable_hash, status: :created, location: api_rollbacks_url
         else
           render json: Api::V2::ErrorSerializationService.new.serialized_errors(rollback.errors), status: :unprocessable_entity
         end

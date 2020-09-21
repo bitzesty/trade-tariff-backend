@@ -5,7 +5,7 @@ describe TariffSynchronizer::ChiefUpdate do
   it_behaves_like 'Base Update'
 
   let(:example_date) { Date.new(2010,1,1) }
-  let(:chief_file) { ChiefFileNameGenerator.new(example_date) }
+  let(:chief_file) { TariffSynchronizer::ChiefFileNameGenerator.new(example_date) }
 
   describe '.download' do
     it "Calls TariffDownloader perform for a CHIEF update" do

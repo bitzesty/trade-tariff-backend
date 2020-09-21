@@ -21,6 +21,7 @@ describe Api::V2::ChaptersController, "GET #show" do
           description: chapter.description,
           formatted_description: chapter.formatted_description,
           chapter_note: chapter_note.content,
+          forum_url: chapter.forum_link&.url,
           section_id: section.id
         },
         relationships: {
@@ -65,7 +66,7 @@ describe Api::V2::ChaptersController, "GET #show" do
           type: 'guide',
           attributes: {
             title: chapter_guide.title,
-            url: chapter_guide.url,
+            url: chapter_guide.url
           }
         },
         {
@@ -101,7 +102,8 @@ describe Api::V2::ChaptersController, "GET #show" do
 
   context 'when record is not present' do
     it 'returns not found if record was not found' do
-      get :show, params: { id: "55" }, format: :json
+      id = chapter.goods_nomenclature_item_id.first(2).to_i + 1
+      get :show, params: { id: id }, format: :json
 
       expect(response.status).to eq 404
     end

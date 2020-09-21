@@ -4,7 +4,11 @@ require "chief_importer/start_entry"
 require "chief_importer/end_entry"
 require "chief_importer/change_entry"
 require "chief_importer/strategies/base_strategy"
-require "chief_importer/strategies/strategies"
+require "chief_importer/strategies/comm"
+require "chief_importer/strategies/mfcm"
+require "chief_importer/strategies/tame"
+require "chief_importer/strategies/tamf"
+require "chief_importer/strategies/tbl9"
 
 class ChiefImporter
   class ImportException < StandardError

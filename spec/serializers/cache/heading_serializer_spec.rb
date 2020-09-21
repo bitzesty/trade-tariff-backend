@@ -9,6 +9,7 @@ describe Cache::HeadingSerializer do
                             :with_section, :with_description,
                             goods_nomenclature_item_id: heading.chapter_id
     }
+    let!(:forum_link) { ForumLink.create(url: '123', goods_nomenclature_sid: chapter.goods_nomenclature_sid) }
     let!(:footnote) { create :footnote, :with_gono_association, goods_nomenclature_sid: heading.goods_nomenclature_sid }
     let!(:commodity) { heading.commodities.first }
     let(:measure_type) { create :measure_type, measure_type_id: '103' }
@@ -41,6 +42,9 @@ describe Cache::HeadingSerializer do
           validity_end_date: nil,
           description: String,
           formatted_description: String,
+          forum_link: {
+            url: String
+          },
           chapter_note: nil,
           guide_ids: Array,
           guides: Array
