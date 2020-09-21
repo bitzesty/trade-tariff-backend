@@ -1,15 +1,3 @@
-GIT
-  remote: https://gitlab.bitzesty.com/open-source/uktt.git
-  revision: 3783ad4a32a8d87d168a40b4883cc348853f84ad
-  branch: master
-  specs:
-    uktt (0.2.14)
-      faraday
-      nokogiri
-      prawn
-      prawn-table
-      thor (~> 0.20)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -1276,6 +1264,12 @@ GEM
     ttfunk (1.6.2.1)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
+    uktt (0.2.15)
+      faraday
+      nokogiri
+      prawn
+      prawn-table
+      thor (~> 0.20)
     unicode-display_width (1.7.0)
     warden (1.2.8)
       rack (>= 2.0.6)
@@ -1344,7 +1338,7 @@ DEPENDENCIES
   simplecov (~> 0.18)
   sinatra (~> 2.0.2)
   tilt
-  uktt!
+  uktt (~> 0.2.15)
   webmock
   yajl-ruby (~> 1.3.1)
 
