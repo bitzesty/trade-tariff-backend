@@ -87,10 +87,16 @@ module TariffSynchronizer
         record = event.payload[:record]
         xml_key = event.payload[:xml_key]
         xml_node = event.payload[:xml_node]
+        exception = event.payload[:exception]
         TariffSynchronizer::TariffUpdateCdsError.create(
           base_update: @base_update,
           model_name: record.class,
-          details: { errors: record.errors, xml_key: xml_key, xml_node: xml_node }.to_json
+          details: {
+            errors: record.errors,
+            xml_key: xml_key,
+            xml_node: xml_node,
+            exception: exception.class.to_s + ": " + exception.message.to_s
+          }.to_json
         )
       end
     end

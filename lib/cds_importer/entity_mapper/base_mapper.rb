@@ -51,7 +51,7 @@ class CdsImporter
         @values = values.slice(*entity_mapping_key_as_array.keys.map{ |k| k[0] }.uniq)
       end
 
-      # sometimes we have array as a mapping path value,
+      # Sometimes we have array as a mapping path value,
       # so need to iterate through it and import each item separately
       def parse
         expanded = [@values]

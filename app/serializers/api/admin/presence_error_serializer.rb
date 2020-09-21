@@ -1,5 +1,5 @@
 module Api
-  module V2
+  module Admin
     class PresenceErrorSerializer
       include JSONAPI::Serializer
 

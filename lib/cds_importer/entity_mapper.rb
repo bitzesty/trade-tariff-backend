@@ -36,10 +36,10 @@ class CdsImporter
     end
 
     def save_record(record)
-      record.save(validate: false, transaction: false)
-    rescue StandardError
-      instrument("cds_error.cds_importer", record: record, xml_key: @key, xml_node: @values)
-      false
+      save_record!(record)
+    rescue StandardError => e
+      instrument("cds_error.cds_importer", record: record, xml_key: @key, xml_node: @values, exception: e)
+      nil
     end
   end
 end

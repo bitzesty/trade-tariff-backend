@@ -2,8 +2,11 @@ module TariffSynchronizer
   class BaseUpdate < Sequel::Model(:tariff_updates)
     delegate :instrument, to: ActiveSupport::Notifications
 
+    # Used for Some models (see :conformance_validator plugin). Conformance is assumed by CDS.
     one_to_many :conformance_errors, class: TariffUpdateConformanceError, key: :tariff_update_filename
+    # Used for TARIC updates only.
     one_to_many :presence_errors, class: TariffUpdatePresenceError, key: :tariff_update_filename
+    # Used for CDS updates only.
     one_to_many :cds_errors, class: TariffUpdateCdsError, key: :tariff_update_filename
 
     def conformance_error_ids
