@@ -4,7 +4,7 @@ TradeTariffBackend::DataMigrator.migration do
   FOOTNOTE_ID = '004'.freeze
   FOOTNOTE_TYPE = '05'.freeze
   GOODS_NOMENCLATURE_ITEM_ID = '7304293080'.freeze
-  VALIDITY_END_DATE = Date.new(2020, 9, 20)
+  VALIDITY_END_DATE = Date.new(2020, 5, 16)
 
   up do
     applicable do
