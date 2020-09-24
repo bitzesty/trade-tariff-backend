@@ -133,7 +133,7 @@ describe TariffSynchronizer::TariffDownloader do
             tariff_synchronizer_logger_listener
             tariff_downloader.perform
             expect(@logger.logged(:warn).size).to eq 1
-            expect(@logger.logged(:warn).last).to eq("Update not found for 2010-01-01 at http://example.com/taric/KBT009(10001).txt")
+            expect(@logger.logged(:warn).last).to eq("Update NOT found for 2010-01-01 at http://example.com/taric/KBT009(10001).txt")
           end
         end
 

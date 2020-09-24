@@ -20,7 +20,7 @@ module TariffSynchronizer
       end
     end
 
-  private
+    private
 
     def create_entry
       return if tariff_update.present?

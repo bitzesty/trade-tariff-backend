@@ -46,7 +46,7 @@ module Sequel
         # in rails = 5.1.6.1 and sequel >= 5.0.0
         # e.g. Chapter, Heading, Commodity
         def operation=(op)
-          self[:operation] = op.to_s.first.upcase
+          self[:operation] = op.present? ? op[0].upcase : op
         end
 
         def operation
