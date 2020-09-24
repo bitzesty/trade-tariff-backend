@@ -18,7 +18,7 @@ FactoryBot.define do
   end
 
   factory :additional_code_description_period do
-    additional_code_description_period_sid { generate(:additional_code_sid) }
+    additional_code_description_period_sid { generate(:additional_code_description_period_sid) }
     additional_code_sid                    { generate(:additional_code_sid) }
     additional_code_type_id                { generate(:additional_code_type_id) }
     additional_code                        { Forgery(:basic).text(exactly: 3) }
@@ -32,7 +32,7 @@ FactoryBot.define do
       valid_to { nil }
     end
 
-    additional_code_description_period_sid { generate(:additional_code_sid) }
+    additional_code_description_period_sid { generate(:additional_code_description_period_sid) }
     additional_code_sid                    { generate(:additional_code_sid) }
     additional_code_type_id                { generate(:additional_code_type_id) }
     additional_code                        { Forgery(:basic).text(exactly: 3) }
