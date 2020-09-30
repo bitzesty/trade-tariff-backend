@@ -8,7 +8,7 @@ end
 ruby "~> 2.7.1"
 
 # Server
-gem "puma", "~> 5.0.0"
+gem "puma", "~> 5.0.2"
 gem "rails", ">= 6.0.3.3"
 gem "sinatra", "~> 2.0.2"
 
@@ -37,7 +37,7 @@ gem "elasticsearch-extensions", "0.0.30"
 # Helpers
 gem "bootsnap", require: false
 gem "builder", "~> 3.2"
-gem "gds-sso", "~> 13", ">= 12.1.0"
+gem "gds-sso", "~> 13", ">= 13.6.0"
 gem "hashie", "~> 3.4"
 gem "holidays"
 gem "lograge", ">= 0.3.6"
