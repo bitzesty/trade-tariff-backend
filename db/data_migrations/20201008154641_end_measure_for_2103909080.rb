@@ -1,23 +1,41 @@
 TradeTariffBackend::DataMigrator.migration do
-  name 'Delete 425 measure for commodity 2103909080.'
+  name 'End measure 425 for commodity 2103909080.'
 
   MEASURE_TYPE = 'DBE'
   COMMODITY = '2103909080'
-  VALIDITY_END_DATE: '2020-02-29 00:00:00'
 
   up do
     applicable { true }
 
     apply do
-      if measure = Measure::Operation.where(
+      if measures = Measure::Operation.where(
           measure_type_id: MEASURE_TYPE, 
           goods_nomenclature_item_id: COMMODITY
         )
-        measure.validity_end_date = VALIDITY_END_DATE
-        measure.save!
+        measures.each do |measure|
+          measure.validity_end_date = measure.validity_end_date || '2020-02-29 00:00:00'
+          # only update the measures where the validity_end_date is nil, otherwise, assume there's a date there for a reason
+          measure.save
+        end
       end
     end
   end
 
-  down { }
+  down do
+    applicable { true }
+
+    apply do
+      if measures = Measure::Operation.where(
+          measure_type_id: MEASURE_TYPE, 
+          goods_nomenclature_item_id: COMMODITY,
+          validity_end_date: '2020-02-29 00:00:00'
+        )
+        measures.each do |measure|
+          measure.validity_end_date = nil
+          # only update the measures where the validity_end_date is nil, otherwise, assume there's a date there for a reason
+          measure.save
+        end
+      end
+    end
+  end
 end
