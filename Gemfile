@@ -9,7 +9,7 @@ ruby "~> 2.7.1"
 
 # Server
 gem "puma", "~> 5.0.2"
-gem "rails", ">= 6.0.3.3"
+gem "rails", ">= 6.0.3.4"
 gem "sinatra", "~> 2.0.2"
 
 # DB
@@ -22,7 +22,7 @@ gem "aws-sdk", "~> 3"
 gem "aws-sdk-rails", "~> 3"
 
 # File zip/unzipping
-gem "rubyzip", ">= 1.3.0"
+gem "rubyzip", ">= 2.3.0"
 
 # Background jobs
 gem "redis-rails"
