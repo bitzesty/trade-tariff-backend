@@ -119,9 +119,24 @@ module TariffSynchronizer
     TradeTariffBackend.with_redis_lock do
       instrument("download.tariff_synchronizer") do
         begin
-          # TODO: enable cds updates when it's needed
-          # [TaricUpdate, ChiefUpdate, CdsUpdate].map(&:sync)
           [TaricUpdate, ChiefUpdate].map(&:sync)
+        rescue TariffUpdatesRequester::DownloadException => exception
+          instrument("failed_download.tariff_synchronizer", exception: exception)
+          raise exception.original
+        end
+      end
+    end
+  end
+
+  def download_cds
+    if ENV['HMRC_API_HOST'].blank? || ENV['HMRC_CLIENT_ID'].blank? || ENV['HMRC_CLIENT_SECRET'].blank?
+      return instrument("config_error.tariff_synchronizer")
+    end
+
+    TradeTariffBackend.with_redis_lock do
+      instrument("download.tariff_synchronizer") do
+        begin
+          CdsUpdate.sync
         rescue TariffUpdatesRequester::DownloadException => exception
           instrument("failed_download.tariff_synchronizer", exception: exception)
           raise exception.original
@@ -158,6 +173,38 @@ module TariffSynchronizer
         applied_updates << perform_update(ChiefUpdate, day)
       end
 
+      applied_updates.flatten!
+
+      if applied_updates.any? && BaseUpdate.pending_or_failed.none?
+        instrument("apply.tariff_synchronizer",
+          update_names: applied_updates.map(&:filename),
+          unconformant_records: unconformant_records
+        )
+      end
+    end
+  rescue Redlock::LockError
+    instrument("apply_lock_error.tariff_synchronizer")
+  end
+
+  def apply_cds
+    check_tariff_updates_failures
+
+    applied_updates = []
+    unconformant_records = []
+
+    # The sync task is run on multiple machines to avoid more than on process
+    # running the apply task it is wrapped with a redis lock
+    TradeTariffBackend.with_redis_lock do
+
+      # Updates could be modifying primary keys so unrestricted it for all models.
+      Sequel::Model.subclasses.each(&:unrestrict_primary_key)
+
+      subscribe /conformance_error/ do |*args|
+        event = ActiveSupport::Notifications::Event.new(*args)
+        unconformant_records << event.payload[:record]
+      end
+
+      date_range = date_range_since_last_pending_update
       date_range.each do |day|
         applied_updates << perform_update(CdsUpdate, day)
       end
@@ -171,7 +218,6 @@ module TariffSynchronizer
         )
       end
     end
-
   rescue Redlock::LockError
     instrument("apply_lock_error.tariff_synchronizer")
   end
@@ -221,19 +267,6 @@ module TariffSynchronizer
               # need to delete measure logs
               ChiefTransformer::MeasuresLogger.delete_logs(chief_update.filename)
             end
-            # Rollback CDS
-            TariffSynchronizer::CdsUpdate.applied_or_failed.where { issue_date > date_for_rollback }.each do |cds_update|
-              instrument("rollback_update.tariff_synchronizer",
-                update_type: :cds,
-                filename: cds_update.filename
-              )
-
-              cds_update.mark_as_pending
-              cds_update.clear_applied_at
-
-              # delete cds errors
-              cds_update.cds_errors_dataset.destroy
-            end
           else
             # Rollback TARIC
             TariffSynchronizer::TaricUpdate.where { issue_date > date_for_rollback }.each do |taric_update|
@@ -262,8 +295,47 @@ module TariffSynchronizer
 
               chief_update.delete
             end
-            # Rollback CDS
+          end
+        end
+      end
+
+      instrument("rollback.tariff_synchronizer", date: date, keep: keep)
+    end
+  rescue Redlock::LockError
+    instrument("rollback_lock_error.tariff_synchronizer", date: rollback_date, keep: keep)
+  end
+
+  def rollback_cds(rollback_date, keep = false)
+    TradeTariffBackend.with_redis_lock do
+      date = Date.parse(rollback_date.to_s)
+
+      (date..Date.current).to_a.reverse.each do |date_for_rollback|
+        Sequel::Model.db.transaction do
+          if keep
+            TariffSynchronizer::CdsUpdate.applied_or_failed.where { issue_date > date_for_rollback }.each do |cds_update|
+              # Delete actual data
+              oplog_based_models.each do |model|
+                model.operation_klass.where("filename = ?", cds_update.filename).delete
+              end
+
+              instrument("rollback_update.tariff_synchronizer",
+                update_type: :cds,
+                filename: cds_update.filename
+              )
+
+              cds_update.mark_as_pending
+              cds_update.clear_applied_at
+
+              # delete cds errors
+              cds_update.cds_errors_dataset.destroy
+            end
+          else
             TariffSynchronizer::CdsUpdate.where { issue_date > date_for_rollback }.each do |cds_update|
+              # Delete actual data
+              oplog_based_models.each do |model|
+                model.operation_klass.where("filename = ?", cds_update.filename).delete
+              end
+
               instrument("rollback_update.tariff_synchronizer",
                 update_type: :cds,
                 filename: cds_update.filename
