@@ -32,7 +32,6 @@ TradeTariffBackend::DataMigrator.migration do
         )
         measures.each do |measure|
           measure.validity_end_date = nil
-          # only update the measures where the validity_end_date is nil, otherwise, assume there's a date there for a reason
           measure.save
         end
       end
