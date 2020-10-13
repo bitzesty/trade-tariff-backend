@@ -21,6 +21,7 @@ module TariffSynchronizer
       # { "filename"=>"tariff_dailyExtract_v1_20191009T235959.gzip",
       #   "downloadURL"=>"https://sdes.hmrc.gov.uk/api-download/156ec583-9245-484a-9f91-3919493a047d",
       #   "fileSize"=>478 }
+      # downloadURL contains gzip file with an xml file inside.
       daily_files.select! { |file| file['filename'][23..30] == date.strftime("%Y%m%d") }
 
       if daily_files.empty?
@@ -36,7 +37,7 @@ module TariffSynchronizer
     private
 
     def response
-      @response ||= begin
+      @response = Rails.cache.fetch('cds-updates-list', expires_in: 2.hours) do
         uri = URI::join(ENV['HMRC_API_HOST'], '/bulk-data-download/list/TARIFF-DAILY')
         https = Net::HTTP.new(uri.host, uri.port)
         https.use_ssl = true

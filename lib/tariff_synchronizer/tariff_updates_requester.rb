@@ -58,9 +58,12 @@ module TariffSynchronizer
         crawler = Curl::Easy.new(@url)
         crawler.ssl_verify_peer = false
         crawler.ssl_verify_host = false
-        crawler.http_auth_types = :basic
-        crawler.username = TariffSynchronizer.username
-        crawler.password = TariffSynchronizer.password
+        # Add basic auth if it's TARIC or CHIEF, and skip it for CDS updates
+        if URI(@url).host == URI(ENV['TARIFF_SYNC_HOST']).host
+          crawler.http_auth_types = :basic
+          crawler.username = TariffSynchronizer.username
+          crawler.password = TariffSynchronizer.password
+        end
         crawler.perform
       rescue Curl::Err::HostResolutionError,
              Curl::Err::ConnectionFailedError,
