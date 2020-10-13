@@ -31,7 +31,7 @@ describe TaricImporter::RecordProcessor::Record do
     end
 
     it 'assigns sanitized attributes' do
-      expect(record.attributes).to eq({"language_code_id"=>"FR", "language_id"=>"EN", "description"=>"French"})
+      expect(record.attributes).to eq({"language_code_id"=>"FR", "language_id"=>"EN", "description"=>"French", "filename" => nil})
     end
   end
 
@@ -44,7 +44,7 @@ describe TaricImporter::RecordProcessor::Record do
       it 'assigns attributes unmutated' do
         record.attributes = { 'foo' => 'bar' }
 
-        expect(record.attributes).to eq({"language_code_id"=>nil, "language_id"=>nil, "description"=>nil, "foo"=>"bar"})
+        expect(record.attributes).to eq({"language_code_id"=>nil, "language_id"=>nil, "description"=>nil, "foo"=>"bar", "filename" => nil})
       end
     end
 
@@ -66,7 +66,7 @@ describe TaricImporter::RecordProcessor::Record do
       it 'assigns mutated attributes' do
         record.attributes = { 'foo' => 'bar' }
 
-        expect(record.attributes).to eq({"language_code_id"=>nil, "language_id"=>nil, "description"=>nil, "foo_id"=>"bar"})
+        expect(record.attributes).to eq({"language_code_id"=>nil, "language_id"=>nil, "description"=>nil, "foo_id"=>"bar", "filename" => nil})
       end
     end
   end

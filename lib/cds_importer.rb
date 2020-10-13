@@ -31,8 +31,7 @@ class CdsImporter
         # do the xml parsing depending on records root depth
         CdsImporter::XmlParser::Reader.new(xml_stream.read, handler).parse
 
-        ActiveSupport::Notifications.instrument("cds_imported.tariff_importer",
-                                                filename: @cds_update.filename)
+        ActiveSupport::Notifications.instrument("cds_imported.tariff_importer", filename: @cds_update.filename)
       end
     end
   end
