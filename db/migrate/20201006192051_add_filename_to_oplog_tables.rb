@@ -36,7 +36,7 @@ Sequel.migration do
                                                                                 .where(pk_assoc_hash))
                                             .where{ Sequel.~(:"#{view_name}1__operation" => "D") })
     end
-    
+
     run QuotaCriticalEvents_20201006.up
   end
 
@@ -44,7 +44,7 @@ Sequel.migration do
     Sequel::Model.db.tables.select { |table_name| table_name.to_s.include?("_oplog") }.each do |table_name|
       # name of the view we are going to build
       view_name = table_name.to_s.split("_oplog").first
-      
+
       if table_name == "quota_critical_events_oplog"
         drop_view(view_name)
 
@@ -55,7 +55,7 @@ Sequel.migration do
         run QuotaCriticalEvents_20201006.down
         next
       end
-      
+
       # primary key of the view
       # from class that inherits from Sequel::Model
       pk = view_name.classify.constantize.primary_key
@@ -117,7 +117,7 @@ class QuotaCriticalEvents_20201006
               group by quota_critical_events2.oid
               order by quota_critical_events2.oid desc
             ) and (
-              quota_critical_events1.operation <> "D"
+              quota_critical_events1.operation <> 'D'
             )
           )
     }
@@ -148,7 +148,7 @@ class QuotaCriticalEvents_20201006
               group by quota_critical_events2.oid
               order by quota_critical_events2.oid desc
             ) and (
-              quota_critical_events1.operation <> "D"
+              quota_critical_events1.operation <> 'D'
             )
           )
     }

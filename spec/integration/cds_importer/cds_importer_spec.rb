@@ -2,12 +2,12 @@ require "rails_helper"
 require "fileutils"
 
 describe CdsImporter do
-  let(:cds_update) { TariffSynchronizer::CdsUpdate.new(filename: "filename.xml") }
+  let(:cds_update) { TariffSynchronizer::CdsUpdate.new(filename: "tariff_dailyExtract_v1_20201004T235959.gzip") }
   let(:importer) { CdsImporter.new(cds_update) }
 
   before(:all) do
     FileUtils.mkpath("tmp/data/cds")
-    FileUtils.touch("tmp/data/cds/filename.xml")
+    FileUtils.cp("spec/fixtures/cds_samples/tariff_dailyExtract_v1_20201004T235959.gzip","tmp/data/cds/tariff_dailyExtract_v1_20201004T235959.gzip")
   end
 
   describe "#import" do
@@ -23,9 +23,10 @@ describe CdsImporter do
   end
 
   describe "XmlProcessor" do
-    let(:processor) { CdsImporter::XmlProcessor.new }
+    let(:processor) { CdsImporter::XmlProcessor.new(cds_update.filename) }
 
     it "should invoke EntityMapper" do
+      expect(CdsImporter::EntityMapper).to receive(:new).with("AdditionalCode", { "filename" => cds_update.filename }).and_call_original
       expect_any_instance_of(CdsImporter::EntityMapper).to receive(:import)
       processor.process_xml_node("AdditionalCode", {})
     end
