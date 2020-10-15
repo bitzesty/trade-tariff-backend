@@ -5,7 +5,7 @@ TradeTariffBackend::DataMigrator.migration do
     applicable { true }
     apply {
 
-      footnote = Footnote.where(footnote_id: "425", footnote_type_id: "01").first
+      footnote = Footnote.where(footnote_id: "853", footnote_type_id: "05").first
 
       codes = %w[2103909081 2103909089]
 
