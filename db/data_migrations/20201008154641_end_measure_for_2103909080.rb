@@ -8,15 +8,13 @@ TradeTariffBackend::DataMigrator.migration do
     applicable { true }
 
     apply do
-      if measures = Measure::Operation.where(
-          measure_type_id: MEASURE_TYPE, 
-          goods_nomenclature_item_id: COMMODITY
-        )
-        measures.each do |measure|
-          measure.validity_end_date = measure.validity_end_date || '2020-02-29 00:00:00'
-          # only update the measures where the validity_end_date is nil, otherwise, assume there's a date there for a reason
-          measure.save
-        end
+      Measure::Operation.where(
+        measure_type_id: MEASURE_TYPE, 
+        goods_nomenclature_item_id: COMMODITY
+      ).each do |measure|
+        measure.validity_end_date = measure.validity_end_date || '2020-02-29 00:00:00'
+        # only update the measures where the validity_end_date is nil, otherwise, assume there's a date there for a reason
+        measure.save
       end
     end
   end
