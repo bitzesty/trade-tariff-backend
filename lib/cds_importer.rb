@@ -1,7 +1,8 @@
 require 'zip'
+# It's important to require mappers before xml_parser and entity_mapper to load all descendants
+Dir[File.join(Rails.root, 'lib', 'cds_importer/entity_mapper/*.rb')].each { |f| require f }
 require 'cds_importer/xml_parser'
 require 'cds_importer/entity_mapper'
-Dir[File.join(Rails.root, 'lib', 'cds_importer/entity_mapper/*.rb')].each{|f| require f }
 
 class CdsImporter
   class ImportException < StandardError
