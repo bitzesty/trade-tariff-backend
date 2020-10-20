@@ -35,7 +35,7 @@ module TariffSynchronizer
         if Rails.env.production?
           bucket.object(file_path).size
         else
-          File.read(file_path).size
+          File.open(file_path).size
         end
       end
 
@@ -43,7 +43,7 @@ module TariffSynchronizer
         if Rails.env.production? && ENV['CDS'] != 'true'
           bucket.object(tariff_update.file_path).get.body
         else
-          IO.new(IO.sysopen(tariff_update.file_path))
+          File.open(tariff_update.file_path)
         end
       end
 

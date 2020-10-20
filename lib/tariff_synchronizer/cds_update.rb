@@ -19,11 +19,8 @@ module TariffSynchronizer
 
     private
 
-    def self.validate_file!(xml_string)
-      # maybe we need to validate gzip
+    def self.validate_file!(_gzip_string)
       true
-    rescue Ox::ParseError => e
-      raise InvalidContents.new(e.message, e)
     end
   end
 end
