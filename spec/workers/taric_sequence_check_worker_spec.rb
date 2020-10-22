@@ -8,7 +8,7 @@ describe TaricSequenceCheckWorker do
 
   describe "#perfomr" do
     it "creates an instance of TaricSequenceCheck" do
-      expect(TariffSynchronizer::TaricSequenceChecker).to receive(:new).and_call_original
+      expect(TariffSynchronizer::TaricSequenceChecker).to receive(:new).with(true).and_call_original
 
       described_class.new.perform
     end

@@ -8,7 +8,7 @@ describe TariffSynchronizer::TaricSequenceChecker do
   let(:response) { TariffSynchronizer::Response.new(200, "abc\ndef.xml") }
   let(:with_email) { false }
   let(:mail) { double }
-  subject { described_class.new(with_email: with_email) }
+  subject { described_class.new(with_email) }
 
   before do
     allow_any_instance_of(described_class).to receive(:interval).and_return(Date.new(2020, 01, 01)..Date.new(2020,01,01))
