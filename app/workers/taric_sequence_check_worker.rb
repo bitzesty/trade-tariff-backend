@@ -5,6 +5,6 @@ class TaricSequenceCheckWorker
 
   def perform
     logger.info "Running TARIC files sequence check"
-    TariffSynchronizer::TaricSequenceChecker.new(with_email: true).perform
+    TariffSynchronizer::TaricSequenceChecker.new(true).perform
   end
 end
