@@ -37,9 +37,7 @@ module Cache
             forum_link: {
               url: heading.chapter.forum_link&.url,
             },
-            guide_ids: heading.chapter.guides.map do |guide|
-              guide.id
-            end,
+            guide_ids: heading.chapter.guides.map(&:id),
             guides: heading.chapter.guides.map do |guide|
               {
                 id: guide.id,
