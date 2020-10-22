@@ -13,7 +13,7 @@ gem "rails", ">= 6.0.3.4"
 gem "sinatra", "~> 2.0.2"
 
 # DB
-gem 'pg', "~> 1.1", ">= 1.1.3"
+gem "pg", "~> 1.1", ">= 1.1.3"
 gem "sequel", "~> 5.22.0"
 gem "sequel-rails", "~> 1.0.0"
 
@@ -36,20 +36,17 @@ gem "elasticsearch-extensions", "0.0.30"
 
 # Helpers
 gem "bootsnap", require: false
-gem "builder", "~> 3.2"
 gem "gds-sso", "~> 13", ">= 13.6.0"
-gem "hashie", "~> 3.4"
+gem "hashie", "~> 4"
 gem "holidays"
 gem "lograge", ">= 0.3.6"
 gem "logstash-event"
-gem "multi_json", "~> 1.11"
 gem "scout_apm"
 gem "nokogiri", ">= 1.10.9"
 gem "ox", ">= 2.8.1"
 gem "plek", "~> 1.11"
 gem "rack-timeout", "~> 0.4"
 gem "sentry-raven"
-gem "yajl-ruby", "~> 1.3.1", require: "yajl"
 
 # API related
 gem "ansi", "~> 1.5"
@@ -60,9 +57,9 @@ gem "responders", "~> 3.0.0"
 gem "tilt"
 
 # Printed PDF
-gem 'uktt', '~> 0.2.15'
-gem 'combine_pdf'
-gem 'sidekiq-batch'
+gem "uktt", "~> 0.2.15"
+gem "combine_pdf"
+gem "sidekiq-batch"
 
 group :development do
   gem "foreman"
@@ -71,7 +68,7 @@ group :development do
 end
 
 group :development, :test do
-  gem "dotenv-rails", ">= 2.1.1"
+  gem "dotenv-rails", ">= 2.7.6"
 end
 
 group :test do
