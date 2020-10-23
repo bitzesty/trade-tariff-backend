@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe TaricSequenceCheckWorker do
+describe TaricSequenceCheckWorker, type: :worker do
   before do
     allow($stdout).to receive(:write)
     allow_any_instance_of(TariffSynchronizer::TaricSequenceChecker).to receive(:perform)
