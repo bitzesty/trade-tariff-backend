@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe BuildIndexPageWorker do
+describe BuildIndexPageWorker, type: :worker do
   describe '#methods' do
     describe 'build index page' do
       let(:commodity) {
