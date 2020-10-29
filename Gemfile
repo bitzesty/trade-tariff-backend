@@ -47,6 +47,7 @@ gem "ox", ">= 2.8.1"
 gem "plek", "~> 1.11"
 gem "rack-timeout", "~> 0.4"
 gem "sentry-raven"
+gem "sitemap_generator", "~> 6.1.2"
 
 # API related
 gem "ansi", "~> 1.5"
