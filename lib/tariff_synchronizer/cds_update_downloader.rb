@@ -5,37 +5,35 @@ module TariffSynchronizer
 
     delegate :instrument, :subscribe, to: ActiveSupport::Notifications
 
-    attr_reader :date
+    attr_reader :request_date
 
-    def initialize(date)
-      @date = date
+    def initialize(request_date)
+      @request_date = request_date
     end
 
     def perform
-      return if check_date_already_downloaded?
-
       log_request_to_cds_daily_updates
 
+      # CDS updates are published with a few days delay so we should check past dates.
+      range = ((request_date - 5.days)..request_date).to_a
       daily_files = JSON.parse(response.body)
-      # Example:
-      # { "filename"=>"tariff_dailyExtract_v1_20191009T235959.gzip",
-      #   "downloadURL"=>"https://sdes.hmrc.gov.uk/api-download/156ec583-9245-484a-9f91-3919493a047d",
-      #   "fileSize"=>478 }
-      # downloadURL contains gzip file with an xml file inside.
-      daily_files.select! { |file| file['filename'][23..30] == date.strftime("%Y%m%d") }
 
-      if daily_files.empty?
-        create_record_for_not_found_response
-        return
-      end
+      return if daily_files.empty?
 
-      daily_files.each do |file|
+      range.each do |date|
+        file = daily_files.find { |df| df['filename'][23..30] == date.strftime("%Y%m%d") }
+        next unless file
         TariffDownloader.new(file['filename'], file['downloadURL'], date, TariffSynchronizer::CdsUpdate).perform
       end
     end
 
     private
 
+    # Example:
+    # { "filename"=>"tariff_dailyExtract_v1_20191009T235959.gzip",
+    #   "downloadURL"=>"https://sdes.hmrc.gov.uk/api-download/156ec583-9245-484a-9f91-3919493a047d",
+    #   "fileSize"=>478 }
+    # downloadURL contains gzip file with an xml file inside.
     def response
       @response = Rails.cache.fetch('cds-updates-list', expires_in: 2.hours) do
         uri = URI::join(ENV['HMRC_API_HOST'], '/bulk-data-download/list/TARIFF-DAILY')
@@ -49,28 +47,8 @@ module TariffSynchronizer
       end
     end
 
-    def check_date_already_downloaded?
-      CdsUpdate.find(issue_date: date).present?
-    end
-
-    def missing_filename
-      "#{date}_cds"
-    end
-
-    def update_or_create(state, file_name)
-      TariffSynchronizer::CdsUpdate.find_or_create(filename: file_name, issue_date: date).update(state: state)
-    end
-
     def log_request_to_cds_daily_updates
-      instrument("get_cds_daily_updates.tariff_synchronizer", date: date)
-    end
-
-    def create_record_for_not_found_response
-      # Do not create missing record until we are sure until the next day
-      return if date >= Date.current
-
-      update_or_create(BaseUpdate::MISSING_STATE, missing_filename)
-      instrument("cds_not_found.tariff_synchronizer", date: date)
+      instrument("get_cds_daily_updates.tariff_synchronizer", date: request_date)
     end
 
     def access_token
