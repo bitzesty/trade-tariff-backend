@@ -4,32 +4,16 @@ describe Api::Admin::ChemicalsController do
   render_views
 
   let(:chemical) { create :chemical, :with_name }
-  let(:commodity) { create :commodity }
-  let(:commodity2) { create :commodity }
-  let(:commodity3) { create :commodity }
-  let(:association) do
-    create :chemicals_goods_nomenclatures,
-           chemical_id: chemical.id,
-           goods_nomenclature_sid: commodity.goods_nomenclature_sid
-  end
-
-  before do
-    login_as_api_user
-    expect(association).to exist
-  end
-
   let(:response_pattern_collection) do
     {
       data: [response_pattern_inner]
     }
   end
-
   let(:response_pattern_object) do
     {
       data: response_pattern_inner
     }
   end
-
   let(:response_pattern_inner) do
     {
       id: String,
@@ -58,9 +42,21 @@ describe Api::Admin::ChemicalsController do
       }
     }
   end
-
   let(:json_body) do
     JSON.parse(response.body)['data']
+  end
+  let(:commodity) { create :commodity }
+  let(:commodity2) { create :commodity }
+  let(:commodity3) { create :commodity }
+  let(:association) do
+    create :chemicals_goods_nomenclatures,
+           chemical_id: chemical.id,
+           goods_nomenclature_sid: commodity.goods_nomenclature_sid
+  end
+
+  before do
+    login_as_api_user
+    expect(association).to exist
   end
 
   specify 'GET to #index returns collection of chemicals' do

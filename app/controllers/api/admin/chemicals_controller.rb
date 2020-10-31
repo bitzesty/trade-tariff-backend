@@ -32,19 +32,8 @@ module Api
         end
 
         if @chemical.present? && @commodity.present?
-          begin
-            ChemicalsGoodsNomenclatures.insert(
-              chemical_id: @chemical.id,
-              goods_nomenclature_sid: @commodity.id
-            )
-          rescue StandardError
-            @errors << "Mapping was not created: chemical_id: #{@chemical.id}, goods_nomenclature_sid: #{@commodity.id}"
-          end
-
-          @map = ChemicalsGoodsNomenclatures.find(
-            chemical_id: @chemical.id,
-            goods_nomenclature_sid: @commodity.id
-          )
+          create_chemical_commodity_mapping
+          fetch_map
           unless @map.present?
             @errors << "Newly created mapping was not found: chemical_id: #{@chemical.id}, goods_nomenclature_sid: #{@commodity.id}"
           end
@@ -59,16 +48,7 @@ module Api
       # PUT   /admin/chemicals/:chemical_id/map/:gn_id
       def update_map
         if @chemical.present? && @map.present? && @new_commodity.present?
-          Sequel::Model.db.transaction do
-            ChemicalsGoodsNomenclatures.unrestrict_primary_key
-            ChemicalsGoodsNomenclatures.create(
-              chemical_id: @chemical.id,
-              goods_nomenclature_sid: @new_commodity.id
-            )
-            @map.destroy
-          rescue StandardError
-            @errors << "Mapping already exists: chemical_id: #{@chemical.id}, goods_nomenclature_sid: #{@commodity.id}"
-          end
+          update_chemical_commodity_mapping
         else
           @errors << "Mapping was not updated: chemical.id: #{@chemical.id}, old_gn: #{@map.goods_nomenclature_item_id}, new_gn: #{@new_commodity.goods_nomenclature_item_id}"
         end
@@ -96,7 +76,11 @@ module Api
       def fetch_objects
         fetch_chemical
         @commodity = GoodsNomenclature.where(goods_nomenclature_sid: params[:gn_id]).first
+        fetch_map
         @new_commodity = GoodsNomenclature.where(goods_nomenclature_sid: params[:new_id]).first if params[:new_id]
+      end
+
+      def fetch_map
         @map = ChemicalsGoodsNomenclatures.find(
           chemical_id: @chemical.id,
           goods_nomenclature_sid: @commodity.id
@@ -112,6 +96,28 @@ module Api
           render json: data, status: :unprocessable_entity
         else
           render json: Api::Admin::Chemicals::ChemicalSerializer.new(obj || @chemical.refresh).serializable_hash
+        end
+      end
+
+      def create_chemical_commodity_mapping
+        ChemicalsGoodsNomenclatures.insert(
+          chemical_id: @chemical.id,
+          goods_nomenclature_sid: @commodity.id
+        )
+      rescue StandardError
+        @errors << "Mapping was not created: chemical_id: #{@chemical.id}, goods_nomenclature_sid: #{@commodity.id}"
+      end
+
+      def update_chemical_commodity_mapping
+        Sequel::Model.db.transaction do
+          ChemicalsGoodsNomenclatures.unrestrict_primary_key
+          ChemicalsGoodsNomenclatures.create(
+            chemical_id: @chemical.id,
+            goods_nomenclature_sid: @new_commodity.id
+          )
+          @map.destroy
+        rescue StandardError
+          @errors << "Mapping already exists: chemical_id: #{@chemical.id}, goods_nomenclature_sid: #{@commodity.id}"
         end
       end
     end
