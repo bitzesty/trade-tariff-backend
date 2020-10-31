@@ -13,4 +13,8 @@ class Chemical < Sequel::Model
   def chemical_name_ids
     chemical_names.map(&:id)
   end
+
+  def id_to_s
+    id.to_s
+  end
 end
