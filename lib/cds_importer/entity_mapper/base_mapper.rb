@@ -44,8 +44,7 @@ class CdsImporter
         "validityEndDate" => :validity_end_date,
         "metainfo.origin" => :national,
         "metainfo.opType" => :operation,
-        "metainfo.transactionDate" => :operation_date,
-        "filename" => :filename
+        "metainfo.transactionDate" => :operation_date
       }.freeze
 
       def initialize(values)
