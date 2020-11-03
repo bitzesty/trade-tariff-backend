@@ -15,6 +15,7 @@ module Api
         attribute :id, &:id_to_s
         attribute :cas
         attribute :name, &:name
+        attribute :goods_nomenclature_map
 
         has_many :goods_nomenclatures, serializer: Api::Admin::Commodities::CommoditySerializer
         has_many :chemical_names

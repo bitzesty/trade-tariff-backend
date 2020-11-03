@@ -4,12 +4,13 @@ module Api
       before_action :authenticate_user!
       before_action :fetch_chemical, only: %i[show show_map]
       before_action :fetch_objects, only: %i[create_map update_map]
+      before_action :set_up_errors
 
       # GET    /admin/chemicals
       def index
-        @errors = []
+        # @errors = []
 
-        respond_with Chemical.all
+        respond_with Chemical.order_by(:id).all
       end
 
       # GET   /admin/chemicals/:chemical_id
@@ -50,11 +51,12 @@ module Api
         if @chemical.present? && @map.present? && @new_commodity.present?
           update_chemical_commodity_mapping
         else
-          @errors << "Mapping was not updated: chemical.id: #{@chemical.id}, old_gn: #{@map.goods_nomenclature_item_id}, new_gn: #{@new_commodity.goods_nomenclature_item_id}"
+          @errors << "Mapping was not updated: chemical.id: #{@chemical&.id}, old_gn: #{@map&.goods_nomenclature_sid}, new_gn: #{@new_commodity&.goods_nomenclature_item_id}"
         end
 
         respond_with @chemical.refresh
       end
+      alias update update_map
 
       private
 
@@ -64,10 +66,10 @@ module Api
       end
 
       def fetch_chemical
-        @errors = []
+        # @errors = []
 
         unless id = params[:chemical_id] || params[:id] || false
-          @errors << "Chemical id not found: chemical_id: #{params[:chemical_id]}"
+          @errors << "Chemical id not found: chemical_id: #{id}"
         end
 
         @errors << "Chemical not found: chemical_id: #{params[:chemical_id]}" unless @chemical = Chemical.find(id: id)
@@ -75,16 +77,30 @@ module Api
 
       def fetch_objects
         fetch_chemical
-        @commodity = GoodsNomenclature.where(goods_nomenclature_sid: params[:gn_id]).first
+        fetch_commodity
         fetch_map
-        @new_commodity = GoodsNomenclature.where(goods_nomenclature_sid: params[:new_id]).first if params[:new_id]
+        fetch_new_commodity
       end
-
+      
       def fetch_map
         @map = ChemicalsGoodsNomenclatures.find(
           chemical_id: @chemical.id,
           goods_nomenclature_sid: @commodity.id
         )
+      end
+      
+      def fetch_commodity
+        @commodity = GoodsNomenclature.where(goods_nomenclature_sid: params[:gn_id]).first
+      rescue PG::NumericValueOutOfRange
+        GoodsNomenclature.where(goods_nomenclature_item_id: params[:gn_id]).first
+      end
+
+      def fetch_new_commodity
+        @new_commodity = GoodsNomenclature.where(goods_nomenclature_item_id: params[:new_id]).first if params[:new_id]
+      end
+
+      def set_up_errors
+        @errors = []
       end
 
       def respond_with(obj, errors = @errors)

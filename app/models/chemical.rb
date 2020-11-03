@@ -10,6 +10,14 @@ class Chemical < Sequel::Model
     goods_nomenclatures.map(&:goods_nomenclature_sid)
   end
 
+  def goods_nomenclature_map
+    obj = {}
+    goods_nomenclatures.each do |gn|
+      obj[gn.goods_nomenclature_sid] = gn.goods_nomenclature_item_id
+    end
+    obj
+  end
+
   def chemical_name_ids
     chemical_names.map(&:id)
   end

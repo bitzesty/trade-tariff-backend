@@ -21,7 +21,8 @@ describe Api::Admin::ChemicalsController do
       attributes: {
         id: String,
         cas: String,
-        name: String
+        name: String,
+        goods_nomenclature_map: { }.ignore_extra_keys!
       },
       relationships: {
         goods_nomenclatures: {
@@ -84,7 +85,7 @@ describe Api::Admin::ChemicalsController do
   end
 
   specify 'UPDATE: PUT (also PATCH) to `/admin/chemicals/:chemical_id/map/:gn_id` returns the chemical, now associated with the new commodity and not associated with the old commodity' do
-    put :update_map, format: :json, params: { chemical_id: chemical.id, gn_id: commodity.pk, new_id: commodity3.pk }
+    put :update_map, format: :json, params: { chemical_id: chemical.id, gn_id: commodity.pk, new_id: commodity3.goods_nomenclature_item_id }
     commodity_ids = json_body['relationships']['goods_nomenclatures']['data'].map { |f| f['id'] }
 
     expect(response.body).to match_json_expression response_pattern_object
