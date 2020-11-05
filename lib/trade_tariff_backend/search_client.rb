@@ -77,7 +77,6 @@ module TradeTariffBackend
       search_index_for(namespace, model.class).tap do |model_index|
         super({
           index: model_index.name,
-          type: model_index.type,
           id: model.id,
           body: TradeTariffBackend.model_serializer_for(namespace, model_index.model).new(model).as_json
         }.merge(search_operation_options))
@@ -88,7 +87,6 @@ module TradeTariffBackend
       search_index_for(namespace, model.class).tap do |model_index|
         super({
           index: model_index.name,
-          type: model_index.type,
           id: model.id
         }.merge(search_operation_options))
       end

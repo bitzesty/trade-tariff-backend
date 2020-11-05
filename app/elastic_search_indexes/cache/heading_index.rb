@@ -3,10 +3,8 @@ module Cache
     def definition
       {
         mappings: {
-          heading: {
-            dynamic: false,
-            properties: {}
-          }
+          dynamic: false,
+          properties: {}
         }
       }
     end

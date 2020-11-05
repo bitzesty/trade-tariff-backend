@@ -24,7 +24,7 @@ describe BuildIndexPageWorker, type: :worker do
         
         search_result = TradeTariffBackend.search_client.search q: 'test', index: TradeTariffBackend.search_index_for('search', commodity).name
       
-        expect(search_result.hits.total).to be >= 1
+        expect(search_result.hits.total.value).to be >= 1
         expect(search_result.hits.hits.first._source.goods_nomenclature_item_id).to eq commodity.goods_nomenclature_item_id
       end
     end
