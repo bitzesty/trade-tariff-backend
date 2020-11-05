@@ -46,7 +46,7 @@ jobs:
       - name: Runs Elasticsearch
         uses: elastic/elastic-github-actions/elasticsearch@master
         with:
-          stack-version: 6.4.2
+          stack-version: 7.9.3
       - name: Build and run tests
         env:
           BUNDLER_VERSION: 2.1.4

@@ -4,7 +4,6 @@ class SearchService
       def query(query_opts = {})
         {
           index: index.name,
-          type: index.type,
           search: {
             query: {
               constant_score: {
@@ -65,11 +64,10 @@ class SearchService
                     ]
                   }
                 }
-             }
-           },
-           size: INDEX_SIZE_MAX
-         }
-       }
+              }
+            }, size: INDEX_SIZE_MAX
+          }
+        }
       end
     end
   end

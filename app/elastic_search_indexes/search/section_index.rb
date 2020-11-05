@@ -7,13 +7,11 @@ module Search
     def definition
       {
         mappings: {
-          section: {
-            properties: {
-              position: {type: "long"},
-              id: {type: "long"},
-              title: {type: "text", analyzer: "snowball"},
-              numeral: {type: "keyword"}
-            }
+          properties: {
+            position: {type: "long"},
+            id: {type: "long"},
+            title: {type: "text", analyzer: "snowball"},
+            numeral: {type: "keyword"}
           }
         }
       }

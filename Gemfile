@@ -31,8 +31,8 @@ gem "sidekiq-scheduler", "~> 3.0.1"
 gem "redlock", "~> 1.1.0"
 
 # Elasticsearch
-gem "elasticsearch", "6.1.0"
-gem "elasticsearch-extensions", "0.0.30"
+gem "elasticsearch", "7.9.0"
+gem "elasticsearch-extensions", "0.0.31"
 
 # Helpers
 gem "bootsnap", require: false
