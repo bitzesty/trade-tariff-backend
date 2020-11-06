@@ -7,20 +7,18 @@ module Search
     def definition
       {
         mappings: {
-          chapter: {
-            properties: {
-              id: {type: 'long'},
-              description: {type: 'text', analyzer: 'snowball'},
-              validity_start_date: {type: 'date', format: 'dateOptionalTime'},
-              producline_suffix: {type: 'keyword'},
-              goods_nomenclature_item_id: {type: 'keyword'},
-              section: {
-                dynamic: true,
-                properties: {
-                  position: {type: 'long'},
-                  title: {type: 'text'},
-                  numeral: {type: 'keyword'}
-                }
+          properties: {
+            id: {type: 'long'},
+            description: {type: 'text', analyzer: 'snowball'},
+            validity_start_date: {type: 'date', format: 'date_optional_time'},
+            producline_suffix: {type: 'keyword'},
+            goods_nomenclature_item_id: {type: 'keyword'},
+            section: {
+              dynamic: true,
+              properties: {
+                position: {type: 'long'},
+                title: {type: 'text'},
+                numeral: {type: 'keyword'}
               }
             }
           }

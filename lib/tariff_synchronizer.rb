@@ -82,7 +82,7 @@ module TariffSynchronizer
   # set initial update date
   # Initial dump date + 1 day
   mattr_accessor :cds_initial_update_date
-  self.cds_initial_update_date = Date.new(2021,1,1)
+  self.cds_initial_update_date = Date.new(2020,9,1)
 
   # Times to retry downloading update before giving up
   mattr_accessor :retry_count

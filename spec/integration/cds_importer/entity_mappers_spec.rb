@@ -1030,6 +1030,7 @@ describe CdsImporter::EntityMapper do
     values = {
       "sid" => "234",
       "validityStartDate" => "1984-01-01T00:00:00",
+      "validityEndDate" => nil,
       "geographicalCode" => "1",
       "geographicalAreaId" => "1032",
       "metainfo" => {
@@ -1045,6 +1046,8 @@ describe CdsImporter::EntityMapper do
     expect(entity.geographical_area_sid.to_s).to eq(values["sid"])
     expect(entity.geographical_code).to eq(values["geographicalCode"])
     expect(entity.geographical_area_id).to eq(values["geographicalAreaId"])
+    expect(entity.validity_start_date).to eq(values["validityStartDate"])
+    expect(entity.validity_end_date).to eq(values["validityEndDate"])
     expect(entity.national).to be_truthy
     expect(entity.operation).to eq(:update)
     expect(entity.operation_date).to eq(Date.parse(values["metainfo"]["transactionDate"]))
@@ -1090,6 +1093,7 @@ describe CdsImporter::EntityMapper do
       "geographicalAreaDescriptionPeriod" => {
         "sid" => "1239",
         "validityStartDate" => "2008-01-01T00:00:00",
+        "validityEndDate" => nil,
         "metainfo" => {
           "opType" => "U",
           "origin" => "N",
@@ -1104,6 +1108,7 @@ describe CdsImporter::EntityMapper do
     expect(entity.geographical_area_description_period_sid.to_s).to eq(values["geographicalAreaDescriptionPeriod"]["sid"])
     expect(entity.geographical_area_sid.to_s).to eq(values["sid"])
     expect(entity.validity_start_date).to eq(values["geographicalAreaDescriptionPeriod"]["validityStartDate"])
+    expect(entity.validity_end_date).to eq(values["geographicalAreaDescriptionPeriod"]["validityEndDate"])
     expect(entity.geographical_area_id).to eq(values["geographicalAreaId"])
     expect(entity.national).to be_truthy
     expect(entity.operation).to eq(:update)
@@ -1112,10 +1117,18 @@ describe CdsImporter::EntityMapper do
 
   it "GeographicalAreaMembership sample" do
     values = {
+      "hjid" => "123",
       "sid" => "234",
+      "metainfo" => {
+        "opType" => "U",
+        "origin" => "N",
+        "transactionDate" => "2017-08-29T20:14:17"
+      },
       "geographicalAreaMembership" => {
+        "hjid" => "25864",
         "geographicalAreaGroupSid" => "461273",
         "validityStartDate" => "2008-01-01T00:00:00",
+        "validityEndDate" => "2020-06-29T20:04:37",
         "metainfo" => {
           "opType" => "U",
           "origin" => "N",
@@ -1130,6 +1143,7 @@ describe CdsImporter::EntityMapper do
     expect(entity.geographical_area_sid.to_s).to eq(values["sid"])
     expect(entity.geographical_area_group_sid.to_s).to eq(values["geographicalAreaMembership"]["geographicalAreaGroupSid"])
     expect(entity.validity_start_date).to eq(values["geographicalAreaMembership"]["validityStartDate"])
+    expect(entity.validity_end_date).to eq(values["geographicalAreaMembership"]["validityEndDate"])
     expect(entity.operation).to eq(:update)
     expect(entity.national).to be_truthy
     expect(entity.operation_date).to eq(Date.parse(values["geographicalAreaMembership"]["metainfo"]["transactionDate"]))

@@ -7,6 +7,7 @@ class CdsImporter
     def initialize(key, values)
       @key = key
       @values = values
+      @filename = @values.delete("filename")
     end
 
     def import
@@ -32,6 +33,7 @@ class CdsImporter
     private
 
     def save_record!(record)
+      record.filename = @filename
       record.save(validate: false, transaction: false)
     end
 

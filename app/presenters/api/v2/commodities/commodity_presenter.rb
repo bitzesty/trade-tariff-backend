@@ -2,9 +2,9 @@ module Api
   module V2
     module Commodities
       class CommodityPresenter < SimpleDelegator
-        attr_reader :commodity, :footnotes, :import_measures, :export_measures, :cache_key
+        attr_reader :commodity, :footnotes, :import_measures, :export_measures
 
-        def initialize(commodity, measures, cache_key)
+        def initialize(commodity, measures)
           super(commodity)
           @commodity = commodity
           @footnotes = commodity.footnotes + commodity.heading.footnotes
@@ -14,7 +14,6 @@ module Api
           @export_measures = measures.select(&:export).map do |measure|
             Api::V2::Measures::MeasurePresenter.new(measure, commodity)
           end
-          @cache_key = cache_key
         end
 
         def consigned

@@ -61,7 +61,7 @@ class FootnoteSearchService
     search_client = ::TradeTariffBackend.cache_client
     index = ::Cache::FootnoteIndex.new(TradeTariffBackend.search_namespace).name
     result = search_client.search index: index, body: { query: { constant_score: { filter: { bool: { must: @query } } } }, size: per_page, from: (current_page - 1) * per_page, sort: %w(footnote_type_id footnote_id) }
-    @pagination_record_count = result&.hits&.total || 0
+    @pagination_record_count = result&.hits&.total&.value || 0
     @result = result&.hits&.hits&.map(&:_source)
   end
 
