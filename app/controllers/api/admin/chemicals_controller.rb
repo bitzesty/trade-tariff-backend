@@ -4,7 +4,7 @@ module Api
       before_action :authenticate_user!
       before_action :set_up_errors
       before_action :fetch_chemical, only: %i[show show_map]
-      before_action :fetch_objects, only: %i[create_map update_map]
+      before_action :fetch_objects, only: %i[create_map update_map delete_map]
 
       # GET    /admin/chemicals
       def index
@@ -56,6 +56,14 @@ module Api
           @errors << "Mapping was not updated: chemical.id: #{@chemical&.id}, old_gn: #{@map&.goods_nomenclature_sid}, new_gn: #{@new_commodity&.goods_nomenclature_item_id}"
           status = :not_found
         end
+
+        respond_with @chemical.refresh, status: status
+      end
+
+      # DELETE /admin/chemicals/:chemical_id/map/:gn_id
+      def delete_map
+        status = @map.destroy ? :ok : :not_found
+        # status = true ? :ok : :not_found
 
         respond_with @chemical.refresh, status: status
       end

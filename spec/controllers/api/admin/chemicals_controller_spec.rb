@@ -92,4 +92,15 @@ describe Api::Admin::ChemicalsController do
     expect(commodity_ids).to include commodity3.pk.to_s
     expect(commodity_ids & [commodity.pk.to_s]).to be_empty
   end
+
+  specify 'DELETE: DELETE to `DELETE /admin/chemicals/:chemical_id/map/:gn_id` returns the returns the chemical, with a 200 OK response' do
+    post :create_map, format: :json, params: { chemical_id: chemical.id, gn_id: commodity2.pk }
+    put :delete_map, format: :json, params: { chemical_id: chemical.id, gn_id: commodity.pk }
+
+    commodity_ids = json_body['relationships']['goods_nomenclatures']['data'].map { |f| f['id'] }
+
+    expect(response.body).to match_json_expression response_pattern_object
+    expect(commodity_ids).not_to include commodity.pk.to_s
+    expect(commodity_ids).to include commodity2.pk.to_s
+  end
 end

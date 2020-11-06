@@ -38,10 +38,11 @@ Rails.application.routes.draw do
       end
 
       resources :chemicals, only: [:map, :index, :show, :update] do
-        get   'map',        to: 'chemicals#show_map'
-        post  'map/:gn_id', to: 'chemicals#create_map'
-        patch 'map/:gn_id', to: 'chemicals#update_map'
-        put   'map/:gn_id', to: 'chemicals#update_map'
+        get     'map',        to: 'chemicals#show_map'
+        post    'map/:gn_id', to: 'chemicals#create_map'
+        patch   'map/:gn_id', to: 'chemicals#update_map'
+        put     'map/:gn_id', to: 'chemicals#update_map'
+        delete  'map/:gn_id', to: 'chemicals#delete_map'
       end
     end
   end
