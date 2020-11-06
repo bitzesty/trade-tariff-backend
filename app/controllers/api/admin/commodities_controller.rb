@@ -10,12 +10,16 @@ module Api
       private
 
       def find_commodity
-        @commodity = Commodity.actual
-                              .declarable
-                              .by_code(params[:id])
-                              .take
+        @commodity = self.find_commodity_by_code(params[:id])
 
         raise Sequel::RecordNotFound if @commodity.goods_nomenclature_item_id.in? HiddenGoodsNomenclature.codes
+      end
+
+      def self.find_commodity_by_code(code)
+        Commodity.actual
+                 .declarable
+                 .by_code(code)
+                 .take
       end
     end
   end

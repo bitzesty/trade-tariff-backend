@@ -67,7 +67,7 @@ module Api
           @errors << "Chemical id not found: chemical_id: #{id}"
         end
 
-        @errors << "Chemical not found: chemical_id: #{params[:chemical_id]}" unless @chemical = Chemical.find(id: id)
+        @chemical = Chemical.where(id: id).take
       end
 
       def fetch_objects
@@ -86,15 +86,14 @@ module Api
       
       def fetch_commodity
         @commodity = begin
-          GoodsNomenclature.where(goods_nomenclature_sid: params[:gn_id]).first
-        rescue Sequel::DatabaseError#PG::NumericValueOutOfRange
-          GoodsNomenclature.where(goods_nomenclature_item_id: params[:gn_id]).first
+          GoodsNomenclature.where(goods_nomenclature_sid: params[:gn_id]).take
+        rescue Sequel::DatabaseError # PG::NumericValueOutOfRange
+          Api::Admin::CommoditiesController.send(:find_commodity_by_code, params[:gn_id])
         end
-        @errors << "Commodity not found: id: #{params[:gn_id]}" unless @commodity
       end
 
       def fetch_new_commodity
-        @new_commodity = GoodsNomenclature.where(goods_nomenclature_item_id: params[:new_id]).first if params[:new_id]
+        @new_commodity = GoodsNomenclature.where(goods_nomenclature_item_id: params[:new_id]).take if params[:new_id]
       end
 
       def set_up_errors
