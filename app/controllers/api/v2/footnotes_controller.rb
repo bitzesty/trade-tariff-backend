@@ -4,8 +4,6 @@ module Api
       before_action :find_footnotes
 
       def search
-        # raise Sequel::RecordNotFound if @footnotes.empty?
-
         options = {}
         options[:include] = [:measures, 'measures.goods_nomenclature', :goods_nomenclatures]
         render json: Api::V2::Footnotes::FootnoteSerializer.new(@footnotes, options.merge(serialization_meta)).serializable_hash

@@ -25,7 +25,6 @@ class BuildIndexPageWorker
       memo.push(
         operation => {
           _index: index.name,
-          _type: index.type,
           _id: model.id,
           data: TradeTariffBackend.model_serializer_for(namespace, index.model).new(model).as_json
         }

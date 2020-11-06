@@ -14,13 +14,14 @@ describe CdsImporter::EntityMapper do
         "origin" => "T",
         "opType" => "U",
         "transactionDate" => "2016-07-27T09:20:15"
-      }
+      },
+      "filename" => "test.gzip"
     }
   }
   let(:mapper) { described_class.new("AdditionalCode", xml_node) }
 
-  before :all do
-   CdsImporter::EntityMapper::ALL_MAPPERS = [CdsImporter::EntityMapper::AdditionalCodeMapper]
+  before do
+    stub_const('CdsImporter::EntityMapper::ALL_MAPPERS', [CdsImporter::EntityMapper::AdditionalCodeMapper])
   end
 
   describe "#import" do
@@ -55,6 +56,11 @@ describe CdsImporter::EntityMapper do
     it "should select mappers by mapping root" do
       expect_any_instance_of(CdsImporter::EntityMapper::AdditionalCodeMapper).to receive(:parse).and_call_original
       mapper.import
+    end
+
+    it "should assign filename" do
+      mapper.import
+      expect(AdditionalCode.last.filename).to eq "test.gzip"
     end
   end
 end
