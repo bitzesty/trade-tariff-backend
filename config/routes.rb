@@ -36,6 +36,13 @@ Rails.application.routes.draw do
           resources :search_references, only: [:show, :index, :destroy, :create, :update]
         end
       end
+
+      resources :chemicals, only: [:map, :index, :show, :update] do
+        get   'map',        to: 'chemicals#show_map'
+        post  'map/:gn_id', to: 'chemicals#create_map'
+        patch 'map/:gn_id', to: 'chemicals#update_map'
+        put   'map/:gn_id', to: 'chemicals#update_map'
+      end
     end
   end
 
