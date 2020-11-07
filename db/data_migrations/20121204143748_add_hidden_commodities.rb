@@ -19,6 +19,7 @@ TradeTariffBackend::DataMigrator.migration do
   up do
     applicable {
       HiddenGoodsNomenclature.where(goods_nomenclature_item_id: CODES).count != CODES.size
+      false
     }
 
     apply {
@@ -39,6 +40,7 @@ TradeTariffBackend::DataMigrator.migration do
   down do
     applicable {
       HiddenGoodsNomenclature.where(goods_nomenclature_item_id: CODES).any?
+      false
     }
 
     apply {

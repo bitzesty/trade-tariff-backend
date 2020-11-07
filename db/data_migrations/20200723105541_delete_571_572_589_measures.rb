@@ -5,7 +5,7 @@ TradeTariffBackend::DataMigrator.migration do
   COMMODITIES = %w(1516209800)
 
   up do
-    applicable { true }
+    applicable { false }
 
     apply do
       Measure::Operation.where(measure_type_id: MEASURE_TYPES, goods_nomenclature_item_id: COMMODITIES).delete

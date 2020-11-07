@@ -9,6 +9,7 @@ TradeTariffBackend::DataMigrator.migration do
   up do
     applicable {
       !FootnoteDescription.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID, description: OLD_DESCRIPTION).empty?
+      false
     }
 
     apply {

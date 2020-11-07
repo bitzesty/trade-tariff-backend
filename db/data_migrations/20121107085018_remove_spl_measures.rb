@@ -4,6 +4,7 @@ TradeTariffBackend::DataMigrator.migration do
   up do
     applicable {
       Measure::Operation.where("measure_sid < 0").where(measure_type_id: 'SPL').any?
+      false
     }
     apply {
       Measure::Operation.where("measure_sid < 0").where(measure_type_id: 'SPL').delete

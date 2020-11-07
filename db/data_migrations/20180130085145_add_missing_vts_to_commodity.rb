@@ -17,6 +17,7 @@ TradeTariffBackend::DataMigrator.migration do
   up do
     applicable {
       helper_klass.up_applicable?(missing_vat_measures)
+      false
     }
 
     apply {
@@ -27,6 +28,7 @@ TradeTariffBackend::DataMigrator.migration do
   down do
     applicable {
       helper_klass.down_applicable?(missing_vat_measures)
+      false
     }
 
     apply {

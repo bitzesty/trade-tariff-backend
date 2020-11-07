@@ -8,7 +8,7 @@ require 'trade_tariff_backend/data_migration/log_entry'
 
 module TradeTariffBackend
   class DataMigration
-    attr_accessor :name
+    attr_accessor :name, :desc
 
     def initialize(&block)
       instance_eval &block if block_given?
@@ -62,7 +62,7 @@ module TradeTariffBackend
       "<#{self.class}: #{@name}>"
     end
 
-  private
+    private
 
     def define_up_runner(&block)
       raise ArgumentError.new("#define_up_runner expects block to be passed in") unless block_given?

@@ -7,6 +7,7 @@ TradeTariffBackend::DataMigrator.migration do
         measurement_unit_code: 'ASX',
         measurement_unit_qualifier_code: 'X'
       ).any?
+      false
     }
     apply {
       MeasureComponent::Operation.where(
@@ -25,6 +26,7 @@ TradeTariffBackend::DataMigrator.migration do
         measurement_unit_code: 'HLT',
         measurement_unit_qualifier_code: nil
       ).any?
+      false
     }
     apply {
       MeasureComponent::Operation.where(

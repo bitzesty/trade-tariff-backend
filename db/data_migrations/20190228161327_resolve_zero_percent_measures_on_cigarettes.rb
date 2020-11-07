@@ -9,6 +9,7 @@ TradeTariffBackend::DataMigrator.migration do
       Measure::Operation.where(measure_sid: -500832, measure_type_id: 'FAA', goods_nomenclature_item_id: '2402900000').any?
       Measure::Operation.where(measure_sid: -501457, measure_type_id: 'FAA', goods_nomenclature_item_id: '2402900000').any?
       Measure::Operation.where(measure_sid: -512829, measure_type_id: 'FAA', goods_nomenclature_item_id: '2402900000').any?
+      false
     end
 
     apply do

@@ -2,12 +2,9 @@ TradeTariffBackend::DataMigrator.migration do
   name "Assign footnote_id/footnote_type_id 002 05 ECO to list of heading ids and their commodities"
 
   up do
-    applicable {
-      # The apply block is idempotent
-      true
-    }
+    applicable { false }
+    # The apply block is idempotent
     apply {
-
       footnote = Footnote.where(footnote_id: "002", footnote_type_id: "05").first
 
       codes = [ "28111100", "28121200", "28121300", "28121400", "28121500", "28121600",
@@ -50,11 +47,7 @@ TradeTariffBackend::DataMigrator.migration do
   end
 
   down do
-    applicable {
-      false
-    }
-    apply {
-      # noop
-    }
+    applicable { false }
+    apply { } # noop
   end
 end
