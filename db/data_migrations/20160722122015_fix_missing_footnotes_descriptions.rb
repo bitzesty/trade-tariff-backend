@@ -2,10 +2,8 @@ TradeTariffBackend::DataMigrator.migration do
   name "Fix Missing Footnotes descriptions"
 
   up do
-    applicable {
-      # The apply block is idempotent
-      true
-    }
+    applicable { false }
+    # The apply block is idempotent
     apply {
 
       FootnoteDescription.unrestrict_primary_key
@@ -27,11 +25,7 @@ TradeTariffBackend::DataMigrator.migration do
   end
 
   down do
-    applicable {
-      false
-    }
-    apply {
-      # noop
-    }
+    applicable { false }
+    apply { } # noop
   end
 end

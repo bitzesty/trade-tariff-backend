@@ -17,10 +17,7 @@ TradeTariffBackend::DataMigrator.migration do
       6000000.0 => [{duty_expression_id: "01", duty_amount: 19.08, measurement_unit_code: "LPA"}]
   }
   up do
-    applicable {
-      true
-    }
-
+    applicable { false }
     apply {
       operation_date = Date.today
 
@@ -36,9 +33,7 @@ TradeTariffBackend::DataMigrator.migration do
   end
 
   down do
-    applicable {
-      true
-    }
+    applicable { false }
     apply {
       MeasureCondition::Operation.where(
         measure_sid: measure_sids,

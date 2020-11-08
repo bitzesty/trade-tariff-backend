@@ -7,6 +7,7 @@ TradeTariffBackend::DataMigrator.migration do
   up do
     applicable {
       Measure::Operation.where(measure_type_id: MEASURE_TYPE_ID, validity_end_date: nil).any?
+      false
     }
 
     apply {
@@ -17,6 +18,7 @@ TradeTariffBackend::DataMigrator.migration do
   down do
     applicable {
       Measure::Operation.where(measure_type_id: MEASURE_TYPE_ID, validity_end_date: VALIDITY_END_DATE).any?
+      false
     }
     apply {
       Measure::Operation.where(measure_type_id: MEASURE_TYPE_ID, validity_end_date: VALIDITY_END_DATE).update(validity_end_date: nil)

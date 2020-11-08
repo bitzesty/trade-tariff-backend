@@ -5,6 +5,7 @@ TradeTariffBackend::DataMigrator.migration do
   up do
     applicable {
       MeasurementUnitAbbreviation.empty?
+      false
     }
 
     apply {
@@ -84,6 +85,7 @@ TradeTariffBackend::DataMigrator.migration do
   down do
     applicable {
       MeasurementUnitAbbreviation.any?
+      false
     }
 
     apply {

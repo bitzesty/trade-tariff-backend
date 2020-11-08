@@ -2,7 +2,7 @@ TradeTariffBackend::DataMigrator.migration do
   name "Change footnote type description if contains _oplog"
 
   up do
-    applicable { true }
+    applicable { false }
     apply {
       change_footnote_type_description
     }

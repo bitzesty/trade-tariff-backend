@@ -24,6 +24,7 @@ TradeTariffBackend::DataMigrator.migration do
       Measure.filter(measure_sid: COMMODITY_2007993190).any?{|m| m.goods_nomenclature_sid != 33722} ||
       Measure.filter(measure_sid: COMMODITY_3823193020).any?{|m| m.goods_nomenclature_sid != 98270} ||
       Measure.filter(measure_sid: COMMODITY_3823199020).any?{|m| m.goods_nomenclature_sid != 98271}
+      false
     }
 
     apply {
@@ -52,6 +53,7 @@ TradeTariffBackend::DataMigrator.migration do
       Measure.filter(measure_sid: COMMODITY_2007993190).any?{|m| m.goods_nomenclature_sid != 97061} ||
       Measure.filter(measure_sid: COMMODITY_3823193020).any?{|m| m.goods_nomenclature_sid != 98114} ||
       Measure.filter(measure_sid: COMMODITY_3823199020).any?{|m| m.goods_nomenclature_sid != 98115}
+      false
     }
 
     apply {

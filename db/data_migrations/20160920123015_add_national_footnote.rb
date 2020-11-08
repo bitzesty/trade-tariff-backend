@@ -18,6 +18,7 @@ TradeTariffBackend::DataMigrator.migration do
       Footnote.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).none? ||
       FootnoteDescription.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID, description: FOOTNOTE_DESCRIPTION).none? ||
       FootnoteDescriptionPeriod.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).none?
+      false
     }
 
     apply {
@@ -59,6 +60,7 @@ TradeTariffBackend::DataMigrator.migration do
       FootnoteDescription.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).any? ||
       FootnoteDescriptionPeriod.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).any? ||
       FootnoteAssociationGoodsNomenclature.where(footnote_type: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).any?
+      false
     }
 
     apply {

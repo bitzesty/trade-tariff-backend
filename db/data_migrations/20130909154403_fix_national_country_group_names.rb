@@ -31,6 +31,7 @@ TradeTariffBackend::DataMigrator.migration do
         geographical_area_id: 'D065',
         description: PRECURSOR_DRUG_TEXT
       ).none?
+      false
     }
 
     apply {
@@ -98,6 +99,7 @@ TradeTariffBackend::DataMigrator.migration do
         geographical_area_id: 'D065',
         description: PRECURSOR_DRUG_TEXT
       ).any?
+      false
     }
 
     apply {

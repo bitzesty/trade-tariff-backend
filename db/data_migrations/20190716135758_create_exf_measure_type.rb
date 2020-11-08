@@ -19,6 +19,7 @@ TradeTariffBackend::DataMigrator.migration do
   up do
     applicable do
       MeasureType.where(measure_type_id: 'EXF').blank?
+      false
     end
 
     apply do

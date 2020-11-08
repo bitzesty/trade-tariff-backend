@@ -13,6 +13,7 @@ TradeTariffBackend::DataMigrator.migration do
         footnote_id: FOOTNOTE_ID,
         validity_end_date: VALIDITY_END_DATE
       ).count == 0
+      false
     }
 
     apply {
@@ -49,6 +50,7 @@ TradeTariffBackend::DataMigrator.migration do
         footnote_id: FOOTNOTE_ID,
         validity_end_date: VALIDITY_END_DATE
       ).count > 0
+      false
     }
 
     apply {

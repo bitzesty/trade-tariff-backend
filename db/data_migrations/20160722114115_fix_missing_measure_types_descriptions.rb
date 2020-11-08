@@ -2,10 +2,8 @@ TradeTariffBackend::DataMigrator.migration do
   name "Fix Missing measure types descriptions"
 
   up do
-    applicable {
-      # The apply block is idempotent
-      true
-    }
+    applicable { true }
+    # The apply block is idempotent
     apply {
 
       MeasureTypeDescription.unrestrict_primary_key
@@ -36,11 +34,7 @@ TradeTariffBackend::DataMigrator.migration do
   end
 
   down do
-    applicable {
-      false
-    }
-    apply {
-      # noop
-    }
+    applicable { false }
+    apply { } # noop
   end
 end
