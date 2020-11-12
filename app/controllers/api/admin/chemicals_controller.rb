@@ -3,7 +3,7 @@ module Api
     class ChemicalsController < ApiController
       before_action :authenticate_user!
       before_action :set_up_errors
-      before_action :fetch_chemical, only: %i[show show_map]
+      before_action :fetch_chemical, only: %i[show show_map update]
       before_action :fetch_objects, only: %i[create_map update_map delete_map]
 
       # GET    /admin/chemicals
@@ -16,6 +16,61 @@ module Api
         render_not_found and return unless @chemical.present?
 
         respond_with @chemical
+      end
+
+      # POST   /admin/chemicals
+      def create
+        status = :created
+
+        # params = {:chemical=>{:cas=>"0-1-0", :name=>"ethynylcyclopropane"}}
+        chemical = Chemical.new do |c|
+          c.cas = params[:cas]
+        end
+
+        Sequel::Model.db.transaction do
+          chemical.save raise_on_failure: false
+          begin
+            chemical_name = chemical.reload.add_chemical_name name: params[:name]
+          rescue Sequel::ValidationFailed
+            @errors << chemical_name.stringify_sequel_errors
+            status = :unprocessable_entity
+          end
+        end
+
+        respond_with chemical.refresh, status: status
+      end
+
+      # PATCH   /admin/chemicals
+      # PUT     /admin/chemicals
+      def update
+        status = :accepted
+        unless params[:cas].present? || params[:chemical_name_id].present?
+          @errors << "Missing paramter, one is required: cas: #{@chemical&.cas}, chemical_name_id: #{params[:chemical_name_id]}"
+          status = :bad_request  
+        end
+
+        Sequel::Model.db.transaction do
+          begin
+            if params[:cas].present?
+              @chemical.update(cas: params[:cas])
+            end
+
+            if params[:chemical_name_id].present?
+              chemical_name = ChemicalName.where(id: params[:chemical_name_id], chemical_id: @chemical.id).take
+              begin
+                chemical_name.update(name: params[:new_chemical_name])
+              rescue Sequel::ValidationFailed
+                @errors << chemical_name.stringify_sequel_errors
+                status = :unprocessable_entity
+              end
+            end
+          rescue
+            @errors << "Chemical was not updated: chemical.id: #{@chemical&.id}, cas: #{@chemical&.cas}, chemical_name_id: #{params[:chemical_name_id]}, new_chemical_name: #{params[:new_chemical_name]}"
+            status = :not_found
+          end
+        end
+
+        respond_with @chemical.refresh, status: status
       end
 
       # GET   /admin/chemicals/:chemical_id/map
@@ -62,8 +117,9 @@ module Api
 
       # DELETE /admin/chemicals/:chemical_id/map/:gn_id
       def delete_map
+        respond_with(@chemical.refresh, status: :not_found) and return if @map.nil?
+
         status = @map.destroy ? :ok : :not_found
-        # status = true ? :ok : :not_found
 
         respond_with @chemical.refresh, status: status
       end
@@ -86,7 +142,7 @@ module Api
       end
       
       def fetch_map
-        @map = ChemicalsGoodsNomenclatures.find(
+        @map = @commodity.nil? ? nil : ChemicalsGoodsNomenclatures.find(
           chemical_id: @chemical.id,
           goods_nomenclature_sid: @commodity.id
         ) unless @errors.any?
@@ -96,7 +152,7 @@ module Api
         @commodity = begin
           GoodsNomenclature.where(goods_nomenclature_sid: params[:gn_id]).take
         rescue Sequel::DatabaseError # PG::NumericValueOutOfRange
-          Api::Admin::CommoditiesController.send(:find_commodity_by_code, params[:gn_id])
+          Commodity.find_commodity_by_code params[:gn_id]
         end
       end
 
@@ -114,10 +170,13 @@ module Api
           data[:errors] = errors.map do |error|
             { title: error }
           end
-          render json: data, status: :unprocessable_entity
+          status = status || :unprocessable_entity
         else
-          render json: Api::Admin::Chemicals::ChemicalSerializer.new(obj || @chemical.refresh).serializable_hash, status: status
+          data = Api::Admin::Chemicals::ChemicalSerializer.new(obj || @chemical.refresh).serializable_hash
+          status = status || :ok
         end
+
+        render json: data, status: status
       end
 
       def create_chemical_commodity_mapping
@@ -130,6 +189,22 @@ module Api
       end
 
       def update_chemical_commodity_mapping
+        Sequel::Model.db.transaction do
+          ChemicalsGoodsNomenclatures.unrestrict_primary_key
+          ChemicalsGoodsNomenclatures.create(
+            chemical_id: @chemical.id,
+            goods_nomenclature_sid: @new_commodity.id
+          )
+          @map.destroy
+          status = :accepted
+        rescue StandardError
+          @errors << "Mapping already exists: chemical_id: #{@chemical.id}, goods_nomenclature_sid: #{@commodity.id}"
+          status = :conflict
+        end
+        status
+      end
+
+      def update_chemical_name
         Sequel::Model.db.transaction do
           ChemicalsGoodsNomenclatures.unrestrict_primary_key
           ChemicalsGoodsNomenclatures.create(

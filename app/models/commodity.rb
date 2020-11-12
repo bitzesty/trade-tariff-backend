@@ -151,7 +151,7 @@ class Commodity < GoodsNomenclature
        Measure.changes_for(
          depth + 1,
          Sequel.qualify(:measures_oplog, :goods_nomenclature_item_id) => goods_nomenclature_item_id
-)
+       )
      )
      .from_self
      .where(Sequel.~(operation_date: nil))
@@ -162,5 +162,12 @@ class Commodity < GoodsNomenclature
     }
      .limit(TradeTariffBackend.change_count)
      .order(Sequel.desc(:operation_date, nulls: :last), Sequel.desc(:depth))
+  end
+
+  def self.find_commodity_by_code(code)
+    self.actual
+        .declarable
+        .by_code(code)
+        .take
   end
 end

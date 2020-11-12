@@ -37,7 +37,9 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :chemicals, only: [:map, :index, :show, :update] do
+      resources :chemicals, only: %i[map index show create] do
+        patch   '(:chemical_name_id/:new_chemical_name)', to: 'chemicals#update'
+        put     '(:chemical_name_id/:new_chemical_name)', to: 'chemicals#update'
         get     'map',        to: 'chemicals#show_map'
         post    'map/:gn_id', to: 'chemicals#create_map'
         patch   'map/:gn_id', to: 'chemicals#update_map'
