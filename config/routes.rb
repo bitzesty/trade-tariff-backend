@@ -37,14 +37,16 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :chemicals, only: %i[map index show create] do
+      resources :chemicals, only: %i[index create] do
+        get     '',                                       to: 'chemicals#show'
         patch   '(:chemical_name_id/:new_chemical_name)', to: 'chemicals#update'
         put     '(:chemical_name_id/:new_chemical_name)', to: 'chemicals#update'
-        get     'map',        to: 'chemicals#show_map'
-        post    'map/:gn_id', to: 'chemicals#create_map'
-        patch   'map/:gn_id', to: 'chemicals#update_map'
-        put     'map/:gn_id', to: 'chemicals#update_map'
-        delete  'map/:gn_id', to: 'chemicals#delete_map'
+       #delete  '',                                       to: 'chemicals#delete'
+        get     'map',                                    to: 'chemicals#show_map'
+        post    'map/:gn_sid',                            to: 'chemicals#create_map'
+        patch   'map/:gn_iid',                            to: 'chemicals#update_map'
+        put     'map/:gn_iid',                            to: 'chemicals#update_map'
+        delete  'map/:gn_sid',                            to: 'chemicals#delete_map'
       end
     end
   end

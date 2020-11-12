@@ -105,7 +105,7 @@ describe Api::Admin::ChemicalsController do
     post :create, format: :json, params: created_chemical_params
 
     expect(response.body).to match_json_expression response_pattern_chemical_object
-    expect(json_body['attributes']['name']).to eq creatde_chemical_params[:name]
+    expect(json_body['attributes']['name']).to eq created_chemical_params[:name]
   end
 
   specify 'PUT (also PATCH) to `/admin/chemicals/:chemical_id(/:chemical_name_id/:new_chemical_name)` returns the updated chemical' do
@@ -129,27 +129,31 @@ describe Api::Admin::ChemicalsController do
   specify 'GET to #show returns a chemical' do
     expect(association).to exist
 
-    get :show, format: :json, params: { id: chemical.pk }
+    get :show, format: :json, params: { chemical_id: chemical.pk }
     commodity_ids = json_body['relationships']['goods_nomenclatures']['data'].map { |f| f['id'] }
 
     expect(response.body).to match_json_expression response_pattern_object
     expect(commodity_ids).to include commodity.pk.to_s
   end
 
-  specify 'CREATE: POST to `/admin/chemicals/:chemical_id/map/:gn_id` returns the chemical, now associated with the new commodity' do
+  specify 'CREATE: POST to `/admin/chemicals/:chemical_id/map/:gn_sid` returns the chemical, now associated with the new commodity' do
     expect(association).to exist
 
-    post :create_map, format: :json, params: { chemical_id: chemical.id, gn_id: commodity2.pk }
+    post :create_map, format: :json, params: { chemical_id: chemical.id, gn_sid: commodity2.pk }
     commodity_ids = json_body['relationships']['goods_nomenclatures']['data'].map { |f| f['id'] }
 
     expect(response.body).to match_json_expression response_pattern_object
     expect(commodity_ids).to include commodity2.pk.to_s
   end
 
-  specify 'UPDATE: PUT (also PATCH) to `/admin/chemicals/:chemical_id/map/:gn_id` returns the chemical, now associated with the new commodity and not associated with the old commodity' do
+  specify 'UPDATE: PUT (also PATCH) to `/admin/chemicals/:chemical_id/map/:gn_iid` returns the chemical, now associated with the new commodity and not associated with the old commodity' do
     expect(association).to exist
 
-    put :update_map, format: :json, params: { chemical_id: chemical.id, gn_id: commodity.pk, new_id: commodity3.goods_nomenclature_item_id }
+    put :update_map, format: :json, params: {
+      chemical_id: chemical.id,
+      gn_iid: commodity.goods_nomenclature_item_id,
+      new_id: commodity3.goods_nomenclature_item_id
+    }
     commodity_ids = json_body['relationships']['goods_nomenclatures']['data'].map { |f| f['id'] }
 
     expect(response.body).to match_json_expression response_pattern_object
@@ -157,9 +161,9 @@ describe Api::Admin::ChemicalsController do
     expect(commodity_ids & [commodity.pk.to_s]).to be_empty
   end
 
-  specify 'DELETE: DELETE to `/admin/chemicals/:chemical_id/map/:gn_id` returns the returns the chemical, with a 200 OK response' do
-    post :create_map, format: :json, params: { chemical_id: chemical.id, gn_id: commodity2.pk }
-    put :delete_map, format: :json, params: { chemical_id: chemical.id, gn_id: commodity.pk }
+  specify 'DELETE: DELETE to `/admin/chemicals/:chemical_id/map/:gn_sid` returns the returns the chemical, with a 200 OK response' do
+    post :create_map, format: :json, params: { chemical_id: chemical.id, gn_sid: commodity2.pk }
+    delete :delete_map, format: :json, params: { chemical_id: chemical.id, gn_sid: commodity.pk }
 
     commodity_ids = json_body['relationships']['goods_nomenclatures']['data'].map { |f| f['id'] }
 

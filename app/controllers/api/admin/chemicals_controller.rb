@@ -78,7 +78,7 @@ module Api
         show
       end
 
-      # POST  /admin/chemicals/:chemical_id/map/:gn_id
+      # POST  /admin/chemicals/:chemical_id/map/:gn_sid
       def create_map
         if @map.present?
           @errors << "Mapping already exists: chemical_id: #{@chemical.id}, goods_nomenclature_sid: #{@commodity.id}"
@@ -101,8 +101,8 @@ module Api
         respond_with @chemical.refresh, status: status
       end
 
-      # PATCH /admin/chemicals/:chemical_id/map/:gn_id
-      # PUT   /admin/chemicals/:chemical_id/map/:gn_id
+      # PATCH /admin/chemicals/:chemical_id/map/:gn_sid
+      # PUT   /admin/chemicals/:chemical_id/map/:gn_sid
       def update_map
         status = :accepted
         if @chemical.present? && @map.present? && @new_commodity.present?
@@ -115,7 +115,7 @@ module Api
         respond_with @chemical.refresh, status: status
       end
 
-      # DELETE /admin/chemicals/:chemical_id/map/:gn_id
+      # DELETE /admin/chemicals/:chemical_id/map/:gn_sid
       def delete_map
         respond_with(@chemical.refresh, status: :not_found) and return if @map.nil?
 
@@ -149,11 +149,22 @@ module Api
       end
       
       def fetch_commodity
-        @commodity = begin
-          GoodsNomenclature.where(goods_nomenclature_sid: params[:gn_id]).take
-        rescue Sequel::DatabaseError # PG::NumericValueOutOfRange
-          Commodity.find_commodity_by_code params[:gn_id]
+        @commodity = case
+        when params[:gn_iid]
+          fetch_commodity_by_iid 
+        when params[:gn_sid]
+          fetch_commodity_by_sid
+        else
+          nil
         end
+      end
+
+      def fetch_commodity_by_iid(iid = params[:gn_iid])
+        Commodity.find_commodity_by_code iid
+      end
+
+      def fetch_commodity_by_sid(sid = params[:gn_sid])
+        Commodity.where(goods_nomenclature_sid: sid).take
       end
 
       def fetch_new_commodity
