@@ -136,22 +136,22 @@ describe Api::Admin::ChemicalsController do
     expect(commodity_ids).to include commodity.pk.to_s
   end
 
-  specify 'CREATE: POST to `/admin/chemicals/:chemical_id/map/:gn_sid` returns the chemical, now associated with the new commodity' do
+  specify 'CREATE: POST to `/admin/chemicals/:chemical_id/map/:goods_nomenclature_sid` returns the chemical, now associated with the new commodity' do
     expect(association).to exist
 
-    post :create_map, format: :json, params: { chemical_id: chemical.id, gn_sid: commodity2.pk }
+    post :create_map, format: :json, params: { chemical_id: chemical.id, goods_nomenclature_sid: commodity2.pk }
     commodity_ids = json_body['relationships']['goods_nomenclatures']['data'].map { |f| f['id'] }
 
     expect(response.body).to match_json_expression response_pattern_object
     expect(commodity_ids).to include commodity2.pk.to_s
   end
 
-  specify 'UPDATE: PUT (also PATCH) to `/admin/chemicals/:chemical_id/map/:gn_iid` returns the chemical, now associated with the new commodity and not associated with the old commodity' do
+  specify 'UPDATE: PUT (also PATCH) to `/admin/chemicals/:chemical_id/map/:goods_nomenclature_item_id` returns the chemical, now associated with the new commodity and not associated with the old commodity' do
     expect(association).to exist
 
     put :update_map, format: :json, params: {
       chemical_id: chemical.id,
-      gn_iid: commodity.goods_nomenclature_item_id,
+      goods_nomenclature_item_id: commodity.goods_nomenclature_item_id,
       new_id: commodity3.goods_nomenclature_item_id
     }
     commodity_ids = json_body['relationships']['goods_nomenclatures']['data'].map { |f| f['id'] }
@@ -161,9 +161,9 @@ describe Api::Admin::ChemicalsController do
     expect(commodity_ids & [commodity.pk.to_s]).to be_empty
   end
 
-  specify 'DELETE: DELETE to `/admin/chemicals/:chemical_id/map/:gn_sid` returns the returns the chemical, with a 200 OK response' do
-    post :create_map, format: :json, params: { chemical_id: chemical.id, gn_sid: commodity2.pk }
-    delete :delete_map, format: :json, params: { chemical_id: chemical.id, gn_sid: commodity.pk }
+  specify 'DELETE: DELETE to `/admin/chemicals/:chemical_id/map/:goods_nomenclature_sid` returns the returns the chemical, with a 200 OK response' do
+    post :create_map, format: :json, params: { chemical_id: chemical.id, goods_nomenclature_sid: commodity2.pk }
+    delete :delete_map, format: :json, params: { chemical_id: chemical.id, goods_nomenclature_sid: commodity.pk }
 
     commodity_ids = json_body['relationships']['goods_nomenclatures']['data'].map { |f| f['id'] }
 

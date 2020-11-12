@@ -46,28 +46,26 @@ module Api
         status = :accepted
         unless params[:cas].present? || params[:chemical_name_id].present?
           @errors << "Missing paramter, one is required: cas: #{@chemical&.cas}, chemical_name_id: #{params[:chemical_name_id]}"
-          status = :bad_request  
+          status = :bad_request
         end
 
         Sequel::Model.db.transaction do
-          begin
-            if params[:cas].present?
-              @chemical.update(cas: params[:cas])
-            end
-
-            if params[:chemical_name_id].present?
-              chemical_name = ChemicalName.where(id: params[:chemical_name_id], chemical_id: @chemical.id).take
-              begin
-                chemical_name.update(name: params[:new_chemical_name])
-              rescue Sequel::ValidationFailed
-                @errors << chemical_name.stringify_sequel_errors
-                status = :unprocessable_entity
-              end
-            end
-          rescue
-            @errors << "Chemical was not updated: chemical.id: #{@chemical&.id}, cas: #{@chemical&.cas}, chemical_name_id: #{params[:chemical_name_id]}, new_chemical_name: #{params[:new_chemical_name]}"
-            status = :not_found
+          if params[:cas].present?
+            @chemical.update(cas: params[:cas])
           end
+
+          if params[:chemical_name_id].present?
+            chemical_name = ChemicalName.where(id: params[:chemical_name_id], chemical_id: @chemical.id).take
+            begin
+              chemical_name.update(name: params[:new_chemical_name])
+            rescue Sequel::ValidationFailed
+              @errors << chemical_name.stringify_sequel_errors
+              status = :unprocessable_entity
+            end
+          end
+        rescue StandardError
+          @errors << "Chemical was not updated: chemical.id: #{@chemical&.id}, cas: #{@chemical&.cas}, chemical_name_id: #{params[:chemical_name_id]}, new_chemical_name: #{params[:new_chemical_name]}"
+          status = :not_found
         end
 
         respond_with @chemical.refresh, status: status
@@ -78,7 +76,7 @@ module Api
         show
       end
 
-      # POST  /admin/chemicals/:chemical_id/map/:gn_sid
+      # POST  /admin/chemicals/:chemical_id/map/:goods_nomenclature_sid
       def create_map
         if @map.present?
           @errors << "Mapping already exists: chemical_id: #{@chemical.id}, goods_nomenclature_sid: #{@commodity.id}"
@@ -101,8 +99,8 @@ module Api
         respond_with @chemical.refresh, status: status
       end
 
-      # PATCH /admin/chemicals/:chemical_id/map/:gn_sid
-      # PUT   /admin/chemicals/:chemical_id/map/:gn_sid
+      # PATCH /admin/chemicals/:chemical_id/map/:goods_nomenclature_sid
+      # PUT   /admin/chemicals/:chemical_id/map/:goods_nomenclature_sid
       def update_map
         status = :accepted
         if @chemical.present? && @map.present? && @new_commodity.present?
@@ -115,7 +113,7 @@ module Api
         respond_with @chemical.refresh, status: status
       end
 
-      # DELETE /admin/chemicals/:chemical_id/map/:gn_sid
+      # DELETE /admin/chemicals/:chemical_id/map/:goods_nomenclature_sid
       def delete_map
         respond_with(@chemical.refresh, status: :not_found) and return if @map.nil?
 
@@ -140,30 +138,33 @@ module Api
         fetch_map
         fetch_new_commodity
       end
-      
+
       def fetch_map
-        @map = @commodity.nil? ? nil : ChemicalsGoodsNomenclatures.find(
-          chemical_id: @chemical.id,
-          goods_nomenclature_sid: @commodity.id
-        ) unless @errors.any?
-      end
-      
-      def fetch_commodity
-        @commodity = case
-        when params[:gn_iid]
-          fetch_commodity_by_iid 
-        when params[:gn_sid]
-          fetch_commodity_by_sid
-        else
-          nil
+        unless @errors.any?
+          @map = if @commodity.nil?
+                   nil
+                 else
+                   ChemicalsGoodsNomenclatures.find(
+                     chemical_id: @chemical.id,
+                     goods_nomenclature_sid: @commodity.id
+                   )
+                 end
         end
       end
 
-      def fetch_commodity_by_iid(iid = params[:gn_iid])
+      def fetch_commodity
+        @commodity = if params[:goods_nomenclature_item_id]
+                       fetch_commodity_by_iid
+                     elsif params[:goods_nomenclature_sid]
+                       fetch_commodity_by_sid
+                     end
+      end
+
+      def fetch_commodity_by_iid(iid = params[:goods_nomenclature_item_id])
         Commodity.find_commodity_by_code iid
       end
 
-      def fetch_commodity_by_sid(sid = params[:gn_sid])
+      def fetch_commodity_by_sid(sid = params[:goods_nomenclature_sid])
         Commodity.where(goods_nomenclature_sid: sid).take
       end
 
@@ -181,10 +182,10 @@ module Api
           data[:errors] = errors.map do |error|
             { title: error }
           end
-          status = status || :unprocessable_entity
+          status ||= :unprocessable_entity
         else
           data = Api::Admin::Chemicals::ChemicalSerializer.new(obj || @chemical.refresh).serializable_hash
-          status = status || :ok
+          status ||= :ok
         end
 
         render json: data, status: status

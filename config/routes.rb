@@ -43,10 +43,10 @@ Rails.application.routes.draw do
         put     '(:chemical_name_id/:new_chemical_name)', to: 'chemicals#update'
        #delete  '',                                       to: 'chemicals#delete'
         get     'map',                                    to: 'chemicals#show_map'
-        post    'map/:gn_sid',                            to: 'chemicals#create_map'
-        patch   'map/:gn_iid',                            to: 'chemicals#update_map'
-        put     'map/:gn_iid',                            to: 'chemicals#update_map'
-        delete  'map/:gn_sid',                            to: 'chemicals#delete_map'
+        post    'map/:goods_nomenclature_sid',            to: 'chemicals#create_map'
+        patch   'map/:goods_nomenclature_item_id',        to: 'chemicals#update_map'
+        put     'map/:goods_nomenclature_item_id',        to: 'chemicals#update_map'
+        delete  'map/:goods_nomenclature_sid',            to: 'chemicals#delete_map'
       end
     end
   end
