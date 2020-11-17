@@ -1033,6 +1033,7 @@ describe CdsImporter::EntityMapper do
       "validityEndDate" => nil,
       "geographicalCode" => "1",
       "geographicalAreaId" => "1032",
+      "parentGeographicalAreaGroupSid" => "400",
       "metainfo" => {
         "opType" => "U",
         "origin" => "N",
@@ -1046,6 +1047,7 @@ describe CdsImporter::EntityMapper do
     expect(entity.geographical_area_sid.to_s).to eq(values["sid"])
     expect(entity.geographical_code).to eq(values["geographicalCode"])
     expect(entity.geographical_area_id).to eq(values["geographicalAreaId"])
+    expect(entity.parent_geographical_area_group_sid.to_s).to eq(values["parentGeographicalAreaGroupSid"])
     expect(entity.validity_start_date).to eq(values["validityStartDate"])
     expect(entity.validity_end_date).to eq(values["validityEndDate"])
     expect(entity.national).to be_truthy

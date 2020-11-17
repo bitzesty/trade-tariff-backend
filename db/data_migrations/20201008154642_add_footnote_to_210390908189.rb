@@ -2,7 +2,7 @@ TradeTariffBackend::DataMigrator.migration do
   name "Assign footnote to commodities"
 
   up do
-    applicable { true }
+    applicable { false }
     apply {
       TimeMachine.at("2020-10-08") do
         footnote = Footnote.where(footnote_id: "853", footnote_type_id: "05").first

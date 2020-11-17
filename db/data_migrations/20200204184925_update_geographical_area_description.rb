@@ -8,6 +8,7 @@ TradeTariffBackend::DataMigrator.migration do
   up do
     applicable {
       GeographicalAreaDescription.where(geographical_area_id: GEOGRAPHICAL_AREA_ID, description: OLD_DESCRIPTION).any?
+      false
     }
 
     apply {

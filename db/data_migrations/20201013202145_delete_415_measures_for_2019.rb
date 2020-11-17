@@ -6,7 +6,7 @@ TradeTariffBackend::DataMigrator.migration do
   VALIDITY_END_DATE = Date.new(2020, 9, 3) # date when issue was reported
 
   up do
-    applicable { true }
+    applicable { false }
 
     apply do
       Measure::Operation.where(measure_type_id: MEASURE_TYPE_ID, validity_end_date: nil)

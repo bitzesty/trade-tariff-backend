@@ -31,7 +31,7 @@ TradeTariffBackend::DataMigrator.migration do
   end
 
   down do
-    applicable { true }
+    applicable { false }
     apply {
       Footnote::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).delete
       FootnoteDescription::Operation.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).delete

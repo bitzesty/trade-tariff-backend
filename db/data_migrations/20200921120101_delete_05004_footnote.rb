@@ -13,6 +13,7 @@ TradeTariffBackend::DataMigrator.migration do
         footnote_type: FOOTNOTE_TYPE,
         goods_nomenclature_item_id: GOODS_NOMENCLATURE_ITEM_ID
       ).where('validity_end_date <> ? OR validity_end_date IS NULL', VALIDITY_END_DATE).any?
+      false
     end
 
     apply do
@@ -34,6 +35,7 @@ TradeTariffBackend::DataMigrator.migration do
         goods_nomenclature_item_id: GOODS_NOMENCLATURE_ITEM_ID,
         validity_end_date: VALIDITY_END_DATE
       ).any?
+      false
     end
 
     apply do

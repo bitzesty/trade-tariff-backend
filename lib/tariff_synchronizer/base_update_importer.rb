@@ -17,6 +17,8 @@ module TariffSynchronizer
       keep_record_of_presence_errors
       keep_record_of_cds_errors
 
+      # IMPORTANT: running large update files may cause out of memory exception.
+      # Run `import!` outside of this class to prevent that.
       Sequel::Model.db.transaction(reraise: true) do
         # If a error is raised during import, mark the update as failed
         Sequel::Model.db.after_rollback { @base_update.mark_as_failed }
@@ -34,7 +36,7 @@ module TariffSynchronizer
       ActiveSupport::Notifications.unsubscribe(@cds_errors_subscriber)
     end
 
-  private
+    private
 
     def track_latest_sql_queries
       @sql_subscriber = ActiveSupport::Notifications.subscribe(/sql\.sequel/) do |*args|

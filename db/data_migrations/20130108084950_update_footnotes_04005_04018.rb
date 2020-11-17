@@ -18,6 +18,7 @@ TradeTariffBackend::DataMigrator.migration do
       ).where(
         Sequel.~(description: TEXT_04018_NEW)
       ).any?
+      false
     }
 
     apply {
@@ -47,6 +48,7 @@ TradeTariffBackend::DataMigrator.migration do
       ).where(
         Sequel.~(description: TEXT_04018_OLD)
       ).any?
+      false
     }
 
     apply {

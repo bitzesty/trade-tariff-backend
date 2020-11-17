@@ -5,6 +5,7 @@ TradeTariffBackend::DataMigrator.migration do
   up do
     applicable {
       MeasureExcludedGeographicalArea::Operation.where(excluded_geographical_area: 'IT').where("measure_sid < 0").any?
+      false
     }
     apply {
       MeasureExcludedGeographicalArea::Operation.where(excluded_geographical_area: 'IT').where("measure_sid < 0").update(geographical_area_sid: 382, excluded_geographical_area: 'SM')
@@ -14,6 +15,7 @@ TradeTariffBackend::DataMigrator.migration do
   down do
     applicable {
       MeasureExcludedGeographicalArea::Operation.where(excluded_geographical_area: 'SM').where("measure_sid < 0").any?
+      false
     }
     apply {
       MeasureExcludedGeographicalArea::Operation.where(excluded_geographical_area: 'SM').where("measure_sid < 0").update(geographical_area_sid: 270, excluded_geographical_area: 'IT')
