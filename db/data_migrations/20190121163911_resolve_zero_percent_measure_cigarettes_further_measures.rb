@@ -5,6 +5,7 @@ TradeTariffBackend::DataMigrator.migration do
     applicable {
       Measure::Operation.where(measure_sid: -491538).where(measure_type_id: 'FAA').where(goods_nomenclature_item_id: '2402900000').any?
       Measure::Operation.where(measure_sid: -491539).where(measure_type_id: 'FAA').where(goods_nomenclature_item_id: '2402201000').any?
+      false
     }
 
     apply {

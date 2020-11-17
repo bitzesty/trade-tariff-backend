@@ -7,6 +7,7 @@ TradeTariffBackend::DataMigrator.migration do
         certificate_type_code: '9',
         validity_start_date: Date.new(1971,12,13)
       ).none?
+      false
     }
 
     apply {
@@ -24,6 +25,7 @@ TradeTariffBackend::DataMigrator.migration do
         certificate_type_code: '9',
         validity_start_date: nil
       ).none?
+      false
     }
 
     apply {

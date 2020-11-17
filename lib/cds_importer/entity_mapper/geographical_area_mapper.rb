@@ -8,7 +8,8 @@ class CdsImporter
       self.entity_mapping = base_mapping.merge(
         "sid" => :geographical_area_sid,
         "geographicalCode" => :geographical_code,
-        "geographicalAreaId" => :geographical_area_id
+        "geographicalAreaId" => :geographical_area_id,
+        "parentGeographicalAreaGroupSid" => :parent_geographical_area_group_sid
       ).freeze
 
       self.entity_mapping_key_as_array = mapping_with_key_as_array.freeze

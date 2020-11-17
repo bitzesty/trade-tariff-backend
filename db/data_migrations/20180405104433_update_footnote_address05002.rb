@@ -30,6 +30,7 @@ TradeTariffBackend::DataMigrator.migration do
     applicable {
       f = Footnote.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).last
       f && f.footnote_description && f.footnote_description.description != NEW_DESCRIPTION
+      false
     }
 
     apply {
@@ -42,6 +43,7 @@ TradeTariffBackend::DataMigrator.migration do
     applicable {
       f = Footnote.where(footnote_type_id: FOOTNOTE_TYPE_ID, footnote_id: FOOTNOTE_ID).last
       f && f.footnote_description && f.footnote_description.description != OLD_DESCRIPTION
+      false
     }
 
     apply {

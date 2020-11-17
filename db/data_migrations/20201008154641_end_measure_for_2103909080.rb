@@ -5,7 +5,7 @@ TradeTariffBackend::DataMigrator.migration do
   COMMODITY = '2103909080'
 
   up do
-    applicable { true }
+    applicable { false }
 
     apply do
       Measure::Operation.where(

@@ -8,6 +8,7 @@ TradeTariffBackend::DataMigrator.migration do
       ).where { |o|
        (Sequel.~(measurement_unit_code: 'LTR') | {measurement_unit_code: nil}) | ((Sequel.~(monetary_unit_code: 'GBP')) | { monetary_unit_code: nil })
       }.any?
+      false
     }
 
     apply {
@@ -27,6 +28,7 @@ TradeTariffBackend::DataMigrator.migration do
       ).where { |o|
        Sequel.expr(measurement_unit_code: 'LTR') | Sequel.expr(monetary_unit_code: 'GBP')
       }.any?
+      false
     }
 
     apply {

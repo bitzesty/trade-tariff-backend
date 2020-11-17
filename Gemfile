@@ -8,7 +8,7 @@ end
 ruby "~> 2.7.1"
 
 # Server
-gem "puma", "~> 5.0.2"
+gem "puma", "~> 5.0.4"
 gem "rails", ">= 6.0.3.4"
 gem "sinatra", "~> 2.0.2"
 
@@ -57,7 +57,7 @@ gem "responders", "~> 3.0.0"
 gem "tilt"
 
 # Printed PDF
-gem "uktt", "~> 0.2.15"
+gem "uktt", "~> 0.2.16", git: 'https://github.com/bitzesty/uktt.git'
 gem "combine_pdf"
 gem "sidekiq-batch"
 
