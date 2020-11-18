@@ -38,15 +38,19 @@ Rails.application.routes.draw do
       end
 
       resources :chemicals, only: %i[index create] do
-        get     '',                                       to: 'chemicals#show'
-        patch   '(:chemical_name_id/:new_chemical_name)', to: 'chemicals#update'
-        put     '(:chemical_name_id/:new_chemical_name)', to: 'chemicals#update'
-       #delete  '',                                       to: 'chemicals#delete'
-        get     'map',                                    to: 'chemicals#show_map'
-        post    'map/:goods_nomenclature_sid',            to: 'chemicals#create_map'
-        patch   'map/:goods_nomenclature_item_id',        to: 'chemicals#update_map'
-        put     'map/:goods_nomenclature_item_id',        to: 'chemicals#update_map'
-        delete  'map/:goods_nomenclature_sid',            to: 'chemicals#delete_map'
+        get     '',                                                         to: 'chemicals#show'
+       #delete  '',                                                         to: 'chemicals#delete'
+        get     'map',                                                      to: 'chemicals#show_map'
+        post    'map/:goods_nomenclature_item_id',                              to: 'chemicals#create_map'
+        patch   'map/:goods_nomenclature_sid(/:goods_nomenclature_item_id)',  to: 'chemicals#update_map'
+        put     'map/:goods_nomenclature_sid(/:goods_nomenclature_item_id)',  to: 'chemicals#update_map'
+        delete  'map/:goods_nomenclature_sid',                              to: 'chemicals#delete_map'
+        get     'chemical_names',                                           to: 'chemicals#names'
+        get     'chemical_names/:chemical_name_id',                         to: 'chemicals#name'
+        patch   'chemical_names',                                           to: 'chemicals#update'
+        put     'chemical_names',                                           to: 'chemicals#update'
+        patch   '(:chemical_name_id/:new_chemical_name)',                   to: 'chemicals#update'
+        put     '(:chemical_name_id/:new_chemical_name)',                   to: 'chemicals#update'
       end
     end
   end
