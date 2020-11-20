@@ -10,6 +10,7 @@ class QuotaSearchService
   def initialize(attributes, current_page, per_page)
     self.scope = Measure.
       eager(quota_definition: [:measures, :quota_exhaustion_events, :quota_blocking_periods, quota_order_number: [quota_order_number_origins: :geographical_area]]).
+      join(:quota_definitions, [[:measures__ordernumber, :quota_definitions__quota_order_number_id], [:measures__validity_start_date, :quota_definitions__validity_start_date]]).
       distinct(:measures__ordernumber, :measures__validity_start_date).
       select(Sequel.expr(:measures).*).
       exclude(measures__ordernumber: nil).
@@ -54,7 +55,6 @@ class QuotaSearchService
 
   def apply_critical_filter
     self.scope = scope.
-      join(:quota_definitions, [[:measures__ordernumber, :quota_definitions__quota_order_number_id], [:measures__validity_start_date, :quota_definitions__validity_start_date]]).
       where(quota_definitions__critical_state: critical)
   end
 
@@ -68,7 +68,6 @@ class QuotaSearchService
 
   def apply_exhausted_filter
     @scope = scope.
-      join(:quota_definitions, [[:measures__ordernumber, :quota_definitions__quota_order_number_id], [:measures__validity_start_date, :quota_definitions__validity_start_date]]).
       where(
       <<~SQL
 EXISTS (
@@ -84,7 +83,6 @@ SELECT *
 
   def apply_not_exhausted_filter
     @scope = scope.
-      join(:quota_definitions, [[:measures__ordernumber, :quota_definitions__quota_order_number_id], [:measures__validity_start_date, :quota_definitions__validity_start_date]]).
       where(
       <<~SQL
 NOT EXISTS (
@@ -100,7 +98,6 @@ SELECT *
 
   def apply_blocked_filter
     @scope = scope.
-      join(:quota_definitions, [[:measures__ordernumber, :quota_definitions__quota_order_number_id], [:measures__validity_start_date, :quota_definitions__validity_start_date]]).
       where(
         <<~SQL
 EXISTS (
@@ -118,7 +115,6 @@ SELECT *
 
   def apply_not_blocked_filter
     @scope = scope.
-      join(:quota_definitions, [[:measures__ordernumber, :quota_definitions__quota_order_number_id], [:measures__validity_start_date, :quota_definitions__validity_start_date]]).
       where(
         <<~SQL
 NOT EXISTS (
