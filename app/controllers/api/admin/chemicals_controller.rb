@@ -160,9 +160,7 @@ module Api
 
       def fetch_map
         unless @errors.any?
-          @map = if @commodity.nil?
-                   nil
-                 else
+          @map = if @commodity.present?
                    ChemicalsGoodsNomenclatures.find(
                      chemical_id: @chemical.id,
                      goods_nomenclature_sid: @commodity.id
