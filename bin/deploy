@@ -23,13 +23,13 @@ $SLACK_WEBHOOK
 export CF_BUILDPACK="https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.24"
 
 # Deploy Worker & Migrate DB
-cf create-app-manifest $CF_APP_WORKER
+#cf create-app-manifest $CF_APP_WORKER
 cf push $CF_APP_WORKER -f "$CF_APP_WORKER"_manifest.yml -b $CF_BUILDPACK
 cf run-task $CF_APP_WORKER "rake db:migrate" --name "db-migrate"
 cf run-task $CF_APP_WORKER "rake db:data:migrate" --name "db-data-migrate"
 
 # Deploy
-cf create-app-manifest $CF_APP
+#cf create-app-manifest $CF_APP
 
 # "patch" the manifest so it has "buildpack", not "buildpacks":
 CF_BUILDPACK=$CF_BUILDPACK ruby -ryaml -e 'm = YAML.load(STDIN); m["applications"].map{ |x| x["buildpack"] = ENV["CF_BUILDPACK"]; x.delete("buildpacks") }; puts YAML.dump(m)' \
@@ -37,6 +37,15 @@ CF_BUILDPACK=$CF_BUILDPACK ruby -ryaml -e 'm = YAML.load(STDIN); m["applications
   > "$CF_APP"_patched_manifest.yml
 
 cf bgd $CF_APP -f "$CF_APP"_patched_manifest.yml --delete-old-apps
+
+# Create network policy for fronted app
+# https://docs.cloud.service.gov.uk/deploying_apps.html#deploying-private-apps
+# $PRIVATE_APP - backend app
+# $PUBLIC_APP - frontend app
+export PUBLIC_APP1=`CF_APP=$CF_APP ruby -e 'puts ENV["CF_APP"].gsub("backend", "frontend")'`
+export PUBLIC_APP2=`CF_APP=$CF_APP ruby -e 'puts ENV["CF_APP"].gsub("backend", "admin")'`
+cf add-network-policy $PUBLIC_APP1 --destination-app $CF_APP --protocol tcp --port 8080
+cf add-network-policy $PUBLIC_APP2 --destination-app $CF_APP --protocol tcp --port 8080
 
 # Attach autoscaling policy
 cf attach-autoscaling-policy $CF_APP config/autoscaling/"$CF_SPACE"-policy.json
