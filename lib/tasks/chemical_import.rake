@@ -5,7 +5,6 @@ namespace :chemical do
 
     ChemicalsGoodsNomenclatures.unrestrict_primary_key
 
-    # filepath = File.join(Rails.root, 'db', 'Annex_6.csv')
     filepath = File.join(Rails.root, 'db', ARGV[1].to_s)
     ods = File.open(filepath, 'r')
     
