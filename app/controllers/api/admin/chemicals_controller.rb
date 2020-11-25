@@ -4,13 +4,12 @@ module Api
       before_action :authenticate_user!
       before_action :set_up_errors
       before_action :fetch_chemical, only: %i[show show_map update names delete_map create_map update_map]
-      after_action :set_pagination_headers, only: [:index]
 
       # GET    /admin/chemicals
       def index
         @chemicals = Chemical.eager(:chemical_names, :goods_nomenclatures).order_by(:id).paginate(page, per_page).all
 
-        respond_with @chemicals
+        respond_with @chemicals, meta: serialization_meta
       end
 
       # GET   /admin/chemicals/:chemical_id
@@ -192,7 +191,7 @@ module Api
         @errors ||= []
       end
 
-      def respond_with(obj, status: :ok, errors: @errors)
+      def respond_with(obj, status: :ok, errors: @errors, meta: {})
         if errors.any?
           data = { errors: [] }
           data[:errors] = errors.map do |error|
@@ -200,7 +199,7 @@ module Api
           end
           status ||= :unprocessable_entity
         else
-          data = Api::Admin::Chemicals::ChemicalSerializer.new(obj || @chemical.refresh).serializable_hash
+          data = Api::Admin::Chemicals::ChemicalSerializer.new((obj || @chemical.refresh), meta).serializable_hash
           status ||= :ok
         end
 
@@ -238,7 +237,7 @@ module Api
       end
 
       def per_page
-        params.fetch(:per_page, 20).to_i
+        params.fetch(:per_page, 200).to_i
       end
 
       def page
@@ -246,18 +245,19 @@ module Api
       end
 
       def chemicals_count
-        @chemicals&.count || 0
+        Chemical.all.count || 0
       end
-  
-      def set_pagination_headers
-        headers["X-Meta"] = {
-          pagination: {
-            total: chemicals_count,
-            offset: page * per_page,
-            page: page,
-            per_page: per_page
+
+      def serialization_meta
+        {
+          meta: {
+            pagination: {
+              page: page,
+              per_page: per_page,
+              total_count: chemicals_count
+            }
           }
-        }.to_json
+        }
       end
     end
   end

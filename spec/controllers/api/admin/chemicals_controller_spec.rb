@@ -9,6 +9,18 @@ describe Api::Admin::ChemicalsController do
       data: [response_pattern_inner]
     }
   end
+  let(:response_pattern_meta) do
+    {
+      data: [response_pattern_inner],
+      meta: {
+        pagination: {
+          page: Integer,
+          per_page: Integer,
+          total_count: Integer
+        }
+      }
+    }
+  end
   let(:response_pattern_object) do
     {
       data: response_pattern_inner
@@ -126,7 +138,7 @@ describe Api::Admin::ChemicalsController do
     get :index, format: :json
     commodity_ids = json_body.map { |f| f['relationships']['goods_nomenclatures']['data'].map { |gn| gn['id'] } }.flatten
 
-    expect(response.body).to match_json_expression response_pattern_collection
+    expect(response.body).to match_json_expression response_pattern_meta
     expect(commodity_ids).to include commodity.pk.to_s
   end
 
