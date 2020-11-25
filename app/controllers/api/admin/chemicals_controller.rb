@@ -4,10 +4,13 @@ module Api
       before_action :authenticate_user!
       before_action :set_up_errors
       before_action :fetch_chemical, only: %i[show show_map update names delete_map create_map update_map]
+      after_action :set_pagination_headers, only: [:index]
 
       # GET    /admin/chemicals
       def index
-        respond_with Chemical.order_by(:id).all
+        @chemicals = Chemical.eager(:chemical_names, :goods_nomenclatures).order_by(:id).paginate(page, per_page).all
+
+        respond_with @chemicals
       end
 
       # GET   /admin/chemicals/:chemical_id
@@ -232,6 +235,29 @@ module Api
           status = :conflict
         end
         status
+      end
+
+      def per_page
+        params.fetch(:per_page, 20).to_i
+      end
+
+      def page
+        params.fetch(:page, 1).to_i
+      end
+
+      def chemicals_count
+        @chemicals&.count || 0
+      end
+  
+      def set_pagination_headers
+        headers["X-Meta"] = {
+          pagination: {
+            total: chemicals_count,
+            offset: page * per_page,
+            page: page,
+            per_page: per_page
+          }
+        }.to_json
       end
     end
   end
