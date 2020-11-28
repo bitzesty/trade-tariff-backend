@@ -80,7 +80,7 @@ Rails.application.routes.draw do
 
       resources :search_references, only: [:index]
 
-      resources :quotas, only: [:search] do
+      resources :quotas, only: [] do
         collection { get :search }
       end
 
