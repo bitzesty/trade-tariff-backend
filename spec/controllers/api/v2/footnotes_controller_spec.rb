@@ -141,12 +141,6 @@ describe Api::V2::FootnotesController, type: :controller do
       expect(response.body).to match_json_expression pattern
     end
 
-    it 'returns 404 if no valid parameter is provided' do
-      get :search, format: :json
-
-      expect(response.status).to eq(404)
-    end
-
     it 'returns an empty JSON object if no footnotes are found' do
       get :search, params: {code: 'F-O-O-B-A-R'}, format: :json
 
