@@ -68,6 +68,10 @@ class MeasureCondition < Sequel::Model
     "#{certificate_type_code}#{certificate_code}"
   end
 
+  def measure_condition_component_ids
+    measure_condition_components.map { |mcc| mcc.pk.join('-') }
+  end
+
   # TODO presenter?
   def requirement
     case requirement_type

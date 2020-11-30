@@ -52,7 +52,7 @@ class MeasureComponent < Sequel::Model
     duty_expression_id.in?(DutyExpression::MEURSING_DUTY_EXPRESSION_IDS)
   end
 
-private
+  private
 
   def duty_expression_formatter_options
     {

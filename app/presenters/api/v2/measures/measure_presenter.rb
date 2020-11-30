@@ -66,6 +66,10 @@ module Api
         def legal_act_ids
           measure.legal_acts.map(&:regulation_id)
         end
+
+        def order_number_id
+          measure.order_number&.quota_order_number_id
+        end
       end
     end
   end
