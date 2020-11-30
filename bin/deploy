@@ -23,13 +23,13 @@ $SLACK_WEBHOOK
 export CF_BUILDPACK="https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.24"
 
 # Deploy Worker & Migrate DB
-#cf create-app-manifest $CF_APP_WORKER
+cf create-app-manifest $CF_APP_WORKER
 cf push $CF_APP_WORKER -f "$CF_APP_WORKER"_manifest.yml -b $CF_BUILDPACK
 cf run-task $CF_APP_WORKER "rake db:migrate" --name "db-migrate"
 cf run-task $CF_APP_WORKER "rake db:data:migrate" --name "db-data-migrate"
 
 # Deploy
-#cf create-app-manifest $CF_APP
+cf create-app-manifest $CF_APP
 
 # "patch" the manifest so it has "buildpack", not "buildpacks":
 CF_BUILDPACK=$CF_BUILDPACK ruby -ryaml -e 'm = YAML.load(STDIN); m["applications"].map{ |x| x["buildpack"] = ENV["CF_BUILDPACK"]; x.delete("buildpacks") }; puts YAML.dump(m)' \
