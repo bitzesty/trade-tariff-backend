@@ -4,7 +4,7 @@
   "scaling_rules": [
     {
       "metric_type": "throughput",
-      "breach_duration_secs": 30,
+      "breach_duration_secs": 60,
       "threshold": 4,
       "operator": "<",
       "cool_down_secs": 60,
@@ -12,7 +12,7 @@
     },
     {
       "metric_type": "throughput",
-      "breach_duration_secs": 30,
+      "breach_duration_secs": 60,
       "threshold": 4,
       "operator": ">=",
       "cool_down_secs": 60,
@@ -20,7 +20,7 @@
     },
     {
       "metric_type": "memoryutil",
-      "breach_duration_secs": 30,
+      "breach_duration_secs": 60,
       "threshold": 40,
       "operator": "<",
       "cool_down_secs": 60,
@@ -28,7 +28,7 @@
     },
     {
       "metric_type": "memoryutil",
-      "breach_duration_secs": 30,
+      "breach_duration_secs": 60,
       "threshold": 40,
       "operator": ">=",
       "cool_down_secs": 60,
@@ -36,7 +36,7 @@
     },
     {
       "metric_type": "cpu",
-      "breach_duration_secs": 30,
+      "breach_duration_secs": 60,
       "threshold": 50,
       "operator": "<",
       "cool_down_secs": 60,
@@ -44,7 +44,7 @@
     },
     {
       "metric_type": "cpu",
-      "breach_duration_secs": 30,
+      "breach_duration_secs": 60,
       "threshold": 50,
       "operator": ">=",
       "cool_down_secs": 60,
