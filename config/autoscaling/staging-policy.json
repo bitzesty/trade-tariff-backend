@@ -4,18 +4,18 @@
   "scaling_rules": [
     {
       "metric_type": "throughput",
-      "breach_duration_secs": 60,
-      "threshold": 10,
+      "breach_duration_secs": 120,
+      "threshold": 5,
       "operator": "<",
-      "cool_down_secs": 60,
+      "cool_down_secs": 120,
       "adjustment": "-1"
     },
     {
       "metric_type": "throughput",
-      "breach_duration_secs": 60,
-      "threshold": 10,
+      "breach_duration_secs": 120,
+      "threshold": 5,
       "operator": ">=",
-      "cool_down_secs": 60,
+      "cool_down_secs": 120,
       "adjustment": "+1"
     },
     {
