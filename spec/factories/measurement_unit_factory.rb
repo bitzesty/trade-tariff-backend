@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:measurement_unit_code, LoopingSequence.lower_a_to_upper_z, &:value)
 
   factory :measurement_unit do
@@ -12,7 +12,7 @@ FactoryGirl.define do
 
     trait :with_description do
       after(:create) { |measurement_unit, evaluator|
-        FactoryGirl.create :measurement_unit_description,
+        FactoryBot.create :measurement_unit_description,
           measurement_unit_code: measurement_unit.measurement_unit_code,
           description: evaluator.description
       }

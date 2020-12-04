@@ -287,9 +287,17 @@ describe QuotaSearchService do
       end
 
       context '094 quotas' do
-        let(:measure_094) { create :measure,
+        let!(:measure_094) { create :measure,
                                    ordernumber: "094#{3.times.map { Random.rand(9) }.join}",
                                    validity_start_date: validity_start_date }
+        let!(:quota_order_number_094) { create :quota_order_number, quota_order_number_id: measure_094.ordernumber }
+        let!(:quota_definition_094) {
+          create :quota_definition,
+                 quota_order_number_sid: quota_order_number_094.quota_order_number_sid,
+                 quota_order_number_id: quota_order_number_094.quota_order_number_id,
+                 critical_state: 'Y',
+                 validity_start_date: validity_start_date
+        }
 
         it 'should search 094 quotas' do
           result = described_class.new(

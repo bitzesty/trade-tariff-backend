@@ -2,9 +2,7 @@ module Api
   module V2
     module Commodities
       class CommoditySerializer
-        include FastJsonapi::ObjectSerializer
-
-        cache_options enabled: true, cache_length: 12.hours
+        include JSONAPI::Serializer
 
         set_type :commodity
 

@@ -80,7 +80,7 @@ Rails.application.routes.draw do
 
       resources :search_references, only: [:index]
 
-      resources :quotas, only: [:search] do
+      resources :quotas, only: [] do
         collection { get :search }
       end
 
@@ -98,6 +98,10 @@ Rails.application.routes.draw do
         collection { get :search }
       end
       resources :footnote_types, only: [:index]
+
+      resources :chemicals, only: [:index, :show] do
+        collection { get :search }
+      end
 
       post "search" => "search#search"
       get "search_suggestions" => "search#suggestions"

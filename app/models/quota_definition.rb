@@ -28,8 +28,10 @@ class QuotaDefinition < Sequel::Model
     ds.with_actual(MeasurementUnit)
   end
 
-  one_to_many :measures, key: [:ordernumber, :validity_start_date],
-                         primary_key: [:quota_order_number_id, :validity_start_date]
+  one_to_many :measures, key: [:ordernumber],
+                         primary_key: [:quota_order_number_id] do |ds|
+    ds.where("validity_end_date IS NULL OR validity_end_date >= ?", Measure.point_in_time)
+  end
 
   def measure_ids
     measures&.map(&:measure_sid)

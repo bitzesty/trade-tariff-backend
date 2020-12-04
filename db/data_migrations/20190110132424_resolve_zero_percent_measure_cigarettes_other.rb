@@ -4,6 +4,7 @@ TradeTariffBackend::DataMigrator.migration do
   up do
     applicable {
       Measure::Operation.where(measure_sid: -491537).where(measure_type_id: 'FAA').where(goods_nomenclature_item_id: '2402209000').any?
+      false
     }
     apply {
       Measure::Operation.where(measure_sid: -491537).where(measure_type_id: 'FAA').where(goods_nomenclature_item_id: '2402209000').delete
@@ -12,11 +13,7 @@ TradeTariffBackend::DataMigrator.migration do
   end
 
   down do
-    applicable {
-      false
-    }
-    apply {
-      # noop
-    }
+    applicable { false }
+    apply { } # noop
   end
 end

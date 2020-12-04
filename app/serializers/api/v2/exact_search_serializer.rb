@@ -1,7 +1,7 @@
 module Api
   module V2
     class ExactSearchSerializer
-      include FastJsonapi::ObjectSerializer
+      include JSONAPI::Serializer
 
       set_type :exact_search
       

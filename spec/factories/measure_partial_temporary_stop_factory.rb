@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :measure_partial_temporary_stop do
     partial_temporary_stop_regulation_id { Forgery(:basic).text(exactly: 8) }
     measure_sid { generate(:measure_sid) }

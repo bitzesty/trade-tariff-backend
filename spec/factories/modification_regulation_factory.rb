@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:modification_regulation_sid) { |n| n }
 
   factory :modification_regulation do

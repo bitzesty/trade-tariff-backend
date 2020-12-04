@@ -5,7 +5,7 @@ describe TariffSynchronizer::TaricUpdateDownloader do
   let(:example_date) { Date.new(2010,1,1) }
 
   describe "#perform" do
-    let(:generator) { TaricFileNameGenerator.new(example_date) }
+    let(:generator) { TariffSynchronizer::TaricFileNameGenerator.new(example_date) }
 
     it "Logs the request for the TaricUpdate file" do
       expect(TariffSynchronizer::TariffUpdatesRequester).to receive(:perform)
@@ -71,7 +71,7 @@ describe TariffSynchronizer::TaricUpdateDownloader do
         tariff_synchronizer_logger_listener
         described_class.new(example_date).perform
         expect(@logger.logged(:warn).size).to eq 1
-        expect(@logger.logged(:warn).last).to eq("Update not found for 2010-01-01 at http://example.com/taric/TARIC320100101")
+        expect(@logger.logged(:warn).last).to eq("Update NOT found for 2010-01-01 at http://example.com/taric/TARIC320100101")
       end
     end
 

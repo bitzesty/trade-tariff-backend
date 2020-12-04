@@ -20,7 +20,7 @@ module Api
 
       def show
         @search_reference = search_reference_resource
-        options = {}
+        options = { is_collection: false }
         options[:include] = [:referenced, 'referenced.chapter', 'referenced.chapter.guides', 'referenced.section']
 
         render json: Api::Admin::SearchReferences::SearchReferenceSerializer.new(@search_reference, options).serializable_hash
@@ -32,7 +32,7 @@ module Api
         )
 
         if @search_reference.save
-          options = {}
+          options = { is_collection: false }
           options[:include] = [:referenced, 'referenced.chapter', 'referenced.chapter.guides', 'referenced.section']
           render json: Api::Admin::SearchReferences::SearchReferenceSerializer.new(@search_reference, options).serializable_hash
         else

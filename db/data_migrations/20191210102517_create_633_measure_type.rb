@@ -7,6 +7,7 @@ TradeTariffBackend::DataMigrator.migration do
   up do
     applicable do
       MeasureType::Operation.where(measure_type_id: 'FCC').none?
+      false
     end
 
     apply do

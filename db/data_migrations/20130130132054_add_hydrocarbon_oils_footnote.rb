@@ -20,6 +20,7 @@ TradeTariffBackend::DataMigrator.migration do
         footnote_id: '976',
         goods_nomenclature_item_id: ASSOCIATED_GOODS_CODES
       ).count != ASSOCIATED_GOODS_CODES.size
+      false
     }
 
     apply {
@@ -77,6 +78,7 @@ TradeTariffBackend::DataMigrator.migration do
       FootnoteDescription::Operation.where(footnote_type_id: '05', footnote_id: '976').present? ||
       FootnoteDescriptionPeriod::Operation.where(footnote_type_id: '05', footnote_id: '976').present? ||
       FootnoteAssociationGoodsNomenclature::Operation.where(footnote_type: '05', footnote_id: '976').present?
+      false
     }
 
     apply {

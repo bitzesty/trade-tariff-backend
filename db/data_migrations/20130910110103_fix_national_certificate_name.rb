@@ -11,6 +11,7 @@ TradeTariffBackend::DataMigrator.migration do
         certificate_code: '004',
         description: CERTIFICATE_TEXT_NEW
       ).none?
+      false
     }
 
     apply {
@@ -30,6 +31,7 @@ TradeTariffBackend::DataMigrator.migration do
         certificate_code: '004',
         description: CERTIFICATE_TEXT_OLD
       ).none?
+      false
     }
 
     apply {

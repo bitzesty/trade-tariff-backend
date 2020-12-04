@@ -38,23 +38,29 @@ module HeadingService
                                                                            :full_temporary_stop_regulations,
                                                                            :measure_partial_temporary_stops).all, heading).validate!
           presenter = Api::V2::Headings::DeclarableHeadingPresenter.new(heading, @measures)
-          options = {}
+          options = { is_collection: false }
           options[:include] = [:section, :chapter, 'chapter.guides', :footnotes,
                                :import_measures, 'import_measures.duty_expression', 'import_measures.measure_type',
                                'import_measures.legal_acts', 'import_measures.suspending_regulation',
-                               'import_measures.measure_conditions', 'import_measures.geographical_area',
+                               'import_measures.measure_conditions',
+                               'import_measures.measure_conditions.measure_condition_components',
+                               'import_measures.geographical_area',
                                'import_measures.geographical_area.contained_geographical_areas',
                                'import_measures.excluded_geographical_areas',
                                'import_measures.footnotes', 'import_measures.additional_code',
-                               'import_measures.export_refund_nomenclature',
+                               'import_measures.measure_components',
+                               'import_measures.national_measurement_units',
                                'import_measures.order_number', 'import_measures.order_number.definition',
                                :export_measures, 'export_measures.duty_expression', 'export_measures.measure_type',
                                'export_measures.legal_acts', 'export_measures.suspending_regulation',
-                               'export_measures.measure_conditions', 'export_measures.geographical_area',
+                               'export_measures.measure_conditions',
+                               'export_measures.measure_conditions.measure_condition_components',
+                               'export_measures.geographical_area',
                                'export_measures.geographical_area.contained_geographical_areas',
                                'export_measures.excluded_geographical_areas',
                                'export_measures.footnotes', 'export_measures.additional_code',
-                               'export_measures.export_refund_nomenclature',
+                               'export_measures.measure_components',
+                               'export_measures.national_measurement_units',
                                'export_measures.order_number', 'export_measures.order_number.definition',]
           Api::V2::Headings::DeclarableHeadingSerializer.new(presenter, options).serializable_hash
         end
@@ -62,7 +68,7 @@ module HeadingService
         Rails.cache.fetch('_' + heading_cache_key, expires_in: TradeTariffBackend.seconds_till_6am) do
           service = HeadingService::CachedHeadingService.new(heading, actual_date)
           hash = service.serializable_hash
-          options = {}
+          options = { is_collection: false }
           options[:include] = [:section, :chapter, 'chapter.guides', :footnotes,
                                :commodities, 'commodities.overview_measures',
                                'commodities.overview_measures.duty_expression', 'commodities.overview_measures.measure_type']

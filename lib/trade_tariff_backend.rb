@@ -1,5 +1,5 @@
 require 'ostruct'
-require "paas_resolver"
+require "paas_config"
 
 module TradeTariffBackend
   autoload :Auditor,         'trade_tariff_backend/auditor'
@@ -40,7 +40,7 @@ module TradeTariffBackend
     end
 
     def deployed_environment
-      MAILER_ENV
+      PaasConfig.space
     end
 
     def govuk_app_name

@@ -6,9 +6,7 @@ TradeTariffBackend::DataMigrator.migration do
   VALIDITY_END_DATE = Date.new(2008, 9, 30)
 
   up do
-    applicable {
-      true
-    }
+    applicable { false }
     apply {
       operation = Measure::Operation.where(measure_sid: MEASURE_SID).last
       operation.update(validity_end_date: VALIDITY_END_DATE)
@@ -16,9 +14,7 @@ TradeTariffBackend::DataMigrator.migration do
   end
 
   down do
-    applicable {
-      true
-    }
+    applicable { false }
     apply {
       operation = Measure::Operation.where(measure_sid: MEASURE_SID).last
       operation.update(validity_end_date: nil)

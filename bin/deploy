@@ -19,9 +19,12 @@ curl -X POST \
 --data-urlencode 'payload={"text": "'"Deploying $CF_APP.\n${GIT_MESSAGE}"'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":cloud:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}, {"title": "SHA1", "value": "'"<https://github.com/bitzesty/trade-tariff-backend/compare/$GIT_OLD_REVISION...$GIT_REVISION|$GIT_REVISION>"'", "short": true}]}' \
 $SLACK_WEBHOOK
 
+# Pin ruby buildpack
+export CF_BUILDPACK="https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.24"
+
 # Deploy Worker & Migrate DB
 cf create-app-manifest $CF_APP_WORKER
-cf push $CF_APP_WORKER -f "$CF_APP_WORKER"_manifest.yml
+cf push $CF_APP_WORKER -f "$CF_APP_WORKER"_manifest.yml -b $CF_BUILDPACK
 cf run-task $CF_APP_WORKER "rake db:migrate" --name "db-migrate"
 cf run-task $CF_APP_WORKER "rake db:data:migrate" --name "db-data-migrate"
 
@@ -29,11 +32,23 @@ cf run-task $CF_APP_WORKER "rake db:data:migrate" --name "db-data-migrate"
 cf create-app-manifest $CF_APP
 
 # "patch" the manifest so it has "buildpack", not "buildpacks":
-ruby -ryaml -e 'm = YAML.load(STDIN); m["applications"].map{ |x| x["buildpack"] = x["buildpacks"][0]; x.delete("buildpacks") }; puts YAML.dump(m)' \
+CF_BUILDPACK=$CF_BUILDPACK ruby -ryaml -e 'm = YAML.load(STDIN); m["applications"].map{ |x| x["buildpack"] = ENV["CF_BUILDPACK"]; x.delete("buildpacks") }; puts YAML.dump(m)' \
   < "$CF_APP"_manifest.yml \
   > "$CF_APP"_patched_manifest.yml
 
 cf bgd $CF_APP -f "$CF_APP"_patched_manifest.yml --delete-old-apps
+
+# Create network policy for fronted app
+# https://docs.cloud.service.gov.uk/deploying_apps.html#deploying-private-apps
+# $PRIVATE_APP - backend app
+# $PUBLIC_APP - frontend app
+export PUBLIC_APP1=`CF_APP=$CF_APP ruby -e 'puts ENV["CF_APP"].gsub("backend", "frontend")'`
+export PUBLIC_APP2=`CF_APP=$CF_APP ruby -e 'puts ENV["CF_APP"].gsub("backend", "admin")'`
+cf add-network-policy $PUBLIC_APP1 --destination-app $CF_APP --protocol tcp --port 8080
+cf add-network-policy $PUBLIC_APP2 --destination-app $CF_APP --protocol tcp --port 8080
+
+# Attach autoscaling policy
+cf attach-autoscaling-policy $CF_APP config/autoscaling/"$CF_SPACE"-policy.json
 
 # Notify Slack deployment finished
 curl -X POST \

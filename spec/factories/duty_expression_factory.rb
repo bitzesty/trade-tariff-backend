@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:duty_expression_description) { |n| n }
 
   factory :duty_expression do
@@ -8,7 +8,7 @@ FactoryGirl.define do
 
     trait :with_description do
       after(:create) do |duty_expression, _evaluator|
-        FactoryGirl.create(:duty_expression_description, duty_expression_id: duty_expression.duty_expression_id)
+        FactoryBot.create(:duty_expression_description, duty_expression_id: duty_expression.duty_expression_id)
       end
     end
   end

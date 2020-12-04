@@ -59,7 +59,7 @@ describe Api::V2::AdditionalCodesController, type: :controller do
             goods_nomenclature_sid: Integer,
             description: String,
             number_indents: Integer,
-            productline_suffix: String
+            producline_suffix: String
           }
         }],
         meta: {
@@ -83,8 +83,20 @@ describe Api::V2::AdditionalCodesController, type: :controller do
       end
     end
 
-    it 'returns rendered found additional codes and related measures and goods nomenclatures' do
+    it 'returns rendered found additional codes and related measures and goods nomenclatures searching by additional_code' do
       get :search, params: { code: additional_code.additional_code }, format: :json
+
+      expect(response.body).to match_json_expression pattern
+    end
+
+    it 'returns rendered found additional codes and related measures and goods nomenclatures searching by description' do
+      get :search, params: { description: additional_code.description }, format: :json
+
+      expect(response.body).to match_json_expression pattern
+    end
+
+    it 'returns rendered found additional codes and related measures and goods nomenclatures searching by type' do
+      get :search, params: { type: additional_code.additional_code_type_id }, format: :json
 
       expect(response.body).to match_json_expression pattern
     end

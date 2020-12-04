@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:additional_code_sid) { |n| n }
   sequence(:additional_code_description_period_sid) { |n| n }
   sequence(:meursing_additional_code_sid) { |n| n }
@@ -12,13 +12,13 @@ FactoryGirl.define do
 
     trait :with_export_refund_nomenclature do
       after(:build) { |adco, _evaluator|
-        FactoryGirl.create(:export_refund_nomenclature, export_refund_code: adco.additional_code)
+        FactoryBot.create(:export_refund_nomenclature, export_refund_code: adco.additional_code)
       }
     end
   end
 
   factory :additional_code_description_period do
-    additional_code_description_period_sid { generate(:additional_code_sid) }
+    additional_code_description_period_sid { generate(:additional_code_description_period_sid) }
     additional_code_sid                    { generate(:additional_code_sid) }
     additional_code_type_id                { generate(:additional_code_type_id) }
     additional_code                        { Forgery(:basic).text(exactly: 3) }
@@ -32,7 +32,7 @@ FactoryGirl.define do
       valid_to { nil }
     end
 
-    additional_code_description_period_sid { generate(:additional_code_sid) }
+    additional_code_description_period_sid { generate(:additional_code_description_period_sid) }
     additional_code_sid                    { generate(:additional_code_sid) }
     additional_code_type_id                { generate(:additional_code_type_id) }
     additional_code                        { Forgery(:basic).text(exactly: 3) }
@@ -40,7 +40,7 @@ FactoryGirl.define do
 
     trait :with_period do
       after(:create) { |adco_description, evaluator|
-        FactoryGirl.create(:additional_code_description_period, additional_code_description_period_sid: adco_description.additional_code_description_period_sid,
+        FactoryBot.create(:additional_code_description_period, additional_code_description_period_sid: adco_description.additional_code_description_period_sid,
                                                                 additional_code_sid: adco_description.additional_code_sid,
                                                                 additional_code_type_id: adco_description.additional_code_type_id,
                                                                 additional_code: adco_description.additional_code,

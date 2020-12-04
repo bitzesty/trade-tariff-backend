@@ -78,12 +78,13 @@ class Measure < Sequel::Model
 
   one_to_one :quota_order_number, key: :quota_order_number_id,
                                   primary_key: :ordernumber do |ds|
-    ds.with_actual(QuotaOrderNumber)
-      .order(Sequel.desc(:validity_start_date))
+    ds.with_actual(QuotaOrderNumber).order(Sequel.desc(:validity_start_date))
   end
 
-  one_to_one :quota_definition, key: [:quota_order_number_id, :validity_start_date],
-                                primary_key: [:ordernumber, :validity_start_date]
+  one_to_one :quota_definition, key: [:quota_order_number_id],
+                                primary_key: [:ordernumber] do |ds|
+    ds.with_actual(QuotaDefinition).order(Sequel.desc(:validity_start_date))
+  end
 
   many_to_many :full_temporary_stop_regulations, join_table: :fts_regulation_actions,
                                                  left_primary_key: :measure_generating_regulation_id,
@@ -357,10 +358,6 @@ class Measure < Sequel::Model
       definition[:quota_definition_sid] = -rand(100000)
       definition
     end
-  end
-
-  def order_number_id
-    order_number&.quota_order_number_id
   end
 
   def self.changes_for(depth = 1, conditions = {})

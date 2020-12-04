@@ -6,7 +6,7 @@ module Api
 
         options = {}
         options[:include] = [:contained_geographical_areas]
-        render json:  Api::V2::GeographicalAreaTreeSerializer.new(@geographical_areas).serializable_hash
+        render json: Api::V2::GeographicalAreaTreeSerializer.new(@geographical_areas).serializable_hash
       end
       
       def countries
@@ -14,7 +14,7 @@ module Api
 
         options = {}
         options[:include] = [:contained_geographical_areas]
-        render json:  Api::V2::GeographicalAreaTreeSerializer.new(@geographical_areas).serializable_hash
+        render json: Api::V2::GeographicalAreaTreeSerializer.new(@geographical_areas).serializable_hash
       end
     end
   end

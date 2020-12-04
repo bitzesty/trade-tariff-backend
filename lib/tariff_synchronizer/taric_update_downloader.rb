@@ -20,7 +20,7 @@ module TariffSynchronizer
       send("create_record_for_#{response.state}_response")
     end
 
-  private
+    private
 
     def response
       @response ||= TariffUpdatesRequester.perform(url)

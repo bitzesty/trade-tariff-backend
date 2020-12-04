@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-describe Api::V2::HeadingsController, 'GET #show' do
+describe Api::V2::HeadingsController, type: :controller do
   render_views
 
   context 'non-declarable heading' do
-    let(:heading) { create :heading, :non_grouping,
+    let!(:heading) { create :heading, :non_grouping,
                                      :non_declarable,
                                      :with_description }
     let!(:chapter) { create :chapter,
@@ -31,7 +31,12 @@ describe Api::V2::HeadingsController, 'GET #show' do
 
     context 'when record is present' do
       
-      before { TradeTariffBackend.cache_client.reindex }
+      before do
+        Sidekiq::Testing.inline! do
+          TradeTariffBackend.cache_client.reindex
+          sleep 1
+        end
+      end
       
       it 'returns rendered record' do
         get :show, params: { id: heading }, format: :json
@@ -45,7 +50,12 @@ describe Api::V2::HeadingsController, 'GET #show' do
 
       let!(:hidden_goods_nomenclature) { create :hidden_goods_nomenclature, goods_nomenclature_item_id: commodity2.goods_nomenclature_item_id }
 
-      before { TradeTariffBackend.cache_client.reindex }
+      before do
+        Sidekiq::Testing.inline! do
+          TradeTariffBackend.cache_client.reindex
+          sleep 1
+        end
+      end
       
       it 'does not include hidden commodities in the response' do
         get :show, params: { id: heading }, format: :json

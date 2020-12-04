@@ -1,11 +1,11 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :measurement_unit_abbreviation do
     abbreviation { Forgery(:basic).text }
     measurement_unit_code { Forgery(:basic).text(exactly: 3) }
 
     trait :with_measurement_unit do
       after(:create) do |measurement_unit_abbreviation|
-        FactoryGirl.create(:measurement_unit, :with_description, measurement_unit_code: measurement_unit_abbreviation.measurement_unit_code)
+        FactoryBot.create(:measurement_unit, :with_description, measurement_unit_code: measurement_unit_abbreviation.measurement_unit_code)
       end
     end
 

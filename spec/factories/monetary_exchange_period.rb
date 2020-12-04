@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:monetary_exchange_sid) { |n| n }
 
   factory :monetary_exchange_period do

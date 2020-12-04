@@ -33,7 +33,7 @@ module Api
               { excluded_geographical_areas: :geographical_area_descriptions },
               { geographical_area: [:geographical_area_descriptions,
                                     { contained_geographical_areas: :geographical_area_descriptions }] },
-              :additional_code,
+              { additional_code: :additional_code_descriptions },
               :footnotes,
               :base_regulation,
               :modification_regulation,
@@ -42,12 +42,14 @@ module Api
             ).all, @commodity
           ).validate!
 
-          presenter = Api::V2::Commodities::CommodityPresenter.new(@commodity, @measures, @commodity_cache_key)
-          options = {}
+          presenter = Api::V2::Commodities::CommodityPresenter.new(@commodity, @measures)
+          options = { is_collection: false }
           options[:include] = [:section, :chapter, 'chapter.guides', :heading, :ancestors, :footnotes,
                                :import_measures, 'import_measures.duty_expression', 'import_measures.measure_type',
                                'import_measures.legal_acts', 'import_measures.suspending_regulation',
-                               'import_measures.measure_conditions', 'import_measures.measure_components',
+                               'import_measures.measure_conditions',
+                               'import_measures.measure_conditions.measure_condition_components',
+                               'import_measures.measure_components',
                                'import_measures.national_measurement_units', 'import_measures.geographical_area',
                                'import_measures.geographical_area.contained_geographical_areas',
                                'import_measures.excluded_geographical_areas',
@@ -55,14 +57,17 @@ module Api
                                'import_measures.order_number', 'import_measures.order_number.definition',
                                :export_measures, 'export_measures.duty_expression', 'export_measures.measure_type',
                                'export_measures.legal_acts', 'export_measures.suspending_regulation',
-                               'export_measures.measure_conditions', 'export_measures.measure_components',
+                               'export_measures.measure_conditions',
+                               'export_measures.measure_conditions.measure_condition_components',
+                               'export_measures.measure_components',
                                'export_measures.national_measurement_units', 'export_measures.geographical_area',
                                'export_measures.geographical_area.contained_geographical_areas',
                                'export_measures.excluded_geographical_areas',
                                'export_measures.footnotes', 'export_measures.additional_code',
-                               'export_measures.order_number', 'export_measures.order_number.definition',]
-            Api::V2::Commodities::CommoditySerializer.new(presenter, options).serializable_hash
-          end
+                               'export_measures.order_number', 'export_measures.order_number.definition']
+          Api::V2::Commodities::CommoditySerializer.new(presenter, options).serializable_hash
+        end
+
         render json: serializable_hash
       end
 

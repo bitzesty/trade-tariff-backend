@@ -7,7 +7,7 @@ namespace :db do
       TradeTariffBackend::DataMigrator.migrate
     end
 
-    desc "Rollsback last applied data migration"
+    desc "Rollbacks last applied data migration"
     task rollback: :environment do
       TradeTariffBackend::DataMigrator.rollback
     end
@@ -17,15 +17,20 @@ namespace :db do
       TradeTariffBackend::DataMigrator.status
     end
 
-    desc "Rollsback last data migration and reapplies it"
+    desc "Rollbacks last data migration and applies it"
     task redo: :environment do
       TradeTariffBackend::DataMigrator.redo
+    end
+
+    desc "Applies data migration one more time by timestamp"
+    task :repeat, [:timestamp]  => :environment do |_task, args|
+      TradeTariffBackend::DataMigrator.repeat(args[:timestamp])
     end
 
     desc "Load old data migrations (run this task once)"
     task init_migrations_table: :environment do
       TradeTariffBackend::DataMigrator.send(:migration_files).each do |file|
-        if TradeTariffBackend::DataMigration::LogEntry.where(filename: file).last.nil?
+        if TradeTariffBackend::DataMigration::LogEntry.where(filename: file).none?
           l = TradeTariffBackend::DataMigration::LogEntry.new
           l.filename = file
           l.save

@@ -4,7 +4,6 @@ class SearchService
       def query(*)
         {
           index: "#{TradeTariffBackend.search_namespace}-search_references",
-          type: 'search_reference',
           search: {
             query: {
               bool: {
@@ -18,7 +17,7 @@ class SearchService
                 filter: {
                   bool: {
                     must: [
-                      { term: { reference_class: index.type } },
+                      { term: { reference_class: index.type.capitalize } },
                       {
                         nested: {
                           path: "reference",
@@ -66,9 +65,8 @@ class SearchService
                     ]
                   }
                 }
-               },
-             },
-             size: INDEX_SIZE_MAX
+              }
+            }, size: INDEX_SIZE_MAX
           }
         }
       end

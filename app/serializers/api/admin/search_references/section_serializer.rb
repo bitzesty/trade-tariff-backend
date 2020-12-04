@@ -2,7 +2,7 @@ module Api
   module Admin
     module SearchReferences
       class SectionSerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
 
         set_type :section
 

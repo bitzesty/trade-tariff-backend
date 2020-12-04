@@ -2,8 +2,12 @@ module TariffSynchronizer
   class BaseUpdate < Sequel::Model(:tariff_updates)
     delegate :instrument, to: ActiveSupport::Notifications
 
+    # Used for Some models (see :conformance_validator plugin). Conformance is assumed by CDS.
     one_to_many :conformance_errors, class: TariffUpdateConformanceError, key: :tariff_update_filename
+    # Used for TARIC updates only.
     one_to_many :presence_errors, class: TariffUpdatePresenceError, key: :tariff_update_filename
+    # Used for CDS updates only.
+    one_to_many :cds_errors, class: TariffUpdateCdsError, key: :tariff_update_filename
 
     def conformance_error_ids
       conformance_errors.pluck(:id)
@@ -13,6 +17,7 @@ module TariffSynchronizer
       presence_errors.pluck(:id)
     end
 
+    plugin :timestamps
     plugin :eager_each
     plugin :timestamps
     plugin :single_table_inheritance, :update_type
@@ -121,11 +126,14 @@ module TariffSynchronizer
     end
 
     # can cause a delay as we a requesting S3 bucket for each update
+    # TODO: is it possible to cache it? need to investigate
     def file_presigned_url
       TariffSynchronizer::FileService.file_presigned_url(file_path)
     end
 
     # can cause a delay as we a requesting S3 bucket for each update
+    # TODO: is it possible to cache it? need to investigate
+    # or maybe we need to switch MeasureLogger to db storage
     def log_presigned_urls
       ChiefTransformer::MeasuresLogger::LOG_TYPES.inject({}) do |memo, type|
         log_path = ChiefTransformer::MeasuresLogger.file_path(filename, type)

@@ -1,5 +1,5 @@
 module TariffSynchronizer
-  # Download pending updates for TARIC and CHIEF data
+  # Download pending updates for TARIC, CHIEF and CDS data
   class TariffDownloader
     delegate :instrument, :subscribe, to: ActiveSupport::Notifications
 
@@ -20,7 +20,7 @@ module TariffSynchronizer
       end
     end
 
-  private
+    private
 
     def create_entry
       return if tariff_update.present?

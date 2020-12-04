@@ -2,7 +2,7 @@ module Api
   module V2
     module Sections
       class SectionSerializer
-        include FastJsonapi::ObjectSerializer
+        include JSONAPI::Serializer
 
         set_type :section
 

@@ -90,7 +90,8 @@ CREATE TABLE public.additional_code_description_periods_oplog (
     validity_end_date timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -107,7 +108,8 @@ CREATE VIEW public.additional_code_description_periods AS
     additional_code_description_periods1.validity_end_date,
     additional_code_description_periods1.oid,
     additional_code_description_periods1.operation,
-    additional_code_description_periods1.operation_date
+    additional_code_description_periods1.operation_date,
+    additional_code_description_periods1.filename
    FROM public.additional_code_description_periods_oplog additional_code_description_periods1
   WHERE ((additional_code_description_periods1.oid IN ( SELECT max(additional_code_description_periods2.oid) AS max
            FROM public.additional_code_description_periods_oplog additional_code_description_periods2
@@ -148,7 +150,8 @@ CREATE TABLE public.additional_code_descriptions_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -166,7 +169,8 @@ CREATE VIEW public.additional_code_descriptions AS
     additional_code_descriptions1."national",
     additional_code_descriptions1.oid,
     additional_code_descriptions1.operation,
-    additional_code_descriptions1.operation_date
+    additional_code_descriptions1.operation_date,
+    additional_code_descriptions1.filename
    FROM public.additional_code_descriptions_oplog additional_code_descriptions1
   WHERE ((additional_code_descriptions1.oid IN ( SELECT max(additional_code_descriptions2.oid) AS max
            FROM public.additional_code_descriptions_oplog additional_code_descriptions2
@@ -204,7 +208,8 @@ CREATE TABLE public.additional_code_type_descriptions_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -219,7 +224,8 @@ CREATE VIEW public.additional_code_type_descriptions AS
     additional_code_type_descriptions1."national",
     additional_code_type_descriptions1.oid,
     additional_code_type_descriptions1.operation,
-    additional_code_type_descriptions1.operation_date
+    additional_code_type_descriptions1.operation_date,
+    additional_code_type_descriptions1.filename
    FROM public.additional_code_type_descriptions_oplog additional_code_type_descriptions1
   WHERE ((additional_code_type_descriptions1.oid IN ( SELECT max(additional_code_type_descriptions2.oid) AS max
            FROM public.additional_code_type_descriptions_oplog additional_code_type_descriptions2
@@ -258,7 +264,8 @@ CREATE TABLE public.additional_code_type_measure_types_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -274,7 +281,8 @@ CREATE VIEW public.additional_code_type_measure_types AS
     additional_code_type_measure_types1."national",
     additional_code_type_measure_types1.oid,
     additional_code_type_measure_types1.operation,
-    additional_code_type_measure_types1.operation_date
+    additional_code_type_measure_types1.operation_date,
+    additional_code_type_measure_types1.filename
    FROM public.additional_code_type_measure_types_oplog additional_code_type_measure_types1
   WHERE ((additional_code_type_measure_types1.oid IN ( SELECT max(additional_code_type_measure_types2.oid) AS max
            FROM public.additional_code_type_measure_types_oplog additional_code_type_measure_types2
@@ -314,7 +322,8 @@ CREATE TABLE public.additional_code_types_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -331,7 +340,8 @@ CREATE VIEW public.additional_code_types AS
     additional_code_types1."national",
     additional_code_types1.oid,
     additional_code_types1.operation,
-    additional_code_types1.operation_date
+    additional_code_types1.operation_date,
+    additional_code_types1.filename
    FROM public.additional_code_types_oplog additional_code_types1
   WHERE ((additional_code_types1.oid IN ( SELECT max(additional_code_types2.oid) AS max
            FROM public.additional_code_types_oplog additional_code_types2
@@ -371,7 +381,8 @@ CREATE TABLE public.additional_codes_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -388,7 +399,8 @@ CREATE VIEW public.additional_codes AS
     additional_codes1."national",
     additional_codes1.oid,
     additional_codes1.operation,
-    additional_codes1.operation_date
+    additional_codes1.operation_date,
+    additional_codes1.filename
    FROM public.additional_codes_oplog additional_codes1
   WHERE ((additional_codes1.oid IN ( SELECT max(additional_codes2.oid) AS max
            FROM public.additional_codes_oplog additional_codes2
@@ -477,7 +489,8 @@ CREATE TABLE public.base_regulations_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -509,7 +522,8 @@ CREATE VIEW public.base_regulations AS
     base_regulations1."national",
     base_regulations1.oid,
     base_regulations1.operation,
-    base_regulations1.operation_date
+    base_regulations1.operation_date,
+    base_regulations1.filename
    FROM public.base_regulations_oplog base_regulations1
   WHERE ((base_regulations1.oid IN ( SELECT max(base_regulations2.oid) AS max
            FROM public.base_regulations_oplog base_regulations2
@@ -549,7 +563,8 @@ CREATE TABLE public.certificate_description_periods_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -566,7 +581,8 @@ CREATE VIEW public.certificate_description_periods AS
     certificate_description_periods1."national",
     certificate_description_periods1.oid,
     certificate_description_periods1.operation,
-    certificate_description_periods1.operation_date
+    certificate_description_periods1.operation_date,
+    certificate_description_periods1.filename
    FROM public.certificate_description_periods_oplog certificate_description_periods1
   WHERE ((certificate_description_periods1.oid IN ( SELECT max(certificate_description_periods2.oid) AS max
            FROM public.certificate_description_periods_oplog certificate_description_periods2
@@ -606,7 +622,8 @@ CREATE TABLE public.certificate_descriptions_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -623,7 +640,8 @@ CREATE VIEW public.certificate_descriptions AS
     certificate_descriptions1."national",
     certificate_descriptions1.oid,
     certificate_descriptions1.operation,
-    certificate_descriptions1.operation_date
+    certificate_descriptions1.operation_date,
+    certificate_descriptions1.filename
    FROM public.certificate_descriptions_oplog certificate_descriptions1
   WHERE ((certificate_descriptions1.oid IN ( SELECT max(certificate_descriptions2.oid) AS max
            FROM public.certificate_descriptions_oplog certificate_descriptions2
@@ -661,7 +679,8 @@ CREATE TABLE public.certificate_type_descriptions_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -676,7 +695,8 @@ CREATE VIEW public.certificate_type_descriptions AS
     certificate_type_descriptions1."national",
     certificate_type_descriptions1.oid,
     certificate_type_descriptions1.operation,
-    certificate_type_descriptions1.operation_date
+    certificate_type_descriptions1.operation_date,
+    certificate_type_descriptions1.filename
    FROM public.certificate_type_descriptions_oplog certificate_type_descriptions1
   WHERE ((certificate_type_descriptions1.oid IN ( SELECT max(certificate_type_descriptions2.oid) AS max
            FROM public.certificate_type_descriptions_oplog certificate_type_descriptions2
@@ -714,7 +734,8 @@ CREATE TABLE public.certificate_types_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -729,7 +750,8 @@ CREATE VIEW public.certificate_types AS
     certificate_types1."national",
     certificate_types1.oid,
     certificate_types1.operation,
-    certificate_types1.operation_date
+    certificate_types1.operation_date,
+    certificate_types1.filename
    FROM public.certificate_types_oplog certificate_types1
   WHERE ((certificate_types1.oid IN ( SELECT max(certificate_types2.oid) AS max
            FROM public.certificate_types_oplog certificate_types2
@@ -769,7 +791,8 @@ CREATE TABLE public.certificates_oplog (
     national_abbrev text,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -786,7 +809,8 @@ CREATE VIEW public.certificates AS
     certificates1.national_abbrev,
     certificates1.oid,
     certificates1.operation,
-    certificates1.operation_date
+    certificates1.operation_date,
+    certificates1.filename
    FROM public.certificates_oplog certificates1
   WHERE ((certificates1.oid IN ( SELECT max(certificates2.oid) AS max
            FROM public.certificates_oplog certificates2
@@ -880,6 +904,65 @@ ALTER SEQUENCE public.chapters_guides_id_seq OWNED BY public.chapters_guides.id;
 CREATE TABLE public.chapters_sections (
     goods_nomenclature_sid integer,
     section_id integer
+);
+
+
+--
+-- Name: chemical_names; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chemical_names (
+    id integer NOT NULL,
+    chemical_id integer,
+    name text
+);
+
+
+--
+-- Name: chemical_names_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+ALTER TABLE public.chemical_names ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME public.chemical_names_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: chemicals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chemicals (
+    id integer NOT NULL,
+    cas text
+);
+
+
+--
+-- Name: chemicals_goods_nomenclatures; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chemicals_goods_nomenclatures (
+    chemical_id integer NOT NULL,
+    goods_nomenclature_sid integer NOT NULL
+);
+
+
+--
+-- Name: chemicals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+ALTER TABLE public.chemicals ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME public.chemicals_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
 );
 
 
@@ -1221,7 +1304,8 @@ CREATE TABLE public.complete_abrogation_regulations_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -1240,7 +1324,8 @@ CREATE VIEW public.complete_abrogation_regulations AS
     complete_abrogation_regulations1.approved_flag,
     complete_abrogation_regulations1.oid,
     complete_abrogation_regulations1.operation,
-    complete_abrogation_regulations1.operation_date
+    complete_abrogation_regulations1.operation_date,
+    complete_abrogation_regulations1.filename
    FROM public.complete_abrogation_regulations_oplog complete_abrogation_regulations1
   WHERE ((complete_abrogation_regulations1.oid IN ( SELECT max(complete_abrogation_regulations2.oid) AS max
            FROM public.complete_abrogation_regulations_oplog complete_abrogation_regulations2
@@ -1286,7 +1371,8 @@ CREATE TABLE public.duty_expression_descriptions_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -1300,7 +1386,8 @@ CREATE VIEW public.duty_expression_descriptions AS
     duty_expression_descriptions1.description,
     duty_expression_descriptions1.oid,
     duty_expression_descriptions1.operation,
-    duty_expression_descriptions1.operation_date
+    duty_expression_descriptions1.operation_date,
+    duty_expression_descriptions1.filename
    FROM public.duty_expression_descriptions_oplog duty_expression_descriptions1
   WHERE ((duty_expression_descriptions1.oid IN ( SELECT max(duty_expression_descriptions2.oid) AS max
            FROM public.duty_expression_descriptions_oplog duty_expression_descriptions2
@@ -1340,7 +1427,8 @@ CREATE TABLE public.duty_expressions_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -1357,7 +1445,8 @@ CREATE VIEW public.duty_expressions AS
     duty_expressions1.monetary_unit_applicability_code,
     duty_expressions1.oid,
     duty_expressions1.operation,
-    duty_expressions1.operation_date
+    duty_expressions1.operation_date,
+    duty_expressions1.filename
    FROM public.duty_expressions_oplog duty_expressions1
   WHERE ((duty_expressions1.oid IN ( SELECT max(duty_expressions2.oid) AS max
            FROM public.duty_expressions_oplog duty_expressions2
@@ -1400,7 +1489,8 @@ CREATE TABLE public.explicit_abrogation_regulations_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -1420,7 +1510,8 @@ CREATE VIEW public.explicit_abrogation_regulations AS
     explicit_abrogation_regulations1.approved_flag,
     explicit_abrogation_regulations1.oid,
     explicit_abrogation_regulations1.operation,
-    explicit_abrogation_regulations1.operation_date
+    explicit_abrogation_regulations1.operation_date,
+    explicit_abrogation_regulations1.filename
    FROM public.explicit_abrogation_regulations_oplog explicit_abrogation_regulations1
   WHERE ((explicit_abrogation_regulations1.oid IN ( SELECT max(explicit_abrogation_regulations2.oid) AS max
            FROM public.explicit_abrogation_regulations_oplog explicit_abrogation_regulations2
@@ -1462,7 +1553,8 @@ CREATE TABLE public.export_refund_nomenclature_description_periods_oplog (
     validity_end_date timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -1481,7 +1573,8 @@ CREATE VIEW public.export_refund_nomenclature_description_periods AS
     export_refund_nomenclature_description_periods1.validity_end_date,
     export_refund_nomenclature_description_periods1.oid,
     export_refund_nomenclature_description_periods1.operation,
-    export_refund_nomenclature_description_periods1.operation_date
+    export_refund_nomenclature_description_periods1.operation_date,
+    export_refund_nomenclature_description_periods1.filename
    FROM public.export_refund_nomenclature_description_periods_oplog export_refund_nomenclature_description_periods1
   WHERE ((export_refund_nomenclature_description_periods1.oid IN ( SELECT max(export_refund_nomenclature_description_periods2.oid) AS max
            FROM public.export_refund_nomenclature_description_periods_oplog export_refund_nomenclature_description_periods2
@@ -1523,7 +1616,8 @@ CREATE TABLE public.export_refund_nomenclature_descriptions_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -1542,7 +1636,8 @@ CREATE VIEW public.export_refund_nomenclature_descriptions AS
     export_refund_nomenclature_descriptions1.description,
     export_refund_nomenclature_descriptions1.oid,
     export_refund_nomenclature_descriptions1.operation,
-    export_refund_nomenclature_descriptions1.operation_date
+    export_refund_nomenclature_descriptions1.operation_date,
+    export_refund_nomenclature_descriptions1.filename
    FROM public.export_refund_nomenclature_descriptions_oplog export_refund_nomenclature_descriptions1
   WHERE ((export_refund_nomenclature_descriptions1.oid IN ( SELECT max(export_refund_nomenclature_descriptions2.oid) AS max
            FROM public.export_refund_nomenclature_descriptions_oplog export_refund_nomenclature_descriptions2
@@ -1585,7 +1680,8 @@ CREATE TABLE public.export_refund_nomenclature_indents_oplog (
     validity_end_date timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -1605,7 +1701,8 @@ CREATE VIEW public.export_refund_nomenclature_indents AS
     export_refund_nomenclature_indents1.validity_end_date,
     export_refund_nomenclature_indents1.oid,
     export_refund_nomenclature_indents1.operation,
-    export_refund_nomenclature_indents1.operation_date
+    export_refund_nomenclature_indents1.operation_date,
+    export_refund_nomenclature_indents1.filename
    FROM public.export_refund_nomenclature_indents_oplog export_refund_nomenclature_indents1
   WHERE ((export_refund_nomenclature_indents1.oid IN ( SELECT max(export_refund_nomenclature_indents2.oid) AS max
            FROM public.export_refund_nomenclature_indents_oplog export_refund_nomenclature_indents2
@@ -1647,7 +1744,8 @@ CREATE TABLE public.export_refund_nomenclatures_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -1666,7 +1764,8 @@ CREATE VIEW public.export_refund_nomenclatures AS
     export_refund_nomenclatures1.goods_nomenclature_sid,
     export_refund_nomenclatures1.oid,
     export_refund_nomenclatures1.operation,
-    export_refund_nomenclatures1.operation_date
+    export_refund_nomenclatures1.operation_date,
+    export_refund_nomenclatures1.filename
    FROM public.export_refund_nomenclatures_oplog export_refund_nomenclatures1
   WHERE ((export_refund_nomenclatures1.oid IN ( SELECT max(export_refund_nomenclatures2.oid) AS max
            FROM public.export_refund_nomenclatures_oplog export_refund_nomenclatures2
@@ -1707,7 +1806,8 @@ CREATE TABLE public.footnote_association_additional_codes_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -1725,7 +1825,8 @@ CREATE VIEW public.footnote_association_additional_codes AS
     footnote_association_additional_codes1.additional_code,
     footnote_association_additional_codes1.oid,
     footnote_association_additional_codes1.operation,
-    footnote_association_additional_codes1.operation_date
+    footnote_association_additional_codes1.operation_date,
+    footnote_association_additional_codes1.filename
    FROM public.footnote_association_additional_codes_oplog footnote_association_additional_codes1
   WHERE ((footnote_association_additional_codes1.oid IN ( SELECT max(footnote_association_additional_codes2.oid) AS max
            FROM public.footnote_association_additional_codes_oplog footnote_association_additional_codes2
@@ -1768,7 +1869,8 @@ CREATE TABLE public.footnote_association_erns_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -1788,7 +1890,8 @@ CREATE VIEW public.footnote_association_erns AS
     footnote_association_erns1.productline_suffix,
     footnote_association_erns1.oid,
     footnote_association_erns1.operation,
-    footnote_association_erns1.operation_date
+    footnote_association_erns1.operation_date,
+    footnote_association_erns1.filename
    FROM public.footnote_association_erns_oplog footnote_association_erns1
   WHERE ((footnote_association_erns1.oid IN ( SELECT max(footnote_association_erns2.oid) AS max
            FROM public.footnote_association_erns_oplog footnote_association_erns2
@@ -1830,7 +1933,8 @@ CREATE TABLE public.footnote_association_goods_nomenclatures_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -1849,7 +1953,8 @@ CREATE VIEW public.footnote_association_goods_nomenclatures AS
     footnote_association_goods_nomenclatures1."national",
     footnote_association_goods_nomenclatures1.oid,
     footnote_association_goods_nomenclatures1.operation,
-    footnote_association_goods_nomenclatures1.operation_date
+    footnote_association_goods_nomenclatures1.operation_date,
+    footnote_association_goods_nomenclatures1.filename
    FROM public.footnote_association_goods_nomenclatures_oplog footnote_association_goods_nomenclatures1
   WHERE ((footnote_association_goods_nomenclatures1.oid IN ( SELECT max(footnote_association_goods_nomenclatures2.oid) AS max
            FROM public.footnote_association_goods_nomenclatures_oplog footnote_association_goods_nomenclatures2
@@ -1887,7 +1992,8 @@ CREATE TABLE public.footnote_association_measures_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -1902,7 +2008,8 @@ CREATE VIEW public.footnote_association_measures AS
     footnote_association_measures1."national",
     footnote_association_measures1.oid,
     footnote_association_measures1.operation,
-    footnote_association_measures1.operation_date
+    footnote_association_measures1.operation_date,
+    footnote_association_measures1.filename
    FROM public.footnote_association_measures_oplog footnote_association_measures1
   WHERE ((footnote_association_measures1.oid IN ( SELECT max(footnote_association_measures2.oid) AS max
            FROM public.footnote_association_measures_oplog footnote_association_measures2
@@ -1943,7 +2050,8 @@ CREATE TABLE public.footnote_association_meursing_headings_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -1961,7 +2069,8 @@ CREATE VIEW public.footnote_association_meursing_headings AS
     footnote_association_meursing_headings1.validity_end_date,
     footnote_association_meursing_headings1.oid,
     footnote_association_meursing_headings1.operation,
-    footnote_association_meursing_headings1.operation_date
+    footnote_association_meursing_headings1.operation_date,
+    footnote_association_meursing_headings1.filename
    FROM public.footnote_association_meursing_headings_oplog footnote_association_meursing_headings1
   WHERE ((footnote_association_meursing_headings1.oid IN ( SELECT max(footnote_association_meursing_headings2.oid) AS max
            FROM public.footnote_association_meursing_headings_oplog footnote_association_meursing_headings2
@@ -2001,7 +2110,8 @@ CREATE TABLE public.footnote_description_periods_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -2018,7 +2128,8 @@ CREATE VIEW public.footnote_description_periods AS
     footnote_description_periods1."national",
     footnote_description_periods1.oid,
     footnote_description_periods1.operation,
-    footnote_description_periods1.operation_date
+    footnote_description_periods1.operation_date,
+    footnote_description_periods1.filename
    FROM public.footnote_description_periods_oplog footnote_description_periods1
   WHERE ((footnote_description_periods1.oid IN ( SELECT max(footnote_description_periods2.oid) AS max
            FROM public.footnote_description_periods_oplog footnote_description_periods2
@@ -2058,7 +2169,8 @@ CREATE TABLE public.footnote_descriptions_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -2075,7 +2187,8 @@ CREATE VIEW public.footnote_descriptions AS
     footnote_descriptions1."national",
     footnote_descriptions1.oid,
     footnote_descriptions1.operation,
-    footnote_descriptions1.operation_date
+    footnote_descriptions1.operation_date,
+    footnote_descriptions1.filename
    FROM public.footnote_descriptions_oplog footnote_descriptions1
   WHERE ((footnote_descriptions1.oid IN ( SELECT max(footnote_descriptions2.oid) AS max
            FROM public.footnote_descriptions_oplog footnote_descriptions2
@@ -2113,7 +2226,8 @@ CREATE TABLE public.footnote_type_descriptions_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -2128,7 +2242,8 @@ CREATE VIEW public.footnote_type_descriptions AS
     footnote_type_descriptions1."national",
     footnote_type_descriptions1.oid,
     footnote_type_descriptions1.operation,
-    footnote_type_descriptions1.operation_date
+    footnote_type_descriptions1.operation_date,
+    footnote_type_descriptions1.filename
    FROM public.footnote_type_descriptions_oplog footnote_type_descriptions1
   WHERE ((footnote_type_descriptions1.oid IN ( SELECT max(footnote_type_descriptions2.oid) AS max
            FROM public.footnote_type_descriptions_oplog footnote_type_descriptions2
@@ -2167,7 +2282,8 @@ CREATE TABLE public.footnote_types_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -2183,7 +2299,8 @@ CREATE VIEW public.footnote_types AS
     footnote_types1."national",
     footnote_types1.oid,
     footnote_types1.operation,
-    footnote_types1.operation_date
+    footnote_types1.operation_date,
+    footnote_types1.filename
    FROM public.footnote_types_oplog footnote_types1
   WHERE ((footnote_types1.oid IN ( SELECT max(footnote_types2.oid) AS max
            FROM public.footnote_types_oplog footnote_types2
@@ -2222,7 +2339,8 @@ CREATE TABLE public.footnotes_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -2238,7 +2356,8 @@ CREATE VIEW public.footnotes AS
     footnotes1."national",
     footnotes1.oid,
     footnotes1.operation,
-    footnotes1.operation_date
+    footnotes1.operation_date,
+    footnotes1.filename
    FROM public.footnotes_oplog footnotes1
   WHERE ((footnotes1.oid IN ( SELECT max(footnotes2.oid) AS max
            FROM public.footnotes_oplog footnotes2
@@ -2265,6 +2384,32 @@ ALTER SEQUENCE public.footnotes_oid_seq OWNED BY public.footnotes_oplog.oid;
 
 
 --
+-- Name: forum_links; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.forum_links (
+    id integer NOT NULL,
+    url text,
+    goods_nomenclature_sid integer,
+    created_at timestamp without time zone
+);
+
+
+--
+-- Name: forum_links_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+ALTER TABLE public.forum_links ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME public.forum_links_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: fts_regulation_actions_oplog; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2276,7 +2421,8 @@ CREATE TABLE public.fts_regulation_actions_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -2291,7 +2437,8 @@ CREATE VIEW public.fts_regulation_actions AS
     fts_regulation_actions1.stopped_regulation_id,
     fts_regulation_actions1.oid,
     fts_regulation_actions1.operation,
-    fts_regulation_actions1.operation_date
+    fts_regulation_actions1.operation_date,
+    fts_regulation_actions1.filename
    FROM public.fts_regulation_actions_oplog fts_regulation_actions1
   WHERE ((fts_regulation_actions1.oid IN ( SELECT max(fts_regulation_actions2.oid) AS max
            FROM public.fts_regulation_actions_oplog fts_regulation_actions2
@@ -2340,7 +2487,8 @@ CREATE TABLE public.full_temporary_stop_regulations_oplog (
     operation character varying(1) DEFAULT 'C'::character varying,
     operation_date date,
     complete_abrogation_regulation_role integer,
-    complete_abrogation_regulation_id character varying(8)
+    complete_abrogation_regulation_id character varying(8),
+    filename text
 );
 
 
@@ -2362,11 +2510,12 @@ CREATE VIEW public.full_temporary_stop_regulations AS
     full_temporary_stop_regulations1.replacement_indicator,
     full_temporary_stop_regulations1.information_text,
     full_temporary_stop_regulations1.approved_flag,
-    full_temporary_stop_regulations1.complete_abrogation_regulation_id,
-    full_temporary_stop_regulations1.complete_abrogation_regulation_role,
     full_temporary_stop_regulations1.oid,
     full_temporary_stop_regulations1.operation,
-    full_temporary_stop_regulations1.operation_date
+    full_temporary_stop_regulations1.operation_date,
+    full_temporary_stop_regulations1.complete_abrogation_regulation_role,
+    full_temporary_stop_regulations1.complete_abrogation_regulation_id,
+    full_temporary_stop_regulations1.filename
    FROM public.full_temporary_stop_regulations_oplog full_temporary_stop_regulations1
   WHERE ((full_temporary_stop_regulations1.oid IN ( SELECT max(full_temporary_stop_regulations2.oid) AS max
            FROM public.full_temporary_stop_regulations_oplog full_temporary_stop_regulations2
@@ -2406,7 +2555,8 @@ CREATE TABLE public.geographical_area_description_periods_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -2423,7 +2573,8 @@ CREATE VIEW public.geographical_area_description_periods AS
     geographical_area_description_periods1."national",
     geographical_area_description_periods1.oid,
     geographical_area_description_periods1.operation,
-    geographical_area_description_periods1.operation_date
+    geographical_area_description_periods1.operation_date,
+    geographical_area_description_periods1.filename
    FROM public.geographical_area_description_periods_oplog geographical_area_description_periods1
   WHERE ((geographical_area_description_periods1.oid IN ( SELECT max(geographical_area_description_periods2.oid) AS max
            FROM public.geographical_area_description_periods_oplog geographical_area_description_periods2
@@ -2463,7 +2614,8 @@ CREATE TABLE public.geographical_area_descriptions_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -2480,7 +2632,8 @@ CREATE VIEW public.geographical_area_descriptions AS
     geographical_area_descriptions1."national",
     geographical_area_descriptions1.oid,
     geographical_area_descriptions1.operation,
-    geographical_area_descriptions1.operation_date
+    geographical_area_descriptions1.operation_date,
+    geographical_area_descriptions1.filename
    FROM public.geographical_area_descriptions_oplog geographical_area_descriptions1
   WHERE ((geographical_area_descriptions1.oid IN ( SELECT max(geographical_area_descriptions2.oid) AS max
            FROM public.geographical_area_descriptions_oplog geographical_area_descriptions2
@@ -2519,7 +2672,8 @@ CREATE TABLE public.geographical_area_memberships_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -2535,7 +2689,8 @@ CREATE VIEW public.geographical_area_memberships AS
     geographical_area_memberships1."national",
     geographical_area_memberships1.oid,
     geographical_area_memberships1.operation,
-    geographical_area_memberships1.operation_date
+    geographical_area_memberships1.operation_date,
+    geographical_area_memberships1.filename
    FROM public.geographical_area_memberships_oplog geographical_area_memberships1
   WHERE ((geographical_area_memberships1.oid IN ( SELECT max(geographical_area_memberships2.oid) AS max
            FROM public.geographical_area_memberships_oplog geographical_area_memberships2
@@ -2576,7 +2731,8 @@ CREATE TABLE public.geographical_areas_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -2594,7 +2750,8 @@ CREATE VIEW public.geographical_areas AS
     geographical_areas1."national",
     geographical_areas1.oid,
     geographical_areas1.operation,
-    geographical_areas1.operation_date
+    geographical_areas1.operation_date,
+    geographical_areas1.filename
    FROM public.geographical_areas_oplog geographical_areas1
   WHERE ((geographical_areas1.oid IN ( SELECT max(geographical_areas2.oid) AS max
            FROM public.geographical_areas_oplog geographical_areas2
@@ -2634,7 +2791,8 @@ CREATE TABLE public.goods_nomenclature_description_periods_oplog (
     validity_end_date timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -2651,7 +2809,8 @@ CREATE VIEW public.goods_nomenclature_description_periods AS
     goods_nomenclature_description_periods1.validity_end_date,
     goods_nomenclature_description_periods1.oid,
     goods_nomenclature_description_periods1.operation,
-    goods_nomenclature_description_periods1.operation_date
+    goods_nomenclature_description_periods1.operation_date,
+    goods_nomenclature_description_periods1.filename
    FROM public.goods_nomenclature_description_periods_oplog goods_nomenclature_description_periods1
   WHERE ((goods_nomenclature_description_periods1.oid IN ( SELECT max(goods_nomenclature_description_periods2.oid) AS max
            FROM public.goods_nomenclature_description_periods_oplog goods_nomenclature_description_periods2
@@ -2691,7 +2850,8 @@ CREATE TABLE public.goods_nomenclature_descriptions_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -2708,7 +2868,8 @@ CREATE VIEW public.goods_nomenclature_descriptions AS
     goods_nomenclature_descriptions1.description,
     goods_nomenclature_descriptions1.oid,
     goods_nomenclature_descriptions1.operation,
-    goods_nomenclature_descriptions1.operation_date
+    goods_nomenclature_descriptions1.operation_date,
+    goods_nomenclature_descriptions1.filename
    FROM public.goods_nomenclature_descriptions_oplog goods_nomenclature_descriptions1
   WHERE ((goods_nomenclature_descriptions1.oid IN ( SELECT max(goods_nomenclature_descriptions2.oid) AS max
            FROM public.goods_nomenclature_descriptions_oplog goods_nomenclature_descriptions2
@@ -2746,7 +2907,8 @@ CREATE TABLE public.goods_nomenclature_group_descriptions_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -2761,7 +2923,8 @@ CREATE VIEW public.goods_nomenclature_group_descriptions AS
     goods_nomenclature_group_descriptions1.description,
     goods_nomenclature_group_descriptions1.oid,
     goods_nomenclature_group_descriptions1.operation,
-    goods_nomenclature_group_descriptions1.operation_date
+    goods_nomenclature_group_descriptions1.operation_date,
+    goods_nomenclature_group_descriptions1.filename
    FROM public.goods_nomenclature_group_descriptions_oplog goods_nomenclature_group_descriptions1
   WHERE ((goods_nomenclature_group_descriptions1.oid IN ( SELECT max(goods_nomenclature_group_descriptions2.oid) AS max
            FROM public.goods_nomenclature_group_descriptions_oplog goods_nomenclature_group_descriptions2
@@ -2800,7 +2963,8 @@ CREATE TABLE public.goods_nomenclature_groups_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -2816,7 +2980,8 @@ CREATE VIEW public.goods_nomenclature_groups AS
     goods_nomenclature_groups1.nomenclature_group_facility_code,
     goods_nomenclature_groups1.oid,
     goods_nomenclature_groups1.operation,
-    goods_nomenclature_groups1.operation_date
+    goods_nomenclature_groups1.operation_date,
+    goods_nomenclature_groups1.filename
    FROM public.goods_nomenclature_groups_oplog goods_nomenclature_groups1
   WHERE ((goods_nomenclature_groups1.oid IN ( SELECT max(goods_nomenclature_groups2.oid) AS max
            FROM public.goods_nomenclature_groups_oplog goods_nomenclature_groups2
@@ -2857,7 +3022,8 @@ CREATE TABLE public.goods_nomenclature_indents_oplog (
     validity_end_date timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -2875,7 +3041,8 @@ CREATE VIEW public.goods_nomenclature_indents AS
     goods_nomenclature_indents1.validity_end_date,
     goods_nomenclature_indents1.oid,
     goods_nomenclature_indents1.operation,
-    goods_nomenclature_indents1.operation_date
+    goods_nomenclature_indents1.operation_date,
+    goods_nomenclature_indents1.filename
    FROM public.goods_nomenclature_indents_oplog goods_nomenclature_indents1
   WHERE ((goods_nomenclature_indents1.oid IN ( SELECT max(goods_nomenclature_indents2.oid) AS max
            FROM public.goods_nomenclature_indents_oplog goods_nomenclature_indents2
@@ -2914,7 +3081,8 @@ CREATE TABLE public.goods_nomenclature_origins_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -2930,7 +3098,8 @@ CREATE VIEW public.goods_nomenclature_origins AS
     goods_nomenclature_origins1.productline_suffix,
     goods_nomenclature_origins1.oid,
     goods_nomenclature_origins1.operation,
-    goods_nomenclature_origins1.operation_date
+    goods_nomenclature_origins1.operation_date,
+    goods_nomenclature_origins1.filename
    FROM public.goods_nomenclature_origins_oplog goods_nomenclature_origins1
   WHERE ((goods_nomenclature_origins1.oid IN ( SELECT max(goods_nomenclature_origins2.oid) AS max
            FROM public.goods_nomenclature_origins_oplog goods_nomenclature_origins2
@@ -2969,7 +3138,8 @@ CREATE TABLE public.goods_nomenclature_successors_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -2985,7 +3155,8 @@ CREATE VIEW public.goods_nomenclature_successors AS
     goods_nomenclature_successors1.productline_suffix,
     goods_nomenclature_successors1.oid,
     goods_nomenclature_successors1.operation,
-    goods_nomenclature_successors1.operation_date
+    goods_nomenclature_successors1.operation_date,
+    goods_nomenclature_successors1.filename
    FROM public.goods_nomenclature_successors_oplog goods_nomenclature_successors1
   WHERE ((goods_nomenclature_successors1.oid IN ( SELECT max(goods_nomenclature_successors2.oid) AS max
            FROM public.goods_nomenclature_successors_oplog goods_nomenclature_successors2
@@ -3025,7 +3196,8 @@ CREATE TABLE public.goods_nomenclatures_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -3042,7 +3214,8 @@ CREATE VIEW public.goods_nomenclatures AS
     goods_nomenclatures1.statistical_indicator,
     goods_nomenclatures1.oid,
     goods_nomenclatures1.operation,
-    goods_nomenclatures1.operation_date
+    goods_nomenclatures1.operation_date,
+    goods_nomenclatures1.filename
    FROM public.goods_nomenclatures_oplog goods_nomenclatures1
   WHERE ((goods_nomenclatures1.oid IN ( SELECT max(goods_nomenclatures2.oid) AS max
            FROM public.goods_nomenclatures_oplog goods_nomenclatures2
@@ -3119,7 +3292,8 @@ CREATE TABLE public.language_descriptions_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -3133,7 +3307,8 @@ CREATE VIEW public.language_descriptions AS
     language_descriptions1.description,
     language_descriptions1.oid,
     language_descriptions1.operation,
-    language_descriptions1.operation_date
+    language_descriptions1.operation_date,
+    language_descriptions1.filename
    FROM public.language_descriptions_oplog language_descriptions1
   WHERE ((language_descriptions1.oid IN ( SELECT max(language_descriptions2.oid) AS max
            FROM public.language_descriptions_oplog language_descriptions2
@@ -3170,7 +3345,8 @@ CREATE TABLE public.languages_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -3184,7 +3360,8 @@ CREATE VIEW public.languages AS
     languages1.validity_end_date,
     languages1.oid,
     languages1.operation,
-    languages1.operation_date
+    languages1.operation_date,
+    languages1.filename
    FROM public.languages_oplog languages1
   WHERE ((languages1.oid IN ( SELECT max(languages2.oid) AS max
            FROM public.languages_oplog languages2
@@ -3221,7 +3398,8 @@ CREATE TABLE public.measure_action_descriptions_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -3235,7 +3413,8 @@ CREATE VIEW public.measure_action_descriptions AS
     measure_action_descriptions1.description,
     measure_action_descriptions1.oid,
     measure_action_descriptions1.operation,
-    measure_action_descriptions1.operation_date
+    measure_action_descriptions1.operation_date,
+    measure_action_descriptions1.filename
    FROM public.measure_action_descriptions_oplog measure_action_descriptions1
   WHERE ((measure_action_descriptions1.oid IN ( SELECT max(measure_action_descriptions2.oid) AS max
            FROM public.measure_action_descriptions_oplog measure_action_descriptions2
@@ -3272,7 +3451,8 @@ CREATE TABLE public.measure_actions_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -3286,7 +3466,8 @@ CREATE VIEW public.measure_actions AS
     measure_actions1.validity_end_date,
     measure_actions1.oid,
     measure_actions1.operation,
-    measure_actions1.operation_date
+    measure_actions1.operation_date,
+    measure_actions1.filename
    FROM public.measure_actions_oplog measure_actions1
   WHERE ((measure_actions1.oid IN ( SELECT max(measure_actions2.oid) AS max
            FROM public.measure_actions_oplog measure_actions2
@@ -3326,7 +3507,8 @@ CREATE TABLE public.measure_components_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -3343,7 +3525,8 @@ CREATE VIEW public.measure_components AS
     measure_components1.measurement_unit_qualifier_code,
     measure_components1.oid,
     measure_components1.operation,
-    measure_components1.operation_date
+    measure_components1.operation_date,
+    measure_components1.filename
    FROM public.measure_components_oplog measure_components1
   WHERE ((measure_components1.oid IN ( SELECT max(measure_components2.oid) AS max
            FROM public.measure_components_oplog measure_components2
@@ -3380,7 +3563,8 @@ CREATE TABLE public.measure_condition_code_descriptions_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -3394,7 +3578,8 @@ CREATE VIEW public.measure_condition_code_descriptions AS
     measure_condition_code_descriptions1.description,
     measure_condition_code_descriptions1.oid,
     measure_condition_code_descriptions1.operation,
-    measure_condition_code_descriptions1.operation_date
+    measure_condition_code_descriptions1.operation_date,
+    measure_condition_code_descriptions1.filename
    FROM public.measure_condition_code_descriptions_oplog measure_condition_code_descriptions1
   WHERE ((measure_condition_code_descriptions1.oid IN ( SELECT max(measure_condition_code_descriptions2.oid) AS max
            FROM public.measure_condition_code_descriptions_oplog measure_condition_code_descriptions2
@@ -3431,7 +3616,8 @@ CREATE TABLE public.measure_condition_codes_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -3445,7 +3631,8 @@ CREATE VIEW public.measure_condition_codes AS
     measure_condition_codes1.validity_end_date,
     measure_condition_codes1.oid,
     measure_condition_codes1.operation,
-    measure_condition_codes1.operation_date
+    measure_condition_codes1.operation_date,
+    measure_condition_codes1.filename
    FROM public.measure_condition_codes_oplog measure_condition_codes1
   WHERE ((measure_condition_codes1.oid IN ( SELECT max(measure_condition_codes2.oid) AS max
            FROM public.measure_condition_codes_oplog measure_condition_codes2
@@ -3485,7 +3672,8 @@ CREATE TABLE public.measure_condition_components_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -3502,7 +3690,8 @@ CREATE VIEW public.measure_condition_components AS
     measure_condition_components1.measurement_unit_qualifier_code,
     measure_condition_components1.oid,
     measure_condition_components1.operation,
-    measure_condition_components1.operation_date
+    measure_condition_components1.operation_date,
+    measure_condition_components1.filename
    FROM public.measure_condition_components_oplog measure_condition_components1
   WHERE ((measure_condition_components1.oid IN ( SELECT max(measure_condition_components2.oid) AS max
            FROM public.measure_condition_components_oplog measure_condition_components2
@@ -3547,7 +3736,8 @@ CREATE TABLE public.measure_conditions_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -3569,7 +3759,8 @@ CREATE VIEW public.measure_conditions AS
     measure_conditions1.certificate_code,
     measure_conditions1.oid,
     measure_conditions1.operation,
-    measure_conditions1.operation_date
+    measure_conditions1.operation_date,
+    measure_conditions1.filename
    FROM public.measure_conditions_oplog measure_conditions1
   WHERE ((measure_conditions1.oid IN ( SELECT max(measure_conditions2.oid) AS max
            FROM public.measure_conditions_oplog measure_conditions2
@@ -3606,7 +3797,8 @@ CREATE TABLE public.measure_excluded_geographical_areas_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -3620,7 +3812,8 @@ CREATE VIEW public.measure_excluded_geographical_areas AS
     measure_excluded_geographical_areas1.geographical_area_sid,
     measure_excluded_geographical_areas1.oid,
     measure_excluded_geographical_areas1.operation,
-    measure_excluded_geographical_areas1.operation_date
+    measure_excluded_geographical_areas1.operation_date,
+    measure_excluded_geographical_areas1.filename
    FROM public.measure_excluded_geographical_areas_oplog measure_excluded_geographical_areas1
   WHERE ((measure_excluded_geographical_areas1.oid IN ( SELECT max(measure_excluded_geographical_areas2.oid) AS max
            FROM public.measure_excluded_geographical_areas_oplog measure_excluded_geographical_areas2
@@ -3663,7 +3856,8 @@ CREATE TABLE public.measure_partial_temporary_stops_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -3683,7 +3877,8 @@ CREATE VIEW public.measure_partial_temporary_stops AS
     measure_partial_temporary_stops1.abrogation_regulation_officialjournal_page,
     measure_partial_temporary_stops1.oid,
     measure_partial_temporary_stops1.operation,
-    measure_partial_temporary_stops1.operation_date
+    measure_partial_temporary_stops1.operation_date,
+    measure_partial_temporary_stops1.filename
    FROM public.measure_partial_temporary_stops_oplog measure_partial_temporary_stops1
   WHERE ((measure_partial_temporary_stops1.oid IN ( SELECT max(measure_partial_temporary_stops2.oid) AS max
            FROM public.measure_partial_temporary_stops_oplog measure_partial_temporary_stops2
@@ -3721,7 +3916,8 @@ CREATE TABLE public.measure_type_descriptions_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -3736,7 +3932,8 @@ CREATE VIEW public.measure_type_descriptions AS
     measure_type_descriptions1."national",
     measure_type_descriptions1.oid,
     measure_type_descriptions1.operation,
-    measure_type_descriptions1.operation_date
+    measure_type_descriptions1.operation_date,
+    measure_type_descriptions1.filename
    FROM public.measure_type_descriptions_oplog measure_type_descriptions1
   WHERE ((measure_type_descriptions1.oid IN ( SELECT max(measure_type_descriptions2.oid) AS max
            FROM public.measure_type_descriptions_oplog measure_type_descriptions2
@@ -3774,7 +3971,8 @@ CREATE TABLE public.measure_type_series_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -3789,7 +3987,8 @@ CREATE VIEW public.measure_type_series AS
     measure_type_series1.measure_type_combination,
     measure_type_series1.oid,
     measure_type_series1.operation,
-    measure_type_series1.operation_date
+    measure_type_series1.operation_date,
+    measure_type_series1.filename
    FROM public.measure_type_series_oplog measure_type_series1
   WHERE ((measure_type_series1.oid IN ( SELECT max(measure_type_series2.oid) AS max
            FROM public.measure_type_series_oplog measure_type_series2
@@ -3807,7 +4006,8 @@ CREATE TABLE public.measure_type_series_descriptions_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -3821,7 +4021,8 @@ CREATE VIEW public.measure_type_series_descriptions AS
     measure_type_series_descriptions1.description,
     measure_type_series_descriptions1.oid,
     measure_type_series_descriptions1.operation,
-    measure_type_series_descriptions1.operation_date
+    measure_type_series_descriptions1.operation_date,
+    measure_type_series_descriptions1.filename
    FROM public.measure_type_series_descriptions_oplog measure_type_series_descriptions1
   WHERE ((measure_type_series_descriptions1.oid IN ( SELECT max(measure_type_series_descriptions2.oid) AS max
            FROM public.measure_type_series_descriptions_oplog measure_type_series_descriptions2
@@ -3886,7 +4087,8 @@ CREATE TABLE public.measure_types_oplog (
     measure_type_acronym character varying(3),
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -3909,7 +4111,8 @@ CREATE VIEW public.measure_types AS
     measure_types1.measure_type_acronym,
     measure_types1.oid,
     measure_types1.operation,
-    measure_types1.operation_date
+    measure_types1.operation_date,
+    measure_types1.filename
    FROM public.measure_types_oplog measure_types1
   WHERE ((measure_types1.oid IN ( SELECT max(measure_types2.oid) AS max
            FROM public.measure_types_oplog measure_types2
@@ -3977,7 +4180,8 @@ CREATE TABLE public.measurement_unit_descriptions_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -3991,7 +4195,8 @@ CREATE VIEW public.measurement_unit_descriptions AS
     measurement_unit_descriptions1.description,
     measurement_unit_descriptions1.oid,
     measurement_unit_descriptions1.operation,
-    measurement_unit_descriptions1.operation_date
+    measurement_unit_descriptions1.operation_date,
+    measurement_unit_descriptions1.filename
    FROM public.measurement_unit_descriptions_oplog measurement_unit_descriptions1
   WHERE ((measurement_unit_descriptions1.oid IN ( SELECT max(measurement_unit_descriptions2.oid) AS max
            FROM public.measurement_unit_descriptions_oplog measurement_unit_descriptions2
@@ -4028,7 +4233,8 @@ CREATE TABLE public.measurement_unit_qualifier_descriptions_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -4042,7 +4248,8 @@ CREATE VIEW public.measurement_unit_qualifier_descriptions AS
     measurement_unit_qualifier_descriptions1.description,
     measurement_unit_qualifier_descriptions1.oid,
     measurement_unit_qualifier_descriptions1.operation,
-    measurement_unit_qualifier_descriptions1.operation_date
+    measurement_unit_qualifier_descriptions1.operation_date,
+    measurement_unit_qualifier_descriptions1.filename
    FROM public.measurement_unit_qualifier_descriptions_oplog measurement_unit_qualifier_descriptions1
   WHERE ((measurement_unit_qualifier_descriptions1.oid IN ( SELECT max(measurement_unit_qualifier_descriptions2.oid) AS max
            FROM public.measurement_unit_qualifier_descriptions_oplog measurement_unit_qualifier_descriptions2
@@ -4079,7 +4286,8 @@ CREATE TABLE public.measurement_unit_qualifiers_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -4093,7 +4301,8 @@ CREATE VIEW public.measurement_unit_qualifiers AS
     measurement_unit_qualifiers1.validity_end_date,
     measurement_unit_qualifiers1.oid,
     measurement_unit_qualifiers1.operation,
-    measurement_unit_qualifiers1.operation_date
+    measurement_unit_qualifiers1.operation_date,
+    measurement_unit_qualifiers1.filename
    FROM public.measurement_unit_qualifiers_oplog measurement_unit_qualifiers1
   WHERE ((measurement_unit_qualifiers1.oid IN ( SELECT max(measurement_unit_qualifiers2.oid) AS max
            FROM public.measurement_unit_qualifiers_oplog measurement_unit_qualifiers2
@@ -4130,7 +4339,8 @@ CREATE TABLE public.measurement_units_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -4144,7 +4354,8 @@ CREATE VIEW public.measurement_units AS
     measurement_units1.validity_end_date,
     measurement_units1.oid,
     measurement_units1.operation,
-    measurement_units1.operation_date
+    measurement_units1.operation_date,
+    measurement_units1.filename
    FROM public.measurement_units_oplog measurement_units1
   WHERE ((measurement_units1.oid IN ( SELECT max(measurement_units2.oid) AS max
            FROM public.measurement_units_oplog measurement_units2
@@ -4182,7 +4393,8 @@ CREATE TABLE public.measurements_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -4197,7 +4409,8 @@ CREATE VIEW public.measurements AS
     measurements1.validity_end_date,
     measurements1.oid,
     measurements1.operation,
-    measurements1.operation_date
+    measurements1.operation_date,
+    measurements1.filename
    FROM public.measurements_oplog measurements1
   WHERE ((measurements1.oid IN ( SELECT max(measurements2.oid) AS max
            FROM public.measurements_oplog measurements2
@@ -4257,7 +4470,48 @@ CREATE TABLE public.measures_oplog (
     operation_date date,
     effective_start_date timestamp without time zone,
     effective_end_date timestamp without time zone
+    filename text
 );
+
+
+--
+-- Name: measures; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.measures AS
+ SELECT measures1.measure_sid,
+    measures1.measure_type_id,
+    measures1.geographical_area_id,
+    measures1.goods_nomenclature_item_id,
+    measures1.validity_start_date,
+    measures1.effective_start_date,
+    measures1.validity_end_date,
+    measures1.effective_end_date,
+    measures1.measure_generating_regulation_role,
+    measures1.measure_generating_regulation_id,
+    measures1.justification_regulation_role,
+    measures1.justification_regulation_id,
+    measures1.stopped_flag,
+    measures1.geographical_area_sid,
+    measures1.goods_nomenclature_sid,
+    measures1.ordernumber,
+    measures1.additional_code_type_id,
+    measures1.additional_code_id,
+    measures1.additional_code_sid,
+    measures1.reduction_indicator,
+    measures1.export_refund_nomenclature_sid,
+    measures1."national",
+    measures1.tariff_measure_number,
+    measures1.invalidated_by,
+    measures1.invalidated_at,
+    measures1.oid,
+    measures1.operation,
+    measures1.operation_date,
+    measures1.filename
+   FROM public.measures_oplog measures1
+  WHERE ((measures1.oid IN ( SELECT max(measures2.oid) AS max
+           FROM public.measures_oplog measures2
+          WHERE (measures1.measure_sid = measures2.measure_sid))) AND ((measures1.operation)::text <> 'D'::text));
 
 
 --
@@ -4291,7 +4545,8 @@ CREATE TABLE public.meursing_additional_codes_oplog (
     validity_end_date timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -4306,7 +4561,8 @@ CREATE VIEW public.meursing_additional_codes AS
     meursing_additional_codes1.validity_end_date,
     meursing_additional_codes1.oid,
     meursing_additional_codes1.operation,
-    meursing_additional_codes1.operation_date
+    meursing_additional_codes1.operation_date,
+    meursing_additional_codes1.filename
    FROM public.meursing_additional_codes_oplog meursing_additional_codes1
   WHERE ((meursing_additional_codes1.oid IN ( SELECT max(meursing_additional_codes2.oid) AS max
            FROM public.meursing_additional_codes_oplog meursing_additional_codes2
@@ -4345,7 +4601,8 @@ CREATE TABLE public.meursing_heading_texts_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -4361,7 +4618,8 @@ CREATE VIEW public.meursing_heading_texts AS
     meursing_heading_texts1.description,
     meursing_heading_texts1.oid,
     meursing_heading_texts1.operation,
-    meursing_heading_texts1.operation_date
+    meursing_heading_texts1.operation_date,
+    meursing_heading_texts1.filename
    FROM public.meursing_heading_texts_oplog meursing_heading_texts1
   WHERE ((meursing_heading_texts1.oid IN ( SELECT max(meursing_heading_texts2.oid) AS max
            FROM public.meursing_heading_texts_oplog meursing_heading_texts2
@@ -4400,7 +4658,8 @@ CREATE TABLE public.meursing_headings_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -4416,7 +4675,8 @@ CREATE VIEW public.meursing_headings AS
     meursing_headings1.validity_end_date,
     meursing_headings1.oid,
     meursing_headings1.operation,
-    meursing_headings1.operation_date
+    meursing_headings1.operation_date,
+    meursing_headings1.filename
    FROM public.meursing_headings_oplog meursing_headings1
   WHERE ((meursing_headings1.oid IN ( SELECT max(meursing_headings2.oid) AS max
            FROM public.meursing_headings_oplog meursing_headings2
@@ -4457,7 +4717,8 @@ CREATE TABLE public.meursing_subheadings_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -4475,7 +4736,8 @@ CREATE VIEW public.meursing_subheadings AS
     meursing_subheadings1.description,
     meursing_subheadings1.oid,
     meursing_subheadings1.operation,
-    meursing_subheadings1.operation_date
+    meursing_subheadings1.operation_date,
+    meursing_subheadings1.filename
    FROM public.meursing_subheadings_oplog meursing_subheadings1
   WHERE ((meursing_subheadings1.oid IN ( SELECT max(meursing_subheadings2.oid) AS max
            FROM public.meursing_subheadings_oplog meursing_subheadings2
@@ -4517,7 +4779,8 @@ CREATE TABLE public.meursing_table_cell_components_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -4536,7 +4799,8 @@ CREATE VIEW public.meursing_table_cell_components AS
     meursing_table_cell_components1.additional_code,
     meursing_table_cell_components1.oid,
     meursing_table_cell_components1.operation,
-    meursing_table_cell_components1.operation_date
+    meursing_table_cell_components1.operation_date,
+    meursing_table_cell_components1.filename
    FROM public.meursing_table_cell_components_oplog meursing_table_cell_components1
   WHERE ((meursing_table_cell_components1.oid IN ( SELECT max(meursing_table_cell_components2.oid) AS max
            FROM public.meursing_table_cell_components_oplog meursing_table_cell_components2
@@ -4573,7 +4837,8 @@ CREATE TABLE public.meursing_table_plans_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -4587,7 +4852,8 @@ CREATE VIEW public.meursing_table_plans AS
     meursing_table_plans1.validity_end_date,
     meursing_table_plans1.oid,
     meursing_table_plans1.operation,
-    meursing_table_plans1.operation_date
+    meursing_table_plans1.operation_date,
+    meursing_table_plans1.filename
    FROM public.meursing_table_plans_oplog meursing_table_plans1
   WHERE ((meursing_table_plans1.oid IN ( SELECT max(meursing_table_plans2.oid) AS max
            FROM public.meursing_table_plans_oplog meursing_table_plans2
@@ -4639,7 +4905,8 @@ CREATE TABLE public.modification_regulations_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -4668,7 +4935,8 @@ CREATE VIEW public.modification_regulations AS
     modification_regulations1.complete_abrogation_regulation_id,
     modification_regulations1.oid,
     modification_regulations1.operation,
-    modification_regulations1.operation_date
+    modification_regulations1.operation_date,
+    modification_regulations1.filename
    FROM public.modification_regulations_oplog modification_regulations1
   WHERE ((modification_regulations1.oid IN ( SELECT max(modification_regulations2.oid) AS max
            FROM public.modification_regulations_oplog modification_regulations2
@@ -4695,45 +4963,6 @@ ALTER SEQUENCE public.modification_regulations_oid_seq OWNED BY public.modificat
 
 
 --
--- Name: measures; Type: VIEW; Schema: public; Owner: -
---
-
-CREATE VIEW public.measures AS
-SELECT measures1.measure_sid,
-       measures1.measure_type_id,
-       measures1.geographical_area_id,
-       measures1.goods_nomenclature_item_id,
-       measures1.validity_start_date,
-       measures1.effective_start_date,
-       measures1.validity_end_date,
-       measures1.effective_end_date,
-       measures1.measure_generating_regulation_role,
-       measures1.measure_generating_regulation_id,
-       measures1.justification_regulation_role,
-       measures1.justification_regulation_id,
-       measures1.stopped_flag,
-       measures1.geographical_area_sid,
-       measures1.goods_nomenclature_sid,
-       measures1.ordernumber,
-       measures1.additional_code_type_id,
-       measures1.additional_code_id,
-       measures1.additional_code_sid,
-       measures1.reduction_indicator,
-       measures1.export_refund_nomenclature_sid,
-       measures1."national",
-       measures1.tariff_measure_number,
-       measures1.invalidated_by,
-       measures1.invalidated_at,
-       measures1.oid,
-       measures1.operation,
-       measures1.operation_date
-FROM public.measures_oplog measures1
-WHERE ((measures1.oid IN ( SELECT max(measures2.oid) AS max
-                           FROM public.measures_oplog measures2
-                           WHERE (measures1.measure_sid = measures2.measure_sid))) AND ((measures1.operation)::text <> 'D'::text));
-
-
---
 -- Name: monetary_exchange_periods_oplog; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -4745,7 +4974,8 @@ CREATE TABLE public.monetary_exchange_periods_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -4760,7 +4990,8 @@ CREATE VIEW public.monetary_exchange_periods AS
     monetary_exchange_periods1.validity_end_date,
     monetary_exchange_periods1.oid,
     monetary_exchange_periods1.operation,
-    monetary_exchange_periods1.operation_date
+    monetary_exchange_periods1.operation_date,
+    monetary_exchange_periods1.filename
    FROM public.monetary_exchange_periods_oplog monetary_exchange_periods1
   WHERE ((monetary_exchange_periods1.oid IN ( SELECT max(monetary_exchange_periods2.oid) AS max
            FROM public.monetary_exchange_periods_oplog monetary_exchange_periods2
@@ -4797,7 +5028,8 @@ CREATE TABLE public.monetary_exchange_rates_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -4811,7 +5043,8 @@ CREATE VIEW public.monetary_exchange_rates AS
     monetary_exchange_rates1.exchange_rate,
     monetary_exchange_rates1.oid,
     monetary_exchange_rates1.operation,
-    monetary_exchange_rates1.operation_date
+    monetary_exchange_rates1.operation_date,
+    monetary_exchange_rates1.filename
    FROM public.monetary_exchange_rates_oplog monetary_exchange_rates1
   WHERE ((monetary_exchange_rates1.oid IN ( SELECT max(monetary_exchange_rates2.oid) AS max
            FROM public.monetary_exchange_rates_oplog monetary_exchange_rates2
@@ -4848,7 +5081,8 @@ CREATE TABLE public.monetary_unit_descriptions_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -4862,7 +5096,8 @@ CREATE VIEW public.monetary_unit_descriptions AS
     monetary_unit_descriptions1.description,
     monetary_unit_descriptions1.oid,
     monetary_unit_descriptions1.operation,
-    monetary_unit_descriptions1.operation_date
+    monetary_unit_descriptions1.operation_date,
+    monetary_unit_descriptions1.filename
    FROM public.monetary_unit_descriptions_oplog monetary_unit_descriptions1
   WHERE ((monetary_unit_descriptions1.oid IN ( SELECT max(monetary_unit_descriptions2.oid) AS max
            FROM public.monetary_unit_descriptions_oplog monetary_unit_descriptions2
@@ -4899,7 +5134,8 @@ CREATE TABLE public.monetary_units_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -4913,7 +5149,8 @@ CREATE VIEW public.monetary_units AS
     monetary_units1.validity_end_date,
     monetary_units1.oid,
     monetary_units1.operation,
-    monetary_units1.operation_date
+    monetary_units1.operation_date,
+    monetary_units1.filename
    FROM public.monetary_units_oplog monetary_units1
   WHERE ((monetary_units1.oid IN ( SELECT max(monetary_units2.oid) AS max
            FROM public.monetary_units_oplog monetary_units2
@@ -4954,7 +5191,8 @@ CREATE TABLE public.nomenclature_group_memberships_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -4972,7 +5210,8 @@ CREATE VIEW public.nomenclature_group_memberships AS
     nomenclature_group_memberships1.productline_suffix,
     nomenclature_group_memberships1.oid,
     nomenclature_group_memberships1.operation,
-    nomenclature_group_memberships1.operation_date
+    nomenclature_group_memberships1.operation_date,
+    nomenclature_group_memberships1.filename
    FROM public.nomenclature_group_memberships_oplog nomenclature_group_memberships1
   WHERE ((nomenclature_group_memberships1.oid IN ( SELECT max(nomenclature_group_memberships2.oid) AS max
            FROM public.nomenclature_group_memberships_oplog nomenclature_group_memberships2
@@ -5011,7 +5250,8 @@ CREATE TABLE public.prorogation_regulation_actions_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -5027,7 +5267,8 @@ CREATE VIEW public.prorogation_regulation_actions AS
     prorogation_regulation_actions1.prorogated_date,
     prorogation_regulation_actions1.oid,
     prorogation_regulation_actions1.operation,
-    prorogation_regulation_actions1.operation_date
+    prorogation_regulation_actions1.operation_date,
+    prorogation_regulation_actions1.filename
    FROM public.prorogation_regulation_actions_oplog prorogation_regulation_actions1
   WHERE ((prorogation_regulation_actions1.oid IN ( SELECT max(prorogation_regulation_actions2.oid) AS max
            FROM public.prorogation_regulation_actions_oplog prorogation_regulation_actions2
@@ -5069,7 +5310,8 @@ CREATE TABLE public.prorogation_regulations_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -5088,7 +5330,8 @@ CREATE VIEW public.prorogation_regulations AS
     prorogation_regulations1.approved_flag,
     prorogation_regulations1.oid,
     prorogation_regulations1.operation,
-    prorogation_regulations1.operation_date
+    prorogation_regulations1.operation_date,
+    prorogation_regulations1.filename
    FROM public.prorogation_regulations_oplog prorogation_regulations1
   WHERE ((prorogation_regulations1.oid IN ( SELECT max(prorogation_regulations2.oid) AS max
            FROM public.prorogation_regulations_oplog prorogation_regulations2
@@ -5128,7 +5371,8 @@ CREATE TABLE public.publication_sigles_oplog (
     validity_start_date timestamp without time zone,
     created_at timestamp without time zone,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -5145,7 +5389,8 @@ CREATE VIEW public.publication_sigles AS
     publication_sigles1.validity_end_date,
     publication_sigles1.validity_start_date,
     publication_sigles1.operation,
-    publication_sigles1.operation_date
+    publication_sigles1.operation_date,
+    publication_sigles1.filename
    FROM public.publication_sigles_oplog publication_sigles1
   WHERE ((publication_sigles1.oid IN ( SELECT max(publication_sigles2.oid) AS max
            FROM public.publication_sigles_oplog publication_sigles2
@@ -5183,7 +5428,8 @@ CREATE TABLE public.quota_associations_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -5198,7 +5444,8 @@ CREATE VIEW public.quota_associations AS
     quota_associations1.coefficient,
     quota_associations1.oid,
     quota_associations1.operation,
-    quota_associations1.operation_date
+    quota_associations1.operation_date,
+    quota_associations1.filename
    FROM public.quota_associations_oplog quota_associations1
   WHERE ((quota_associations1.oid IN ( SELECT max(quota_associations2.oid) AS max
            FROM public.quota_associations_oplog quota_associations2
@@ -5238,7 +5485,8 @@ CREATE TABLE public.quota_balance_events_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -5255,7 +5503,8 @@ CREATE VIEW public.quota_balance_events AS
     quota_balance_events1.imported_amount,
     quota_balance_events1.oid,
     quota_balance_events1.operation,
-    quota_balance_events1.operation_date
+    quota_balance_events1.operation_date,
+    quota_balance_events1.filename
    FROM public.quota_balance_events_oplog quota_balance_events1
   WHERE ((quota_balance_events1.oid IN ( SELECT max(quota_balance_events2.oid) AS max
            FROM public.quota_balance_events_oplog quota_balance_events2
@@ -5295,7 +5544,8 @@ CREATE TABLE public.quota_blocking_periods_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -5312,7 +5562,8 @@ CREATE VIEW public.quota_blocking_periods AS
     quota_blocking_periods1.description,
     quota_blocking_periods1.oid,
     quota_blocking_periods1.operation,
-    quota_blocking_periods1.operation_date
+    quota_blocking_periods1.operation_date,
+    quota_blocking_periods1.filename
    FROM public.quota_blocking_periods_oplog quota_blocking_periods1
   WHERE ((quota_blocking_periods1.oid IN ( SELECT max(quota_blocking_periods2.oid) AS max
            FROM public.quota_blocking_periods_oplog quota_blocking_periods2
@@ -5350,7 +5601,8 @@ CREATE TABLE public.quota_critical_events_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -5365,7 +5617,8 @@ CREATE VIEW public.quota_critical_events AS
     quota_critical_events1.critical_state_change_date,
     quota_critical_events1.oid,
     quota_critical_events1.operation,
-    quota_critical_events1.operation_date
+    quota_critical_events1.operation_date,
+    quota_critical_events1.filename
    FROM public.quota_critical_events_oplog quota_critical_events1
   WHERE ((quota_critical_events1.oid IN ( SELECT max(quota_critical_events2.oid) AS max
            FROM public.quota_critical_events_oplog quota_critical_events2
@@ -5415,7 +5668,8 @@ CREATE TABLE public.quota_definitions_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -5440,7 +5694,8 @@ CREATE VIEW public.quota_definitions AS
     quota_definitions1.description,
     quota_definitions1.oid,
     quota_definitions1.operation,
-    quota_definitions1.operation_date
+    quota_definitions1.operation_date,
+    quota_definitions1.filename
    FROM public.quota_definitions_oplog quota_definitions1
   WHERE ((quota_definitions1.oid IN ( SELECT max(quota_definitions2.oid) AS max
            FROM public.quota_definitions_oplog quota_definitions2
@@ -5477,7 +5732,8 @@ CREATE TABLE public.quota_exhaustion_events_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -5491,7 +5747,8 @@ CREATE VIEW public.quota_exhaustion_events AS
     quota_exhaustion_events1.exhaustion_date,
     quota_exhaustion_events1.oid,
     quota_exhaustion_events1.operation,
-    quota_exhaustion_events1.operation_date
+    quota_exhaustion_events1.operation_date,
+    quota_exhaustion_events1.filename
    FROM public.quota_exhaustion_events_oplog quota_exhaustion_events1
   WHERE ((quota_exhaustion_events1.oid IN ( SELECT max(quota_exhaustion_events2.oid) AS max
            FROM public.quota_exhaustion_events_oplog quota_exhaustion_events2
@@ -5527,7 +5784,8 @@ CREATE TABLE public.quota_order_number_origin_exclusions_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -5540,7 +5798,8 @@ CREATE VIEW public.quota_order_number_origin_exclusions AS
     quota_order_number_origin_exclusions1.excluded_geographical_area_sid,
     quota_order_number_origin_exclusions1.oid,
     quota_order_number_origin_exclusions1.operation,
-    quota_order_number_origin_exclusions1.operation_date
+    quota_order_number_origin_exclusions1.operation_date,
+    quota_order_number_origin_exclusions1.filename
    FROM public.quota_order_number_origin_exclusions_oplog quota_order_number_origin_exclusions1
   WHERE ((quota_order_number_origin_exclusions1.oid IN ( SELECT max(quota_order_number_origin_exclusions2.oid) AS max
            FROM public.quota_order_number_origin_exclusions_oplog quota_order_number_origin_exclusions2
@@ -5580,7 +5839,8 @@ CREATE TABLE public.quota_order_number_origins_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -5597,7 +5857,8 @@ CREATE VIEW public.quota_order_number_origins AS
     quota_order_number_origins1.geographical_area_sid,
     quota_order_number_origins1.oid,
     quota_order_number_origins1.operation,
-    quota_order_number_origins1.operation_date
+    quota_order_number_origins1.operation_date,
+    quota_order_number_origins1.filename
    FROM public.quota_order_number_origins_oplog quota_order_number_origins1
   WHERE ((quota_order_number_origins1.oid IN ( SELECT max(quota_order_number_origins2.oid) AS max
            FROM public.quota_order_number_origins_oplog quota_order_number_origins2
@@ -5635,7 +5896,8 @@ CREATE TABLE public.quota_order_numbers_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -5650,7 +5912,8 @@ CREATE VIEW public.quota_order_numbers AS
     quota_order_numbers1.validity_end_date,
     quota_order_numbers1.oid,
     quota_order_numbers1.operation,
-    quota_order_numbers1.operation_date
+    quota_order_numbers1.operation_date,
+    quota_order_numbers1.filename
    FROM public.quota_order_numbers_oplog quota_order_numbers1
   WHERE ((quota_order_numbers1.oid IN ( SELECT max(quota_order_numbers2.oid) AS max
            FROM public.quota_order_numbers_oplog quota_order_numbers2
@@ -5687,7 +5950,8 @@ CREATE TABLE public.quota_reopening_events_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -5701,7 +5965,8 @@ CREATE VIEW public.quota_reopening_events AS
     quota_reopening_events1.reopening_date,
     quota_reopening_events1.oid,
     quota_reopening_events1.operation,
-    quota_reopening_events1.operation_date
+    quota_reopening_events1.operation_date,
+    quota_reopening_events1.filename
    FROM public.quota_reopening_events_oplog quota_reopening_events1
   WHERE ((quota_reopening_events1.oid IN ( SELECT max(quota_reopening_events2.oid) AS max
            FROM public.quota_reopening_events_oplog quota_reopening_events2
@@ -5740,7 +6005,8 @@ CREATE TABLE public.quota_suspension_periods_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -5756,7 +6022,8 @@ CREATE VIEW public.quota_suspension_periods AS
     quota_suspension_periods1.description,
     quota_suspension_periods1.oid,
     quota_suspension_periods1.operation,
-    quota_suspension_periods1.operation_date
+    quota_suspension_periods1.operation_date,
+    quota_suspension_periods1.filename
    FROM public.quota_suspension_periods_oplog quota_suspension_periods1
   WHERE ((quota_suspension_periods1.oid IN ( SELECT max(quota_suspension_periods2.oid) AS max
            FROM public.quota_suspension_periods_oplog quota_suspension_periods2
@@ -5793,7 +6060,8 @@ CREATE TABLE public.quota_unblocking_events_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -5807,7 +6075,8 @@ CREATE VIEW public.quota_unblocking_events AS
     quota_unblocking_events1.unblocking_date,
     quota_unblocking_events1.oid,
     quota_unblocking_events1.operation,
-    quota_unblocking_events1.operation_date
+    quota_unblocking_events1.operation_date,
+    quota_unblocking_events1.filename
    FROM public.quota_unblocking_events_oplog quota_unblocking_events1
   WHERE ((quota_unblocking_events1.oid IN ( SELECT max(quota_unblocking_events2.oid) AS max
            FROM public.quota_unblocking_events_oplog quota_unblocking_events2
@@ -5844,7 +6113,8 @@ CREATE TABLE public.quota_unsuspension_events_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -5858,7 +6128,8 @@ CREATE VIEW public.quota_unsuspension_events AS
     quota_unsuspension_events1.unsuspension_date,
     quota_unsuspension_events1.oid,
     quota_unsuspension_events1.operation,
-    quota_unsuspension_events1.operation_date
+    quota_unsuspension_events1.operation_date,
+    quota_unsuspension_events1.filename
    FROM public.quota_unsuspension_events_oplog quota_unsuspension_events1
   WHERE ((quota_unsuspension_events1.oid IN ( SELECT max(quota_unsuspension_events2.oid) AS max
            FROM public.quota_unsuspension_events_oplog quota_unsuspension_events2
@@ -5896,7 +6167,8 @@ CREATE TABLE public.regulation_group_descriptions_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -5911,7 +6183,8 @@ CREATE VIEW public.regulation_group_descriptions AS
     regulation_group_descriptions1."national",
     regulation_group_descriptions1.oid,
     regulation_group_descriptions1.operation,
-    regulation_group_descriptions1.operation_date
+    regulation_group_descriptions1.operation_date,
+    regulation_group_descriptions1.filename
    FROM public.regulation_group_descriptions_oplog regulation_group_descriptions1
   WHERE ((regulation_group_descriptions1.oid IN ( SELECT max(regulation_group_descriptions2.oid) AS max
            FROM public.regulation_group_descriptions_oplog regulation_group_descriptions2
@@ -5949,7 +6222,8 @@ CREATE TABLE public.regulation_groups_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -5964,7 +6238,8 @@ CREATE VIEW public.regulation_groups AS
     regulation_groups1."national",
     regulation_groups1.oid,
     regulation_groups1.operation,
-    regulation_groups1.operation_date
+    regulation_groups1.operation_date,
+    regulation_groups1.filename
    FROM public.regulation_groups_oplog regulation_groups1
   WHERE ((regulation_groups1.oid IN ( SELECT max(regulation_groups2.oid) AS max
            FROM public.regulation_groups_oplog regulation_groups2
@@ -6005,7 +6280,8 @@ CREATE TABLE public.regulation_replacements_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -6023,7 +6299,8 @@ CREATE VIEW public.regulation_replacements AS
     regulation_replacements1.measure_type_id,
     regulation_replacements1.oid,
     regulation_replacements1.operation,
-    regulation_replacements1.operation_date
+    regulation_replacements1.operation_date,
+    regulation_replacements1.filename
    FROM public.regulation_replacements_oplog regulation_replacements1
   WHERE ((regulation_replacements1.oid IN ( SELECT max(regulation_replacements2.oid) AS max
            FROM public.regulation_replacements_oplog regulation_replacements2
@@ -6061,7 +6338,8 @@ CREATE TABLE public.regulation_role_type_descriptions_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -6076,7 +6354,8 @@ CREATE VIEW public.regulation_role_type_descriptions AS
     regulation_role_type_descriptions1."national",
     regulation_role_type_descriptions1.oid,
     regulation_role_type_descriptions1.operation,
-    regulation_role_type_descriptions1.operation_date
+    regulation_role_type_descriptions1.operation_date,
+    regulation_role_type_descriptions1.filename
    FROM public.regulation_role_type_descriptions_oplog regulation_role_type_descriptions1
   WHERE ((regulation_role_type_descriptions1.oid IN ( SELECT max(regulation_role_type_descriptions2.oid) AS max
            FROM public.regulation_role_type_descriptions_oplog regulation_role_type_descriptions2
@@ -6114,7 +6393,8 @@ CREATE TABLE public.regulation_role_types_oplog (
     "national" boolean,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -6129,7 +6409,8 @@ CREATE VIEW public.regulation_role_types AS
     regulation_role_types1."national",
     regulation_role_types1.oid,
     regulation_role_types1.operation,
-    regulation_role_types1.operation_date
+    regulation_role_types1.operation_date,
+    regulation_role_types1.filename
    FROM public.regulation_role_types_oplog regulation_role_types1
   WHERE ((regulation_role_types1.oid IN ( SELECT max(regulation_role_types2.oid) AS max
            FROM public.regulation_role_types_oplog regulation_role_types2
@@ -6292,6 +6573,32 @@ ALTER SEQUENCE public.sections_id_seq OWNED BY public.sections.id;
 
 
 --
+-- Name: tariff_update_cds_errors; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tariff_update_cds_errors (
+    id integer NOT NULL,
+    tariff_update_filename text NOT NULL,
+    model_name text NOT NULL,
+    details jsonb
+);
+
+
+--
+-- Name: tariff_update_cds_errors_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+ALTER TABLE public.tariff_update_cds_errors ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME public.tariff_update_cds_errors_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: tariff_update_conformance_errors; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -6360,7 +6667,7 @@ ALTER SEQUENCE public.tariff_update_presence_errors_id_seq OWNED BY public.tarif
 --
 
 CREATE TABLE public.tariff_updates (
-    filename character varying(30) NOT NULL,
+    filename character varying(255) NOT NULL,
     update_type character varying(50),
     state character varying(1),
     issue_date date,
@@ -6387,7 +6694,8 @@ CREATE TABLE public.transmission_comments_oplog (
     created_at timestamp without time zone,
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
-    operation_date date
+    operation_date date,
+    filename text
 );
 
 
@@ -6401,7 +6709,8 @@ CREATE VIEW public.transmission_comments AS
     transmission_comments1.comment_text,
     transmission_comments1.oid,
     transmission_comments1.operation,
-    transmission_comments1.operation_date
+    transmission_comments1.operation_date,
+    transmission_comments1.filename
    FROM public.transmission_comments_oplog transmission_comments1
   WHERE ((transmission_comments1.oid IN ( SELECT max(transmission_comments2.oid) AS max
            FROM public.transmission_comments_oplog transmission_comments2
@@ -7385,6 +7694,38 @@ ALTER TABLE ONLY public.chapters_guides
 
 
 --
+-- Name: chemical_names chemical_names_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chemical_names
+    ADD CONSTRAINT chemical_names_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chemicals chemicals_cas_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chemicals
+    ADD CONSTRAINT chemicals_cas_key UNIQUE (cas);
+
+
+--
+-- Name: chemicals_goods_nomenclatures chemicals_goods_nomenclatures_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chemicals_goods_nomenclatures
+    ADD CONSTRAINT chemicals_goods_nomenclatures_pkey PRIMARY KEY (chemical_id, goods_nomenclature_sid);
+
+
+--
+-- Name: chemicals chemicals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chemicals
+    ADD CONSTRAINT chemicals_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: chief_duty_expression chief_duty_expression_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7558,6 +7899,14 @@ ALTER TABLE ONLY public.footnote_types_oplog
 
 ALTER TABLE ONLY public.footnotes_oplog
     ADD CONSTRAINT footnotes_pkey PRIMARY KEY (oid);
+
+
+--
+-- Name: forum_links forum_links_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.forum_links
+    ADD CONSTRAINT forum_links_pkey PRIMARY KEY (id);
 
 
 --
@@ -8161,6 +8510,14 @@ ALTER TABLE ONLY public.sections
 
 
 --
+-- Name: tariff_update_cds_errors tariff_update_cds_errors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tariff_update_cds_errors
+    ADD CONSTRAINT tariff_update_cds_errors_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: tariff_update_conformance_errors tariff_update_conformance_errors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8415,6 +8772,27 @@ CREATE INDEX chapter_notes_chapter_id_index ON public.chapter_notes USING btree 
 --
 
 CREATE INDEX chapter_notes_section_id_index ON public.chapter_notes USING btree (section_id);
+
+
+--
+-- Name: chemical_names_name_chemical_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX chemical_names_name_chemical_id_index ON public.chemical_names USING btree (name, chemical_id);
+
+
+--
+-- Name: chemicals_cas_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX chemicals_cas_index ON public.chemicals USING btree (cas);
+
+
+--
+-- Name: chemicals_goods_nomenclatures_chemical_id_goods_nomenclature_si; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX chemicals_goods_nomenclatures_chemical_id_goods_nomenclature_si ON public.chemicals_goods_nomenclatures USING btree (chemical_id, goods_nomenclature_sid);
 
 
 --
@@ -8681,6 +9059,13 @@ CREATE INDEX fo_fooopl_teslog_operation_date ON public.footnotes_oplog USING btr
 --
 
 CREATE INDEX footnote_id ON public.footnote_association_measures_oplog USING btree (footnote_id);
+
+
+--
+-- Name: forum_links_goods_nomenclature_sid_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX forum_links_goods_nomenclature_sid_index ON public.forum_links USING btree (goods_nomenclature_sid);
 
 
 --
@@ -9023,7 +9408,7 @@ CREATE INDEX index_certificate_type_descriptions_on_language_id ON public.certif
 -- Name: index_chapters_sections_on_goods_nomenclature_sid_and_section_i; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_chapters_sections_on_goods_nomenclature_sid_and_section_i ON public.chapters_sections USING btree (goods_nomenclature_sid, section_id);
+CREATE UNIQUE INDEX index_chapters_sections_on_goods_nomenclature_sid_and_section_i ON public.chapters_sections USING btree (goods_nomenclature_sid, section_id);
 
 
 --
@@ -10161,6 +10546,13 @@ CREATE INDEX sid ON public.additional_code_descriptions_oplog USING btree (addit
 
 
 --
+-- Name: tariff_update_cds_errors_tariff_update_filename_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX tariff_update_cds_errors_tariff_update_filename_index ON public.tariff_update_cds_errors USING btree (tariff_update_filename);
+
+
+--
 -- Name: tariff_update_conformance_errors_tariff_update_filename_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10231,11 +10623,11 @@ CREATE INDEX user_id ON public.rollbacks USING btree (user_id);
 
 
 --
--- Name: reassign_owned; Type: EVENT TRIGGER; Schema: -; Owner: -
+-- Name: chemical_names chemical_names_chemical_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-CREATE EVENT TRIGGER reassign_owned ON ddl_command_end
-   EXECUTE PROCEDURE public.reassign_owned();
+ALTER TABLE ONLY public.chemical_names
+    ADD CONSTRAINT chemical_names_chemical_id_fkey FOREIGN KEY (chemical_id) REFERENCES public.chemicals(id);
 
 
 --
@@ -10328,3 +10720,9 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20190418162242_add_order_n
 INSERT INTO "schema_migrations" ("filename") VALUES ('20190810104215_add_effective_dates_to_measures_oplog.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20190811114215_add_effective_dates_to_measures_view.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20190815114215_change_effective_dates_to_measures_view.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20191014165200_create_chemicals.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20180822124608_add_tariff_update_cds_error.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20191022065944_update_filename_size.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20200905141023_create_forum_links.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20201006192051_add_filename_to_oplog_tables.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20201006193537_fix_index_on_chapters_sections.rb');

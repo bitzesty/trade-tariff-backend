@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe BuildIndexPageWorker do
+describe BuildIndexPageWorker, type: :worker do
   describe '#methods' do
     describe 'build index page' do
       let(:commodity) {
@@ -20,11 +20,11 @@ describe BuildIndexPageWorker do
           1,
           10
         )
-        sleep 1
+        sleep 2
         
         search_result = TradeTariffBackend.search_client.search q: 'test', index: TradeTariffBackend.search_index_for('search', commodity).name
       
-        expect(search_result.hits.total).to be >= 1
+        expect(search_result.hits.total.value).to be >= 1
         expect(search_result.hits.hits.first._source.goods_nomenclature_item_id).to eq commodity.goods_nomenclature_item_id
       end
     end

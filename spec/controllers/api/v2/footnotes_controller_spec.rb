@@ -5,13 +5,16 @@ describe Api::V2::FootnotesController, type: :controller do
 
   context 'footnotes search' do
 
-    let!(:footnote) { create :footnote }
+    let!(:footnote) { create :footnote, :national }
     let!(:footnote_description) { create :footnote_description, :with_period, footnote_type_id: footnote.footnote_type_id, footnote_id: footnote.footnote_id }
     let!(:measure) { create :measure }
     let!(:footnote_association_measure) { create :footnote_association_measure, footnote_type_id: footnote.footnote_type_id, footnote_id: footnote.footnote_id, measure_sid: measure.measure_sid }
     let!(:goods_nomenclature) { measure.goods_nomenclature }
+    let!(:goods_nomenclature2) { create :goods_nomenclature }
     let!(:footnote_association_goods_nomenclature) { create :footnote_association_goods_nomenclature, footnote_type: footnote.footnote_type_id, footnote_id: footnote.footnote_id, goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid }
+    let!(:footnote_association_goods_nomenclature2) { create :footnote_association_goods_nomenclature, footnote_type: footnote.footnote_type_id, footnote_id: footnote.footnote_id, goods_nomenclature_sid: goods_nomenclature2.goods_nomenclature_sid }
     let!(:goods_nomenclature_description) { create :goods_nomenclature_description, goods_nomenclature_sid: goods_nomenclature.goods_nomenclature_sid }
+    let!(:goods_nomenclature_description2) { create :goods_nomenclature_description, goods_nomenclature_sid: goods_nomenclature2.goods_nomenclature_sid }
 
     let(:pattern) {
       {
@@ -33,15 +36,19 @@ describe Api::V2::FootnotesController, type: :controller do
                   id: String,
                   type: "measure"
                 }
-              ].ignore_extra_values!
+              ]
             },
             goods_nomenclatures: {
               data: [
                 {
                   id: String,
                   type: "goods_nomenclature"
+                },
+                {
+                  id: String,
+                  type: "goods_nomenclature"
                 }
-              ].ignore_extra_values!
+              ]
             }
           }
         }].ignore_extra_values!,
@@ -64,16 +71,27 @@ describe Api::V2::FootnotesController, type: :controller do
           }
         },
         {
-          id: String,
+          id: goods_nomenclature.goods_nomenclature_sid.to_s,
           type: "goods_nomenclature",
           attributes: {
             goods_nomenclature_item_id: String,
             goods_nomenclature_sid: Integer,
             description: String,
             number_indents: Integer,
-            productline_suffix: String
+            producline_suffix: String
           }
-        }].ignore_extra_values!,
+        },
+        {
+          id: goods_nomenclature2.goods_nomenclature_sid.to_s,
+          type: "goods_nomenclature",
+          attributes: {
+            goods_nomenclature_item_id: String,
+            goods_nomenclature_sid: Integer,
+            description: String,
+            number_indents: Integer,
+            producline_suffix: String
+          }
+        }],
         meta: {
           pagination: {
             page: Integer,
@@ -105,7 +123,7 @@ describe Api::V2::FootnotesController, type: :controller do
     before do
       Sidekiq::Testing.inline! do
         TradeTariffBackend.cache_client.reindex
-        sleep(1)
+        sleep(2) # TODO: need to think about better ES rspec integration
       end
     end
 
@@ -125,12 +143,6 @@ describe Api::V2::FootnotesController, type: :controller do
       get :search, params: { description: footnote.description }, format: :json
 
       expect(response.body).to match_json_expression pattern
-    end
-
-    it 'returns 404 if no valid parameter is provided' do
-      get :search, format: :json
-
-      expect(response.status).to eq(404)
     end
 
     it 'returns an empty JSON object if no footnotes are found' do

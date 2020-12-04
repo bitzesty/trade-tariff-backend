@@ -4,6 +4,7 @@ TradeTariffBackend::DataMigrator.migration do
   up do
     applicable {
       ChapterNote.where("char_length(chapter_id) < 2").any?
+      false
     }
     apply {
       ChapterNote.all do |chapter_note|
@@ -13,11 +14,7 @@ TradeTariffBackend::DataMigrator.migration do
   end
 
   down do
-    applicable {
-      false
-    }
-    apply {
-      # noop
-    }
+    applicable { false }
+    apply { } # noop
   end
 end

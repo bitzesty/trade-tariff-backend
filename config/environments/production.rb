@@ -25,7 +25,7 @@ Rails.application.configure do
   config.serve_static_files = false
 
   # Compress JavaScripts and CSS.
-  config.assets.enabled = false
+  # config.assets.enabled = false
   # config.assets.compress = true
   # config.assets.js_compressor = :uglifier
   # config.assets.css_compressor = :sass
@@ -61,8 +61,8 @@ Rails.application.configure do
   config.lograge.ignore_actions = ['HealthcheckController#index']
 
   # Rails cache store
-  # PaasResolver returns url and db
-  config.cache_store = :redis_store, PaasResolver.get_redis_config.merge({
+  # PaasConfig returns url and db
+  config.cache_store = :redis_store, PaasConfig.redis.merge({
     expires_in: 1.day,
     namespace:  ENV["GOVUK_APP_DOMAIN"],
     pool_size:  Integer(ENV["MAX_THREADS"] || 5)
@@ -73,7 +73,7 @@ Rails.application.configure do
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
-  config.action_mailer.delivery_method = :aws_sdk
+  config.action_mailer.delivery_method = :ses
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).

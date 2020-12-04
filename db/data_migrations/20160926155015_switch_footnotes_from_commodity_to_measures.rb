@@ -43,6 +43,7 @@ TradeTariffBackend::DataMigrator.migration do
   up do
     applicable {
       FootnoteAssociationMeasure.where(footnote_type_id: FOOTNOTE_TYPE_ID,footnote_id: FOOTNOTE_ID).none?
+      false
     }
 
     apply {

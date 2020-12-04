@@ -1,7 +1,7 @@
 module Api
   module V2
     class TariffUpdateSerializer
-      include FastJsonapi::ObjectSerializer
+      include JSONAPI::Serializer
 
       set_type :tariff_update
 

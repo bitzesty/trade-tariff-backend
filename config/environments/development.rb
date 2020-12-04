@@ -34,19 +34,16 @@ Rails.application.configure do
   config.action_dispatch.best_standards_support = :builtin
 
   # Do not compress assets.
-  config.assets.compress = false
+  # config.assets.compress = false
 
   # Suppress logger output for asset requests.
-  config.assets.quiet = true
+  # config.assets.quiet = true
 
   # Expands the lines which load the assets.
-  config.assets.debug = true
+  # config.assets.debug = true
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  # Configure Rails.logger to log to both STDOUT and development.log file.
   config.log_level = :info
-  file_logger = Logger.new(Rails.root.join("log", "development.log"))
-  config.logger = file_logger.extend(ActiveSupport::Logger.broadcast(Logger.new(STDOUT)))
 end

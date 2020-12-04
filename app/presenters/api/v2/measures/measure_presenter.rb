@@ -32,7 +32,7 @@ module Api
         end
 
         def geographical_area_id
-          geographical_area.geographical_area_id
+          measure.geographical_area_id
         end
 
         def additional_code
@@ -65,6 +65,10 @@ module Api
 
         def legal_act_ids
           measure.legal_acts.map(&:regulation_id)
+        end
+
+        def order_number_id
+          measure.order_number&.quota_order_number_id
         end
       end
     end

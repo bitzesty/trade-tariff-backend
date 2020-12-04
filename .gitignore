@@ -8,9 +8,7 @@
 .byebug_history
 
 # Local tariff files
-data/*/*.xml
-data/*.xml
-data/*/*.txt
+data/*/*
 data/failed-measures-report*
 
 # Environment files
