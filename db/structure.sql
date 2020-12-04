@@ -4468,6 +4468,8 @@ CREATE TABLE public.measures_oplog (
     oid integer NOT NULL,
     operation character varying(1) DEFAULT 'C'::character varying,
     operation_date date,
+    effective_start_date timestamp without time zone,
+    effective_end_date timestamp without time zone
     filename text
 );
 
@@ -4482,7 +4484,9 @@ CREATE VIEW public.measures AS
     measures1.geographical_area_id,
     measures1.goods_nomenclature_item_id,
     measures1.validity_start_date,
+    measures1.effective_start_date,
     measures1.validity_end_date,
+    measures1.effective_end_date,
     measures1.measure_generating_regulation_role,
     measures1.measure_generating_regulation_id,
     measures1.justification_regulation_role,
@@ -10713,6 +10717,9 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20181003140819_add_updated
 INSERT INTO "schema_migrations" ("filename") VALUES ('20181029112658_change_size_to_six_for_measure_type_id.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20181211165412_create_guides.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20190418162242_add_order_number_index_on_measure.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20190810104215_add_effective_dates_to_measures_oplog.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20190811114215_add_effective_dates_to_measures_view.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20190815114215_change_effective_dates_to_measures_view.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20191014165200_create_chemicals.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20180822124608_add_tariff_update_cds_error.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20191022065944_update_filename_size.rb');

@@ -16,5 +16,6 @@ class UpdatesSynchronizerWorker
       logger.info "Applying..."
       TariffSynchronizer.apply
     end
+    TradeTariffBackend.update_measure_effective_dates
   end
 end

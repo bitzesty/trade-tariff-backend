@@ -29,7 +29,7 @@ module Cache
         end
       }
 
-      measures = footnote.measures.select { |measure| has_valid_dates(measure) }
+      measures = footnote.measures.select { |measure| has_valid_dates(measure, :effective_start_date, :effective_end_date) }
       extra_large_measures = measures.size >= 1000
       unless extra_large_measures
         footnote_attributes[:measure_ids] = measures.map(&:measure_sid)
@@ -38,7 +38,9 @@ module Cache
             id: measure.measure_sid,
             measure_sid: measure.measure_sid,
             validity_start_date: measure.validity_start_date,
+            effective_start_date: measure.effective_start_date,
             validity_end_date: measure.validity_end_date,
+            effective_end_date: measure.effective_end_date,
             goods_nomenclature_item_id: measure.goods_nomenclature_item_id,
             goods_nomenclature_sid: measure.goods_nomenclature_sid,
             goods_nomenclature: goods_nomenclature_attributes(measure.goods_nomenclature)

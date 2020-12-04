@@ -72,6 +72,10 @@ describe Api::V2::AdditionalCodesController, type: :controller do
       }
     }
 
+    before(:each) do
+      TradeTariffBackend.update_measure_effective_dates
+    end
+
     before do
       Sidekiq::Testing.inline! do
         TradeTariffBackend.cache_client.reindex

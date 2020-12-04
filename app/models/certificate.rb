@@ -17,7 +17,9 @@ class Certificate < Sequel::Model
 
   many_to_many :measures, join_table: :measure_conditions,
                           left_key: %i[certificate_code certificate_type_code],
-                          right_key: :measure_sid
+                          right_key: :measure_sid do |ds|
+    ds.with_actual(Measure)
+  end
 
   def certificate_description
     certificate_descriptions(reload: true).first

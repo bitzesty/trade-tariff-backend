@@ -118,6 +118,10 @@ describe Cache::HeadingSerializer do
       }
     }
 
+    before(:each) do
+      TradeTariffBackend.update_measure_effective_dates
+    end
+
     it 'returns json representation for ElasticSearch' do
       expect(serializer.as_json).to match_json_expression pattern
     end
