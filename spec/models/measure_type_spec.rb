@@ -29,7 +29,9 @@ describe MeasureType do
 
     context 'when the service is the XI version' do
       let(:service) { 'xi' }
-      let(:excluded_types) { %w[442 SPL].concat(described_class::QUOTA_TYPES) }
+      let(:excluded_types) {
+        %w[442 SPL].concat(described_class::QUOTA_TYPES + described_class::NATIONAL_PR_TYPES)
+      }
 
       it 'defines the correct EXCLUDED_TYPES list' do
         allow(TradeTariffBackend).to receive(:service).and_return('xi')

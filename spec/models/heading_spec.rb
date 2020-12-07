@@ -62,7 +62,8 @@ describe Heading do
     describe 'measures' do
       let(:heading) { create :commodity, :with_indent }
       let(:excluded_for_both_uk_xi) { '442' }
-      let(:excluded_for_xi) { '653' }
+      let(:excluded_quota_for_xi) { '653' }
+      let(:excluded_pr_for_xi) { 'CEX' }
 
       before do
         allow(TradeTariffBackend).to receive(:service).and_return(service)
@@ -81,8 +82,15 @@ describe Heading do
           expect(heading.measures.map(&:measure_sid)).not_to include measure.measure_sid
         end
 
-        it 'does include measures that are only excluded for the XI service' do
-          measure_type = create(:measure_type, measure_type_id: excluded_for_xi)
+        it 'does include quota measures that are only excluded for the XI service' do
+          measure_type = create(:measure_type, measure_type_id: excluded_quota_for_xi)
+          measure = create(:measure, measure_type_id: measure_type.measure_type_id, goods_nomenclature_sid: heading.goods_nomenclature_sid)
+
+          expect(heading.measures.map(&:measure_sid)).to include measure.measure_sid
+        end
+
+        it 'does include P&R national measures that are only excluded for the XI service' do
+          measure_type = create(:measure_type, measure_type_id: excluded_pr_for_xi)
           measure = create(:measure, measure_type_id: measure_type.measure_type_id, goods_nomenclature_sid: heading.goods_nomenclature_sid)
 
           expect(heading.measures.map(&:measure_sid)).to include measure.measure_sid
@@ -99,8 +107,15 @@ describe Heading do
           expect(heading.measures.map(&:measure_sid)).not_to include measure.measure_sid
         end
 
-        it 'does not include measures that are only excluded for the XI service' do
-          measure_type = create(:measure_type, measure_type_id: excluded_for_xi)
+        it 'does not include quota measures that are only excluded for the XI service' do
+          measure_type = create(:measure_type, measure_type_id: excluded_quota_for_xi)
+          measure = create(:measure, measure_type_id: measure_type.measure_type_id, goods_nomenclature_sid: heading.goods_nomenclature_sid)
+
+          expect(heading.measures.map(&:measure_sid)).not_to include measure.measure_sid
+        end
+
+        it 'does not include national P&R national measures that are only excluded for the XI service' do
+          measure_type = create(:measure_type, measure_type_id: excluded_pr_for_xi)
           measure = create(:measure, measure_type_id: measure_type.measure_type_id, goods_nomenclature_sid: heading.goods_nomenclature_sid)
 
           expect(heading.measures.map(&:measure_sid)).not_to include measure.measure_sid
