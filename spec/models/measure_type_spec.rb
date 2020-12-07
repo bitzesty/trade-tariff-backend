@@ -34,11 +34,6 @@ describe MeasureType do
       }
 
       it 'defines the correct EXCLUDED_TYPES list' do
-        allow(TradeTariffBackend).to receive(:service).and_return('xi')
-
-        # Reloads the module to update the EXCLUDED_TYPES value after stubbing the service
-        load Rails.root.join("app/models/measure_type.rb")
-
         expect(described_class::EXCLUDED_TYPES).to eq(excluded_types)
       end
     end
