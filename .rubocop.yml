@@ -116,17 +116,13 @@ SpaceInsideParens:
   Description: No spaces after ( or before ).
   Enabled: true
 
-Tab:
-  Description: No hard tabs.
-  Enabled: true
-
 # Supports --auto-correct
 TrailingWhitespace:
   Description: Avoid trailing whitespace.
   Enabled: true
 
 # Supports --auto-correct
-TrailingBlankLines:
+TrailingEmptyLines:
   Description: Checks trailing blank lines and final newline.
   Enabled: true
   EnforcedStyle: final_newline
@@ -257,7 +253,7 @@ TrivialAccessors:
   ExactNameMatch: true
   AllowPredicates: true
   AllowDSLWriters: false
-  Whitelist:
+  AllowedMethods:
     - to_ary
     - to_a
     - to_c
@@ -276,7 +272,7 @@ TrivialAccessors:
     - to_s
     - to_sym
 
-VariableName:
+Naming/VariableName:
   Description: Use the configured style when naming variables.
   Enabled: true
   EnforcedStyle: snake_case
@@ -294,7 +290,7 @@ RescueException:
 ## Collections
 
 # Supports --auto-correct
-AlignArray:
+ArrayAlignment:
   Description: Align the elements of an array literal if they span more than one line.
   Enabled: true
 
@@ -334,7 +330,7 @@ MultilineMethodCallIndentation:
 ## Strings
 
 # Supports --auto-correct
-StringConversionInInterpolation:
+RedundantStringCoercion:
   Description: Checks for Object#to_s usage in string interpolation.
   Enabled: true
 

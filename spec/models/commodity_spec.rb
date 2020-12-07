@@ -122,18 +122,51 @@ describe Commodity do
     end
 
     describe 'measures' do
-      let(:measure_type) { create :measure_type, measure_type_id: MeasureType::EXCLUDED_TYPES.sample }
-      let(:commodity)    { create :commodity, :with_indent }
-      let(:measure)      {
-        create :measure, measure_type_id: measure_type.measure_type_id,
-                                            goods_nomenclature_sid: commodity.goods_nomenclature_sid
-      }
+      let(:commodity) { create :commodity, :with_indent }
+      let(:excluded_for_both_uk_xi) { '442' }
+      let(:excluded_for_xi) { '653' }
 
-      it 'does not include measures for excluded measure types' do
-        measure_type
-        measure
+      before do
+        allow(TradeTariffBackend).to receive(:service).and_return(service)
 
-        expect(commodity.measures.map(&:measure_sid)).not_to include measure.measure_sid
+        # Reloads the module to update the EXCLUDED_TYPES value after stubbing the service
+        load Rails.root.join("app/models/measure_type.rb")
+      end
+
+      context 'when the service version is the UK' do
+        let(:service) { 'uk' }
+
+        it 'does not include measures that are excluded for the UK service' do
+          measure_type = create(:measure_type, measure_type_id: excluded_for_both_uk_xi)
+          measure = create(:measure, measure_type_id: measure_type.measure_type_id, goods_nomenclature_sid: commodity.goods_nomenclature_sid)
+
+          expect(commodity.measures.map(&:measure_sid)).not_to include measure.measure_sid
+        end
+
+        it 'does include measures that are only excluded for the XI service' do
+          measure_type = create(:measure_type, measure_type_id: excluded_for_xi)
+          measure = create(:measure, measure_type_id: measure_type.measure_type_id, goods_nomenclature_sid: commodity.goods_nomenclature_sid)
+
+          expect(commodity.measures.map(&:measure_sid)).to include measure.measure_sid
+        end
+      end
+
+      context 'when the service version is the XI' do
+        let(:service) { 'xi' }
+
+        it 'does not include measures that were also excluded for the UK service' do
+          measure_type = create(:measure_type, measure_type_id: excluded_for_both_uk_xi)
+          measure = create(:measure, measure_type_id: measure_type.measure_type_id, goods_nomenclature_sid: commodity.goods_nomenclature_sid)
+
+          expect(commodity.measures.map(&:measure_sid)).not_to include measure.measure_sid
+        end
+
+        it 'does not include measures that are only excluded for the XI service' do
+          measure_type = create(:measure_type, measure_type_id: excluded_for_xi)
+          measure = create(:measure,  measure_type_id: measure_type.measure_type_id, goods_nomenclature_sid: commodity.goods_nomenclature_sid)
+
+          expect(commodity.measures.map(&:measure_sid)).not_to include measure.measure_sid
+        end
       end
     end
 

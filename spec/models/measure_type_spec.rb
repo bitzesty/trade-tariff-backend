@@ -10,6 +10,38 @@ describe MeasureType do
     it { is_expected.to validate_presence.of(:measure_type_series) }
   end
 
+  describe 'constants' do
+    before do
+      allow(TradeTariffBackend).to receive(:service).and_return(service)
+
+      # Reloads the module to update the EXCLUDED_TYPES value after stubbing the service
+      load Rails.root.join("app/models/measure_type.rb")
+    end
+
+    context 'when the service is the UK version' do
+      let(:service) { 'uk' }
+      let(:excluded_types) { %w[442 SPL] }
+
+      it 'defines the correct EXCLUDED_TYPES list' do
+        expect(described_class::EXCLUDED_TYPES).to eq(excluded_types)
+      end
+    end
+
+    context 'when the service is the XI version' do
+      let(:service) { 'xi' }
+      let(:excluded_types) { %w[442 SPL].concat(described_class::QUOTA_TYPES) }
+
+      it 'defines the correct EXCLUDED_TYPES list' do
+        allow(TradeTariffBackend).to receive(:service).and_return('xi')
+
+        # Reloads the module to update the EXCLUDED_TYPES value after stubbing the service
+        load Rails.root.join("app/models/measure_type.rb")
+
+        expect(described_class::EXCLUDED_TYPES).to eq(excluded_types)
+      end
+    end
+  end
+
   describe '#excise?' do
     context 'measure type is Excise related' do
       let(:measure_type) { build :measure_type, measure_type_series_id: 'Q' }

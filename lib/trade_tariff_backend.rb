@@ -39,6 +39,10 @@ module TradeTariffBackend
       Rails.env
     end
 
+    def service
+      ENV.fetch('SERVICE', 'uk')
+    end
+
     def deployed_environment
       PaasConfig.space
     end
