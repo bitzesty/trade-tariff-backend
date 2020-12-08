@@ -13,6 +13,7 @@ data/failed-measures-report*
 
 # Environment files
 .env
+.env.*.local
 
 # Cloud Foundry manifest files
 *_manifest.yml

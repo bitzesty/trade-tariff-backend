@@ -5,10 +5,14 @@
 class MeasureType < Sequel::Model
   IMPORT_MOVEMENT_CODES = [0, 2].freeze
   EXPORT_MOVEMENT_CODES = [1, 2].freeze
-  EXCLUDED_TYPES = %w[442 SPL].freeze
   THIRD_COUNTRY = '103'.freeze
   VAT_TYPES = %w[VTA VTE VTS VTZ 305].freeze
   SUPPLEMENTARY_TYPES = %w[109 110 111].freeze
+  QUOTA_TYPES = %w[046 122 123 143 146 147 653 654].freeze
+  NATIONAL_PR_TYPES = %w[ATT CEX CHM COE COI CVD DPO ECM EHC EQC EWP HOP HSE IWP PHC PRE PRT QRC SFS].freeze
+  EXCLUDED_TYPES = %w[442 SPL].tap do |types|
+    types.concat(QUOTA_TYPES + NATIONAL_PR_TYPES) if TradeTariffBackend.service == 'xi'
+  end.freeze
 
   plugin :time_machine, period_start_column: :measure_types__validity_start_date,
                         period_end_column:   :measure_types__validity_end_date

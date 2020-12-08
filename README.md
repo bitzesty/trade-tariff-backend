@@ -29,7 +29,7 @@ Please go through this updated [setup document](https://github.com/bitzesty/trad
 
     bin/setup
 
-2. Update `.env` file with valid data.
+2. Update `.env` file with valid data. To enable the XI version, add the extra flag `SERVICE=xi`. If not added, it will default to the UK version.
 
 3. Start Foreman.
 
