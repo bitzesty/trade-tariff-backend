@@ -11,7 +11,7 @@ describe CdsImporter::EntityMapper do
         "additionalCodeTypeId" => "8"
       },
       "metainfo" => {
-        "origin" => "T",
+        "origin" => "N",
         "opType" => "U",
         "transactionDate" => "2016-07-27T09:20:15"
       },
@@ -43,14 +43,35 @@ describe CdsImporter::EntityMapper do
       end
 
       it "should raise an error and stop import" do
-        allow_any_instance_of(AdditionalCode).to receive(:save).and_raise(StandardError)
+        allow(AdditionalCode::Operation).to receive(:insert).and_raise(StandardError)
         expect{ mapper.import }.to raise_error(StandardError)
       end
     end
 
-    it "should call save method for any instance" do
-      expect_any_instance_of(AdditionalCode).to receive(:save).with({ validate: false, transaction: false })
+    it "should call insert method for operation class" do
+      expect(AdditionalCode::Operation).to receive(:insert).with(
+        hash_including(additional_code: "169", additional_code_sid: 3084, additional_code_type_id: "8", operation: "U", filename: "test.gzip")
+      )
       mapper.import
+    end
+
+    it "should save record for any instance" do
+      expect { mapper.import }.to change(AdditionalCode, :count).by(1)
+    end
+
+    it "should save all attributes for record" do
+      mapper.import
+      record = AdditionalCode.last
+      aggregate_failures do
+        expect(record.additional_code).to eq "169"
+        expect(record.additional_code_sid).to eq 3084
+        expect(record.additional_code_type_id).to eq "8"
+        expect(record.operation).to eq :update
+        expect(record.validity_start_date.to_s).to eq "1991-06-01 00:00:00 UTC"
+        expect(record.validity_end_date.to_s).to eq "1996-06-14 23:59:59 UTC"
+        expect(record.filename).to eq "test.gzip"
+        expect(record.national).to eq true
+      end
     end
 
     it "should select mappers by mapping root" do
