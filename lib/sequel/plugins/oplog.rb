@@ -82,13 +82,23 @@ module Sequel
         def _destroy_delete
           self.operation = :destroy
 
-          operation_klass.insert(self.values.except(:oid))
+          values = self.values.except(:oid)
+          if operation_klass.columns.include?(:created_at)
+            values.merge!(created_at: operation_klass.dataset.current_datetime)
+          end
+
+          operation_klass.insert(values)
         end
 
         def _update_columns(_columns)
           self.operation = :update
 
-          operation_klass.insert(self.values.except(:oid))
+          values = self.values.except(:oid)
+          if operation_klass.columns.include?(:created_at)
+            values.merge!(created_at: operation_klass.dataset.current_datetime)
+          end
+
+          operation_klass.insert(values)
         end
       end
 

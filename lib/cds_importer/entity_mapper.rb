@@ -33,8 +33,17 @@ class CdsImporter
     private
 
     def save_record!(record)
-      record.filename = @filename
-      record.save(validate: false, transaction: false)
+      values = record.values.except(:oid)
+
+      values.merge!(filename: @filename)
+
+      operation_klass = record.class.operation_klass
+
+      if operation_klass.columns.include?(:created_at)
+        values.merge!(created_at: operation_klass.dataset.current_datetime)
+      end
+
+      operation_klass.insert(values)
     end
 
     def save_record(record)
