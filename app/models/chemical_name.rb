@@ -14,4 +14,16 @@ class ChemicalName < Sequel::Model
       .flatten
       .join(' and ')
   end
+
+  def update_with_name(name)
+    errors = []
+    status = :accepted
+    begin
+      update(name: name)
+    rescue Sequel::ValidationFailed
+      errors << stringify_sequel_errors
+      status = :unprocessable_entity
+    end
+    [errors, status]
+  end
 end
