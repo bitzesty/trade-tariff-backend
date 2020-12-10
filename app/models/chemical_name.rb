@@ -17,7 +17,7 @@ class ChemicalName < Sequel::Model
 
   def update_with_name(name)
     errors = []
-    status = :accepted
+    status = :ok
     begin
       update(name: name)
     rescue Sequel::ValidationFailed

@@ -69,7 +69,7 @@ attr_accessor :commodity
           goods_nomenclature_sid: new_commodity.id
         )
         map.destroy
-        status = :accepted
+        status = :ok
       rescue StandardError
         errors << "Mapping already exists: chemical_id: #{chemical.id}, goods_nomenclature_sid: #{commodity.id}"
       end

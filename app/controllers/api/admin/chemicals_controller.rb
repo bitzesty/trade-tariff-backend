@@ -34,7 +34,7 @@ module Api
       # PATCH   /admin/chemicals
       # PUT     /admin/chemicals
       def update
-        status = :accepted
+        status = :ok
         unless params[:cas].present? || params[:chemical_name_id].present?
           @errors << "Missing paramter, at least one is required: cas: #{@chemical&.cas}, chemical_name_id: #{params[:chemical_name_id]}"
           status = :bad_request
@@ -139,7 +139,7 @@ module Api
       end
 
       def respond_with(obj, status: :ok, errors: @errors, meta: {})
-        if errors.any?
+        if errors&.any?
           data = { errors: [] }
           data[:errors] = errors.map do |error|
             { title: error }
