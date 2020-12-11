@@ -120,6 +120,7 @@ class Measure < Sequel::Model
                                         measure_generating_regulation_role]
 
   def validity_start_date
+    return self[:effective_start_date] if self[:effective_start_date].present?
     if self[:validity_start_date].present?
       self[:validity_start_date]
     else
@@ -128,6 +129,7 @@ class Measure < Sequel::Model
   end
 
   def validity_end_date
+    return self[:effective_end_date] if self[effective_end_date].present?
     if national
       self[:validity_end_date]
     elsif self[:validity_end_date].present? && generating_regulation.present? && generating_regulation.effective_end_date.present?
