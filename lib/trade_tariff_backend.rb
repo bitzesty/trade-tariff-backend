@@ -176,29 +176,30 @@ module TradeTariffBackend
     def update_measure_effective_dates
       Sequel::Model.db.run(
         "UPDATE measures_oplog
-SET effective_start_date = COALESCE(
-        validity_start_date,
-        (SELECT b.validity_start_date
-         FROM base_regulations b
-         WHERE b.base_regulation_id = measure_generating_regulation_id
-           AND b.base_regulation_role = measure_generating_regulation_role),
-        (SELECT m.validity_start_date
-         FROM modification_regulations m
-         WHERE m.modification_regulation_id = measure_generating_regulation_id
-           AND m.modification_regulation_role = measure_generating_regulation_role)
-    ),
-    effective_end_date   = COALESCE(
-            validity_end_date,
-            (SELECT b.effective_end_date
-             FROM base_regulations b
-             WHERE b.base_regulation_id = measure_generating_regulation_id
-               AND b.base_regulation_role = measure_generating_regulation_role),
-            (SELECT m.effective_end_date
-             FROM modification_regulations m
-             WHERE m.modification_regulation_id = measure_generating_regulation_id
-               AND m.modification_regulation_role = measure_generating_regulation_role)
-        )
-WHERE oid IN (SELECT oid FROM measures);"
+SET effective_start_date = COALESCE(validity_start_date, r.effective_start_date),
+    effective_end_date   = CASE
+                               WHEN national THEN validity_end_date
+                               WHEN NOT validity_end_date IS NULL AND NOT r.effective_end_date IS NULL THEN LEAST(validity_end_date, r.effective_end_date)
+                               WHEN NOT validity_end_date IS NULL AND NOT justification_regulation_id IS NULL AND
+                                    NOT justification_regulation_role IS NULL THEN validity_end_date
+                               ELSE r.effective_end_date
+                           END
+FROM (SELECT b.validity_start_date as effective_start_date,
+             b.effective_end_date,
+             b.base_regulation_id   as regulation_id,
+             b.base_regulation_role as regulation_role
+      FROM base_regulations b
+      UNION ALL
+      SELECT m.validity_start_date as effective_start_date,
+             m.effective_end_date,
+             m.modification_regulation_id   as regulation_id,
+             m.modification_regulation_role as regulation_role
+      FROM modification_regulations m
+     ) as r,
+     (SELECT m.oid as operation_id FROM measures m) as m
+WHERE oid = m.operation_id
+  AND r.regulation_id = measure_generating_regulation_id
+  AND r.regulation_role = measure_generating_regulation_role;"
       )
     end
   end
