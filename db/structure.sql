@@ -10726,3 +10726,6 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20191022065944_update_file
 INSERT INTO "schema_migrations" ("filename") VALUES ('20200905141023_create_forum_links.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20201006192051_add_filename_to_oplog_tables.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20201006193537_fix_index_on_chapters_sections.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20190810104215_add_effective_dates_to_measures_oplog.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20190811114215_add_effective_dates_to_measures_view.rb');
+INSERT INTO "schema_migrations" ("filename") VALUES ('20190815114215_change_effective_dates_to_measures_view.rb');
