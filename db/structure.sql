@@ -4469,7 +4469,7 @@ CREATE TABLE public.measures_oplog (
     operation character varying(1) DEFAULT 'C'::character varying,
     operation_date date,
     effective_start_date timestamp without time zone,
-    effective_end_date timestamp without time zone
+    effective_end_date timestamp without time zone,
     filename text
 );
 
@@ -10719,7 +10719,6 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20181211165412_create_guid
 INSERT INTO "schema_migrations" ("filename") VALUES ('20190418162242_add_order_number_index_on_measure.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20190810104215_add_effective_dates_to_measures_oplog.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20190811114215_add_effective_dates_to_measures_view.rb');
-INSERT INTO "schema_migrations" ("filename") VALUES ('20190815114215_change_effective_dates_to_measures_view.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20191014165200_create_chemicals.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20180822124608_add_tariff_update_cds_error.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20191022065944_update_filename_size.rb');
