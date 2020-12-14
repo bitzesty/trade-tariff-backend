@@ -10717,8 +10717,6 @@ INSERT INTO "schema_migrations" ("filename") VALUES ('20181003140819_add_updated
 INSERT INTO "schema_migrations" ("filename") VALUES ('20181029112658_change_size_to_six_for_measure_type_id.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20181211165412_create_guides.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20190418162242_add_order_number_index_on_measure.rb');
-INSERT INTO "schema_migrations" ("filename") VALUES ('20190810104215_add_effective_dates_to_measures_oplog.rb');
-INSERT INTO "schema_migrations" ("filename") VALUES ('20190811114215_add_effective_dates_to_measures_view.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20191014165200_create_chemicals.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20180822124608_add_tariff_update_cds_error.rb');
 INSERT INTO "schema_migrations" ("filename") VALUES ('20191022065944_update_filename_size.rb');
