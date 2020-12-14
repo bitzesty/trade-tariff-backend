@@ -46,6 +46,7 @@ namespace :importer do
         u = TariffSynchronizer::CdsUpdate.where(filename: file).first
         next if u.present?
         u = TariffSynchronizer::CdsUpdate.new
+        u.filename = file
         u.issue_date = Date.parse file[-20..-13]
         u.state = "P"
         u.update_type = "TariffSynchronizer::CdsUpdate"
