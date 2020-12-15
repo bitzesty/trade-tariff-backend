@@ -21,7 +21,7 @@ namespace :importer do
         Sequel::Model.subclasses.each(&:unrestrict_primary_key)
         Sequel::Model.plugin :skip_create_refresh
         taric_update = TariffSynchronizer::TaricUpdate.new(
-          filename: f,
+          filename: ENV["TARGET"],
           issue_date: '1970-01-01',
           state: "P",
           update_type: "TariffSynchronizer::TaricUpdate"
