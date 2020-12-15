@@ -1844,6 +1844,8 @@ describe CdsImporter::EntityMapper do
       },
       "measurementUnit" => {
         "measurementUnitCode" => "KGM",
+      },
+      "measurementUnitQualifier" => {
         "measurementUnitQualifierCode" => "X"
       },
       "monetaryUnit" => {
@@ -1867,7 +1869,7 @@ describe CdsImporter::EntityMapper do
     expect(entity.description).to eq(values["description"])
     expect(entity.monetary_unit_code).to eq(values["monetaryUnit"]["monetaryUnitCode"])
     expect(entity.measurement_unit_code).to eq(values["measurementUnit"]["measurementUnitCode"])
-    expect(entity.measurement_unit_qualifier_code).to eq(values["measurementUnit"]["measurementUnitQualifierCode"])
+    expect(entity.measurement_unit_qualifier_code).to eq(values["measurementUnitQualifier"]["measurementUnitQualifierCode"])
     expect(entity.maximum_precision.to_s.to_s).to eq(values["maximumPrecision"])
     expect(entity.critical_state).to eq(values["criticalState"])
     expect(entity.critical_threshold.to_s).to eq(values["criticalThreshold"])
