@@ -18,7 +18,7 @@ class CdsImporter
         "criticalThreshold" => :critical_threshold,
         "monetaryUnit.monetaryUnitCode" => :monetary_unit_code,
         "measurementUnit.measurementUnitCode" => :measurement_unit_code,
-        "measurementUnit.measurementUnitQualifierCode" => :measurement_unit_qualifier_code,
+        "measurementUnitQualifier.measurementUnitQualifierCode" => :measurement_unit_qualifier_code,
         "description" => :description
       ).freeze
 
