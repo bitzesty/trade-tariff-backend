@@ -17,15 +17,17 @@ namespace :importer do
 
     desc "Import TARIC file from S3"
     task import_from_s3: %i[environment class_eager_load] do
-      if ENV["TARGET"] && File.exist?(ENV["TARGET"])
+      taric_update = TariffSynchronizer::TaricUpdate.new(
+        filename: ENV["TARGET"],
+        issue_date: '1970-01-01',
+        state: "P",
+        update_type: "TariffSynchronizer::TaricUpdate"
+      )
+
+      if TariffSynchronizer::FileService.file_exists?(taric_update.file_path)
+        puts "Importing #{ENV["TARGET"]}"
         Sequel::Model.subclasses.each(&:unrestrict_primary_key)
         Sequel::Model.plugin :skip_create_refresh
-        taric_update = TariffSynchronizer::TaricUpdate.new(
-          filename: ENV["TARGET"],
-          issue_date: '1970-01-01',
-          state: "P",
-          update_type: "TariffSynchronizer::TaricUpdate"
-        )
         TaricImporter.new(taric_update).import(validate: false)
       else
         puts "Please provide TARGET environment variable pointing to Tariff file to import"
