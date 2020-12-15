@@ -15,9 +15,9 @@ cf login -a $CF_ENDPOINT -u $CF_USER -p "$CF_PASSWORD" -o $CF_ORG -s $CF_SPACE
 cf a
 
 # Notify Slack deployment started
-curl -X POST \
---data-urlencode 'payload={"text": "'"Deploying $CF_APP.\n${GIT_MESSAGE}"'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":cloud:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}, {"title": "SHA1", "value": "'"<https://github.com/bitzesty/trade-tariff-backend/compare/$GIT_OLD_REVISION...$GIT_REVISION|$GIT_REVISION>"'", "short": true}]}' \
-$SLACK_WEBHOOK
+#curl -X POST \
+#--data-urlencode 'payload={"text": "'"Deploying $CF_APP.\n${GIT_MESSAGE}"'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":cloud:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}, {"title": "SHA1", "value": "'"<https://github.com/bitzesty/trade-tariff-backend/compare/$GIT_OLD_REVISION...$GIT_REVISION|$GIT_REVISION>"'", "short": true}]}' \
+#$SLACK_WEBHOOK
 
 # Pin ruby buildpack
 export CF_BUILDPACK="https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.24"
@@ -51,6 +51,6 @@ cf add-network-policy $PUBLIC_APP2 --destination-app $CF_APP --protocol tcp --po
 cf attach-autoscaling-policy $CF_APP config/autoscaling/"$CF_SPACE"-policy.json
 
 # Notify Slack deployment finished
-curl -X POST \
---data-urlencode 'payload={"text": "'"Deployment finished for $CF_APP"'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":cloud:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}, {"title": "SHA1", "value": "'"<https://github.com/bitzesty/trade-tariff-backend/compare/$GIT_OLD_REVISION...$GIT_REVISION|$GIT_REVISION>"'", "short": true}]}' \
-$SLACK_WEBHOOK
+#curl -X POST \
+#--data-urlencoqde 'payload={"text": "'"Deployment finished for $CF_APP"'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":cloud:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}, {"title": "SHA1", "value": "'"<https://github.com/bitzesty/trade-tariff-backend/compare/$GIT_OLD_REVISION...$GIT_REVISION|$GIT_REVISION>"'", "short": true}]}' \
+#$SLACK_WEBHOOK
