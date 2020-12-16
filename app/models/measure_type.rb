@@ -9,7 +9,7 @@ class MeasureType < Sequel::Model
   VAT_TYPES = %w[VTA VTE VTS VTZ 305].freeze
   SUPPLEMENTARY_TYPES = %w[109 110 111].freeze
   QUOTA_TYPES = %w[046 122 123 143 146 147 653 654].freeze
-  NATIONAL_PR_TYPES = %w[ATT CEX CHM COE COI CVD DPO ECM EHC EQC EWP HOP HSE IWP PHC PRE PRT QRC SFS].freeze
+  NATIONAL_PR_TYPES = %w[AHC AIL ATT CEX CHM COE COI CVD DPO ECM EHC EQC EWP HOP HSE IWP PHC PRE PRT QRC SFS].freeze
   EXCLUDED_TYPES = %w[442 SPL].tap do |types|
     types.concat(QUOTA_TYPES + NATIONAL_PR_TYPES) if TradeTariffBackend.service == 'xi'
   end.freeze
