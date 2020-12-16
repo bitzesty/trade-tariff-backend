@@ -66,7 +66,7 @@ jobs:
           RAILS_ENV=test RAILS_DISABLE_TEST_LOG=true bundle exec rspec spec/ --tag '~skip_ci' --profile 10 --format RspecJunitFormatter --out rspec.xml --format progress
   deploy_dev:
     needs: [test]
-    if: github.ref == 'refs/heads/master_notyet'
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
@@ -91,6 +91,10 @@ jobs:
           CF_SPACE: development
           CF_APP: "tariff-backend-dev"
           CF_APP_WORKER: "tariff-backend-worker-dev"
+          CF_APP_XI: "tariff-xi-backend-dev"
+          CF_APP_WORKER_XI: "tariff-xi-backend-worker-dev"
+          CF_APP_UK: "tariff-uk-backend-dev"
+          CF_APP_WORKER_UK: "tariff-uk-backend-worker-dev"
           CF_USER: ${{ secrets.CF_USER }}
           CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
           CF_ORG: ${{ secrets.CF_ORG }}
