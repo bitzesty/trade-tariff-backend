@@ -56,7 +56,7 @@ CF_BUILDPACK=$CF_BUILDPACK ruby -ryaml -e 'm = YAML.load(STDIN); m["applications
   <"$CF_APP_XI"_manifest.yml \
   >"$CF_APP_XI"_patched_manifest.yml
 
-cf blue-green-deploy $CF_APP_XI -f "$CF_APP"_patched_manifest.yml --delete-old-apps
+cf blue-green-deploy $CF_APP_XI -f "$CF_APP_XI"_patched_manifest.yml --delete-old-apps
 
 # Attach autoscaling policy
 cf attach-autoscaling-policy $CF_APP_XI config/autoscaling/"$CF_SPACE"-policy.json
@@ -75,7 +75,7 @@ CF_BUILDPACK=$CF_BUILDPACK ruby -ryaml -e 'm = YAML.load(STDIN); m["applications
   <"$CF_APP_UK"_manifest.yml \
   >"$CF_APP_UK"_patched_manifest.yml
 
-cf blue-green-deploy $CF_APP_UK -f "$CF_APP"_patched_manifest.yml --delete-old-apps
+cf blue-green-deploy $CF_APP_UK -f "$CF_APP_UK"_patched_manifest.yml --delete-old-apps
 
 # Attach autoscaling policy
 cf attach-autoscaling-policy $CF_APP_UK config/autoscaling/"$CF_SPACE"-policy.json
