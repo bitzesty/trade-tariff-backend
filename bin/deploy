@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 
-set -e
+[[ "$TRACE" ]] && set -o xtrace
+set -o errexit
+set -o nounset
+set -o pipefail
+set -o noclobber
+
+cf login -a $CF_ENDPOINT -u $CF_USER -p "$CF_PASSWORD" -o $CF_ORG -s $CF_SPACE
+cf apps
 
 export GIT_OLD_REVISION=$(cf ssh $CF_APP -c 'cat app/REVISION')
 export GIT_NEW_REVISION=$(git rev-parse --short HEAD)
@@ -15,10 +22,6 @@ function notify() {
     --data-urlencode 'payload={"text": "'"$1"'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":rocket:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}, {"title": "SHA1", "value": "'"<https://github.com/bitzesty/trade-tariff-backend/compare/$GIT_OLD_REVISION...$GIT_NEW_REVISION|$GIT_NEW_REVISION>"'", "short": true}]}' \
     $SLACK_WEBHOOK
 }
-
-# Check CF connectivity
-cf login -a $CF_ENDPOINT -u $CF_USER -p "$CF_PASSWORD" -o $CF_ORG -s $CF_SPACE
-cf apps
 
 # Notify Slack deployment started
 notify "Deploying $CF_APP.\n${GIT_MESSAGE}"
