@@ -2,13 +2,13 @@
 set -e
 
 # Fetch deployed revision
-export GIT_OLD_REVISION=`curl "https://$CF_APP.$HEALTHCHECK_URL" | grep -o -w -E '[[:alnum:]]{7}'`
+export GIT_OLD_REVISION=$(curl "https://$CF_APP.$HEALTHCHECK_URL" | grep -o -w -E '[[:alnum:]]{7}')
 
 # Log the new revision
-export GIT_REVISION=`git rev-parse --short HEAD`
-echo $GIT_REVISION > REVISION
+export GIT_REVISION=$(git rev-parse --short HEAD)
+echo $GIT_REVISION >REVISION
 
-export GIT_MESSAGE=`git log --oneline $GIT_OLD_REVISION..$GIT_REVISION`
+export GIT_MESSAGE=$(git log --oneline $GIT_OLD_REVISION..$GIT_REVISION)
 
 # Check CF connectivity
 cf login -a $CF_ENDPOINT -u $CF_USER -p "$CF_PASSWORD" -o $CF_ORG -s $CF_SPACE
@@ -16,8 +16,8 @@ cf a
 
 # Notify Slack deployment started
 curl -X POST \
---data-urlencode 'payload={"text": "'"Deploying $CF_APP.\n${GIT_MESSAGE}"'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":cloud:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}, {"title": "SHA1", "value": "'"<https://github.com/bitzesty/trade-tariff-backend/compare/$GIT_OLD_REVISION...$GIT_REVISION|$GIT_REVISION>"'", "short": true}]}' \
-$SLACK_WEBHOOK
+  --data-urlencode 'payload={"text": "'"Deploying $CF_APP.\n${GIT_MESSAGE}"'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":cloud:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}, {"title": "SHA1", "value": "'"<https://github.com/bitzesty/trade-tariff-backend/compare/$GIT_OLD_REVISION...$GIT_REVISION|$GIT_REVISION>"'", "short": true}]}' \
+  $SLACK_WEBHOOK
 
 # Pin ruby buildpack
 export CF_BUILDPACK="https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.24"
@@ -33,8 +33,8 @@ cf create-app-manifest $CF_APP
 
 # "patch" the manifest so it has "buildpack", not "buildpacks":
 CF_BUILDPACK=$CF_BUILDPACK ruby -ryaml -e 'm = YAML.load(STDIN); m["applications"].map{ |x| x["buildpack"] = ENV["CF_BUILDPACK"]; x.delete("buildpacks") }; puts YAML.dump(m)' \
-  < "$CF_APP"_manifest.yml \
-  > "$CF_APP"_patched_manifest.yml
+  <"$CF_APP"_manifest.yml \
+  >"$CF_APP"_patched_manifest.yml
 
 cf bgd $CF_APP -f "$CF_APP"_patched_manifest.yml --delete-old-apps
 
@@ -42,8 +42,8 @@ cf bgd $CF_APP -f "$CF_APP"_patched_manifest.yml --delete-old-apps
 # https://docs.cloud.service.gov.uk/deploying_apps.html#deploying-private-apps
 # $PRIVATE_APP - backend app
 # $PUBLIC_APP - frontend app
-export PUBLIC_APP1=`CF_APP=$CF_APP ruby -e 'puts ENV["CF_APP"].gsub("backend", "frontend")'`
-export PUBLIC_APP2=`CF_APP=$CF_APP ruby -e 'puts ENV["CF_APP"].gsub("backend", "admin")'`
+export PUBLIC_APP1=$(CF_APP=$CF_APP ruby -e 'puts ENV["CF_APP"].gsub("backend", "frontend")')
+export PUBLIC_APP2=$(CF_APP=$CF_APP ruby -e 'puts ENV["CF_APP"].gsub("backend", "admin")')
 cf add-network-policy $PUBLIC_APP1 --destination-app $CF_APP --protocol tcp --port 8080
 cf add-network-policy $PUBLIC_APP2 --destination-app $CF_APP --protocol tcp --port 8080
 
@@ -55,8 +55,8 @@ cf create-app-manifest $CF_APP_XI
 
 # "patch" the manifest so it has "buildpack", not "buildpacks":
 CF_BUILDPACK=$CF_BUILDPACK ruby -ryaml -e 'm = YAML.load(STDIN); m["applications"].map{ |x| x["buildpack"] = ENV["CF_BUILDPACK"]; x.delete("buildpacks") }; puts YAML.dump(m)' \
-  < "$CF_APP_XI"_manifest.yml \
-  > "$CF_APP_XI"_patched_manifest.yml
+  <"$CF_APP_XI"_manifest.yml \
+  >"$CF_APP_XI"_patched_manifest.yml
 
 cf bgd $CF_APP_XI -f "$CF_APP"_patched_manifest.yml --delete-old-apps
 
@@ -64,22 +64,21 @@ cf bgd $CF_APP_XI -f "$CF_APP"_patched_manifest.yml --delete-old-apps
 # https://docs.cloud.service.gov.uk/deploying_apps.html#deploying-private-apps
 # $PRIVATE_APP - backend app
 # $PUBLIC_APP - frontend app
-export PUBLIC_APP1=`CF_APP_XI=$CF_APP_XI ruby -e 'puts ENV["CF_APP"].gsub("backend", "frontend")'`
-export PUBLIC_APP2=`CF_APP_XI=$CF_APP_XI ruby -e 'puts ENV["CF_APP"].gsub("backend", "admin")'`
+export PUBLIC_APP1=$(CF_APP_XI=$CF_APP_XI ruby -e 'puts ENV["CF_APP"].gsub("backend", "frontend")')
+export PUBLIC_APP2=$(CF_APP_XI=$CF_APP_XI ruby -e 'puts ENV["CF_APP"].gsub("backend", "admin")')
 cf add-network-policy $PUBLIC_APP1 --destination-app $CF_APP_XI --protocol tcp --port 8080
 cf add-network-policy $PUBLIC_APP2 --destination-app $CF_APP_XI --protocol tcp --port 8080
 
 # Attach autoscaling policy
 cf attach-autoscaling-policy $CF_APP_XI config/autoscaling/"$CF_SPACE"-policy.json
 
-
 # Deploy "UK"
 cf create-app-manifest $CF_APP_UK
 
 # "patch" the manifest so it has "buildpack", not "buildpacks":
 CF_BUILDPACK=$CF_BUILDPACK ruby -ryaml -e 'm = YAML.load(STDIN); m["applications"].map{ |x| x["buildpack"] = ENV["CF_BUILDPACK"]; x.delete("buildpacks") }; puts YAML.dump(m)' \
-  < "$CF_APP_UK"_manifest.yml \
-  > "$CF_APP_UK"_patched_manifest.yml
+  <"$CF_APP_UK"_manifest.yml \
+  >"$CF_APP_UK"_patched_manifest.yml
 
 cf bgd $CF_APP_UK -f "$CF_APP"_patched_manifest.yml --delete-old-apps
 
@@ -87,16 +86,15 @@ cf bgd $CF_APP_UK -f "$CF_APP"_patched_manifest.yml --delete-old-apps
 # https://docs.cloud.service.gov.uk/deploying_apps.html#deploying-private-apps
 # $PRIVATE_APP - backend app
 # $PUBLIC_APP - frontend app
-export PUBLIC_APP1=`CF_APP_UK=$CF_APP_UK ruby -e 'puts ENV["CF_APP"].gsub("backend", "frontend")'`
-export PUBLIC_APP2=`CF_APP_UK=$CF_APP_UK ruby -e 'puts ENV["CF_APP"].gsub("backend", "admin")'`
+export PUBLIC_APP1=$(CF_APP_UK=$CF_APP_UK ruby -e 'puts ENV["CF_APP"].gsub("backend", "frontend")')
+export PUBLIC_APP2=$(CF_APP_UK=$CF_APP_UK ruby -e 'puts ENV["CF_APP"].gsub("backend", "admin")')
 cf add-network-policy $PUBLIC_APP1 --destination-app $CF_APP_UK --protocol tcp --port 8080
 cf add-network-policy $PUBLIC_APP2 --destination-app $CF_APP_UK --protocol tcp --port 8080
 
 # Attach autoscaling policy
 cf attach-autoscaling-policy $CF_APP_UK config/autoscaling/"$CF_SPACE"-policy.json
 
-
 # Notify Slack deployment finished
 curl -X POST \
---data-urlencode 'payload={"text": "'"Deployment finished for $CF_APP"'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":cloud:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}, {"title": "SHA1", "value": "'"<https://github.com/bitzesty/trade-tariff-backend/compare/$GIT_OLD_REVISION...$GIT_REVISION|$GIT_REVISION>"'", "short": true}]}' \
-$SLACK_WEBHOOK
+  --data-urlencode 'payload={"text": "'"Deployment finished for $CF_APP"'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":cloud:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}, {"title": "SHA1", "value": "'"<https://github.com/bitzesty/trade-tariff-backend/compare/$GIT_OLD_REVISION...$GIT_REVISION|$GIT_REVISION>"'", "short": true}]}' \
+  $SLACK_WEBHOOK
