@@ -2,7 +2,7 @@
 
 set -e
 
-export GIT_OLD_REVISION=$(curl "https://$CF_APP.$HEALTHCHECK_URL" | grep -o -w -E '[[:alnum:]]{7}')
+export GIT_OLD_REVISION=$(cf ssh $CF_APP -c 'cat app/REVISION')
 export GIT_NEW_REVISION=$(git rev-parse --short HEAD)
 export GIT_MESSAGE=$(git log --oneline $GIT_OLD_REVISION..$GIT_NEW_REVISION)
 
