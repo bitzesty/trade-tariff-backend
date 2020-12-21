@@ -65,7 +65,7 @@ jobs:
   #         curl "http://localhost:9200/_cat/health"
   #         RAILS_ENV=test RAILS_DISABLE_TEST_LOG=true bundle exec rspec spec/ --tag '~skip_ci' --profile 10 --format RspecJunitFormatter --out rspec.xml --format progress
   deploy_dev:
-    needs: [test]
+    # needs: [test]
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
@@ -109,7 +109,7 @@ jobs:
           cf install-plugin app-autoscaler-plugin -r CF-Community -f
           ./bin/deploy
   deploy_staging:
-    needs: [test]
+    # needs: [test]
     if: github.ref == 'refs/heads/staging_notyet'
     runs-on: ubuntu-latest
     strategy:
