@@ -1,26 +1,27 @@
 #!/usr/bin/env bash
+
 set -e
 
-# Fetch deployed revision
 export GIT_OLD_REVISION=$(curl "https://$CF_APP.$HEALTHCHECK_URL" | grep -o -w -E '[[:alnum:]]{7}')
+export GIT_NEW_REVISION=$(git rev-parse --short HEAD)
+export GIT_MESSAGE=$(git log --oneline $GIT_OLD_REVISION..$GIT_NEW_REVISION)
 
-# Log the new revision
-export GIT_REVISION=$(git rev-parse --short HEAD)
-echo $GIT_REVISION >REVISION
+export CF_BUILDPACK="https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.24"
 
-export GIT_MESSAGE=$(git log --oneline $GIT_OLD_REVISION..$GIT_REVISION)
+echo $GIT_NEW_REVISION >REVISION
+
+function notify() {
+  curl -X POST \
+    --data-urlencode 'payload={"text": "'"$1"'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":unicorn:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}, {"title": "SHA1", "value": "'"<https://github.com/bitzesty/trade-tariff-backend/compare/$GIT_OLD_REVISION...$GIT_NEW_REVISION|$GIT_NEW_REVISION>"'", "short": true}]}' \
+    $SLACK_WEBHOOK
+}
 
 # Check CF connectivity
 cf login -a $CF_ENDPOINT -u $CF_USER -p "$CF_PASSWORD" -o $CF_ORG -s $CF_SPACE
-cf a
+cf apps
 
 # Notify Slack deployment started
-curl -X POST \
-  --data-urlencode 'payload={"text": "'"Deploying $CF_APP.\n${GIT_MESSAGE}"'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":cloud:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}, {"title": "SHA1", "value": "'"<https://github.com/bitzesty/trade-tariff-backend/compare/$GIT_OLD_REVISION...$GIT_REVISION|$GIT_REVISION>"'", "short": true}]}' \
-  $SLACK_WEBHOOK
-
-# Pin ruby buildpack
-export CF_BUILDPACK="https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.24"
+notify "Deploying $CF_APP.\n${GIT_MESSAGE}"
 
 # Deploy Worker & Migrate DB
 cf create-app-manifest $CF_APP_WORKER
@@ -36,19 +37,16 @@ CF_BUILDPACK=$CF_BUILDPACK ruby -ryaml -e 'm = YAML.load(STDIN); m["applications
   <"$CF_APP"_manifest.yml \
   >"$CF_APP"_patched_manifest.yml
 
-cf bgd $CF_APP -f "$CF_APP"_patched_manifest.yml --delete-old-apps
-
-# Create network policy for fronted app
-# https://docs.cloud.service.gov.uk/deploying_apps.html#deploying-private-apps
-# $PRIVATE_APP - backend app
-# $PUBLIC_APP - frontend app
-export PUBLIC_APP1=$(CF_APP=$CF_APP ruby -e 'puts ENV["CF_APP"].gsub("backend", "frontend")')
-export PUBLIC_APP2=$(CF_APP=$CF_APP ruby -e 'puts ENV["CF_APP"].gsub("backend", "admin")')
-cf add-network-policy $PUBLIC_APP1 --destination-app $CF_APP --protocol tcp --port 8080
-cf add-network-policy $PUBLIC_APP2 --destination-app $CF_APP --protocol tcp --port 8080
+cf blue-green-deploy $CF_APP -f "$CF_APP"_patched_manifest.yml --delete-old-apps
 
 # Attach autoscaling policy
 cf attach-autoscaling-policy $CF_APP config/autoscaling/"$CF_SPACE"-policy.json
+
+# Deploy Worker & Migrate DB
+cf create-app-manifest $CF_APP_XI_WORKER
+cf push $CF_APP_XI_WORKER -f "$CF_APP_XI_WORKER"_manifest.yml -b $CF_BUILDPACK
+cf run-task $CF_APP_XI_WORKER "rake db:migrate" --name "db-migrate"
+cf run-task $CF_APP_XI_WORKER "rake db:data:migrate" --name "db-data-migrate"
 
 # Deploy "XI"
 cf create-app-manifest $CF_APP_XI
@@ -58,19 +56,16 @@ CF_BUILDPACK=$CF_BUILDPACK ruby -ryaml -e 'm = YAML.load(STDIN); m["applications
   <"$CF_APP_XI"_manifest.yml \
   >"$CF_APP_XI"_patched_manifest.yml
 
-cf bgd $CF_APP_XI -f "$CF_APP"_patched_manifest.yml --delete-old-apps
-
-# Create network policy for fronted app
-# https://docs.cloud.service.gov.uk/deploying_apps.html#deploying-private-apps
-# $PRIVATE_APP - backend app
-# $PUBLIC_APP - frontend app
-export PUBLIC_APP1=$(CF_APP_XI=$CF_APP_XI ruby -e 'puts ENV["CF_APP"].gsub("backend", "frontend")')
-export PUBLIC_APP2=$(CF_APP_XI=$CF_APP_XI ruby -e 'puts ENV["CF_APP"].gsub("backend", "admin")')
-cf add-network-policy $PUBLIC_APP1 --destination-app $CF_APP_XI --protocol tcp --port 8080
-cf add-network-policy $PUBLIC_APP2 --destination-app $CF_APP_XI --protocol tcp --port 8080
+cf blue-green-deploy $CF_APP_XI -f "$CF_APP"_patched_manifest.yml --delete-old-apps
 
 # Attach autoscaling policy
 cf attach-autoscaling-policy $CF_APP_XI config/autoscaling/"$CF_SPACE"-policy.json
+
+# Deploy Worker & Migrate DB
+cf create-app-manifest $CF_APP_UK_WORKER
+cf push $CF_APP_UK_WORKER -f "$CF_APP_UK_WORKER"_manifest.yml -b $CF_BUILDPACK
+cf run-task $CF_APP_UK_WORKER "rake db:migrate" --name "db-migrate"
+cf run-task $CF_APP_UK_WORKER "rake db:data:migrate" --name "db-data-migrate"
 
 # Deploy "UK"
 cf create-app-manifest $CF_APP_UK
@@ -80,21 +75,24 @@ CF_BUILDPACK=$CF_BUILDPACK ruby -ryaml -e 'm = YAML.load(STDIN); m["applications
   <"$CF_APP_UK"_manifest.yml \
   >"$CF_APP_UK"_patched_manifest.yml
 
-cf bgd $CF_APP_UK -f "$CF_APP"_patched_manifest.yml --delete-old-apps
+cf blue-green-deploy $CF_APP_UK -f "$CF_APP"_patched_manifest.yml --delete-old-apps
+
+# Attach autoscaling policy
+cf attach-autoscaling-policy $CF_APP_UK config/autoscaling/"$CF_SPACE"-policy.json
 
 # Create network policy for fronted app
 # https://docs.cloud.service.gov.uk/deploying_apps.html#deploying-private-apps
 # $PRIVATE_APP - backend app
 # $PUBLIC_APP - frontend app
-export PUBLIC_APP1=$(CF_APP_UK=$CF_APP_UK ruby -e 'puts ENV["CF_APP"].gsub("backend", "frontend")')
-export PUBLIC_APP2=$(CF_APP_UK=$CF_APP_UK ruby -e 'puts ENV["CF_APP"].gsub("backend", "admin")')
+export PUBLIC_APP1=$(CF_APP=$CF_APP ruby -e 'puts ENV["CF_APP"].sub("backend", "frontend")')
+export PUBLIC_APP2=$(CF_APP=$CF_APP ruby -e 'puts ENV["CF_APP"].sub("backend", "admin")')
+
+cf add-network-policy $PUBLIC_APP1 --destination-app $CF_APP    --protocol tcp --port 8080
+cf add-network-policy $PUBLIC_APP2 --destination-app $CF_APP    --protocol tcp --port 8080
+cf add-network-policy $PUBLIC_APP1 --destination-app $CF_APP_XI --protocol tcp --port 8080
+cf add-network-policy $PUBLIC_APP2 --destination-app $CF_APP_XI --protocol tcp --port 8080
 cf add-network-policy $PUBLIC_APP1 --destination-app $CF_APP_UK --protocol tcp --port 8080
 cf add-network-policy $PUBLIC_APP2 --destination-app $CF_APP_UK --protocol tcp --port 8080
 
-# Attach autoscaling policy
-cf attach-autoscaling-policy $CF_APP_UK config/autoscaling/"$CF_SPACE"-policy.json
-
 # Notify Slack deployment finished
-curl -X POST \
-  --data-urlencode 'payload={"text": "'"Deployment finished for $CF_APP"'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":cloud:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}, {"title": "SHA1", "value": "'"<https://github.com/bitzesty/trade-tariff-backend/compare/$GIT_OLD_REVISION...$GIT_REVISION|$GIT_REVISION>"'", "short": true}]}' \
-  $SLACK_WEBHOOK
+notify "Deployment finished for $CF_APP"
