@@ -43,10 +43,10 @@ cf blue-green-deploy $CF_APP -f "$CF_APP"_patched_manifest.yml --delete-old-apps
 cf attach-autoscaling-policy $CF_APP config/autoscaling/"$CF_SPACE"-policy.json
 
 # Deploy Worker & Migrate DB
-cf create-app-manifest $CF_APP_XI_WORKER
-cf push $CF_APP_XI_WORKER -f "$CF_APP_XI_WORKER"_manifest.yml -b $CF_BUILDPACK
-cf run-task $CF_APP_XI_WORKER "rake db:migrate" --name "db-migrate"
-cf run-task $CF_APP_XI_WORKER "rake db:data:migrate" --name "db-data-migrate"
+cf create-app-manifest $CF_APP_WORKER_XI
+cf push $CF_APP_WORKER_XI -f "$CF_APP_WORKER_XI"_manifest.yml -b $CF_BUILDPACK
+cf run-task $CF_APP_WORKER_XI "rake db:migrate" --name "db-migrate"
+cf run-task $CF_APP_WORKER_XI "rake db:data:migrate" --name "db-data-migrate"
 
 # Deploy "XI"
 cf create-app-manifest $CF_APP_XI
@@ -62,10 +62,10 @@ cf blue-green-deploy $CF_APP_XI -f "$CF_APP"_patched_manifest.yml --delete-old-a
 cf attach-autoscaling-policy $CF_APP_XI config/autoscaling/"$CF_SPACE"-policy.json
 
 # Deploy Worker & Migrate DB
-cf create-app-manifest $CF_APP_UK_WORKER
-cf push $CF_APP_UK_WORKER -f "$CF_APP_UK_WORKER"_manifest.yml -b $CF_BUILDPACK
-cf run-task $CF_APP_UK_WORKER "rake db:migrate" --name "db-migrate"
-cf run-task $CF_APP_UK_WORKER "rake db:data:migrate" --name "db-data-migrate"
+cf create-app-manifest $CF_APP_WORKER_UK
+cf push $CF_APP_WORKER_UK -f "$CF_APP_WORKER_UK"_manifest.yml -b $CF_BUILDPACK
+cf run-task $CF_APP_WORKER_UK "rake db:migrate" --name "db-migrate"
+cf run-task $CF_APP_WORKER_UK "rake db:data:migrate" --name "db-data-migrate"
 
 # Deploy "UK"
 cf create-app-manifest $CF_APP_UK
