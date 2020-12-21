@@ -86,20 +86,22 @@ jobs:
           node-version: '12'
       - name: "Deploy dev"
         env:
-          CF_ENDPOINT: "api.london.cloud.service.gov.uk"
-          CF_SPACE: development
-          CF_APP: "tariff-backend-dev"
+          CF_APP_ADMIN: "tariff-admin-dev"
+          CF_APP_API: "tariff-backend-dev"
+          CF_APP_API_UK: "tariff-uk-backend-dev"
+          CF_APP_API_XI: "tariff-xi-backend-dev"
+          CF_APP_FRONTEND: "tariff-frontend-dev"
           CF_APP_WORKER: "tariff-backend-worker-dev"
-          CF_APP_XI: "tariff-xi-backend-dev"
-          CF_APP_WORKER_XI: "tariff-xi-backend-worker-dev"
-          CF_APP_UK: "tariff-uk-backend-dev"
           CF_APP_WORKER_UK: "tariff-uk-backend-worker-dev"
-          CF_USER: ${{ secrets.CF_USER }}
-          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+          CF_APP_WORKER_XI: "tariff-xi-backend-worker-dev"
+          CF_ENDPOINT: "api.london.cloud.service.gov.uk"
           CF_ORG: ${{ secrets.CF_ORG }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+          CF_SPACE: development
+          CF_USER: ${{ secrets.CF_USER }}
+          HEALTHCHECK_URL: ${{ secrets.HEALTHCHECK_URL }}
           SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          HEALTHCHECK_URL: ${{ secrets.HEALTHCHECK_URL }}
         run: |
           curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
           sudo dpkg -i cf-cli_amd64.deb
