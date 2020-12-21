@@ -35,6 +35,10 @@ module TradeTariffBackend
       ENV.fetch("TARIFF_SYNC_EMAIL")
     end
 
+    def use_cds?
+      ENV['CDS'] == 'true'
+    end
+
     def platform
       Rails.env
     end
