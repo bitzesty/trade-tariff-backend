@@ -19,7 +19,8 @@ echo "$GIT_NEW_REVISION" >REVISION
 
 # Replace the buildpack of the current api with the build pack specified above
 echo "Reading in HEREDOC for replacing buildpacks"
-read -r -d '' BUILDPACK_REPLACER <<HERE
+BUILDPACK_REPLACER=$(
+cat<<HERE
 require 'yaml'
 
 app_manifest = YAML.load(STDIN)
@@ -31,6 +32,7 @@ end
 
 YAML.dump(app_manifest)
 HERE
+)
 
 echo "Read in HEREDOC for replacing buildpacks"
 function notify() {
