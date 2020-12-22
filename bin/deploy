@@ -10,6 +10,7 @@
 cf login -a "$CF_ENDPOINT" -u "$CF_USER" -p "$CF_PASSWORD" -o "$CF_ORG" -s "$CF_SPACE"
 cf apps
 
+env
 export GIT_OLD_REVISION=$(cf ssh $CF_APP_API -c 'cat app/REVISION')
 export GIT_NEW_REVISION=$(git rev-parse --short HEAD)
 
