@@ -51,8 +51,7 @@ function deploy_api() {
   local APP_API=$1
 
   # Fetch existing manifest
-  echo $APP_API
-  cf create-app-manifest "$APP_API"
+  cf create-app-manifest $APP_API
   # Patch downloaded manifest with specified buildpack
   echo "Applying replace"
   ruby update_buildpack_key.rb <"$APP_API"_manifest.yml >"$APP_API"_patched_manifest.yml
@@ -73,7 +72,8 @@ function deploy_api() {
 # deploy_worker "$CF_APP_WORKER"
 # deploy_worker "$CF_APP_WORKER_XI"
 # deploy_worker "$CF_APP_WORKER_UK"
-deploy_api "$CF_APP_API"
+
+deploy_api $CF_APP_API
 # deploy_api "$CF_APP_API_XI"
 # deploy_api "$CF_APP_API_UK"
 # notify "Deployment finished for $CF_APP_API"
