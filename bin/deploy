@@ -8,8 +8,9 @@ set -o noclobber
 
 cf login -a "$CF_ENDPOINT" -u "$CF_USER" -p "$CF_PASSWORD" -o "$CF_ORG" -s "$CF_SPACE"
 
-export GIT_OLD_REVISION=$(cf ssh $CF_APP_API -c 'cat app/REVISION')
+export GIT_OLD_REVISION=$(cf ssh $CF_APP_API_NAME -c 'cat app/REVISION')
 export GIT_NEW_REVISION=$(git rev-parse --short HEAD)
+export CF_APP_WORKER_NAME=$(echo $CF_APP_API_NAME | sed 's/backend/backend-worker/')
 export CF_BUILDPACK="https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.24"
 
 echo "$GIT_NEW_REVISION" >REVISION
@@ -69,12 +70,7 @@ function deploy_api() {
 
 notify "Deploying tariff backend services.\n${GIT_NEW_REVISION}"
 
-deploy_worker "$CF_APP_WORKER"
-deploy_worker "$CF_APP_WORKER_XI"
-deploy_worker "$CF_APP_WORKER_UK"
+deploy_worker "$CF_APP_WORKER_NAME"
+deploy_api "$CF_APP_API_NAME"
 
-deploy_api "$CF_APP_API"
-deploy_api "$CF_APP_API_XI"
-deploy_api "$CF_APP_API_UK"
-
-notify "Deployment finished for $CF_APP_API"
+notify "Deployment finished for $CF_APP_API_NAME"
