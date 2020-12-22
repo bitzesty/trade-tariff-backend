@@ -5,13 +5,11 @@ set -o errexit
 set -o nounset
 set -o pipefail
 set -o noclobber
-set -x
 
 cf login -a "$CF_ENDPOINT" -u "$CF_USER" -p "$CF_PASSWORD" -o "$CF_ORG" -s "$CF_SPACE"
 
 export GIT_OLD_REVISION=$(cf ssh $CF_APP_API -c 'cat app/REVISION')
 export GIT_NEW_REVISION=$(git rev-parse --short HEAD)
-
 export CF_BUILDPACK="https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.24"
 
 echo "$GIT_NEW_REVISION" >REVISION
@@ -41,6 +39,7 @@ function deploy_worker() {
 
   # Fetch existing manifest
   cf create-app-manifest "$APP_WORKER"
+
   # Stage manifest
   cf push "$APP_WORKER" -f "$APP_WORKER"_manifest.yml -b "$CF_BUILDPACK"
 
@@ -53,29 +52,29 @@ function deploy_api() {
 
   # Fetch existing manifest
   cf create-app-manifest $APP_API
-  ls -lrt
+
   # Patch downloaded manifest with specified buildpack
-  echo "Applying replace"
   ruby update_buildpack_key.rb <"$APP_API"_manifest.yml >"$APP_API"_patched_manifest.yml
 
-  echo "Catting patched file"
-  cat "$APP_API"_patched_manifest.yml
   # Deploy patched manifest
-  # cf blue-green-deploy "$APP_API" -f "$APP_API"_patched_manifest.yml --delete-old-apps
-  # # Attached precreated autoscaling policy
-  # cf attach-autoscaling-policy "$APP_API" config/autoscaling/"$CF_SPACE"-policy.json
-  # # Enable routing from the public applications to the backend application
-  # cf add-network-policy "$CF_APP_FRONTEND" "$APP_API" --protocol tcp --port 8080
-  # cf add-network-policy "$CF_APP_ADMIN" "$APP_API" --protocol tcp --port 8080
+  cf blue-green-deploy "$APP_API" -f "$APP_API"_patched_manifest.yml --delete-old-apps
 
+  # Attach precreated autoscaling policy
+  cf attach-autoscaling-policy "$APP_API" config/autoscaling/"$CF_SPACE"-policy.json
+
+  # Enable routing from the public applications to this backend application
+  cf add-network-policy "$CF_APP_FRONTEND" "$APP_API" --protocol tcp --port 8080
+  cf add-network-policy "$CF_APP_ADMIN" "$APP_API" --protocol tcp --port 8080
 }
 
-# notify "Deploying tariff backend services.\n${GIT_NEW_REVISION}"
+notify "Deploying tariff backend services.\n${GIT_NEW_REVISION}"
+
 deploy_worker "$CF_APP_WORKER"
 deploy_worker "$CF_APP_WORKER_XI"
 deploy_worker "$CF_APP_WORKER_UK"
 
-# deploy_api $CF_APP_API
+# deploy_api "$CF_APP_API"
 # deploy_api "$CF_APP_API_XI"
-# deploy_api "$CF_APP_API_UK"
-# notify "Deployment finished for $CF_APP_API"
+deploy_api "$CF_APP_API_UK"
+
+notify "Deployment finished for $CF_APP_API"
