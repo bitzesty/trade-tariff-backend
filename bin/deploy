@@ -7,9 +7,9 @@ set -o pipefail
 set -o noclobber
 
 cf login -a "$CF_ENDPOINT" -u "$CF_USER" -p "$CF_PASSWORD" -o "$CF_ORG" -s "$CF_SPACE"
-cf apps
-
+echo "Finding revision"
 export GIT_OLD_REVISION=$(cf ssh $CF_APP_API -c 'cat app/REVISION')
+echo "Found revision"
 export GIT_NEW_REVISION=$(git rev-parse --short HEAD)
 
 export CF_BUILDPACK="https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.24"
