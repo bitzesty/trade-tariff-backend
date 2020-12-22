@@ -5,12 +5,12 @@
 # set -o nounset
 # set -o pipefail
 # set -o noclobber
-# set -x
+set -x
 
-cf login -a "$CF_ENDPOINT" -u "$CF_USER" -p "$CF_PASSWORD" -o "$CF_ORG" -s "$CF_SPACE"
+cf --version
+# cf login -a "$CF_ENDPOINT" -u "$CF_USER" -p "$CF_PASSWORD" -o "$CF_ORG" -s "$CF_SPACE"
 cf apps
 
-env
 export GIT_OLD_REVISION=$(cf ssh $CF_APP_API -c 'cat app/REVISION')
 export GIT_NEW_REVISION=$(git rev-parse --short HEAD)
 
@@ -78,8 +78,8 @@ function deploy_api() {
 # deploy_worker "$CF_APP_WORKER_XI"
 # deploy_worker "$CF_APP_WORKER_UK"
 
-# cf create-app-manifest $CF_APP_API
-deploy_api $CF_APP_API
+cf create-app-manifest $CF_APP_API
+# deploy_api $CF_APP_API
 # deploy_api "$CF_APP_API_XI"
 # deploy_api "$CF_APP_API_UK"
 # notify "Deployment finished for $CF_APP_API"
