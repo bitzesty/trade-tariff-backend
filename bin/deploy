@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
-# [[ "$TRACE" ]] && set -o xtrace
-# set -o errexit
-# set -o nounset
-# set -o pipefail
-# set -o noclobber
+[[ "$TRACE" ]] && set -o xtrace
+set -o errexit
+set -o nounset
+set -o pipefail
+set -o noclobber
 set -x
 
-# cf login -a "$CF_ENDPOINT" -u "$CF_USER" -p "$CF_PASSWORD" -o "$CF_ORG" -s "$CF_SPACE"
-# cf apps
+cf login -a "$CF_ENDPOINT" -u "$CF_USER" -p "$CF_PASSWORD" -o "$CF_ORG" -s "$CF_SPACE"
+cf apps
 export GIT_OLD_REVISION=$(cf ssh $CF_APP_API -c 'cat app/REVISION')
 export GIT_NEW_REVISION=$(git rev-parse --short HEAD)
 
@@ -53,7 +53,6 @@ function deploy_api() {
 
   # Fetch existing manifest
   cf create-app-manifest $APP_API
-  
   ls -lrt
   # Patch downloaded manifest with specified buildpack
   echo "Applying replace"
