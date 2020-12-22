@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/bitzesty/uktt.git
+  remote: https://github.com/TransformCore/uktt.git
   revision: 860674b06e72392f7ee87b86bc9fe75d03d0df0b
   specs:
     uktt (0.2.16)
