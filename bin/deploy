@@ -52,9 +52,12 @@ function deploy_api() {
   local APP_API=$1
 
   # Fetch existing manifest
+  echo $APP_API
   cf create-app-manifest "$APP_API"
   # Patch downloaded manifest with specified buildpack
   ruby -ryaml -e "$BUILDPACK_REPLACER" <"$APP_API"_manifest.yml >"$APP_API"_patched_manifest.yml
+
+  echo "Catting patched file"
   cat "$APP_API"_patched_manifest.yml
   # Deploy patched manifest
   # cf blue-green-deploy "$APP_API" -f "$APP_API"_patched_manifest.yml --delete-old-apps
