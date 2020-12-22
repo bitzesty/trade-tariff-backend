@@ -8,34 +8,28 @@ set -o noclobber
 
 cf login -a "$CF_ENDPOINT" -u "$CF_USER" -p "$CF_PASSWORD" -o "$CF_ORG" -s "$CF_SPACE"
 export GIT_OLD_REVISION=$(cf ssh $CF_APP_API -c 'cat app/REVISION')
-echo "Getting new revision"
 export GIT_NEW_REVISION=$(git rev-parse --short HEAD)
-echo "Got new revision"
 
 export CF_BUILDPACK="https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.24"
 
-echo "Storing revision"
 echo "$GIT_NEW_REVISION" >REVISION
 
 # Replace the buildpack of the current api with the build pack specified above
-echo "Reading in HEREDOC for replacing buildpacks"
-BUILDPACK_REPLACER=$(
-cat<<HERE
-require 'yaml';
+cat<<HERE>update_buildpack_key.rb
+require 'yaml'
 
-app_manifest = YAML.load(STDIN);
+app_manifest = YAML.load(STDIN)
 
 app_manifest["applications"].map do |application|
-  application["buildpack"] = "$CF_BUILDPACK";
-  application.delete("buildpacks");
-end;
+  application["buildpack"] = "$CF_BUILDPACK"
+  application.delete("buildpacks")
+end
 
-YAML.dump(app_manifest);
+puts YAML.dump(app_manifest)
 HERE
-)
 
-echo $BUILDPACK_REPLACER
-echo "Read in HEREDOC for replacing buildpacks"
+cat update_buildpack_key.rb
+
 function notify() {
   curl -X POST \
     --data-urlencode 'payload={"text": "'"$1"'", "channel": "'"#$SLACK_CHANNEL"'", "username": "cf-deploy", "icon_emoji": ":rocket:", "fields": [{"title": "ENV", "value": "'"$CF_SPACE"'", "short": true}, {"title": "SHA1", "value": "'"<https://github.com/bitzesty/trade-tariff-backend/compare/$GIT_OLD_REVISION...$GIT_NEW_REVISION|$GIT_NEW_REVISION>"'", "short": true}]}' \
@@ -61,13 +55,14 @@ function deploy_api() {
   cf create-app-manifest "$APP_API"
   # Patch downloaded manifest with specified buildpack
   ruby -ryaml -e "$BUILDPACK_REPLACER" <"$APP_API"_manifest.yml >"$APP_API"_patched_manifest.yml
+  cat "$APP_API"_patched_manifest.yml
   # Deploy patched manifest
-  cf blue-green-deploy "$APP_API" -f "$APP_API"_patched_manifest.yml --delete-old-apps
-  # Attached precreated autoscaling policy
-  cf attach-autoscaling-policy "$APP_API" config/autoscaling/"$CF_SPACE"-policy.json
-  # Enable routing from the public applications to the backend application
-  cf add-network-policy "$CF_APP_FRONTEND" --destination-app "$APP_API" --protocol tcp --port 8080
-  cf add-network-policy "$CF_APP_ADMIN" --destination-app "$APP_API" --protocol tcp --port 8080
+  # cf blue-green-deploy "$APP_API" -f "$APP_API"_patched_manifest.yml --delete-old-apps
+  # # Attached precreated autoscaling policy
+  # cf attach-autoscaling-policy "$APP_API" config/autoscaling/"$CF_SPACE"-policy.json
+  # # Enable routing from the public applications to the backend application
+  # cf add-network-policy "$CF_APP_FRONTEND" --destination-app "$APP_API" --protocol tcp --port 8080
+  # cf add-network-policy "$CF_APP_ADMIN" --destination-app "$APP_API" --protocol tcp --port 8080
 
 }
 
@@ -75,7 +70,7 @@ function deploy_api() {
 # deploy_worker "$CF_APP_WORKER"
 # deploy_worker "$CF_APP_WORKER_XI"
 # deploy_worker "$CF_APP_WORKER_UK"
-# deploy_api "$CF_APP_API"
+deploy_api "$CF_APP_API"
 # deploy_api "$CF_APP_API_XI"
 # deploy_api "$CF_APP_API_UK"
 # notify "Deployment finished for $CF_APP_API"
