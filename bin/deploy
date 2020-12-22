@@ -54,6 +54,8 @@ function deploy_api() {
 
   # Fetch existing manifest
   cf create-app-manifest $APP_API
+  
+  ls -lrt
   # Patch downloaded manifest with specified buildpack
   echo "Applying replace"
   ruby update_buildpack_key.rb <"$APP_API"_manifest.yml >"$APP_API"_patched_manifest.yml
