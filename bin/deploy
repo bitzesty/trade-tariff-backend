@@ -11,7 +11,6 @@ cf apps
 
 export GIT_OLD_REVISION=$(cf ssh $CF_APP_API -c 'cat app/REVISION')
 export GIT_NEW_REVISION=$(git rev-parse --short HEAD)
-export GIT_MESSAGE=$(git log --oneline $GIT_OLD_REVISION..$GIT_NEW_REVISION)
 
 export CF_BUILDPACK="https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.24"
 
@@ -66,7 +65,7 @@ function deploy_api() {
 
 }
 
-notify "Deploying tariff backend services.\n${GIT_MESSAGE}"
+notify "Deploying tariff backend services.\n${GIT_NEW_REVISION}"
 deploy_worker "$CF_APP_WORKER"
 deploy_worker "$CF_APP_WORKER_XI"
 # deploy_worker "$CF_APP_WORKER_UK"
