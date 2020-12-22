@@ -73,8 +73,8 @@ deploy_worker "$CF_APP_WORKER"
 deploy_worker "$CF_APP_WORKER_XI"
 deploy_worker "$CF_APP_WORKER_UK"
 
-# deploy_api "$CF_APP_API"
-# deploy_api "$CF_APP_API_XI"
+deploy_api "$CF_APP_API"
+deploy_api "$CF_APP_API_XI"
 deploy_api "$CF_APP_API_UK"
 
 notify "Deployment finished for $CF_APP_API"
