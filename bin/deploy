@@ -8,6 +8,8 @@ set -o noclobber
 set -x
 
 cf login -a "$CF_ENDPOINT" -u "$CF_USER" -p "$CF_PASSWORD" -o "$CF_ORG" -s "$CF_SPACE"
+cf apps
+
 export GIT_OLD_REVISION=$(cf ssh $CF_APP_API -c 'cat app/REVISION')
 export GIT_NEW_REVISION=$(git rev-parse --short HEAD)
 
@@ -48,7 +50,6 @@ function deploy_worker() {
 }
 
 function deploy_api() {
-  cf login -a "$CF_ENDPOINT" -u "$CF_USER" -p "$CF_PASSWORD" -o "$CF_ORG" -s "$CF_SPACE"
   local APP_API=$1
 
   # Fetch existing manifest
