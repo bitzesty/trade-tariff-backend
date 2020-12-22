@@ -68,7 +68,7 @@ function deploy_api() {
   cf add-network-policy "$CF_APP_ADMIN" "$APP_API" --protocol tcp --port 8080
 }
 
-notify "Deploying tariff backend services.\n${GIT_NEW_REVISION}"
+notify "Deploying tariff backend service $CF_APP_API_NAME.\n${GIT_NEW_REVISION}"
 
 deploy_worker "$CF_APP_WORKER_NAME"
 deploy_api "$CF_APP_API_NAME"
