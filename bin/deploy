@@ -48,6 +48,7 @@ function deploy_worker() {
 }
 
 function deploy_api() {
+  cf login -a "$CF_ENDPOINT" -u "$CF_USER" -p "$CF_PASSWORD" -o "$CF_ORG" -s "$CF_SPACE"
   local APP_API=$1
 
   # Fetch existing manifest
@@ -73,6 +74,7 @@ function deploy_api() {
 # deploy_worker "$CF_APP_WORKER_XI"
 # deploy_worker "$CF_APP_WORKER_UK"
 
+# cf create-app-manifest $CF_APP_API
 deploy_api $CF_APP_API
 # deploy_api "$CF_APP_API_XI"
 # deploy_api "$CF_APP_API_UK"
