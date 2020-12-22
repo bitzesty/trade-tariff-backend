@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 # [[ "$TRACE" ]] && set -o xtrace
-set -o errexit
+# set -o errexit
 # set -o nounset
 # set -o pipefail
 # set -o noclobber
-set -x
+# set -x
 
 cf login -a "$CF_ENDPOINT" -u "$CF_USER" -p "$CF_PASSWORD" -o "$CF_ORG" -s "$CF_SPACE"
 cf apps
