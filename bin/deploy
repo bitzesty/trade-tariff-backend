@@ -34,6 +34,7 @@ YAML.dump(app_manifest)
 HERE
 )
 
+echo $BUILDPACK_REPLACER
 echo "Read in HEREDOC for replacing buildpacks"
 function notify() {
   curl -X POST \
