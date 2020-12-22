@@ -1,5 +1,5 @@
 name: CI
-on: [push, pull_request]
+on: [pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -42,7 +42,6 @@ jobs:
           sudo sysctl -w vm.swappiness=1
           sudo sysctl -w fs.file-max=262144
           sudo sysctl -w vm.max_map_count=262144
-
       - name: Runs Elasticsearch
         uses: elastic/elastic-github-actions/elasticsearch@master
         with:
@@ -66,10 +65,12 @@ jobs:
           RAILS_ENV=test RAILS_DISABLE_TEST_LOG=true bundle exec rspec spec/ --tag '~skip_ci' --profile 10 --format RspecJunitFormatter --out rspec.xml --format progress
   deploy_dev:
     needs: [test]
-    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 1
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        service: ["tariff-backend-dev",  "tariff-uk-backend-dev",  "tariff-xi-backend-dev"]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -87,23 +88,19 @@ jobs:
           node-version: '12'
       - name: "Deploy dev"
         env:
+          CF_APP_API_NAME: "${{ matrix.service }}"
+          CF_APP_ADMIN: "tariff-admin-dev"
+          CF_APP_FRONTEND: "tariff-frontend-dev"
           CF_ENDPOINT: "api.london.cloud.service.gov.uk"
-          CF_SPACE: development
-          CF_APP: "tariff-backend-dev"
-          CF_APP_WORKER: "tariff-backend-worker-dev"
-          CF_APP_XI: "tariff-xi-backend-dev"
-          CF_APP_WORKER_XI: "tariff-xi-backend-worker-dev"
-          CF_APP_UK: "tariff-uk-backend-dev"
-          CF_APP_WORKER_UK: "tariff-uk-backend-worker-dev"
-          CF_USER: ${{ secrets.CF_USER }}
-          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
           CF_ORG: ${{ secrets.CF_ORG }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+          CF_SPACE: development
+          CF_USER: ${{ secrets.CF_USER }}
           SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          HEALTHCHECK_URL: ${{ secrets.HEALTHCHECK_URL }}
         run: |
-          curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
-          sudo dpkg -i cf-cli_amd64.deb
+          curl -L -o cf.deb 'https://packages.cloudfoundry.org/stable?release=debian64&version=7.2.0&source=github-rel'
+          sudo dpkg -i cf.deb
           cf -v
           cf add-plugin-repo CF-Community https://plugins.cloudfoundry.org
           cf install-plugin blue-green-deploy -r CF-Community -f
