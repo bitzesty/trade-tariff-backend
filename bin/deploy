@@ -21,16 +21,16 @@ echo "$GIT_NEW_REVISION" >REVISION
 echo "Reading in HEREDOC for replacing buildpacks"
 BUILDPACK_REPLACER=$(
 cat<<HERE
-require 'yaml'
+require 'yaml';
 
-app_manifest = YAML.load(STDIN)
+app_manifest = YAML.load(STDIN);
 
 app_manifest["applications"].map do |application|
-  application["buildpack"] = $CF_BUILDPACK
-  application.delete("buildpacks")
-end
+  application["buildpack"] = "$CF_BUILDPACK";
+  application.delete("buildpacks");
+end;
 
-YAML.dump(app_manifest)
+YAML.dump(app_manifest);
 HERE
 )
 
