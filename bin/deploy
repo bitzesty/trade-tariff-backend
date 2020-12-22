@@ -18,7 +18,7 @@ export CF_BUILDPACK="https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.24"
 echo "$GIT_NEW_REVISION" >REVISION
 
 # Replace the buildpack of the current api with the build pack specified above
-export BUILDPACK_REPLACER <<HERE
+read -r -d '' BUILDPACK_REPLACER <<HERE
 require 'yaml'
 
 app_manifest = YAML.load(STDIN)
@@ -27,6 +27,7 @@ app_manifest["applications"].map do |application|
   application["buildpack"] = $CF_BUILDPACK
   application.delete("buildpacks")
 end
+
 YAML.dump(app_manifest)
 HERE
 
@@ -65,7 +66,7 @@ function deploy_api() {
 
 }
 
-notify "Deploying $CF_APP_API.\n${GIT_MESSAGE}"
+notify "Deploying tariff backend services.\n${GIT_MESSAGE}"
 deploy_worker "$CF_APP_WORKER"
 deploy_worker "$CF_APP_WORKER_XI"
 # deploy_worker "$CF_APP_WORKER_UK"
