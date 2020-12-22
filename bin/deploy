@@ -44,8 +44,8 @@ function deploy_worker() {
   # Stage manifest
   cf push "$APP_WORKER" -f "$APP_WORKER"_manifest.yml -b "$CF_BUILDPACK"
 
-  cf run-task "$APP_WORKER" "rake db:migrate" --name "db-migrate"
-  cf run-task "$APP_WORKER" "rake db:data:migrate" --name "db-data-migrate"
+  cf run-task "$APP_WORKER" --command "rake db:migrate" --name "db-migrate"
+  cf run-task "$APP_WORKER" --command "rake db:data:migrate" --name "db-data-migrate"
 }
 
 function deploy_api() {
