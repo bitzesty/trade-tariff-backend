@@ -35,6 +35,13 @@ function notify() {
     "$SLACK_WEBHOOK"
 }
 
+function sentry_release() {
+  curl -sL https://sentry.io/get-cli/ | bash
+  VERSION=$(sentry-cli releases propose-version)
+  sentry-cli releases new -p tariff-backend $VERSION
+  sentry-cli releases set-commits --auto $VERSION
+}
+
 function deploy_worker() {
   local APP_WORKER=$1
 
@@ -68,6 +75,7 @@ function deploy_api() {
   cf add-network-policy "$CF_APP_ADMIN" "$APP_API" --protocol tcp --port 8080
 }
 
+deploy_worker
 notify "Deploying tariff backend service $CF_APP_API_NAME.\n${GIT_NEW_REVISION}"
 
 deploy_worker "$CF_APP_WORKER_NAME"
