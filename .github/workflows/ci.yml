@@ -111,7 +111,10 @@ jobs:
     if: github.ref == 'refs/heads/staging_notyet'
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       max-parallel: 1
+      matrix:
+        service: ["tariff-backend-staging"]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -129,19 +132,19 @@ jobs:
           node-version: '12'
       - name: "Deploy staging"
         env:
+          CF_APP_API_NAME: "${{ matrix.service }}"
+          CF_APP_ADMIN: "tariff-admin-staging"
+          CF_APP_FRONTEND: "tariff-frontend-staging"
           CF_ENDPOINT: "api.london.cloud.service.gov.uk"
-          CF_SPACE: staging
-          CF_APP: "tariff-backend-staging"
-          CF_APP_WORKER: "tariff-backend-worker-staging"
-          CF_USER: ${{ secrets.CF_USER }}
-          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
           CF_ORG: ${{ secrets.CF_ORG }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+          CF_SPACE: staging
+          CF_USER: ${{ secrets.CF_USER }}
           SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          HEALTHCHECK_URL: ${{ secrets.HEALTHCHECK_URL }}
         run: |
-          curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
-          sudo dpkg -i cf-cli_amd64.deb
+          curl -L -o cf.deb 'https://packages.cloudfoundry.org/stable?release=debian64&version=7.2.0&source=github-rel'
+          sudo dpkg -i cf.deb
           cf -v
           cf add-plugin-repo CF-Community https://plugins.cloudfoundry.org
           cf install-plugin blue-green-deploy -r CF-Community -f
