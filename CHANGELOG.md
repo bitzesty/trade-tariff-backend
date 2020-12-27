@@ -1,5 +1,32 @@
 # Change Log
 
+## [Dec 27, 2019](https://github.com/bitzesty/trade-tariff-backend/compare/38031efc8c2d07cb3de76d9333348c3fa09561ce...5fe1ca944485eb45b89bf154c0c272459af40a5c)
+
+### Added
+- Produce PDF in multiple currencies
+- Add footnotes search endpoint to API v2
+- Add footnotes type endpoint to API v2
+- Add additional code type endpoint to API v2
+- Add certificate type endpoint to API v2
+- Add pagination to search endpoints
+- Add measure components to API v2 response
+- Add `measures` relation to additional code and certificate
+
+### Changed
+- Change "additional_code - measure" association to one_to_many
+- Change "measures - measure type" association to use `measure_type_id` key
+- Replace `description` with `formatted_description` for `*_search` endpoints
+- Fix geographical area eager loading
+- Move certificates search to elasticsearch
+- Move footnotes search to elasticsearch
+- Move additional code search to elasticsearch
+- Update `puma` to 3.12.2
+- Update chapter notes
+
+## Removed
+- Remove `*_ids` methods from models
+
+
 ## [August 07, 2019](https://github.com/bitzesty/trade-tariff-backend/compare/1262198130f31d51331cad9ad4ef18ea95a96b2e...fdb42e59937ff691ecbbe7a36042a4453f362b7e)
 
 ### Added
@@ -7,7 +34,7 @@
 - Use PaaS s3 broker for PDF storage
 - Use `redlock-rb` gem
 - Add elasticsearch caching for heavy headings
-- Add search services for footnotes, additional codes, quotas
+- Add search services for additional codes, quotas
 
 ### Changed
 - API v2 fixes
@@ -19,6 +46,7 @@
 ### Removed
 - Remove `.json` from hrefs in goods_nomenclature API v2 responses
 - Remove admin related attributes from API v2 respponses (e.g. notes count)
+
 
 ## [May 7, 2019](https://github.com/bitzesty/trade-tariff-backend/compare/fce07ae3b07bfa3b758df115e8113dd25f876cdf...1f064896d4576e86ae56ab900512ef1c02db4466)
 
