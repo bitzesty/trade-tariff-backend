@@ -1,5 +1,28 @@
 # Change Log
 
+## [May 7, 2019](https://github.com/bitzesty/trade-tariff-backend/compare/fce07ae3b07bfa3b758df115e8113dd25f876cdf...1f064896d4576e86ae56ab900512ef1c02db4466)
+
+### Added
+- Add and apply `govuk-lint`
+- Add `scout`
+- Switch to blue green deploy plugin
+- Extract API v2
+- Use JSONAPI specs
+
+### Changed
+- Update `pg` to 1.1.3 and `sequel` to 5.16.0
+- Resolved agri quotas issue
+- Use `Date.current` instead of `Date.today`
+- Update `ruby` to 2.6.1
+- Upgrade to `rails` 5.1.6.2
+- Fix `0%` duty measures
+- Use the type id rather than the description for VAT measure type detection
+- Update deploy to use london region
+
+### Removed
+- Remove `national` ordering of measures as all measures are national
+
+
 ## [January 4, 2019](https://github.com/bitzesty/trade-tariff-backend/compare/4b3fea89ea79960c9fa93ba0699da51ed389c80a...017ae076d96b95914a5fd264cbb6d999bf9c8d2b)
 
 ### Added
