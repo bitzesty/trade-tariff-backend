@@ -1,5 +1,25 @@
 # Change Log
 
+## [August 07, 2019](https://github.com/bitzesty/trade-tariff-backend/compare/1262198130f31d51331cad9ad4ef18ea95a96b2e...fdb42e59937ff691ecbbe7a36042a4453f362b7e)
+
+### Added
+- Produces printable Trade Tariff PDFs
+- Use PaaS s3 broker for PDF storage
+- Use `redlock-rb` gem
+- Add elasticsearch caching for heavy headings
+- Add search services for footnotes, additional codes, quotas
+
+### Changed
+- API v2 fixes
+- Reindex in batches
+- Move admin related api to separate namespace
+- Use `uktt` for Bitzesty gitlab profile
+- Fix eager loading for commodities API v2
+
+### Removed
+- Remove `.json` from hrefs in goods_nomenclature API v2 responses
+- Remove admin related attributes from API v2 respponses (e.g. notes count)
+
 ## [May 7, 2019](https://github.com/bitzesty/trade-tariff-backend/compare/fce07ae3b07bfa3b758df115e8113dd25f876cdf...1f064896d4576e86ae56ab900512ef1c02db4466)
 
 ### Added
