@@ -1,12 +1,52 @@
 # Change Log
 
-## [February 18, 2018]
+## [January 4, 2019](https://github.com/bitzesty/trade-tariff-backend/compare/4b3fea89ea79960c9fa93ba0699da51ed389c80a...017ae076d96b95914a5fd264cbb6d999bf9c8d2b)
+
+### Added
+- Add browserconfig.xml
+- Add updated_at to sections
+- API v1: add list of legal acts for measure
+- API v1: add producline_suffix to heading commodities response
+- Use PaaS redis service
+- Use redis store for caching
+- Use PaaS elasticsearch service
+- GitlabCI intergation
+- Search improvements
+- Add chapter guidance links
+- Fix various data and formatting issues
 
 ### Changed
+- Disable rabl caching
+- Fix QuotaOrderNumber pk for oplog plugin
+- Setup guide
+- Set size for complete_abrogation_regulation_id according to TARIC documentation
+- Change size 3 to 6 for measure_type_id column
+- Update Elasticsearch indexes to use "text" or "keyword instead of "string" data type
+- Update `elasticsearch` gem to 6.1.0
+- Update `ruby` to 2.5.3
 
+### Removed
+- Delete outdated specs
+- Remove `dalli` gem
+- Remove CircleCI intergation
+
+
+## [August 8, 2018](https://github.com/bitzesty/trade-tariff-backend/compare/f8815c69d3bb98ce66ce007b84b8f299bd452ee4...037ace4adb903c98865c0df359040043097f898f)
+
+### Added
+- API v1: Add information about section, chapter notes and footnotes to non declarable heading
+- Data migrations & rake tasks
+- Display EUR duty amount on hover
+- Handle presence errors, logging
+
+### Changed
+- Format duty expressions in GBP
+- Update `rails` to 5.1.5
+- Updated `sinatra` gem to 2.0.2
 - Update `ruby` version to 2.5.0
 
-## [August 28, 2017]
+
+## [August 28, 2017](https://github.com/bitzesty/trade-tariff-backend/compare/f435635...ce68659)
 
 ### Added
 - Search Suggestions api and service
@@ -27,9 +67,8 @@
 - Removed geo areas from eager loading for fetching commodity measures
 - ActionDispatch::ParamsParser::DEFAULT_PARSERS was deprecated and `remove_parsers.rb` initializer was removed
 
-[August 28, 2017]: https://github.com/bitzesty/trade-tariff-backend/compare/f435635...ce68659
 
-## [August 28, 2017]
+## [ May 27, 2017 ](https://github.com/bitzesty/trade-tariff-backend/compare/37f6244...e2691fc)
 
 Maintained at now at the Bit Zesty repo - not the alphagov one.
 
@@ -51,7 +90,6 @@ Maintained at now at the Bit Zesty repo - not the alphagov one.
 ### Removed
 - End national footnote 05 014
 
-[May 27, 2017]: https://github.com/bitzesty/trade-tariff-backend/compare/37f6244...e2691fc
 
 ## [August 01, 2016]
 
