@@ -26,7 +26,7 @@ describe Api::V2::CertificatesController, type: :controller do
       {
         data: [{
           id: String,
-          type: "certificates",
+          type: "certificate",
           attributes: {
             certificate_type_code: String,
             certificate_code: String,
