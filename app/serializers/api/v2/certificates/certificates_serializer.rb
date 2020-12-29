@@ -5,6 +5,7 @@ module Api
         include JSONAPI::Serializer
 
         set_id :id
+        set_type :certificate
 
         attributes :certificate_type_code, :certificate_code, :description, :formatted_description
 

@@ -9,9 +9,8 @@ module Api
 
           set_id :quota_order_number_id
 
-          attribute :number do |quota|
-            quota.quota_order_number_id
-          end
+          attribute :number, &:quota_order_number_id
+
           has_many :geographical_areas, serializer: Api::V2::GeographicalAreaSerializer
         end
       end

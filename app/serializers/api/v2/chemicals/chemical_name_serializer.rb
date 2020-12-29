@@ -4,6 +4,9 @@ module Api
       class ChemicalNameSerializer
         include JSONAPI::Serializer
 
+        set_type :chemical_name
+        set_id :id
+
         attributes :name, :chemical_id
       end
     end
