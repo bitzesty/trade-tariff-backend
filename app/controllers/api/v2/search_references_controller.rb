@@ -1,6 +1,6 @@
 module Api
   module V2
-    class SearchReferencesController < ApiController
+    class SearchReferencesController < BaseController
       def index
         @search_references = SearchReference.for_letter(letter).by_title.all
 

@@ -1,6 +1,6 @@
 module Api
   module V2
-    class AdditionalCodesController < ApiController
+    class AdditionalCodesController < BaseController
       before_action :find_additional_codes
 
       def search

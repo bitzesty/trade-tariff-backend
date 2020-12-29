@@ -1,6 +1,6 @@
 module Api
   module V2
-    class MonetaryExchangeRatesController < ApiController
+    class MonetaryExchangeRatesController < BaseController
       def index
         jan_five_back = 5.years.ago.change({ day: 01, month: 01, hour: 0, minute: 0, second: 0 })
         @rates = MonetaryExchangeRate.eager(:monetary_exchange_period)

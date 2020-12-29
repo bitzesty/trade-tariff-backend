@@ -1,6 +1,6 @@
 module Api
   module V2
-    class AdditionalCodeTypesController < ApiController
+    class AdditionalCodeTypesController < BaseController
       def index
         render json: Api::V2::AdditionalCodes::AdditionalCodeTypeSerializer.new(additional_code_types, {}).serializable_hash
       end

@@ -2,7 +2,7 @@ require 'csv'
 
 module Api
   module V2
-    class GoodsNomenclaturesController < ApiController
+    class GoodsNomenclaturesController < BaseController
       before_action :set_request_format, only: %w(show_by_section show_by_chapter show_by_heading)
 
       def index

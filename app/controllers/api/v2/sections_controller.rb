@@ -1,6 +1,6 @@
 module Api
   module V2
-    class SectionsController < ApiController
+    class SectionsController < BaseController
       def index
         @sections = Section.eager({ chapters: [:chapter_note] }, :section_note).all
 

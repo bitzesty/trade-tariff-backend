@@ -1,6 +1,6 @@
 module Api
   module V2
-    class ChemicalsController < ApiController
+    class ChemicalsController < BaseController
       def index
         @chemicals = Chemical.all
 

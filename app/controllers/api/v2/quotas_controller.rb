@@ -1,6 +1,6 @@
 module Api
   module V2
-    class QuotasController < ApiController
+    class QuotasController < BaseController
       before_action :find_quotas
 
       def search

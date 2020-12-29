@@ -2,7 +2,7 @@ require 'goods_nomenclature_mapper'
 
 module Api
   module V2
-    class ChaptersController < ApiController
+    class ChaptersController < BaseController
       before_action :find_chapter, only: [:show, :changes]
 
       def index

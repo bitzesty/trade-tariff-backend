@@ -1,6 +1,6 @@
 module Api
   module V2
-    class GeographicalAreasController < ApiController
+    class GeographicalAreasController < BaseController
       def index
         @geographical_areas = GeographicalArea.eager(:geographical_area_descriptions).actual.areas.all
 

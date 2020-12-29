@@ -1,6 +1,6 @@
 module Api
   module V2
-    class CertificatesController < ApiController
+    class CertificatesController < BaseController
       before_action :find_certificates
 
       def search

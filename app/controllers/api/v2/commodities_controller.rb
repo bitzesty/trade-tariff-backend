@@ -1,6 +1,6 @@
 module Api
   module V2
-    class CommoditiesController < ApiController
+    class CommoditiesController < BaseController
       before_action :find_commodity, only: [:show, :changes]
 
       def show

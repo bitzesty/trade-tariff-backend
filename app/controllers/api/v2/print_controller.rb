@@ -1,6 +1,6 @@
 module Api
   module V2
-    class PrintController < ApiController
+    class PrintController < BaseController
       include PaasS3
 
       before_action :set_up_s3_bucket

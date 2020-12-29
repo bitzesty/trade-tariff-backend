@@ -1,6 +1,6 @@
 module Api
   module V2
-    class FootnotesController < ApiController
+    class FootnotesController < BaseController
       before_action :find_footnotes
 
       def search

@@ -1,6 +1,6 @@
 module Api
   module V2
-    class SearchController < ApiController
+    class SearchController < BaseController
       def search
         render json: SearchService.new(Api::V2::SearchSerializationService.new, params).to_json
       end

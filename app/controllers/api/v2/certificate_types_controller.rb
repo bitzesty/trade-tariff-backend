@@ -1,6 +1,6 @@
 module Api
   module V2
-    class CertificateTypesController < ApiController
+    class CertificateTypesController < BaseController
       def index
         render json: Api::V2::Certificates::CertificateTypeSerializer.new(certificate_types, {}).serializable_hash
       end
