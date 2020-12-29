@@ -12,7 +12,7 @@ module Api
 
         respond_to do |format|
           format.json {
-            headers['Content-Type'] = 'application/json'
+            headers['Content-Type'] = json_content_type
           }
           format.csv {
             filename = "goods_nomenclature_#{@as_of.strftime('%Y%m%d')}.csv"

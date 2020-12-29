@@ -15,11 +15,15 @@ class ApplicationController < ActionController::Base
   def render_not_found
     respond_to do |format|
       format.any { 
-        response.headers['Content-Type'] = 'application/json'
+        response.headers['Content-Type'] = json_content_type
         serializer = TradeTariffBackend.error_serializer(request)
         render json: serializer.serialized_errors(error: "404 - Not Found"), status: 404
       }
     end
+  end
+
+  def json_content_type
+    'application/json'
   end
 
   def render_error(exception)
@@ -29,7 +33,7 @@ class ApplicationController < ActionController::Base
 
     respond_to do |format|
       format.any {
-        response.headers['Content-Type'] = 'application/json'
+        response.headers['Content-Type'] = json_content_type
         serializer = TradeTariffBackend.error_serializer(request)
         render json: serializer.serialized_errors(error: "500 - Internal Server Error: #{exception.message}"), status: 500
       }
