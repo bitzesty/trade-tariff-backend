@@ -9,7 +9,11 @@ module Api
         set_id :regulation_id
 
         attributes :validity_start_date, :validity_end_date, :officialjournal_number,
-                   :officialjournal_page, :information_text
+                   :officialjournal_page
+
+        attribute :information_text do |regulation|
+          regulation&.information_text&.gsub(0xA0.chr('UTF-8'), '|')
+        end
 
         attribute :published_date do |regulation|
           regulation.try(:published_date)

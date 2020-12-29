@@ -1,12 +1,173 @@
 # Change Log
 
-## [February 18, 2018]
+## [December 24, 2020](https://github.com/bitzesty/trade-tariff-backend/compare/9badbe2622e12b784e796afb35e49dd9d4352571...5e6ed767fb2de28e86d5f55787142fae605b009d)
+
+### Added
+- CDS update type and environment
+- Add PaaS autoscaling policy
+- Add measure_condition_components to api v2 response
+- Log filename for cds data records
+- Data migrations
 
 ### Changed
+- Text formatting for regulations
+- Update support email address
+- Using `insert` instead of `save` in cds mapper
+- Fix quota_definition<->measure relation
+- Update puma to 5.0.4
+- Upgrade ruby buildpack
+- Replace `fast_jsonapi` with `jsonapi-serializer` gem
 
+### Removed
+- Remove rails (redis) caching
+- Skip old data migrations on cds env
+
+
+## [August 04, 2020](https://github.com/bitzesty/trade-tariff-backend/compare/b9d1803faff907f7dfbc86c25dc53fd01ca6678e...59bfeb5f4d17964e68546fdd6cb23aaa235ff662)
+
+### Added
+- Add CAS numbers (chemical names mapped to goods nomenclatures)
+- Add TARIC sequence checker
+- Several data migrations
+- Serialize `productline_suffix` for goods nomenclature in API v2
+- Add env name to pdf emails subject
+
+### Changed
+- Measure components ordering on database level
+- UKTT gem updates
+- Upgrade to ruby 2.7.1
+- Upgrade rails to 6.0.3.2
+- Upgrade puma to 3.12.6
+- Upgrade sidekiq to v6
+- Update generated pdf links
+- Fix additional code description order by validity start date
+- Render proper suspension legal act in measures serializer for API v2
+- Update CF buildpack
+
+### Removed
+- Remove rails_12factor gem
+- Disable commodity serializer caching
+- Skip health check url for scout_apm
+
+
+## [Dec 27, 2019](https://github.com/bitzesty/trade-tariff-backend/compare/38031efc8c2d07cb3de76d9333348c3fa09561ce...5fe1ca944485eb45b89bf154c0c272459af40a5c)
+
+### Added
+- Produce PDF in multiple currencies
+- Add footnotes search endpoint to API v2
+- Add footnotes type endpoint to API v2
+- Add additional code type endpoint to API v2
+- Add certificate type endpoint to API v2
+- Add pagination to search endpoints
+- Add measure components to API v2 response
+- Add `measures` relation to additional code and certificate
+
+### Changed
+- Change "additional_code - measure" association to one_to_many
+- Change "measures - measure type" association to use `measure_type_id` key
+- Replace `description` with `formatted_description` for `*_search` endpoints
+- Fix geographical area eager loading
+- Move certificates search to elasticsearch
+- Move footnotes search to elasticsearch
+- Move additional code search to elasticsearch
+- Update `puma` to 3.12.2
+- Update chapter notes
+
+### Removed
+- Remove `*_ids` methods from models
+
+
+## [August 07, 2019](https://github.com/bitzesty/trade-tariff-backend/compare/1262198130f31d51331cad9ad4ef18ea95a96b2e...fdb42e59937ff691ecbbe7a36042a4453f362b7e)
+
+### Added
+- Produces printable Trade Tariff PDFs
+- Use PaaS s3 broker for PDF storage
+- Use `redlock-rb` gem
+- Add elasticsearch caching for heavy headings
+- Add search services for additional codes, quotas
+
+### Changed
+- API v2 fixes
+- Reindex in batches
+- Move admin related api to separate namespace
+- Use `uktt` for Bitzesty gitlab profile
+- Fix eager loading for commodities API v2
+
+### Removed
+- Remove `.json` from hrefs in goods_nomenclature API v2 responses
+- Remove admin related attributes from API v2 responses (e.g. notes count)
+
+
+## [May 7, 2019](https://github.com/bitzesty/trade-tariff-backend/compare/fce07ae3b07bfa3b758df115e8113dd25f876cdf...1f064896d4576e86ae56ab900512ef1c02db4466)
+
+### Added
+- Add and apply `govuk-lint`
+- Add `scout`
+- Switch to blue green deploy plugin
+- Extract API v2
+- Use JSONAPI specs
+
+### Changed
+- Update `pg` to 1.1.3 and `sequel` to 5.16.0
+- Resolved agri quotas issue
+- Use `Date.current` instead of `Date.today`
+- Update `ruby` to 2.6.1
+- Upgrade to `rails` 5.1.6.2
+- Fix `0%` duty measures
+- Use the type id rather than the description for VAT measure type detection
+- Update deploy to use london region
+
+### Removed
+- Remove `national` ordering of measures as all measures are national
+
+
+## [January 4, 2019](https://github.com/bitzesty/trade-tariff-backend/compare/4b3fea89ea79960c9fa93ba0699da51ed389c80a...017ae076d96b95914a5fd264cbb6d999bf9c8d2b)
+
+### Added
+- Add browserconfig.xml
+- Add updated_at to sections
+- API v1: add list of legal acts for measure
+- API v1: add producline_suffix to heading commodities response
+- Use PaaS redis service
+- Use redis store for caching
+- Use PaaS elasticsearch service
+- GitlabCI integration
+- Search improvements
+- Add chapter guidance links
+- Fix various data and formatting issues
+
+### Changed
+- Disable rabl caching
+- Fix QuotaOrderNumber pk for oplog plugin
+- Setup guide
+- Set size for complete_abrogation_regulation_id according to TARIC documentation
+- Change size 3 to 6 for measure_type_id column
+- Update Elasticsearch indexes to use "text" or "keyword instead of "string" data type
+- Update `elasticsearch` gem to 6.1.0
+- Update `ruby` to 2.5.3
+
+### Removed
+- Delete outdated specs
+- Remove `dalli` gem
+- Remove CircleCI integration
+
+
+## [August 8, 2018](https://github.com/bitzesty/trade-tariff-backend/compare/f8815c69d3bb98ce66ce007b84b8f299bd452ee4...037ace4adb903c98865c0df359040043097f898f)
+
+### Added
+- API v1: Add information about section, chapter notes and footnotes to non declarable heading
+- Data migrations & rake tasks
+- Display EUR duty amount on hover
+- Handle presence errors, logging
+
+### Changed
+- Format duty expressions in GBP
+- Update `rails` to 5.1.5
+- Updated `sinatra` gem to 2.0.2
 - Update `ruby` version to 2.5.0
 
-## [August 28, 2017]
+
+## [August 28, 2017](https://github.com/bitzesty/trade-tariff-backend/compare/f435635...ce68659)
 
 ### Added
 - Search Suggestions api and service
@@ -27,9 +188,8 @@
 - Removed geo areas from eager loading for fetching commodity measures
 - ActionDispatch::ParamsParser::DEFAULT_PARSERS was deprecated and `remove_parsers.rb` initializer was removed
 
-[August 28, 2017]: https://github.com/bitzesty/trade-tariff-backend/compare/f435635...ce68659
 
-## [August 28, 2017]
+## [ May 27, 2017 ](https://github.com/bitzesty/trade-tariff-backend/compare/37f6244...e2691fc)
 
 Maintained at now at the Bit Zesty repo - not the alphagov one.
 
@@ -51,7 +211,6 @@ Maintained at now at the Bit Zesty repo - not the alphagov one.
 ### Removed
 - End national footnote 05 014
 
-[May 27, 2017]: https://github.com/bitzesty/trade-tariff-backend/compare/37f6244...e2691fc
 
 ## [August 01, 2016]
 
