@@ -1,7 +1,7 @@
 
 # Trade Tariff Backend
 
-__Now maintained at https://github.com/bitzesty/trade-tariff-backend__
+Now maintainded by HMRC
 
 The API back-end for:
 
